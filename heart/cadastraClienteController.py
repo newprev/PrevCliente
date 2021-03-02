@@ -15,7 +15,7 @@ class CadastraClientePage(Ui_mwCadastroCliente, QMainWindow):
         self.db = db
         self.pbCarregaCnis.clicked.connect(self.carregaCnis)
 
-        self.cbxEstado.addItems(estCivil)
+        self.cbxEstCivil.addItems(estCivil)
 
     def carregaCnis(self):
         self.cnisClienteAtual = CNISModelo()
@@ -28,3 +28,6 @@ class CadastraClientePage(Ui_mwCadastroCliente, QMainWindow):
             self.leNomeMae.setText(infoPessoais['nomeMae'])
             self.lePrimeiroNome.setText(infoPessoais['nomeCompleto'].split(' ')[0])
             self.leSobrenome.setText(' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]))
+
+        df = self.cnisClienteAtual.gerarDataframe(informacao='remuneracoes')
+        print(df.head())

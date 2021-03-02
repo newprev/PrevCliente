@@ -324,7 +324,7 @@
           <string>123.456.789-00</string>
          </property>
         </widget>
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="cbxEstCivil">
          <property name="geometry">
           <rect>
            <x>20</x>

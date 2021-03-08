@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="home">
+    <file>home.png</file>
+  </qresource>
+  <qresource prefix="configuracoes">
+    <file>settings.png</file>
+  </qresource>
+  <qresource prefix="sobre">
+    <file>information.png</file>
+  </qresource>
+</RCC>

@@ -1,0 +1,2 @@
+def inicializaCard(tipo):
+    pass

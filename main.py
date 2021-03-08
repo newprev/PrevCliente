@@ -1,18 +1,15 @@
-import pandas as pd
 import pymysql
-from datetime import datetime
-import re
-
-from PyPDF3 import PdfFileReader
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow
 
 from Daos.daoConfiguracoes import DaoConfiguracoes
 from Telas.splashScreen import Ui_MainWindow
+from heart.login.loginController import LoginController
 from connections import ConfigConnection
 from heart.cadastraClienteController import CadastraClientePage
-from modelos.cnisModelo import CNISModelo
+
+from heart.dashboard.dashboardController import DashboardController
 
 
 class Main(Ui_MainWindow, QMainWindow):
@@ -21,13 +18,15 @@ class Main(Ui_MainWindow, QMainWindow):
         super(Main, self).__init__()
         self.setupUi(self)
         self.contador = 0
-        self.config = ConfigConnection(carregaBanco=True)
-        self.db = self.getDB()
-        self.daoConfigs = DaoConfiguracoes(self.db)
+        # self.config = ConfigConnection(carregaBanco=True)
+        # self.db = self.getDB()
+        # self.daoConfigs = DaoConfiguracoes(self.db)
+        # self.dashboard = DashboardController()
+        self.loginPage = LoginController()
         self.center()
         self.show()
 
-        self.cadastraClientePage = CadastraClientePage(db=self.db)
+        # self.cadastraClientePage = CadastraClientePage(db=self.db)
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -47,7 +46,9 @@ class Main(Ui_MainWindow, QMainWindow):
         if self.contador == 20:
             self.timer.stop()
             # self.iniciaBancos()
-            self.cadastraClientePage.show()
+            # self.cadastraClientePage.show()
+            # self.dashboard.show()
+            self.loginPage.show()
             self.close()
 
         if self.contador == 100:
@@ -111,15 +112,15 @@ class Main(Ui_MainWindow, QMainWindow):
         frameGm.moveCenter(centerPoint)
         self.move(frameGm.topLeft())
 
-    def getDB(self):
-
-        return pymysql.connect(
-            host=self.config.host,
-            user=self.config.user,
-            passwd=self.config.passwd,
-            db=self.config.banco,
-            port=self.config.port
-        )
+    # def getDB(self):
+    #
+    #     return pymysql.connect(
+    #         host=self.config.host,
+    #         user=self.config.user,
+    #         passwd=self.config.passwd,
+    #         db=self.config.banco,
+    #         port=self.config.port
+    #     )
 
     # def carregaCNIS(self):
     #

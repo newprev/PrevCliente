@@ -14,13 +14,19 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_mwLogin(object):
     def setupUi(self, mwLogin):
         mwLogin.setObjectName("mwLogin")
-        mwLogin.resize(880, 400)
-        mwLogin.setMinimumSize(QtCore.QSize(880, 400))
-        mwLogin.setMaximumSize(QtCore.QSize(880, 400))
+        mwLogin.resize(950, 500)
+        mwLogin.setMinimumSize(QtCore.QSize(950, 500))
+        mwLogin.setMaximumSize(QtCore.QSize(950, 500))
+        mwLogin.setStyleSheet("#mwLogin, #centralwidget {\n"
+"    border-radius: 8px;\n"
+"}")
         self.centralwidget = QtWidgets.QWidget(mwLogin)
         self.centralwidget.setObjectName("centralwidget")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.centralwidget)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setSpacing(0)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.frMain = QtWidgets.QFrame(self.centralwidget)
-        self.frMain.setGeometry(QtCore.QRect(0, 0, 880, 400))
         self.frMain.setStyleSheet("/*---------------------------------- Frame --------------------------------------*/\n"
 "#frMain{\n"
 "    border-radius: 8px;\n"
@@ -76,6 +82,24 @@ class Ui_mwLogin(object):
 "\n"
 "    border-radius: 4px;\n"
 "    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(68, 181, 150, 255), stop:1 rgba(19, 222, 166, 255));\n"
+"}\n"
+"\n"
+"#pbPrimeiroAcesso {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(61, 83, 180, 255), stop:1 rgba(9, 162, 212, 255));\n"
+"}\n"
+"\n"
+"#pbPrimeiroAcesso:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(81, 103, 200, 255), stop:1 rgba(29, 182, 232, 255));\n"
 "}")
         self.frMain.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frMain.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -85,6 +109,7 @@ class Ui_mwLogin(object):
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.frLeft = QtWidgets.QFrame(self.frMain)
+        self.frLeft.setMaximumSize(QtCore.QSize(400, 16777215))
         self.frLeft.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frLeft.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frLeft.setObjectName("frLeft")
@@ -112,12 +137,16 @@ class Ui_mwLogin(object):
         self.lbInfoAcesso = QtWidgets.QLabel(self.frLeft)
         self.lbInfoAcesso.setGeometry(QtCore.QRect(120, 130, 141, 17))
         self.lbInfoAcesso.setObjectName("lbInfoAcesso")
+        self.pbPrimeiroAcesso = QtWidgets.QPushButton(self.frLeft)
+        self.pbPrimeiroAcesso.setGeometry(QtCore.QRect(100, 340, 181, 25))
+        self.pbPrimeiroAcesso.setObjectName("pbPrimeiroAcesso")
         self.horizontalLayout.addWidget(self.frLeft)
         self.frRight = QtWidgets.QFrame(self.frMain)
         self.frRight.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frRight.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frRight.setObjectName("frRight")
         self.horizontalLayout.addWidget(self.frRight)
+        self.horizontalLayout_2.addWidget(self.frMain)
         mwLogin.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(mwLogin)
@@ -134,7 +163,8 @@ class Ui_mwLogin(object):
         self.pbEntrar.setText(_translate("mwLogin", "Entrar"))
         self.lbNLS.setText(_translate("mwLogin", "Não lembro minha senha"))
         self.lbInfoAcesso.setText(_translate("mwLogin", "Acesse a sua conta"))
-import Resources.login
+        self.pbPrimeiroAcesso.setText(_translate("mwLogin", "Primeiro acesso"))
+import Resources.lgResources
 
 
 if __name__ == "__main__":

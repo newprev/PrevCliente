@@ -13,10 +13,10 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.boxLayout = QHBoxLayout()
         self.db = db
         self.funcCliente = CardFuncionalidade(tipo='cliente')
+        self.funcEntrevista = CardFuncionalidade(tipo='Entrevista')
         self.tabCadastro = TabCliente(parent=self, db=db)
         self.stkMainDashBoard.addWidget(self.tabCadastro)
         # self.stkMainDashBoard.setCurrentIndex(0)
-        self.funcOutra = CardFuncionalidade()
         self.funcOutra1 = CardFuncionalidade()
         self.funcOutra2 = CardFuncionalidade()
         self.funcOutra3 = CardFuncionalidade()
@@ -24,7 +24,7 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.funcOutra5 = CardFuncionalidade()
 
         self.boxLayout.addWidget(self.funcCliente)
-        self.boxLayout.addWidget(self.funcOutra)
+        self.boxLayout.addWidget(self.funcEntrevista)
         self.boxLayout.addWidget(self.funcOutra1)
         self.boxLayout.addWidget(self.funcOutra2)
         self.boxLayout.addWidget(self.funcOutra3)

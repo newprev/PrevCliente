@@ -2,4 +2,7 @@
   <qresource prefix="cliente">
     <file>customer.png</file>
   </qresource>
+  <qresource prefix="entrevista">
+    <file>entrevista.png</file>
+  </qresource>
 </RCC>

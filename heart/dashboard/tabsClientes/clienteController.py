@@ -42,8 +42,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.lePrimeiroNome.setText(infoPessoais['nomeCompleto'].split(' ')[0])
             self.leSobrenome.setText(' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]))
 
-        df = self.cnisClienteAtual.gerarDataframe(informacao='remuneracoes')
-        print(df.head())
+        df = self.cnisClienteAtual.gerarDataframe()
+        # print(df.head(20))
 
     def ativaDesativaFiltro(self, nomeFiltro: str):
         if nomeFiltro.upper() == 'NOME':

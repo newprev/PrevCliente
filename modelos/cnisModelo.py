@@ -22,13 +22,14 @@ class CNISModelo:
         self.expRegDataMenor = "^[0-9]{2}/[0-9]{4}$"
         self.expRegDataMaior = "^[0-9]{2}/[0-9]{2}/[0-9]{4}$"
         self.expRegNomeEmp = "^[A-Z]{2,20}"
+        self.expRegNB = "[0-9]{10}"
         self.expRegCNPJ = "[0-9]{2}\.[0-9]{3}\.[0-9]{3}/[0-9]{4}-[0-9]{2}"
         self.expRegNit = "[0-9]{3}\.[0-9]{5}\.[0-9]{2}-[0-9]{1}"
         self.expRegCPF = "[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}"
         self.expRegTipoVinculo = "[A-Z]{1}[a-z]{2,20}"
 
         self.infoASerPulada = ['NIT', 'Código Emp.', 'Origem do Vínculo', 'Data Fim', 'Tipo Filiado no Vínculo',
-                               'Últ. Remun.', 'Indicadores']
+                               'Últ. Remun.', 'Indicadores', 'NB', 'Espécie', 'Situação']
 
         self.qtdPaginas = 0
 
@@ -85,6 +86,16 @@ class CNISModelo:
             'indicadores': [],
             'ultRem': []
         }
+        self.dictCabecalhoBeneficio = {
+            'Seq': [],
+            'NIT': [],
+            'NB': [],
+            'orgVinculo': [],
+            'especie': [],
+            'dataInicio': [],
+            'dataFim': [],
+            'situacao': []
+        }
         self.dictDadosPessoais = {
             'nit': None,
             'nomeCompleto': None,
@@ -128,9 +139,92 @@ class CNISModelo:
                     blocoRemuneracoes = False
 
                 elif documentoLinhas[pos] == 'Seq.':
-                    pos = self.extrairCabecalhos(documentoLinhas, pos)
+                    pos = self.trataExtrairCabecalhos(documentoLinhas, pos)
 
                 pos += 1
+
+    def trataExtrairCabecalhos(self, documentoLinhas, posInicio):
+        if any(filter(lambda item: re.fullmatch(self.expRegNB, item), documentoLinhas[posInicio:posInicio+16])):
+            # pos = self.extrairCabecalhosBeneficio(documentoLinhas, posInicio)
+            self.extrairCabecalhosBeneficio(documentoLinhas, posInicio)
+        else:
+            # pos = self.extrairCabecalhosPadrao(documentoLinhas, posInicio)
+            self.extrairCabecalhosPadrao(documentoLinhas, posInicio)
+
+        return posInicio + 9
+
+    def extrairCabecalhosBeneficio(self, documentoLinhas, posInicio):
+
+        seq = False
+        nit = False
+        nb = False
+        orgVinculo = False
+        dataInicio = False
+        dataFim = False
+        tipoVinculo = False
+        indicadores = False
+        ultRem = False
+
+        pos = posInicio
+        dataPos = 1
+        nomeEmp = ''
+
+        for j in range(pos + 1, pos + 9):
+
+            if re.fullmatch(self.expRegNit, documentoLinhas[j]) is not None:
+                self.dictCabecalhoBeneficio['NIT'].append(documentoLinhas[j])
+                nit = True
+            elif re.fullmatch(self.expRegNB, documentoLinhas[j]) is not None:
+                self.dictCabecalhoBeneficio['NB'].append(documentoLinhas[j])
+                nb = True
+            elif re.match(self.expRegNomeEmp, documentoLinhas[j]) is not None and documentoLinhas[j] not in self.infoASerPulada:
+                nomeEmp += documentoLinhas[j]
+                orgVinculo = True
+            elif re.match(self.expRegDataMaior, documentoLinhas[j]):
+                if dataPos == 1:
+                    self.dictCabecalhoBeneficio['dataInicio'].append(documentoLinhas[j])
+                    dataPos += 1
+                    dataInicio = True
+                else:
+                    self.dictCabecalhoBeneficio['dataFim'].append(documentoLinhas[j])
+                    dataFim = True
+                    dataPos = 0
+            elif re.match(self.expRegDataMenor, documentoLinhas[j]) is not None:
+                self.dictCabecalhoBeneficio['ultRem'].append(documentoLinhas[j])
+                ultRem = True
+            elif re.match(self.expRegTipoVinculo, documentoLinhas[j]) is not None:
+                pularInfo = documentoLinhas[j]
+                if pularInfo not in self.infoASerPulada:
+                    self.dictCabecalhoBeneficio['tipoVinculo'].append(documentoLinhas[j])
+                    tipoVinculo = True
+            elif documentoLinhas[j][0].isnumeric() and len(documentoLinhas[j]) <= 3:
+                self.dictCabecalhoBeneficio['Seq'].append(documentoLinhas[j])
+                seq = True
+
+        self.dictCabecalhoBeneficio['nomeEmp'].append(nomeEmp)
+        if dataPos != 0:
+            self.dictCabecalhoBeneficio['dataFim'].append('')
+            dataFim = True
+
+        if not seq:
+            self.dictCabecalhoBeneficio['Seq'].append('')
+        if not nit:
+            self.dictCabecalhoBeneficio['NIT'].append('')
+        if not nb:
+            self.dictCabecalhoBeneficio['cdEmp'].append('')
+        # if not orgVinculo:
+        #     self.dictCabecalho['orgVinculo'].append('')
+        if not dataInicio:
+            self.dictCabecalhoBeneficio['dataInicio'].append('')
+        if not dataFim:
+            self.dictCabecalhoBeneficio['dataFim'].append('')
+        if not tipoVinculo:
+            self.dictCabecalhoBeneficio['tipoVinculo'].append('')
+        if not indicadores:
+            self.dictCabecalhoBeneficio['indicadores'].append('')
+        if not ultRem:
+            self.dictCabecalhoBeneficio['ultRem'].append('')
+
 
     def extrairContribuicoes(self, documentoLinhas, posInicio):
 
@@ -215,7 +309,7 @@ class CNISModelo:
             pos += 1
         return pos
 
-    def extrairCabecalhos(self, documentoLinhas, posInicio):
+    def extrairCabecalhosPadrao(self, documentoLinhas, posInicio):
 
         seq = False
         nit = False
@@ -258,7 +352,7 @@ class CNISModelo:
                 if pularInfo not in self.infoASerPulada:
                     self.dictCabecalho['tipoVinculo'].append(documentoLinhas[j])
                     tipoVinculo = True
-            elif documentoLinhas[j][0].isnumeric():
+            elif documentoLinhas[j][0].isnumeric() and len(documentoLinhas[j]) <= 3:
                 self.dictCabecalho['Seq'].append(documentoLinhas[j])
                 seq = True
 
@@ -273,8 +367,8 @@ class CNISModelo:
             self.dictCabecalho['NIT'].append('')
         if not cdEmp:
             self.dictCabecalho['cdEmp'].append('')
-        if not orgVinculo:
-            self.dictCabecalho['orgVinculo'].append('')
+        # if not orgVinculo:
+        #     self.dictCabecalho['orgVinculo'].append('')
         if not dataInicio:
             self.dictCabecalho['dataInicio'].append('')
         if not dataFim:
@@ -316,19 +410,21 @@ class CNISModelo:
 
         return posicaoAtual
 
-
     def gerarDataframe(self, informacao: str = 'cabecalhos'):
 
-        if informacao == 'cabecalhos':
-            return pd.DataFrame(self.dictCabecalho)
-        elif informacao == 'remuneracoes':
-            return pd.DataFrame(self.dictRemuneracoes)
-        elif informacao == 'contribuicoes':
-            return pd.DataFrame(self.dictContribuicoes)
-        elif informacao == 'indicadores':
-            return pd.DataFrame.from_dict(self.dictIndicadores, orient='index', columns=['Descrição'])
-        else:
-            return None
+        # if informacao == 'cabecalhos':
+        #     return pd.DataFrame(self.dictCabecalho)
+        # elif informacao == 'remuneracoes':
+        #     return pd.DataFrame(self.dictRemuneracoes)
+        # elif informacao == 'contribuicoes':
+        #     return pd.DataFrame(self.dictContribuicoes)
+        # elif informacao == 'indicadores':
+        #     return pd.DataFrame.from_dict(self.dictIndicadores, orient='index', columns=['Descrição'])
+        # else:
+        #     return None
+        print('\n\n\n\n')
+        for chave, valor in self.dictCabecalho.items():
+            print(f"{chave}({len(valor)}) {valor}")
 
     def gerarCsv(self, path, informacao: str = 'cabecalhos'):
         df = self.gerarDataframe(informacao=informacao)

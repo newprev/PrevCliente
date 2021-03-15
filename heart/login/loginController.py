@@ -10,18 +10,17 @@ from heart.dashboard.dashboardController import DashboardController
 
 class LoginController(QMainWindow, Ui_mwLogin):
 
-    def __init__(self):
+    def __init__(self, db=None):
         super(LoginController, self).__init__()
         self.setupUi(self)
-        self.config = ConfigConnection(carregaBanco=True)
+        self.db = db
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
         self.pbEntrar.clicked.connect(self.entrar)
-        self.db = self.getDB()
         self.daoConfigs = DaoConfiguracoes(self.db)
-        self.dashboard = DashboardController()
+        self.dashboard = DashboardController(db=self.db)
 
         self.center()
 

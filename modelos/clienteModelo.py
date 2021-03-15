@@ -4,8 +4,8 @@ class ClienteModelo:
         self.clienteId: int = None
         self.nomeCliente: str = None
         self.sobrenomeCliente: str = None
-        self.telefone: str = None
         self.email: str = None
+        self.telefone: str = None
         self.rgCliente: str = None
         self.cpfCliente: str = None
         self.numCartProf: str = None

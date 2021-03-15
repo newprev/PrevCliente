@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow
 
 from Daos.daoConfiguracoes import DaoConfiguracoes
+from Daos.tabelas import TabelasConfig
 from Telas.splashScreen import Ui_MainWindow
 from heart.login.loginController import LoginController
 from connections import ConfigConnection
@@ -18,11 +19,10 @@ class Main(Ui_MainWindow, QMainWindow):
         super(Main, self).__init__()
         self.setupUi(self)
         self.contador = 0
-        # self.config = ConfigConnection(carregaBanco=True)
-        # self.db = self.getDB()
-        # self.daoConfigs = DaoConfiguracoes(self.db)
-        # self.dashboard = DashboardController()
-        self.loginPage = LoginController()
+        self.dbConnection = ConfigConnection(instanciaBanco='Local')
+        self.db = self.dbConnection.getDatabase()
+        self.daoConfigs = DaoConfiguracoes(db=self.db)
+        self.loginPage = LoginController(db=self.db)
         self.center()
         self.show()
 
@@ -45,32 +45,42 @@ class Main(Ui_MainWindow, QMainWindow):
 
         if self.contador == 20:
             self.timer.stop()
-            # self.iniciaBancos()
+            self.iniciaBancos()
             # self.cadastraClientePage.show()
             # self.dashboard.show()
-            self.loginPage.show()
-            self.close()
+            # self.loginPage.show()
+            # self.close()
 
         if self.contador == 100:
             self.lbInfo.setText('INICIANDO SUBMERSAO...')
 
-    # def iniciaBancos(self):
-    #
-    #     self.lbInfo.setText('CRIANDO BANCO DO USUÁRIO...')
-    #     if self.daoConfigs.criaTabela(self.config.):
-    #         self.progresso(add=10)
-    #
-    #     self.lbInfo.setText('CRIANDO BANCO DO CLIENTE...')
-    #     if self.daoConfigs.criaTblCliente():
-    #         self.progresso(add=10)
-    #
-    #     self.lbInfo.setText('CRIANDO BANCO DO EVENTO...')
-    #     if self.daoConfigs.criaTblEvento():
-    #         self.progresso(add=10)
-    #
-    #     self.lbInfo.setText('CRIANDO BANCO DAS GRUPOS...')
-    #     if self.daoConfigs.criaTblGrupo():
-    #         self.progresso(add=10)
+    def iniciaBancos(self):
+
+        tabelas = TabelasConfig()
+
+        self.lbInfo.setText('CRIANDO TABELA DO CLIENTE...')
+        if self.daoConfigs.criaTabela(tabelas.sqlCreateCliente):
+            self.progresso(add=20)
+        else:
+            return False
+
+        self.lbInfo.setText('CRIANDO TABELA DE REMUNERAÇÕES...')
+        if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisRemuneracoes):
+            self.progresso(add=20)
+        else:
+            return False
+
+        self.lbInfo.setText('CRIANDO TABELA DE CONTRIBUIÇÕES...')
+        if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisContribuicoes):
+            self.progresso(add=20)
+        else:
+            return False
+
+        self.lbInfo.setText('CRIANDO TABELA DE BENEFÍCIOS...')
+        if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisBeneficios):
+            self.progresso(add=20)
+        else:
+            return False
     #
     #     self.lbInfo.setText('CRIANDO BANCO DOS PARTICIPANTES...')
     #     if self.daoConfigs.criaTblParticipantes():
@@ -98,10 +108,11 @@ class Main(Ui_MainWindow, QMainWindow):
     #     else:
     #         self.progresso(add=10)
     #
-    #     self.iniciaNautilus()
+        self.iniciaNewPrev()
 
-    def iniciaNautilus(self):
-        pass
+    def iniciaNewPrev(self):
+        self.loginPage.show()
+        self.close()
         # self.close()
         # LoginPage(self.db).show()
 
@@ -111,24 +122,6 @@ class Main(Ui_MainWindow, QMainWindow):
         centerPoint = QtWidgets.QApplication.desktop().screenGeometry(screen).center()
         frameGm.moveCenter(centerPoint)
         self.move(frameGm.topLeft())
-
-    # def getDB(self):
-    #
-    #     return pymysql.connect(
-    #         host=self.config.host,
-    #         user=self.config.user,
-    #         passwd=self.config.passwd,
-    #         db=self.config.banco,
-    #         port=self.config.port
-    #     )
-
-    # def carregaCNIS(self):
-    #
-    #     cnisModelo = CNISModelo('/home/israeldev/Projetos/NewPrev/PrevCliente/CNIS.pdf')
-    #     cnisModelo.carregaDados()
-    #     df = cnisModelo.gerarDataframe()
-    #     print(df.head())
-    #     cnisModelo.gerarCsv('teste.csv', informacao='remuneracoes')
 
 
 if __name__ == '__main__':

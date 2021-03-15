@@ -6,6 +6,8 @@ from pathlib import Path
 from PyPDF3 import PdfFileReader
 from PyQt5.QtWidgets import QFileDialog
 
+from helpers import strToFloat
+
 
 class CNISModelo:
 
@@ -70,11 +72,13 @@ class CNISModelo:
             'PVIN-IRREG': 'Pendência de Vínculo Irregular.'
         }
         self.dictRemuneracoes = {
+            'Seq': [],
             'remuneracao': [],
             'competencia': [],
             'indicadores': []
         }
         self.dictContribuicoes = {
+            'Seq': [],
             'competencia': [],
             'dataPagamento': [],
             'contribuicao': [],
@@ -306,6 +310,8 @@ class CNISModelo:
 
         blocoContribuicoes = True
         ehContribuicao = False
+        seq = self.dictCabecalho['Seq'][-1]
+        contSeq = 0
 
         pos = posInicio
 
@@ -315,18 +321,19 @@ class CNISModelo:
 
                 if re.fullmatch(self.expRegDataMenor, documentoLinhas[pos]) is not None:
                     self.dictContribuicoes['competencia'].append(documentoLinhas[pos])
+                    contSeq += 1
                 elif re.fullmatch(self.expRegDataMaior, documentoLinhas[pos]) is not None:
                     self.dictContribuicoes['dataPagamento'].append(documentoLinhas[pos])
                 elif self.verificaSalario(documentoLinhas[pos]):
                     if ehContribuicao:
-                        self.dictContribuicoes['contribuicao'].append(documentoLinhas[pos])
+                        self.dictContribuicoes['contribuicao'].append(strToFloat(documentoLinhas[pos]))
                         if not self.verificaSalario(documentoLinhas[pos+1]):
                             ehContribuicao = False
                             if documentoLinhas[pos+1].replace(',', '') not in self.dictIndicadores.keys():
                                 if re.fullmatch(self.expRegDataMenor, documentoLinhas[pos+1]) is None:
                                     blocoContribuicoes = False
                     else:
-                        self.dictContribuicoes['salContribuicao'].append(documentoLinhas[pos])
+                        self.dictContribuicoes['salContribuicao'].append(strToFloat(documentoLinhas[pos]))
                         if documentoLinhas[pos + 1].replace(',', '') not in self.dictIndicadores.keys():
                             self.dictContribuicoes['indicadores'].append('')
                         if self.verificaSalario(documentoLinhas[pos+1]):
@@ -347,18 +354,26 @@ class CNISModelo:
                             blocoContribuicoes = False
 
             pos += 1
+
+        # Adiciona o Seq de cada contribuição no dicionário de contribuições
+        for i in range(contSeq):
+            self.dictContribuicoes['Seq'].append(seq)
         return pos
 
     def extrairRemueracoes(self, documentoLinhas, posInicio):
 
         blocoRemuneracoes = True
         pos = posInicio
+        seq = self.dictCabecalho['Seq'][-1]
+        contSeq = 0
 
         while blocoRemuneracoes:
+
             if re.fullmatch(self.expRegData, documentoLinhas[pos]) != None:
                 self.dictRemuneracoes['competencia'].append(documentoLinhas[pos])
+                contSeq += 1
             elif documentoLinhas[pos][0].isnumeric():
-                self.dictRemuneracoes['remuneracao'].append(documentoLinhas[pos])
+                self.dictRemuneracoes['remuneracao'].append(strToFloat(documentoLinhas[pos]))
                 if documentoLinhas[pos + 1].split(',')[0] not in self.dictIndicadores.keys():
                     self.dictRemuneracoes['indicadores'].append('')
                     if not documentoLinhas[pos + 1][0].isnumeric():
@@ -383,6 +398,10 @@ class CNISModelo:
                 blocoRemuneracoes = False
 
             pos += 1
+
+        # Adiciona o Seq de cada contribuição no dicionário de contribuições
+        for i in range(contSeq):
+            self.dictRemuneracoes['Seq'].append(seq)
         return pos
 
     def extraiDadosPessoais(self, documentoLinhas: str):
@@ -414,7 +433,6 @@ class CNISModelo:
         return posicaoAtual
 
     def gerarDataframe(self, informacao: str = 'cabecalhos'):
-
 
         if informacao.lower() == 'cabecalhos':
             return pd.DataFrame(self.dictCabecalho)
@@ -451,12 +469,24 @@ class CNISModelo:
         if self.pathCnis is not None and self.pathCnis != '':
             self.carregaDoc(self.pathCnis)
             self.carregaDados()
+            return self.pathCnis
+        else:
+            return None
 
     def getInfoPessoais(self, dataFrame: bool = False):
         if dataFrame:
             return pd.DataFrame.from_dict(self.dictDadosPessoais, orient='index', columns=['Descrição'])
         else:
             return self.dictDadosPessoais
+
+    def getAllDict(self) -> dict:
+        recolhimentos = {
+            'cabecalho': self.dictCabecalho,
+            'cabecalhoBeneficio': self.dictCabecalhoBeneficio,
+            'remuneracoes': self.dictRemuneracoes,
+            'contribuicoes': self.dictContribuicoes
+        }
+        return recolhimentos
 
     def verificaSalario(self, salario: str):
         salarioP = re.match(self.expRegSalarioP, salario) is not None

@@ -87,7 +87,7 @@ class CNISModelo:
         }
         self.dictCabecalho = {
             'Seq': [],
-            'NIT': [],
+            'nit': [],
             'cdEmp': [],
             'nomeEmp': [],
             'dataInicio': [],
@@ -98,7 +98,7 @@ class CNISModelo:
         }
         self.dictCabecalhoBeneficio = {
             'Seq': [],
-            'NIT': [],
+            'nit': [],
             'NB': [],
             'orgVinculo': [],
             'especie': [],
@@ -179,7 +179,7 @@ class CNISModelo:
             if documentoLinhas[j] not in self.infoASerPulada:
 
                 if re.fullmatch(self.expRegNit, documentoLinhas[j]) is not None:
-                    self.dictCabecalho['NIT'].append(documentoLinhas[j])
+                    self.dictCabecalho['nit'].append(documentoLinhas[j])
                     nit = True
                 elif re.fullmatch(self.expRegCNPJ, documentoLinhas[j]) is not None:
                     self.dictCabecalho['cdEmp'].append(documentoLinhas[j])
@@ -202,7 +202,7 @@ class CNISModelo:
                 elif re.match(self.expRegTipoVinculo, documentoLinhas[j]) is not None:
                     pularInfo = documentoLinhas[j]
                     if pularInfo not in self.infoASerPulada:
-                        self.dictCabecalho['tipoVinculo'].append(documentoLinhas[j])
+                        self.dictCabecalho['tipoVinculo'].append(documentoLinhas[j].replace(',', ''))
                         tipoVinculo = True
                 elif documentoLinhas[j][0].isnumeric() and len(documentoLinhas[j]) <= 3:
                     self.dictCabecalho['Seq'].append(documentoLinhas[j])
@@ -216,7 +216,7 @@ class CNISModelo:
         if not seq:
             self.dictCabecalho['Seq'].append('')
         if not nit:
-            self.dictCabecalho['NIT'].append('')
+            self.dictCabecalho['nit'].append('')
         if not cdEmp:
             self.dictCabecalho['cdEmp'].append('')
         # if not orgVinculo:
@@ -252,7 +252,7 @@ class CNISModelo:
             if documentoLinhas[j] not in self.infoASerPulada and documentoLinhas[j] not in self.dictIndicadores.keys():
 
                 if re.fullmatch(self.expRegNit, documentoLinhas[j]) is not None:
-                    self.dictCabecalhoBeneficio['NIT'].append(documentoLinhas[j])
+                    self.dictCabecalhoBeneficio['nit'].append(documentoLinhas[j])
                     nit = True
                 elif re.fullmatch(self.expRegNB, documentoLinhas[j]) is not None:
                     self.dictCabecalhoBeneficio['NB'].append(documentoLinhas[j])
@@ -290,7 +290,7 @@ class CNISModelo:
         if not seq:
             self.dictCabecalhoBeneficio['Seq'].append('')
         if not nit:
-            self.dictCabecalhoBeneficio['NIT'].append('')
+            self.dictCabecalhoBeneficio['nit'].append('')
         if not nb:
             self.dictCabecalhoBeneficio['NB'].append('')
         if not orgVinculo:

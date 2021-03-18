@@ -48,6 +48,12 @@ def getEstados():
         'Tocantins': 'TO'
     }
 
+def getEstadoBySigla(uf: str):
+    dictEstados = getEstados()
+    for chave, valor in dictEstados.items():
+        if valor.upper() == uf.upper():
+            return chave
+
 def mascaraTelCel(telCel):
     if telCel is None or len(telCel) == 10:
         return f'({telCel[0:2]}) {telCel[3:7]}-{telCel[7:]}'
@@ -55,7 +61,6 @@ def mascaraTelCel(telCel):
         return f'({telCel[0:2]}) {telCel[2:3]}.{telCel[3:7]}-{telCel[7:]}'
     else:
         return telCel
-
 
 def mascaraCNPJ(cnpj):
     if cnpj is None or len(cnpj) != 14:
@@ -77,6 +82,10 @@ def mascaraRG(rg: str):
 
 def mascaraCep(cep):
     return f'{cep[:5]}-{cep[5:]}'
+
+def calculaIdadeFromString(dataNascimento: str) -> int:
+    dataIdade = datetime.datetime.strptime(dataNascimento, '%d/%m/%Y')
+    return int((datetime.datetime.now() - dataIdade).days / 365.25)
 
 def macaraFormaPagamento(pagamento: str):
     if (pagamento.upper() == 'CC'):

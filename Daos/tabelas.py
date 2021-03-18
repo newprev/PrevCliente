@@ -6,12 +6,15 @@ class TabelasConfig:
         self.__tblCnisRemuneracoes = 'cnisRemuneracoes'
         self.__tblCnisBeneficios = 'cnisBeneficios'
         self.__tblCnisContribuicoes = 'cnisContribuicoes'
+        self.__tblCnisCabecalhos = 'cnisCabecalhos'
 
 #     # Comando SQL para criar tabela de clientes
         self.__sqlCreateCliente = f"""CREATE TABLE IF NOT EXISTS {self.tblCliente}(
                     clienteId INT AUTO_INCREMENT,
                     nomeCliente VARCHAR(20) NOT NULL,
                     sobrenomeCliente VARCHAR(30) NOT NULL,
+                    idade INT NOT NULL,
+                    dataNascimento DATETIME NOT NULL,
                     telefone VARCHAR(11) NULL,
                     email VARCHAR(40) NOT NULL,
                     rgCliente VARCHAR(8) NOT NULL,
@@ -77,6 +80,24 @@ class TabelasConfig:
                     PRIMARY KEY (beneficiosId)
                 );"""
 
+        # Comando que cria tabela de benefícios
+        self.__sqlCreateCnisCabecalhos = f"""CREATE TABLE IF NOT EXISTS {self.tblCnisCabecalhos}(
+                            cabecalhosId INT AUTO_INCREMENT,
+                            clienteId INT NOT NULL,
+                            seq INT NOT NULL,
+                            nit VARCHAR(14) NOT NULL,
+                            cdEmp VARCHAR(18) NOT NULL,
+                            nomeEmp VARCHAR(100) NOT NULL,
+                            dataInicio DATETIME NOT NULL,
+                            dataFim DATETIME NOT NULL,
+                            tipoVinculo VARCHAR(20) NOT NULL,
+                            indicadores VARCHAR(25) NOT NULL,
+                            ultRem DATETIME NOT NULL,
+                            dataCadastro DATETIME NOT NULL,
+                            dataUltAlt DATETIME NOT NULL,
+                            PRIMARY KEY (cabecalhosId)
+                        );"""
+
     @property
     def sqlCreateCliente(self):
         return self.__sqlCreateCliente
@@ -94,6 +115,10 @@ class TabelasConfig:
         return self.__sqlCreateCnisBeneficios
 
     @property
+    def sqlCreateCnisCabecalhos(self):
+        return self.__sqlCreateCnisCabecalhos
+
+    @property
     def tblCliente(self):
         return self.__tblCliente
 
@@ -108,3 +133,7 @@ class TabelasConfig:
     @property
     def tblCnisBeneficios(self):
         return self.__tblCnisBeneficios
+
+    @property
+    def tblCnisCabecalhos(self):
+        return self.__tblCnisCabecalhos

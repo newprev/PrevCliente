@@ -293,7 +293,7 @@ class Ui_wdgTabCliente(object):
         self.tblClientes = QtWidgets.QTableWidget(self.tabClientes)
         self.tblClientes.setGeometry(QtCore.QRect(230, 130, 591, 411))
         self.tblClientes.setObjectName("tblClientes")
-        self.tblClientes.setColumnCount(4)
+        self.tblClientes.setColumnCount(5)
         self.tblClientes.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tblClientes.setHorizontalHeaderItem(0, item)
@@ -303,6 +303,9 @@ class Ui_wdgTabCliente(object):
         self.tblClientes.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
         self.tblClientes.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblClientes.setHorizontalHeaderItem(4, item)
+        self.tblClientes.horizontalHeader().setCascadingSectionResizes(True)
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.tabClientes)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(210, 90, 631, 31))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
@@ -365,23 +368,41 @@ class Ui_wdgTabCliente(object):
 "\n"
 "/*------------------------------- Push Buttons ------------------------------*/\n"
 "\n"
-"#pbCadastrar {\n"
+"#pbCarregaCnis {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    color: white;\n"
 "\n"
 "    border-radius: 4px;\n"
-"    background-color: rgb(14, 91, 201);\n"
+"    background-color: rgb(52, 73, 94);\n"
 "}\n"
 "\n"
-"#pbCadastrar:hover {\n"
+"#pbCarregaCnis:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: rgb(72, 93, 114);\n"
+"}\n"
+"\n"
+"#pbAtualizar {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: rgb(52, 73, 94);\n"
+"}\n"
+"\n"
+"#pbAtualizar:hover {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    color: white;\n"
 "\n"
 "    border-radius: 4px;\n"
 "    border: 1px solid rgb(51, 126, 251);\n"
-"    background-color: rgb(11, 106, 241);\n"
+"    background-color: rgb(52, 93, 114);\n"
 "}\n"
 "\n"
 "#pbLimpar {\n"
@@ -390,7 +411,7 @@ class Ui_wdgTabCliente(object):
 "    color: white;\n"
 "\n"
 "    border-radius: 4px;\n"
-"    background-color: rgb(245, 121, 0);\n"
+"    background-color: rgb(52, 73, 94);\n"
 "}\n"
 "\n"
 "#pbLimpar:hover {\n"
@@ -400,27 +421,44 @@ class Ui_wdgTabCliente(object):
 "\n"
 "    border-radius: 4px;\n"
 "    border: 1px solid rgb(51, 126, 251);\n"
-"    background-color: rgb(245, 141, 20);\n"
+"    background-color: rgb(52, 93, 114);\n"
 "}\n"
 "\n"
-"\n"
-"\n"
-"#pbCarregaCnis {\n"
+"#pbCadastrar {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    color: white;\n"
 "\n"
 "    border-radius: 4px;\n"
-"    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(58, 171, 140, 255), stop:1 rgba(9, 212, 156, 255));\n"
+"    background-color: rgb(52, 73, 94);\n"
 "}\n"
 "\n"
-"#pbCarregaCnis:hover {\n"
+"#pbCadastrar:hover {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    color: white;\n"
 "\n"
 "    border-radius: 4px;\n"
-"    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(68, 181, 150, 255), stop:1 rgba(19, 222, 166, 255));\n"
+"    border: 1px solid rgb(51, 126, 251);\n"
+"    background-color: rgb(52, 93, 114);\n"
+"}\n"
+"\n"
+"#pbBuscaCep{\n"
+"    border-radius: 4px;\n"
+"    background-image: url(:/buscaCep/search.png);\n"
+"    background-color: rgb(52, 73, 94);\n"
+"\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"}\n"
+"\n"
+"#pbBuscaCep:hover {\n"
+"    border-radius: 4px;\n"
+"    background-image: url(:/buscaCep/search.png);\n"
+"    background-color: rgb(52, 93, 114);\n"
+"\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
 "}")
         self.tabCadastro.setObjectName("tabCadastro")
         self.scrollArea = QtWidgets.QScrollArea(self.tabCadastro)
@@ -459,16 +497,16 @@ class Ui_wdgTabCliente(object):
         self.lbRg.setGeometry(QtCore.QRect(10, 150, 64, 17))
         self.lbRg.setObjectName("lbRg")
         self.leCpf = QtWidgets.QLineEdit(self.frInfoPessoais)
-        self.leCpf.setGeometry(QtCore.QRect(150, 170, 113, 25))
+        self.leCpf.setGeometry(QtCore.QRect(10, 230, 113, 25))
         self.leCpf.setObjectName("leCpf")
         self.lbCpf = QtWidgets.QLabel(self.frInfoPessoais)
-        self.lbCpf.setGeometry(QtCore.QRect(150, 150, 64, 17))
+        self.lbCpf.setGeometry(QtCore.QRect(10, 210, 64, 17))
         self.lbCpf.setObjectName("lbCpf")
         self.cbxEstCivil = QtWidgets.QComboBox(self.frInfoPessoais)
-        self.cbxEstCivil.setGeometry(QtCore.QRect(10, 230, 121, 25))
+        self.cbxEstCivil.setGeometry(QtCore.QRect(10, 290, 121, 25))
         self.cbxEstCivil.setObjectName("cbxEstCivil")
         self.lbEstCivil = QtWidgets.QLabel(self.frInfoPessoais)
-        self.lbEstCivil.setGeometry(QtCore.QRect(10, 210, 91, 17))
+        self.lbEstCivil.setGeometry(QtCore.QRect(10, 270, 91, 17))
         self.lbEstCivil.setObjectName("lbEstCivil")
         self.leNomeMae = QtWidgets.QLineEdit(self.frInfoPessoais)
         self.leNomeMae.setGeometry(QtCore.QRect(150, 230, 191, 25))
@@ -494,11 +532,23 @@ class Ui_wdgTabCliente(object):
         self.leEmail.setGeometry(QtCore.QRect(150, 290, 191, 25))
         self.leEmail.setObjectName("leEmail")
         self.lbTelefone = QtWidgets.QLabel(self.frInfoPessoais)
-        self.lbTelefone.setGeometry(QtCore.QRect(10, 270, 101, 17))
+        self.lbTelefone.setGeometry(QtCore.QRect(10, 330, 101, 17))
         self.lbTelefone.setObjectName("lbTelefone")
         self.leTelefone = QtWidgets.QLineEdit(self.frInfoPessoais)
-        self.leTelefone.setGeometry(QtCore.QRect(10, 290, 121, 25))
+        self.leTelefone.setGeometry(QtCore.QRect(10, 350, 121, 25))
         self.leTelefone.setObjectName("leTelefone")
+        self.leIdade = QtWidgets.QLineEdit(self.frInfoPessoais)
+        self.leIdade.setGeometry(QtCore.QRect(300, 170, 41, 25))
+        self.leIdade.setObjectName("leIdade")
+        self.lbIdade = QtWidgets.QLabel(self.frInfoPessoais)
+        self.lbIdade.setGeometry(QtCore.QRect(300, 150, 51, 17))
+        self.lbIdade.setObjectName("lbIdade")
+        self.leDataNascimento = QtWidgets.QLineEdit(self.frInfoPessoais)
+        self.leDataNascimento.setGeometry(QtCore.QRect(150, 170, 121, 25))
+        self.leDataNascimento.setObjectName("leDataNascimento")
+        self.lbDataNascimento = QtWidgets.QLabel(self.frInfoPessoais)
+        self.lbDataNascimento.setGeometry(QtCore.QRect(150, 150, 121, 17))
+        self.lbDataNascimento.setObjectName("lbDataNascimento")
         self.frInfoResidencial = QtWidgets.QFrame(self.scaCadastro)
         self.frInfoResidencial.setGeometry(QtCore.QRect(390, 80, 361, 291))
         self.frInfoResidencial.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -507,13 +557,13 @@ class Ui_wdgTabCliente(object):
         self.frInfoResidencial.setMidLineWidth(2)
         self.frInfoResidencial.setObjectName("frInfoResidencial")
         self.leCep = QtWidgets.QLineEdit(self.frInfoResidencial)
-        self.leCep.setGeometry(QtCore.QRect(10, 40, 161, 25))
+        self.leCep.setGeometry(QtCore.QRect(10, 50, 161, 25))
         self.leCep.setObjectName("leCep")
         self.leCidade = QtWidgets.QLineEdit(self.frInfoResidencial)
         self.leCidade.setGeometry(QtCore.QRect(200, 110, 141, 25))
         self.leCidade.setObjectName("leCidade")
         self.lbCep = QtWidgets.QLabel(self.frInfoResidencial)
-        self.lbCep.setGeometry(QtCore.QRect(10, 20, 101, 17))
+        self.lbCep.setGeometry(QtCore.QRect(10, 30, 101, 17))
         self.lbCep.setObjectName("lbCep")
         self.lbCidade = QtWidgets.QLabel(self.frInfoResidencial)
         self.lbCidade.setGeometry(QtCore.QRect(200, 90, 111, 17))
@@ -542,6 +592,10 @@ class Ui_wdgTabCliente(object):
         self.leComplemento = QtWidgets.QLineEdit(self.frInfoResidencial)
         self.leComplemento.setGeometry(QtCore.QRect(10, 230, 331, 25))
         self.leComplemento.setObjectName("leComplemento")
+        self.pbBuscaCep = QtWidgets.QPushButton(self.frInfoResidencial)
+        self.pbBuscaCep.setGeometry(QtCore.QRect(200, 50, 41, 25))
+        self.pbBuscaCep.setText("")
+        self.pbBuscaCep.setObjectName("pbBuscaCep")
         self.pbCadastrar = QtWidgets.QPushButton(self.scaCadastro)
         self.pbCadastrar.setGeometry(QtCore.QRect(790, 310, 121, 25))
         self.pbCadastrar.setObjectName("pbCadastrar")
@@ -597,6 +651,9 @@ class Ui_wdgTabCliente(object):
         self.lbFrTituloInfoProfissional = QtWidgets.QLabel(self.scaCadastro)
         self.lbFrTituloInfoProfissional.setGeometry(QtCore.QRect(410, 380, 171, 17))
         self.lbFrTituloInfoProfissional.setObjectName("lbFrTituloInfoProfissional")
+        self.pbAtualizar = QtWidgets.QPushButton(self.scaCadastro)
+        self.pbAtualizar.setGeometry(QtCore.QRect(790, 230, 121, 25))
+        self.pbAtualizar.setObjectName("pbAtualizar")
         self.scrollArea.setWidget(self.scaCadastro)
         self.tabMain.addTab(self.tabCadastro, "")
         self.tabCalculos = QtWidgets.QWidget()
@@ -631,6 +688,8 @@ class Ui_wdgTabCliente(object):
         item.setText(_translate("wdgTabCliente", "Telefone"))
         item = self.tblClientes.horizontalHeaderItem(3)
         item.setText(_translate("wdgTabCliente", "Cidade"))
+        item = self.tblClientes.horizontalHeaderItem(4)
+        item.setText(_translate("wdgTabCliente", "Tipo de Processo"))
         self.pbResetar.setText(_translate("wdgTabCliente", "Resetar"))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabClientes), _translate("wdgTabCliente", "Clientes"))
         self.pbCarregaCnis.setText(_translate("wdgTabCliente", "Carregar \n"
@@ -653,6 +712,10 @@ class Ui_wdgTabCliente(object):
         self.leEmail.setPlaceholderText(_translate("wdgTabCliente", "Ex: Cleusa da Silva Santos"))
         self.lbTelefone.setText(_translate("wdgTabCliente", "Telefone/Celular"))
         self.leTelefone.setPlaceholderText(_translate("wdgTabCliente", "(11) 9.4578-6541"))
+        self.leIdade.setPlaceholderText(_translate("wdgTabCliente", "35"))
+        self.lbIdade.setText(_translate("wdgTabCliente", "Idade"))
+        self.leDataNascimento.setPlaceholderText(_translate("wdgTabCliente", "01/01/2001"))
+        self.lbDataNascimento.setText(_translate("wdgTabCliente", "Data de Nascimento"))
         self.leCep.setPlaceholderText(_translate("wdgTabCliente", "12345-789"))
         self.leCidade.setPlaceholderText(_translate("wdgTabCliente", "São Paulo"))
         self.lbCep.setText(_translate("wdgTabCliente", "CEP"))
@@ -677,6 +740,7 @@ class Ui_wdgTabCliente(object):
         self.lbTitulo.setText(_translate("wdgTabCliente", "<html><head/><body><p>Cadastro de clientes</p></body></html>"))
         self.pbLimpar.setText(_translate("wdgTabCliente", "Limpar"))
         self.lbFrTituloInfoProfissional.setText(_translate("wdgTabCliente", "Informações profissionais"))
+        self.pbAtualizar.setText(_translate("wdgTabCliente", "Atualizar cliente"))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabCadastro), _translate("wdgTabCliente", "Cadastro"))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabCalculos), _translate("wdgTabCliente", "Cálculos"))
 import Resources.tabCliente

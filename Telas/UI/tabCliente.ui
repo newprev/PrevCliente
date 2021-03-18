@@ -663,6 +663,9 @@ QTabBar::tab:selected, QTabBar::tab:hover {
          <height>411</height>
         </rect>
        </property>
+       <attribute name="horizontalHeaderCascadingSectionResizes">
+        <bool>true</bool>
+       </attribute>
        <column>
         <property name="text">
          <string>Nome</string>
@@ -681,6 +684,11 @@ QTabBar::tab:selected, QTabBar::tab:hover {
        <column>
         <property name="text">
          <string>Cidade</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Tipo de Processo</string>
         </property>
        </column>
       </widget>
@@ -764,23 +772,41 @@ QFrame &gt; QLabel {
 
 /*------------------------------- Push Buttons ------------------------------*/
 
-#pbCadastrar {
+#pbCarregaCnis {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
 
 	border-radius: 4px;
-	background-color: rgb(14, 91, 201);
+	background-color: rgb(52, 73, 94);
 }
 
-#pbCadastrar:hover {
+#pbCarregaCnis:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: white;
+
+	border-radius: 4px;
+	background-color: rgb(72, 93, 114);
+}
+
+#pbAtualizar {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: white;
+
+	border-radius: 4px;
+	background-color: rgb(52, 73, 94);
+}
+
+#pbAtualizar:hover {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
 
 	border-radius: 4px;
 	border: 1px solid rgb(51, 126, 251);
-	background-color: rgb(11, 106, 241);
+	background-color: rgb(52, 93, 114);
 }
 
 #pbLimpar {
@@ -789,7 +815,7 @@ QFrame &gt; QLabel {
 	color: white;
 
 	border-radius: 4px;
-	background-color: rgb(245, 121, 0);
+	background-color: rgb(52, 73, 94);
 }
 
 #pbLimpar:hover {
@@ -799,27 +825,44 @@ QFrame &gt; QLabel {
 
 	border-radius: 4px;
 	border: 1px solid rgb(51, 126, 251);
-	background-color: rgb(245, 141, 20);
+	background-color: rgb(52, 93, 114);
 }
 
-
-
-#pbCarregaCnis {
+#pbCadastrar {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
 
 	border-radius: 4px;
-	background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(58, 171, 140, 255), stop:1 rgba(9, 212, 156, 255));
+	background-color: rgb(52, 73, 94);
 }
 
-#pbCarregaCnis:hover {
+#pbCadastrar:hover {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
 
 	border-radius: 4px;
-	background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(68, 181, 150, 255), stop:1 rgba(19, 222, 166, 255));
+	border: 1px solid rgb(51, 126, 251);
+	background-color: rgb(52, 93, 114);
+}
+
+#pbBuscaCep{
+	border-radius: 4px;
+	background-image: url(:/buscaCep/search.png);
+	background-color: rgb(52, 73, 94);
+
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+#pbBuscaCep:hover {
+	border-radius: 4px;
+	background-image: url(:/buscaCep/search.png);
+	background-color: rgb(52, 93, 114);
+
+	background-position: center;
+	background-repeat: no-repeat;
 }</string>
       </property>
       <attribute name="title">
@@ -962,8 +1005,8 @@ CNIS</string>
          <widget class="QLineEdit" name="leCpf">
           <property name="geometry">
            <rect>
-            <x>150</x>
-            <y>170</y>
+            <x>10</x>
+            <y>230</y>
             <width>113</width>
             <height>25</height>
            </rect>
@@ -975,8 +1018,8 @@ CNIS</string>
          <widget class="QLabel" name="lbCpf">
           <property name="geometry">
            <rect>
-            <x>150</x>
-            <y>150</y>
+            <x>10</x>
+            <y>210</y>
             <width>64</width>
             <height>17</height>
            </rect>
@@ -989,7 +1032,7 @@ CNIS</string>
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>230</y>
+            <y>290</y>
             <width>121</width>
             <height>25</height>
            </rect>
@@ -999,7 +1042,7 @@ CNIS</string>
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>210</y>
+            <y>270</y>
             <width>91</width>
             <height>17</height>
            </rect>
@@ -1109,7 +1152,7 @@ CNIS</string>
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>270</y>
+            <y>330</y>
             <width>101</width>
             <height>17</height>
            </rect>
@@ -1122,13 +1165,65 @@ CNIS</string>
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>290</y>
+            <y>350</y>
             <width>121</width>
             <height>25</height>
            </rect>
           </property>
           <property name="placeholderText">
            <string>(11) 9.4578-6541</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="leIdade">
+          <property name="geometry">
+           <rect>
+            <x>300</x>
+            <y>170</y>
+            <width>41</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="placeholderText">
+           <string>35</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="lbIdade">
+          <property name="geometry">
+           <rect>
+            <x>300</x>
+            <y>150</y>
+            <width>51</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Idade</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="leDataNascimento">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>170</y>
+            <width>121</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="placeholderText">
+           <string>01/01/2001</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="lbDataNascimento">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>150</y>
+            <width>121</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Data de Nascimento</string>
           </property>
          </widget>
         </widget>
@@ -1157,7 +1252,7 @@ CNIS</string>
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>40</y>
+            <y>50</y>
             <width>161</width>
             <height>25</height>
            </rect>
@@ -1183,7 +1278,7 @@ CNIS</string>
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>20</y>
+            <y>30</y>
             <width>101</width>
             <height>17</height>
            </rect>
@@ -1304,6 +1399,19 @@ CNIS</string>
           </property>
           <property name="placeholderText">
            <string>Bloco E, Apto: 504</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pbBuscaCep">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>50</y>
+            <width>41</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string/>
           </property>
          </widget>
         </widget>
@@ -1518,6 +1626,19 @@ CNIS</string>
          </property>
          <property name="text">
           <string>Informações profissionais</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pbAtualizar">
+         <property name="geometry">
+          <rect>
+           <x>790</x>
+           <y>230</y>
+           <width>121</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Atualizar cliente</string>
          </property>
         </widget>
        </widget>

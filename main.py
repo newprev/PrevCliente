@@ -66,19 +66,25 @@ class Main(Ui_MainWindow, QMainWindow):
 
         self.lbInfo.setText('CRIANDO TABELA DE REMUNERAÇÕES...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisRemuneracoes):
-            self.progresso(add=20)
+            self.progresso(add=15)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE CONTRIBUIÇÕES...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisContribuicoes):
-            self.progresso(add=20)
+            self.progresso(add=15)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE BENEFÍCIOS...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisBeneficios):
-            self.progresso(add=20)
+            self.progresso(add=15)
+        else:
+            return False
+
+        self.lbInfo.setText('CRIANDO TABELA DE CABEÇALHOS...')
+        if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisCabecalhos):
+            self.progresso(add=15)
         else:
             return False
     #

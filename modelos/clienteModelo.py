@@ -1,9 +1,14 @@
+import datetime
+
+
 class ClienteModelo:
 
     def __init__(self):
         self.clienteId: int = None
         self.nomeCliente: str = None
         self.sobrenomeCliente: str = None
+        self.idade: int = None
+        self.dataNascimento: datetime = None
         self.email: str = None
         self.telefone: str = None
         self.rgCliente: str = None
@@ -26,6 +31,8 @@ class ClienteModelo:
             'clienteId': self.clienteId,
             'nomeCliente': self.nomeCliente,
             'sobrenomeCliente': self.sobrenomeCliente,
+            'idade': self.idade,
+            'dataNascimento': self.dataNascimento,
             'telefone': self.telefone,
             'email': self.email,
             'rgCliente': self.rgCliente,
@@ -48,6 +55,8 @@ class ClienteModelo:
         self.clienteId = dictCliente['clienteId'],
         self.nomeCliente = dictCliente['nomeCliente'],
         self.sobrenomeCliente = dictCliente['sobrenomeCliente'],
+        self.idade = dictCliente['idade'],
+        self.dataNascimento = dictCliente['dataNascimento'],
         self.telefone = dictCliente['telefone'],
         self.email = dictCliente['email'],
         self.rgCliente = dictCliente['rgCliente'],
@@ -68,6 +77,8 @@ class ClienteModelo:
         return f"""Cliente(\nclienteId: {self.clienteId},
             nomeCliente: {self.nomeCliente},
             sobrenomeCliente: {self.sobrenomeCliente},
+            idade: {self.idade},
+            dataNascimento: {self.dataNascimento},
             telefone: {self.telefone},
             email: {self.email},
             rgCliente: {self.rgCliente},

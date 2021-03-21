@@ -62,7 +62,7 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
 
-    def carregarInfoCliente(self, clientId: int = 3):
+    def carregarInfoCliente(self, clientId: int = 1):
         self.carregarTabela(clientId)
         self.cliente.fromList(self.daoCliente.buscaClienteById(clientId)[0])
         self.lbInfoNome.setText(self.cliente.nomeCliente + ' ' + self.cliente.sobrenomeCliente)

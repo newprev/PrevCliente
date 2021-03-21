@@ -23,7 +23,8 @@ class DaoCalculos:
             WHERE clienteId = {clienteId}
         UNION ALL
         SELECT remuneracoesId, seq, competencia, remuneracao, indicadores, 'Remuneração' FROM {self.config.tblCnisRemuneracoes} rem
-            WHERE clienteId = {clienteId};"""
+            WHERE clienteId = {clienteId}
+        ORDER BY competencia;"""
 
         try:
             cursor.execute(strComando)

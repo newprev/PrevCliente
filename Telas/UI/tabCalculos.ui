@@ -154,6 +154,22 @@ QTabBar::tab:selected, QTabBar::tab:hover {
 	background-color: transparent;
 }
 
+QHeaderView::section {
+    background-color: rgb(52, 73, 94);
+    color: white;
+    padding-left: 4px;
+    border: 1px solid #6c6c6c;
+	min-height: 45px;
+}
+
+QHeaderView::down-arrow {
+    icon-color: white;
+}
+
+QHeaderView::up-arrow {
+    icon-color: white;
+}
+
 /*-------------------------------- Push Buttons --------------------------------*/
 #pbArrowNome, 
 #pbArrowEmail, 
@@ -263,7 +279,7 @@ QTabBar::tab:selected, QTabBar::tab:hover {
         <property name="font">
          <font>
           <family>TeX Gyre Adventor</family>
-          <pointsize>14</pointsize>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="textAlignment">
@@ -277,7 +293,7 @@ QTabBar::tab:selected, QTabBar::tab:hover {
         <property name="font">
          <font>
           <family>TeX Gyre Adventor</family>
-          <pointsize>14</pointsize>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="textAlignment">
@@ -286,12 +302,13 @@ QTabBar::tab:selected, QTabBar::tab:hover {
        </column>
        <column>
         <property name="text">
-         <string>Salário de Contribuição</string>
+         <string>Salário de 
+Contribuição</string>
         </property>
         <property name="font">
          <font>
           <family>TeX Gyre Adventor</family>
-          <pointsize>14</pointsize>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="textAlignment">
@@ -305,7 +322,7 @@ QTabBar::tab:selected, QTabBar::tab:hover {
         <property name="font">
          <font>
           <family>TeX Gyre Adventor</family>
-          <pointsize>14</pointsize>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="textAlignment">
@@ -319,7 +336,7 @@ QTabBar::tab:selected, QTabBar::tab:hover {
         <property name="font">
          <font>
           <family>TeX Gyre Adventor</family>
-          <pointsize>14</pointsize>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="textAlignment">

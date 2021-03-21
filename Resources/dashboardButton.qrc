@@ -5,4 +5,7 @@
   <qresource prefix="entrevista">
     <file>entrevista.png</file>
   </qresource>
+  <qresource prefix="calculos">
+    <file>calculos.png</file>
+  </qresource>
 </RCC>

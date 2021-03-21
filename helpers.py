@@ -96,6 +96,18 @@ def macaraFormaPagamento(pagamento: str):
 def mascaraMeses(data: datetime.date):
     return f'{data.day} de {meses[data.month]} de {data.year}'
 
+def mascaraDataPequena(data: datetime.date):
+    return f'{data.month}/{data.year}'
+
+def mascaraDinheiro(valor: float):
+    strValor = str(valor).replace('.', ',')
+    pointPosition = strValor.find(",") - 3
+    strFinal = strValor[:pointPosition] + '.' + strValor[pointPosition:]
+    if strFinal.startswith('.'):
+        return f"R$ {strFinal[1:]}"
+    else:
+        return f"R$ {strFinal}"
+
 def mascaraDataSql(data: datetime, short: bool = False):
     try:
         if short:

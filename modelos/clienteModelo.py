@@ -73,8 +73,33 @@ class ClienteModelo:
         self.complemento = dictCliente['complemento']
         self.pathCnis = dictCliente['pathCnis']
 
+    def fromList(self, listCliente: list):
+        self.clienteId = listCliente[0]
+        self.nomeCliente = listCliente[1]
+        self.sobrenomeCliente = listCliente[2]
+        self.idade = listCliente[3]
+        self.dataNascimento = listCliente[4]
+        self.telefone = listCliente[5]
+        self.email = listCliente[6]
+        self.rgCliente = listCliente[7]
+        self.cpfCliente = listCliente[8]
+        self.numCartProf = listCliente[9]
+        self.serieCarteiraProf = listCliente[10]
+        self.quaCarteiraProf = listCliente[11]
+        self.nit = listCliente[12]
+        self.nomeMae = listCliente[13]
+        self.estadoCivil = listCliente[14]
+        self.endereco = listCliente[15]
+        self.estado = listCliente[16]
+        self.cidade = listCliente[17]
+        self.bairro = listCliente[18]
+        self.cep = listCliente[19]
+        self.complemento = listCliente[20]
+        # pathCnis: {self.pathCnis}
+
     def __repr__(self):
-        return f"""Cliente(\nclienteId: {self.clienteId},
+        return f"""Cliente(
+            clienteId: {self.clienteId},
             nomeCliente: {self.nomeCliente},
             sobrenomeCliente: {self.sobrenomeCliente},
             idade: {self.idade},

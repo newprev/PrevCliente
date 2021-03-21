@@ -107,7 +107,7 @@ QTabBar::tab:selected, QTabBar::tab:hover {
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="iconSize">
       <size>
@@ -664,6 +664,9 @@ QTabBar::tab:selected, QTabBar::tab:hover {
         </rect>
        </property>
        <attribute name="horizontalHeaderCascadingSectionResizes">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="horizontalHeaderStretchLastSection">
         <bool>true</bool>
        </attribute>
        <column>
@@ -1643,11 +1646,6 @@ CNIS</string>
         </widget>
        </widget>
       </widget>
-     </widget>
-     <widget class="QWidget" name="tabCalculos">
-      <attribute name="title">
-       <string>Cálculos</string>
-      </attribute>
      </widget>
     </widget>
    </item>

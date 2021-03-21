@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgFuncionalidade(object):
     def setupUi(self, wdgFuncionalidade):
         wdgFuncionalidade.setObjectName("wdgFuncionalidade")
-        wdgFuncionalidade.resize(118, 109)
+        wdgFuncionalidade.resize(252, 252)
         self.horizontalLayout = QtWidgets.QHBoxLayout(wdgFuncionalidade)
         self.horizontalLayout.setContentsMargins(-1, 0, -1, -1)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -30,19 +30,13 @@ class Ui_wdgFuncionalidade(object):
 "    font-family: \"Fira Sans\";\n"
 "    color: white;\n"
 "\n"
-"/*    padding-bottom: 8px;*/\n"
-"/*    padding-top: 50px;*/\n"
 "    background-color: qlineargradient(spread:pad, x1:0.481102, y1:0.688, x2:0.477, y2:0, stop:0 rgba(41, 128, 185, 255), stop:1 rgba(66, 147, 215, 255));\n"
-"    /*background-color: rgb(85, 87, 83);\n"
-"    qproperty-icon: url(:/cliente/customer.png);\n"
-"    qproperty-iconSize: 24px 24px;*/\n"
 "    border-radius: 10px;\n"
-"    /*background-image: url(:/cliente/customer.png);\n"
+"    background-image: url(:/cliente/customer.png);\n"
 "    background-repeat: no-repeat;\n"
-"    background-position: top;*/\n"
+"    background-position: top;\n"
 "    text-align: bottom center;\n"
 "    padding: 4px 0px 4px 0px;\n"
-"\n"
 "}")
         self.pbFuncionalidade.setFlat(True)
         self.pbFuncionalidade.setObjectName("pbFuncionalidade")

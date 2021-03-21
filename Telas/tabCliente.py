@@ -306,6 +306,7 @@ class Ui_wdgTabCliente(object):
         item = QtWidgets.QTableWidgetItem()
         self.tblClientes.setHorizontalHeaderItem(4, item)
         self.tblClientes.horizontalHeader().setCascadingSectionResizes(True)
+        self.tblClientes.horizontalHeader().setStretchLastSection(True)
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.tabClientes)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(210, 90, 631, 31))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
@@ -656,13 +657,10 @@ class Ui_wdgTabCliente(object):
         self.pbAtualizar.setObjectName("pbAtualizar")
         self.scrollArea.setWidget(self.scaCadastro)
         self.tabMain.addTab(self.tabCadastro, "")
-        self.tabCalculos = QtWidgets.QWidget()
-        self.tabCalculos.setObjectName("tabCalculos")
-        self.tabMain.addTab(self.tabCalculos, "")
         self.horizontalLayout.addWidget(self.tabMain)
 
         self.retranslateUi(wdgTabCliente)
-        self.tabMain.setCurrentIndex(1)
+        self.tabMain.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(wdgTabCliente)
 
     def retranslateUi(self, wdgTabCliente):
@@ -742,7 +740,6 @@ class Ui_wdgTabCliente(object):
         self.lbFrTituloInfoProfissional.setText(_translate("wdgTabCliente", "Informações profissionais"))
         self.pbAtualizar.setText(_translate("wdgTabCliente", "Atualizar cliente"))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabCadastro), _translate("wdgTabCliente", "Cadastro"))
-        self.tabMain.setTabText(self.tabMain.indexOf(self.tabCalculos), _translate("wdgTabCliente", "Cálculos"))
 import Resources.tabCliente
 
 

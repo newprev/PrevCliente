@@ -22,6 +22,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.cnisClienteAtual = None
         self.daoCliente = DaoCliente(db=db)
 
+        self.tblClientes.resizeColumnsToContents()
+
         self.frBuscaNome.hide()
         self.frBuscaEmail.hide()
         self.frBuscaTelefone.hide()
@@ -59,6 +61,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leEmail.textEdited.connect(lambda: self.carregaInfoTela('email'))
 
         self.pbCarregaCnis.clicked.connect(self.carregaCnis)
+
+        self.cliente.estadoCivil = self.cbxEstCivil.currentText()
 
     def atualizaStatusCliente(self):
         if self.cbClienteAntigo.isChecked():
@@ -136,7 +140,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.estado = self.cbxEstado.currentText()
 
         elif info == 'complemento':
-            print('Entrou no complemento')
             self.cliente.complemento = self.leComplemento.text()
 
         elif info == 'nit':
@@ -158,7 +161,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.sobrenomeCliente = self.leSobrenome.text()
 
         elif info == 'rg':
-            print('Entrou no rg')
             self.cliente.rgCliente = self.leRg.text()
 
         elif info == 'dataNascimento':
@@ -177,7 +179,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.estadoCivil = self.cbxEstCivil.currentText()
 
         elif info == 'email':
-            print('Entrou no email')
             self.cliente.email = self.leEmail.text()
 
         elif info == 'telefone':

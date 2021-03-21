@@ -44,7 +44,6 @@ class DaoCliente:
                     clienteId = {cliente.clienteId}
                 """
         try:
-            print(strComando)
             cursor.execute(strComando)
         except:
             raise Warning(f'Erro SQL - atualizaCliente({self.config.tblCliente}) <UPDATE>')
@@ -196,7 +195,7 @@ class DaoCliente:
                                 {clienteId}, {cabecalhos['Seq'][i]}, '{cabecalhos['nit'][i]}',
                                 '{cabecalhos['cdEmp'][i]}', '{cabecalhos['nomeEmp'][i]}', '{mascaraDataSql(cabecalhos['dataInicio'][i])}',
                                 '{mascaraDataSql(cabecalhos['dataFim'][i])}', '{cabecalhos['tipoVinculo'][i]}', '{cabecalhos['indicadores'][i]}',
-                                '{mascaraDataSql(cabecalhos['ultRem'][i])}', NOW(), NOW()
+                                '{mascaraDataSql(cabecalhos['ultRem'][i], short=True)}', NOW(), NOW()
                             )"""
             return strComando
         else:
@@ -219,13 +218,26 @@ class DaoCliente:
                     strComando += ', '
                 strComando += f""" 
                             (
-                                {clienteId}, {remuneracoes['Seq'][i]}, '{mascaraDataSql(remuneracoes['competencia'][i])}',
+                                {clienteId}, {remuneracoes['Seq'][i]}, '{mascaraDataSql(remuneracoes['competencia'][i], short=True)}',
                                 {remuneracoes['remuneracao'][i]}, '{remuneracoes['indicadores'][i]}', NOW(), 
                                 NOW()
                             )"""
             return strComando
         else:
             return ''
+
+    def buscaClienteById(self, clienteId):
+        self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""SELECT * FROM {self.config.tblCliente} WHERE clienteId = {clienteId}"""
+
+        try:
+            cursor.execute(strComando)
+            return cursor.fetchall()
+        except:
+            raise Warning(f'Erro SQL - buscaClienteById({self.config.tblCliente}) <SELECT>')
+
 
     def disconectBD(self, cursor):
         cursor.close()

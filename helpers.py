@@ -78,7 +78,7 @@ def mascaraRG(rg: str):
     if rg is None or len(rg) != 9:
         return rg
     else:
-        return f'{rg[:3]}.{rg[3:6]}.{rg[6:9]}-{rg[9:]}'
+        return f'{rg[:2]}.{rg[2:5]}.{rg[5:8]}-{rg[8:]}'
 
 def mascaraCep(cep: str):
     return f'{cep[:5]}-{cep[5:]}'

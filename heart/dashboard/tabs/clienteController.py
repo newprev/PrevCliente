@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox
 from Daos.daoCliente import DaoCliente
 from Telas.tabCliente import Ui_wdgTabCliente
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
-from helpers import estCivil, getEstados, unmaskAll, calculaIdadeFromString, getEstadoBySigla
+from helpers import estCivil, getEstados, unmaskAll, calculaIdadeFromString, getEstadoBySigla, mascaraRG, mascaraCPF, \
+    mascaraTelCel
 from modelos.clienteModelo import ClienteModelo
 from modelos.cnisModelo import CNISModelo
 from repositorios.clienteRepositorio import ClienteRepository
@@ -42,6 +43,9 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.cbClienteAntigo.clicked.connect(self.atualizaStatusCliente)
 
         self.leCep.editingFinished.connect(lambda: self.carregaInfoTela('cep'))
+        self.leRg.editingFinished.connect(lambda: self.leRg.setText(mascaraRG(self.leRg.text())))
+        self.leCpf.editingFinished.connect(lambda: self.leCpf.setText(mascaraCPF(self.leCpf.text())))
+        self.leTelefone.editingFinished.connect(lambda: self.leTelefone.setText(mascaraTelCel(self.leTelefone.text())))
         self.leEndereco.textEdited.connect(lambda: self.carregaInfoTela('endereco'))
         self.leCidade.textEdited.connect(lambda: self.carregaInfoTela('cidade'))
         self.leBairro.textEdited.connect(lambda: self.carregaInfoTela('bairro'))

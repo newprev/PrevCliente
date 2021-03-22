@@ -1,0 +1,962 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mwBuscaCliente</class>
+ <widget class="QMainWindow" name="mwBuscaCliente">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1039</width>
+    <height>608</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1039</width>
+    <height>608</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/*-------------------------------- Labels -----------------------------------------*/
+#lbTitulo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+}
+
+#lbSubtitulo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;	
+}
+
+#lbTituloFiltro {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+}
+
+#lbTituloFrame {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+
+	background-color: white;
+}
+
+QFrame &gt; QLabel {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;	
+}
+
+#lbBuscaNome, 
+#lbBuscaEmail, 
+#lbBuscaTelefone,
+#lbBuscaTpProcesso,
+#lbBuscaRgcpf {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+}
+
+#lbCdCliente, #lbEmail, 
+#lbTel, #lbNomeCompleto,
+#lbIdade, #lbNit {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+
+
+/*-------------------------------- Frames -----------------------------------------*/
+#frInfo {
+	border: 1px solid rgb(46, 52, 54);
+	border-radius: 8px;
+}
+
+#frFiltrosBusca {
+	background-color: qlineargradient(spread:pad, x1:0.495, y1:1, x2:0.490204, y2:0.608, stop:0 rgba(53, 117, 185, 255), stop:1 rgba(147, 185, 225, 204));
+
+	border: 0px solid;
+	border-radius: 8px;
+}
+
+#frMain {
+	border-radius: 8px;
+	border: 0px solid;
+
+	background-color: white;
+}
+
+#centralwidget {
+	border-radius: 8px;
+	border: 0px solid;	
+}
+
+/*-------------------------------- Tables -----------------------------------------*/
+#tblListaClientes{
+	background-color: transparent;
+}
+
+QHeaderView::section {
+    background-color: rgb(52, 73, 94);
+    color: white;
+    padding-left: 4px;
+    border: 1px solid #6c6c6c;
+	min-height: 45px;
+}
+
+/*-------------------------------- Push Buttons --------------------------------*/
+#pbArrowNome, 
+#pbArrowEmail, 
+#pbArrowTelefone,
+#pbArrowTpProcesso,
+#pbArrowRgcpf {
+	background-image: url(:/arrowUp/arrowUp.png);
+	background-repeat: no-repeat;
+	background-position: center;
+
+	background-color: transparent;
+}
+
+#pbSeleciona, #pbLimpa, 
+#pbCancela, #pbEditar {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: white;
+
+	border-radius: 4px;
+	background-color: rgb(52, 73, 94);
+}
+
+#pbSeleciona:hover, #pbLimpa:hover, 
+#pbCancela:hover, #pbEditar:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: white;
+
+	border-radius: 4px;
+	background-color: rgb(72, 93, 114);
+}
+
+/*-------------------------------- Main Window -------------------------------*/
+#mwBuscaCliente{
+	background-color: rgb(52, 73, 94);
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>8</number>
+    </property>
+    <property name="topMargin">
+     <number>8</number>
+    </property>
+    <property name="rightMargin">
+     <number>8</number>
+    </property>
+    <property name="bottomMargin">
+     <number>8</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="frMain">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="lbTitulo">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>10</y>
+         <width>351</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Buscar clientes</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbSubtitulo">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>36</y>
+         <width>331</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Buscar cliente em toda sua base de dados</string>
+       </property>
+      </widget>
+      <widget class="QFrame" name="frInfo">
+       <property name="geometry">
+        <rect>
+         <x>260</x>
+         <y>80</y>
+         <width>531</width>
+         <height>171</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="lbInfoNomeCompleto">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>30</y>
+          <width>101</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Nome Completo:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoEmail">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>80</y>
+          <width>41</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>E-mail:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoTel">
+        <property name="geometry">
+         <rect>
+          <x>330</x>
+          <y>130</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Tel/Cel:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoCdCliente">
+        <property name="geometry">
+         <rect>
+          <x>330</x>
+          <y>30</y>
+          <width>91</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Cód. Cliente:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoNit">
+        <property name="geometry">
+         <rect>
+          <x>330</x>
+          <y>80</y>
+          <width>21</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>NIT:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbCdCliente">
+        <property name="geometry">
+         <rect>
+          <x>420</x>
+          <y>30</y>
+          <width>91</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoIdade">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>130</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Idade:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbIdade">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>130</y>
+          <width>121</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbEmail">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>80</y>
+          <width>211</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbTel">
+        <property name="geometry">
+         <rect>
+          <x>400</x>
+          <y>130</y>
+          <width>121</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbNit">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>80</y>
+          <width>121</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbNomeCompleto">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>30</y>
+          <width>191</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QTableWidget" name="tblListaClientes">
+       <property name="geometry">
+        <rect>
+         <x>260</x>
+         <y>280</y>
+         <width>751</width>
+         <height>311</height>
+        </rect>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+       <attribute name="horizontalHeaderCascadingSectionResizes">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <column>
+        <property name="text">
+         <string>Cód. Cliente</string>
+        </property>
+        <property name="font">
+         <font>
+          <family>TeX Gyre Adventor</family>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="textAlignment">
+         <set>AlignCenter</set>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Nome completo</string>
+        </property>
+        <property name="font">
+         <font>
+          <family>TeX Gyre Adventor</family>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="textAlignment">
+         <set>AlignCenter</set>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Cidade</string>
+        </property>
+        <property name="font">
+         <font>
+          <family>TeX Gyre Adventor</family>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="textAlignment">
+         <set>AlignCenter</set>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Telefone</string>
+        </property>
+        <property name="font">
+         <font>
+          <family>TeX Gyre Adventor</family>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="textAlignment">
+         <set>AlignCenter</set>
+        </property>
+       </column>
+      </widget>
+      <widget class="QFrame" name="frFiltrosBusca">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>211</width>
+         <height>591</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>500</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="lbTituloFiltro">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>131</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Filtros de busca</string>
+        </property>
+       </widget>
+       <widget class="QFrame" name="frUnderlineNome">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>60</y>
+          <width>211</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QLabel" name="lbBuscaNome">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>0</y>
+           <width>171</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Nome/Sobrenome</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pbArrowNome">
+         <property name="geometry">
+          <rect>
+           <x>180</x>
+           <y>0</y>
+           <width>31</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QFrame" name="frBuscaNome">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>80</y>
+          <width>211</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QLineEdit" name="leBuscaNome">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>191</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="placeholderText">
+          <string>Nome ou Sobrenome</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QFrame" name="frBuscaEmail">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>150</y>
+          <width>211</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QLineEdit" name="leBuscaEmail">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>191</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="placeholderText">
+          <string>E-mail</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QFrame" name="frUnderlineEmail">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>130</y>
+          <width>211</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QLabel" name="lbBuscaEmail">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>0</y>
+           <width>171</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>E-mail</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pbArrowEmail">
+         <property name="geometry">
+          <rect>
+           <x>180</x>
+           <y>0</y>
+           <width>31</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QFrame" name="frBuscaTelefone">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>230</y>
+          <width>211</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QLineEdit" name="leBuscaTelefone">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>191</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="placeholderText">
+          <string>Telefone/Celular</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QFrame" name="frUnderlineTelefone">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>210</y>
+          <width>211</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QLabel" name="lbBuscaTelefone">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>0</y>
+           <width>171</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Telefone</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pbArrowTelefone">
+         <property name="geometry">
+          <rect>
+           <x>180</x>
+           <y>0</y>
+           <width>31</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QFrame" name="frBuscaRgcpf">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>310</y>
+          <width>211</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QLineEdit" name="leBuscaRgcpf">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>191</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="placeholderText">
+          <string>RG ou CPF</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QFrame" name="frUnderlineRgcpf">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>290</y>
+          <width>211</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QLabel" name="lbBuscaRgcpf">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>0</y>
+           <width>171</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>RG/CPF</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pbArrowRgcpf">
+         <property name="geometry">
+          <rect>
+           <x>180</x>
+           <y>0</y>
+           <width>31</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QFrame" name="frUnderlineTpProcesso">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>360</y>
+          <width>211</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QLabel" name="lbBuscaTpProcesso">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>0</y>
+           <width>171</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Tipo de Processo</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pbArrowTpProcesso">
+         <property name="geometry">
+          <rect>
+           <x>180</x>
+           <y>0</y>
+           <width>31</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QFrame" name="frBuscaTpProcesso">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>380</y>
+          <width>211</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QComboBox" name="comboBox">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>191</width>
+           <height>25</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
+       <zorder>lbTituloFiltro</zorder>
+       <zorder>frBuscaNome</zorder>
+       <zorder>frUnderlineNome</zorder>
+       <zorder>frBuscaEmail</zorder>
+       <zorder>frUnderlineEmail</zorder>
+       <zorder>frBuscaTelefone</zorder>
+       <zorder>frUnderlineTelefone</zorder>
+       <zorder>frBuscaRgcpf</zorder>
+       <zorder>frUnderlineRgcpf</zorder>
+       <zorder>frUnderlineTpProcesso</zorder>
+       <zorder>frBuscaTpProcesso</zorder>
+      </widget>
+      <widget class="QLabel" name="lbTituloFrame">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>70</y>
+         <width>141</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Informações pessoais</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbSeleciona">
+       <property name="geometry">
+        <rect>
+         <x>800</x>
+         <y>80</y>
+         <width>111</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Seleciona</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbCancela">
+       <property name="geometry">
+        <rect>
+         <x>800</x>
+         <y>130</y>
+         <width>111</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Cancela</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbLimpa">
+       <property name="geometry">
+        <rect>
+         <x>800</x>
+         <y>180</y>
+         <width>111</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Limpa busca</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbEditar">
+       <property name="geometry">
+        <rect>
+         <x>800</x>
+         <y>230</y>
+         <width>111</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Editar cliente</string>
+       </property>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../../Resources/buscaClientes.qrc"/>
+ </resources>
+ <connections/>
+</ui>

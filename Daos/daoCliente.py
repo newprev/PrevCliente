@@ -237,6 +237,23 @@ class DaoCliente:
             return cursor.fetchall()
         except:
             raise Warning(f'Erro SQL - buscaClienteById({self.config.tblCliente}) <SELECT>')
+        finally:
+            self.disconectBD(cursor)
+
+    def buscaTodos(self):
+        self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""SELECT * FROM {self.config.tblCliente};"""
+
+        try:
+            cursor.execute(strComando)
+            return cursor.fetchall()
+        except:
+            raise Warning(f'Erro SQL - buscaTodos({self.config.tblCliente}) <SELECT>')
+        finally:
+            self.disconectBD(cursor)
+
 
 
     def disconectBD(self, cursor):

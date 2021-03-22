@@ -1,9 +1,11 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem
 
 from Daos.daoCalculos import DaoCalculos
 from Daos.daoCliente import DaoCliente
 from Telas.tabCalculos import Ui_wdgTabCalculos
+from heart.buscaClientePage import BuscaClientePage
 from helpers import mascaraDataPequena, mascaraDinheiro, mascaraCPF
 from modelos.clienteModelo import ClienteModelo
 
@@ -18,8 +20,10 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
         self.daoCalculos = DaoCalculos(db=db)
         self.daoCliente = DaoCliente(db=db)
 
+        self.buscaClientePage = None
+
         self.tblCalculos.hideColumn(0)
-        self.pbBuscarCliente.clicked.connect(lambda: self.carregarInfoCliente())
+        self.pbBuscarCliente.clicked.connect(self.abreBuscaClientePage)
 
         self.tblCalculos.resizeColumnsToContents()
 
@@ -44,26 +48,46 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
 
                 elif contColuna == 2:
                     strItem = QTableWidgetItem(mascaraDataPequena(info))
+                    strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
 
                 elif contColuna == 3:
                     strItem = QTableWidgetItem(mascaraDinheiro(info))
+                    strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
 
                 elif contColuna == 4:
                     strItem = QTableWidgetItem(info)
+                    strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
 
                 elif contColuna == 5:
-                    strItem = QTableWidgetItem(info)
+                    if ',' in info:
+                        indicadores = info.split(', ')
+                        strIndicadores = ''
+                        for indicador in indicadores:
+                            strIndicadores += '- ' + indicador + '\n'
+                    elif info != '':
+                        strIndicadores = '- ' + info
+                    else:
+                        strIndicadores = info
+                    strItem = QTableWidgetItem(strIndicadores)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
+
+
+        self.tblCalculos.resizeColumnsToContents()
+        self.tblCalculos.resizeRowsToContents()
 
     def carregarInfoCliente(self, clientId: int = 1):
         self.carregarTabela(clientId)
         self.cliente.fromList(self.daoCliente.buscaClienteById(clientId)[0])
         self.lbInfoNome.setText(self.cliente.nomeCliente + ' ' + self.cliente.sobrenomeCliente)
         self.lbInfoDocumento.setText(mascaraCPF(self.cliente.cpfCliente))
+
+    def abreBuscaClientePage(self):
+        self.buscaClientePage = BuscaClientePage(parent=self, db=self.db)
+        self.buscaClientePage.show()

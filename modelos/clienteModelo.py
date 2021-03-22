@@ -73,7 +73,7 @@ class ClienteModelo:
         self.complemento = dictCliente['complemento']
         self.pathCnis = dictCliente['pathCnis']
 
-    def fromList(self, listCliente: list):
+    def fromList(self, listCliente: list, retornaInst: bool = False):
         self.clienteId = listCliente[0]
         self.nomeCliente = listCliente[1]
         self.sobrenomeCliente = listCliente[2]
@@ -96,6 +96,8 @@ class ClienteModelo:
         self.cep = listCliente[19]
         self.complemento = listCliente[20]
         # pathCnis: {self.pathCnis}
+        if retornaInst:
+            return self
 
     def __repr__(self):
         return f"""Cliente(

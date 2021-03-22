@@ -80,8 +80,12 @@ def mascaraRG(rg: str):
     else:
         return f'{rg[:3]}.{rg[3:6]}.{rg[6:9]}-{rg[9:]}'
 
-def mascaraCep(cep):
+def mascaraCep(cep: str):
     return f'{cep[:5]}-{cep[5:]}'
+
+def mascaraNit(nit: int) -> str:
+    strNit = str(nit)
+    return f"{strNit[0:3]}.{strNit[3:8]}.{strNit[8:10]}-{strNit[10:]}"
 
 def calculaIdadeFromString(dataNascimento: str) -> int:
     dataIdade = datetime.datetime.strptime(dataNascimento, '%d/%m/%Y')

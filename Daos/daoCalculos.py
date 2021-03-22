@@ -19,10 +19,10 @@ class DaoCalculos:
         cursor = self.db.cursor()
 
         strComando = f"""
-        SELECT contribuicoesId, seq, competencia, salContribuicao, indicadores, 'Contribuição' FROM {self.config.tblCnisContribuicoes} con
+        SELECT contribuicoesId, seq, competencia, salContribuicao, 'Contribuição', indicadores FROM {self.config.tblCnisContribuicoes} con
             WHERE clienteId = {clienteId}
         UNION ALL
-        SELECT remuneracoesId, seq, competencia, remuneracao, indicadores, 'Remuneração' FROM {self.config.tblCnisRemuneracoes} rem
+        SELECT remuneracoesId, seq, competencia, remuneracao, 'Remuneração', indicadores FROM {self.config.tblCnisRemuneracoes} rem
             WHERE clienteId = {clienteId}
         ORDER BY competencia;"""
 

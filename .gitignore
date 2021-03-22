@@ -4,3 +4,5 @@
 *.pdf
 
 *.pyi
+
+.idea/misc.xml

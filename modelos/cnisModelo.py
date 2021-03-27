@@ -6,7 +6,7 @@ from pathlib import Path
 from PyPDF3 import PdfFileReader
 from PyQt5.QtWidgets import QFileDialog
 
-from helpers import strToFloat
+from helpers import strToFloat, dictIndicadores
 
 
 class CNISModelo:
@@ -41,36 +41,7 @@ class CNISModelo:
 
         self.qtdPaginas = 0
 
-        self.dictIndicadores = {
-            'AEXT-VI': 'Acerto de vínculo extemporâneo indeferido.',
-            'AEXT-VT': 'Acerto de vínculo extemporâneo validado totalmente.',
-            'AVRC-DEF': 'Acerto de vínculo extemporâneo deferido.',
-            'IEAN': 'Exposição a agentes nocivos no grupo 25 anos.',
-            'IGFIP-INF': 'Indicador de GFIP meramente informativa.',
-            'ILEI123': 'Contribuição da competência foi recolhida com código da Lei Complementar 123/2006. (Plano simplificado de Previdência).',
-            'IMEI': 'Contribuição da competência foi recolhida com código MEI.',
-            'IREC-CIRURAL': 'Recolhimento com código de CI Rural sem homologação.',
-            'IREC-FBR': 'Recolhimento facultativo baixa renda.',
-            'IREC-INDPEND': 'Recolhimentos com indicadores e/ou pendências.',
-            'IREC-LC123': 'Recolhimentos para fins da LC 123.',
-            'IREC-LC123-SUP': 'Recolhimento / Complementação LC 123 superior ao salário mínimo.',
-            'PADM-EMPR': 'Inconsistência temporal, admissão anterior ao início da atividade do empregador.',
-            'PEMP-CAD': 'Falta de informações cadastrais do CNPJ ou CEI.',
-            'PEXT': 'Pendência de vínculo extemporâneo não tratado.',
-            'PREC-COD1821': 'Recolhimento com código de pagamento 1821 – Mandato Eletivo.',
-            'PREC-CSE': 'Recolhimento GPS de Segurado Especial Pendente Comprovação.',
-            'PREC-FBR': 'Recolhimento facultativo baixa renda não validado / homologado.',
-            'PREC-FBR-ANT': 'Recolhimento facultativo baixa renda anterior a comp. 09/2011.',
-            'PREC-LC123-ANT': 'Recolhimento com código da LC 123 anterior à competência 04/2007.',
-            'PREC-MENOR-MIN': 'Recolhimento realizado é inferior ao valor mínimo.',
-            'PREC-PMIG-DOM': 'Recolhimento inclusive sal.mat., e/ou período declarado empregado doméstico sem registro de vínculo.',
-            'PREC-FACULTCONC': 'Recolhimento ou período atividade de contribuinte facultativo concomitante com outro TFV.',
-            'PREM-EMPR': 'Remuneração antes do início da atividade do empregador.',
-            'PREM-EXT': 'Remuneração da competência é extemporânea.',
-            'PREM-FVIN': 'Remunerações posteriores ao fim do vínculo de trabalho.',
-            'PREM-RET': 'Remuneração de prestador de serviço declarada em GFIP mas que não é considerada.',
-            'PVIN-IRREG': 'Pendência de Vínculo Irregular.'
-        }
+        self.dictIndicadores = dictIndicadores
         self.dictRemuneracoes = {
             'Seq': [],
             'remuneracao': [],

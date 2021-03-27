@@ -35,6 +35,36 @@ class DaoCalculos:
             self.db.commit()
             self.disconectBD(cursor)
 
+    def contaContribuicoes(self, clienteId: int):
+        self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""SELECT COUNT(*) FROM {self.config.tblCnisContribuicoes} WHERE clienteId = {clienteId}"""
+
+        try:
+            cursor.execute(strComando)
+            return cursor.fetchone()
+        except:
+            raise Warning(f'Erro SQL - contaContribuicoes({self.config.tblCnisContribuicoes}) <SELECT>')
+        finally:
+            self.db.commit()
+            self.disconectBD(cursor)
+
+    def contaRemuneracoes(self, clienteId: int):
+        self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""SELECT COUNT(*) FROM {self.config.tblCnisRemuneracoes} WHERE clienteId = {clienteId}"""
+
+        try:
+            cursor.execute(strComando)
+            return cursor.fetchone()
+        except:
+            raise Warning(f'Erro SQL - contaRemuneracoes({self.config.tblCnisRemuneracoes}) <SELECT>')
+        finally:
+            self.db.commit()
+            self.disconectBD(cursor)
+
     def disconectBD(self, cursor):
         cursor.close()
         self.db.close()

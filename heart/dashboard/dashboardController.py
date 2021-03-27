@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QHBoxLayout
 
 from Telas.dashboard import Ui_mwDashBoard
+from heart.dashboard.configuracoes.configuracoesPage import ConfiguracoesPage
 from heart.dashboard.localWidgets.cardFuncionalidade import CardFuncionalidade
 from heart.dashboard.tabs.clienteController import TabCliente
 from heart.dashboard.tabs.tabCalculos import TabCalculos
@@ -20,12 +21,15 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.funcCliente = CardFuncionalidade(tipo='cliente', parent=self)
         self.funcEntrevista = CardFuncionalidade(tipo='Entrevista', parent=self)
         self.funcCalculos = CardFuncionalidade(tipo='Calculos', parent=self)
+        self.pbConfig.clicked.connect(lambda: self.trocarParaPagina(2))
 
         self.tabCadastro = TabCliente(parent=self, db=db)
         self.tabCalculos = TabCalculos(parent=self, db=db)
+        self.configuracoesPage = ConfiguracoesPage(parent=self, db=db)
 
         self.stkMainDashBoard.addWidget(self.tabCadastro)
         self.stkMainDashBoard.addWidget(self.tabCalculos)
+        self.stkMainDashBoard.addWidget(self.configuracoesPage)
 
         self.stkMainDashBoard.setCurrentIndex(0)
         # self.funcOutra1 = CardFuncionalidade()

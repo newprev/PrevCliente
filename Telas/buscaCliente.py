@@ -29,7 +29,9 @@ class Ui_mwBuscaCliente(object):
 "\n"
 "#lbTituloFiltro {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 16px;\n"
+"    font-size: 20px;\n"
+"\n"
+"    color: white;\n"
 "}\n"
 "\n"
 "#lbTituloFrame {\n"
@@ -51,6 +53,8 @@ class Ui_mwBuscaCliente(object):
 "#lbBuscaRgcpf {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
+"\n"
+"    color: white;\n"
 "}\n"
 "\n"
 "#lbCdCliente, #lbEmail, \n"
@@ -70,7 +74,9 @@ class Ui_mwBuscaCliente(object):
 "}\n"
 "\n"
 "#frFiltrosBusca {\n"
-"    background-color: qlineargradient(spread:pad, x1:0.495, y1:1, x2:0.490204, y2:0.608, stop:0 rgba(53, 117, 185, 255), stop:1 rgba(147, 185, 225, 204));\n"
+"/*    background-color: qlineargradient(spread:pad, x1:0.495, y1:1, x2:0.490204, y2:0.608, stop:0 rgba(53, 117, 185, 255), stop:1 rgba(147, 185, 225, 204));*/\n"
+"\n"
+"    background-color: rgb(82, 111, 139);\n"
 "\n"
 "    border: 0px solid;\n"
 "    border-radius: 8px;\n"
@@ -132,6 +138,24 @@ class Ui_mwBuscaCliente(object):
 "\n"
 "    border-radius: 4px;\n"
 "    background-color: rgb(72, 93, 114);\n"
+"}\n"
+"\n"
+"#pbFiltrar {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: rgb(52, 73, 94);\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"#pbFiltrar:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: rgb(52, 73, 94);\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: rgb(244, 244, 244);\n"
 "}\n"
 "\n"
 "/*-------------------------------- Main Window -------------------------------*/\n"
@@ -253,7 +277,7 @@ class Ui_mwBuscaCliente(object):
         self.frFiltrosBusca.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frFiltrosBusca.setObjectName("frFiltrosBusca")
         self.lbTituloFiltro = QtWidgets.QLabel(self.frFiltrosBusca)
-        self.lbTituloFiltro.setGeometry(QtCore.QRect(10, 10, 131, 21))
+        self.lbTituloFiltro.setGeometry(QtCore.QRect(10, 10, 161, 21))
         self.lbTituloFiltro.setObjectName("lbTituloFiltro")
         self.frUnderlineNome = QtWidgets.QFrame(self.frFiltrosBusca)
         self.frUnderlineNome.setGeometry(QtCore.QRect(0, 60, 211, 21))
@@ -360,6 +384,9 @@ class Ui_mwBuscaCliente(object):
         self.comboBox = QtWidgets.QComboBox(self.frBuscaTpProcesso)
         self.comboBox.setGeometry(QtCore.QRect(10, 10, 191, 25))
         self.comboBox.setObjectName("comboBox")
+        self.pbFiltrar = QtWidgets.QPushButton(self.frFiltrosBusca)
+        self.pbFiltrar.setGeometry(QtCore.QRect(90, 450, 111, 25))
+        self.pbFiltrar.setObjectName("pbFiltrar")
         self.lbTituloFiltro.raise_()
         self.frBuscaNome.raise_()
         self.frUnderlineNome.raise_()
@@ -371,6 +398,7 @@ class Ui_mwBuscaCliente(object):
         self.frUnderlineRgcpf.raise_()
         self.frUnderlineTpProcesso.raise_()
         self.frBuscaTpProcesso.raise_()
+        self.pbFiltrar.raise_()
         self.lbTituloFrame = QtWidgets.QLabel(self.frMain)
         self.lbTituloFrame.setGeometry(QtCore.QRect(280, 70, 141, 17))
         self.lbTituloFrame.setObjectName("lbTituloFrame")
@@ -421,6 +449,7 @@ class Ui_mwBuscaCliente(object):
         self.leBuscaRgcpf.setPlaceholderText(_translate("mwBuscaCliente", "RG ou CPF"))
         self.lbBuscaRgcpf.setText(_translate("mwBuscaCliente", "RG/CPF"))
         self.lbBuscaTpProcesso.setText(_translate("mwBuscaCliente", "Tipo de Processo"))
+        self.pbFiltrar.setText(_translate("mwBuscaCliente", "Filtrar"))
         self.lbTituloFrame.setText(_translate("mwBuscaCliente", "  Informações pessoais"))
         self.pbSeleciona.setText(_translate("mwBuscaCliente", "Seleciona"))
         self.pbCancela.setText(_translate("mwBuscaCliente", "Cancela"))

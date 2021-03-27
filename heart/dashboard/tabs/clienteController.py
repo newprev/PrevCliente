@@ -209,7 +209,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         elif 'erro' in dictCep.keys():
             self.showPopupAlerta(dictCep['erro'])
 
-
     def carregaComboBoxes(self):
         self.cbxEstCivil.addItems(estCivil)
         self.cbxEstado.addItems(getEstados().keys())

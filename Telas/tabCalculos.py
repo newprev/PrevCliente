@@ -91,10 +91,8 @@ class Ui_wdgTabCalculos(object):
 "    font-size: 16px;\n"
 "}\n"
 "\n"
-"#lbBuscaNome, \n"
-"#lbBuscaEmail, \n"
-"#lbBuscaTelefone,\n"
-"#lbBuscaTpProcesso,\n"
+"#lbBuscaNome, #lbBuscaEmail, \n"
+"#lbBuscaTelefone, #lbBuscaTpProcesso,\n"
 "#lbBuscaRgcpf {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
@@ -105,6 +103,14 @@ class Ui_wdgTabCalculos(object):
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    background-color: white;\n"
+"}\n"
+"\n"
+"#lbDibDer, \n"
+"#lbNome, #lbDocumento {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    background-color: white;\n"
+"    font-weight: bold;\n"
 "}\n"
 "\n"
 "/*-------------------------------- Frames -----------------------------------------*/\n"
@@ -155,7 +161,7 @@ class Ui_wdgTabCalculos(object):
 "\n"
 "#pbBuscarCliente {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;\n"
+"    font-size: 14px;\n"
 "    color: white;\n"
 "\n"
 "    border-radius: 4px;\n"
@@ -164,12 +170,32 @@ class Ui_wdgTabCalculos(object):
 "\n"
 "#pbBuscarCliente:hover {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    border: 1px solid;\n"
+"    background-color: rgb(72, 93, 114);\n"
+"}\n"
+"\n"
+"#pbInserir, #pbEditar, #pbExcluir {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    color: white;\n"
 "\n"
 "    border-radius: 4px;\n"
-"    border: 1px solid rgb(51, 126, 251);\n"
-"    background-color: rgb(245, 141, 20);\n"
+"    background-color: rgb(52, 73, 94);\n"
+"}\n"
+"\n"
+"#pbInserir:hover, #pbEditar:hover, \n"
+"#pbExcluir:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    border: 1px solid;\n"
+"    background-color: rgb(72, 93, 114);\n"
 "}")
         self.tabContribuicoes.setObjectName("tabContribuicoes")
         self.lbTituloClientes = QtWidgets.QLabel(self.tabContribuicoes)
@@ -179,7 +205,7 @@ class Ui_wdgTabCalculos(object):
         self.lbInfoClientes.setGeometry(QtCore.QRect(10, 40, 371, 31))
         self.lbInfoClientes.setObjectName("lbInfoClientes")
         self.tblCalculos = QtWidgets.QTableWidget(self.tabContribuicoes)
-        self.tblCalculos.setGeometry(QtCore.QRect(20, 80, 741, 481))
+        self.tblCalculos.setGeometry(QtCore.QRect(20, 100, 741, 461))
         self.tblCalculos.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.tblCalculos.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
         self.tblCalculos.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
@@ -230,25 +256,45 @@ class Ui_wdgTabCalculos(object):
         self.tblCalculos.horizontalHeader().setStretchLastSection(True)
         self.tblCalculos.verticalHeader().setVisible(False)
         self.pbBuscarCliente = QtWidgets.QPushButton(self.tabContribuicoes)
-        self.pbBuscarCliente.setGeometry(QtCore.QRect(810, 130, 101, 25))
+        self.pbBuscarCliente.setGeometry(QtCore.QRect(790, 150, 101, 41))
         self.pbBuscarCliente.setObjectName("pbBuscarCliente")
         self.frInfoCabecalho = QtWidgets.QFrame(self.tabContribuicoes)
-        self.frInfoCabecalho.setGeometry(QtCore.QRect(420, 10, 341, 61))
+        self.frInfoCabecalho.setGeometry(QtCore.QRect(420, 10, 491, 81))
         self.frInfoCabecalho.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frInfoCabecalho.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frInfoCabecalho.setObjectName("frInfoCabecalho")
         self.lbInfoNome = QtWidgets.QLabel(self.frInfoCabecalho)
-        self.lbInfoNome.setGeometry(QtCore.QRect(10, 10, 161, 17))
+        self.lbInfoNome.setGeometry(QtCore.QRect(10, 10, 81, 21))
         self.lbInfoNome.setObjectName("lbInfoNome")
         self.lbInfoDocumento = QtWidgets.QLabel(self.frInfoCabecalho)
-        self.lbInfoDocumento.setGeometry(QtCore.QRect(10, 40, 131, 17))
+        self.lbInfoDocumento.setGeometry(QtCore.QRect(10, 50, 81, 21))
         self.lbInfoDocumento.setObjectName("lbInfoDocumento")
         self.lbInfoDibDer = QtWidgets.QLabel(self.frInfoCabecalho)
-        self.lbInfoDibDer.setGeometry(QtCore.QRect(200, 10, 131, 17))
+        self.lbInfoDibDer.setGeometry(QtCore.QRect(350, 10, 51, 21))
         self.lbInfoDibDer.setObjectName("lbInfoDibDer")
+        self.lbNome = QtWidgets.QLabel(self.frInfoCabecalho)
+        self.lbNome.setGeometry(QtCore.QRect(100, 10, 221, 21))
+        self.lbNome.setText("")
+        self.lbNome.setObjectName("lbNome")
+        self.lbDocumento = QtWidgets.QLabel(self.frInfoCabecalho)
+        self.lbDocumento.setGeometry(QtCore.QRect(100, 50, 191, 21))
+        self.lbDocumento.setText("")
+        self.lbDocumento.setObjectName("lbDocumento")
+        self.lbDibDer = QtWidgets.QLabel(self.frInfoCabecalho)
+        self.lbDibDer.setGeometry(QtCore.QRect(410, 10, 61, 21))
+        self.lbDibDer.setObjectName("lbDibDer")
         self.lbInfoCabecalho = QtWidgets.QLabel(self.tabContribuicoes)
         self.lbInfoCabecalho.setGeometry(QtCore.QRect(440, 0, 141, 17))
         self.lbInfoCabecalho.setObjectName("lbInfoCabecalho")
+        self.pbInserir = QtWidgets.QPushButton(self.tabContribuicoes)
+        self.pbInserir.setGeometry(QtCore.QRect(790, 220, 101, 25))
+        self.pbInserir.setObjectName("pbInserir")
+        self.pbExcluir = QtWidgets.QPushButton(self.tabContribuicoes)
+        self.pbExcluir.setGeometry(QtCore.QRect(790, 270, 101, 25))
+        self.pbExcluir.setObjectName("pbExcluir")
+        self.pbEditar = QtWidgets.QPushButton(self.tabContribuicoes)
+        self.pbEditar.setGeometry(QtCore.QRect(790, 320, 101, 25))
+        self.pbEditar.setObjectName("pbEditar")
         self.tabMain.addTab(self.tabContribuicoes, "")
         self.horizontalLayout.addWidget(self.tabMain)
 
@@ -274,11 +320,16 @@ class Ui_wdgTabCalculos(object):
         item.setText(_translate("wdgTabCalculos", "Natureza"))
         item = self.tblCalculos.horizontalHeaderItem(5)
         item.setText(_translate("wdgTabCalculos", "Indicadores"))
-        self.pbBuscarCliente.setText(_translate("wdgTabCalculos", "Buscar cliente"))
+        self.pbBuscarCliente.setText(_translate("wdgTabCalculos", "Buscar \n"
+"cliente"))
         self.lbInfoNome.setText(_translate("wdgTabCalculos", "Nome cliente:"))
         self.lbInfoDocumento.setText(_translate("wdgTabCalculos", "Documento:"))
         self.lbInfoDibDer.setText(_translate("wdgTabCalculos", "DIB/DER:"))
+        self.lbDibDer.setText(_translate("wdgTabCalculos", "DIB/DER:"))
         self.lbInfoCabecalho.setText(_translate("wdgTabCalculos", "  Informações pessoais"))
+        self.pbInserir.setText(_translate("wdgTabCalculos", "Inserir"))
+        self.pbExcluir.setText(_translate("wdgTabCalculos", "Excluir"))
+        self.pbEditar.setText(_translate("wdgTabCalculos", "Editar"))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabContribuicoes), _translate("wdgTabCalculos", "Contribuições"))
 
 

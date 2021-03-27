@@ -7,6 +7,8 @@ class TabelasConfig:
         self.__tblCnisBeneficios = 'cnisBeneficios'
         self.__tblCnisContribuicoes = 'cnisContribuicoes'
         self.__tblCnisCabecalhos = 'cnisCabecalhos'
+        self.__tblIndicadores = 'indicadores'
+        self.__tblEspecieBenef = 'especieBenef'
 
 #     # Comando SQL para criar tabela de clientes
         self.__sqlCreateCliente = f"""CREATE TABLE IF NOT EXISTS {self.tblCliente}(
@@ -98,6 +100,22 @@ class TabelasConfig:
                             PRIMARY KEY (cabecalhosId)
                         );"""
 
+        # Comando que cria tabela de indicadores
+        self.__sqlCreateIndicadores = f"""
+        CREATE TABLE IF NOT EXISTS {self.tblIndicadores}(
+            indicadoresId VARCHAR(20) NOT NULL,
+            descricao VARCHAR(120) NOT NULL,
+            PRIMARY KEY (indicadoresId)
+        );"""
+
+        # Comando que cria tabela de espécies de benefícios
+        self.__sqlCreateEspecieBenef = f"""
+        CREATE TABLE IF NOT EXISTS {self.tblEspecieBenef}(
+            especieId VARCHAR(3) NOT NULL,
+            descricao VARCHAR(120) NOT NULL,
+            PRIMARY KEY (especieId)
+        );"""
+
     @property
     def sqlCreateCliente(self):
         return self.__sqlCreateCliente
@@ -119,6 +137,14 @@ class TabelasConfig:
         return self.__sqlCreateCnisCabecalhos
 
     @property
+    def sqlCreateIndicadores(self):
+        return self.__sqlCreateIndicadores
+
+    @property
+    def sqlCreateEspecieBenef(self):
+        return self.__sqlCreateEspecieBenef
+
+    @property
     def tblCliente(self):
         return self.__tblCliente
 
@@ -137,3 +163,11 @@ class TabelasConfig:
     @property
     def tblCnisCabecalhos(self):
         return self.__tblCnisCabecalhos
+
+    @property
+    def tblIndicadores(self):
+        return self.__tblIndicadores
+
+    @property
+    def tblEspecieBenef(self):
+        return self.__tblEspecieBenef

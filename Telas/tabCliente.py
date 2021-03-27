@@ -95,7 +95,9 @@ class Ui_wdgTabCliente(object):
 "\n"
 "#lbTituloFiltro {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 16px;\n"
+"    font-size: 20px;\n"
+"\n"
+"    color: white;\n"
 "}\n"
 "\n"
 "#lbBuscaNome, \n"
@@ -105,11 +107,16 @@ class Ui_wdgTabCliente(object):
 "#lbBuscaRgcpf {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
+"\n"
+"    color: white;\n"
 "}\n"
 "\n"
 "/*-------------------------------- Frames -----------------------------------------*/\n"
 "#frFiltrosBusca {\n"
-"    background-color: rgb(245, 245, 245);\n"
+"    background-color: rgb(82, 111, 139);\n"
+"    border: 0px solid;\n"
+"\n"
+"    border-radius: 8px;\n"
 "}\n"
 "\n"
 "#frUnderlineNome {\n"
@@ -119,6 +126,14 @@ class Ui_wdgTabCliente(object):
 "/*-------------------------------- Tables -----------------------------------------*/\n"
 "#tblClientes{\n"
 "    background-color: transparent;\n"
+"}\n"
+"\n"
+"QHeaderView::section {\n"
+"    background-color: rgb(52, 73, 94);\n"
+"    color: white;\n"
+"    padding-left: 4px;\n"
+"    border: 1px solid #6c6c6c;\n"
+"    min-height: 45px;\n"
 "}\n"
 "\n"
 "/*-------------------------------- Push Buttons --------------------------------*/\n"
@@ -134,23 +149,42 @@ class Ui_wdgTabCliente(object):
 "    background-color: transparent;\n"
 "}\n"
 "\n"
-"#pbResetar {\n"
+"#pbResetar, #pbFiltrar {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    color: white;\n"
 "\n"
 "    border-radius: 4px;\n"
-"    background-color: rgb(245, 121, 0);\n"
+"    background-color: rgb(52, 73, 94);\n"
 "}\n"
 "\n"
-"#pbResetar:hover {\n"
+"#pbResetar:hover, #pbFiltrar:hover {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    color: white;\n"
 "\n"
 "    border-radius: 4px;\n"
-"    border: 1px solid rgb(51, 126, 251);\n"
-"    background-color: rgb(245, 141, 20);\n"
+"    border: 1px solid;\n"
+"    background-color: rgb(72, 93, 114);\n"
+"}\n"
+"\n"
+"#pbFiltrar {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: rgb(52, 73, 94);\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"#pbFiltrar:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: rgb(52, 73, 94);\n"
+"\n"
+"    border-radius: 4px;\n"
+"    border: 1px solid;\n"
+"    background-color: rgb(238, 238, 236);\n"
 "}")
         self.tabClientes.setObjectName("tabClientes")
         self.lbTituloClientes = QtWidgets.QLabel(self.tabClientes)
@@ -160,19 +194,19 @@ class Ui_wdgTabCliente(object):
         self.lbInfoClientes.setGeometry(QtCore.QRect(230, 40, 371, 31))
         self.lbInfoClientes.setObjectName("lbInfoClientes")
         self.frFiltrosBusca = QtWidgets.QFrame(self.tabClientes)
-        self.frFiltrosBusca.setGeometry(QtCore.QRect(-2, -2, 211, 1000))
+        self.frFiltrosBusca.setGeometry(QtCore.QRect(0, 0, 211, 571))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frFiltrosBusca.sizePolicy().hasHeightForWidth())
         self.frFiltrosBusca.setSizePolicy(sizePolicy)
-        self.frFiltrosBusca.setMinimumSize(QtCore.QSize(0, 1000))
+        self.frFiltrosBusca.setMinimumSize(QtCore.QSize(0, 470))
         self.frFiltrosBusca.setStyleSheet("")
         self.frFiltrosBusca.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frFiltrosBusca.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frFiltrosBusca.setObjectName("frFiltrosBusca")
         self.lbTituloFiltro = QtWidgets.QLabel(self.frFiltrosBusca)
-        self.lbTituloFiltro.setGeometry(QtCore.QRect(10, 10, 131, 21))
+        self.lbTituloFiltro.setGeometry(QtCore.QRect(10, 10, 171, 21))
         self.lbTituloFiltro.setObjectName("lbTituloFiltro")
         self.frUnderlineNome = QtWidgets.QFrame(self.frFiltrosBusca)
         self.frUnderlineNome.setGeometry(QtCore.QRect(0, 60, 211, 21))
@@ -279,6 +313,9 @@ class Ui_wdgTabCliente(object):
         self.comboBox = QtWidgets.QComboBox(self.frBuscaTpProcesso)
         self.comboBox.setGeometry(QtCore.QRect(10, 10, 191, 25))
         self.comboBox.setObjectName("comboBox")
+        self.pbFiltrar = QtWidgets.QPushButton(self.frFiltrosBusca)
+        self.pbFiltrar.setGeometry(QtCore.QRect(120, 440, 83, 25))
+        self.pbFiltrar.setObjectName("pbFiltrar")
         self.lbTituloFiltro.raise_()
         self.frBuscaNome.raise_()
         self.frUnderlineNome.raise_()
@@ -290,20 +327,46 @@ class Ui_wdgTabCliente(object):
         self.frUnderlineRgcpf.raise_()
         self.frUnderlineTpProcesso.raise_()
         self.frBuscaTpProcesso.raise_()
+        self.pbFiltrar.raise_()
         self.tblClientes = QtWidgets.QTableWidget(self.tabClientes)
         self.tblClientes.setGeometry(QtCore.QRect(230, 130, 591, 411))
         self.tblClientes.setObjectName("tblClientes")
         self.tblClientes.setColumnCount(5)
         self.tblClientes.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("TeX Gyre Adventor")
+        font.setPointSize(12)
+        item.setFont(font)
         self.tblClientes.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("TeX Gyre Adventor")
+        font.setPointSize(12)
+        item.setFont(font)
         self.tblClientes.setHorizontalHeaderItem(1, item)
         item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("TeX Gyre Adventor")
+        font.setPointSize(12)
+        item.setFont(font)
         self.tblClientes.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("TeX Gyre Adventor")
+        font.setPointSize(12)
+        item.setFont(font)
         self.tblClientes.setHorizontalHeaderItem(3, item)
         item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("TeX Gyre Adventor")
+        font.setPointSize(12)
+        item.setFont(font)
         self.tblClientes.setHorizontalHeaderItem(4, item)
         self.tblClientes.horizontalHeader().setCascadingSectionResizes(True)
         self.tblClientes.horizontalHeader().setStretchLastSection(True)
@@ -678,6 +741,7 @@ class Ui_wdgTabCliente(object):
         self.leBuscaRgcpf.setPlaceholderText(_translate("wdgTabCliente", "RG ou CPF"))
         self.lbBuscaRgcpf.setText(_translate("wdgTabCliente", "RG/CPF"))
         self.lbBuscaTpProcesso.setText(_translate("wdgTabCliente", "Tipo de Processo"))
+        self.pbFiltrar.setText(_translate("wdgTabCliente", "Filtrar"))
         item = self.tblClientes.horizontalHeaderItem(0)
         item.setText(_translate("wdgTabCliente", "Nome"))
         item = self.tblClientes.horizontalHeaderItem(1)

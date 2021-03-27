@@ -125,10 +125,8 @@ QTabBar::tab:selected, QTabBar::tab:hover {
 	font-size: 16px;
 }
 
-#lbBuscaNome, 
-#lbBuscaEmail, 
-#lbBuscaTelefone,
-#lbBuscaTpProcesso,
+#lbBuscaNome, #lbBuscaEmail, 
+#lbBuscaTelefone, #lbBuscaTpProcesso,
 #lbBuscaRgcpf {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
@@ -139,6 +137,14 @@ QTabBar::tab:selected, QTabBar::tab:hover {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	background-color: white;
+}
+
+#lbDibDer, 
+#lbNome, #lbDocumento {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	background-color: white;
+	font-weight: bold;
 }
 
 /*-------------------------------- Frames -----------------------------------------*/
@@ -189,7 +195,7 @@ QHeaderView::up-arrow {
 
 #pbBuscarCliente {
 	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 12px;
+	font-size: 14px;
 	color: white;
 
 	border-radius: 4px;
@@ -198,12 +204,32 @@ QHeaderView::up-arrow {
 
 #pbBuscarCliente:hover {
 	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: white;
+
+	border-radius: 4px;
+	border: 1px solid;
+	background-color: rgb(72, 93, 114);
+}
+
+#pbInserir, #pbEditar, #pbExcluir {
+	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
 
 	border-radius: 4px;
-	border: 1px solid rgb(51, 126, 251);
-	background-color: rgb(245, 141, 20);
+	background-color: rgb(52, 73, 94);
+}
+
+#pbInserir:hover, #pbEditar:hover, 
+#pbExcluir:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: white;
+
+	border-radius: 4px;
+	border: 1px solid;
+	background-color: rgb(72, 93, 114);
 }</string>
       </property>
       <attribute name="title">
@@ -239,9 +265,9 @@ QHeaderView::up-arrow {
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>80</y>
+         <y>100</y>
          <width>741</width>
-         <height>481</height>
+         <height>461</height>
         </rect>
        </property>
        <property name="frameShape">
@@ -351,14 +377,15 @@ Contribuição</string>
       <widget class="QPushButton" name="pbBuscarCliente">
        <property name="geometry">
         <rect>
-         <x>810</x>
-         <y>130</y>
+         <x>790</x>
+         <y>150</y>
          <width>101</width>
-         <height>25</height>
+         <height>41</height>
         </rect>
        </property>
        <property name="text">
-        <string>Buscar cliente</string>
+        <string>Buscar 
+cliente</string>
        </property>
       </widget>
       <widget class="QFrame" name="frInfoCabecalho">
@@ -366,8 +393,8 @@ Contribuição</string>
         <rect>
          <x>420</x>
          <y>10</y>
-         <width>341</width>
-         <height>61</height>
+         <width>491</width>
+         <height>81</height>
         </rect>
        </property>
        <property name="frameShape">
@@ -381,8 +408,8 @@ Contribuição</string>
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>161</width>
-          <height>17</height>
+          <width>81</width>
+          <height>21</height>
          </rect>
         </property>
         <property name="text">
@@ -393,9 +420,9 @@ Contribuição</string>
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>40</y>
-          <width>131</width>
-          <height>17</height>
+          <y>50</y>
+          <width>81</width>
+          <height>21</height>
          </rect>
         </property>
         <property name="text">
@@ -405,10 +432,49 @@ Contribuição</string>
        <widget class="QLabel" name="lbInfoDibDer">
         <property name="geometry">
          <rect>
-          <x>200</x>
+          <x>350</x>
           <y>10</y>
-          <width>131</width>
-          <height>17</height>
+          <width>51</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>DIB/DER:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbNome">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>10</y>
+          <width>221</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbDocumento">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>50</y>
+          <width>191</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbDibDer">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>10</y>
+          <width>61</width>
+          <height>21</height>
          </rect>
         </property>
         <property name="text">
@@ -427,6 +493,45 @@ Contribuição</string>
        </property>
        <property name="text">
         <string>  Informações pessoais</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbInserir">
+       <property name="geometry">
+        <rect>
+         <x>790</x>
+         <y>220</y>
+         <width>101</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Inserir</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbExcluir">
+       <property name="geometry">
+        <rect>
+         <x>790</x>
+         <y>270</y>
+         <width>101</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Excluir</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbEditar">
+       <property name="geometry">
+        <rect>
+         <x>790</x>
+         <y>320</y>
+         <width>101</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Editar</string>
        </property>
       </widget>
      </widget>

@@ -6,6 +6,7 @@ from Daos.daoCalculos import DaoCalculos
 from Daos.daoCliente import DaoCliente
 from Telas.tabCalculos import Ui_wdgTabCalculos
 from heart.buscaClientePage import BuscaClientePage
+from heart.insereContribuicaoPage import InsereContribuicaoPage
 from helpers import mascaraDataPequena, mascaraDinheiro, mascaraCPF
 from modelos.clienteModelo import ClienteModelo
 
@@ -21,9 +22,11 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
         self.daoCliente = DaoCliente(db=db)
 
         self.buscaClientePage = None
+        self.inserirContribuicao = None
 
         self.tblCalculos.hideColumn(0)
         self.pbBuscarCliente.clicked.connect(self.abreBuscaClientePage)
+        self.pbInserir.clicked.connect(self.abreInsereContribuicoes)
 
         self.tblCalculos.resizeColumnsToContents()
 
@@ -85,9 +88,14 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
     def carregarInfoCliente(self, clientId: int = 1):
         self.carregarTabela(clientId)
         self.cliente.fromList(self.daoCliente.buscaClienteById(clientId)[0])
-        self.lbInfoNome.setText(self.cliente.nomeCliente + ' ' + self.cliente.sobrenomeCliente)
-        self.lbInfoDocumento.setText(mascaraCPF(self.cliente.cpfCliente))
+        self.lbNome.setText(self.cliente.nomeCliente + ' ' + self.cliente.sobrenomeCliente)
+        self.lbDocumento.setText(mascaraCPF(self.cliente.cpfCliente))
 
     def abreBuscaClientePage(self):
         self.buscaClientePage = BuscaClientePage(parent=self, db=self.db)
         self.buscaClientePage.show()
+
+    def abreInsereContribuicoes(self):
+        if self.cliente.nomeCliente is not None:
+            self.inserirContribuicao = InsereContribuicaoPage(parent=self, db=self.db, cliente=self.cliente)
+            self.inserirContribuicao.show()

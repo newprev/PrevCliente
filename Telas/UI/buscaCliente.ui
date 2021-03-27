@@ -33,7 +33,9 @@
 
 #lbTituloFiltro {
 	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 16px;
+	font-size: 20px;
+
+	color: white;
 }
 
 #lbTituloFrame {
@@ -55,6 +57,8 @@ QFrame &gt; QLabel {
 #lbBuscaRgcpf {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
+
+	color: white;
 }
 
 #lbCdCliente, #lbEmail, 
@@ -74,7 +78,9 @@ QFrame &gt; QLabel {
 }
 
 #frFiltrosBusca {
-	background-color: qlineargradient(spread:pad, x1:0.495, y1:1, x2:0.490204, y2:0.608, stop:0 rgba(53, 117, 185, 255), stop:1 rgba(147, 185, 225, 204));
+/*	background-color: qlineargradient(spread:pad, x1:0.495, y1:1, x2:0.490204, y2:0.608, stop:0 rgba(53, 117, 185, 255), stop:1 rgba(147, 185, 225, 204));*/
+
+	background-color: rgb(82, 111, 139);
 
 	border: 0px solid;
 	border-radius: 8px;
@@ -136,6 +142,24 @@ QHeaderView::section {
 
 	border-radius: 4px;
 	background-color: rgb(72, 93, 114);
+}
+
+#pbFiltrar {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: rgb(52, 73, 94);
+
+	border-radius: 4px;
+	background-color: white;
+}
+
+#pbFiltrar:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: rgb(52, 73, 94);
+
+	border-radius: 4px;
+	background-color: rgb(244, 244, 244);
 }
 
 /*-------------------------------- Main Window -------------------------------*/
@@ -483,7 +507,7 @@ QHeaderView::section {
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>131</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -873,6 +897,19 @@ QHeaderView::section {
          </property>
         </widget>
        </widget>
+       <widget class="QPushButton" name="pbFiltrar">
+        <property name="geometry">
+         <rect>
+          <x>90</x>
+          <y>450</y>
+          <width>111</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Filtrar</string>
+        </property>
+       </widget>
        <zorder>lbTituloFiltro</zorder>
        <zorder>frBuscaNome</zorder>
        <zorder>frUnderlineNome</zorder>
@@ -884,6 +921,7 @@ QHeaderView::section {
        <zorder>frUnderlineRgcpf</zorder>
        <zorder>frUnderlineTpProcesso</zorder>
        <zorder>frBuscaTpProcesso</zorder>
+       <zorder>pbFiltrar</zorder>
       </widget>
       <widget class="QLabel" name="lbTituloFrame">
        <property name="geometry">

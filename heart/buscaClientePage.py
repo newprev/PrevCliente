@@ -19,10 +19,12 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
 
         self.daoCliente = DaoCliente(db=db)
         self.clientes: list = None
+        self.clienteSelecionadoId = 0
 
         self.tblListaClientes.doubleClicked.connect(self.carregaInfoClienteNaTela)
         self.pbLimpa.clicked.connect(self.limpaTudo)
         self.pbSeleciona.clicked.connect(self.enviaCliente)
+        self.pbCancela.clicked.connect(self.close)
 
         self.atualizaTabelaClientes()
 
@@ -65,17 +67,18 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
     def enviaCliente(self):
         clienteSelecionado: ClienteModelo = None
 
-        if self.lbCdCliente.text() == '':
-            self.parent.cliente = None
-        else:
-            for cliente in self.clientes:
-                if cliente.clienteId == int(self.lbCdCliente.text()):
-                    clienteSelecionado = cliente
-                    break
-            self.parent.cliente = clienteSelecionado
+        if self.clienteSelecionadoId != 0:
+            if self.lbCdCliente.text() == '':
+                self.parent.cliente = None
+            else:
+                for cliente in self.clientes:
+                    if cliente.clienteId == int(self.lbCdCliente.text()):
+                        clienteSelecionado = cliente
+                        break
+                self.parent.cliente = clienteSelecionado
 
-        self.parent.carregarInfoCliente(clientId=clienteSelecionado.clienteId)
-        self.close()
+            self.parent.carregarInfoCliente(clientId=clienteSelecionado.clienteId)
+            self.close()
 
     def carregaInfoClienteNaTela(self, *args):
         clienteId = int(self.tblListaClientes.item(args[0].row(), 0).text())
@@ -84,6 +87,7 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
         for cliente in self.clientes:
             if cliente.clienteId == clienteId:
                 clienteSelecionado = cliente
+                self.clienteSelecionadoId = clienteSelecionado.clienteId
                 break
 
         self.lbTel.setText(mascaraTelCel(clienteSelecionado.telefone))
@@ -94,6 +98,8 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
         self.lbNomeCompleto.setText(f"{clienteSelecionado.nomeCliente} {clienteSelecionado.sobrenomeCliente}")
 
     def limpaTudo(self):
+        self.clienteSelecionadoId = 0
+        
         self.lbNomeCompleto.clear()
         self.lbTel.clear()
         self.lbNit.clear()

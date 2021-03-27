@@ -43,7 +43,7 @@ class Main(Ui_MainWindow, QMainWindow):
 
         self.pbarSplash.setValue(self.contador)
 
-        if self.contador == 20:
+        if self.contador == 10:
             self.timer.stop()
             self.iniciaBancos()
             # self.cadastraClientePage.show()
@@ -87,33 +87,23 @@ class Main(Ui_MainWindow, QMainWindow):
             self.progresso(add=15)
         else:
             return False
-    #
-    #     self.lbInfo.setText('CRIANDO BANCO DOS PARTICIPANTES...')
-    #     if self.daoConfigs.criaTblParticipantes():
-    #         self.progresso(add=10)
-    #
-    #     self.lbInfo.setText('CRIANDO BANCO DAS CATEGORIAS...')
-    #     if self.daoConfigs.criaTblCategoria():
-    #         self.progresso(add=10)
-    #
-    #     self.lbInfo.setText('CRIANDO BANCO DOS ESTADOS...')
-    #     if self.daoConfigs.criaTblEstado():
-    #         self.progresso(add=10)
-    #
-    #     self.lbInfo.setText('LEMBRANDO DOS ESTADOS DO BRASIL...')
-    #     # Se alguma coisa de errada acontecer com a table a "estados"
-    #     # ele deleta a tabela (DROP TABLE), recria e insere todos os estados de novo
-    #     if not self.daoConfigs.verificaEstados():
-    #         self.lbInfo.setText('EITA! DEU PROBLEMA NA TABELA. VOU ARRUMAR...')
-    #         self.progresso(add=5)
-    #         self.daoConfigs.criaTblEstado()
-    #         self.lbInfo.setText('ESTOU ARRUMANDO RAPIDINHO...')
-    #         if self.daoConfigs.addEstados():
-    #             self.lbInfo.setText('PRONTO! TUDO CERO!')
-    #             self.progresso(add=5)
-    #     else:
-    #         self.progresso(add=10)
-    #
+
+        self.lbInfo.setText('CRIANDO TABELA DE ESPÉCIES DE BENEFÍCIOS...')
+        if self.daoConfigs.criaTabela(tabelas.sqlCreateEspecieBenef):
+            self.progresso(add=5)
+            self.daoConfigs.verificaTblEspecieBenef()
+            self.progresso(add=10)
+        else:
+            return False
+
+        self.lbInfo.setText('CRIANDO TABELA DE INDICADORES...')
+        if self.daoConfigs.criaTabela(tabelas.sqlCreateIndicadores):
+            self.progresso(add=5)
+            self.daoConfigs.verificaTblIndicadores()
+            self.progresso(add=10)
+        else:
+            return False
+
         self.iniciaNewPrev()
 
     def iniciaNewPrev(self):

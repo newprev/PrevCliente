@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mwInsereContrib</class>
+ <widget class="QMainWindow" name="mwInsereContrib">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/*-------------------------------- Main Window -------------------------------*/
+#mwInsereContrib {
+	background-color: rgb(52, 73, 94);
+}
+
+/*------------------------------------ Frame ------------------------------------*/
+#frMain {
+	border-radius: 8px;
+	border: 0px solid;	
+	background-color: white;
+}
+
+#frInfo, #frInfoRemCont, 
+#frTipoDado, #frInfoBeneficio {
+	border-radius: 8px;
+	border: 1px solid black;
+}
+
+/*------------------------------------- Label -----------------------------------*/
+
+#lbSubtitulo, #lbInfoNit, 
+#lbInfoQtdRem, #lbInfoQtdCont,
+#lbInfoNomeCompleto {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	
+	background-color: transparent;
+}
+
+#lbNit, #lbQtdRem, 
+#lbQtdCont, #lbNomeCompleto {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	background-color: transparent;
+	font-weight: bold;
+}
+
+#lbTitulo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+}
+
+#lbInfoBeneficio, #lbInfoPessoal,
+#lbInfoRemCont, #lbInfoTipoDado {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;	
+
+	background-color: white;
+}
+
+/*------------------------------ Radio Button -------------------------------------*/
+#rbBeneficio, #rbContribuicao, #rbRemuneracao{
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+}
+
+
+/*------------------------------ Pushed Button -------------------------------------*/
+#pbConfirmar, #pbCancelar {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: white;
+
+	border-radius: 4px;
+	background-color: rgb(52, 73, 94);
+}
+
+#pbConfirmar:hover, #pbCancelar:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: white;
+
+	border-radius: 4px;
+	border: 1px solid;
+	background-color: rgb(72, 93, 114);
+}</string>
+  </property>
+  <widget class="QWidget" name="WdgMain">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="leftMargin">
+     <number>12</number>
+    </property>
+    <property name="topMargin">
+     <number>12</number>
+    </property>
+    <property name="rightMargin">
+     <number>12</number>
+    </property>
+    <property name="bottomMargin">
+     <number>12</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="frMain">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QFrame" name="frInfo">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>100</y>
+         <width>481</width>
+         <height>141</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="lbInfoNomeCompleto">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>51</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Nome:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoNit">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>70</y>
+          <width>31</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>NIT:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoQtdRem">
+        <property name="geometry">
+         <rect>
+          <x>270</x>
+          <y>20</y>
+          <width>111</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Quantidade de 
+Remunerações</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoQtdCont">
+        <property name="geometry">
+         <rect>
+          <x>270</x>
+          <y>80</y>
+          <width>101</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Quantidade de 
+Contribuições</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbNomeCompleto">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>20</y>
+          <width>211</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbNit">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>70</y>
+          <width>141</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbQtdRem">
+        <property name="geometry">
+         <rect>
+          <x>400</x>
+          <y>30</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbQtdCont">
+        <property name="geometry">
+         <rect>
+          <x>400</x>
+          <y>90</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QLabel" name="lbTitulo">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>10</y>
+         <width>591</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Inserir Contribuição/Remuneração/Benefício</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbSubtitulo">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>50</y>
+         <width>511</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Insira as informações de uma determinada Contribuição, Remuneração ou Benefício</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbInfoPessoal">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>90</y>
+         <width>171</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Informações do cliente</string>
+       </property>
+      </widget>
+      <widget class="QFrame" name="frTipoDado">
+       <property name="geometry">
+        <rect>
+         <x>540</x>
+         <y>110</y>
+         <width>161</width>
+         <height>121</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QRadioButton" name="rbBeneficio">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>30</y>
+          <width>106</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Benefício</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="rbRemuneracao">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>70</y>
+          <width>121</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Remuneração</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="rbContribuicao">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>50</y>
+          <width>106</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Contribuição</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QLabel" name="lbInfoTipoDado">
+       <property name="geometry">
+        <rect>
+         <x>550</x>
+         <y>100</y>
+         <width>111</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Tipo de dado</string>
+       </property>
+      </widget>
+      <widget class="QFrame" name="frInfoRemCont">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>270</y>
+         <width>351</width>
+         <height>221</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="label">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>40</y>
+          <width>101</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Competência</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>120</y>
+          <width>101</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Remuneração</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="leRemuneracao">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>140</y>
+          <width>113</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoDataFim">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>40</y>
+          <width>131</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Data Fim</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_4">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>120</y>
+          <width>91</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Indicadores</string>
+        </property>
+       </widget>
+       <widget class="QDateEdit" name="dtCompetencia">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>60</y>
+          <width>110</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QDateEdit" name="dtFimContRem">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>60</y>
+          <width>110</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="cbxIndicadores">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>140</y>
+          <width>141</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QLabel" name="lbInfoRemCont">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>260</y>
+         <width>221</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Remuneração / Contribuição</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbInfoBeneficio">
+       <property name="geometry">
+        <rect>
+         <x>410</x>
+         <y>260</y>
+         <width>81</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Benefício</string>
+       </property>
+      </widget>
+      <widget class="QFrame" name="frInfoBeneficio">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>270</y>
+         <width>351</width>
+         <height>221</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="label_5">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>60</y>
+          <width>101</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Data Início</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_6">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>90</y>
+          <width>101</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Situação</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_7">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>120</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Data Fim</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_8">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>30</y>
+          <width>91</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>NB</string>
+        </property>
+       </widget>
+       <widget class="QDateEdit" name="dtInicio">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>80</y>
+          <width>110</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QDateEdit" name="dtFim">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>140</y>
+          <width>110</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="cbxSituacao">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>110</y>
+          <width>111</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_9">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>160</y>
+          <width>101</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Espécie</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="cbxEspecie">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>180</y>
+          <width>111</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lbNb">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>50</y>
+          <width>113</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QPushButton" name="pbConfirmar">
+       <property name="geometry">
+        <rect>
+         <x>650</x>
+         <y>520</y>
+         <width>83</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Confirmar</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbCancelar">
+       <property name="geometry">
+        <rect>
+         <x>550</x>
+         <y>520</y>
+         <width>83</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Cancelar</string>
+       </property>
+      </widget>
+      <zorder>frInfo</zorder>
+      <zorder>lbTitulo</zorder>
+      <zorder>lbSubtitulo</zorder>
+      <zorder>lbInfoPessoal</zorder>
+      <zorder>frTipoDado</zorder>
+      <zorder>lbInfoTipoDado</zorder>
+      <zorder>frInfoRemCont</zorder>
+      <zorder>lbInfoRemCont</zorder>
+      <zorder>frInfoBeneficio</zorder>
+      <zorder>lbInfoBeneficio</zorder>
+      <zorder>pbConfirmar</zorder>
+      <zorder>pbCancelar</zorder>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

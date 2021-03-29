@@ -2,6 +2,9 @@
   <qresource prefix="home">
     <file>home.png</file>
   </qresource>
+  <qresource prefix="ferramentas">
+    <file>ferramentas.png</file>
+  </qresource>
   <qresource prefix="configuracoes">
     <file>settings.png</file>
   </qresource>

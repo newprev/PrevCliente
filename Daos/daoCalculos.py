@@ -1,12 +1,6 @@
-from datetime import datetime
-
 from Daos.tabelas import TabelasConfig
-from connections import ConfigConnection
-from helpers import mascaraDataSql
-from modelos.clienteModelo import ClienteModelo
-from pymysql import connections, cursors
-import pprint
-
+from pymysql import connections
+from logs import *
 
 class DaoCalculos:
 
@@ -28,6 +22,7 @@ class DaoCalculos:
 
         try:
             cursor.execute(strComando)
+            logPrioridade(f'SELECT<getRemECon>___________________{self.config.tblCnisRemuneracoes}', TipoEdicao.select, Prioridade.saidaComun)
             return cursor.fetchall()
         except:
             raise Warning(f'Erro SQL - getRemECon({self.config.tblCnisRemuneracoes}, {self.config.tblCnisContribuicoes}) <SELECT>')
@@ -58,6 +53,7 @@ class DaoCalculos:
 
         try:
             cursor.execute(strComando)
+            logPrioridade(f'SELECT<contaRemuneracoes>___________________{self.config.tblCnisRemuneracoes}', TipoEdicao.select, Prioridade.saidaComun)
             return cursor.fetchone()
         except:
             raise Warning(f'Erro SQL - contaRemuneracoes({self.config.tblCnisRemuneracoes}) <SELECT>')

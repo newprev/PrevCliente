@@ -186,6 +186,10 @@ def getEstadoBySigla(uf: str):
             return chave
 
 
+def getConversoesMonetarias():
+    return ['Valorizou', 'Desvalorizou']
+
+
 def mascaraTelCel(telCel):
     if telCel is None or len(telCel) == 10:
         return f'({telCel[0:2]}) {telCel[3:7]}-{telCel[7:]}'
@@ -248,14 +252,28 @@ def mascaraDataPequena(data: datetime.date):
 def mascaraDinheiro(valor: float):
     strValor = str(valor).replace('.', ',')
     pointPosition = strValor.find(",") - 3
-    strFinal = strValor[:pointPosition] + '.' + strValor[pointPosition:]
+    if pointPosition > 0:
+        strFinal = strValor[:pointPosition] + '.' + strValor[pointPosition:]
+    else:
+        strFinal = strValor
+
     if strFinal.startswith('.'):
         return f"R$ {strFinal[1:]}"
     else:
         return f"R$ {strFinal}"
 
 
-def mascaraDataSql(data: datetime, short: bool = False):
+def dinheiroToFloat(valor: str):
+    if valor == '' or valor == 'R$ ':
+        return ''
+    strSemCifrao = valor.replace('R$ ', '')
+    semPontoDivisor = strSemCifrao.replace('.', '')
+    comPontoDecimal = semPontoDivisor.replace(',', '.')
+
+    return float(comPontoDecimal)
+
+
+def mascaraDataSql(data: str, short: bool = False):
     try:
         if short:
             dataRetorno = datetime.datetime.strptime(data, '%m/%Y')
@@ -266,9 +284,22 @@ def mascaraDataSql(data: datetime, short: bool = False):
         return datetime.datetime.min
 
 
+def strToDatetime(data: str, short: bool = False):
+    try:
+        if short:
+            return datetime.datetime.strptime(data, '%m/%Y')
+        else:
+            return datetime.datetime.strptime(data, '%d/%m/%Y')
+    except ValueError:
+        return datetime.datetime.min
+
+
 def strToFloat(valor: str) -> float:
-    retorno = valor.replace('.', '').replace(',', '.')
-    return float(retorno)
+    try:
+        retorno = valor.replace('.', '').replace(',', '.')
+        return float(retorno)
+    except ValueError:
+        return valor
 
 
 def unmaskAll(info: str):

@@ -9,96 +9,103 @@ class TabelasConfig:
         self.__tblCnisCabecalhos = 'cnisCabecalhos'
         self.__tblIndicadores = 'indicadores'
         self.__tblEspecieBenef = 'especieBenef'
+        self.__tblTetosPrev = 'tetosPrev'
+        self.__tblConvMon = 'convMon'
 
 #     # Comando SQL para criar tabela de clientes
-        self.__sqlCreateCliente = f"""CREATE TABLE IF NOT EXISTS {self.tblCliente}(
-                    clienteId INT AUTO_INCREMENT,
-                    nomeCliente VARCHAR(20) NOT NULL,
-                    sobrenomeCliente VARCHAR(30) NOT NULL,
-                    idade INT NOT NULL,
-                    dataNascimento DATETIME NOT NULL,
-                    telefone VARCHAR(11) NULL,
-                    email VARCHAR(40) NOT NULL,
-                    rgCliente VARCHAR(9) NOT NULL,
-                    cpfCliente VARCHAR(11) NULL,
-                    numCarteiraProf VARCHAR(15) NULL,
-                    serieCarteiraProf VARCHAR(15) NULL,
-                    quaCarteiraProf VARCHAR(15) NULL,
-                    nit VARCHAR(14) NOT NULL,
-                    nomeMae VARCHAR(40) NOT NULL,
-                    estadoCivil VARCHAR(15) NOT NULL DEFAULT 'SOLTEIRO(A)',
-                    profissao VARCHAR(30) NOT NULL,
-                    endereco VARCHAR(50) NOT NULL,
-                    estado VARCHAR(20) NOT NULL,
-                    cidade VARCHAR(30) NOT NULL,
-                    bairro VARCHAR(30) NULL,
-                    cep VARCHAR(8) NOT NULL,
-                    complemento VARCHAR(30) NULL,
-                    dataCadastro DATETIME NOT NULL,
-                    dataUltAlt DATETIME NOT NULL,
-                    PRIMARY KEY (clienteId)
-                );"""
+        self.__sqlCreateCliente = f"""
+        CREATE TABLE IF NOT EXISTS {self.tblCliente}(
+            clienteId INT AUTO_INCREMENT,
+            nomeCliente VARCHAR(20) NOT NULL,
+            sobrenomeCliente VARCHAR(30) NOT NULL,
+            idade INT NOT NULL,
+            dataNascimento DATETIME NOT NULL,
+            telefone VARCHAR(11) NULL,
+            email VARCHAR(40) NOT NULL,
+            rgCliente VARCHAR(9) NOT NULL,
+            cpfCliente VARCHAR(11) NULL,
+            numCarteiraProf VARCHAR(15) NULL,
+            serieCarteiraProf VARCHAR(15) NULL,
+            quaCarteiraProf VARCHAR(15) NULL,
+            nit VARCHAR(14) NOT NULL,
+            nomeMae VARCHAR(40) NOT NULL,
+            estadoCivil VARCHAR(15) NOT NULL DEFAULT 'SOLTEIRO(A)',
+            profissao VARCHAR(30) NOT NULL,
+            endereco VARCHAR(50) NOT NULL,
+            estado VARCHAR(20) NOT NULL,
+            cidade VARCHAR(30) NOT NULL,
+            bairro VARCHAR(30) NULL,
+            cep VARCHAR(8) NOT NULL,
+            complemento VARCHAR(30) NULL,
+            dataCadastro DATETIME NOT NULL,
+            dataUltAlt DATETIME NOT NULL,
+            PRIMARY KEY (clienteId)
+        );"""
 
         # Comando que cria tabela de remunerações
-        self.__sqlCreateCnisRemuneracoes = f"""CREATE TABLE IF NOT EXISTS {self.tblCnisRemuneracoes}(
-                    remuneracoesId INT AUTO_INCREMENT,
-                    clienteId INT NOT NULL,
-                    seq INT NOT NULL,
-                    competencia DATETIME NOT NULL,
-                    remuneracao FLOAT NOT NULL,
-                    indicadores VARCHAR(25) NOT NULL,
-                    dataCadastro DATETIME NOT NULL,
-                    dataUltAlt DATETIME NOT NULL,
-                    PRIMARY KEY (remuneracoesId)
-                );"""
+        self.__sqlCreateCnisRemuneracoes = f"""
+        CREATE TABLE IF NOT EXISTS {self.tblCnisRemuneracoes}(
+            remuneracoesId INT AUTO_INCREMENT,
+            clienteId INT NOT NULL,
+            seq INT NOT NULL,
+            competencia DATETIME NOT NULL,
+            remuneracao FLOAT NOT NULL,
+            indicadores VARCHAR(25) NOT NULL,
+            dataCadastro DATETIME NOT NULL,
+            dataUltAlt DATETIME NOT NULL,
+            PRIMARY KEY (remuneracoesId)
+        );"""
 
         # Comando que cria tabela de contribuições
-        self.__sqlCreateCnisContribuicoes = f"""CREATE TABLE IF NOT EXISTS {self.tblCnisContribuicoes}(
-                    contribuicoesId INT AUTO_INCREMENT,
-                    clienteId INT NOT NULL,
-                    seq INT NOT NULL,
-                    competencia DATETIME NOT NULL,
-                    dataPagamento DATETIME NOT NULL,
-                    contribuicao FLOAT NOT NULL,
-                    salContribuicao FLOAT NOT NULL,
-                    indicadores VARCHAR(25) NOT NULL,
-                    dataCadastro DATETIME NOT NULL,
-                    dataUltAlt DATETIME NOT NULL,
-                    PRIMARY KEY (contribuicoesId)
-                );"""
+        self.__sqlCreateCnisContribuicoes = f"""
+        CREATE TABLE IF NOT EXISTS {self.tblCnisContribuicoes}(
+            contribuicoesId INT AUTO_INCREMENT,
+            clienteId INT NOT NULL,
+            seq INT NOT NULL,
+            competencia DATETIME NOT NULL,
+            dataPagamento DATETIME NOT NULL,
+            contribuicao FLOAT NOT NULL,
+            salContribuicao FLOAT NOT NULL,
+            indicadores VARCHAR(25) NOT NULL,
+            dataCadastro DATETIME NOT NULL,
+            dataUltAlt DATETIME NOT NULL,
+            PRIMARY KEY (contribuicoesId)
+        );"""
 
         # Comando que cria tabela de benefícios
-        self.__sqlCreateCnisBeneficios = f"""CREATE TABLE IF NOT EXISTS {self.tblCnisBeneficios}(
-                    beneficiosId INT AUTO_INCREMENT,
-                    clienteId INT NOT NULL,
-                    seq INT NOT NULL,
-                    nb BIGINT NOT NULL,
-                    especie VARCHAR(45) NOT NULL,
-                    dataInicio DATETIME NOT NULL,
-                    dataFim DATETIME NOT NULL,
-                    situacao VARCHAR(25) NOT NULL,
-                    dataCadastro DATETIME NOT NULL,
-                    dataUltAlt DATETIME NOT NULL,
-                    PRIMARY KEY (beneficiosId)
-                );"""
+        self.__sqlCreateCnisBeneficios = f"""
+        CREATE TABLE IF NOT EXISTS {self.tblCnisBeneficios}(
+            beneficiosId INT AUTO_INCREMENT,
+            clienteId INT NOT NULL,
+            seq INT NOT NULL,
+            nb BIGINT NOT NULL,
+            especie VARCHAR(45) NOT NULL,
+            dataInicio DATETIME NOT NULL,
+            dataFim DATETIME NOT NULL,
+            situacao VARCHAR(25) NOT NULL,
+            dataCadastro DATETIME NOT NULL,
+            dataUltAlt DATETIME NOT NULL,
+            PRIMARY KEY (beneficiosId)
+        );"""
 
         # Comando que cria tabela de benefícios
-        self.__sqlCreateCnisCabecalhos = f"""CREATE TABLE IF NOT EXISTS {self.tblCnisCabecalhos}(
-                            cabecalhosId INT AUTO_INCREMENT,
-                            clienteId INT NOT NULL,
-                            seq INT NOT NULL,
-                            nit VARCHAR(14) NOT NULL,
-                            cdEmp VARCHAR(18) NOT NULL,
-                            nomeEmp VARCHAR(100) NOT NULL,
-                            dataInicio DATETIME NOT NULL,
-                            dataFim DATETIME NOT NULL,
-                            tipoVinculo VARCHAR(30) NOT NULL,
-                            indicadores VARCHAR(25) NOT NULL,
-                            ultRem DATETIME NOT NULL,
-                            dataCadastro DATETIME NOT NULL,
-                            dataUltAlt DATETIME NOT NULL,
-                            PRIMARY KEY (cabecalhosId)
-                        );"""
+        self.__sqlCreateCnisCabecalhos = f"""
+        CREATE TABLE IF NOT EXISTS {self.tblCnisCabecalhos}(
+            cabecalhosId INT AUTO_INCREMENT,
+            clienteId INT NOT NULL,
+            seq INT NOT NULL,
+            nit VARCHAR(14) NOT NULL,
+            cdEmp VARCHAR(18) NOT NULL,
+            nomeEmp VARCHAR(100) NOT NULL,
+            dataInicio DATETIME NOT NULL,
+            dataFim DATETIME NOT NULL,
+            tipoVinculo VARCHAR(30) NOT NULL,
+            indicadores VARCHAR(25) NOT NULL,
+            ultRem DATETIME NOT NULL,
+            dataCadastro DATETIME NOT NULL,
+            dataUltAlt DATETIME NOT NULL,
+            PRIMARY KEY (cabecalhosId)
+        );"""
 
         # Comando que cria tabela de indicadores
         self.__sqlCreateIndicadores = f"""
@@ -114,6 +121,32 @@ class TabelasConfig:
             especieId VARCHAR(3) NOT NULL,
             descricao VARCHAR(120) NOT NULL,
             PRIMARY KEY (especieId)
+        );"""
+
+        # Comando que cria tabela de tetos previdenciários
+        self.__sqlCreateTetosPrev = f"""
+        CREATE TABLE IF NOT EXISTS {self.tblTetosPrev}(
+            tetosPrevId INT AUTO_INCREMENT,
+            dataValidade DATETIME NOT NULL,
+            valor FLOAT NOT NULL,
+            dataUltAlt DATETIME NOT NULL,
+            dataCadastro DATETIME NOT NULL,
+            PRIMARY KEY (tetosPrevId, dataValidade)
+        );"""
+
+        # Comando que cria tabela de conversão monetária
+        self.__sqlCreatetblConvMon = f"""
+        CREATE TABLE IF NOT EXISTS {self.tblConvMon}(
+            convMonId INT AUTO_INCREMENT,
+            nomeMoeda VARCHAR(20) NOT NULL,
+            fator FLOAT NOT NULL,
+            dataInicial DATETIME NOT NULL,
+            dataFinal DATETIME NOT NULL,
+            conversao VARCHAR(15) NOT NULL,
+            moedaCorrente BOOLEAN NOT NULL,
+            dataUltAlt DATETIME NOT NULL,
+            dataCadastro DATETIME NOT NULL,
+            PRIMARY KEY (convMonId)
         );"""
 
     @property
@@ -145,6 +178,14 @@ class TabelasConfig:
         return self.__sqlCreateEspecieBenef
 
     @property
+    def sqlCreateTetosPrev(self):
+        return self.__sqlCreateTetosPrev
+
+    @property
+    def sqlCreateConvMon(self):
+        return self.__sqlCreatetblConvMon
+
+    @property
     def tblCliente(self):
         return self.__tblCliente
 
@@ -171,3 +212,11 @@ class TabelasConfig:
     @property
     def tblEspecieBenef(self):
         return self.__tblEspecieBenef
+
+    @property
+    def tblTetosPrev(self):
+        return self.__tblTetosPrev
+
+    @property
+    def tblConvMon(self):
+        return self.__tblConvMon

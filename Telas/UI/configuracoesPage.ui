@@ -108,14 +108,23 @@ QHeaderView::up-arrow {
 	font-size: 24px;
 }
 
-#lbSubtitulo {
+#lbSubtitulo, #lbInfoValor,
+#lbInfoData, #lbInfoAcao {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;	
 }
 
+#lbInfoTitulo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+
+	background-color: white;	
+}
+
 /*-------------------------------- Push Buttons --------------------------------*/
 #pbBuscarArq, #pbEditar, 
-#pbExcluir, #pbInserir {
+#pbExcluir, #pbInserir, 
+#pbEfetivar  {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 14px;
 	color: white;
@@ -125,7 +134,8 @@ QHeaderView::up-arrow {
 }
 
 #pbBuscarArq:hover, #pbEditar:hover, 
-#pbExcluir:hover, #pbInserir:hover {
+#pbExcluir:hover, #pbInserir:hover,
+#pbEfetivar:hover {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 14px;
 	color: white;
@@ -133,6 +143,32 @@ QHeaderView::up-arrow {
 	border-radius: 4px;
 	border: 1px solid;
 	background-color: rgb(72, 93, 114);
+}
+
+#pbCancelar {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: black;
+
+	border-radius: 4px;
+	background-color: rgb(225, 224, 53);
+}
+
+#pbCancelar:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: black;
+
+	border-radius: 4px;
+	background-color: rgb(225, 240, 73);
+}
+
+/*-------------------------------- Frames -----------------------------------------*/
+#frInfo{
+	border-radius: 4px;
+	border: 1px solid rgb(85, 87, 83);
+
+	background-color: white;
 }
 </string>
       </property>
@@ -143,9 +179,9 @@ QHeaderView::up-arrow {
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>110</y>
-         <width>431</width>
-         <height>441</height>
+         <y>180</y>
+         <width>471</width>
+         <height>371</height>
         </rect>
        </property>
        <property name="editTriggers">
@@ -173,21 +209,7 @@ QHeaderView::up-arrow {
        </column>
        <column>
         <property name="text">
-         <string>Ano</string>
-        </property>
-        <property name="font">
-         <font>
-          <family>TeX Gyre Adventor</family>
-          <pointsize>14</pointsize>
-         </font>
-        </property>
-        <property name="textAlignment">
-         <set>AlignCenter</set>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Mês</string>
+         <string>Data</string>
         </property>
         <property name="font">
          <font>
@@ -231,7 +253,7 @@ QHeaderView::up-arrow {
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>50</y>
+         <y>40</y>
          <width>371</width>
          <height>21</height>
         </rect>
@@ -243,7 +265,7 @@ QHeaderView::up-arrow {
       <widget class="QPushButton" name="pbBuscarArq">
        <property name="geometry">
         <rect>
-         <x>480</x>
+         <x>500</x>
          <y>20</y>
          <width>111</width>
          <height>41</height>
@@ -257,7 +279,7 @@ arquivo</string>
       <widget class="QPushButton" name="pbInserir">
        <property name="geometry">
         <rect>
-         <x>480</x>
+         <x>500</x>
          <y>160</y>
          <width>111</width>
          <height>25</height>
@@ -270,7 +292,7 @@ arquivo</string>
       <widget class="QPushButton" name="pbExcluir">
        <property name="geometry">
         <rect>
-         <x>480</x>
+         <x>500</x>
          <y>210</y>
          <width>111</width>
          <height>25</height>
@@ -283,7 +305,7 @@ arquivo</string>
       <widget class="QPushButton" name="pbEditar">
        <property name="geometry">
         <rect>
-         <x>480</x>
+         <x>500</x>
          <y>260</y>
          <width>111</width>
          <height>25</height>
@@ -293,6 +315,141 @@ arquivo</string>
         <string>Editar</string>
        </property>
       </widget>
+      <widget class="QFrame" name="frInfo">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>90</y>
+         <width>471</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="lbInfoData">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Data</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoValor">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>20</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Valor</string>
+        </property>
+       </widget>
+       <widget class="QDateEdit" name="dtData">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>40</y>
+          <width>110</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::UpDownArrows</enum>
+        </property>
+        <property name="currentSection">
+         <enum>QDateTimeEdit::MonthSection</enum>
+        </property>
+        <property name="displayFormat">
+         <string>MM/yyyy</string>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="leValor">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>40</y>
+          <width>91</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoAcao">
+        <property name="geometry">
+         <rect>
+          <x>300</x>
+          <y>10</y>
+          <width>161</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Inserir ou cancelar edição</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pbEfetivar">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>40</y>
+          <width>83</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Efetivar</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pbCancelar">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>40</y>
+          <width>83</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Cancelar</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QLabel" name="lbInfoTitulo">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>80</y>
+         <width>111</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Inserir / Editar</string>
+       </property>
+      </widget>
+      <zorder>frInfo</zorder>
+      <zorder>tblTetos</zorder>
+      <zorder>lbTitulo</zorder>
+      <zorder>lbSubtitulo</zorder>
+      <zorder>pbBuscarArq</zorder>
+      <zorder>pbInserir</zorder>
+      <zorder>pbExcluir</zorder>
+      <zorder>pbEditar</zorder>
+      <zorder>lbInfoTitulo</zorder>
      </widget>
      <widget class="QWidget" name="clientes">
       <attribute name="title">

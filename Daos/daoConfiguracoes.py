@@ -1,6 +1,7 @@
 from connections import ConfigConnection
 from helpers import dictIndicadores, dictEspecies
 from Daos.tabelas import TabelasConfig
+from logs import *
 
 
 class DaoConfiguracoes:
@@ -10,7 +11,7 @@ class DaoConfiguracoes:
         self.config = ConfigConnection()
         self.tabelas = TabelasConfig()
 
-    def criaTabela(self, scriptCreate: str = None):
+    def criaTabela(self, scriptCreate: str = None, nomeTabela: str = None):
 
         self.db.connect()
         cursor = self.db.cursor()
@@ -18,8 +19,9 @@ class DaoConfiguracoes:
 
         try:
             cursor.execute(scriptCreate)
+            logPrioridade(f'CREATE<criaTabela>___________________{nomeTabela}', TipoEdicao.createTable, Prioridade.saidaComun)
         except:
-            raise Warning(f'Erro SQL - criaTabela({self.config.banco}) <SELECT {scriptCreate}>')
+            raise Warning(f'Erro SQL - criaTabela({self.config.banco}) <CREATE {scriptCreate}>')
         finally:
             self.disconectBD(cursor)
             return response
@@ -47,6 +49,8 @@ class DaoConfiguracoes:
         try:
             cursor.execute(f"""DELETE FROM {self.tabelas.tblIndicadores}""")
             cursor.execute(strComando)
+            logPrioridade(f'INSERT<verificaTblIndicadores>___________________{self.tabelas.tblIndicadores}', TipoEdicao.insert, Prioridade.saidaComun)
+
         except:
             raise Warning(f'Erro SQL - verificaTblIndicadores({self.config.banco}) <INSERT {self.tabelas.tblIndicadores}>')
         finally:
@@ -75,7 +79,9 @@ class DaoConfiguracoes:
 
         try:
             cursor.execute(f"""DELETE FROM {self.tabelas.tblEspecieBenef}""")
+            logPrioridade(f'DELETE<verificaTblEspecieBenef>___________________{self.tabelas.tblEspecieBenef}', TipoEdicao.delete, Prioridade.saidaComun)
             cursor.execute(strComando)
+            logPrioridade(f'INSERT<verificaTblEspecieBenef>___________________{self.tabelas.tblEspecieBenef}', TipoEdicao.insert, Prioridade.saidaComun)
         except:
             raise Warning(f'Erro SQL - verificaTblEspecieBenef({self.config.banco}) <INSERT {self.tabelas.tblEspecieBenef}>')
         finally:

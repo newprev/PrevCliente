@@ -5,12 +5,12 @@ from connections import ConfigConnection
 from helpers import mascaraDataSql
 from modelos.clienteModelo import ClienteModelo
 from pymysql import connections, cursors
-import pprint
+from logs import *
 
 
 class DaoCliente:
 
-    def __init__(self, db: connections=None):
+    def __init__(self, db: connections = None):
         self.db = db
         self.config = TabelasConfig()
 
@@ -45,6 +45,7 @@ class DaoCliente:
                 """
         try:
             cursor.execute(strComando)
+            logPrioridade(f'UPDATE<atualizaCliente>___________________{self.config.tblCliente}', TipoEdicao.update, Prioridade.saidaComun)
         except:
             raise Warning(f'Erro SQL - atualizaCliente({self.config.tblCliente}) <UPDATE>')
         finally:
@@ -80,12 +81,14 @@ class DaoCliente:
         try:
             cursor.execute(strComando)
             clienteId = cursor.lastrowid
+            logPrioridade(f'INSERT<cadastroClienteComCnis>___________________{self.config.tblCliente} ({clienteId})', TipoEdicao.insert, Prioridade.saidaComun)
 
             # Verifica se há benefícios para inserir no banco
             strComando = self.insertSqlBenecifio(dictAllInfo['cabecalhoBeneficio'], clienteId)
             if strComando != '':
                 try:
                     cursor.execute(strComando)
+                    logPrioridade(f'INSERT<cadastroClienteComCnis>___________________{self.config.tblCnisBeneficios}', TipoEdicao.insert, Prioridade.saidaComun)
                 except:
                     raise Warning(f'Erro SQL - cadastroClienteComCnis({self.config.tblCnisBeneficios}) <INSERT>')
 
@@ -94,6 +97,7 @@ class DaoCliente:
             if strComando != '':
                 try:
                     cursor.execute(strComando)
+                    logPrioridade(f'INSERT<cadastroClienteComCnis>___________________{self.config.tblCnisContribuicoes}', TipoEdicao.insert, Prioridade.saidaComun)
                 except:
                     raise Warning(
                         f'Erro SQL - cadastroClienteComCnis({self.config.tblCnisContribuicoes}) <INSERT>')
@@ -103,21 +107,22 @@ class DaoCliente:
             if strComando != '':
                 try:
                     cursor.execute(strComando)
+                    logPrioridade(f'INSERT<cadastroClienteComCnis>___________________{self.config.tblCnisCabecalhos}', TipoEdicao.insert, Prioridade.saidaComun)
                 except:
-                    raise Warning(
-                        f'Erro SQL - cadastroClienteComCnis({self.config.tblCnisCabecalhos}) <INSERT>')
+                    raise Warning(f'Erro SQL - cadastroClienteComCnis({self.config.tblCnisCabecalhos}) <INSERT>')
 
             # Verifica se há remunerações para inserir no banco
             strComando = self.insertSqlRemuneracoes(dictAllInfo['remuneracoes'], clienteId)
             if strComando != '':
                 try:
                     cursor.execute(strComando)
+                    logPrioridade(f'INSERT<cadastroClienteComCnis>___________________{self.config.tblCnisRemuneracoes}', TipoEdicao.insert, Prioridade.saidaComun)
                 except:
                     raise Warning(
                         f'Erro SQL - cadastroClienteComCnis({self.config.tblCnisCabecalhos}) <INSERT>')
 
-
             self.db.commit()
+            logPrioridade(f'INSERT<cadastroClienteComCnis>___________________{self.config.tblCliente}', TipoEdicao.insert, Prioridade.saidaImportante)
         except:
             raise Warning(f'Erro SQL - cadastroClienteComCnis({self.config.tblCliente}) <INSERT>')
         finally:
@@ -234,6 +239,7 @@ class DaoCliente:
 
         try:
             cursor.execute(strComando)
+            logPrioridade(f'SELECT<buscaClienteById>___________________{self.config.tblCliente}', TipoEdicao.select, Prioridade.saidaComun)
             return cursor.fetchall()
         except:
             raise Warning(f'Erro SQL - buscaClienteById({self.config.tblCliente}) <SELECT>')
@@ -248,13 +254,12 @@ class DaoCliente:
 
         try:
             cursor.execute(strComando)
+            logPrioridade(f'SELECT<buscaTodos>___________________{self.config.tblCliente}', TipoEdicao.select, Prioridade.saidaComun)
             return cursor.fetchall()
         except:
             raise Warning(f'Erro SQL - buscaTodos({self.config.tblCliente}) <SELECT>')
         finally:
             self.disconectBD(cursor)
-
-
 
     def disconectBD(self, cursor):
         cursor.close()

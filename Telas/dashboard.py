@@ -34,14 +34,16 @@ class Ui_mwDashBoard(object):
 "\n"
 "/*---------------------------- Push Buttons ------------------------------------------*/\n"
 "\n"
-"#pbConfig, #pbHome, #pbSobre {\n"
+"#pbConfig, #pbHome, \n"
+"#pbSobre, #pbFerramentas {\n"
 "    background-color: rgb(41, 128, 185);\n"
 "    border-radius: 20px;\n"
 "}\n"
 "\n"
 "#pbConfig:hover, \n"
 "#pbHome:hover, \n"
-"#pbSobre:hover {\n"
+"#pbSobre:hover,\n"
+"#pbFerramentas:hover {\n"
 "    background-color: rgba(190, 250, 245, 190);\n"
 "    border-radius: 20px;\n"
 "}\n"
@@ -60,6 +62,12 @@ class Ui_mwDashBoard(object):
 "\n"
 "#pbSobre {\n"
 "    background-image: url(:/sobre/information.png);\n"
+"    background-repeat: no-repeat;\n"
+"    background-position: center;\n"
+"}\n"
+"\n"
+"#pbFerramentas {\n"
+"    background-image: url(:/ferramentas/ferramentas.png);\n"
 "    background-repeat: no-repeat;\n"
 "    background-position: center;\n"
 "}\n"
@@ -136,6 +144,12 @@ class Ui_mwDashBoard(object):
         self.pbConfig.setText("")
         self.pbConfig.setObjectName("pbConfig")
         self.verticalLayout.addWidget(self.pbConfig, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
+        self.pbFerramentas = QtWidgets.QPushButton(self.frMainLeft)
+        self.pbFerramentas.setMinimumSize(QtCore.QSize(40, 40))
+        self.pbFerramentas.setMaximumSize(QtCore.QSize(40, 40))
+        self.pbFerramentas.setText("")
+        self.pbFerramentas.setObjectName("pbFerramentas")
+        self.verticalLayout.addWidget(self.pbFerramentas)
         self.pbSobre = QtWidgets.QPushButton(self.frMainLeft)
         self.pbSobre.setMinimumSize(QtCore.QSize(40, 40))
         self.pbSobre.setMaximumSize(QtCore.QSize(40, 40))

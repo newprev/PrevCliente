@@ -39,14 +39,16 @@
 
 /*---------------------------- Push Buttons ------------------------------------------*/
 
-#pbConfig, #pbHome, #pbSobre {
+#pbConfig, #pbHome, 
+#pbSobre, #pbFerramentas {
 	background-color: rgb(41, 128, 185);
 	border-radius: 20px;
 }
 
 #pbConfig:hover, 
 #pbHome:hover, 
-#pbSobre:hover {
+#pbSobre:hover,
+#pbFerramentas:hover {
 	background-color: rgba(190, 250, 245, 190);
 	border-radius: 20px;
 }
@@ -65,6 +67,12 @@
 
 #pbSobre {
 	background-image: url(:/sobre/information.png);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+#pbFerramentas {
+	background-image: url(:/ferramentas/ferramentas.png);
 	background-repeat: no-repeat;
 	background-position: center;
 }
@@ -234,6 +242,25 @@
              </item>
              <item alignment="Qt::AlignHCenter|Qt::AlignTop">
               <widget class="QPushButton" name="pbConfig">
+               <property name="minimumSize">
+                <size>
+                 <width>40</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pbFerramentas">
                <property name="minimumSize">
                 <size>
                  <width>40</width>

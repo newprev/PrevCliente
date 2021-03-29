@@ -95,14 +95,23 @@ class Ui_wdgTabConfiguracoes(object):
 "    font-size: 24px;\n"
 "}\n"
 "\n"
-"#lbSubtitulo {\n"
+"#lbSubtitulo, #lbInfoValor,\n"
+"#lbInfoData, #lbInfoAcao {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;    \n"
 "}\n"
 "\n"
+"#lbInfoTitulo {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"\n"
+"    background-color: white;    \n"
+"}\n"
+"\n"
 "/*-------------------------------- Push Buttons --------------------------------*/\n"
 "#pbBuscarArq, #pbEditar, \n"
-"#pbExcluir, #pbInserir {\n"
+"#pbExcluir, #pbInserir, \n"
+"#pbEfetivar  {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 14px;\n"
 "    color: white;\n"
@@ -112,7 +121,8 @@ class Ui_wdgTabConfiguracoes(object):
 "}\n"
 "\n"
 "#pbBuscarArq:hover, #pbEditar:hover, \n"
-"#pbExcluir:hover, #pbInserir:hover {\n"
+"#pbExcluir:hover, #pbInserir:hover,\n"
+"#pbEfetivar:hover {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 14px;\n"
 "    color: white;\n"
@@ -121,15 +131,41 @@ class Ui_wdgTabConfiguracoes(object):
 "    border: 1px solid;\n"
 "    background-color: rgb(72, 93, 114);\n"
 "}\n"
+"\n"
+"#pbCancelar {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    color: black;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: rgb(225, 224, 53);\n"
+"}\n"
+"\n"
+"#pbCancelar:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    color: black;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: rgb(225, 240, 73);\n"
+"}\n"
+"\n"
+"/*-------------------------------- Frames -----------------------------------------*/\n"
+"#frInfo{\n"
+"    border-radius: 4px;\n"
+"    border: 1px solid rgb(85, 87, 83);\n"
+"\n"
+"    background-color: white;\n"
+"}\n"
 "")
         self.tabTetosPrev.setObjectName("tabTetosPrev")
         self.tblTetos = QtWidgets.QTableWidget(self.tabTetosPrev)
-        self.tblTetos.setGeometry(QtCore.QRect(10, 110, 431, 441))
+        self.tblTetos.setGeometry(QtCore.QRect(10, 180, 471, 371))
         self.tblTetos.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tblTetos.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.tblTetos.setTextElideMode(QtCore.Qt.ElideNone)
         self.tblTetos.setObjectName("tblTetos")
-        self.tblTetos.setColumnCount(4)
+        self.tblTetos.setColumnCount(3)
         self.tblTetos.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tblTetos.setHorizontalHeaderItem(0, item)
@@ -147,13 +183,6 @@ class Ui_wdgTabConfiguracoes(object):
         font.setPointSize(14)
         item.setFont(font)
         self.tblTetos.setHorizontalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        item.setTextAlignment(QtCore.Qt.AlignCenter)
-        font = QtGui.QFont()
-        font.setFamily("TeX Gyre Adventor")
-        font.setPointSize(14)
-        item.setFont(font)
-        self.tblTetos.setHorizontalHeaderItem(3, item)
         self.tblTetos.horizontalHeader().setCascadingSectionResizes(True)
         self.tblTetos.horizontalHeader().setStretchLastSection(True)
         self.tblTetos.verticalHeader().setVisible(False)
@@ -161,20 +190,61 @@ class Ui_wdgTabConfiguracoes(object):
         self.lbTitulo.setGeometry(QtCore.QRect(30, 10, 451, 31))
         self.lbTitulo.setObjectName("lbTitulo")
         self.lbSubtitulo = QtWidgets.QLabel(self.tabTetosPrev)
-        self.lbSubtitulo.setGeometry(QtCore.QRect(30, 50, 371, 21))
+        self.lbSubtitulo.setGeometry(QtCore.QRect(30, 40, 371, 21))
         self.lbSubtitulo.setObjectName("lbSubtitulo")
         self.pbBuscarArq = QtWidgets.QPushButton(self.tabTetosPrev)
-        self.pbBuscarArq.setGeometry(QtCore.QRect(480, 20, 111, 41))
+        self.pbBuscarArq.setGeometry(QtCore.QRect(500, 20, 111, 41))
         self.pbBuscarArq.setObjectName("pbBuscarArq")
         self.pbInserir = QtWidgets.QPushButton(self.tabTetosPrev)
-        self.pbInserir.setGeometry(QtCore.QRect(480, 160, 111, 25))
+        self.pbInserir.setGeometry(QtCore.QRect(500, 160, 111, 25))
         self.pbInserir.setObjectName("pbInserir")
         self.pbExcluir = QtWidgets.QPushButton(self.tabTetosPrev)
-        self.pbExcluir.setGeometry(QtCore.QRect(480, 210, 111, 25))
+        self.pbExcluir.setGeometry(QtCore.QRect(500, 210, 111, 25))
         self.pbExcluir.setObjectName("pbExcluir")
         self.pbEditar = QtWidgets.QPushButton(self.tabTetosPrev)
-        self.pbEditar.setGeometry(QtCore.QRect(480, 260, 111, 25))
+        self.pbEditar.setGeometry(QtCore.QRect(500, 260, 111, 25))
         self.pbEditar.setObjectName("pbEditar")
+        self.frInfo = QtWidgets.QFrame(self.tabTetosPrev)
+        self.frInfo.setGeometry(QtCore.QRect(10, 90, 471, 81))
+        self.frInfo.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frInfo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfo.setObjectName("frInfo")
+        self.lbInfoData = QtWidgets.QLabel(self.frInfo)
+        self.lbInfoData.setGeometry(QtCore.QRect(20, 20, 64, 17))
+        self.lbInfoData.setObjectName("lbInfoData")
+        self.lbInfoValor = QtWidgets.QLabel(self.frInfo)
+        self.lbInfoValor.setGeometry(QtCore.QRect(160, 20, 64, 17))
+        self.lbInfoValor.setObjectName("lbInfoValor")
+        self.dtData = QtWidgets.QDateEdit(self.frInfo)
+        self.dtData.setGeometry(QtCore.QRect(20, 40, 110, 26))
+        self.dtData.setButtonSymbols(QtWidgets.QAbstractSpinBox.UpDownArrows)
+        self.dtData.setCurrentSection(QtWidgets.QDateTimeEdit.MonthSection)
+        self.dtData.setCalendarPopup(True)
+        self.dtData.setObjectName("dtData")
+        self.leValor = QtWidgets.QLineEdit(self.frInfo)
+        self.leValor.setGeometry(QtCore.QRect(160, 40, 91, 25))
+        self.leValor.setObjectName("leValor")
+        self.lbInfoAcao = QtWidgets.QLabel(self.frInfo)
+        self.lbInfoAcao.setGeometry(QtCore.QRect(300, 10, 161, 20))
+        self.lbInfoAcao.setObjectName("lbInfoAcao")
+        self.pbEfetivar = QtWidgets.QPushButton(self.frInfo)
+        self.pbEfetivar.setGeometry(QtCore.QRect(280, 40, 83, 25))
+        self.pbEfetivar.setObjectName("pbEfetivar")
+        self.pbCancelar = QtWidgets.QPushButton(self.frInfo)
+        self.pbCancelar.setGeometry(QtCore.QRect(380, 40, 83, 25))
+        self.pbCancelar.setObjectName("pbCancelar")
+        self.lbInfoTitulo = QtWidgets.QLabel(self.tabTetosPrev)
+        self.lbInfoTitulo.setGeometry(QtCore.QRect(30, 80, 111, 17))
+        self.lbInfoTitulo.setObjectName("lbInfoTitulo")
+        self.frInfo.raise_()
+        self.tblTetos.raise_()
+        self.lbTitulo.raise_()
+        self.lbSubtitulo.raise_()
+        self.pbBuscarArq.raise_()
+        self.pbInserir.raise_()
+        self.pbExcluir.raise_()
+        self.pbEditar.raise_()
+        self.lbInfoTitulo.raise_()
         self.tabMain.addTab(self.tabTetosPrev, "")
         self.clientes = QtWidgets.QWidget()
         self.clientes.setObjectName("clientes")
@@ -191,10 +261,8 @@ class Ui_wdgTabConfiguracoes(object):
         item = self.tblTetos.horizontalHeaderItem(0)
         item.setText(_translate("wdgTabConfiguracoes", "tetoId"))
         item = self.tblTetos.horizontalHeaderItem(1)
-        item.setText(_translate("wdgTabConfiguracoes", "Ano"))
+        item.setText(_translate("wdgTabConfiguracoes", "Data"))
         item = self.tblTetos.horizontalHeaderItem(2)
-        item.setText(_translate("wdgTabConfiguracoes", "Mês"))
-        item = self.tblTetos.horizontalHeaderItem(3)
         item.setText(_translate("wdgTabConfiguracoes", "Valor"))
         self.lbTitulo.setText(_translate("wdgTabConfiguracoes", "Histórico dos tetos previdenciários"))
         self.lbSubtitulo.setText(_translate("wdgTabConfiguracoes", "Procure por tetos previdenciários desde 1960"))
@@ -203,6 +271,13 @@ class Ui_wdgTabConfiguracoes(object):
         self.pbInserir.setText(_translate("wdgTabConfiguracoes", "Inserir"))
         self.pbExcluir.setText(_translate("wdgTabConfiguracoes", "Excluir"))
         self.pbEditar.setText(_translate("wdgTabConfiguracoes", "Editar"))
+        self.lbInfoData.setText(_translate("wdgTabConfiguracoes", "Data"))
+        self.lbInfoValor.setText(_translate("wdgTabConfiguracoes", "Valor"))
+        self.dtData.setDisplayFormat(_translate("wdgTabConfiguracoes", "MM/yyyy"))
+        self.lbInfoAcao.setText(_translate("wdgTabConfiguracoes", "Inserir ou cancelar edição"))
+        self.pbEfetivar.setText(_translate("wdgTabConfiguracoes", "Efetivar"))
+        self.pbCancelar.setText(_translate("wdgTabConfiguracoes", "Cancelar"))
+        self.lbInfoTitulo.setText(_translate("wdgTabConfiguracoes", "  Inserir / Editar"))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabTetosPrev), _translate("wdgTabConfiguracoes", "Tetos Previdenciários"))
         self.tabMain.setTabText(self.tabMain.indexOf(self.clientes), _translate("wdgTabConfiguracoes", "Clientes"))
 

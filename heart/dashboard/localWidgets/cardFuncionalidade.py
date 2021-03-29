@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt
 from Telas.buttonFuncionalidade import Ui_wdgFuncionalidade
 from heart.dashboard.localStyleSheet.cardsFuncionalidade import inicializaCard
 from heart.sinaisCustomizados import Sinais
+from newPrevEnums import TelaPosicao
 
 
 class CardFuncionalidade(QWidget, Ui_wdgFuncionalidade):
@@ -36,11 +37,11 @@ class CardFuncionalidade(QWidget, Ui_wdgFuncionalidade):
 
     def emitirSinal(self):
         if self.tipo.upper() == 'CLIENTE':
-            self.sinais.sTrocaWidgetCentral.emit(0)
+            self.sinais.sTrocaWidgetCentral.emit(TelaPosicao.Cliente)
         elif self.tipo.upper() == 'CALCULOS':
-            self.sinais.sTrocaWidgetCentral.emit(1)
+            self.sinais.sTrocaWidgetCentral.emit(TelaPosicao.Calculos)
         elif self.tipo.upper() == 'ENTREVISTA':
-            self.sinais.sTrocaWidgetCentral.emit(2)
+            self.sinais.sTrocaWidgetCentral.emit(TelaPosicao.Entrevista)
 
     def trocaPagina(self, *args, **kwargs):
         self.dashboard.trocarParaPagina(args[0])

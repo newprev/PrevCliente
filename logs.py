@@ -1,5 +1,5 @@
 from enum import Enum
-from colorama import Fore, init, Back
+from colorama import Fore, init, Back, deinit
 
 class Prioridade(Enum):
     saidaComun = 200
@@ -30,5 +30,7 @@ def logPrioridade(mensagem: str, tipoEdicao: TipoEdicao = TipoEdicao.select, pri
         corDoFundo = Back.RESET
     elif priodiade == Prioridade.saidaImportante:
         corDoFundo = Back.YELLOW
+        corDaFonte = Fore.LIGHTWHITE_EX
 
     print(corDaFonte + corDoFundo + mensagem)
+    deinit()

@@ -6,3 +6,5 @@
 *.pyi
 
 .idea/misc.xml
+
+Daos/producao.db

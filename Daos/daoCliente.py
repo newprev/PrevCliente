@@ -1,8 +1,8 @@
+import sqlite3
 from datetime import datetime
 
 from Daos.tabelas import TabelasConfig
-from connections import ConfigConnection
-from helpers import mascaraDataSql
+from helpers import datetimeToSql, mascaraDataSql
 from modelos.clienteModelo import ClienteModelo
 from pymysql import connections, cursors
 from logs import *
@@ -15,7 +15,11 @@ class DaoCliente:
         self.config = TabelasConfig()
 
     def atualizaCliente(self, cliente: ClienteModelo):
-        self.db.connect()
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor = self.db.cursor()
 
         strComando = f"""
@@ -39,7 +43,7 @@ class DaoCliente:
                     bairro = '{cliente.bairro}',
                     cep = '{cliente.cep}',
                     complemento = '{cliente.complemento}',
-                    dataUltAlt = NOW()
+                    dataUltAlt = '{datetimeToSql(datetime.now())}'
                 WHERE
                     clienteId = {cliente.clienteId}
                 """
@@ -53,7 +57,11 @@ class DaoCliente:
             self.disconectBD(cursor)
 
     def cadastroClienteComCnis(self, cliente: ClienteModelo, dictAllInfo: dict) -> int:
-        self.db.connect()
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor: cursors = self.db.cursor()
         clienteId = 0
 
@@ -70,13 +78,13 @@ class DaoCliente:
                         VALUES
                         (
                             '{cliente.nomeCliente}', '{cliente.sobrenomeCliente}', {cliente.idade}, 
-                            '{mascaraDataSql(cliente.dataNascimento)}', '{cliente.telefone}', '{cliente.email}', 
+                            '{cliente.dataNascimento}', '{cliente.telefone}', '{cliente.email}', 
                             '{cliente.rgCliente}', '{cliente.cpfCliente}', '{cliente.numCartProf}', 
                             '{cliente.nit}', '{cliente.nomeMae}', '{cliente.estadoCivil}', 
                             '{cliente.profissao}', '{cliente.endereco}', '{cliente.estado}', 
                             '{cliente.cidade}', '{cliente.bairro}', '{cliente.cep}', 
-                            '{cliente.complemento}', NOW(), NOW()
-                        )"""
+                            '{cliente.complemento}', '{datetimeToSql(datetime.now())}', '{datetimeToSql(datetime.now())}'
+                        );"""
 
         try:
             cursor.execute(strComando)
@@ -137,7 +145,8 @@ class DaoCliente:
                     (
                         clienteId, seq, nb,
                         especie, dataInicio, dataFim,
-                        situacao, dataCadastro, dataUltAlt
+                        situacao, dadoOrigem, dataCadastro, 
+                        dataUltAlt
                     )
                 VALUES """
 
@@ -148,8 +157,10 @@ class DaoCliente:
                     (
                         {clienteId}, {beneficio['Seq'][i]}, {beneficio['NB'][i]},
                         '{beneficio['especie'][i]}', '{mascaraDataSql(beneficio['dataInicio'][i])}', '{mascaraDataSql(beneficio['dataFim'][i])}',
-                        '{beneficio['situacao'][i]}', NOW(), NOW()
+                        '{beneficio['situacao'][i]}', 'CNIS', '{datetimeToSql(datetime.now())}',
+                        '{datetimeToSql(datetime.now())}'
                     )"""
+
             return strComando
         else:
             return ''
@@ -162,7 +173,8 @@ class DaoCliente:
                             (
                                 clienteId, seq, competencia,
                                 dataPagamento, contribuicao, salContribuicao,
-                                indicadores, dataCadastro, dataUltAlt
+                                indicadores, dadoOrigem, dataCadastro, 
+                                dataUltAlt
                             )
                         VALUES """
 
@@ -173,8 +185,10 @@ class DaoCliente:
                             (
                                 {clienteId}, {contribuicoes['Seq'][i]}, '{mascaraDataSql(contribuicoes['competencia'][i], short=True)}',
                                 '{mascaraDataSql(contribuicoes['dataPagamento'][i])}', {contribuicoes['contribuicao'][i]}, {contribuicoes['salContribuicao'][i]},
-                                '{contribuicoes['indicadores'][i]}', NOW(), NOW()
+                                '{contribuicoes['indicadores'][i]}', 'CNIS', '{datetimeToSql(datetime.now())}', 
+                                '{datetimeToSql(datetime.now())}'
                             )"""
+
             return strComando
         else:
             return ''
@@ -188,7 +202,8 @@ class DaoCliente:
                                 clienteId, seq, nit,
                                 cdEmp, nomeEmp, dataInicio,
                                 dataFim, tipoVinculo, indicadores, 
-                                ultRem, dataCadastro, dataUltAlt
+                                ultRem, dadoOrigem, dataCadastro, 
+                                dataUltAlt
                             )
                         VALUES """
 
@@ -200,8 +215,10 @@ class DaoCliente:
                                 {clienteId}, {cabecalhos['Seq'][i]}, '{cabecalhos['nit'][i]}',
                                 '{cabecalhos['cdEmp'][i]}', '{cabecalhos['nomeEmp'][i]}', '{mascaraDataSql(cabecalhos['dataInicio'][i])}',
                                 '{mascaraDataSql(cabecalhos['dataFim'][i])}', '{cabecalhos['tipoVinculo'][i]}', '{cabecalhos['indicadores'][i]}',
-                                '{mascaraDataSql(cabecalhos['ultRem'][i], short=True)}', NOW(), NOW()
+                                '{mascaraDataSql(cabecalhos['ultRem'][i], short=True)}', 'CNIS', '{datetimeToSql(datetime.now())}', 
+                                '{datetimeToSql(datetime.now())}'
                             )"""
+
             return strComando
         else:
             return ''
@@ -213,8 +230,8 @@ class DaoCliente:
                         INSERT INTO {self.config.tblCnisRemuneracoes}
                             (
                                 clienteId, seq, competencia,
-                                remuneracao, indicadores, dataCadastro, 
-                                dataUltAlt
+                                remuneracao, indicadores, dadoOrigem,
+                                dataCadastro, dataUltAlt
                             )
                         VALUES """
 
@@ -224,15 +241,20 @@ class DaoCliente:
                 strComando += f""" 
                             (
                                 {clienteId}, {remuneracoes['Seq'][i]}, '{mascaraDataSql(remuneracoes['competencia'][i], short=True)}',
-                                {remuneracoes['remuneracao'][i]}, '{remuneracoes['indicadores'][i]}', NOW(), 
-                                NOW()
+                                {remuneracoes['remuneracao'][i]}, '{remuneracoes['indicadores'][i]}', 'CNIS',
+                                '{datetimeToSql(datetime.now())}', '{datetimeToSql(datetime.now())}'
                             )"""
+
             return strComando
         else:
             return ''
 
-    def buscaClienteById(self, clienteId):
-        self.db.connect()
+    def buscaClienteById(self, clienteId, returnInstance: bool = False):
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor = self.db.cursor()
 
         strComando = f"""SELECT * FROM {self.config.tblCliente} WHERE clienteId = {clienteId}"""
@@ -240,14 +262,21 @@ class DaoCliente:
         try:
             cursor.execute(strComando)
             logPrioridade(f'SELECT<buscaClienteById>___________________{self.config.tblCliente}', TipoEdicao.select, Prioridade.saidaComun)
-            return cursor.fetchall()
+            if returnInstance:
+                return ClienteModelo().fromList(cursor.fetchone(), retornaInst=True)
+            else:
+                return cursor.fetchall()
         except:
             raise Warning(f'Erro SQL - buscaClienteById({self.config.tblCliente}) <SELECT>')
         finally:
             self.disconectBD(cursor)
 
-    def buscaTodos(self):
-        self.db.connect()
+    def buscaTodos(self, returnModel: bool = False):
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor = self.db.cursor()
 
         strComando = f"""SELECT * FROM {self.config.tblCliente};"""
@@ -255,7 +284,14 @@ class DaoCliente:
         try:
             cursor.execute(strComando)
             logPrioridade(f'SELECT<buscaTodos>___________________{self.config.tblCliente}', TipoEdicao.select, Prioridade.saidaComun)
-            return cursor.fetchall()
+
+            if returnModel:
+                clientesModel = []
+                for cliente in cursor.fetchall():
+                    clientesModel.append(ClienteModelo().fromList(cliente, retornaInst=True))
+                return clientesModel
+            else:
+                return cursor.fetchall()
         except:
             raise Warning(f'Erro SQL - buscaTodos({self.config.tblCliente}) <SELECT>')
         finally:
@@ -263,4 +299,4 @@ class DaoCliente:
 
     def disconectBD(self, cursor):
         cursor.close()
-        self.db.close()
+        # self.db.close()

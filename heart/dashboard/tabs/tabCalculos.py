@@ -7,8 +7,9 @@ from Daos.daoCliente import DaoCliente
 from Telas.tabCalculos import Ui_wdgTabCalculos
 from heart.buscaClientePage import BuscaClientePage
 from heart.insereContribuicaoPage import InsereContribuicaoPage
-from helpers import mascaraDataPequena, mascaraDinheiro, mascaraCPF
+from helpers import mascaraDataPequena, mascaraDinheiro, mascaraCPF, strToDatetime
 from modelos.clienteModelo import ClienteModelo
+from newPrevEnums import TamanhoData
 
 
 class TabCalculos(QWidget, Ui_wdgTabCalculos):
@@ -79,6 +80,7 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
                         strIndicadores = info
                     strItem = QTableWidgetItem(strIndicadores)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+                    strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
 
 

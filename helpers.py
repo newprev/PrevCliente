@@ -1,5 +1,7 @@
 import datetime
 
+from newPrevEnums import TamanhoData
+
 estCivil = ['Solteiro(a)', 'Casado(a)', 'Divorciado(a)', 'Viúvo(a)']
 
 dictIndicadores = {
@@ -246,6 +248,12 @@ def mascaraMeses(data: datetime.date):
 
 
 def mascaraDataPequena(data: datetime.date):
+    if isinstance(data, str):
+        if len(data) <= 16:
+            data = strToDatetime(data, tamanho=TamanhoData.g)
+        else:
+            data = strToDatetime(data, tamanho=TamanhoData.gg)
+
     return f'{data.month}/{data.year}'
 
 
@@ -284,12 +292,20 @@ def mascaraDataSql(data: str, short: bool = False):
         return datetime.datetime.min
 
 
-def strToDatetime(data: str, short: bool = False):
+def datetimeToSql(data: datetime.datetime) -> str:
+    return data.strftime('%Y-%m-%d %H:%M')
+
+
+def strToDatetime(data: str, tamanho: TamanhoData = TamanhoData.m):
     try:
-        if short:
+        if tamanho == TamanhoData.p:
             return datetime.datetime.strptime(data, '%m/%Y')
-        else:
+        elif tamanho == TamanhoData.m:
             return datetime.datetime.strptime(data, '%d/%m/%Y')
+        elif tamanho == TamanhoData.g:
+            return datetime.datetime.strptime(data, '%Y-%m-%d %H:%M')
+        elif tamanho == TamanhoData.gg:
+            return datetime.datetime.strptime(data, '%Y-%m-%d %H:%M:%S')
     except ValueError:
         return datetime.datetime.min
 

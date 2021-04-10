@@ -8,6 +8,7 @@ from Daos.tabelas import TabelasConfig
 from Telas.splashScreen import Ui_MainWindow
 from heart.login.loginController import LoginController
 from connections import ConfigConnection
+from newPrevEnums import TiposConexoes
 
 
 class Main(Ui_MainWindow, QMainWindow):
@@ -16,8 +17,9 @@ class Main(Ui_MainWindow, QMainWindow):
         super(Main, self).__init__()
         self.setupUi(self)
         self.contador = 0
-        # self.dbConnection = ConfigConnection(instanciaBanco='Local')
-        self.dbConnection = ConfigConnection(instanciaBanco='Umbler')
+        self.tipoConexao = TiposConexoes.sqlite
+        self.dbConnection = ConfigConnection(instanciaBanco=self.tipoConexao)
+        # self.dbConnection = ConfigConnection(instanciaBanco='Umbler')
         self.db = self.dbConnection.getDatabase()
         self.daoConfigs = DaoConfiguracoes(db=self.db)
         self.loginPage = None
@@ -54,7 +56,7 @@ class Main(Ui_MainWindow, QMainWindow):
 
     def iniciaBancosETelas(self):
 
-        tabelas = TabelasConfig()
+        tabelas = TabelasConfig(tipoBanco=self.tipoConexao)
 
         self.lbInfo.setText('CRIANDO TABELA DO CLIENTE...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCliente, nomeTabela='cliente'):

@@ -1,5 +1,6 @@
 import requests as http
 
+
 class ClienteRepository:
 
     def __init__(self):
@@ -11,7 +12,7 @@ class ClienteRepository:
             response: http.Response = http.get(url)
 
             if response.status_code == 200:
-                if response.text != "":
+                if response.text != "" and 'erro' not in response.json().keys():
                     return response.json()
                 else:
                     return dict()

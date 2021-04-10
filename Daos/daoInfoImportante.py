@@ -1,9 +1,12 @@
+import sqlite3
+
 from connections import ConfigConnection
 from Daos.tabelas import TabelasConfig
-from helpers import dinheiroToFloat
+from helpers import dinheiroToFloat, datetimeToSql
 from modelos.convMonModelo import ConvMonModelo
 from modelos.tetosPrevModelo import TetosPrevModelo
 from logs import *
+from datetime import datetime
 
 
 class DaoInfoImportante:
@@ -14,7 +17,11 @@ class DaoInfoImportante:
         self.tabelas = TabelasConfig()
 
     def insereListaTetos(self, tetosDict: dict, deletarTabela: bool = False):
-        self.db.connect()
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor = self.db.cursor()
 
         strComando = f"""
@@ -28,12 +35,17 @@ class DaoInfoImportante:
             if index == 0:
                 strComando += f"""
             (
-                '{tetosDict['data'][index]}', {tetosDict['valor'][index]}, NOW(), NOW()
-            )"""
+                '{tetosDict['data'][index]}', {tetosDict['valor'][index]}"""
             else:
                 strComando += f""",
             (
-                '{tetosDict['data'][index]}', {tetosDict['valor'][index]}, NOW(), NOW()
+                '{tetosDict['data'][index]}', {tetosDict['valor'][index]}"""
+
+            if isinstance(self.db, sqlite3.Connection):
+                strComando += f""", '{datetimeToSql(datetime.now())}', '{datetimeToSql(datetime.now())}' 
+            )"""
+            else:
+                strComando += f""", NOW(), NOW()
             )"""
 
         try:
@@ -50,7 +62,11 @@ class DaoInfoImportante:
             self.disconectBD(cursor)
 
     def insereTeto(self, tetoDict: dict):
-        self.db.connect()
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor = self.db.cursor()
 
         strComando = f"""
@@ -74,7 +90,11 @@ class DaoInfoImportante:
             self.disconectBD(cursor)
 
     def insereConvMon(self, convMon: ConvMonModelo):
-        self.db.connect()
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor = self.db.cursor()
 
         strComando = f"""
@@ -87,11 +107,18 @@ class DaoInfoImportante:
             VALUES 
             (
                 '{convMon.nomeMoeda}', {convMon.fator}, '{convMon.dataInicial}',
-                '{convMon.dataFinal}', '{convMon.conversao}', {convMon.moedaCorrente},
+                '{convMon.dataFinal}', '{convMon.conversao}', {convMon.moedaCorrente}"""
+
+        if isinstance(self.db, sqlite3.Connection):
+            strComando += f""", '{datetimeToSql(datetime.now())}', '{datetimeToSql(datetime.now())}'
+            )"""
+        else:
+            strComando += f""",
                 NOW(), NOW()
             )"""
 
         try:
+
             cursor.execute(strComando)
             convMonId = cursor.lastrowid
             logPrioridade(f'INSERT<insereConvMon>___________________{self.tabelas.tblConvMon} ({convMonId})', TipoEdicao.insert, Prioridade.saidaComun)
@@ -102,7 +129,11 @@ class DaoInfoImportante:
             self.disconectBD(cursor)
 
     def atualizaTeto(self, tetoModel: TetosPrevModelo):
-        self.db.connect()
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor = self.db.cursor()
 
         strComando = f"""
@@ -114,7 +145,6 @@ class DaoInfoImportante:
                 tetosPrevId = {tetoModel.tetosPrevId}"""
 
         try:
-            print(strComando)
             cursor.execute(strComando)
             logPrioridade(f'UPDATE<atualizaTeto>___________________{self.tabelas.tblTetosPrev} ({tetoModel.tetosPrevId})', TipoEdicao.update, Prioridade.saidaComun)
         except:
@@ -124,7 +154,11 @@ class DaoInfoImportante:
             self.disconectBD(cursor)
 
     def deletaTetoById(self, tetoPrevId: int):
-        self.db.connect()
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor = self.db.cursor()
 
         strComando = f"""
@@ -142,7 +176,11 @@ class DaoInfoImportante:
             self.disconectBD(cursor)
 
     def deletarTabela(self, commitar: bool = True):
-        self.db.connect()
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor = self.db.cursor()
 
         strComando = f"DELETE FROM {self.tabelas.tblTetosPrev};"
@@ -161,14 +199,18 @@ class DaoInfoImportante:
                 cursor.close()
 
     def getAllTetos(self):
-        self.db.connect()
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor = self.db.cursor()
 
         strComando = f"""SELECT tetosPrevId, dataValidade, valor FROM {self.tabelas.tblTetosPrev} ORDER BY dataValidade DESC"""
 
         try:
             cursor.execute(strComando)
-            logPrioridade(f'SELECT<getAllTetos>___________________{self.tabelas.tblTetosPrev}', TipoEdicao.select, Prioridade.saidaComun)
+            logPrioridade(f'SELECT<getAllTetos>___________________{self.tabelas.tblTetosPrev};', TipoEdicao.select, Prioridade.saidaComun)
             return cursor.fetchall()
         except:
             raise Warning(f'Erro SQL - getAllTetos({self.config.banco}) <INSERT {self.tabelas.tblTetosPrev}>')
@@ -176,7 +218,12 @@ class DaoInfoImportante:
             self.disconectBD(cursor)
 
     def getConvMonByNomeMoeda(self, nomeMoeda: str):
-        self.db.connect()
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+
         cursor = self.db.cursor()
 
         strComando = f"""
@@ -198,7 +245,11 @@ class DaoInfoImportante:
             self.disconectBD(cursor)
 
     def getAllMoedas(self):
-        self.db.connect()
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor = self.db.cursor()
 
         strComando = f"""
@@ -216,5 +267,4 @@ class DaoInfoImportante:
 
     def disconectBD(self, cursor):
         cursor.close()
-        self.db.close()
-
+        # self.db.close()

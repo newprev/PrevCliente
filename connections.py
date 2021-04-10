@@ -1,12 +1,14 @@
 import json
 import os
-
+import sqlite3
 import pymysql
+
+from newPrevEnums import TiposConexoes
 
 
 class ConfigConnection:
 
-    def __init__(self, instanciaBanco: str = None):
+    def __init__(self, instanciaBanco: TiposConexoes = TiposConexoes.local):
 
         self.__host = None
         self.__user = None
@@ -36,11 +38,14 @@ class ConfigConnection:
         return self.__banco
 
     def getDatabase(self):
-        dataSourcesDir = os.path.join(os.path.dirname(__file__), 'datasource')
-        if self.__instanciaBanco.title() == 'Local':
+        if self.__instanciaBanco == TiposConexoes.local:
+            dataSourcesDir = os.path.join(os.path.dirname(__file__), 'datasource')
             dbPath = os.path.join(dataSourcesDir, 'dbLocal.json')
-        else:
+        elif self.__instanciaBanco == TiposConexoes.nuvem:
+            dataSourcesDir = os.path.join(os.path.dirname(__file__), 'datasource')
             dbPath = os.path.join(dataSourcesDir, 'databaseCloud.json')
+        elif self.__instanciaBanco == TiposConexoes.sqlite:
+            return sqlite3.connect('Daos/producao.db')
 
         with open(dbPath) as arquivo:
             config = json.load(arquivo)

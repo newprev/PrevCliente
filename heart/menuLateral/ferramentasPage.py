@@ -4,7 +4,7 @@ from Daos.daoInfoImportante import DaoInfoImportante
 from Telas.ferramentasPage import Ui_wdgFerramentas
 from modelos.convMonModelo import ConvMonModelo
 
-from helpers import dinheiroToFloat, getConversoesMonetarias
+from helpers import dinheiroToFloat, getConversoesMonetarias, datetimeToSql, strToFloat
 from datetime import datetime
 
 
@@ -28,6 +28,8 @@ class FerramentasPage(QWidget, Ui_wdgFerramentas):
         self.cbMoedaCorrente.setChecked(True)
         self.dtDataFim.setDisabled(True)
 
+        self.lbValorPara.setText('R$ 0,00')
+
         self.leNomeMoeda.textChanged.connect(lambda: self.getInfo('leNomeMoeda'))
         self.leFator.textChanged.connect(lambda: self.getInfo('leFator'))
         self.dtDataInicio.dateChanged.connect(lambda: self.getInfo('dtDataInicio'))
@@ -36,6 +38,7 @@ class FerramentasPage(QWidget, Ui_wdgFerramentas):
         self.cbMoedaCorrente.clicked.connect(lambda: self.getInfo('cbMoedaCorrente'))
         self.cbxDe.currentTextChanged.connect(lambda: self.atualizaConvMon('cbxDe'))
         self.cbxPara.currentTextChanged.connect(lambda: self.atualizaConvMon('cbxPara'))
+        self.leValorDe.textChanged.connect(self.atualizaValor)
 
         self.pbInserir.clicked.connect(self.trataInserir)
 
@@ -60,10 +63,10 @@ class FerramentasPage(QWidget, Ui_wdgFerramentas):
             self.convMonModelo.fator = dinheiroToFloat(self.leFator.text())
 
         elif info == 'dtDataInicio':
-            self.convMonModelo.dataInicial = self.dtDataInicio.date().toPyDate()
+            self.convMonModelo.dataInicial = self.dtDataInicio.date().toPyDate().strftime('%Y-%m-%d %H:%M')
 
         elif info == 'dtDataFim':
-            self.convMonModelo.dataFinal = self.dtDataFim.date().toPyDate()
+            self.convMonModelo.dataFinal = self.dtDataFim.date().toPyDate().strftime('%Y-%m-%d %H:%M')
 
         elif info == 'cbxConversao':
             self.convMonModelo.conversao = self.cbxConversao.currentText()
@@ -75,9 +78,12 @@ class FerramentasPage(QWidget, Ui_wdgFerramentas):
     def trataInserir(self):
         if self.convMonModelo.nomeMoeda is not None:
             if self.convMonModelo.moedaCorrente:
-                self.convMonModelo.dataFinal = datetime.now()
+                if self.convMonModelo.dataInicial is None:
+                    self.convMonModelo.dataInicial = self.dtDataInicio.date().toPyDate().strftime('%Y-%m-%d %H:%M')
+                self.convMonModelo.dataFinal = datetimeToSql(datetime.now())
             self.daoInfoImportante.insereConvMon(self.convMonModelo)
             self.carregaComboBoxes()
+            self.limpaTudo()
 
     def carregaConvMonIniciais(self):
         if self.cbxDe.currentText() != '' and self.cbxDe.currentText() is not None:
@@ -91,7 +97,16 @@ class FerramentasPage(QWidget, Ui_wdgFerramentas):
             else:
                 self.convMonPara = ConvMonModelo().fromList(self.daoInfoImportante.getConvMonByNomeMoeda(self.cbxPara.currentText()), retornaInst=True)
 
+    def atualizaValor(self):
+        if self.leValorDe.text() != '':
+            if self.convMonDe.dataFinal is not None and self.convMonPara.dataInicial:
+                valor = strToFloat(self.leValorDe.text())
+                valorAtuzliado = round((valor / self.convMonDe.fator) * self.convMonPara.fator, 2)
+
+                self.lbValorPara.setText(f'R$ {valorAtuzliado}')
 
     def limpaTudo(self):
         self.leValorDe.clear()
-        self.leValorPara.clear()
+        self.leNomeMoeda.clear()
+        self.leFator.clear()
+        self.lbValorPara.setText('R$ 0,00')

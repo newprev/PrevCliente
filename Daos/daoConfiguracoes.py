@@ -3,6 +3,8 @@ from helpers import dictIndicadores, dictEspecies
 from Daos.tabelas import TabelasConfig
 from logs import *
 
+import sqlite3
+
 
 class DaoConfiguracoes:
 
@@ -13,7 +15,10 @@ class DaoConfiguracoes:
 
     def criaTabela(self, scriptCreate: str = None, nomeTabela: str = None):
 
-        self.db.connect()
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor = self.db.cursor()
         response = True
 
@@ -27,7 +32,10 @@ class DaoConfiguracoes:
             return response
 
     def verificaTblIndicadores(self):
-        self.db.connect()
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+        # self.db.connect()
         cursor = self.db.cursor()
         indicadores = dictIndicadores
 
@@ -58,7 +66,11 @@ class DaoConfiguracoes:
             self.disconectBD(cursor)
 
     def verificaTblEspecieBenef(self):
-        self.db.connect()
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
         cursor = self.db.cursor()
         especieBenef = dictEspecies
 
@@ -90,4 +102,4 @@ class DaoConfiguracoes:
 
     def disconectBD(self, cursor):
         cursor.close()
-        self.db.close()
+        # self.db.close()

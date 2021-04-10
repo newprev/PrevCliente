@@ -1,6 +1,7 @@
 import datetime
 
-from helpers import mascaraDataPequena
+from helpers import strToDatetime
+from newPrevEnums import TamanhoData
 
 
 class ConvMonModelo:
@@ -46,8 +47,8 @@ class ConvMonModelo:
         self.convMonId = listConvMon[0]
         self.nomeMoeda = listConvMon[1]
         self.fator = listConvMon[2]
-        self.dataInicial = listConvMon[3]
-        self.dataFinal = listConvMon[4]
+        self.dataInicial = strToDatetime(listConvMon[3], tamanho=TamanhoData.g)
+        self.dataFinal = strToDatetime(listConvMon[4], tamanho=TamanhoData.g)
         self.conversao = listConvMon[5]
         self.moedaCorrente = listConvMon[6]
         self.dataUltAlt = listConvMon[7]

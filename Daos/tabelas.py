@@ -1,6 +1,9 @@
+from newPrevEnums import TiposConexoes
+
+
 class TabelasConfig:
 
-    def __init__(self):
+    def __init__(self, tipoBanco: TiposConexoes = TiposConexoes.local):
 
         self.__tblCliente = 'cliente'
         self.__tblCnisRemuneracoes = 'cnisRemuneracoes'
@@ -11,11 +14,23 @@ class TabelasConfig:
         self.__tblEspecieBenef = 'especieBenef'
         self.__tblTetosPrev = 'tetosPrev'
         self.__tblConvMon = 'convMon'
+        self.tipoBanco = tipoBanco
 
-#     # Comando SQL para criar tabela de clientes
-        self.__sqlCreateCliente = f"""
+
+    # Comando SQL para criar tabela de clientes
+    @property
+    def sqlCreateCliente(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'clienteId INT AUTO_INCREMENT,'
+            bottom = """,
+            PRIMARY KEY (clienteId)
+        );"""
+        else:
+            cabecalho = 'clienteId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
         CREATE TABLE IF NOT EXISTS {self.tblCliente}(
-            clienteId INT AUTO_INCREMENT,
+            {cabecalho}
             nomeCliente VARCHAR(20) NOT NULL,
             sobrenomeCliente VARCHAR(30) NOT NULL,
             idade INT NOT NULL,
@@ -29,7 +44,7 @@ class TabelasConfig:
             quaCarteiraProf VARCHAR(15) NULL,
             nit VARCHAR(14) NOT NULL,
             nomeMae VARCHAR(40) NOT NULL,
-            estadoCivil VARCHAR(15) NOT NULL DEFAULT 'SOLTEIRO(A)',
+            estadoCivil VARCHAR(15) DEFAULT 'SOLTEIRO(A)',
             profissao VARCHAR(30) NOT NULL,
             endereco VARCHAR(50) NOT NULL,
             estado VARCHAR(20) NOT NULL,
@@ -38,28 +53,47 @@ class TabelasConfig:
             cep VARCHAR(8) NOT NULL,
             complemento VARCHAR(30) NULL,
             dataCadastro DATETIME NOT NULL,
-            dataUltAlt DATETIME NOT NULL,
-            PRIMARY KEY (clienteId)
-        );"""
+            dataUltAlt DATETIME NOT NULL{bottom}
+        """
 
-        # Comando que cria tabela de remunerações
-        self.__sqlCreateCnisRemuneracoes = f"""
+    # Comando que cria tabela de remunerações
+    @property
+    def sqlCreateCnisRemuneracoes(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'remuneracoesId INT AUTO_INCREMENT,'
+            bottom = """,
+            PRIMARY KEY (remuneracoesId)
+        );"""
+        else:
+            cabecalho = 'remuneracoesId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
         CREATE TABLE IF NOT EXISTS {self.tblCnisRemuneracoes}(
-            remuneracoesId INT AUTO_INCREMENT,
+            {cabecalho}
             clienteId INT NOT NULL,
             seq INT NOT NULL,
             competencia DATETIME NOT NULL,
             remuneracao FLOAT NOT NULL,
             indicadores VARCHAR(25) NOT NULL,
+            dadoOrigem VARCHAR(15) NOT NULL,
             dataCadastro DATETIME NOT NULL,
-            dataUltAlt DATETIME NOT NULL,
-            PRIMARY KEY (remuneracoesId)
-        );"""
+            dataUltAlt DATETIME NOT NULL{bottom}
+        """
 
-        # Comando que cria tabela de contribuições
-        self.__sqlCreateCnisContribuicoes = f"""
+    # Comando que cria tabela de contribuições
+    @property
+    def sqlCreateCnisContribuicoes(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'contribuicoesId INT AUTO_INCREMENT,'
+            bottom = """,
+            PRIMARY KEY (contribuicoesId)
+        );"""
+        else:
+            cabecalho = 'contribuicoesId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
         CREATE TABLE IF NOT EXISTS {self.tblCnisContribuicoes}(
-            contribuicoesId INT AUTO_INCREMENT,
+            {cabecalho}
             clienteId INT NOT NULL,
             seq INT NOT NULL,
             competencia DATETIME NOT NULL,
@@ -67,15 +101,25 @@ class TabelasConfig:
             contribuicao FLOAT NOT NULL,
             salContribuicao FLOAT NOT NULL,
             indicadores VARCHAR(25) NOT NULL,
+            dadoOrigem VARCHAR(15) NOT NULL,
             dataCadastro DATETIME NOT NULL,
-            dataUltAlt DATETIME NOT NULL,
-            PRIMARY KEY (contribuicoesId)
-        );"""
+            dataUltAlt DATETIME NOT NULL{bottom}
+        """
 
-        # Comando que cria tabela de benefícios
-        self.__sqlCreateCnisBeneficios = f"""
+    # Comando que cria tabela de benefícios
+    @property
+    def sqlCreateCnisBeneficios(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'beneficiosId INT AUTO_INCREMENT,'
+            bottom = """,
+            PRIMARY KEY (beneficiosId)
+        );"""
+        else:
+            cabecalho = 'beneficiosId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
         CREATE TABLE IF NOT EXISTS {self.tblCnisBeneficios}(
-            beneficiosId INT AUTO_INCREMENT,
+            {cabecalho}
             clienteId INT NOT NULL,
             seq INT NOT NULL,
             nb BIGINT NOT NULL,
@@ -83,15 +127,25 @@ class TabelasConfig:
             dataInicio DATETIME NOT NULL,
             dataFim DATETIME NOT NULL,
             situacao VARCHAR(25) NOT NULL,
+            dadoOrigem VARCHAR(15) NOT NULL,
             dataCadastro DATETIME NOT NULL,
-            dataUltAlt DATETIME NOT NULL,
-            PRIMARY KEY (beneficiosId)
-        );"""
+            dataUltAlt DATETIME NOT NULL{bottom}
+        """
 
-        # Comando que cria tabela de benefícios
-        self.__sqlCreateCnisCabecalhos = f"""
+    # Comando SQL para criar tabela de cabeçalhos do CNIS
+    @property
+    def sqlCreateCnisCabecalhos(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'cabecalhosId INT AUTO_INCREMENT,'
+            bottom = """,
+            PRIMARY KEY (cabecalhosId)
+        );"""
+        else:
+            cabecalho = 'cabecalhosId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
         CREATE TABLE IF NOT EXISTS {self.tblCnisCabecalhos}(
-            cabecalhosId INT AUTO_INCREMENT,
+            {cabecalho}
             clienteId INT NOT NULL,
             seq INT NOT NULL,
             nit VARCHAR(14) NOT NULL,
@@ -102,42 +156,79 @@ class TabelasConfig:
             tipoVinculo VARCHAR(30) NOT NULL,
             indicadores VARCHAR(25) NOT NULL,
             ultRem DATETIME NOT NULL,
+            dadoOrigem VARCHAR(15) NOT NULL,
             dataCadastro DATETIME NOT NULL,
-            dataUltAlt DATETIME NOT NULL,
-            PRIMARY KEY (cabecalhosId)
-        );"""
+            dataUltAlt DATETIME NOT NULL{bottom}
+        """
 
-        # Comando que cria tabela de indicadores
-        self.__sqlCreateIndicadores = f"""
-        CREATE TABLE IF NOT EXISTS {self.tblIndicadores}(
-            indicadoresId VARCHAR(20) NOT NULL,
-            descricao VARCHAR(120) NOT NULL,
+    # Comando SQL para criar tabela de indicadores
+    @property
+    def sqlCreateIndicadores(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'indicadoresId VARCHAR(20) NOT NULL,'
+            bottom = """,
             PRIMARY KEY (indicadoresId)
         );"""
+        else:
+            cabecalho = 'indicadoresId VARCHAR(20) PRIMARY KEY,'
+            bottom = f""");"""
+        return f"""
+        CREATE TABLE IF NOT EXISTS {self.tblIndicadores}(
+            {cabecalho}
+            descricao VARCHAR(120) NOT NULL{bottom}
+        """
 
-        # Comando que cria tabela de espécies de benefícios
-        self.__sqlCreateEspecieBenef = f"""
-        CREATE TABLE IF NOT EXISTS {self.tblEspecieBenef}(
-            especieId VARCHAR(3) NOT NULL,
-            descricao VARCHAR(120) NOT NULL,
+    # Comando SQL para criar tabela de espécies dos benefícios
+    @property
+    def sqlCreateEspecieBenef(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'especieId VARCHAR(3) NOT NULL,'
+            bottom = """,
             PRIMARY KEY (especieId)
         );"""
+        else:
+            cabecalho = 'especieId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
+        CREATE TABLE IF NOT EXISTS {self.tblEspecieBenef}(
+            {cabecalho}
+            descricao VARCHAR(120) NOT NULL{bottom}
+        """
 
-        # Comando que cria tabela de tetos previdenciários
-        self.__sqlCreateTetosPrev = f"""
+    # Comando SQL para criar tabela de tetos previdenciários
+    @property
+    def sqlCreateTetosPrev(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'tetosPrevId INT AUTO_INCREMENT,'
+            bottom = """,
+            PRIMARY KEY (tetosPrevId, dataValidade)
+        );"""
+        else:
+            cabecalho = 'tetosPrevId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
         CREATE TABLE IF NOT EXISTS {self.tblTetosPrev}(
-            tetosPrevId INT AUTO_INCREMENT,
+            {cabecalho}
             dataValidade DATETIME NOT NULL,
             valor FLOAT NOT NULL,
             dataUltAlt DATETIME NOT NULL,
-            dataCadastro DATETIME NOT NULL,
-            PRIMARY KEY (tetosPrevId, dataValidade)
-        );"""
+            dataCadastro DATETIME NOT NULL{bottom}
+        """
 
-        # Comando que cria tabela de conversão monetária
-        self.__sqlCreatetblConvMon = f"""
+    # Comando SQL para criar tabela de conversão monetária
+    @property
+    def sqlCreateConvMon(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'convMonId INT AUTO_INCREMENT,'
+            bottom = """,
+            PRIMARY KEY (convMonId)
+        );"""
+        else:
+            cabecalho = 'convMonId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
         CREATE TABLE IF NOT EXISTS {self.tblConvMon}(
-            convMonId INT AUTO_INCREMENT,
+            {cabecalho}
             nomeMoeda VARCHAR(20) NOT NULL,
             fator FLOAT NOT NULL,
             dataInicial DATETIME NOT NULL,
@@ -145,45 +236,8 @@ class TabelasConfig:
             conversao VARCHAR(15) NOT NULL,
             moedaCorrente BOOLEAN NOT NULL,
             dataUltAlt DATETIME NOT NULL,
-            dataCadastro DATETIME NOT NULL,
-            PRIMARY KEY (convMonId)
-        );"""
-
-    @property
-    def sqlCreateCliente(self):
-        return self.__sqlCreateCliente
-
-    @property
-    def sqlCreateCnisRemuneracoes(self):
-        return self.__sqlCreateCnisRemuneracoes
-
-    @property
-    def sqlCreateCnisContribuicoes(self):
-        return self.__sqlCreateCnisContribuicoes
-
-    @property
-    def sqlCreateCnisBeneficios(self):
-        return self.__sqlCreateCnisBeneficios
-
-    @property
-    def sqlCreateCnisCabecalhos(self):
-        return self.__sqlCreateCnisCabecalhos
-
-    @property
-    def sqlCreateIndicadores(self):
-        return self.__sqlCreateIndicadores
-
-    @property
-    def sqlCreateEspecieBenef(self):
-        return self.__sqlCreateEspecieBenef
-
-    @property
-    def sqlCreateTetosPrev(self):
-        return self.__sqlCreateTetosPrev
-
-    @property
-    def sqlCreateConvMon(self):
-        return self.__sqlCreatetblConvMon
+            dataCadastro DATETIME NOT NULL{bottom}
+        """
 
     @property
     def tblCliente(self):

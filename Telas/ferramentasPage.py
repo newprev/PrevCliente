@@ -90,7 +90,7 @@ class Ui_wdgFerramentas(object):
 "}\n"
 "\n"
 "/*-------------------------------- Labels -----------------------------------------*/\n"
-"#lbTitulo {\n"
+"#lbTitulo, #lbValorPara {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 24px;\n"
 "}\n"
@@ -191,9 +191,6 @@ class Ui_wdgFerramentas(object):
         self.lbInfoValorPara = QtWidgets.QLabel(self.frInfo)
         self.lbInfoValorPara.setGeometry(QtCore.QRect(160, 80, 64, 17))
         self.lbInfoValorPara.setObjectName("lbInfoValorPara")
-        self.leValorPara = QtWidgets.QLineEdit(self.frInfo)
-        self.leValorPara.setGeometry(QtCore.QRect(160, 100, 161, 25))
-        self.leValorPara.setObjectName("leValorPara")
         self.lbInfoPara = QtWidgets.QLabel(self.frInfo)
         self.lbInfoPara.setGeometry(QtCore.QRect(10, 80, 64, 17))
         self.lbInfoPara.setObjectName("lbInfoPara")
@@ -203,6 +200,10 @@ class Ui_wdgFerramentas(object):
         self.cbxPara = QtWidgets.QComboBox(self.frInfo)
         self.cbxPara.setGeometry(QtCore.QRect(10, 100, 131, 25))
         self.cbxPara.setObjectName("cbxPara")
+        self.lbValorPara = QtWidgets.QLabel(self.frInfo)
+        self.lbValorPara.setGeometry(QtCore.QRect(190, 100, 131, 31))
+        self.lbValorPara.setText("")
+        self.lbValorPara.setObjectName("lbValorPara")
         self.lbInfoTitulo = QtWidgets.QLabel(self.tabFerramentas)
         self.lbInfoTitulo.setGeometry(QtCore.QRect(30, 80, 81, 17))
         self.lbInfoTitulo.setObjectName("lbInfoTitulo")

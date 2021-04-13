@@ -3,9 +3,9 @@ from datetime import datetime
 
 from Daos.tabelas import TabelasConfig
 from helpers import datetimeToSql, mascaraDataSql
+from logs import logPrioridade, TipoEdicao, Prioridade
 from modelos.clienteModelo import ClienteModelo
 from pymysql import connections, cursors
-from logs import *
 
 
 class DaoCliente:

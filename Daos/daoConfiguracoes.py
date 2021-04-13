@@ -1,9 +1,10 @@
 from connections import ConfigConnection
 from helpers import dictIndicadores, dictEspecies
 from Daos.tabelas import TabelasConfig
-from logs import *
 
 import sqlite3
+
+from logs import TipoEdicao, Prioridade, logPrioridade
 
 
 class DaoConfiguracoes:

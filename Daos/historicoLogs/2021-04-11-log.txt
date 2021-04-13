@@ -1,0 +1,1475 @@
+2021-04-11 12:58 -> CREATE<criaTabela>___________________cliente
+2021-04-11 12:58 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 12:58 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 12:58 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 12:58 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 12:58 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 12:58 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 12:58 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 12:58 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 12:58 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 12:58 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 12:58 -> CREATE<criaTabela>___________________convMon
+2021-04-11 12:58 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 12:58 -> SELECT<getAllTetos>___________________tetosPrev;
+2021-04-11 12:58 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 12:58 -> CREATE<criaTabela>___________________cliente
+2021-04-11 12:58 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 12:58 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 12:58 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 12:58 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 12:58 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 12:58 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 12:58 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 12:58 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 12:58 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 12:58 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 12:58 -> CREATE<criaTabela>___________________convMon
+2021-04-11 12:58 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 12:58 -> SELECT<getAllTetos>___________________tetosPrev;
+2021-04-11 12:58 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 17:18 -> CREATE<criaTabela>___________________cliente
+2021-04-11 17:18 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 17:18 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 17:18 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 17:18 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 17:18 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 17:18 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 17:18 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 17:18 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 17:18 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 17:18 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 17:18 -> CREATE<criaTabela>___________________convMon
+2021-04-11 17:18 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 17:18 -> SELECT<getAllTetos>___________________tetosPrev;
+2021-04-11 17:18 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 17:18 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 17:18 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 17:20 -> CREATE<criaTabela>___________________cliente
+2021-04-11 17:20 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 17:20 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 17:20 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 17:20 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 17:20 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 17:20 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 17:20 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 17:20 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 17:20 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 17:20 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 17:20 -> CREATE<criaTabela>___________________convMon
+2021-04-11 17:20 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 17:20 -> SELECT<getAllTetos>___________________tetosPrev;
+2021-04-11 17:20 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 17:21 -> DELETE<deletarTabela>___________________tetosPrev
+2021-04-11 17:21 -> INSERT<insereListaTetos>___________________tetosPrev (1)
+2021-04-11 17:21 -> SELECT<getAllTetos>___________________tetosPrev;
+2021-04-11 17:22 -> INSERT<insereTeto>___________________tetosPrev (698)
+2021-04-11 17:22 -> SELECT<getAllTetos>___________________tetosPrev;
+2021-04-11 17:22 -> INSERT<insereTeto>___________________tetosPrev (699)
+2021-04-11 17:22 -> SELECT<getAllTetos>___________________tetosPrev;
+2021-04-11 17:23 -> INSERT<insereTeto>___________________tetosPrev (700)
+2021-04-11 17:23 -> SELECT<getAllTetos>___________________tetosPrev;
+2021-04-11 17:23 -> INSERT<insereTeto>___________________tetosPrev (701)
+2021-04-11 17:23 -> SELECT<getAllTetos>___________________tetosPrev;
+2021-04-11 17:39 -> CREATE<criaTabela>___________________cliente
+2021-04-11 17:39 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 17:39 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 17:39 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 17:39 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 17:39 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 17:39 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 17:39 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 17:39 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 17:39 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 17:39 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 17:39 -> CREATE<criaTabela>___________________convMon
+2021-04-11 17:39 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 17:39 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 17:39 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 17:41 -> CREATE<criaTabela>___________________cliente
+2021-04-11 17:41 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 17:41 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 17:41 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 17:41 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 17:41 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 17:41 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 17:41 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 17:41 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 17:41 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 17:41 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 17:41 -> CREATE<criaTabela>___________________convMon
+2021-04-11 17:41 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 17:41 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 17:41 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 17:41 -> INSERT<insereTeto>___________________tetosPrev (702)
+2021-04-11 17:41 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 18:22 -> CREATE<criaTabela>___________________cliente
+2021-04-11 18:22 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 18:22 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 18:22 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 18:22 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 18:22 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 18:22 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:22 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:22 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 18:22 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 18:22 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 18:22 -> CREATE<criaTabela>___________________convMon
+2021-04-11 18:22 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 18:22 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 18:22 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:22 -> CREATE<criaTabela>___________________cliente
+2021-04-11 18:22 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 18:22 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 18:22 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 18:22 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 18:22 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 18:22 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:22 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:22 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 18:22 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 18:22 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 18:22 -> CREATE<criaTabela>___________________convMon
+2021-04-11 18:22 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 18:22 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 18:22 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:23 -> CREATE<criaTabela>___________________cliente
+2021-04-11 18:23 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 18:23 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 18:23 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 18:23 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 18:23 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 18:23 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:23 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:23 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 18:23 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 18:23 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 18:23 -> CREATE<criaTabela>___________________convMon
+2021-04-11 18:23 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 18:23 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 18:23 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:23 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 18:25 -> CREATE<criaTabela>___________________cliente
+2021-04-11 18:25 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 18:25 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 18:25 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 18:25 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 18:25 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 18:25 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:25 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:25 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 18:25 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 18:25 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 18:25 -> CREATE<criaTabela>___________________convMon
+2021-04-11 18:25 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 18:25 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 18:25 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:25 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 18:26 -> CREATE<criaTabela>___________________cliente
+2021-04-11 18:26 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 18:26 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 18:26 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 18:26 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 18:26 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 18:26 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:26 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:26 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 18:26 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 18:26 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 18:26 -> CREATE<criaTabela>___________________convMon
+2021-04-11 18:26 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 18:26 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 18:26 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:44 -> CREATE<criaTabela>___________________cliente
+2021-04-11 18:44 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 18:44 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 18:44 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 18:44 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 18:44 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 18:44 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:44 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:44 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 18:44 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 18:44 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 18:44 -> CREATE<criaTabela>___________________convMon
+2021-04-11 18:44 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 18:44 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 18:44 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:45 -> CREATE<criaTabela>___________________cliente
+2021-04-11 18:45 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 18:45 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 18:45 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 18:45 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 18:45 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 18:45 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:45 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:45 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 18:45 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 18:45 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 18:45 -> CREATE<criaTabela>___________________convMon
+2021-04-11 18:45 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 18:45 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 18:45 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:46 -> CREATE<criaTabela>___________________cliente
+2021-04-11 18:46 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 18:46 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 18:46 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 18:46 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 18:46 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 18:46 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:46 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:46 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 18:46 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 18:46 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 18:46 -> CREATE<criaTabela>___________________convMon
+2021-04-11 18:46 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 18:46 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 18:46 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:47 -> INSERT<insereConvMon>___________________convMon (1)
+2021-04-11 18:47 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:47 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:48 -> CREATE<criaTabela>___________________cliente
+2021-04-11 18:48 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 18:48 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 18:48 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 18:48 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 18:48 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 18:48 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:48 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:48 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 18:48 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 18:48 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 18:48 -> CREATE<criaTabela>___________________convMon
+2021-04-11 18:48 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 18:48 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 18:48 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:48 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:48 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:50 -> INSERT<insereConvMon>___________________convMon (2)
+2021-04-11 18:50 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:50 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:50 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:50 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:52 -> CREATE<criaTabela>___________________cliente
+2021-04-11 18:52 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 18:52 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 18:52 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 18:52 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 18:52 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 18:52 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:52 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:52 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 18:52 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 18:52 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 18:52 -> CREATE<criaTabela>___________________convMon
+2021-04-11 18:52 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 18:52 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 18:52 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:52 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:52 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:52 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:52 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:53 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:53 -> INSERT<insereConvMon>___________________convMon (3)
+2021-04-11 18:53 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:53 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:53 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:53 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:53 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:53 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:55 -> INSERT<insereConvMon>___________________convMon (4)
+2021-04-11 18:55 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:55 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:55 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:55 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:55 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:55 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:55 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:56 -> INSERT<insereConvMon>___________________convMon (5)
+2021-04-11 18:56 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 18:56 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:56 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:56 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:57 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:57 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 18:59 -> CREATE<criaTabela>___________________cliente
+2021-04-11 18:59 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 18:59 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 18:59 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 18:59 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 18:59 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 18:59 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:59 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 18:59 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 18:59 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 18:59 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 18:59 -> CREATE<criaTabela>___________________convMon
+2021-04-11 18:59 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 18:59 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 18:59 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:00 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:00 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:00 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:00 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:00 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:00 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:00 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:00 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:00 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:00 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:00 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:00 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:00 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:00 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:00 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:00 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:00 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:00 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:00 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:00 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:00 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:00 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:00 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:00 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:00 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:00 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:00 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:00 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:00 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:00 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:00 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:00 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:01 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:01 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:01 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:01 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:01 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:01 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:01 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:01 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:01 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:01 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:01 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:01 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:01 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:01 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:01 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:01 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:02 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:02 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:02 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:02 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:02 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:02 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:02 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:02 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:02 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:02 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:02 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:02 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:02 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:02 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:02 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:02 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:02 -> INSERT<insereConvMon>___________________convMon (1)
+2021-04-11 19:02 -> INSERT<insereConvMon>___________________convMon (2)
+2021-04-11 19:02 -> INSERT<insereConvMon>___________________convMon (3)
+2021-04-11 19:02 -> INSERT<insereConvMon>___________________convMon (4)
+2021-04-11 19:02 -> INSERT<insereConvMon>___________________convMon (5)
+2021-04-11 19:06 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:06 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:06 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:06 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:06 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:06 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:06 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:06 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:06 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:06 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:06 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:06 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:06 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:06 -> INSERT<insereConvMon>___________________convMon (1)
+2021-04-11 19:06 -> INSERT<insereConvMon>___________________convMon (2)
+2021-04-11 19:06 -> INSERT<insereConvMon>___________________convMon (3)
+2021-04-11 19:06 -> INSERT<insereConvMon>___________________convMon (4)
+2021-04-11 19:06 -> INSERT<insereConvMon>___________________convMon (5)
+2021-04-11 19:06 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:06 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:06 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:06 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:06 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:10 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:10 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:10 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:10 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:10 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:10 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:10 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:10 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:10 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:10 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:10 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:10 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:10 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:10 -> INSERT<insereConvMon>___________________convMon (6)
+2021-04-11 19:10 -> INSERT<insereConvMon>___________________convMon (7)
+2021-04-11 19:10 -> INSERT<insereConvMon>___________________convMon (8)
+2021-04-11 19:10 -> INSERT<insereConvMon>___________________convMon (9)
+2021-04-11 19:10 -> INSERT<insereConvMon>___________________convMon (10)
+2021-04-11 19:10 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:10 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:10 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:10 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:10 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:16 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:16 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:16 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:16 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:16 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:16 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:16 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:16 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:16 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:16 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:16 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:16 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:16 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:16 -> INSERT<insereConvMon>___________________convMon (11)
+2021-04-11 19:16 -> INSERT<insereConvMon>___________________convMon (12)
+2021-04-11 19:16 -> INSERT<insereConvMon>___________________convMon (13)
+2021-04-11 19:16 -> INSERT<insereConvMon>___________________convMon (14)
+2021-04-11 19:16 -> INSERT<insereConvMon>___________________convMon (15)
+2021-04-11 19:16 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:16 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:16 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:16 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:16 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:16 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:16 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:16 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:16 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:16 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:16 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:16 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:16 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:16 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:16 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:16 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:16 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:16 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:16 -> INSERT<insereConvMon>___________________convMon (16)
+2021-04-11 19:16 -> INSERT<insereConvMon>___________________convMon (17)
+2021-04-11 19:16 -> INSERT<insereConvMon>___________________convMon (18)
+2021-04-11 19:16 -> INSERT<insereConvMon>___________________convMon (19)
+2021-04-11 19:16 -> INSERT<insereConvMon>___________________convMon (20)
+2021-04-11 19:16 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:16 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:16 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:16 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:16 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:20 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:20 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:20 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:20 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:20 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:20 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:20 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:20 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:20 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:20 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:20 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:20 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:21 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (21)
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (22)
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (23)
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (24)
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (25)
+2021-04-11 19:21 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:21 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:21 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:21 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:21 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:21 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:21 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:21 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:21 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:21 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:21 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:21 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:21 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:21 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:21 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:21 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:21 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:21 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (26)
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (27)
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (28)
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (29)
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (30)
+2021-04-11 19:21 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:21 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:21 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:21 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:21 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:21 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:21 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:21 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:21 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:21 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:21 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:21 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:21 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:21 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:21 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:21 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:21 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:21 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (31)
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (32)
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (33)
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (34)
+2021-04-11 19:21 -> INSERT<insereConvMon>___________________convMon (35)
+2021-04-11 19:21 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:21 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:21 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:21 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:21 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:24 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:24 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:24 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:24 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:24 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:24 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:24 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:24 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:24 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:24 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:24 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:24 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:24 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:24 -> INSERT<insereConvMon>___________________convMon (36)
+2021-04-11 19:24 -> INSERT<insereConvMon>___________________convMon (37)
+2021-04-11 19:24 -> INSERT<insereConvMon>___________________convMon (38)
+2021-04-11 19:24 -> INSERT<insereConvMon>___________________convMon (39)
+2021-04-11 19:24 -> INSERT<insereConvMon>___________________convMon (40)
+2021-04-11 19:24 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:24 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:24 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:24 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:24 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:24 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:24 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:24 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:24 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:24 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:24 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:24 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:24 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:24 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:24 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:24 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:24 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:24 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:24 -> INSERT<insereConvMon>___________________convMon (41)
+2021-04-11 19:24 -> INSERT<insereConvMon>___________________convMon (42)
+2021-04-11 19:24 -> INSERT<insereConvMon>___________________convMon (43)
+2021-04-11 19:24 -> INSERT<insereConvMon>___________________convMon (44)
+2021-04-11 19:24 -> INSERT<insereConvMon>___________________convMon (45)
+2021-04-11 19:24 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:24 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:24 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:24 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:24 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:27 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:27 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:27 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:27 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:27 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:27 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:27 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:27 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:27 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:27 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:27 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:27 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:27 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:27 -> INSERT<insereConvMon>___________________convMon (46)
+2021-04-11 19:27 -> INSERT<insereConvMon>___________________convMon (47)
+2021-04-11 19:27 -> INSERT<insereConvMon>___________________convMon (48)
+2021-04-11 19:27 -> INSERT<insereConvMon>___________________convMon (49)
+2021-04-11 19:27 -> INSERT<insereConvMon>___________________convMon (50)
+2021-04-11 19:27 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:27 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:27 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:27 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:27 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:29 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:29 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:29 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:29 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:29 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:29 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:29 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:29 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:29 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:29 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:29 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:29 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:29 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:29 -> INSERT<insereConvMon>___________________convMon (51)
+2021-04-11 19:29 -> INSERT<insereConvMon>___________________convMon (52)
+2021-04-11 19:29 -> INSERT<insereConvMon>___________________convMon (53)
+2021-04-11 19:29 -> INSERT<insereConvMon>___________________convMon (54)
+2021-04-11 19:29 -> INSERT<insereConvMon>___________________convMon (55)
+2021-04-11 19:29 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:29 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:29 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:29 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:29 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:30 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:30 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:30 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:30 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:30 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:30 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:30 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:30 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:30 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:30 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:30 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:30 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:30 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:30 -> INSERT<insereConvMon>___________________convMon (56)
+2021-04-11 19:30 -> INSERT<insereConvMon>___________________convMon (57)
+2021-04-11 19:30 -> INSERT<insereConvMon>___________________convMon (58)
+2021-04-11 19:30 -> INSERT<insereConvMon>___________________convMon (59)
+2021-04-11 19:30 -> INSERT<insereConvMon>___________________convMon (60)
+2021-04-11 19:30 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:30 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:30 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:30 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:30 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:31 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:31 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:31 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:31 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:31 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:31 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:31 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:31 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:31 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:31 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:31 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:31 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:31 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:31 -> INSERT<insereConvMon>___________________convMon (61)
+2021-04-11 19:31 -> INSERT<insereConvMon>___________________convMon (62)
+2021-04-11 19:31 -> INSERT<insereConvMon>___________________convMon (63)
+2021-04-11 19:31 -> INSERT<insereConvMon>___________________convMon (64)
+2021-04-11 19:31 -> INSERT<insereConvMon>___________________convMon (65)
+2021-04-11 19:31 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:31 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:31 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:31 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:31 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:31 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:31 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:31 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:31 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:31 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:31 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:31 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:31 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:31 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:31 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:31 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:31 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:31 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:31 -> INSERT<insereConvMon>___________________convMon (66)
+2021-04-11 19:31 -> INSERT<insereConvMon>___________________convMon (67)
+2021-04-11 19:31 -> INSERT<insereConvMon>___________________convMon (68)
+2021-04-11 19:31 -> INSERT<insereConvMon>___________________convMon (69)
+2021-04-11 19:31 -> INSERT<insereConvMon>___________________convMon (70)
+2021-04-11 19:31 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:31 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:31 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:31 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:31 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:34 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:34 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:34 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:34 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:34 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:34 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:34 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:34 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:34 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:34 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:34 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:34 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:34 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:34 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:34 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:34 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:34 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:34 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:34 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:34 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:34 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:34 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:34 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:34 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:34 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:34 -> INSERT<insereConvMon>___________________convMon (71)
+2021-04-11 19:34 -> INSERT<insereConvMon>___________________convMon (72)
+2021-04-11 19:34 -> INSERT<insereConvMon>___________________convMon (73)
+2021-04-11 19:34 -> INSERT<insereConvMon>___________________convMon (74)
+2021-04-11 19:34 -> INSERT<insereConvMon>___________________convMon (75)
+2021-04-11 19:34 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:34 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:34 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:34 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:34 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:35 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:35 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:35 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:35 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:35 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:35 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:35 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:35 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:35 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:35 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:35 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:35 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:35 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:35 -> INSERT<insereConvMon>___________________convMon (76)
+2021-04-11 19:35 -> INSERT<insereConvMon>___________________convMon (77)
+2021-04-11 19:35 -> INSERT<insereConvMon>___________________convMon (78)
+2021-04-11 19:35 -> INSERT<insereConvMon>___________________convMon (79)
+2021-04-11 19:35 -> INSERT<insereConvMon>___________________convMon (80)
+2021-04-11 19:35 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:35 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:35 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:35 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:35 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:36 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:36 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:36 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:36 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:36 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:36 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:36 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:36 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:36 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:36 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:36 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:36 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:36 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:36 -> INSERT<insereConvMon>___________________convMon (81)
+2021-04-11 19:36 -> INSERT<insereConvMon>___________________convMon (82)
+2021-04-11 19:36 -> INSERT<insereConvMon>___________________convMon (83)
+2021-04-11 19:36 -> INSERT<insereConvMon>___________________convMon (84)
+2021-04-11 19:36 -> INSERT<insereConvMon>___________________convMon (85)
+2021-04-11 19:36 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:36 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:36 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:36 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:36 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:36 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:36 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:36 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:36 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:36 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:36 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:36 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:36 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:36 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:36 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:36 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:36 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:36 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:36 -> INSERT<insereConvMon>___________________convMon (86)
+2021-04-11 19:36 -> INSERT<insereConvMon>___________________convMon (87)
+2021-04-11 19:36 -> INSERT<insereConvMon>___________________convMon (88)
+2021-04-11 19:36 -> INSERT<insereConvMon>___________________convMon (89)
+2021-04-11 19:36 -> INSERT<insereConvMon>___________________convMon (90)
+2021-04-11 19:36 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:36 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:36 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:36 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:36 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:40 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:40 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:40 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:40 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:40 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:40 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:40 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:40 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:40 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:40 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:40 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:40 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:40 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:40 -> INSERT<insereConvMon>___________________convMon (91)
+2021-04-11 19:40 -> INSERT<insereConvMon>___________________convMon (92)
+2021-04-11 19:40 -> INSERT<insereConvMon>___________________convMon (93)
+2021-04-11 19:40 -> INSERT<insereConvMon>___________________convMon (94)
+2021-04-11 19:40 -> INSERT<insereConvMon>___________________convMon (95)
+2021-04-11 19:40 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:40 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:40 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:40 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:40 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:41 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:41 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:41 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:41 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:41 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:41 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:41 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:41 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:41 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:41 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:41 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:41 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:41 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:41 -> INSERT<insereConvMon>___________________convMon (96)
+2021-04-11 19:41 -> INSERT<insereConvMon>___________________convMon (97)
+2021-04-11 19:41 -> INSERT<insereConvMon>___________________convMon (98)
+2021-04-11 19:41 -> INSERT<insereConvMon>___________________convMon (99)
+2021-04-11 19:41 -> INSERT<insereConvMon>___________________convMon (100)
+2021-04-11 19:41 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:41 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:41 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:41 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:41 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:43 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:43 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:43 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:43 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:43 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:43 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:43 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:43 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:43 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:43 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:43 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:43 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:43 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:43 -> INSERT<insereConvMon>___________________convMon (101)
+2021-04-11 19:43 -> INSERT<insereConvMon>___________________convMon (102)
+2021-04-11 19:43 -> INSERT<insereConvMon>___________________convMon (103)
+2021-04-11 19:43 -> INSERT<insereConvMon>___________________convMon (104)
+2021-04-11 19:43 -> INSERT<insereConvMon>___________________convMon (105)
+2021-04-11 19:43 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:43 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:43 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:43 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:43 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:44 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:44 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:44 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:44 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:44 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:44 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:44 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:44 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:44 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:44 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:44 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:44 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:44 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:44 -> INSERT<insereConvMon>___________________convMon (106)
+2021-04-11 19:44 -> INSERT<insereConvMon>___________________convMon (107)
+2021-04-11 19:44 -> INSERT<insereConvMon>___________________convMon (108)
+2021-04-11 19:44 -> INSERT<insereConvMon>___________________convMon (109)
+2021-04-11 19:44 -> INSERT<insereConvMon>___________________convMon (110)
+2021-04-11 19:44 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:44 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:44 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:44 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:44 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:45 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:45 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:45 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:45 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:45 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:45 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:45 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:45 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:45 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:45 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:45 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:45 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:45 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:45 -> INSERT<insereConvMon>___________________convMon (111)
+2021-04-11 19:45 -> INSERT<insereConvMon>___________________convMon (112)
+2021-04-11 19:45 -> INSERT<insereConvMon>___________________convMon (113)
+2021-04-11 19:45 -> INSERT<insereConvMon>___________________convMon (114)
+2021-04-11 19:45 -> INSERT<insereConvMon>___________________convMon (115)
+2021-04-11 19:45 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:45 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:45 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:45 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:45 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:49 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:49 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:49 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:49 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:49 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:49 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:49 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:49 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:49 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:49 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:49 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:49 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:49 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:49 -> INSERT<insereConvMon>___________________convMon (116)
+2021-04-11 19:49 -> INSERT<insereConvMon>___________________convMon (117)
+2021-04-11 19:49 -> INSERT<insereConvMon>___________________convMon (118)
+2021-04-11 19:49 -> INSERT<insereConvMon>___________________convMon (119)
+2021-04-11 19:49 -> INSERT<insereConvMon>___________________convMon (120)
+2021-04-11 19:49 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:49 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:49 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:49 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:49 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:50 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:50 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:50 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:50 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:50 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:50 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:50 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:50 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:50 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:50 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:50 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:50 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:50 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:50 -> INSERT<insereConvMon>___________________convMon (121)
+2021-04-11 19:50 -> INSERT<insereConvMon>___________________convMon (122)
+2021-04-11 19:50 -> INSERT<insereConvMon>___________________convMon (123)
+2021-04-11 19:50 -> INSERT<insereConvMon>___________________convMon (124)
+2021-04-11 19:50 -> INSERT<insereConvMon>___________________convMon (125)
+2021-04-11 19:50 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:50 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:50 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:50 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:50 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:51 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:51 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:51 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:51 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:51 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:51 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:51 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:51 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:51 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:51 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:51 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:51 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:51 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:51 -> INSERT<insereConvMon>___________________convMon (126)
+2021-04-11 19:51 -> INSERT<insereConvMon>___________________convMon (127)
+2021-04-11 19:51 -> INSERT<insereConvMon>___________________convMon (128)
+2021-04-11 19:51 -> INSERT<insereConvMon>___________________convMon (129)
+2021-04-11 19:51 -> INSERT<insereConvMon>___________________convMon (130)
+2021-04-11 19:51 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:51 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:51 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:51 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:51 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:52 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:52 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:52 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:52 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:52 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:52 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:52 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:52 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:52 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:52 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:52 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:52 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:52 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:52 -> INSERT<insereConvMon>___________________convMon (131)
+2021-04-11 19:52 -> INSERT<insereConvMon>___________________convMon (132)
+2021-04-11 19:52 -> INSERT<insereConvMon>___________________convMon (133)
+2021-04-11 19:52 -> INSERT<insereConvMon>___________________convMon (134)
+2021-04-11 19:52 -> INSERT<insereConvMon>___________________convMon (135)
+2021-04-11 19:52 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:52 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:52 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:52 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:52 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:52 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:52 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:52 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:52 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:52 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:52 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:52 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:52 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:52 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:52 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:52 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:52 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:52 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:52 -> INSERT<insereConvMon>___________________convMon (136)
+2021-04-11 19:52 -> INSERT<insereConvMon>___________________convMon (137)
+2021-04-11 19:52 -> INSERT<insereConvMon>___________________convMon (138)
+2021-04-11 19:52 -> INSERT<insereConvMon>___________________convMon (139)
+2021-04-11 19:52 -> INSERT<insereConvMon>___________________convMon (140)
+2021-04-11 19:52 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:52 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:52 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:52 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:52 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:53 -> CREATE<criaTabela>___________________cliente
+2021-04-11 19:53 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 19:53 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 19:53 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 19:53 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 19:53 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 19:53 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:53 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 19:53 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 19:53 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 19:53 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 19:53 -> CREATE<criaTabela>___________________convMon
+2021-04-11 19:53 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 19:53 -> INSERT<insereConvMon>___________________convMon (141)
+2021-04-11 19:53 -> INSERT<insereConvMon>___________________convMon (142)
+2021-04-11 19:53 -> INSERT<insereConvMon>___________________convMon (143)
+2021-04-11 19:53 -> INSERT<insereConvMon>___________________convMon (144)
+2021-04-11 19:53 -> INSERT<insereConvMon>___________________convMon (145)
+2021-04-11 19:53 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 19:53 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 19:53 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 19:53 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 19:53 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:01 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:01 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:01 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:01 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:01 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:01 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:01 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:01 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:01 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:01 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:01 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:01 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:01 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 20:01 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 20:01 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 20:01 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:01 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:31 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:31 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:31 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:31 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:31 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:31 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:31 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:31 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:31 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:31 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:31 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:31 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:31 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 20:31 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 20:31 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 20:31 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:31 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:31 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:31 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:31 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:31 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:31 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:31 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:31 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:31 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:31 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:31 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:31 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:31 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:31 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:31 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:32 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 20:32 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 20:32 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 20:32 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:32 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:32 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:32 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:32 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:32 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:32 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:32 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:32 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:32 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:32 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:32 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:32 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 20:32 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 20:32 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 20:35 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:35 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:35 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:35 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:35 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:35 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:35 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:35 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:35 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:35 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:35 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:35 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:35 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 20:35 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 20:35 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 20:35 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 20:38 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:38 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:38 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:38 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:38 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:38 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:38 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:38 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:38 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:38 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:38 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:38 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:38 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 20:38 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 20:38 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 20:38 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 20:41 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:41 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:41 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:41 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:41 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:41 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:41 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:41 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:41 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:41 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:41 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:41 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:41 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 20:42 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:42 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:42 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:42 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:42 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:42 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:42 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:42 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:42 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:42 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:42 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:42 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:42 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 20:42 -> INSERT<insereConvMon>___________________convMon (1)
+2021-04-11 20:42 -> INSERT<insereConvMon>___________________convMon (2)
+2021-04-11 20:42 -> INSERT<insereConvMon>___________________convMon (3)
+2021-04-11 20:42 -> INSERT<insereConvMon>___________________convMon (4)
+2021-04-11 20:42 -> INSERT<insereConvMon>___________________convMon (5)
+2021-04-11 20:42 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 20:42 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 20:42 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 20:42 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:42 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:42 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:42 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:42 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:42 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:42 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:43 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:43 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:43 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:43 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:43 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:43 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:43 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:43 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:43 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:43 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:43 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:43 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:43 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 20:43 -> INSERT<insereConvMon>___________________convMon (6)
+2021-04-11 20:43 -> INSERT<insereConvMon>___________________convMon (7)
+2021-04-11 20:43 -> INSERT<insereConvMon>___________________convMon (8)
+2021-04-11 20:43 -> INSERT<insereConvMon>___________________convMon (9)
+2021-04-11 20:43 -> INSERT<insereConvMon>___________________convMon (10)
+2021-04-11 20:43 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 20:43 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 20:43 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 20:43 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:43 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:47 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:47 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:47 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:47 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:47 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:47 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:47 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:47 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:47 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:47 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:47 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:47 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:47 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 20:47 -> INSERT<insereConvMon>___________________convMon (11)
+2021-04-11 20:47 -> INSERT<insereConvMon>___________________convMon (12)
+2021-04-11 20:47 -> INSERT<insereConvMon>___________________convMon (13)
+2021-04-11 20:47 -> INSERT<insereConvMon>___________________convMon (14)
+2021-04-11 20:47 -> INSERT<insereConvMon>___________________convMon (15)
+2021-04-11 20:47 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 20:47 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 20:47 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 20:47 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:47 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:48 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:48 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:48 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:48 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:48 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:48 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:48 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:48 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:48 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:48 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:48 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:48 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:48 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 20:57 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:57 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:57 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:57 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:57 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:57 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:57 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:57 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:57 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:57 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:57 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:57 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:57 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 20:57 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:57 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:57 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:57 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:57 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:57 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:57 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:57 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:57 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:57 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:57 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:57 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:58 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 20:58 -> SELECT<contaQtdMoedas>___________________convMon
+2021-04-11 20:59 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:59 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:59 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:59 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:59 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:59 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:59 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:59 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:59 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:59 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:59 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:59 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:59 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 20:59 -> SELECT<contaQtdMoedas>___________________convMon
+2021-04-11 20:59 -> INSERT<insereConvMon>___________________convMon (1)
+2021-04-11 20:59 -> INSERT<insereConvMon>___________________convMon (2)
+2021-04-11 20:59 -> INSERT<insereConvMon>___________________convMon (3)
+2021-04-11 20:59 -> INSERT<insereConvMon>___________________convMon (4)
+2021-04-11 20:59 -> INSERT<insereConvMon>___________________convMon (5)
+2021-04-11 20:59 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 20:59 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 20:59 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 20:59 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:59 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:59 -> CREATE<criaTabela>___________________cliente
+2021-04-11 20:59 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 20:59 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 20:59 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 20:59 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 20:59 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 20:59 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:59 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 20:59 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 20:59 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 20:59 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 20:59 -> CREATE<criaTabela>___________________convMon
+2021-04-11 20:59 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 20:59 -> SELECT<contaQtdMoedas>___________________convMon
+2021-04-11 20:59 -> INSERT<insereConvMon>___________________convMon (1)
+2021-04-11 20:59 -> INSERT<insereConvMon>___________________convMon (2)
+2021-04-11 20:59 -> INSERT<insereConvMon>___________________convMon (3)
+2021-04-11 20:59 -> INSERT<insereConvMon>___________________convMon (4)
+2021-04-11 20:59 -> INSERT<insereConvMon>___________________convMon (5)
+2021-04-11 20:59 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 20:59 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 20:59 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 20:59 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 20:59 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 21:00 -> CREATE<criaTabela>___________________cliente
+2021-04-11 21:00 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 21:00 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 21:00 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 21:00 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 21:00 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 21:00 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:00 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:00 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 21:00 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 21:00 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 21:00 -> CREATE<criaTabela>___________________convMon
+2021-04-11 21:00 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 21:00 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 21:00 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 21:00 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 21:00 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 21:00 -> CREATE<criaTabela>___________________cliente
+2021-04-11 21:00 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 21:00 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 21:00 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 21:00 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 21:00 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 21:00 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:00 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:00 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 21:00 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 21:00 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 21:00 -> CREATE<criaTabela>___________________convMon
+2021-04-11 21:00 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 21:00 -> SELECT<contaQtdMoedas>___________________convMon
+2021-04-11 21:01 -> CREATE<criaTabela>___________________cliente
+2021-04-11 21:01 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 21:01 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 21:01 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 21:01 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 21:01 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 21:01 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:01 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:01 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 21:01 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 21:01 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 21:01 -> CREATE<criaTabela>___________________convMon
+2021-04-11 21:02 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 21:02 -> SELECT<contaQtdMoedas>___________________convMon
+2021-04-11 21:02 -> CREATE<criaTabela>___________________cliente
+2021-04-11 21:02 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 21:02 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 21:02 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 21:02 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 21:02 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 21:02 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:02 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:02 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 21:02 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 21:02 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 21:02 -> CREATE<criaTabela>___________________convMon
+2021-04-11 21:02 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 21:02 -> SELECT<contaQtdMoedas>___________________convMon
+2021-04-11 21:02 -> UPDATE<atualizaConvMon>___________________convMon
+2021-04-11 21:02 -> UPDATE<atualizaConvMon>___________________convMon
+2021-04-11 21:02 -> UPDATE<atualizaConvMon>___________________convMon
+2021-04-11 21:02 -> UPDATE<atualizaConvMon>___________________convMon
+2021-04-11 21:02 -> UPDATE<atualizaConvMon>___________________convMon
+2021-04-11 21:02 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 21:02 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 21:02 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 21:02 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 21:02 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 21:03 -> CREATE<criaTabela>___________________cliente
+2021-04-11 21:03 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 21:03 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 21:03 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 21:03 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 21:03 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 21:03 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:03 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:03 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 21:03 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 21:03 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 21:03 -> CREATE<criaTabela>___________________convMon
+2021-04-11 21:03 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 21:03 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 21:03 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 21:03 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 21:03 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 21:04 -> CREATE<criaTabela>___________________cliente
+2021-04-11 21:04 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 21:04 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 21:04 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 21:04 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 21:04 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 21:04 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:04 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:04 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 21:04 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 21:04 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 21:04 -> CREATE<criaTabela>___________________convMon
+2021-04-11 21:04 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 21:04 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 21:04 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 21:04 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 21:04 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 21:04 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 21:05 -> CREATE<criaTabela>___________________cliente
+2021-04-11 21:05 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 21:05 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 21:05 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 21:05 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 21:05 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 21:05 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:05 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:05 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 21:05 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 21:05 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 21:05 -> CREATE<criaTabela>___________________convMon
+2021-04-11 21:05 -> SELECT<syncConvMon>___________________tetosPrev
+2021-04-11 21:05 -> SELECT<contaQtdMoedas>___________________convMon
+2021-04-11 21:05 -> UPDATE<atualizaConvMon>___________________convMon
+2021-04-11 21:05 -> UPDATE<atualizaConvMon>___________________convMon
+2021-04-11 21:05 -> UPDATE<atualizaConvMon>___________________convMon
+2021-04-11 21:05 -> UPDATE<atualizaConvMon>___________________convMon
+2021-04-11 21:05 -> UPDATE<atualizaConvMon>___________________convMon
+2021-04-11 21:05 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 21:05 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 21:05 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 21:05 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 21:05 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 21:13 -> CREATE<criaTabela>___________________cliente
+2021-04-11 21:13 -> CREATE<criaTabela>___________________cnisRemuneracoes
+2021-04-11 21:13 -> CREATE<criaTabela>___________________cnisContribuicoes
+2021-04-11 21:13 -> CREATE<criaTabela>___________________cnisBeneficios
+2021-04-11 21:13 -> CREATE<criaTabela>___________________cnisCabecalhos
+2021-04-11 21:13 -> CREATE<criaTabela>___________________especieBenef
+2021-04-11 21:13 -> DELETE<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:13 -> INSERT<verificaTblEspecieBenef>___________________especieBenef
+2021-04-11 21:13 -> CREATE<criaTabela>___________________indicadores
+2021-04-11 21:13 -> INSERT<verificaTblIndicadores>___________________indicadores
+2021-04-11 21:13 -> CREATE<criaTabela>___________________tetosPrev
+2021-04-11 21:13 -> CREATE<criaTabela>___________________convMon
+2021-04-11 21:13 -> SELECT<buscaTodos>___________________cliente
+2021-04-11 21:13 -> SELECT<getAllTetos>___________________tetosPrev
+2021-04-11 21:13 -> SELECT<getAllMoedas>___________________convMon
+2021-04-11 21:13 -> SELECT<getConvMonByNomeMoeda>___________________convMon
+2021-04-11 21:13 -> SELECT<getConvMonByNomeMoeda>___________________convMon

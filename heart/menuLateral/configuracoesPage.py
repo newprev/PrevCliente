@@ -13,6 +13,7 @@ from heart.localStyleSheet.configuracoes import desabilitaPB
 from PyQt5.QtWidgets import QWidget, QFileDialog, QTableWidgetItem, QMessageBox
 from Telas.configuracoesPage import Ui_wdgTabConfiguracoes
 from modelos.tetosPrevModelo import TetosPrevModelo
+from newPrevEnums import TamanhoData
 
 
 class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
@@ -109,9 +110,6 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
                         self.dictTetos["Mes"].append(Mes)
                         self.dictTetos["Valor"].append(info[index].strip())
 
-
-
-        # print(dt.datetime.now().month)
         documento.close()
         for index in range(0, len(self.dictTetos['Valor'])):
             for numMes, nomeMes in meses.items():
@@ -147,7 +145,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
             tetoIdItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.tblTetos.setItem(linha, 0, tetoIdItem)
 
-            dataItem = QTableWidgetItem(tetoPrev.data)
+            dataItem = QTableWidgetItem(mascaraDataPequena(tetoPrev.dataValidade))
             dataItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             dataItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.tblTetos.setItem(linha, 1, dataItem)
@@ -246,7 +244,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         else:
             linhaSelecionada = self.tblTetos.selectedIndexes()[0].row()
             self.tetoPrev.tetosPrevId = int(self.tblTetos.item(linhaSelecionada, 0).text())
-            self.tetoPrev.data = strToDatetime(self.tblTetos.item(linhaSelecionada, 1).text(), short=True)
+            self.tetoPrev.data = strToDatetime(self.tblTetos.item(linhaSelecionada, 1).text(), TamanhoData.g)
             self.tetoPrev.valor = dinheiroToFloat(self.tblTetos.item(linhaSelecionada, 2).text())
 
             self.popUpSimCancela(
@@ -256,7 +254,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
 
     def getInfo(self, *args):
         if isinstance(args[0], QDate):
-            self.tetoPrev.data = args[0].toPyDate()
+            self.tetoPrev.dataValidade = dt.datetime(args[0].toPyDate().year, args[0].toPyDate().month, args[0].toPyDate().day)
         elif isinstance(args[0], str):
             self.tetoPrev.valor = strToFloat(args[0])
 

@@ -14,6 +14,7 @@ class ConvMonModelo:
         self.dataFinal: datetime = None
         self.conversao: str = 'Valorizou'
         self.moedaCorrente: bool = True
+        self.sinal: str = None
         self.dataUltAlt: datetime = None
         self.dataCadastro: datetime = None
 
@@ -27,6 +28,7 @@ class ConvMonModelo:
             'dataFinal': self.dataFinal,
             'conversao': self.conversao,
             'moedaCorrente': self.moedaCorrente,
+            'sinal': self.sinal,
             'dataUltAlt': self.dataUltAlt,
             'dataCadastro': self.dataCadastro
         }
@@ -40,6 +42,7 @@ class ConvMonModelo:
         self.dataFinal = dictConvMon['dataFinal']
         self.conversao = dictConvMon['conversao']
         self.moedaCorrente = dictConvMon['moedaCorrente']
+        self.sinal = dictConvMon['sinal']
         self.dataUltAlt = dictConvMon['dataUltAlt']
         self.dataCadastro = dictConvMon['dataCadastro']
 
@@ -51,8 +54,9 @@ class ConvMonModelo:
         self.dataFinal = strToDatetime(listConvMon[4], tamanho=TamanhoData.g)
         self.conversao = listConvMon[5]
         self.moedaCorrente = listConvMon[6]
-        self.dataUltAlt = listConvMon[7]
-        self.dataCadastro = listConvMon[8]
+        self.sinal = listConvMon[7]
+        self.dataUltAlt = listConvMon[8]
+        self.dataCadastro = listConvMon[9]
 
         if retornaInst:
             return self
@@ -61,11 +65,12 @@ class ConvMonModelo:
         return f"""ConvMonModelo(
             convMonId: {self.convMonId},
             nomeMoeda: {self.nomeMoeda},
-            fator: {self.fator}
-            dataInicial: {self.dataInicial}
-            dataFinal: {self.dataFinal}
-            conversao: {self.conversao}
-            moedaCorrente: {self.moedaCorrente}
-            dataUltAlt: {self.dataUltAlt}
+            fator: {self.fator},
+            dataInicial: {self.dataInicial},
+            dataFinal: {self.dataFinal},
+            conversao: {self.conversao},
+            moedaCorrente: {self.moedaCorrente},
+            sinal: {self.sinal},
+            dataUltAlt: {self.dataUltAlt},
             dataCadastro: {self.dataCadastro}
         )"""

@@ -1,6 +1,6 @@
 import pymysql
 
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QMainWindow
 
 from Daos.daoConfiguracoes import DaoConfiguracoes
@@ -19,7 +19,6 @@ class Main(Ui_MainWindow, QMainWindow):
         self.contador = 0
         self.tipoConexao = TiposConexoes.sqlite
         self.dbConnection = ConfigConnection(instanciaBanco=self.tipoConexao)
-        # self.dbConnection = ConfigConnection(instanciaBanco='Umbler')
         self.db = self.dbConnection.getDatabase()
         self.daoConfigs = DaoConfiguracoes(db=self.db)
         self.loginPage = None

@@ -368,9 +368,9 @@ QHeaderView::up-arrow {
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>310</y>
+         <y>300</y>
          <width>331</width>
-         <height>211</height>
+         <height>241</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -462,21 +462,21 @@ QHeaderView::up-arrow {
        <widget class="QLabel" name="lbInfoDataInicio">
         <property name="geometry">
          <rect>
-          <x>20</x>
+          <x>200</x>
           <y>80</y>
           <width>111</width>
           <height>17</height>
          </rect>
         </property>
         <property name="text">
-         <string>Início da validade</string>
+         <string>Início da validade:</string>
         </property>
        </widget>
        <widget class="QLabel" name="lbInfoFator">
         <property name="geometry">
          <rect>
-          <x>160</x>
-          <y>20</y>
+          <x>20</x>
+          <y>80</y>
           <width>64</width>
           <height>17</height>
          </rect>
@@ -488,8 +488,8 @@ QHeaderView::up-arrow {
        <widget class="QLineEdit" name="leFator">
         <property name="geometry">
          <rect>
-          <x>160</x>
-          <y>40</y>
+          <x>20</x>
+          <y>100</y>
           <width>151</width>
           <height>25</height>
          </rect>
@@ -498,8 +498,8 @@ QHeaderView::up-arrow {
        <widget class="QLabel" name="lbInfoConversao">
         <property name="geometry">
          <rect>
-          <x>160</x>
-          <y>80</y>
+          <x>20</x>
+          <y>140</y>
           <width>91</width>
           <height>17</height>
          </rect>
@@ -511,20 +511,20 @@ QHeaderView::up-arrow {
        <widget class="QLabel" name="lbInfoDataFim">
         <property name="geometry">
          <rect>
-          <x>20</x>
+          <x>200</x>
           <y>140</y>
           <width>111</width>
           <height>17</height>
          </rect>
         </property>
         <property name="text">
-         <string>Deixa de valer:</string>
+         <string>Deixa de valer em:</string>
         </property>
        </widget>
        <widget class="QDateEdit" name="dtDataInicio">
         <property name="geometry">
          <rect>
-          <x>20</x>
+          <x>200</x>
           <y>100</y>
           <width>110</width>
           <height>26</height>
@@ -537,7 +537,7 @@ QHeaderView::up-arrow {
        <widget class="QDateEdit" name="dtDataFim">
         <property name="geometry">
          <rect>
-          <x>20</x>
+          <x>200</x>
           <y>160</y>
           <width>110</width>
           <height>26</height>
@@ -565,7 +565,7 @@ QHeaderView::up-arrow {
          <rect>
           <x>20</x>
           <y>40</y>
-          <width>111</width>
+          <width>151</width>
           <height>25</height>
          </rect>
         </property>
@@ -576,8 +576,8 @@ QHeaderView::up-arrow {
        <widget class="QComboBox" name="cbxConversao">
         <property name="geometry">
          <rect>
-          <x>160</x>
-          <y>100</y>
+          <x>20</x>
+          <y>160</y>
           <width>151</width>
           <height>25</height>
          </rect>
@@ -586,8 +586,8 @@ QHeaderView::up-arrow {
        <widget class="QCheckBox" name="cbMoedaCorrente">
         <property name="geometry">
          <rect>
-          <x>160</x>
-          <y>160</y>
+          <x>200</x>
+          <y>200</y>
           <width>131</width>
           <height>23</height>
          </rect>
@@ -596,12 +596,38 @@ QHeaderView::up-arrow {
          <string>Moeda corrente</string>
         </property>
        </widget>
+       <widget class="QLineEdit" name="leSinal">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>40</y>
+          <width>61</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoSimbolo">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>20</y>
+          <width>131</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Sinal monetário</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QLabel" name="lbInfoInsereMoeda">
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>300</y>
+         <y>290</y>
          <width>111</width>
          <height>17</height>
         </rect>

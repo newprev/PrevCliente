@@ -5,7 +5,7 @@ from Daos.tabelas import TabelasConfig
 from pymysql import connections
 
 from helpers import datetimeToSql
-from logs import *
+from logs import logPrioridade, TipoEdicao, Prioridade
 from modelos.beneficiosModelo import BeneficiosModelo
 from modelos.contribuicoesModelo import ContribuicoesModelo
 from modelos.remuneracaoModelo import RemuneracoesModelo
@@ -129,7 +129,7 @@ class DaoCalculos:
             VALUES
                 (
                     {contribuicao.clienteId}, {contribuicao.seq}, '{contribuicao.competencia}',
-                    {contribuicao.dataPagamento}, '{contribuicao.contribuicao}', '{contribuicao.salContribuicao}',
+                    '{contribuicao.dataPagamento}', '{contribuicao.contribuicao}', '{contribuicao.salContribuicao}',
                     '{contribuicao.indicadores}', '{contribuicao.dadoOrigem}', '{datetimeToSql(datetime.now())}', 
                     '{datetimeToSql(datetime.now())}'
                 );"""

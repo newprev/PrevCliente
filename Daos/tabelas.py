@@ -235,6 +235,7 @@ class TabelasConfig:
             dataFinal DATETIME NOT NULL,
             conversao VARCHAR(15) NOT NULL,
             moedaCorrente BOOLEAN NOT NULL,
+            sinal VARCHAR(5) NOT NULL,
             dataUltAlt DATETIME NOT NULL,
             dataCadastro DATETIME NOT NULL{bottom}
         """

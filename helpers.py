@@ -148,6 +148,8 @@ meses = {
     12: 'Dezembro'
 }
 
+situacaoBeneficio = ['Indeferido', 'Cessado', 'Ativo']
+
 
 def getEstados():
     return {
@@ -236,7 +238,7 @@ def calculaIdadeFromString(dataNascimento: str) -> int:
     return int((datetime.datetime.now() - dataIdade).days / 365.25)
 
 
-def macaraFormaPagamento(pagamento: str):
+def mascaraFormaPagamento(pagamento: str):
     if (pagamento.upper() == 'CC'):
         return 'Cartão de crédito'
     else:
@@ -297,6 +299,8 @@ def datetimeToSql(data: datetime.datetime) -> str:
 
 
 def strToDatetime(data: str, tamanho: TamanhoData = TamanhoData.m):
+    if isinstance(data, datetime.datetime):
+        data = data.strftime('%Y-%m-%d %H:%M')
     try:
         if tamanho == TamanhoData.p:
             return datetime.datetime.strptime(data, '%m/%Y')

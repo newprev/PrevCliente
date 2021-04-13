@@ -32,6 +32,7 @@ class FerramentasPage(QWidget, Ui_wdgFerramentas):
 
         self.leNomeMoeda.textChanged.connect(lambda: self.getInfo('leNomeMoeda'))
         self.leFator.textChanged.connect(lambda: self.getInfo('leFator'))
+        self.leSinal.textChanged.connect(lambda: self.getInfo('leSinal'))
         self.dtDataInicio.dateChanged.connect(lambda: self.getInfo('dtDataInicio'))
         self.dtDataFim.dateChanged.connect(lambda: self.getInfo('dtDataFim'))
         self.cbxConversao.activated.connect(lambda: self.getInfo('cbxConversao'))
@@ -61,6 +62,9 @@ class FerramentasPage(QWidget, Ui_wdgFerramentas):
 
         elif info == 'leFator':
             self.convMonModelo.fator = dinheiroToFloat(self.leFator.text())
+
+        elif info == 'leSinal':
+            self.convMonModelo.sinal = self.leSinal.text()
 
         elif info == 'dtDataInicio':
             self.convMonModelo.dataInicial = self.dtDataInicio.date().toPyDate().strftime('%Y-%m-%d %H:%M')
@@ -96,6 +100,7 @@ class FerramentasPage(QWidget, Ui_wdgFerramentas):
                 self.convMonDe = ConvMonModelo().fromList(self.daoInfoImportante.getConvMonByNomeMoeda(self.cbxDe.currentText()), retornaInst=True)
             else:
                 self.convMonPara = ConvMonModelo().fromList(self.daoInfoImportante.getConvMonByNomeMoeda(self.cbxPara.currentText()), retornaInst=True)
+                self.lbValorPara.setText(f'{self.convMonPara.sinal} 0,00')
 
     def atualizaValor(self):
         if self.leValorDe.text() != '':
@@ -109,4 +114,5 @@ class FerramentasPage(QWidget, Ui_wdgFerramentas):
         self.leValorDe.clear()
         self.leNomeMoeda.clear()
         self.leFator.clear()
+        self.leSinal.clear()
         self.lbValorPara.setText('R$ 0,00')

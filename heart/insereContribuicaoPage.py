@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from Daos.daoCalculos import DaoCalculos
 from Telas.insereContrib import Ui_mwInsereContrib
 from heart.localStyleSheet.insereContribuicao import habilita
-from helpers import dictIndicadores, dictEspecies, mascaraNit, strToFloat
+from helpers import dictIndicadores, dictEspecies, mascaraNit, strToFloat, situacaoBeneficio
 from modelos.beneficiosModelo import BeneficiosModelo
 from modelos.clienteModelo import ClienteModelo
 from modelos.contribuicoesModelo import ContribuicoesModelo
@@ -55,6 +55,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
     def carregaComboBoxes(self):
         self.cbxIndicadores.addItems(dictIndicadores.keys())
         self.cbxEspecie.addItems(sorted(dictEspecies.values()))
+        self.cbxSituacao.addItems(sorted(situacaoBeneficio))
 
     def carregaQtdsRemCont(self):
         qtdRemuneracoes = self.daoCalculos.contaRemuneracoes(self.cliente.clienteId)[0]
@@ -143,37 +144,39 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             self.beneficio.especie = self.cbxEspecie.currentText()
 
     def trataInsereInfo(self):
-        self.loading(20)
         if self.rbBeneficio.isChecked():
-            self.loading(20)
-            self.beneficio.clienteId = self.cliente.clienteId
-            self.loading(20)
-            self.beneficio.dadoOrigem = 'MANUAL'
-            self.loading(20)
-            self.beneficio.seq = 0
-            self.loading(20)
-            self.daoCalculos.insereBeneficio(self.beneficio)
-            self.mensagemSistema('Benefício inserido com sucesso!')
+            if self.leNb.text() != '' and self.cbxSituacao.currentText() not in (-1, 0):
+                self.loading(40)
+                self.beneficio.clienteId = self.cliente.clienteId
+                self.loading(20)
+                self.beneficio.dadoOrigem = 'MANUAL'
+                self.loading(20)
+                self.beneficio.seq = 0
+                self.loading(20)
+                self.daoCalculos.insereBeneficio(self.beneficio)
+                self.mensagemSistema('Benefício inserido com sucesso!')
         elif self.rbContribuicao.isChecked():
-            self.loading(20)
-            self.contribuicao.clienteId = self.cliente.clienteId
-            self.loading(20)
-            self.contribuicao.dadoOrigem = 'MANUAL'
-            self.loading(20)
-            self.contribuicao.seq = 0
-            self.loading(20)
-            self.daoCalculos.insereContribuicao(self.contribuicao)
-            self.mensagemSistema('Contribuição inserida com sucesso!')
+            if self.leRemuneracao.text() != '':
+                self.loading(40)
+                self.contribuicao.clienteId = self.cliente.clienteId
+                self.loading(20)
+                self.contribuicao.dadoOrigem = 'MANUAL'
+                self.loading(20)
+                self.contribuicao.seq = 0
+                self.loading(20)
+                self.daoCalculos.insereContribuicao(self.contribuicao)
+                self.mensagemSistema('Contribuição inserida com sucesso!')
         else:
-            self.loading(20)
-            self.remuneracao.clienteId = self.cliente.clienteId
-            self.loading(20)
-            self.remuneracao.dadoOrigem = 'MANUAL'
-            self.loading(20)
-            self.remuneracao.seq = 0
-            self.loading(20)
-            self.daoCalculos.insereRemuneracao(self.remuneracao)
-            self.mensagemSistema('Remuneração inserida com sucesso!')
+            if self.leRemuneracao.text() != '':
+                self.loading(40)
+                self.remuneracao.clienteId = self.cliente.clienteId
+                self.loading(20)
+                self.remuneracao.dadoOrigem = 'MANUAL'
+                self.loading(20)
+                self.remuneracao.seq = 0
+                self.loading(20)
+                self.daoCalculos.insereRemuneracao(self.remuneracao)
+                self.mensagemSistema('Remuneração inserida com sucesso!')
 
     def sairAtividade(self):
         remuneracao: bool = self.leRemuneracao.text() == ''
@@ -188,6 +191,9 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
     def limpaTudo(self):
         self.leRemuneracao.clear()
         self.leNb.clear()
+        self.cbxSituacao.setCurrentIndex(0)
+        self.cbxEspecie.setCurrentIndex(0)
+        self.cbxIndicadores.setCurrentIndex(0)
 
     def loading(self, adicionaTempo):
         if self.pbarSistema.isHidden():
@@ -207,6 +213,8 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.lbInfoSistema.setText('')
         self.lbInfoSistema.hide()
         self.pbarSistema.setValue(0)
+        self.timer.stop()
+        self.limpaTudo()
 
     def mensagemSistema(self, mensagem: str):
         self.lbInfoSistema.setText(mensagem)

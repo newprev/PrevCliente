@@ -40,7 +40,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.move(frameGm.topLeft())
 
     def entrar(self):
-        self.verificaRotinaDiaria()
+        if type(self.db) != pymysql.Connection:
+            self.verificaRotinaDiaria()
         self.dashboard = DashboardController(db=self.db)
         self.dashboard.show()
         self.close()

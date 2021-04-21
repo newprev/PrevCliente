@@ -1,5 +1,7 @@
 import sqlite3
 
+import pymysql
+
 from Daos.daoInfoImportante import DaoInfoImportante
 from connections import ConfigConnection
 from Daos.tabelas import TabelasConfig
@@ -26,9 +28,6 @@ class DaoServidor:
         self.dbServidor.ping()
         cursor = self.dbServidor.cursor()
 
-        if isinstance(type(self.dbServidor), type(self.dbLocal)):
-            return True
-
         strComando = f"""
             SELECT 
                 convMonId, nomeMoeda, fator, 
@@ -44,7 +43,9 @@ class DaoServidor:
             listaConvMonServidor = cursor.fetchall()
             qtdMoedasLocal: int = self.daoInfoImportante.contaQtdMoedas()
 
-            if qtdMoedasLocal == 0:
+            if len(listaConvMonServidor) != qtdMoedasLocal:
+                self.daoInfoImportante.deletarConvMon()
+
                 for item in listaConvMonServidor:
                     convMon = ConvMonModelo().fromList(item, retornaInst=True)
                     self.daoInfoImportante.insereConvMon(convMon)
@@ -62,9 +63,6 @@ class DaoServidor:
         self.dbServidor.ping()
         cursor = self.dbServidor.cursor()
 
-        if isinstance(type(self.dbServidor), type(self.dbLocal)):
-            return True
-
         strComando = f"""
                     SELECT 
                         tetosPrevId, dataValidade, valor,
@@ -78,7 +76,9 @@ class DaoServidor:
             listaTetosPrevServidor = cursor.fetchall()
             qtdTetosLocal: int = self.daoInfoImportante.contaQtdTetos()
 
-            if qtdTetosLocal == 0:
+            if len(listaTetosPrevServidor) != qtdTetosLocal:
+                self.daoInfoImportante.deletarTetosPrev()
+
                 listaTetosAInserir = [TetosPrevModelo().fromList(item, retornaInst=True) for item in listaTetosPrevServidor]
                 self.daoInfoImportante.insereListaTetosModel(listaTetosAInserir)
             else:

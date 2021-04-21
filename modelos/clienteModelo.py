@@ -19,11 +19,14 @@ class ClienteModelo:
         self.estadoCivil: str = None
         self.profissao: str = None
         self.endereco: str = None
+        self.numero: int = None
         self.estado: str = None
         self.cidade: str = None
         self.bairro: str = None
         self.cep: str = None
         self.complemento: str = None
+        self.dataCadastro: datetime = None
+        self.dataUltAlt: datetime = None
         self.pathCnis: str = None
 
     def toDict(self):
@@ -66,6 +69,7 @@ class ClienteModelo:
         self.nomeMae = dictCliente['nomeMae'],
         self.estadoCivil = dictCliente['estadoCivil'],
         self.endereco = dictCliente['endereco']
+        self.numero = dictCliente['numero']
         self.estado = dictCliente['estado']
         self.cidade = dictCliente['cidade']
         self.bairro = dictCliente['bairro']
@@ -88,17 +92,19 @@ class ClienteModelo:
                 self.rgCliente = listCliente[7]
                 self.cpfCliente = listCliente[8]
                 self.numCartProf = listCliente[9]
-                self.serieCarteiraProf = listCliente[10]
-                self.quaCarteiraProf = listCliente[11]
-                self.nit = listCliente[12]
-                self.nomeMae = listCliente[13]
-                self.estadoCivil = listCliente[14]
-                self.endereco = listCliente[16]
-                self.estado = listCliente[17]
-                self.cidade = listCliente[18]
-                self.bairro = listCliente[19]
-                self.cep = listCliente[20]
-                self.complemento = listCliente[21]
+                self.nit = listCliente[10]
+                self.nomeMae = listCliente[11]
+                self.estadoCivil = listCliente[12]
+                self.profissao = listCliente[13]
+                self.endereco = listCliente[14]
+                self.estado = listCliente[15]
+                self.cidade = listCliente[16]
+                self.numero = listCliente[17]
+                self.bairro = listCliente[18]
+                self.cep = listCliente[19]
+                self.complemento = listCliente[20]
+                self.dataCadastro = listCliente[21]
+                self.dataUltAlt = listCliente[22]
                 # pathCnis: {self.pathCnis}
             if retornaInst:
                 return self
@@ -119,6 +125,7 @@ class ClienteModelo:
             nomeMae: {self.nomeMae},
             estadoCivil: {self.estadoCivil},
             endereco: {self.endereco},
+            numero: {self.numero},
             estado: {self.estado},
             cidade: {self.cidade},
             bairro: {self.bairro},

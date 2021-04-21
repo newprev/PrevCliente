@@ -233,11 +233,6 @@ def mascaraNit(nit: int) -> str:
     return f"{strNit[0:3]}.{strNit[3:8]}.{strNit[8:10]}-{strNit[10:]}"
 
 
-def calculaIdadeFromString(dataNascimento: str) -> int:
-    dataIdade = datetime.datetime.strptime(dataNascimento, '%d/%m/%Y')
-    return int((datetime.datetime.now() - dataIdade).days / 365.25)
-
-
 def mascaraFormaPagamento(pagamento: str):
     if (pagamento.upper() == 'CC'):
         return 'Cartão de crédito'
@@ -259,18 +254,28 @@ def mascaraDataPequena(data: datetime.date):
     return f'{data.month}/{data.year}'
 
 
-def mascaraDinheiro(valor: float):
+def mascaraDinheiro(valor: float, simbolo: str = 'R$'):
     strValor = str(valor).replace('.', ',')
     pointPosition = strValor.find(",") - 3
     if pointPosition > 0:
         strFinal = strValor[:pointPosition] + '.' + strValor[pointPosition:]
+        pointPosition = strFinal.find(".") - 3
+
+        while pointPosition > 0:
+            strFinal = strFinal[:pointPosition] + '.' + strFinal[pointPosition:]
+            pointPosition = strFinal.find(".") - 3
     else:
         strFinal = strValor
 
     if strFinal.startswith('.'):
-        return f"R$ {strFinal[1:]}"
+        return f"{simbolo} {strFinal[1:]}"
     else:
-        return f"R$ {strFinal}"
+        return f"{simbolo} {strFinal}"
+
+
+def calculaIdadeFromString(dataNascimento: str) -> int:
+    dataIdade = datetime.datetime.strptime(dataNascimento, '%d/%m/%Y')
+    return int((datetime.datetime.now() - dataIdade).days / 365.25)
 
 
 def dinheiroToFloat(valor: str):
@@ -299,7 +304,7 @@ def datetimeToSql(data: datetime.datetime) -> str:
 
 
 def strToDatetime(data: str, tamanho: TamanhoData = TamanhoData.m):
-    if isinstance(data, datetime.datetime):
+    if not isinstance(data, str):
         data = data.strftime('%Y-%m-%d %H:%M')
     try:
         if tamanho == TamanhoData.p:

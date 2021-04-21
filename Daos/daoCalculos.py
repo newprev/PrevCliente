@@ -26,21 +26,53 @@ class DaoCalculos:
         cursor = self.db.cursor()
 
         strComando = f"""
-        SELECT contribuicoesId, seq, competencia, salContribuicao, 'Contribuição', indicadores FROM {self.config.tblCnisContribuicoes} con
-            WHERE clienteId = {clienteId}
-        UNION ALL
-        SELECT remuneracoesId, seq, competencia, remuneracao, 'Remuneração', indicadores FROM {self.config.tblCnisRemuneracoes} rem
-            WHERE clienteId = {clienteId}
-        ORDER BY competencia DESC;"""
+                    SELECT
+                        --Contribuições
+                        con.contribuicoesId, con.seq, con.competencia, 
+                        con.salContribuicao, 'Contribuição' AS natureza, con.indicadores,
+                        
+                        --Conversão monetária
+                        cm.sinal, cm.convMonId, cm.nomeMoeda,
+                        
+                        --Tetos previdenciários
+                        tp.tetosPrevId, tp.valor
+                    FROM {self.config.tblCnisContribuicoes} con
+                        JOIN {self.config.tblConvMon} cm 
+                            ON con.competencia >= cm.dataInicial
+                                AND con.competencia <= cm.dataFinal
+                        JOIN {self.config.tblTetosPrev} tp
+                            ON tp.dataValidade == con.competencia 
+                    WHERE clienteId = {clienteId}
+                
+                UNION ALL
+                    
+                    SELECT 
+                        --Remunerações
+                        rem.remuneracoesId, rem.seq, rem.competencia, 
+                        rem.remuneracao, 'Remuneração' AS natureza, rem.indicadores,
+                        
+                        --Conversão monetária
+                        cm.sinal, cm.convMonId, cm.nomeMoeda,
+                        
+                        --Tetos previdenciários
+                        tp.tetosPrevId, tp.valor
+                    FROM {self.config.tblCnisRemuneracoes} rem
+                        JOIN {self.config.tblConvMon} cm 
+                            ON rem.competencia >= cm.dataInicial
+                                AND rem.competencia <= cm.dataFinal
+                        JOIN {self.config.tblTetosPrev} tp
+                            ON tp.dataValidade == rem.competencia  
+                        WHERE clienteId = {clienteId}
+                    ORDER BY competencia DESC  """
 
         try:
             cursor.execute(strComando)
             logPrioridade(f'SELECT<getRemECon>___________________{self.config.tblCnisRemuneracoes}', TipoEdicao.select, Prioridade.saidaComun)
             return cursor.fetchall()
         except:
+            logPrioridade(f'Erro SQL - getRemECon({self.config.tblCnisRemuneracoes}, {self.config.tblCnisContribuicoes})', TipoEdicao.erro, Prioridade.saidaImportante)
             raise Warning(f'Erro SQL - getRemECon({self.config.tblCnisRemuneracoes}, {self.config.tblCnisContribuicoes}) <SELECT>')
         finally:
-            self.db.commit()
             self.disconectBD(cursor)
 
     def contaContribuicoes(self, clienteId: int):

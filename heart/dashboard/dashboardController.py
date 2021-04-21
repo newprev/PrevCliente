@@ -6,6 +6,7 @@ from heart.dashboard.localWidgets.cardFuncionalidade import CardFuncionalidade
 from heart.dashboard.tabs.clienteController import TabCliente
 from heart.dashboard.tabs.tabCalculos import TabCalculos
 from heart.menuLateral.ferramentasPage import FerramentasPage
+from heart.dashboard.tabs.entrevista.entrevistaController import EntrevistaController
 from heart.sinaisCustomizados import Sinais
 
 from newPrevEnums import TelaPosicao
@@ -56,4 +57,7 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
 
     def trocarParaPagina(self, *args):
         tela = int(args[0].value)
-        self.stkMainDashBoard.setCurrentIndex(tela)
+        if tela == 4:
+            EntrevistaController(parent=self, db=self.db).show()
+        else:
+            self.stkMainDashBoard.setCurrentIndex(tela)

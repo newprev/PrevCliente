@@ -99,7 +99,6 @@ class DaoInfoImportante:
             self.db.commit()
             self.disconectBD(cursor)
 
-
     def insereTeto(self, tetoDict: dict):
 
         if not isinstance(self.db, sqlite3.Connection):
@@ -153,7 +152,6 @@ class DaoInfoImportante:
             )"""
 
         try:
-
             cursor.execute(strComando)
             convMonId = cursor.lastrowid
             logPrioridade(f'INSERT<insereConvMon>___________________{self.tabelas.tblConvMon} ({convMonId})', TipoEdicao.insert, Prioridade.saidaComun)
@@ -173,9 +171,9 @@ class DaoInfoImportante:
 
         strComando = f"""
             UPDATE {self.tabelas.tblTetosPrev} SET
-                dataValidade = '{tetoModel.data}',
-                valor = {dinheiroToFloat(tetoModel.valor)},
-                dataUltAlt = NOW()
+                dataValidade = '{tetoModel.dataValidade}',
+                valor = {tetoModel.valor},
+                dataUltAlt = '{datetime.now()}'
             WHERE 
                 tetosPrevId = {tetoModel.tetosPrevId}"""
 
@@ -241,13 +239,18 @@ class DaoInfoImportante:
         # self.db.connect()
         cursor = self.db.cursor()
 
-        strComando = f"""SELECT tetosPrevId, dataValidade, valor FROM {self.tabelas.tblTetosPrev} ORDER BY dataValidade DESC"""
+        strComando = f"""
+            SELECT 
+                tetosPrevId, dataValidade, valor                
+                FROM {self.tabelas.tblTetosPrev} 
+            ORDER BY dataValidade DESC"""
 
         try:
             cursor.execute(strComando)
             logPrioridade(f'SELECT<getAllTetos>___________________{self.tabelas.tblTetosPrev}', TipoEdicao.select, Prioridade.saidaComun)
             return cursor.fetchall()
         except:
+            logPrioridade(f'Erro SQL - getAllTetos({self.config.banco}) <INSERT {self.tabelas.tblTetosPrev}>', TipoEdicao.erro, Prioridade.saidaImportante)
             raise Warning(f'Erro SQL - getAllTetos({self.config.banco}) <INSERT {self.tabelas.tblTetosPrev}>')
         finally:
             self.disconectBD(cursor)
@@ -370,6 +373,49 @@ class DaoInfoImportante:
             raise Warning(f'Erro SQL - contaQtdTetos({self.config.banco}) <SELECT {self.tabelas.tblTetosPrev}>')
         finally:
             self.disconectBD(cursor)
+
+    def deletarConvMon(self):
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""
+               DELETE FROM {self.tabelas.tblConvMon}"""
+
+        try:
+            cursor.execute(strComando)
+            logPrioridade(f'DELETE<deletarConvMon>___________________{self.tabelas.tblConvMon}', TipoEdicao.delete, Prioridade.saidaComun)
+        except:
+            logPrioridade(f'Erro SQL - deletarConvMon({self.config.banco}) <DELETE {self.tabelas.tblTetosPrev}>', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - deletarConvMon({self.config.banco}) <DELETE {self.tabelas.tblTetosPrev}>')
+        finally:
+            self.db.commit()
+            self.disconectBD(cursor)
+
+    def deletarTetosPrev(self):
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""
+               DELETE FROM {self.tabelas.tblTetosPrev}"""
+
+        try:
+            cursor.execute(strComando)
+            logPrioridade(f'DELETE<deletarTetosPrev>___________________{self.tabelas.tblTetosPrev}', TipoEdicao.delete, Prioridade.saidaComun)
+        except:
+            logPrioridade(f'Erro SQL - deletarTetosPrev({self.config.banco}) <DELETE {self.tabelas.tblTetosPrev}>', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - deletarTetosPrev({self.config.banco}) <DELETE {self.tabelas.tblTetosPrev}>')
+        finally:
+            self.db.commit()
+            self.disconectBD(cursor)
+
 
     def disconectBD(self, cursor):
         cursor.close()

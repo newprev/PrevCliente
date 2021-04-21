@@ -107,7 +107,7 @@ QTabBar::tab:selected, QTabBar::tab:hover {
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="iconSize">
       <size>
@@ -711,6 +711,12 @@ QHeaderView::section {
          <height>411</height>
         </rect>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
        <attribute name="horizontalHeaderCascadingSectionResizes">
         <bool>true</bool>
        </attribute>
@@ -799,9 +805,9 @@ QHeaderView::section {
       <widget class="QWidget" name="horizontalLayoutWidget">
        <property name="geometry">
         <rect>
-         <x>210</x>
+         <x>230</x>
          <y>90</y>
-         <width>631</width>
+         <width>921</width>
          <height>31</height>
         </rect>
        </property>
@@ -1024,6 +1030,9 @@ CNIS</string>
             <height>25</height>
            </rect>
           </property>
+          <property name="maxLength">
+           <number>20</number>
+          </property>
           <property name="placeholderText">
            <string>Ex: José</string>
           </property>
@@ -1036,6 +1045,9 @@ CNIS</string>
             <width>191</width>
             <height>25</height>
            </rect>
+          </property>
+          <property name="maxLength">
+           <number>30</number>
           </property>
           <property name="placeholderText">
            <string>Ex: da Silva Santos</string>
@@ -1076,6 +1088,9 @@ CNIS</string>
             <height>25</height>
            </rect>
           </property>
+          <property name="maxLength">
+           <number>12</number>
+          </property>
           <property name="placeholderText">
            <string>87.452.456-7</string>
           </property>
@@ -1101,6 +1116,12 @@ CNIS</string>
             <width>113</width>
             <height>25</height>
            </rect>
+          </property>
+          <property name="maxLength">
+           <number>14</number>
+          </property>
+          <property name="frame">
+           <bool>true</bool>
           </property>
           <property name="placeholderText">
            <string>254.214.587.99</string>
@@ -1150,6 +1171,9 @@ CNIS</string>
             <width>191</width>
             <height>25</height>
            </rect>
+          </property>
+          <property name="maxLength">
+           <number>40</number>
           </property>
           <property name="placeholderText">
            <string>Ex: Cleusa da Silva Santos</string>
@@ -1235,6 +1259,9 @@ CNIS</string>
             <height>25</height>
            </rect>
           </property>
+          <property name="maxLength">
+           <number>40</number>
+          </property>
           <property name="placeholderText">
            <string>Ex: Cleusa da Silva Santos</string>
           </property>
@@ -1261,6 +1288,9 @@ CNIS</string>
             <height>25</height>
            </rect>
           </property>
+          <property name="maxLength">
+           <number>16</number>
+          </property>
           <property name="placeholderText">
            <string>(11) 9.4578-6541</string>
           </property>
@@ -1273,6 +1303,9 @@ CNIS</string>
             <width>41</width>
             <height>25</height>
            </rect>
+          </property>
+          <property name="maxLength">
+           <number>2</number>
           </property>
           <property name="placeholderText">
            <string>35</string>
@@ -1347,6 +1380,9 @@ CNIS</string>
             <width>161</width>
             <height>25</height>
            </rect>
+          </property>
+          <property name="maxLength">
+           <number>9</number>
           </property>
           <property name="placeholderText">
            <string>12345-789</string>
@@ -1495,7 +1531,7 @@ CNIS</string>
          <widget class="QPushButton" name="pbBuscaCep">
           <property name="geometry">
            <rect>
-            <x>200</x>
+            <x>180</x>
             <y>50</y>
             <width>41</width>
             <height>25</height>
@@ -1503,6 +1539,35 @@ CNIS</string>
           </property>
           <property name="text">
            <string/>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="leNumero">
+          <property name="geometry">
+           <rect>
+            <x>290</x>
+            <y>50</y>
+            <width>51</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="maxLength">
+           <number>5</number>
+          </property>
+          <property name="placeholderText">
+           <string>12345</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="lbNumero">
+          <property name="geometry">
+           <rect>
+            <x>290</x>
+            <y>30</y>
+            <width>111</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Número</string>
           </property>
          </widget>
         </widget>
@@ -1580,6 +1645,9 @@ CNIS</string>
             <width>113</width>
             <height>25</height>
            </rect>
+          </property>
+          <property name="maxLength">
+           <number>14</number>
           </property>
           <property name="placeholderText">
            <string>123.45678.90-1</string>

@@ -37,6 +37,7 @@ class DaoCliente:
                     nomeMae = '{cliente.nomeMae}',
                     estadoCivil = '{cliente.estadoCivil}',
                     profissao = '{cliente.profissao}',
+                    numero = {cliente.numero},
                     endereco = '{cliente.endereco}',
                     estado = '{cliente.estado}',
                     cidade = '{cliente.cidade}',
@@ -65,28 +66,32 @@ class DaoCliente:
         cursor: cursors = self.db.cursor()
         clienteId = 0
 
-        strComando = f"""INSERT INTO {self.config.tblCliente} 
-                        (
-                            nomeCliente, sobrenomeCliente, idade, 
-                            dataNascimento, telefone, email, 
-                            rgCliente, cpfCliente, numCarteiraProf, 
-                            nit, nomeMae, estadoCivil, 
-                            profissao, endereco, estado, 
-                            cidade, bairro, cep, 
-                            complemento, dataCadastro, dataUltAlt
-                        )
-                        VALUES
-                        (
-                            '{cliente.nomeCliente}', '{cliente.sobrenomeCliente}', {cliente.idade}, 
-                            '{cliente.dataNascimento}', '{cliente.telefone}', '{cliente.email}', 
-                            '{cliente.rgCliente}', '{cliente.cpfCliente}', '{cliente.numCartProf}', 
-                            '{cliente.nit}', '{cliente.nomeMae}', '{cliente.estadoCivil}', 
-                            '{cliente.profissao}', '{cliente.endereco}', '{cliente.estado}', 
-                            '{cliente.cidade}', '{cliente.bairro}', '{cliente.cep}', 
-                            '{cliente.complemento}', '{datetimeToSql(datetime.now())}', '{datetimeToSql(datetime.now())}'
-                        );"""
+        strComando = f"""
+            INSERT INTO {self.config.tblCliente} 
+            (
+                nomeCliente, sobrenomeCliente, idade, 
+                dataNascimento, telefone, email, 
+                rgCliente, cpfCliente, numCarteiraProf, 
+                nit, nomeMae, estadoCivil, 
+                profissao, endereco, numero, 
+                estado, cidade, bairro, 
+                cep, complemento, dataCadastro, 
+                dataUltAlt
+            )
+            VALUES
+            (
+                '{cliente.nomeCliente}', '{cliente.sobrenomeCliente}', {cliente.idade}, 
+                '{cliente.dataNascimento}', '{cliente.telefone}', '{cliente.email}', 
+                '{cliente.rgCliente}', '{cliente.cpfCliente}', '{cliente.numCartProf}', 
+                '{cliente.nit}', '{cliente.nomeMae}', '{cliente.estadoCivil}', 
+                '{cliente.profissao}', '{cliente.endereco}', {cliente.numero}, 
+                '{cliente.estado}', '{cliente.cidade}', '{cliente.bairro}', 
+                '{cliente.cep}', '{cliente.complemento}', '{datetime.now()}', 
+                '{datetime.now()}'
+            );"""
 
         try:
+            print(strComando)
             cursor.execute(strComando)
             clienteId = cursor.lastrowid
             logPrioridade(f'INSERT<cadastroClienteComCnis>___________________{self.config.tblCliente} ({clienteId})', TipoEdicao.insert, Prioridade.saidaComun)
@@ -157,8 +162,8 @@ class DaoCliente:
                     (
                         {clienteId}, {beneficio['Seq'][i]}, {beneficio['NB'][i]},
                         '{beneficio['especie'][i]}', '{mascaraDataSql(beneficio['dataInicio'][i])}', '{mascaraDataSql(beneficio['dataFim'][i])}',
-                        '{beneficio['situacao'][i]}', 'CNIS', '{datetimeToSql(datetime.now())}',
-                        '{datetimeToSql(datetime.now())}'
+                        '{beneficio['situacao'][i]}', 'CNIS', '{datetime.now()}',
+                        '{datetime.now()}'
                     )"""
 
             return strComando
@@ -257,7 +262,18 @@ class DaoCliente:
         # self.db.connect()
         cursor = self.db.cursor()
 
-        strComando = f"""SELECT * FROM {self.config.tblCliente} WHERE clienteId = {clienteId}"""
+        strComando = f"""
+            SELECT 
+                clienteId, nomeCliente, sobrenomeCliente,
+                idade, dataNascimento, telefone, 
+                email, rgCliente, cpfCliente,
+                numCarteiraProf, nit, nomeMae, 
+                estadoCivil, profissao, endereco,
+                estado, cidade, numero, 
+                bairro, cep, complemento, 
+                dataCadastro, dataUltAlt
+            FROM {self.config.tblCliente} 
+            WHERE clienteId = {clienteId}"""
 
         try:
             cursor.execute(strComando)
@@ -279,7 +295,17 @@ class DaoCliente:
         # self.db.connect()
         cursor = self.db.cursor()
 
-        strComando = f"""SELECT * FROM {self.config.tblCliente};"""
+        strComando = f"""
+            SELECT 
+                clienteId, nomeCliente, sobrenomeCliente,
+                idade, dataNascimento, telefone, 
+                email, rgCliente, cpfCliente,
+                numCarteiraProf, nit, nomeMae, 
+                estadoCivil, profissao, endereco,
+                estado, cidade, numero, 
+                bairro, cep, complemento, 
+                dataCadastro, dataUltAlt
+            FROM {self.config.tblCliente}"""
 
         try:
             cursor.execute(strComando)

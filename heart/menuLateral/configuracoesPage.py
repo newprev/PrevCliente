@@ -105,10 +105,10 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
                         Ano = info[index].strip()
                     elif info[index].isalpha():
                         Mes = info[index].strip()
-                    elif ',' in info[index]:
+                    elif ',' in info[index] or '.' in info[index]:
                         self.dictTetos["Ano"].append(Ano)
                         self.dictTetos["Mes"].append(Mes)
-                        self.dictTetos["Valor"].append(info[index].strip())
+                        self.dictTetos["Valor"].append(dinheiroToFloat(info[index].strip()))
 
         documento.close()
         for index in range(0, len(self.dictTetos['Valor'])):
@@ -118,7 +118,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
                     break
 
             dataTeto['data'].append(dt.datetime(int(self.dictTetos['Ano'][index]), numeroMes, 1))
-            dataTeto['valor'].append(strToFloat(self.dictTetos['Valor'][index]))
+            dataTeto['valor'].append(self.dictTetos['Valor'][index])
 
         if len(dataTeto['data']) == len(dataTeto['valor']):
             self.daoInfoImportante.deletarTabela()

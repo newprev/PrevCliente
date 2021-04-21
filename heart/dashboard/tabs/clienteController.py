@@ -1,21 +1,22 @@
 from PyQt5 import Qt
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem
+from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar
 
 from Daos.daoCliente import DaoCliente
 from Telas.tabCliente import Ui_wdgTabCliente
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
 from helpers import estCivil, getEstados, unmaskAll, calculaIdadeFromString, getEstadoBySigla, mascaraRG, mascaraCPF, \
-    mascaraTelCel, mascaraCep, strToDatetime
+    mascaraTelCel, mascaraCep, strToDatetime, mascaraNit
 from modelos.clienteModelo import ClienteModelo
 from modelos.cnisModelo import CNISModelo
+from newPrevEnums import TamanhoData
 from repositorios.clienteRepositorio import ClienteRepository
 
 
 class TabCliente(Ui_wdgTabCliente, QWidget):
 
-    def __init__(self, db=None, parent=None):
+    def __init__(self, db=None, parent=None, entrevista=False):
         super(TabCliente, self).__init__(parent)
         self.setupUi(self)
         self.cliente = ClienteModelo()
@@ -69,11 +70,17 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leNomeMae.textEdited.connect(lambda: self.carregaInfoTela('nomeMae'))
         self.cbxEstCivil.activated.connect(lambda: self.carregaInfoTela('estCivil'))
         self.leEmail.textEdited.connect(lambda: self.carregaInfoTela('email'))
+        self.leNumero.textEdited.connect(lambda: self.carregaInfoTela('leNumero'))
 
         self.pbCarregaCnis.clicked.connect(self.carregaCnis)
-        self.atualizaTblClientes()
 
         self.cliente.estadoCivil = self.cbxEstCivil.currentText()
+
+        if entrevista:
+            self.tabMain.setCurrentIndex(1)
+            self.findChild(QTabBar).hide()
+        else:
+            self.atualizaTblClientes()
 
     def atualizaStatusCliente(self):
         if self.cbClienteAntigo.isChecked():
@@ -83,7 +90,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def atualizaTblClientes(self, clientes: list = None):
         if clientes is None:
-            clientesModels = self.daoCliente.buscaTodos(returnModel=True)
+            clientesModels:list = self.daoCliente.buscaTodos(returnModel=True)
         else:
             pass
 
@@ -120,8 +127,12 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def buscaCliente(self):
         if self.leCdCliente.text() != '':
-            self.cliente = self.daoCliente.buscaClienteById(int(self.leCdCliente.text()), returnInstance=True)
+            cdCliente: int = int(self.leCdCliente.text())
+            self.limpaTudo()
+            self.leCdCliente.setText(str(cdCliente))
+            self.cliente = self.daoCliente.buscaClienteById(cdCliente, returnInstance=True)
             if self.cliente is None:
+                self.cliente = ClienteModelo()
                 self.limpaTudo()
             else:
                 self.carregaClienteNaTela(self.cliente)
@@ -134,6 +145,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         infoPessoais = self.cnisClienteAtual.getInfoPessoais()
 
         if infoPessoais is not None:
+
             self.cliente.cpfCliente = unmaskAll(infoPessoais['cpf'])
             self.cliente.dataNascimento = strToDatetime(infoPessoais['dataNascimento'])
             self.cliente.idade = calculaIdadeFromString(infoPessoais['dataNascimento'])
@@ -142,50 +154,51 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.nomeCliente = infoPessoais['nomeCompleto'].split(' ')[0].title()
             self.cliente.sobrenomeCliente = ' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title()
             self.carregaClienteNaTela(cliente=self.cliente)
+            if self.cliente.numero is None:
+                self.cliente.numero = 0
 
         self.cliente.clienteId = self.daoCliente.cadastroClienteComCnis(self.cliente, self.cnisClienteAtual.getAllDict())
 
     def carregaClienteNaTela(self, cliente: ClienteModelo):
 
-        self.leCpf.setText(cliente.cpfCliente)
+        self.leCpf.setText(mascaraCPF(cliente.cpfCliente))
         self.dtNascimento.setDate(strToDatetime(cliente.dataNascimento))
         self.leIdade.setText(f'{cliente.idade}')
-        self.leNit.setText(cliente.nit)
         self.leNomeMae.setText(cliente.nomeMae)
         self.lePrimeiroNome.setText(cliente.nomeCliente)
         self.leSobrenome.setText(cliente.sobrenomeCliente)
         self.leCdCliente.setText(str(self.cliente.clienteId))
 
-        if cliente.cep is not None:
+        if cliente.cep not in [None, 'None']:
             self.leCep.setText(mascaraCep(cliente.cep))
 
-        if cliente.endereco is not None:
+        if cliente.endereco not in [None, 'None']:
             self.leEndereco.setText(cliente.endereco)
 
-        if cliente.cidade is not None:
+        if cliente.cidade not in [None, 'None']:
             self.leCidade.setText(cliente.cidade)
 
-        if cliente.bairro is not None:
+        if cliente.bairro not in [None, 'None']:
             self.leBairro.setText(cliente.bairro)
 
-        if cliente.estado is not None:
+        if cliente.estado not in [None, 'None']:
             self.cbxEstado.setCurrentText(cliente.estado)
 
-        if cliente.complemento is not None:
+        if cliente.complemento not in [None, 'None']:
             self.leComplemento.setText(cliente.complemento)
 
-        if cliente.nit is not None:
-            self.leNit.setText(cliente.nit)
+        if cliente.nit not in [None, 'None']:
+            self.leNit.setText(mascaraNit(int(cliente.nit)))
 
-        if cliente.numCartProf is not None:
+        if cliente.numCartProf not in [None, 'None']:
             self.leCartProf.setText(str(cliente.numCartProf))
 
-        if cliente.profissao is not None:
+        if cliente.profissao not in [None, 'None']:
             self.leProfissao.setText(cliente.profissao)
 
     def carregaInfoTela(self, info, *args):
         if info == 'cep':
-            self.cliente.cep = self.leCep.text()
+            self.cliente.cep = self.leCep.text().replace('-', '')
 
         elif info == 'endereco':
             self.cliente.endereco = self.leEndereco.text()
@@ -212,7 +225,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.profissao = self.leProfissao.text()
 
         elif info == 'cdCliente':
-            self.cliente.clienteId = self.leCdCliente.text()
+            if self.leCdCliente.text() != '':
+                self.cliente.clienteId = int(self.leCdCliente.text())
 
         elif info == 'nomeCliente':
             self.cliente.nomeCliente = self.lePrimeiroNome.text()
@@ -244,9 +258,13 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         elif info == 'telefone':
             self.cliente.telefone = self.leTelefone.text()
 
+        elif info == 'leNumero':
+            if self.leNumero.text() != '':
+                self.cliente.numero = int(self.leNumero.text())
+
     def buscaCep(self):
         clienteRepository = ClienteRepository()
-        dictCep: dict = clienteRepository.getCep(self.leCep.text())
+        dictCep: dict = clienteRepository.getCep(self.leCep.text().replace('-', ''))
         if 'logradouro' in dictCep.keys():
             self.leEndereco.setText(dictCep['logradouro'])
             self.cliente.endereco = dictCep['logradouro']

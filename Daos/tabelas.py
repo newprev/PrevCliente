@@ -49,6 +49,7 @@ class TabelasConfig:
             endereco VARCHAR(50) NOT NULL,
             estado VARCHAR(20) NOT NULL,
             cidade VARCHAR(30) NOT NULL,
+            numero INT NOT NULL,
             bairro VARCHAR(30) NULL,
             cep VARCHAR(8) NOT NULL,
             complemento VARCHAR(30) NULL,

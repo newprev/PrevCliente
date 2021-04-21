@@ -38,6 +38,8 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
 
         for contLinha, infoLinha in enumerate(dados):
             self.tblCalculos.insertRow(contLinha)
+            if contLinha == 1:
+                print(infoLinha)
 
             for contColuna, info in enumerate(infoLinha):
                 if contColuna == 0:
@@ -57,7 +59,7 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
 
                 elif contColuna == 3:
-                    strItem = QTableWidgetItem(mascaraDinheiro(info))
+                    strItem = QTableWidgetItem(mascaraDinheiro(info, simbolo=infoLinha[-1]))
                     strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)

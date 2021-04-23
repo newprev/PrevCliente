@@ -1195,9 +1195,9 @@ CNIS</string>
          <widget class="QLineEdit" name="leCdCliente">
           <property name="geometry">
            <rect>
-            <x>10</x>
-            <y>40</y>
-            <width>121</width>
+            <x>260</x>
+            <y>10</y>
+            <width>81</width>
             <height>25</height>
            </rect>
           </property>
@@ -1216,7 +1216,7 @@ CNIS</string>
            <rect>
             <x>10</x>
             <y>20</y>
-            <width>101</width>
+            <width>81</width>
             <height>17</height>
            </rect>
           </property>
@@ -1348,6 +1348,19 @@ CNIS</string>
           </property>
           <property name="calendarPopup">
            <bool>true</bool>
+          </property>
+         </widget>
+         <widget class="QSpinBox" name="sbCdCliente">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>40</y>
+            <width>121</width>
+            <height>26</height>
+           </rect>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
           </property>
          </widget>
         </widget>

@@ -32,7 +32,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.frBuscaEmail.hide()
         self.frBuscaTelefone.hide()
         self.frBuscaRgcpf.hide()
-        self.leCdCliente.setDisabled(True)
+        # self.leCdCliente.setDisabled(True)
+        self.sbCdCliente.setDisabled(True)
 
         self.carregaFiltroAZ()
         self.carregaComboBoxes()
@@ -50,7 +51,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leCpf.editingFinished.connect(lambda: self.leCpf.setText(mascaraCPF(self.leCpf.text())))
         self.leTelefone.editingFinished.connect(lambda: self.leTelefone.setText(mascaraTelCel(self.leTelefone.text())))
         self.leCep.editingFinished.connect(lambda: self.leCep.setText(mascaraCep(self.leCep.text())))
-        self.leCdCliente.editingFinished.connect(self.buscaCliente)
+        # self.leCdCliente.editingFinished.connect(self.buscaCliente)
+        self.sbCdCliente.editingFinished.connect(self.buscaCliente)
 
         self.leCep.editingFinished.connect(lambda: self.carregaInfoTela('cep'))
         self.leEndereco.textEdited.connect(lambda: self.carregaInfoTela('endereco'))
@@ -60,7 +62,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leTelefone.textEdited.connect(lambda: self.carregaInfoTela('telefone'))
         self.leCartProf.textEdited.connect(lambda: self.carregaInfoTela('cartProf'))
         self.leProfissao.textEdited.connect(lambda: self.carregaInfoTela('profissao'))
-        self.leCdCliente.textEdited.connect(lambda: self.carregaInfoTela('cdCliente'))
+        # self.leCdCliente.textEdited.connect(lambda: self.carregaInfoTela('cdCliente'))
+        self.sbCdCliente.valueChanged.connect(lambda: self.carregaInfoTela('sbCliente'))
         self.lePrimeiroNome.textEdited.connect(lambda: self.carregaInfoTela('nomeCliente'))
         self.leSobrenome.textEdited.connect(lambda: self.carregaInfoTela('sobrenomeCliente'))
         self.leRg.textEdited.connect(lambda: self.carregaInfoTela('rg'))
@@ -84,9 +87,11 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def atualizaStatusCliente(self):
         if self.cbClienteAntigo.isChecked():
-            self.leCdCliente.setDisabled(False)
+            # self.leCdCliente.setDisabled(False)
+            self.sbCdCliente.setDisabled(False)
         else:
-            self.leCdCliente.setDisabled(True)
+            # self.leCdCliente.setDisabled(True)
+            self.sbCdCliente.setDisabled(True)
 
     def atualizaTblClientes(self, clientes: list = None):
         if clientes is None:
@@ -126,10 +131,13 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.tblClientes.resizeColumnsToContents()
 
     def buscaCliente(self):
-        if self.leCdCliente.text() != '':
-            cdCliente: int = int(self.leCdCliente.text())
+        # if self.leCdCliente.text() != '':
+        if self.sbCdCliente.text() != '':
+            # cdCliente: int = int(self.leCdCliente.text())
+            cdCliente: int = int(self.sbCdCliente.text())
             self.limpaTudo()
-            self.leCdCliente.setText(str(cdCliente))
+            # self.leCdCliente.setText(str(cdCliente))
+            self.sbCdCliente.setValue(cdCliente)
             self.cliente = self.daoCliente.buscaClienteById(cdCliente, returnInstance=True)
             if self.cliente is None:
                 self.cliente = ClienteModelo()
@@ -167,7 +175,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leNomeMae.setText(cliente.nomeMae)
         self.lePrimeiroNome.setText(cliente.nomeCliente)
         self.leSobrenome.setText(cliente.sobrenomeCliente)
-        self.leCdCliente.setText(str(self.cliente.clienteId))
+        # self.leCdCliente.setText(str(self.cliente.clienteId))
+        self.sbCdCliente.setValue(self.cliente.clienteId)
 
         if cliente.cep not in [None, 'None']:
             self.leCep.setText(mascaraCep(cliente.cep))
@@ -227,6 +236,10 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         elif info == 'cdCliente':
             if self.leCdCliente.text() != '':
                 self.cliente.clienteId = int(self.leCdCliente.text())
+
+        elif info == 'sbCliente':
+            if self.sbCdCliente.text() != '':
+                self.cliente.clienteId = int(self.sbCdCliente.text())
 
         elif info == 'nomeCliente':
             self.cliente.nomeCliente = self.lePrimeiroNome.text()
@@ -330,7 +343,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.daoCliente.atualizaCliente(self.cliente)
 
     def verificaCodCliente(self) -> bool:
-        if self.leCdCliente.text() is not None and self.leCdCliente.text() != "":
+        # if self.leCdCliente.text() is not None and self.leCdCliente.text() != "":
+        if self.sbCdCliente.text() is not None and self.sbCdCliente.text() != "":
             return True
         else:
             return False
@@ -355,7 +369,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                 self.hlFlitroAlfabetico.addWidget(button)
 
     def limpaTudo(self):
-        self.leCdCliente.clear()
+        # self.leCdCliente.clear()
+        self.sbCdCliente.clear()
         self.lePrimeiroNome.clear()
         self.leSobrenome.clear()
         self.leRg.clear()

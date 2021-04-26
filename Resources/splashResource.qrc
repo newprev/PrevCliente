@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="backgroundSplash">
+    <file>inicio.png</file>
+  </qresource>
+</RCC>

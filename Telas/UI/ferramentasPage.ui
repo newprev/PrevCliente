@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>wdgFerramentas</class>
+ <widget class="QWidget" name="wdgFerramentas">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>945</width>
+    <height>611</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>945</width>
+    <height>611</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#tabMain, #tabFerramentas {
+	border-radius: 8px;
+	background-color: white;
+	padding: 4px;
+	
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+}
+
+#tabMain::pane {
+	background-color: white;
+	border-radius: 8px;
+/*	border-top: 4px solid rgb(52, 73, 94);
+	border-bottom: 4px solid rgb(52, 73, 94);
+	border-right: 4px solid rgb(52, 73, 94);
+	border-left: 4px solid rgba(66, 147, 215, 255);*/
+
+	border: 4px solid transparent;
+}
+
+#tabMain::tab-bar {
+	left: 16px;
+}
+
+QTabBar::tab{
+	background: rgb(52, 73, 94);
+	color: white;
+	min-width: 26ex;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+QTabBar::tab:selected, QTabBar::tab:hover {
+	background: white;
+	color: rgb(52, 73, 94);
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border: 2px solid white;
+	padding: 4px;
+}</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabMain">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tabFerramentas">
+      <property name="styleSheet">
+       <string notr="true">/*------------------------------------ Tables --------------------------------------*/
+#tblTetos{
+	background-color: transparent;
+}
+
+#tblTetos::item{
+	margin: 4px;
+}
+
+QHeaderView::section {
+    background-color: rgb(52, 73, 94);
+    color: white;
+    padding-left: 4px;
+    border: 1px solid #6c6c6c;
+	min-height: 45px;
+}
+
+QHeaderView::down-arrow {
+    icon-color: white;
+}
+
+QHeaderView::up-arrow {
+    icon-color: white;
+}
+
+/*-------------------------------- Labels -----------------------------------------*/
+#lbTitulo, #lbValorPara {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+}
+
+#lbSubtitulo, #lbInfoValor,
+#lbInfoData, #lbInfoAcao {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;	
+}
+
+#lbInfoTitulo, #lbInfoInsereMoeda {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+
+	background-color: white;	
+}
+
+/*-------------------------------- Push Buttons --------------------------------*/
+#pbBuscarArq, #pbEditar, 
+#pbExcluir, #pbInserir, 
+#pbEfetivar, #pbLimpar {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: white;
+
+	border-radius: 4px;
+	background-color: rgb(52, 73, 94);
+}
+
+#pbBuscarArq:hover, #pbEditar:hover, 
+#pbExcluir:hover, #pbInserir:hover,
+#pbEfetivar:hover, #pbLimpar:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: white;
+
+	border-radius: 4px;
+	border: 1px solid;
+	background-color: rgb(72, 93, 114);
+}
+
+#pbCancelar {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: black;
+
+	border-radius: 4px;
+	background-color: rgb(225, 224, 53);
+}
+
+#pbCancelar:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: black;
+
+	border-radius: 4px;
+	background-color: rgb(225, 240, 73);
+}
+
+/*-------------------------------- Frames -----------------------------------------*/
+#frInfo{
+	border-radius: 4px;
+	border: 1px solid rgb(85, 87, 83);
+
+	background-color: white;
+}
+</string>
+      </property>
+      <attribute name="title">
+       <string>Atualização monetária</string>
+      </attribute>
+      <widget class="QLabel" name="lbTitulo">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>471</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Faça cálculos de correções monetárias</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbSubtitulo">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>371</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Faça cálculos de correções importantes para o seu cliente</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbInserir">
+       <property name="geometry">
+        <rect>
+         <x>360</x>
+         <y>340</y>
+         <width>111</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Inserir</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbExcluir">
+       <property name="geometry">
+        <rect>
+         <x>360</x>
+         <y>390</y>
+         <width>111</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Excluir</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbEditar">
+       <property name="geometry">
+        <rect>
+         <x>360</x>
+         <y>440</y>
+         <width>111</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Editar</string>
+       </property>
+      </widget>
+      <widget class="QFrame" name="frInfo">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>90</y>
+         <width>331</width>
+         <height>171</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="lbInfoDe">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>De:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoValorDe">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>20</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Valor</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="leValorDe">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>40</y>
+          <width>161</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoValorPara">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>80</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Valor</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoPara">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>80</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Para:</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="cbxDe">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>40</y>
+          <width>131</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="cbxPara">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>100</y>
+          <width>131</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbValorPara">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>100</y>
+          <width>131</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QLabel" name="lbInfoTitulo">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>80</y>
+         <width>81</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>   Cálculos</string>
+       </property>
+      </widget>
+      <widget class="QFrame" name="frInfoAdicionar">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>300</y>
+         <width>331</width>
+         <height>241</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">/*-------------------------------- Labels -----------------------------------------*/
+/*#lbInfoInsereMoeda {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+}*/
+
+#lbInfoDataInicio, #lbInfoDataFim,
+#lbInfoConversao, #lbInfoFator,
+#lbInfoNomeMoeda  {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;	
+}
+
+#lbInfoTitulo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+
+	background-color: white;	
+}
+
+/*-------------------------------- Push Buttons --------------------------------*/
+#pbBuscarArq, #pbEditar, 
+#pbExcluir, #pbInserir, 
+#pbEfetivar  {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: white;
+
+	border-radius: 4px;
+	background-color: rgb(52, 73, 94);
+}
+
+#pbBuscarArq:hover, #pbEditar:hover, 
+#pbExcluir:hover, #pbInserir:hover,
+#pbEfetivar:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: white;
+
+	border-radius: 4px;
+	border: 1px solid;
+	background-color: rgb(72, 93, 114);
+}
+
+#pbCancelar {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: black;
+
+	border-radius: 4px;
+	background-color: rgb(225, 224, 53);
+}
+
+#pbCancelar:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: black;
+
+	border-radius: 4px;
+	background-color: rgb(225, 240, 73);
+}
+
+/*-------------------------------- Frames -----------------------------------------*/
+#frInfoAdicionar{
+	border-radius: 4px;
+	border: 1px solid rgb(85, 87, 83);
+
+	background-color: white;
+}
+
+/*-------------------------------- Check Box -----------------------------------------*/
+#cbMoedaCorrente {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;	
+
+}
+
+</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="lbInfoDataInicio">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>80</y>
+          <width>111</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Início da validade:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoFator">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>80</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Fator</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="leFator">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>100</y>
+          <width>151</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoConversao">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>140</y>
+          <width>91</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Conversão</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoDataFim">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>140</y>
+          <width>111</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Deixa de valer em:</string>
+        </property>
+       </widget>
+       <widget class="QDateEdit" name="dtDataInicio">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>100</y>
+          <width>110</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="displayFormat">
+         <string>MM/yyyy</string>
+        </property>
+       </widget>
+       <widget class="QDateEdit" name="dtDataFim">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>160</y>
+          <width>110</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="displayFormat">
+         <string>MM/yyyy</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoNomeMoeda">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>111</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Nome da moeda</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="leNomeMoeda">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>40</y>
+          <width>151</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="cbxConversao">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>160</y>
+          <width>151</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="cbMoedaCorrente">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>200</y>
+          <width>131</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Moeda corrente</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="leSinal">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>40</y>
+          <width>61</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoSimbolo">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>20</y>
+          <width>131</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Sinal monetário</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QLabel" name="lbInfoInsereMoeda">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>290</y>
+         <width>111</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Inserir moeda</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbLimpar">
+       <property name="geometry">
+        <rect>
+         <x>360</x>
+         <y>90</y>
+         <width>111</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Limpar 
+conversão</string>
+       </property>
+      </widget>
+      <zorder>frInfo</zorder>
+      <zorder>lbTitulo</zorder>
+      <zorder>lbSubtitulo</zorder>
+      <zorder>pbInserir</zorder>
+      <zorder>pbExcluir</zorder>
+      <zorder>pbEditar</zorder>
+      <zorder>lbInfoTitulo</zorder>
+      <zorder>frInfoAdicionar</zorder>
+      <zorder>lbInfoInsereMoeda</zorder>
+      <zorder>pbLimpar</zorder>
+     </widget>
+     <widget class="QWidget" name="clientes">
+      <attribute name="title">
+       <string>Vazio</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

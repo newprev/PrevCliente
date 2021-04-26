@@ -1,0 +1,10 @@
+
+*.pyc
+
+*.pdf
+
+*.pyi
+
+.idea/misc.xml
+
+Daos/producao.db

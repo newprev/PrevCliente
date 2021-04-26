@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>wdgTabConfiguracoes</class>
+ <widget class="QWidget" name="wdgTabConfiguracoes">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>945</width>
+    <height>611</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>945</width>
+    <height>611</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#tabMain, #tabTetosPrev {
+	border-radius: 8px;
+	background-color: white;
+	padding: 4px;
+	
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+}
+
+#tabMain::pane {
+	background-color: white;
+	border-radius: 8px;
+/*	border-top: 4px solid rgb(52, 73, 94);
+	border-bottom: 4px solid rgb(52, 73, 94);
+	border-right: 4px solid rgb(52, 73, 94);
+	border-left: 4px solid rgba(66, 147, 215, 255);*/
+
+	border: 4px solid transparent;
+}
+
+#tabMain::tab-bar {
+	left: 16px;
+}
+
+QTabBar::tab{
+	background: rgb(52, 73, 94);
+	color: white;
+	min-width: 24ex;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+QTabBar::tab:selected, QTabBar::tab:hover {
+	background: white;
+	color: rgb(52, 73, 94);
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border: 2px solid white;
+	padding: 4px;
+}</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabMain">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tabTetosPrev">
+      <property name="styleSheet">
+       <string notr="true">/*------------------------------------ Tables --------------------------------------*/
+#tblTetos{
+	background-color: transparent;
+}
+
+#tblTetos::item{
+	margin: 4px;
+}
+
+QHeaderView::section {
+    background-color: rgb(52, 73, 94);
+    color: white;
+    padding-left: 4px;
+    border: 1px solid #6c6c6c;
+	min-height: 45px;
+}
+
+QHeaderView::down-arrow {
+    icon-color: white;
+}
+
+QHeaderView::up-arrow {
+    icon-color: white;
+}
+
+/*-------------------------------- Labels -----------------------------------------*/
+#lbTitulo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+}
+
+#lbSubtitulo, #lbInfoValor,
+#lbInfoData, #lbInfoAcao {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;	
+}
+
+#lbInfoTitulo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+
+	background-color: white;	
+}
+
+/*-------------------------------- Push Buttons --------------------------------*/
+#pbBuscarArq, #pbEditar, 
+#pbExcluir, #pbInserir, 
+#pbEfetivar  {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: white;
+
+	border-radius: 4px;
+	background-color: rgb(52, 73, 94);
+}
+
+#pbBuscarArq:hover, #pbEditar:hover, 
+#pbExcluir:hover, #pbInserir:hover,
+#pbEfetivar:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: white;
+
+	border-radius: 4px;
+	border: 1px solid;
+	background-color: rgb(72, 93, 114);
+}
+
+#pbCancelar {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: black;
+
+	border-radius: 4px;
+	background-color: rgb(225, 224, 53);
+}
+
+#pbCancelar:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: black;
+
+	border-radius: 4px;
+	background-color: rgb(225, 240, 73);
+}
+
+/*-------------------------------- Frames -----------------------------------------*/
+#frInfo{
+	border-radius: 4px;
+	border: 1px solid rgb(85, 87, 83);
+
+	background-color: white;
+}
+</string>
+      </property>
+      <attribute name="title">
+       <string>Tetos Previdenciários</string>
+      </attribute>
+      <widget class="QTableWidget" name="tblTetos">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>180</y>
+         <width>471</width>
+         <height>371</height>
+        </rect>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+       <property name="textElideMode">
+        <enum>Qt::ElideNone</enum>
+       </property>
+       <attribute name="horizontalHeaderCascadingSectionResizes">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <column>
+        <property name="text">
+         <string>tetoId</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Data</string>
+        </property>
+        <property name="font">
+         <font>
+          <family>TeX Gyre Adventor</family>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="textAlignment">
+         <set>AlignCenter</set>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Valor</string>
+        </property>
+        <property name="font">
+         <font>
+          <family>TeX Gyre Adventor</family>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="textAlignment">
+         <set>AlignCenter</set>
+        </property>
+       </column>
+      </widget>
+      <widget class="QLabel" name="lbTitulo">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>10</y>
+         <width>451</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Histórico dos tetos previdenciários</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbSubtitulo">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>40</y>
+         <width>371</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Procure por tetos previdenciários desde 1960</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbBuscarArq">
+       <property name="geometry">
+        <rect>
+         <x>500</x>
+         <y>20</y>
+         <width>111</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Buscar 
+arquivo</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbInserir">
+       <property name="geometry">
+        <rect>
+         <x>500</x>
+         <y>160</y>
+         <width>111</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Inserir</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbExcluir">
+       <property name="geometry">
+        <rect>
+         <x>500</x>
+         <y>210</y>
+         <width>111</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Excluir</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbEditar">
+       <property name="geometry">
+        <rect>
+         <x>500</x>
+         <y>260</y>
+         <width>111</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Editar</string>
+       </property>
+      </widget>
+      <widget class="QFrame" name="frInfo">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>90</y>
+         <width>471</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="lbInfoData">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Data</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoValor">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>20</y>
+          <width>64</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Valor</string>
+        </property>
+       </widget>
+       <widget class="QDateEdit" name="dtData">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>40</y>
+          <width>110</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::UpDownArrows</enum>
+        </property>
+        <property name="currentSection">
+         <enum>QDateTimeEdit::MonthSection</enum>
+        </property>
+        <property name="displayFormat">
+         <string>MM/yyyy</string>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="leValor">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>40</y>
+          <width>91</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoAcao">
+        <property name="geometry">
+         <rect>
+          <x>300</x>
+          <y>10</y>
+          <width>161</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Inserir ou cancelar edição</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pbEfetivar">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>40</y>
+          <width>83</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Efetivar</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pbCancelar">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>40</y>
+          <width>83</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Cancelar</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QLabel" name="lbInfoTitulo">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>80</y>
+         <width>111</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Inserir / Editar</string>
+       </property>
+      </widget>
+      <zorder>frInfo</zorder>
+      <zorder>tblTetos</zorder>
+      <zorder>lbTitulo</zorder>
+      <zorder>lbSubtitulo</zorder>
+      <zorder>pbBuscarArq</zorder>
+      <zorder>pbInserir</zorder>
+      <zorder>pbExcluir</zorder>
+      <zorder>pbEditar</zorder>
+      <zorder>lbInfoTitulo</zorder>
+     </widget>
+     <widget class="QWidget" name="clientes">
+      <attribute name="title">
+       <string>Clientes</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

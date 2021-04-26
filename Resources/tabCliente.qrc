@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="arrowUp">
+    <file>arrowUp.png</file>
+  </qresource>
+  <qresource prefix="buscaCep">
+    <file>search.png</file>
+  </qresource>
+  <qresource prefix="arrowDown">
+    <file>arrowDown.png</file>
+  </qresource>
+</RCC>

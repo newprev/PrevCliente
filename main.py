@@ -17,7 +17,7 @@ class Main(Ui_MainWindow, QMainWindow):
         super(Main, self).__init__()
         self.setupUi(self)
         self.contador = 0
-        self.tipoConexao = TiposConexoes.sqlite
+        self.tipoConexao = TiposConexoes.local
         self.dbConnection = ConfigConnection(instanciaBanco=self.tipoConexao)
         self.db = self.dbConnection.getDatabase()
         self.daoConfigs = DaoConfiguracoes(db=self.db)
@@ -123,8 +123,10 @@ class Main(Ui_MainWindow, QMainWindow):
         self.iniciaNewPrev()
 
     def iniciaNewPrev(self):
-        self.loginPage.show()
+        # self.loginPage.show()
         self.close()
+        from repositorios.ferramentasRepositorio import ApiFerramentas
+        ApiFerramentas().getAllTetosPrevidenciarios()
         # self.close()
         # LoginPage(self.db).show()
 

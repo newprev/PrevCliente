@@ -161,11 +161,12 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.nomeMae = infoPessoais['nomeMae'].title()
             self.cliente.nomeCliente = infoPessoais['nomeCompleto'].split(' ')[0].title()
             self.cliente.sobrenomeCliente = ' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title()
-            self.carregaClienteNaTela(cliente=self.cliente)
-            if self.cliente.numero is None:
-                self.cliente.numero = 0
 
         self.cliente.clienteId = self.daoCliente.cadastroClienteComCnis(self.cliente, self.cnisClienteAtual.getAllDict())
+
+        self.carregaClienteNaTela(cliente=self.cliente)
+        if self.cliente.numero is None:
+            self.cliente.numero = 0
 
     def carregaClienteNaTela(self, cliente: ClienteModelo):
 

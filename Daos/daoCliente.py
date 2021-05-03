@@ -91,7 +91,6 @@ class DaoCliente:
             );"""
 
         try:
-            print(strComando)
             cursor.execute(strComando)
             clienteId = cursor.lastrowid
             logPrioridade(f'INSERT<cadastroClienteComCnis>___________________{self.config.tblCliente} ({clienteId})', TipoEdicao.insert, Prioridade.saidaComun)

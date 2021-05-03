@@ -1,7 +1,7 @@
 {
-  "host": "mysql742.umbler.com",
+  "host": "mysql01-farm36.kinghost.net",
   "user": "newprev",
-  "passwd": "_NewPrev2021_",
+  "passwd": "NewPrev2021",
   "banco": "newprev",
-  "port": "41890"
+  "port": "3306"
 }

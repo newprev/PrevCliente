@@ -19,10 +19,11 @@ class TetosPrevModelo:
         }
         return dictTetosPrev
 
-    def fromDict(self, dictCliente):
-        self.tetosPrevId = dictCliente['tetosPrevId']
-        self.dataValidade = dictCliente['dataValidade']
-        self.valor = dictCliente['valor']
+    def fromDict(self, dictTeto):
+        self.tetosPrevId = dictTeto['tetosPrevId']
+        self.dataValidade = dictTeto['dataValidade']
+        self.valor = dictTeto['valor']
+        return self
 
     def fromList(self, listCliente: list, retornaInst: bool = False):
         self.tetosPrevId = listCliente[0]

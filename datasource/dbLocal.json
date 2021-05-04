@@ -2,6 +2,6 @@
   "host": "localhost",
   "user": "NEWPREV",
   "passwd": "_NewPrev2021_",
-  "banco": "NewPrev",
+  "banco": "NewPrev_Cli",
   "port": "3306"
 }

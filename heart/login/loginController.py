@@ -28,7 +28,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.pbEntrar.clicked.connect(self.entrar)
         self.daoConfigs = DaoConfiguracoes(self.db)
         self.dashboard: DashboardController = None
-        self.daoServidor = DaoServidor(db=db)
+        # self.daoServidor = DaoServidor(db=db)
 
         self.center()
 
@@ -40,8 +40,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.move(frameGm.topLeft())
 
     def entrar(self):
-        if type(self.db) != pymysql.Connection:
-            self.verificaRotinaDiaria()
+        # if type(self.db) != pymysql.Connection:
+        #     self.verificaRotinaDiaria()
         self.dashboard = DashboardController(db=self.db)
         self.dashboard.show()
         self.close()

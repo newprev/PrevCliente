@@ -1,5 +1,8 @@
 import requests
 
+from modelos.tetosPrevModelo import TetosPrevModelo
+
+
 class ApiFerramentas:
 
     def __init__(self):
@@ -10,14 +13,7 @@ class ApiFerramentas:
         response = requests.get(url)
 
         if 199 < response.status_code < 400:
-            print(f"response.url: {response.url}")
-
-            i = 0
-            for teto in response.json():
-                print(teto)
-                i += 1
-                if i > 5:
-                    break
+            listaTetos = [TetosPrevModelo().fromDict(teto) for teto in response.json()]
         else:
             print('Deu erro')
             print(f"response.url: {response.url}")

@@ -119,11 +119,10 @@ class Main(Ui_MainWindow, QMainWindow):
         self.loginPage = LoginController(db=self.db)
         self.progresso(add=10)
 
-
         self.iniciaNewPrev()
 
     def iniciaNewPrev(self):
-        # self.loginPage.show()
+        self.loginPage.show()
         self.close()
         from repositorios.ferramentasRepositorio import ApiFerramentas
         ApiFerramentas().getAllTetosPrevidenciarios()

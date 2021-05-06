@@ -9,6 +9,8 @@ class TetosPrevModelo:
         self.tetosPrevId: int = None
         self.dataValidade: datetime = None
         self.valor: int = None
+        self.dataUltAlt: datetime = None
+        self.dataCadastro: datetime = None
 
 
     def toDict(self):
@@ -23,6 +25,8 @@ class TetosPrevModelo:
         self.tetosPrevId = dictTeto['tetosPrevId']
         self.dataValidade = dictTeto['dataValidade']
         self.valor = dictTeto['valor']
+        self.dataUltAlt = datetime.datetime.now()
+        self.dataCadastro = datetime.datetime.now()
         return self
 
     def fromList(self, listCliente: list, retornaInst: bool = False):

@@ -124,8 +124,6 @@ class Main(Ui_MainWindow, QMainWindow):
     def iniciaNewPrev(self):
         self.loginPage.show()
         self.close()
-        from repositorios.ferramentasRepositorio import ApiFerramentas
-        ApiFerramentas().getAllTetosPrevidenciarios()
         # self.close()
         # LoginPage(self.db).show()
 

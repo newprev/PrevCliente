@@ -5,7 +5,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow
 
 from Daos.daoConfiguracoes import DaoConfiguracoes
-from Daos.daoServidor import DaoServidor
+from repositorios.ferramentasRepositorio import ApiFerramentas
 from Telas.loginPage import Ui_mwLogin
 from heart.dashboard.dashboardController import DashboardController
 import os
@@ -40,8 +40,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.move(frameGm.topLeft())
 
     def entrar(self):
-        # if type(self.db) != pymysql.Connection:
-        #     self.verificaRotinaDiaria()
+        self.verificaRotinaDiaria()
         self.dashboard = DashboardController(db=self.db)
         self.dashboard.show()
         self.close()
@@ -68,22 +67,32 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     dateSyncTetosPrev = strToDatetime(syncDict['syncTetosPrev'], TamanhoData.g)
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
-                        self.daoServidor.syncConvMon()
+                        # self.daoServidor.syncConvMon()
+                        self.atualizaFerramentas(convMon=True)
                     else:
                         syncJson['syncConvMon'] = syncDict['syncConvMon']
 
                     if (datetime.datetime.now() - dateSyncTetosPrev).days != 0:
-                        self.daoServidor.syncTetosPrev()
+                        # self.daoServidor.syncTetosPrev()
+                        self.atualizaFerramentas(tetos=True)
                     else:
                         syncJson['syncTetosPrev'] = syncDict['syncTetosPrev']
 
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
                 syncFile.write(json.dumps(syncJson))
         else:
-            self.daoServidor.syncConvMon()
-            self.daoServidor.syncTetosPrev()
+            # self.daoServidor.syncConvMon()
+            # self.daoServidor.syncTetosPrev()
+            self.atualizaFerramentas(tetos=True, convMon=True)
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
                 syncFile.write(json.dumps(syncJson))
+
+    def atualizaFerramentas(self, tetos: bool = False, convMon: bool = False):
+        if tetos:
+            ApiFerramentas().getAllTetosPrevidenciarios()
+        if convMon:
+            pass
+            # ApiFerramentas().getAllTetosConvMon()
 
     def getDB(self):
 

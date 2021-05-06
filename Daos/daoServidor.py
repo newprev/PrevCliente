@@ -2,7 +2,7 @@ import sqlite3
 
 import pymysql
 
-from Daos.daoInfoImportante import DaoInfoImportante
+from Daos.daoFerramentas import DaoFerramentas
 from connections import ConfigConnection
 from Daos.tabelas import TabelasConfig
 from helpers import dinheiroToFloat, datetimeToSql
@@ -20,7 +20,7 @@ class DaoServidor:
         self.dbConnection = ConfigConnection(instanciaBanco=TiposConexoes.nuvem)
         self.dbServidor = self.dbConnection.getDatabase()
         self.dbLocal = db
-        self.daoInfoImportante = DaoInfoImportante(db=db)
+        self.daoFerramentas = DaoFerramentas(db=db)
 
         self.tabelas = TabelasConfig()
 
@@ -41,18 +41,18 @@ class DaoServidor:
             cursor.execute(strComando)
             logPrioridade(f'SELECT<syncConvMon>___________________{self.tabelas.tblTetosPrev}', TipoEdicao.select, Prioridade.sync)
             listaConvMonServidor = cursor.fetchall()
-            qtdMoedasLocal: int = self.daoInfoImportante.contaQtdMoedas()
+            qtdMoedasLocal: int = self.daoFerramentas.contaQtdMoedas()
 
             if len(listaConvMonServidor) != qtdMoedasLocal:
-                self.daoInfoImportante.deletarConvMon()
+                self.daoFerramentas.deletarConvMon()
 
                 for item in listaConvMonServidor:
                     convMon = ConvMonModelo().fromList(item, retornaInst=True)
-                    self.daoInfoImportante.insereConvMon(convMon)
+                    self.daoFerramentas.insereConvMon(convMon)
             else:
                 for item in listaConvMonServidor:
                     convMon = ConvMonModelo().fromList(item, retornaInst=True)
-                    self.daoInfoImportante.atualizaConvMon(convMon)
+                    self.daoFerramentas.atualizaConvMon(convMon)
         except:
             raise Warning(f'Erro SQL - atualizaTetos({self.dbConnection.banco}) <INSERT {self.tabelas.tblTetosPrev}>')
         finally:
@@ -74,17 +74,17 @@ class DaoServidor:
             cursor.execute(strComando)
             logPrioridade(f'SELECT<syncTetosPrev>___________________{self.tabelas.tblTetosPrev}', TipoEdicao.select, Prioridade.sync)
             listaTetosPrevServidor = cursor.fetchall()
-            qtdTetosLocal: int = self.daoInfoImportante.contaQtdTetos()
+            qtdTetosLocal: int = self.daoFerramentas.contaQtdTetos()
 
             if len(listaTetosPrevServidor) != qtdTetosLocal:
-                self.daoInfoImportante.deletarTetosPrev()
+                self.daoFerramentas.deletarTetosPrev()
 
                 listaTetosAInserir = [TetosPrevModelo().fromList(item, retornaInst=True) for item in listaTetosPrevServidor]
-                self.daoInfoImportante.insereListaTetosModel(listaTetosAInserir)
+                self.daoFerramentas.insereListaTetosModel(listaTetosAInserir)
             else:
                 for item in listaTetosPrevServidor:
                     tetoPrev = TetosPrevModelo().fromList(item, retornaInst=True)
-                    self.daoInfoImportante.atualizaTeto(tetoPrev)
+                    self.daoFerramentas.atualizaTeto(tetoPrev)
         except:
             raise Warning(f'Erro SQL - syncTetosPrev({self.dbConnection.banco}) <INSERT {self.tabelas.tblTetosPrev}>')
         finally:

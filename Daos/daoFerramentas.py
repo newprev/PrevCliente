@@ -9,7 +9,7 @@ from modelos.tetosPrevModelo import TetosPrevModelo
 from datetime import datetime
 
 
-class DaoInfoImportante:
+class DaoFerramentas:
 
     def __init__(self, db=None):
         self.db = db
@@ -415,7 +415,6 @@ class DaoInfoImportante:
         finally:
             self.db.commit()
             self.disconectBD(cursor)
-
 
     def disconectBD(self, cursor):
         cursor.close()

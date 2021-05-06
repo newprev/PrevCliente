@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QDate
 
-from Daos.daoInfoImportante import DaoInfoImportante
+from Daos.daoFerramentas import DaoInfoImportante
 from helpers import meses, strToFloat, strToDatetime, mascaraDinheiro, dinheiroToFloat, mascaraDataPequena
 import datetime as dt
 from heart.localStyleSheet.configuracoes import desabilitaPB

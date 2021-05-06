@@ -18,7 +18,8 @@ class TipoEdicao(Enum):
     update = 3
     dropTable = 4
     createTable = 5
-    erro = 6
+    api = 6
+    erro = 7
 
 
 def logPrioridade(mensagem: str, tipoEdicao: TipoEdicao = TipoEdicao.select, priodiade: Prioridade = Prioridade.saidaComun):
@@ -31,6 +32,8 @@ def logPrioridade(mensagem: str, tipoEdicao: TipoEdicao = TipoEdicao.select, pri
         corDaFonte = Fore.MAGENTA
     elif tipoEdicao == TipoEdicao.createTable or tipoEdicao == TipoEdicao.dropTable:
         corDaFonte = Fore.LIGHTGREEN_EX
+    elif tipoEdicao == TipoEdicao.api:
+        corDaFonte = Fore.BLUE
     elif tipoEdicao == TipoEdicao.erro:
         corDaFonte = Fore.RED
     else:

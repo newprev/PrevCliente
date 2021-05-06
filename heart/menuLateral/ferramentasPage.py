@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget
 
-from Daos.daoInfoImportante import DaoInfoImportante
+from Daos.daoFerramentas import DaoInfoImportante
 from Telas.ferramentasPage import Ui_wdgFerramentas
 from modelos.convMonModelo import ConvMonModelo
 

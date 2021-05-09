@@ -17,7 +17,7 @@ class Main(Ui_MainWindow, QMainWindow):
         super(Main, self).__init__()
         self.setupUi(self)
         self.contador = 0
-        self.tipoConexao = TiposConexoes.local
+        self.tipoConexao = TiposConexoes.sqlite
         self.dbConnection = ConfigConnection(instanciaBanco=self.tipoConexao)
         self.db = self.dbConnection.getDatabase()
         self.daoConfigs = DaoConfiguracoes(db=self.db)

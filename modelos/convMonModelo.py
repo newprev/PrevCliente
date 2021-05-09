@@ -34,17 +34,28 @@ class ConvMonModelo:
         }
         return dictConvMon
 
-    def fromDict(self, dictConvMon):
-        self.convMonId = dictConvMon['convMonId']
+    def fromDict(self, dictConvMon: dict):
+        if 'convMonId' in dictConvMon.keys():
+            self.convMonId = dictConvMon['convMonId']
+
+        if 'dataUltAlt' in dictConvMon.keys():
+            self.dataUltAlt = dictConvMon['dataUltAlt']
+
+        if 'dataCadastro' in dictConvMon.keys():
+            self.dataCadastro = dictConvMon['dataCadastro']
+
+        if dictConvMon['dataFinal'] is not None:
+            self.dataFinal = dictConvMon['dataFinal']
+        else:
+            self.dataFinal = dictConvMon['dataInicial']
+
         self.nomeMoeda = dictConvMon['nomeMoeda']
         self.fator = dictConvMon['fator']
         self.dataInicial = dictConvMon['dataInicial']
-        self.dataFinal = dictConvMon['dataFinal']
         self.conversao = dictConvMon['conversao']
         self.moedaCorrente = dictConvMon['moedaCorrente']
         self.sinal = dictConvMon['sinal']
-        self.dataUltAlt = dictConvMon['dataUltAlt']
-        self.dataCadastro = dictConvMon['dataCadastro']
+        return self
 
     def fromList(self, listConvMon: list, retornaInst: bool = False):
         self.convMonId = listConvMon[0]

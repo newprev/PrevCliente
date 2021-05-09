@@ -11,7 +11,7 @@ from helpers import estCivil, getEstados, unmaskAll, calculaIdadeFromString, get
 from modelos.clienteModelo import ClienteModelo
 from modelos.cnisModelo import CNISModelo
 from newPrevEnums import TamanhoData
-from repositorios.clienteRepositorio import ClienteRepository
+from repositorios.integracaoRepositorio import IntegracaoRepository
 
 
 class TabCliente(Ui_wdgTabCliente, QWidget):
@@ -277,8 +277,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                 self.cliente.numero = int(self.leNumero.text())
 
     def buscaCep(self):
-        clienteRepository = ClienteRepository()
-        dictCep: dict = clienteRepository.getCep(self.leCep.text().replace('-', ''))
+        integracaoRepository = IntegracaoRepository()
+        dictCep: dict = integracaoRepository.getCep(self.leCep.text().replace('-', ''))
         if 'logradouro' in dictCep.keys():
             self.leEndereco.setText(dictCep['logradouro'])
             self.cliente.endereco = dictCep['logradouro']

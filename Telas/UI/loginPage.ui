@@ -74,7 +74,7 @@
 
 #lbNomeDoEscritorio, #lbInfoAcesso{
 	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 14px;
+	font-size: 18px;
 }
 
 #lbEscritorio {
@@ -157,7 +157,7 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>400</width>
+           <width>488</width>
            <height>16777215</height>
           </size>
          </property>
@@ -229,14 +229,14 @@
            </rect>
           </property>
           <property name="text">
-           <string>NewPrev associados</string>
+           <string/>
           </property>
          </widget>
          <widget class="QPushButton" name="pbEntrar">
           <property name="geometry">
            <rect>
             <x>102</x>
-            <y>270</y>
+            <y>300</y>
             <width>181</width>
             <height>25</height>
            </rect>
@@ -249,7 +249,7 @@
           <property name="geometry">
            <rect>
             <x>100</x>
-            <y>300</y>
+            <y>240</y>
             <width>171</width>
             <height>17</height>
            </rect>
@@ -261,9 +261,9 @@
          <widget class="QLabel" name="lbInfoAcesso">
           <property name="geometry">
            <rect>
-            <x>120</x>
-            <y>130</y>
-            <width>141</width>
+            <x>100</x>
+            <y>132</y>
+            <width>181</width>
             <height>17</height>
            </rect>
           </property>
@@ -289,11 +289,144 @@
        <item>
         <widget class="QStackedWidget" name="stkPrimeiroAcesso">
          <property name="styleSheet">
-          <string notr="true">#wdgVinculado, #wdgDesvinculado {
-	border-radius: 8px;
-}</string>
+          <string notr="true">/*---------------------------------- Widgets ----------------------------------*/
+
+#wdgVinculado{
+	border-top.left-radius: 0px;
+	border-top-right-radius: 8px;
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 8px;
+	background-color: rgb(33, 76, 121);
+}
+
+#wdgDesvinculado {
+	border-top.left-radius: 0px;
+	border-top-right-radius: 8px;
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 8px;
+    border-image: url(:/Logo/LogoLogin.png);
+}
+
+/*---------------------------------- Labels ----------------------------------*/
+
+#lbCdEscritorio {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+
+	color: rgb(238, 238, 236);
+}
+
+/*---------------------------------- ScrollArea ----------------------------------*/
+
+#scaAdvWidgets, #scaAdvogados{
+	background-color: transparent;
+}
+
+/*---------------------------------- Push Buttons ----------------------------------*/
+
+#pbBuscar {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: white;
+
+	border-radius: 4px;
+	background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(58, 171, 140, 255), stop:1 rgba(9, 212, 156, 255));
+}
+
+#pbBuscar:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: white;
+
+	border-radius: 4px;
+	background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(9, 212, 156, 255), stop:1 rgba(58, 171, 140, 255));
+}
+</string>
          </property>
-         <widget class="QWidget" name="wdgVinculado"/>
+         <widget class="QWidget" name="wdgVinculado">
+          <widget class="QLabel" name="lbCdEscritorio">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>20</y>
+             <width>171</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Código do escritório:</string>
+           </property>
+          </widget>
+          <widget class="QLineEdit" name="leCdEscritorio">
+           <property name="geometry">
+            <rect>
+             <x>220</x>
+             <y>20</y>
+             <width>211</width>
+             <height>25</height>
+            </rect>
+           </property>
+          </widget>
+          <widget class="QScrollArea" name="scaAdvogados">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>60</y>
+             <width>530</width>
+             <height>430</height>
+            </rect>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>530</width>
+             <height>430</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>530</width>
+             <height>430</height>
+            </size>
+           </property>
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="scaAdvWidgets">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>528</width>
+              <height>428</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <layout class="QVBoxLayout" name="vlAdv"/>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+          <widget class="QPushButton" name="pbBuscar">
+           <property name="geometry">
+            <rect>
+             <x>450</x>
+             <y>20</y>
+             <width>83</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Buscar</string>
+           </property>
+          </widget>
+         </widget>
          <widget class="QWidget" name="wdgDesvinculado"/>
         </widget>
        </item>

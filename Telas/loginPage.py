@@ -17,7 +17,7 @@ class Ui_mwLogin(object):
         mwLogin.resize(950, 500)
         mwLogin.setMinimumSize(QtCore.QSize(950, 500))
         mwLogin.setMaximumSize(QtCore.QSize(950, 500))
-        mwLogin.setStyleSheet("#mwLogin, #centralwidget {\n"
+        mwLogin.setStyleSheet("#mwLogin, #centralwidget, #stkPrimeiroAcesso {\n"
 "    border-radius: 8px;\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(mwLogin)
@@ -51,7 +51,7 @@ class Ui_mwLogin(object):
 "\n"
 "#lbNomeDoEscritorio, #lbInfoAcesso{\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
+"    font-size: 18px;\n"
 "}\n"
 "\n"
 "#lbEscritorio {\n"
@@ -109,7 +109,8 @@ class Ui_mwLogin(object):
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.frLeft = QtWidgets.QFrame(self.frMain)
-        self.frLeft.setMaximumSize(QtCore.QSize(400, 16777215))
+        self.frLeft.setMinimumSize(QtCore.QSize(400, 0))
+        self.frLeft.setMaximumSize(QtCore.QSize(488, 16777215))
         self.frLeft.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frLeft.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frLeft.setObjectName("frLeft")
@@ -127,25 +128,112 @@ class Ui_mwLogin(object):
         self.lbEscritorio.setObjectName("lbEscritorio")
         self.lbNomeDoEscritorio = QtWidgets.QLabel(self.frLeft)
         self.lbNomeDoEscritorio.setGeometry(QtCore.QRect(90, 10, 301, 31))
+        self.lbNomeDoEscritorio.setText("")
         self.lbNomeDoEscritorio.setObjectName("lbNomeDoEscritorio")
         self.pbEntrar = QtWidgets.QPushButton(self.frLeft)
-        self.pbEntrar.setGeometry(QtCore.QRect(102, 270, 181, 25))
+        self.pbEntrar.setGeometry(QtCore.QRect(102, 300, 181, 25))
         self.pbEntrar.setObjectName("pbEntrar")
         self.lbNLS = QtWidgets.QLabel(self.frLeft)
-        self.lbNLS.setGeometry(QtCore.QRect(100, 300, 171, 17))
+        self.lbNLS.setGeometry(QtCore.QRect(100, 240, 171, 17))
         self.lbNLS.setObjectName("lbNLS")
         self.lbInfoAcesso = QtWidgets.QLabel(self.frLeft)
-        self.lbInfoAcesso.setGeometry(QtCore.QRect(120, 130, 141, 17))
+        self.lbInfoAcesso.setGeometry(QtCore.QRect(100, 132, 181, 17))
         self.lbInfoAcesso.setObjectName("lbInfoAcesso")
         self.pbPrimeiroAcesso = QtWidgets.QPushButton(self.frLeft)
         self.pbPrimeiroAcesso.setGeometry(QtCore.QRect(100, 340, 181, 25))
         self.pbPrimeiroAcesso.setObjectName("pbPrimeiroAcesso")
         self.horizontalLayout.addWidget(self.frLeft)
-        self.frRight = QtWidgets.QFrame(self.frMain)
-        self.frRight.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frRight.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frRight.setObjectName("frRight")
-        self.horizontalLayout.addWidget(self.frRight)
+        self.stkPrimeiroAcesso = QtWidgets.QStackedWidget(self.frMain)
+        self.stkPrimeiroAcesso.setStyleSheet("/*---------------------------------- Widgets ----------------------------------*/\n"
+"\n"
+"#wdgVinculado{\n"
+"    border-top.left-radius: 0px;\n"
+"    border-top-right-radius: 8px;\n"
+"    border-bottom-left-radius: 0px;\n"
+"    border-bottom-right-radius: 8px;\n"
+"    background-color: rgb(33, 76, 121);\n"
+"}\n"
+"\n"
+"#wdgDesvinculado {\n"
+"    border-top.left-radius: 0px;\n"
+"    border-top-right-radius: 8px;\n"
+"    border-bottom-left-radius: 0px;\n"
+"    border-bottom-right-radius: 8px;\n"
+"    border-image: url(:/Logo/LogoLogin.png);\n"
+"}\n"
+"\n"
+"/*---------------------------------- Labels ----------------------------------*/\n"
+"\n"
+"#lbCdEscritorio {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 16px;\n"
+"\n"
+"    color: rgb(238, 238, 236);\n"
+"}\n"
+"\n"
+"/*---------------------------------- ScrollArea ----------------------------------*/\n"
+"\n"
+"#scaAdvWidgets, #scaAdvogados{\n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"/*---------------------------------- Push Buttons ----------------------------------*/\n"
+"\n"
+"#pbBuscar {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(58, 171, 140, 255), stop:1 rgba(9, 212, 156, 255));\n"
+"}\n"
+"\n"
+"#pbBuscar:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(9, 212, 156, 255), stop:1 rgba(58, 171, 140, 255));\n"
+"}\n"
+"")
+        self.stkPrimeiroAcesso.setObjectName("stkPrimeiroAcesso")
+        self.wdgVinculado = QtWidgets.QWidget()
+        self.wdgVinculado.setObjectName("wdgVinculado")
+        self.lbCdEscritorio = QtWidgets.QLabel(self.wdgVinculado)
+        self.lbCdEscritorio.setGeometry(QtCore.QRect(30, 20, 171, 21))
+        self.lbCdEscritorio.setObjectName("lbCdEscritorio")
+        self.leCdEscritorio = QtWidgets.QLineEdit(self.wdgVinculado)
+        self.leCdEscritorio.setGeometry(QtCore.QRect(220, 20, 211, 25))
+        self.leCdEscritorio.setObjectName("leCdEscritorio")
+        self.scaAdvogados = QtWidgets.QScrollArea(self.wdgVinculado)
+        self.scaAdvogados.setGeometry(QtCore.QRect(10, 60, 530, 430))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scaAdvogados.sizePolicy().hasHeightForWidth())
+        self.scaAdvogados.setSizePolicy(sizePolicy)
+        self.scaAdvogados.setMinimumSize(QtCore.QSize(530, 430))
+        self.scaAdvogados.setMaximumSize(QtCore.QSize(530, 430))
+        self.scaAdvogados.setWidgetResizable(True)
+        self.scaAdvogados.setObjectName("scaAdvogados")
+        self.scaAdvWidgets = QtWidgets.QWidget()
+        self.scaAdvWidgets.setGeometry(QtCore.QRect(0, 0, 528, 428))
+        self.scaAdvWidgets.setObjectName("scaAdvWidgets")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.scaAdvWidgets)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.vlAdv = QtWidgets.QVBoxLayout()
+        self.vlAdv.setObjectName("vlAdv")
+        self.verticalLayout_3.addLayout(self.vlAdv)
+        self.scaAdvogados.setWidget(self.scaAdvWidgets)
+        self.pbBuscar = QtWidgets.QPushButton(self.wdgVinculado)
+        self.pbBuscar.setGeometry(QtCore.QRect(450, 20, 83, 25))
+        self.pbBuscar.setObjectName("pbBuscar")
+        self.stkPrimeiroAcesso.addWidget(self.wdgVinculado)
+        self.wdgDesvinculado = QtWidgets.QWidget()
+        self.wdgDesvinculado.setObjectName("wdgDesvinculado")
+        self.stkPrimeiroAcesso.addWidget(self.wdgDesvinculado)
+        self.horizontalLayout.addWidget(self.stkPrimeiroAcesso)
         self.horizontalLayout_2.addWidget(self.frMain)
         mwLogin.setCentralWidget(self.centralwidget)
 
@@ -159,12 +247,13 @@ class Ui_mwLogin(object):
         self.leLogin.setPlaceholderText(_translate("mwLogin", "Nº OAB ou E-mail"))
         self.leSenha.setPlaceholderText(_translate("mwLogin", "Senha"))
         self.lbEscritorio.setText(_translate("mwLogin", "Escritório:"))
-        self.lbNomeDoEscritorio.setText(_translate("mwLogin", "NewPrev associados"))
         self.pbEntrar.setText(_translate("mwLogin", "Entrar"))
         self.lbNLS.setText(_translate("mwLogin", "Não lembro minha senha"))
         self.lbInfoAcesso.setText(_translate("mwLogin", "Acesse a sua conta"))
         self.pbPrimeiroAcesso.setText(_translate("mwLogin", "Primeiro acesso"))
-import Resources.lgResources
+        self.lbCdEscritorio.setText(_translate("mwLogin", "Código do escritório:"))
+        self.pbBuscar.setText(_translate("mwLogin", "Buscar"))
+import Resources.loginResources
 
 
 if __name__ == "__main__":

@@ -10,3 +10,10 @@
 Daos/producao.db
 
 Daos/historicoLogs/
+/envCliente/
+
+.idea/
+
+cache/login.txt
+
+sync/syncFile

@@ -189,6 +189,9 @@
             <height>25</height>
            </rect>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
           <property name="placeholderText">
            <string>Nº OAB ou E-mail</string>
           </property>
@@ -201,6 +204,12 @@
             <width>181</width>
             <height>25</height>
            </rect>
+          </property>
+          <property name="echoMode">
+           <enum>QLineEdit::Password</enum>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>Senha</string>
@@ -284,6 +293,37 @@
            <string>Primeiro acesso</string>
           </property>
          </widget>
+         <widget class="QProgressBar" name="pbarLoading">
+          <property name="geometry">
+           <rect>
+            <x>40</x>
+            <y>480</y>
+            <width>311</width>
+            <height>10</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>10</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>10</height>
+           </size>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="textVisible">
+           <bool>false</bool>
+          </property>
+          <property name="format">
+           <string/>
+          </property>
+         </widget>
         </widget>
        </item>
        <item>
@@ -291,7 +331,7 @@
          <property name="styleSheet">
           <string notr="true">/*---------------------------------- Widgets ----------------------------------*/
 
-#wdgVinculado{
+#wdgVinculado, #wdgCadastrar{
 	border-top.left-radius: 0px;
 	border-top-right-radius: 8px;
 	border-bottom-left-radius: 0px;
@@ -316,6 +356,31 @@
 	color: rgb(238, 238, 236);
 }
 
+#lbInfoTitulo, #lbInfoNumDaOAB {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+
+	color: black;
+}
+
+#lbTitulo, #lbNumeroDaOAB {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 22px;
+
+	color: black;
+}
+
+#lbInfoConfirmarSenha, #lbInfoEmail,
+#lbInfoEstCivil, #lbInfoLogin,
+#lbInfoNacionalidade, #lbInfoNome, 
+#lbInfoSobrenome, #lbInfoSenha, 
+#lbInfoSenhaAtual {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+
+	color: rgb(238, 238, 236);
+}
+
 /*---------------------------------- ScrollArea ----------------------------------*/
 
 #scaAdvWidgets, #scaAdvogados{
@@ -324,7 +389,7 @@
 
 /*---------------------------------- Push Buttons ----------------------------------*/
 
-#pbBuscar {
+#pbBuscar, #pbCadastrar {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
@@ -333,7 +398,7 @@
 	background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(58, 171, 140, 255), stop:1 rgba(9, 212, 156, 255));
 }
 
-#pbBuscar:hover {
+#pbBuscar:hover, #pbCadastrar:hover {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
@@ -341,7 +406,33 @@
 	border-radius: 4px;
 	background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(9, 212, 156, 255), stop:1 rgba(58, 171, 140, 255));
 }
-</string>
+
+#pbCancelar {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: black;
+
+	border-radius: 4px;
+	background-color: qlineargradient(spread:pad, x1:0.47449, y1:0.988636, x2:0.48, y2:0.301, stop:0 rgba(255, 225, 225, 255), stop:1 rgba(255, 255, 255, 255));
+}
+
+#pbCancelar:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: black;
+
+	border-radius: 4px;
+	background-color: qlineargradient(spread:pad, x1:0.47449, y1:0.988636, x2:0.48, y2:0.301, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(255, 225, 225, 255));
+}
+
+/* ----------------------------- Frame -----------------------------*/
+#frInfo {
+	border-radius: 4px;
+	background-color: rgba(255, 255, 255, 245);
+}</string>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
          </property>
          <widget class="QWidget" name="wdgVinculado">
           <widget class="QLabel" name="lbCdEscritorio">
@@ -365,6 +456,9 @@
              <width>211</width>
              <height>25</height>
             </rect>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
           <widget class="QScrollArea" name="scaAdvogados">
@@ -428,6 +522,393 @@
           </widget>
          </widget>
          <widget class="QWidget" name="wdgDesvinculado"/>
+         <widget class="QWidget" name="wdgCadastrar">
+          <widget class="QLabel" name="lbTitulo">
+           <property name="geometry">
+            <rect>
+             <x>40</x>
+             <y>20</y>
+             <width>231</width>
+             <height>31</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Primeiro acesso</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="lbInfoTitulo">
+           <property name="geometry">
+            <rect>
+             <x>40</x>
+             <y>40</y>
+             <width>271</width>
+             <height>31</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Cadastre sua senha</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="lbInfoNome">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>155</y>
+             <width>64</width>
+             <height>17</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Nome:</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="lbInfoSobrenome">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>215</y>
+             <width>81</width>
+             <height>17</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Sobrenome:</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="lbInfoNacionalidade">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>275</y>
+             <width>111</width>
+             <height>17</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Nacionalidade:</string>
+           </property>
+          </widget>
+          <widget class="QLineEdit" name="leNome">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>170</y>
+             <width>201</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QLineEdit" name="leSobrenome">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>230</y>
+             <width>201</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QLineEdit" name="leNacionalidade">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>290</y>
+             <width>201</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="lbInfoNumDaOAB">
+           <property name="geometry">
+            <rect>
+             <x>360</x>
+             <y>26</y>
+             <width>121</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Número da OAB:</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="lbNumeroDaOAB">
+           <property name="geometry">
+            <rect>
+             <x>400</x>
+             <y>46</y>
+             <width>111</width>
+             <height>31</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+          <widget class="QLineEdit" name="lePrimCadLogin">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>110</y>
+             <width>201</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="lbInfoLogin">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>90</y>
+             <width>64</width>
+             <height>17</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Login:</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="lbInfoEstCivil">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>340</y>
+             <width>81</width>
+             <height>17</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Estado civil:</string>
+           </property>
+          </widget>
+          <widget class="QLineEdit" name="leEstadoCivil">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>355</y>
+             <width>201</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QLineEdit" name="lePrimCadSenha">
+           <property name="geometry">
+            <rect>
+             <x>410</x>
+             <y>190</y>
+             <width>113</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="maxLength">
+            <number>30</number>
+           </property>
+           <property name="echoMode">
+            <enum>QLineEdit::Password</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="lbInfoSenha">
+           <property name="geometry">
+            <rect>
+             <x>460</x>
+             <y>171</y>
+             <width>64</width>
+             <height>17</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Senha:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="lbInfoEmail">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>400</y>
+             <width>81</width>
+             <height>17</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>E-mail:</string>
+           </property>
+          </widget>
+          <widget class="QLineEdit" name="leEmail">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>416</y>
+             <width>201</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QLineEdit" name="leConfirmarSenha">
+           <property name="geometry">
+            <rect>
+             <x>410</x>
+             <y>270</y>
+             <width>113</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="maxLength">
+            <number>30</number>
+           </property>
+           <property name="echoMode">
+            <enum>QLineEdit::Password</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="lbInfoConfirmarSenha">
+           <property name="geometry">
+            <rect>
+             <x>440</x>
+             <y>234</y>
+             <width>81</width>
+             <height>41</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Confirmar 
+senha:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="pbCadastrar">
+           <property name="geometry">
+            <rect>
+             <x>440</x>
+             <y>374</y>
+             <width>83</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Cadastrar</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="pbCancelar">
+           <property name="geometry">
+            <rect>
+             <x>440</x>
+             <y>424</y>
+             <width>83</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Cancelar</string>
+           </property>
+          </widget>
+          <widget class="QLineEdit" name="leSenhaProvisoria">
+           <property name="geometry">
+            <rect>
+             <x>410</x>
+             <y>130</y>
+             <width>113</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="maxLength">
+            <number>30</number>
+           </property>
+           <property name="echoMode">
+            <enum>QLineEdit::Password</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="lbInfoSenhaAtual">
+           <property name="geometry">
+            <rect>
+             <x>440</x>
+             <y>100</y>
+             <width>81</width>
+             <height>31</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Senha 
+provisória:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QFrame" name="frInfo">
+           <property name="geometry">
+            <rect>
+             <x>29</x>
+             <y>10</y>
+             <width>491</width>
+             <height>71</height>
+            </rect>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+          </widget>
+          <zorder>frInfo</zorder>
+          <zorder>lbTitulo</zorder>
+          <zorder>lbInfoTitulo</zorder>
+          <zorder>lbInfoNome</zorder>
+          <zorder>lbInfoSobrenome</zorder>
+          <zorder>lbInfoNacionalidade</zorder>
+          <zorder>leNome</zorder>
+          <zorder>leSobrenome</zorder>
+          <zorder>leNacionalidade</zorder>
+          <zorder>lbInfoNumDaOAB</zorder>
+          <zorder>lbNumeroDaOAB</zorder>
+          <zorder>lePrimCadLogin</zorder>
+          <zorder>lbInfoLogin</zorder>
+          <zorder>lbInfoEstCivil</zorder>
+          <zorder>leEstadoCivil</zorder>
+          <zorder>lePrimCadSenha</zorder>
+          <zorder>lbInfoSenha</zorder>
+          <zorder>lbInfoEmail</zorder>
+          <zorder>leEmail</zorder>
+          <zorder>leConfirmarSenha</zorder>
+          <zorder>lbInfoConfirmarSenha</zorder>
+          <zorder>pbCadastrar</zorder>
+          <zorder>pbCancelar</zorder>
+          <zorder>leSenhaProvisoria</zorder>
+          <zorder>lbInfoSenhaAtual</zorder>
+         </widget>
         </widget>
        </item>
       </layout>

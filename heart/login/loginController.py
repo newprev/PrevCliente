@@ -7,12 +7,16 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 from Daos.daoConfiguracoes import DaoConfiguracoes
 from Daos.daoFerramentas import DaoFerramentas
+from cache.cachingLogin import CacheLogin
 from repositorios.clienteRepositorio import UsuarioRepository
+from repositorios.escritorioRepositorio import EscritorioRepositorio
 from repositorios.ferramentasRepositorio import ApiFerramentas
 from modelos.escritorioModelo import EscritorioModelo
+from modelos.advogadoModelo import AdvogadoModelo
 from Telas.loginPage import Ui_mwLogin
 from heart.login.wdgAdvController import WdgAdvController
 from heart.dashboard.dashboardController import DashboardController
+from newPrevEnums import TelaLogin
 import os
 import json
 
@@ -26,19 +30,32 @@ class LoginController(QMainWindow, Ui_mwLogin):
         super(LoginController, self).__init__()
         self.setupUi(self)
         self.db = db
+        # self.sinais = Sinais()
         self.usuarioRepositorio = UsuarioRepository()
+        self.escritorio: EscritorioModelo = None
+        self.advogado: AdvogadoModelo = None
+        self.escritorioRepositorio = EscritorioRepositorio()
+        self.tentativasSenha = 3
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.pbarLoading.hide()
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.escondeLoading)
 
         self.pbEntrar.clicked.connect(self.entrar)
         self.daoConfigs = DaoConfiguracoes(self.db)
         self.dashboard: DashboardController = None
-        # self.daoServidor = DaoServidor(db=db)
+        self.cacheLogin = CacheLogin()
 
-        self.stkPrimeiroAcesso.setCurrentIndex(1)
-        self.pbPrimeiroAcesso.clicked.connect(lambda: self.stkPrimeiroAcesso.setCurrentIndex(0))
-        self.pbBuscar.clicked.connect(self.buscaEmpresa)
+        self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.inicio.value)
+        self.pbPrimeiroAcesso.clicked.connect(self.iniciarPrimeiroAcesso)
+        self.pbBuscar.clicked.connect(self.buscaEscritorio)
+        self.pbCancelar.clicked.connect(self.cancelaCadastro)
+        self.pbCadastrar.clicked.connect(self.avaliaConfirmacaoCadastro)
+
+        self.iniciaCampos()
+        self.carregaCacheLogin()
 
         self.center()
 
@@ -49,10 +66,51 @@ class LoginController(QMainWindow, Ui_mwLogin):
         frameGm.moveCenter(centerPoint)
         self.move(frameGm.topLeft())
 
-    def buscaEmpresa(self):
+    def iniciarPrimeiroAcesso(self):
+        self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.buscaEscritorio.value)
+        self.leCdEscritorio.setFocus()
+
+    def carregaCacheLogin(self):
+        self.advogado = self.cacheLogin.carregarCache()
+        if self.advogado.numeroOAB is not None:
+            self.escritorio = self.escritorioRepositorio.buscaEscritorio(self.advogado.escritorioId)
+            self.lbNomeDoEscritorio.setText(self.escritorio.nomeFantasia)
+            self.leLogin.setText(self.advogado.numeroOAB)
+            self.leSenha.setText(self.advogado.senha)
+        else:
+            self.leLogin.setFocus()
+
+
+    def trocaPagina(self, *args):
+        advogado: AdvogadoModelo = args[0]
+        self.advogado = advogado
+        senhaProvisoria = self.usuarioRepositorio.buscaSenhaProvisoria(advogado.usuarioId)
+
+        if "erro" in senhaProvisoria.keys():
+            self.showPopupAlerta(f"Advogado(a) não encontrado(a). Favor acessar o cadastro do escritório ou o contratante do sistema.")
+            return False
+        else:
+            self.advogado.senha = senhaProvisoria['senha']
+
+        self.lePrimCadLogin.setText(advogado.login)
+        self.leNome.setText(advogado.nomeUsuario)
+        self.leSobrenome.setText(advogado.sobrenomeUsuario.strip())
+        self.leEmail.setText(advogado.email[0])
+        self.leNacionalidade.setText(advogado.nacionalidade)
+        self.leEstadoCivil.setText(advogado.estadoCivil)
+        self.lbNumeroDaOAB.setText(advogado.numeroOAB)
+        self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.cadastro.value)
+
+    def cancelaCadastro(self):
+        self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.inicio.value)
+        self.limpa()
+        self.limpaListaAdv()
+
+    def buscaEscritorio(self):
         nomeEscritorio = self.leCdEscritorio.text()
         if nomeEscritorio != '':
             escritorio: EscritorioModelo = self.usuarioRepositorio.buscaEscritorioPrimeiroAcesso(nomeEscritorio)
+            self.escritorio = escritorio
             if escritorio is not None and escritorio.nomeEscritorio == nomeEscritorio:
                 self.lbNomeDoEscritorio.setText(escritorio.nomeFantasia)
                 self.carregaAdvNaoCadastrados(escritorio.escritorioId)
@@ -61,14 +119,43 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.lbNomeDoEscritorio.setText('')
 
     def carregaAdvNaoCadastrados(self, escritorioId: int):
-        for i in reversed(range(self.vlAdv.count())):
-            self.vlAdv.itemAt(i).widget().setParent(None)
+        self.limpaListaAdv()
 
         listaAdvs = self.usuarioRepositorio.buscaAdvNaoCadastrados(escritorioId)
         listaWdgAdv = [WdgAdvController(adv, parent=self) for adv in listaAdvs]
 
         for adv in listaWdgAdv:
             self.vlAdv.addWidget(adv)
+
+    def avaliaConfirmacaoCadastro(self):
+
+        if self.leSenhaProvisoria.text() != self.advogado.senha:
+            self.tentativasSenha -= 1
+            self.showPopupAlerta(f"Senha provisória diferente da cadastrada. Tente novamente. \nTentativas faltantes: {self.tentativasSenha}")
+            if self.tentativasSenha == 0:
+                self.close()
+        elif self.lePrimCadSenha.text() != self.leConfirmarSenha.text():
+            self.showPopupAlerta(f"Senhas não coincidem. Tente novamente.")
+        else:
+            self.loading(20)
+            senhaConfirmada = self.usuarioRepositorio.atualizaSenha(self.advogado.usuarioId, self.leConfirmarSenha.text())
+            self.loading(20)
+            if 'statusCode' not in senhaConfirmada.keys():
+                self.loading(10)
+                self.advogado.senha = senhaConfirmada['senha']
+                self.loading(10)
+                self.leLogin.setText(self.advogado.numeroOAB)
+                self.loading(10)
+                self.leSenha.setText(self.advogado.senha)
+                self.loading(10)
+                self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.inicio.value)
+                self.loading(10)
+                self.cacheLogin.salvarCache(self.advogado)
+                self.loading(10)
+            else:
+                self.loading(100)
+                self.showPopupAlerta(f"Não foi possível confirmar o cadastro. Tente novamente.")
+
 
     def entrar(self):
         if ApiFerramentas().conexaoOnline():
@@ -142,6 +229,44 @@ class LoginController(QMainWindow, Ui_mwLogin):
         dialogPopup.setStandardButtons(QMessageBox.Ok)
 
         close = dialogPopup.exec_()
+
+    def iniciaCampos(self):
+        self.lePrimCadLogin.setReadOnly(True)
+        self.leNome.setReadOnly(True)
+        self.leSobrenome.setReadOnly(True)
+        self.leNacionalidade.setReadOnly(True)
+        self.leEstadoCivil.setReadOnly(True)
+        self.leEmail.setReadOnly(True)
+
+    def loading(self, value: int):
+        self.pbarLoading.show()
+        valor: int = value + self.pbarLoading.value()
+        self.pbarLoading.setValue(valor)
+
+        if valor >= 100:
+            self.timer.start(500)
+
+    def escondeLoading(self):
+        self.pbarLoading.hide()
+        self.pbarLoading.setValue(0)
+        self.timer.stop()
+
+    def limpa(self):
+        self.leNome.clear()
+        self.leSobrenome.clear()
+        self.leEmail.clear()
+        self.lePrimCadSenha.clear()
+        self.leSenhaProvisoria.clear()
+        self.leNacionalidade.clear()
+        self.leEstadoCivil.clear()
+        self.leSenha.clear()
+        self.leCdEscritorio.clear()
+
+        self.limpaListaAdv()
+
+    def limpaListaAdv(self):
+        for i in reversed(range(self.vlAdv.count())):
+            self.vlAdv.itemAt(i).widget().setParent(None)
 
     def getDB(self):
 

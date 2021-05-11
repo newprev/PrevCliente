@@ -8,6 +8,7 @@ class AdvogadoModelo:
         self.usuarioId: int = None
         self.nomeUsuario: str = None
         self.login: str = None
+        self.senha: str = None
         self.email: str = None
         self.numeroOAB: str = None
         self.sobrenomeUsuario: str = None
@@ -24,6 +25,7 @@ class AdvogadoModelo:
             'usuarioId': self.usuarioId,
             'nomeUsuario': self.nomeUsuario,
             'login': self.login,
+            'senha': self.senha,
             'email': self.email,
             'sobrenomeUsuario': self.sobrenomeUsuario,
             'nacionalidade': self.nacionalidade,
@@ -35,12 +37,15 @@ class AdvogadoModelo:
         }
         return dictUsuario
 
-    def fromDict(self, dictUsuario):
+    def fromDict(self, dictUsuario: dict):
         self.escritorioId = dictUsuario['escritorioId']
         if dictUsuario['usuarioId'] is list or dictUsuario['usuarioId'] is tuple:
             self.usuarioId = dictUsuario['usuarioId'][0]
         else:
             self.usuarioId = dictUsuario['usuarioId']
+
+        if 'senha' in dictUsuario.keys():
+            self.senha = dictUsuario['senha']
 
         self.nomeUsuario = dictUsuario['nomeUsuario']
         self.login = dictUsuario['login']
@@ -64,6 +69,7 @@ class AdvogadoModelo:
                 self.usuarioId = listUsuario[0]
                 self.nomeUsuario = listUsuario[1]
                 self.login = listUsuario[4]
+                self.senha = listUsuario[5]
                 self.email = listUsuario[6]
                 self.sobrenomeUsuario = listUsuario[7]
                 self.nacionalidade = listUsuario[8]

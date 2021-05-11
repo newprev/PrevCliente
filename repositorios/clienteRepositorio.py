@@ -28,7 +28,7 @@ class UsuarioRepository:
                 return None
 
     def buscaAdvNaoCadastrados(self, escritorioId) -> list:
-        url: str = self.baseUrl + f'escritorio/{escritorioId}/advogado?confirmado=false'
+        url: str = self.baseUrl + f'escritorio/{escritorioId}/advogado?confirmado=false&ordering=login'
 
         response = http.get(url)
 
@@ -43,3 +43,34 @@ class UsuarioRepository:
             logPrioridade(f"API____________________GET<escritorio/<escritorioId>/advogado/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
             return []
 
+    def buscaSenhaProvisoria(self, usuarioId: int) -> dict:
+        url: str = self.baseUrl + f'advogados/{usuarioId}/confirmacao/'
+
+        response = http.get(url)
+
+        if 199 < response.status_code < 400:
+            advogadoSenha: dict = response.json()
+
+            logPrioridade(f"API____________________GET<advogado/<int:id>/confirmacao>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
+            return advogadoSenha
+        else:
+            logPrioridade(f"API____________________GET<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+            return {"erro": response.json()}
+
+    def atualizaSenha(self, advogadoId: int, senha: str) -> dict:
+        url: str = self.baseUrl + f'advogados/{advogadoId}/confirmacao/'
+
+        obj: dict = {
+            "senha": senha,
+            "confirmado": True
+        }
+        response = http.patch(url, data=obj)
+
+        if 199 < response.status_code < 400:
+            senha = response.json()
+
+            logPrioridade(f"API____________________PATCH<advogado/<int:id>/confirmacao>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
+            return senha
+        else:
+            logPrioridade(f"API____________________PATCH<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+            return {"statusCode": response.status_code}

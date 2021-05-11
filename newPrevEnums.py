@@ -32,3 +32,8 @@ class TipoEdicao(Enum):
     createTable = 5
     api = 6
     erro = 7
+
+class TelaLogin(Enum):
+    inicio = 1
+    buscaEscritorio = 0
+    cadastro = 2

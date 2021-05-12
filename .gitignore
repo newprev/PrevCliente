@@ -17,3 +17,5 @@ Daos/historicoLogs/
 cache/login.txt
 
 sync/syncFile
+
+cache/.login.txt

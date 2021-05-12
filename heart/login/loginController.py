@@ -53,6 +53,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.pbBuscar.clicked.connect(self.buscaEscritorio)
         self.pbCancelar.clicked.connect(self.cancelaCadastro)
         self.pbCadastrar.clicked.connect(self.avaliaConfirmacaoCadastro)
+        self.pbFechar.clicked.connect(lambda: self.close())
 
         self.iniciaCampos()
         self.carregaCacheLogin()
@@ -156,15 +157,20 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.showPopupAlerta(f"Não foi possível confirmar o cadastro. Tente novamente.")
 
     def entrar(self):
-        if ApiFerramentas().conexaoOnline():
-            self.verificaRotinaDiaria()
-        else:
-            self.showPopupAlerta('Sem conexão com o servidor.')
-            sys.exit()
+        autenticado = self.usuarioRepositorio.loginAuth(self.advogado)
 
-        self.dashboard = DashboardController(db=self.db)
-        self.dashboard.show()
-        self.close()
+        if autenticado:
+            if ApiFerramentas().conexaoOnline():
+                self.verificaRotinaDiaria()
+            else:
+                self.showPopupAlerta('Sem conexão com o servidor.')
+                sys.exit()
+
+            self.dashboard = DashboardController(db=self.db)
+            self.dashboard.show()
+            self.close()
+        else:
+            self.showPopupAlerta(f"Usuário {self.advogado.nomeUsuario} não confirmado. \nFavor confirmar senha clicando em 'Primeiro acesso'.")
 
     def verificaRotinaDiaria(self):
 

@@ -21,10 +21,10 @@ class UsuarioRepository:
             escritorioJson = response.json()
             if len(escritorioJson) == 1:
                 escritorio = EscritorioModelo().fromDict(escritorioJson[0])
-                logPrioridade(f"API____________________GET<escritorio/>:::{url+busca}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
+                logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<escritorio/>:::{url+busca}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
                 return escritorio
             else:
-                logPrioridade(f"API____________________GET<escritorio/Erro>:::{url+busca}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+                logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<escritorio/Erro>:::{url+busca}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
                 return None
 
     def buscaAdvNaoCadastrados(self, escritorioId) -> list:
@@ -37,10 +37,10 @@ class UsuarioRepository:
 
             listaObjAdv = [AdvogadoModelo().fromDict(adv) for adv in listaAdvogadosJson]
 
-            logPrioridade(f"API____________________GET<escritorio/<escritorioId>/advogado:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
+            logPrioridade(f"API => buscaAdvNaoCadastrados ____________________GET<escritorio/<escritorioId>/advogado:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
             return listaObjAdv
         else:
-            logPrioridade(f"API____________________GET<escritorio/<escritorioId>/advogado/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+            logPrioridade(f"API => buscaAdvNaoCadastrados ____________________GET<escritorio/<escritorioId>/advogado/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
             return []
 
     def buscaSenhaProvisoria(self, usuarioId: int) -> dict:
@@ -51,10 +51,28 @@ class UsuarioRepository:
         if 199 < response.status_code < 400:
             advogadoSenha: dict = response.json()
 
-            logPrioridade(f"API____________________GET<advogado/<int:id>/confirmacao>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
+            logPrioridade(f"API => buscaSenhaProvisoria ____________________GET<advogado/<int:id>/confirmacao>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
             return advogadoSenha
         else:
-            logPrioridade(f"API____________________GET<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+            logPrioridade(f"API => buscaSenhaProvisoria GET<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+            return {"erro": response.json()}
+
+    def buscaSenhaDefinitiva(self, usuarioId: int) -> dict:
+        url: str = self.baseUrl + f'advogados/{usuarioId}/confirmacao/'
+
+        response = http.get(url)
+
+        if 199 < response.status_code < 400:
+            advogadoSenha: dict = response.json()
+
+            if advogadoSenha['confirmado']:
+                logPrioridade(f"API => buscaSenhaDefinitiva ____________________GET<advogado/<int:id>/confirmacao>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
+                return advogadoSenha
+            else:
+                logPrioridade(f"API => buscaSenhaDefinitiva GET<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+                return {"erro": response.json()}
+        else:
+            logPrioridade(f"API => buscaSenhaDefinitiva GET<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
             return {"erro": response.json()}
 
     def atualizaSenha(self, advogadoId: int, senha: str) -> dict:
@@ -69,25 +87,36 @@ class UsuarioRepository:
         if 199 < response.status_code < 400:
             senha = response.json()
 
-            logPrioridade(f"API____________________PATCH<advogado/<int:id>/confirmacao>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
+            logPrioridade(f"API => atualizaSenha ____________________PATCH<advogado/<int:id>/confirmacao>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
             return senha
         else:
-            logPrioridade(f"API____________________PATCH<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+            logPrioridade(f"API => atualizaSenha ____________________PATCH<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
             return {"statusCode": response.status_code}
 
-    # def loginAuth(self, advogadoALogar: AdvogadoModelo):
-    #     url: str = self.baseUrl + f'advogados/{advogadoALogar.usuarioId}/'
-    #     advogadoCadastrado: AdvogadoModelo = AdvogadoModelo()
-    #
-    #     response = http.get(url)
-    #
-    #     if 199 < response.status_code < 400:
-    #         advogadoCadastrado.fromDict(response.json(), retornaInst=False)
-    #
-    #         logPrioridade(f"API____________________GET<advogados/<int:id>/>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
-    #         return senha
-    #     else:
-    #         logPrioridade(f"API____________________GET<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
-    #         return {"statusCode": response.status_code}
+    def loginAuth(self, advogadoALogar: AdvogadoModelo):
+        url: str = self.baseUrl + f'advogados/{advogadoALogar.usuarioId}/'
+        advogadoCadastrado: AdvogadoModelo = AdvogadoModelo()
+
+        response = http.get(url)
+
+        if 199 < response.status_code < 400:
+            advogadoCadastrado.fromDict(response.json(), retornaInst=False)
+
+            senhaResponse: dict = self.buscaSenhaDefinitiva(advogadoALogar.usuarioId)
+
+            if 'erro' in senhaResponse.keys():
+                logPrioridade(f"API => loginAuth ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+                return False
+            else:
+                advogadoCadastrado.senha = senhaResponse['senha']
+
+                if advogadoCadastrado == advogadoALogar and advogadoCadastrado.confirmado:
+                    logPrioridade(f"API => loginAuth ____________________GET<advogados/<int:id>>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
+                    return True
+                else:
+                    return False
+        else:
+            logPrioridade(f"API => loginAuth ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+            return False
 
 

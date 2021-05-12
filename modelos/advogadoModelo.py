@@ -98,7 +98,7 @@ class AdvogadoModelo:
             ativo: {self.ativo}"""
 
     def __eq__(self, other):
-        instVariavel: bool = isinstance(self, other)
+        instVariavel: bool = isinstance(self, type(other))
         if not instVariavel:
             return False
 

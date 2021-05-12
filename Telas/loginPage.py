@@ -17,7 +17,7 @@ class Ui_mwLogin(object):
         mwLogin.resize(950, 500)
         mwLogin.setMinimumSize(QtCore.QSize(950, 500))
         mwLogin.setMaximumSize(QtCore.QSize(950, 500))
-        mwLogin.setStyleSheet("#mwLogin, #centralwidget {\n"
+        mwLogin.setStyleSheet("#mwLogin, #centralwidget, #stkPrimeiroAcesso {\n"
 "    border-radius: 8px;\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(mwLogin)
@@ -51,7 +51,7 @@ class Ui_mwLogin(object):
 "\n"
 "#lbNomeDoEscritorio, #lbInfoAcesso{\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
+"    font-size: 18px;\n"
 "}\n"
 "\n"
 "#lbEscritorio {\n"
@@ -109,7 +109,8 @@ class Ui_mwLogin(object):
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.frLeft = QtWidgets.QFrame(self.frMain)
-        self.frLeft.setMaximumSize(QtCore.QSize(400, 16777215))
+        self.frLeft.setMinimumSize(QtCore.QSize(400, 0))
+        self.frLeft.setMaximumSize(QtCore.QSize(488, 16777215))
         self.frLeft.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frLeft.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frLeft.setObjectName("frLeft")
@@ -118,38 +119,310 @@ class Ui_mwLogin(object):
         self.lbLogin.setObjectName("lbLogin")
         self.leLogin = QtWidgets.QLineEdit(self.frLeft)
         self.leLogin.setGeometry(QtCore.QRect(100, 170, 181, 25))
+        self.leLogin.setAlignment(QtCore.Qt.AlignCenter)
         self.leLogin.setObjectName("leLogin")
         self.leSenha = QtWidgets.QLineEdit(self.frLeft)
         self.leSenha.setGeometry(QtCore.QRect(100, 210, 181, 25))
+        self.leSenha.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.leSenha.setAlignment(QtCore.Qt.AlignCenter)
         self.leSenha.setObjectName("leSenha")
         self.lbEscritorio = QtWidgets.QLabel(self.frLeft)
         self.lbEscritorio.setGeometry(QtCore.QRect(10, 10, 71, 31))
         self.lbEscritorio.setObjectName("lbEscritorio")
         self.lbNomeDoEscritorio = QtWidgets.QLabel(self.frLeft)
         self.lbNomeDoEscritorio.setGeometry(QtCore.QRect(90, 10, 301, 31))
+        self.lbNomeDoEscritorio.setText("")
         self.lbNomeDoEscritorio.setObjectName("lbNomeDoEscritorio")
         self.pbEntrar = QtWidgets.QPushButton(self.frLeft)
-        self.pbEntrar.setGeometry(QtCore.QRect(102, 270, 181, 25))
+        self.pbEntrar.setGeometry(QtCore.QRect(102, 300, 181, 25))
         self.pbEntrar.setObjectName("pbEntrar")
         self.lbNLS = QtWidgets.QLabel(self.frLeft)
-        self.lbNLS.setGeometry(QtCore.QRect(100, 300, 171, 17))
+        self.lbNLS.setGeometry(QtCore.QRect(100, 240, 171, 17))
         self.lbNLS.setObjectName("lbNLS")
         self.lbInfoAcesso = QtWidgets.QLabel(self.frLeft)
-        self.lbInfoAcesso.setGeometry(QtCore.QRect(120, 130, 141, 17))
+        self.lbInfoAcesso.setGeometry(QtCore.QRect(100, 132, 181, 17))
         self.lbInfoAcesso.setObjectName("lbInfoAcesso")
         self.pbPrimeiroAcesso = QtWidgets.QPushButton(self.frLeft)
         self.pbPrimeiroAcesso.setGeometry(QtCore.QRect(100, 340, 181, 25))
         self.pbPrimeiroAcesso.setObjectName("pbPrimeiroAcesso")
+        self.pbarLoading = QtWidgets.QProgressBar(self.frLeft)
+        self.pbarLoading.setGeometry(QtCore.QRect(40, 480, 311, 10))
+        self.pbarLoading.setMinimumSize(QtCore.QSize(0, 10))
+        self.pbarLoading.setMaximumSize(QtCore.QSize(16777215, 10))
+        self.pbarLoading.setProperty("value", 0)
+        self.pbarLoading.setTextVisible(False)
+        self.pbarLoading.setFormat("")
+        self.pbarLoading.setObjectName("pbarLoading")
         self.horizontalLayout.addWidget(self.frLeft)
-        self.frRight = QtWidgets.QFrame(self.frMain)
-        self.frRight.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frRight.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frRight.setObjectName("frRight")
-        self.horizontalLayout.addWidget(self.frRight)
+        self.stkPrimeiroAcesso = QtWidgets.QStackedWidget(self.frMain)
+        self.stkPrimeiroAcesso.setStyleSheet("/*---------------------------------- Widgets ----------------------------------*/\n"
+"\n"
+"#wdgVinculado, #wdgCadastrar{\n"
+"    border-top.left-radius: 0px;\n"
+"    border-top-right-radius: 8px;\n"
+"    border-bottom-left-radius: 0px;\n"
+"    border-bottom-right-radius: 8px;\n"
+"    background-color: rgb(33, 76, 121);\n"
+"}\n"
+"\n"
+"#wdgDesvinculado {\n"
+"    border-top.left-radius: 0px;\n"
+"    border-top-right-radius: 8px;\n"
+"    border-bottom-left-radius: 0px;\n"
+"    border-bottom-right-radius: 8px;\n"
+"    border-image: url(:/Logo/LogoLogin.png);\n"
+"}\n"
+"\n"
+"/*---------------------------------- Labels ----------------------------------*/\n"
+"\n"
+"#lbCdEscritorio {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 16px;\n"
+"\n"
+"    color: rgb(238, 238, 236);\n"
+"}\n"
+"\n"
+"#lbInfoTitulo, #lbInfoNumDaOAB {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"#lbTitulo, #lbNumeroDaOAB {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 22px;\n"
+"\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"#lbInfoConfirmarSenha, #lbInfoEmail,\n"
+"#lbInfoEstCivil, #lbInfoLogin,\n"
+"#lbInfoNacionalidade, #lbInfoNome, \n"
+"#lbInfoSobrenome, #lbInfoSenha, \n"
+"#lbInfoSenhaAtual {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"\n"
+"    color: rgb(238, 238, 236);\n"
+"}\n"
+"\n"
+"/*---------------------------------- ScrollArea ----------------------------------*/\n"
+"\n"
+"#scaAdvWidgets, #scaAdvogados{\n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"/*---------------------------------- Push Buttons ----------------------------------*/\n"
+"\n"
+"#pbBuscar, #pbCadastrar {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(58, 171, 140, 255), stop:1 rgba(9, 212, 156, 255));\n"
+"}\n"
+"\n"
+"#pbBuscar:hover, #pbCadastrar:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(9, 212, 156, 255), stop:1 rgba(58, 171, 140, 255));\n"
+"}\n"
+"\n"
+"#pbCancelar {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: black;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: qlineargradient(spread:pad, x1:0.47449, y1:0.988636, x2:0.48, y2:0.301, stop:0 rgba(255, 225, 225, 255), stop:1 rgba(255, 255, 255, 255));\n"
+"}\n"
+"\n"
+"#pbCancelar:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: black;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: qlineargradient(spread:pad, x1:0.47449, y1:0.988636, x2:0.48, y2:0.301, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(255, 225, 225, 255));\n"
+"}\n"
+"\n"
+"/* ----------------------------- Frame -----------------------------*/\n"
+"#frInfo {\n"
+"    border-radius: 4px;\n"
+"    background-color: rgba(255, 255, 255, 245);\n"
+"}")
+        self.stkPrimeiroAcesso.setObjectName("stkPrimeiroAcesso")
+        self.wdgVinculado = QtWidgets.QWidget()
+        self.wdgVinculado.setObjectName("wdgVinculado")
+        self.lbCdEscritorio = QtWidgets.QLabel(self.wdgVinculado)
+        self.lbCdEscritorio.setGeometry(QtCore.QRect(30, 20, 171, 21))
+        self.lbCdEscritorio.setObjectName("lbCdEscritorio")
+        self.leCdEscritorio = QtWidgets.QLineEdit(self.wdgVinculado)
+        self.leCdEscritorio.setGeometry(QtCore.QRect(220, 20, 211, 25))
+        self.leCdEscritorio.setAlignment(QtCore.Qt.AlignCenter)
+        self.leCdEscritorio.setObjectName("leCdEscritorio")
+        self.scaAdvogados = QtWidgets.QScrollArea(self.wdgVinculado)
+        self.scaAdvogados.setGeometry(QtCore.QRect(10, 60, 530, 430))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scaAdvogados.sizePolicy().hasHeightForWidth())
+        self.scaAdvogados.setSizePolicy(sizePolicy)
+        self.scaAdvogados.setMinimumSize(QtCore.QSize(530, 430))
+        self.scaAdvogados.setMaximumSize(QtCore.QSize(530, 430))
+        self.scaAdvogados.setWidgetResizable(True)
+        self.scaAdvogados.setObjectName("scaAdvogados")
+        self.scaAdvWidgets = QtWidgets.QWidget()
+        self.scaAdvWidgets.setGeometry(QtCore.QRect(0, 0, 528, 428))
+        self.scaAdvWidgets.setObjectName("scaAdvWidgets")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.scaAdvWidgets)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.vlAdv = QtWidgets.QVBoxLayout()
+        self.vlAdv.setObjectName("vlAdv")
+        self.verticalLayout_3.addLayout(self.vlAdv)
+        self.scaAdvogados.setWidget(self.scaAdvWidgets)
+        self.pbBuscar = QtWidgets.QPushButton(self.wdgVinculado)
+        self.pbBuscar.setGeometry(QtCore.QRect(450, 20, 83, 25))
+        self.pbBuscar.setObjectName("pbBuscar")
+        self.stkPrimeiroAcesso.addWidget(self.wdgVinculado)
+        self.wdgDesvinculado = QtWidgets.QWidget()
+        self.wdgDesvinculado.setObjectName("wdgDesvinculado")
+        self.stkPrimeiroAcesso.addWidget(self.wdgDesvinculado)
+        self.wdgCadastrar = QtWidgets.QWidget()
+        self.wdgCadastrar.setObjectName("wdgCadastrar")
+        self.lbTitulo = QtWidgets.QLabel(self.wdgCadastrar)
+        self.lbTitulo.setGeometry(QtCore.QRect(40, 20, 231, 31))
+        self.lbTitulo.setObjectName("lbTitulo")
+        self.lbInfoTitulo = QtWidgets.QLabel(self.wdgCadastrar)
+        self.lbInfoTitulo.setGeometry(QtCore.QRect(40, 40, 271, 31))
+        self.lbInfoTitulo.setObjectName("lbInfoTitulo")
+        self.lbInfoNome = QtWidgets.QLabel(self.wdgCadastrar)
+        self.lbInfoNome.setGeometry(QtCore.QRect(30, 155, 64, 17))
+        self.lbInfoNome.setObjectName("lbInfoNome")
+        self.lbInfoSobrenome = QtWidgets.QLabel(self.wdgCadastrar)
+        self.lbInfoSobrenome.setGeometry(QtCore.QRect(30, 215, 81, 17))
+        self.lbInfoSobrenome.setObjectName("lbInfoSobrenome")
+        self.lbInfoNacionalidade = QtWidgets.QLabel(self.wdgCadastrar)
+        self.lbInfoNacionalidade.setGeometry(QtCore.QRect(30, 275, 111, 17))
+        self.lbInfoNacionalidade.setObjectName("lbInfoNacionalidade")
+        self.leNome = QtWidgets.QLineEdit(self.wdgCadastrar)
+        self.leNome.setGeometry(QtCore.QRect(30, 170, 201, 25))
+        self.leNome.setAlignment(QtCore.Qt.AlignCenter)
+        self.leNome.setObjectName("leNome")
+        self.leSobrenome = QtWidgets.QLineEdit(self.wdgCadastrar)
+        self.leSobrenome.setGeometry(QtCore.QRect(30, 230, 201, 25))
+        self.leSobrenome.setAlignment(QtCore.Qt.AlignCenter)
+        self.leSobrenome.setObjectName("leSobrenome")
+        self.leNacionalidade = QtWidgets.QLineEdit(self.wdgCadastrar)
+        self.leNacionalidade.setGeometry(QtCore.QRect(30, 290, 201, 25))
+        self.leNacionalidade.setAlignment(QtCore.Qt.AlignCenter)
+        self.leNacionalidade.setObjectName("leNacionalidade")
+        self.lbInfoNumDaOAB = QtWidgets.QLabel(self.wdgCadastrar)
+        self.lbInfoNumDaOAB.setGeometry(QtCore.QRect(360, 26, 121, 21))
+        self.lbInfoNumDaOAB.setObjectName("lbInfoNumDaOAB")
+        self.lbNumeroDaOAB = QtWidgets.QLabel(self.wdgCadastrar)
+        self.lbNumeroDaOAB.setGeometry(QtCore.QRect(400, 46, 111, 31))
+        self.lbNumeroDaOAB.setObjectName("lbNumeroDaOAB")
+        self.lePrimCadLogin = QtWidgets.QLineEdit(self.wdgCadastrar)
+        self.lePrimCadLogin.setGeometry(QtCore.QRect(30, 110, 201, 25))
+        self.lePrimCadLogin.setText("")
+        self.lePrimCadLogin.setAlignment(QtCore.Qt.AlignCenter)
+        self.lePrimCadLogin.setObjectName("lePrimCadLogin")
+        self.lbInfoLogin = QtWidgets.QLabel(self.wdgCadastrar)
+        self.lbInfoLogin.setGeometry(QtCore.QRect(30, 90, 64, 17))
+        self.lbInfoLogin.setObjectName("lbInfoLogin")
+        self.lbInfoEstCivil = QtWidgets.QLabel(self.wdgCadastrar)
+        self.lbInfoEstCivil.setGeometry(QtCore.QRect(30, 340, 81, 17))
+        self.lbInfoEstCivil.setObjectName("lbInfoEstCivil")
+        self.leEstadoCivil = QtWidgets.QLineEdit(self.wdgCadastrar)
+        self.leEstadoCivil.setGeometry(QtCore.QRect(30, 355, 201, 25))
+        self.leEstadoCivil.setAlignment(QtCore.Qt.AlignCenter)
+        self.leEstadoCivil.setObjectName("leEstadoCivil")
+        self.lePrimCadSenha = QtWidgets.QLineEdit(self.wdgCadastrar)
+        self.lePrimCadSenha.setGeometry(QtCore.QRect(410, 190, 113, 25))
+        self.lePrimCadSenha.setMaxLength(30)
+        self.lePrimCadSenha.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.lePrimCadSenha.setAlignment(QtCore.Qt.AlignCenter)
+        self.lePrimCadSenha.setObjectName("lePrimCadSenha")
+        self.lbInfoSenha = QtWidgets.QLabel(self.wdgCadastrar)
+        self.lbInfoSenha.setGeometry(QtCore.QRect(460, 171, 64, 17))
+        self.lbInfoSenha.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbInfoSenha.setObjectName("lbInfoSenha")
+        self.lbInfoEmail = QtWidgets.QLabel(self.wdgCadastrar)
+        self.lbInfoEmail.setGeometry(QtCore.QRect(30, 400, 81, 17))
+        self.lbInfoEmail.setObjectName("lbInfoEmail")
+        self.leEmail = QtWidgets.QLineEdit(self.wdgCadastrar)
+        self.leEmail.setGeometry(QtCore.QRect(30, 416, 201, 25))
+        self.leEmail.setAlignment(QtCore.Qt.AlignCenter)
+        self.leEmail.setObjectName("leEmail")
+        self.leConfirmarSenha = QtWidgets.QLineEdit(self.wdgCadastrar)
+        self.leConfirmarSenha.setGeometry(QtCore.QRect(410, 270, 113, 25))
+        self.leConfirmarSenha.setMaxLength(30)
+        self.leConfirmarSenha.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.leConfirmarSenha.setAlignment(QtCore.Qt.AlignCenter)
+        self.leConfirmarSenha.setObjectName("leConfirmarSenha")
+        self.lbInfoConfirmarSenha = QtWidgets.QLabel(self.wdgCadastrar)
+        self.lbInfoConfirmarSenha.setGeometry(QtCore.QRect(440, 234, 81, 41))
+        self.lbInfoConfirmarSenha.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbInfoConfirmarSenha.setObjectName("lbInfoConfirmarSenha")
+        self.pbCadastrar = QtWidgets.QPushButton(self.wdgCadastrar)
+        self.pbCadastrar.setGeometry(QtCore.QRect(440, 374, 83, 25))
+        self.pbCadastrar.setObjectName("pbCadastrar")
+        self.pbCancelar = QtWidgets.QPushButton(self.wdgCadastrar)
+        self.pbCancelar.setGeometry(QtCore.QRect(440, 424, 83, 25))
+        self.pbCancelar.setObjectName("pbCancelar")
+        self.leSenhaProvisoria = QtWidgets.QLineEdit(self.wdgCadastrar)
+        self.leSenhaProvisoria.setGeometry(QtCore.QRect(410, 130, 113, 25))
+        self.leSenhaProvisoria.setMaxLength(30)
+        self.leSenhaProvisoria.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.leSenhaProvisoria.setAlignment(QtCore.Qt.AlignCenter)
+        self.leSenhaProvisoria.setObjectName("leSenhaProvisoria")
+        self.lbInfoSenhaAtual = QtWidgets.QLabel(self.wdgCadastrar)
+        self.lbInfoSenhaAtual.setGeometry(QtCore.QRect(440, 100, 81, 31))
+        self.lbInfoSenhaAtual.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbInfoSenhaAtual.setObjectName("lbInfoSenhaAtual")
+        self.frInfo = QtWidgets.QFrame(self.wdgCadastrar)
+        self.frInfo.setGeometry(QtCore.QRect(29, 10, 491, 71))
+        self.frInfo.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frInfo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfo.setObjectName("frInfo")
+        self.frInfo.raise_()
+        self.lbTitulo.raise_()
+        self.lbInfoTitulo.raise_()
+        self.lbInfoNome.raise_()
+        self.lbInfoSobrenome.raise_()
+        self.lbInfoNacionalidade.raise_()
+        self.leNome.raise_()
+        self.leSobrenome.raise_()
+        self.leNacionalidade.raise_()
+        self.lbInfoNumDaOAB.raise_()
+        self.lbNumeroDaOAB.raise_()
+        self.lePrimCadLogin.raise_()
+        self.lbInfoLogin.raise_()
+        self.lbInfoEstCivil.raise_()
+        self.leEstadoCivil.raise_()
+        self.lePrimCadSenha.raise_()
+        self.lbInfoSenha.raise_()
+        self.lbInfoEmail.raise_()
+        self.leEmail.raise_()
+        self.leConfirmarSenha.raise_()
+        self.lbInfoConfirmarSenha.raise_()
+        self.pbCadastrar.raise_()
+        self.pbCancelar.raise_()
+        self.leSenhaProvisoria.raise_()
+        self.lbInfoSenhaAtual.raise_()
+        self.stkPrimeiroAcesso.addWidget(self.wdgCadastrar)
+        self.horizontalLayout.addWidget(self.stkPrimeiroAcesso)
         self.horizontalLayout_2.addWidget(self.frMain)
         mwLogin.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(mwLogin)
+        self.stkPrimeiroAcesso.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(mwLogin)
 
     def retranslateUi(self, mwLogin):
@@ -159,12 +432,30 @@ class Ui_mwLogin(object):
         self.leLogin.setPlaceholderText(_translate("mwLogin", "Nº OAB ou E-mail"))
         self.leSenha.setPlaceholderText(_translate("mwLogin", "Senha"))
         self.lbEscritorio.setText(_translate("mwLogin", "Escritório:"))
-        self.lbNomeDoEscritorio.setText(_translate("mwLogin", "NewPrev associados"))
         self.pbEntrar.setText(_translate("mwLogin", "Entrar"))
         self.lbNLS.setText(_translate("mwLogin", "Não lembro minha senha"))
         self.lbInfoAcesso.setText(_translate("mwLogin", "Acesse a sua conta"))
         self.pbPrimeiroAcesso.setText(_translate("mwLogin", "Primeiro acesso"))
-import Resources.lgResources
+        self.lbCdEscritorio.setText(_translate("mwLogin", "Código do escritório:"))
+        self.pbBuscar.setText(_translate("mwLogin", "Buscar"))
+        self.lbTitulo.setText(_translate("mwLogin", "Primeiro acesso"))
+        self.lbInfoTitulo.setText(_translate("mwLogin", "Cadastre sua senha"))
+        self.lbInfoNome.setText(_translate("mwLogin", "Nome:"))
+        self.lbInfoSobrenome.setText(_translate("mwLogin", "Sobrenome:"))
+        self.lbInfoNacionalidade.setText(_translate("mwLogin", "Nacionalidade:"))
+        self.lbInfoNumDaOAB.setText(_translate("mwLogin", "Número da OAB:"))
+        self.lbNumeroDaOAB.setText(_translate("mwLogin", "TextLabel"))
+        self.lbInfoLogin.setText(_translate("mwLogin", "Login:"))
+        self.lbInfoEstCivil.setText(_translate("mwLogin", "Estado civil:"))
+        self.lbInfoSenha.setText(_translate("mwLogin", "Senha:"))
+        self.lbInfoEmail.setText(_translate("mwLogin", "E-mail:"))
+        self.lbInfoConfirmarSenha.setText(_translate("mwLogin", "Confirmar \n"
+"senha:"))
+        self.pbCadastrar.setText(_translate("mwLogin", "Cadastrar"))
+        self.pbCancelar.setText(_translate("mwLogin", "Cancelar"))
+        self.lbInfoSenhaAtual.setText(_translate("mwLogin", "Senha \n"
+"provisória:"))
+import Resources.loginResources
 
 
 if __name__ == "__main__":

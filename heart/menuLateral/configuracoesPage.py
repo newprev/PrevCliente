@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QDate
 
-from Daos.daoFerramentas import DaoInfoImportante
+from Daos.daoFerramentas import DaoFerramentas
 from helpers import meses, strToFloat, strToDatetime, mascaraDinheiro, dinheiroToFloat, mascaraDataPequena
 import datetime as dt
 from heart.localStyleSheet.configuracoes import desabilitaPB
@@ -27,7 +27,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         self.tetoPrev = TetosPrevModelo()
 
         self.tblTetos.hideColumn(0)
-        self.daoInfoImportante = DaoInfoImportante(db=db)
+        self.daoFerramentas = DaoFerramentas(db=db)
 
         self.dashboard = parent
         self.db = db
@@ -121,8 +121,8 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
             dataTeto['valor'].append(self.dictTetos['Valor'][index])
 
         if len(dataTeto['data']) == len(dataTeto['valor']):
-            self.daoInfoImportante.deletarTabela()
-            self.daoInfoImportante.insereListaTetos(dataTeto)
+            self.daoFerramentas.deletarTabela()
+            self.daoFerramentas.insereDictListaTetos(dataTeto)
             self.atualizaTbl()
         else:
             print('Erro')
@@ -130,7 +130,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
     def atualizaTbl(self, tetos:list = None):
 
         if tetos is None:
-            listaTetos = self.daoInfoImportante.getAllTetos()
+            listaTetos = self.daoFerramentas.getAllTetos()
             tetos = [TetosPrevModelo().fromList(teto, retornaInst=True) for teto in listaTetos]
         elif tetos[0] is not TetosPrevModelo:
             return False
@@ -231,9 +231,9 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
 
     def trataEfetiva(self):
         if self.editando:
-            self.daoInfoImportante.atualizaTeto(self.tetoPrev)
+            self.daoFerramentas.atualizaTeto(self.tetoPrev)
         elif self.inserindo:
-            self.daoInfoImportante.insereTeto(self.tetoPrev.toDict())
+            self.daoFerramentas.insereTeto(self.tetoPrev.toDict())
 
         self.limpaTudo()
         self.atualizaTbl()
@@ -280,7 +280,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         self.leValor.clear()
 
     def excluiTeto(self):
-        self.daoInfoImportante.deletaTetoById(self.tetoPrev.tetosPrevId)
+        self.daoFerramentas.deletaTetoById(self.tetoPrev.tetosPrevId)
         self.tetoPrev = TetosPrevModelo()
         self.atualizaTbl()
         self.limpaTudo()

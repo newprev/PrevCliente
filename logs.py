@@ -2,24 +2,9 @@ from enum import Enum
 from colorama import Fore, init, Back, deinit
 import os
 from datetime import datetime
+from newPrevEnums import *
 
 from helpers import datetimeToSql
-
-
-class Prioridade(Enum):
-    saidaComun = 200
-    saidaImportante = 300
-    sync = 400
-
-class TipoEdicao(Enum):
-    select = 0
-    insert = 1
-    delete = 2
-    update = 3
-    dropTable = 4
-    createTable = 5
-    api = 6
-    erro = 7
 
 
 def logPrioridade(mensagem: str, tipoEdicao: TipoEdicao = TipoEdicao.select, priodiade: Prioridade = Prioridade.saidaComun):
@@ -45,7 +30,7 @@ def logPrioridade(mensagem: str, tipoEdicao: TipoEdicao = TipoEdicao.select, pri
         corDoFundo = Back.YELLOW
         corDaFonte = Fore.LIGHTWHITE_EX
     elif priodiade == Prioridade.sync:
-        corDoFundo = Back.GREEN
+        corDoFundo = Back.RESET
         corDaFonte = Fore.LIGHTWHITE_EX
 
     with open(path, mode='a', encoding='utf-8') as log:

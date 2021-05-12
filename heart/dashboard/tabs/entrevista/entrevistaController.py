@@ -13,7 +13,8 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.setupUi(self)
         self.tipoConexao = TiposConexoes.nuvem
         self.dbConnection = ConfigConnection(instanciaBanco=self.tipoConexao)
-        self.db = self.dbConnection.getDatabase()
+        # self.db = self.dbConnection.getDatabase()
+        self.db = db
 
         self.clienteController = TabCliente(db=self.db, entrevista=True)
 

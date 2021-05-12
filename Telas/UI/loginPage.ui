@@ -123,6 +123,12 @@
 
 	border-radius: 4px;
 	background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(81, 103, 200, 255), stop:1 rgba(29, 182, 232, 255));
+}
+
+/*---------------------------------- Label --------------------------------------*/
+#cbSalvarSenha {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
 }</string>
       </property>
       <property name="frameShape">
@@ -322,6 +328,19 @@
           </property>
           <property name="format">
            <string/>
+          </property>
+         </widget>
+         <widget class="QCheckBox" name="cbSalvarSenha">
+          <property name="geometry">
+           <rect>
+            <x>100</x>
+            <y>260</y>
+            <width>111</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Salvar senha</string>
           </property>
          </widget>
         </widget>

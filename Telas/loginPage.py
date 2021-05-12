@@ -100,6 +100,12 @@ class Ui_mwLogin(object):
 "\n"
 "    border-radius: 4px;\n"
 "    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(81, 103, 200, 255), stop:1 rgba(29, 182, 232, 255));\n"
+"}\n"
+"\n"
+"/*---------------------------------- Label --------------------------------------*/\n"
+"#cbSalvarSenha {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
 "}")
         self.frMain.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frMain.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -153,6 +159,9 @@ class Ui_mwLogin(object):
         self.pbarLoading.setTextVisible(False)
         self.pbarLoading.setFormat("")
         self.pbarLoading.setObjectName("pbarLoading")
+        self.cbSalvarSenha = QtWidgets.QCheckBox(self.frLeft)
+        self.cbSalvarSenha.setGeometry(QtCore.QRect(100, 260, 111, 23))
+        self.cbSalvarSenha.setObjectName("cbSalvarSenha")
         self.horizontalLayout.addWidget(self.frLeft)
         self.stkPrimeiroAcesso = QtWidgets.QStackedWidget(self.frMain)
         self.stkPrimeiroAcesso.setStyleSheet("/*---------------------------------- Widgets ----------------------------------*/\n"
@@ -436,6 +445,7 @@ class Ui_mwLogin(object):
         self.lbNLS.setText(_translate("mwLogin", "Não lembro minha senha"))
         self.lbInfoAcesso.setText(_translate("mwLogin", "Acesse a sua conta"))
         self.pbPrimeiroAcesso.setText(_translate("mwLogin", "Primeiro acesso"))
+        self.cbSalvarSenha.setText(_translate("mwLogin", "Salvar senha"))
         self.lbCdEscritorio.setText(_translate("mwLogin", "Código do escritório:"))
         self.pbBuscar.setText(_translate("mwLogin", "Buscar"))
         self.lbTitulo.setText(_translate("mwLogin", "Primeiro acesso"))

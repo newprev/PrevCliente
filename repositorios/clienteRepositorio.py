@@ -74,3 +74,20 @@ class UsuarioRepository:
         else:
             logPrioridade(f"API____________________PATCH<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
             return {"statusCode": response.status_code}
+
+    # def loginAuth(self, advogadoALogar: AdvogadoModelo):
+    #     url: str = self.baseUrl + f'advogados/{advogadoALogar.usuarioId}/'
+    #     advogadoCadastrado: AdvogadoModelo = AdvogadoModelo()
+    #
+    #     response = http.get(url)
+    #
+    #     if 199 < response.status_code < 400:
+    #         advogadoCadastrado.fromDict(response.json(), retornaInst=False)
+    #
+    #         logPrioridade(f"API____________________GET<advogados/<int:id>/>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
+    #         return senha
+    #     else:
+    #         logPrioridade(f"API____________________GET<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+    #         return {"statusCode": response.status_code}
+
+

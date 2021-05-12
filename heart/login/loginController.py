@@ -80,7 +80,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
         else:
             self.leLogin.setFocus()
 
-
     def trocaPagina(self, *args):
         advogado: AdvogadoModelo = args[0]
         self.advogado = advogado
@@ -155,7 +154,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
             else:
                 self.loading(100)
                 self.showPopupAlerta(f"Não foi possível confirmar o cadastro. Tente novamente.")
-
 
     def entrar(self):
         if ApiFerramentas().conexaoOnline():

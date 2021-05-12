@@ -37,7 +37,7 @@ class AdvogadoModelo:
         }
         return dictUsuario
 
-    def fromDict(self, dictUsuario: dict):
+    def fromDict(self, dictUsuario: dict, retornaInst: bool = True):
         self.escritorioId = dictUsuario['escritorioId']
         if dictUsuario['usuarioId'] is list or dictUsuario['usuarioId'] is tuple:
             self.usuarioId = dictUsuario['usuarioId'][0]
@@ -58,7 +58,8 @@ class AdvogadoModelo:
         self.admin = dictUsuario['admin']
         self.confirmado = dictUsuario['confirmado']
         self.ativo = dictUsuario['ativo']
-        return self
+        if retornaInst:
+            return self
 
     def fromList(self, listUsuario: list, retornaInst: bool = False):
         if listUsuario is None:
@@ -95,3 +96,13 @@ class AdvogadoModelo:
             admin: {self.admin},
             confirmado: {self.confirmado},
             ativo: {self.ativo}"""
+
+    def __eq__(self, other):
+        instVariavel: bool = isinstance(self, other)
+        if not instVariavel:
+            return False
+
+        senhaAuth: bool = self.senha == other.senha
+        loginAuth: bool = self.login == other.login
+
+        return senhaAuth and loginAuth

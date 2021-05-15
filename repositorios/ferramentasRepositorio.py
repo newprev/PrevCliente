@@ -16,10 +16,10 @@ class ApiFerramentas:
 
         if 199 < response.status_code < 400:
             listaTetos = [TetosPrevModelo().fromDict(teto) for teto in response.json()]
-            logPrioridade(f"API____________________GET<tetosPrev/>::::{url}", TipoEdicao.api, Prioridade.sync)
+            logPrioridade(f"API(Sync)____________________GET<tetosPrev/>::::{url}", TipoEdicao.api, Prioridade.sync)
             return listaTetos
         else:
-            logPrioridade(f"API____________________GET<tetosPrev/ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
+            logPrioridade(f"API(Sync)____________________GET<tetosPrev/ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
             return []
 
     def getAllTetosConvMon(self, id: int = None) -> list:
@@ -28,10 +28,10 @@ class ApiFerramentas:
 
         if 199 < response.status_code < 400:
             listaTetos = [ConvMonModelo().fromDict(convMon) for convMon in response.json()]
-            logPrioridade(f"API____________________GET<convMon/>::::{url}", TipoEdicao.api, Prioridade.sync)
+            logPrioridade(f"API(Sync)____________________GET<convMon/>::::{url}", TipoEdicao.api, Prioridade.sync)
             return listaTetos
         else:
-            logPrioridade(f"API____________________GET<ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
+            logPrioridade(f"API(Sync)____________________GET<ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
             return []
 
     def conexaoOnline(self) -> bool:

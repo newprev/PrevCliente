@@ -1,7 +1,0 @@
-{
-  "host": "mysql01-farm36.kinghost.net",
-  "user": "newprev",
-  "passwd": "NewPrev2021",
-  "banco": "NewPrev_Cli",
-  "port": "3306"
-}

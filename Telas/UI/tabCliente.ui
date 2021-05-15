@@ -1192,25 +1192,6 @@ CNIS</string>
            <string>Nome da mãe</string>
           </property>
          </widget>
-         <widget class="QLineEdit" name="leCdCliente">
-          <property name="geometry">
-           <rect>
-            <x>260</x>
-            <y>10</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="maxLength">
-           <number>6</number>
-          </property>
-          <property name="placeholderText">
-           <string>Ex: 453</string>
-          </property>
-          <property name="clearButtonEnabled">
-           <bool>false</bool>
-          </property>
-         </widget>
          <widget class="QLabel" name="lbCdCliente">
           <property name="geometry">
            <rect>

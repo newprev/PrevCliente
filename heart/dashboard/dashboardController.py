@@ -1,3 +1,4 @@
+from PyQt5 import QtGui
 from PyQt5.QtWidgets import QMainWindow, QHBoxLayout
 
 from Telas.dashboard import Ui_mwDashBoard
@@ -8,6 +9,7 @@ from heart.dashboard.tabs.tabCalculos import TabCalculos
 from heart.menuLateral.ferramentasPage import FerramentasPage
 from heart.dashboard.tabs.entrevista.entrevistaController import EntrevistaController
 from heart.sinaisCustomizados import Sinais
+from cache.cachingLogin import CacheLogin
 
 from newPrevEnums import TelaPosicao
 
@@ -21,6 +23,7 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.db = db
         self.sinais = Sinais()
         self.parent = parent
+        self.cacheLogin = CacheLogin()
 
         self.funcCliente = CardFuncionalidade(tipo='cliente', parent=self)
         self.funcEntrevista = CardFuncionalidade(tipo='Entrevista', parent=self)
@@ -61,3 +64,6 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
             EntrevistaController(parent=self, db=self.db).show()
         else:
             self.stkMainDashBoard.setCurrentIndex(tela)
+
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        self.cacheLogin.limpaTemporarios()

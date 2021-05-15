@@ -2,7 +2,7 @@ import datetime
 import sys
 
 import pymysql
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 from Daos.daoConfiguracoes import DaoConfiguracoes
@@ -16,7 +16,7 @@ from modelos.advogadoModelo import AdvogadoModelo
 from Telas.loginPage import Ui_mwLogin
 from heart.login.wdgAdvController import WdgAdvController
 from heart.dashboard.dashboardController import DashboardController
-from newPrevEnums import TelaLogin
+from newPrevEnums import *
 import os
 import json
 
@@ -33,9 +33,10 @@ class LoginController(QMainWindow, Ui_mwLogin):
         # self.sinais = Sinais()
         self.usuarioRepositorio = UsuarioRepository()
         self.escritorio: EscritorioModelo = None
-        self.advogado: AdvogadoModelo = None
+        self.advogado: AdvogadoModelo = AdvogadoModelo()
         self.escritorioRepositorio = EscritorioRepositorio()
         self.tentativasSenha = 3
+        self.edittingFinished = True
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -43,7 +44,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.escondeLoading)
 
-        self.pbEntrar.clicked.connect(self.entrar)
         self.daoConfigs = DaoConfiguracoes(self.db)
         self.dashboard: DashboardController = None
         self.cacheLogin = CacheLogin()
@@ -53,7 +53,9 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.pbBuscar.clicked.connect(self.buscaEscritorio)
         self.pbCancelar.clicked.connect(self.cancelaCadastro)
         self.pbCadastrar.clicked.connect(self.avaliaConfirmacaoCadastro)
-        self.pbFechar.clicked.connect(lambda: self.close())
+        self.pbFechar.clicked.connect(self.close)
+        self.pbEntrar.clicked.connect(self.entrar)
+        # self.leSenha.editingFinished.connect(self.resolveBugEntrar)
 
         self.iniciaCampos()
         self.carregaCacheLogin()
@@ -67,6 +69,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
         frameGm.moveCenter(centerPoint)
         self.move(frameGm.topLeft())
 
+    def resolveBugEntrar(self):
+        if self.edittingFinished:
+            self.edittingFinished = not self.edittingFinished
+            self.entrar()
+
     def iniciarPrimeiroAcesso(self):
         self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.buscaEscritorio.value)
         self.leCdEscritorio.setFocus()
@@ -75,16 +82,21 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.advogado = self.cacheLogin.carregarCache()
         if self.advogado.numeroOAB is not None:
             self.escritorio = self.escritorioRepositorio.buscaEscritorio(self.advogado.escritorioId)
+            if isinstance(self.escritorio, ErroConexao):
+                self.apresentandoErros(self.escritorio)
+                return False
             self.lbNomeDoEscritorio.setText(self.escritorio.nomeFantasia)
             self.leLogin.setText(self.advogado.numeroOAB)
             self.leSenha.setText(self.advogado.senha)
+            self.cbSalvarSenha.setChecked(True)
         else:
+            self.advogado = AdvogadoModelo()
             self.leLogin.setFocus()
 
     def trocaPagina(self, *args):
         advogado: AdvogadoModelo = args[0]
         self.advogado = advogado
-        senhaProvisoria = self.usuarioRepositorio.buscaSenhaProvisoria(advogado.usuarioId)
+        senhaProvisoria = self.usuarioRepositorio.buscaSenhaProvisoria(advogado.advogadoId)
 
         if "erro" in senhaProvisoria.keys():
             self.showPopupAlerta(f"Advogado(a) não encontrado(a). Favor acessar o cadastro do escritório ou o contratante do sistema.")
@@ -138,11 +150,13 @@ class LoginController(QMainWindow, Ui_mwLogin):
             self.showPopupAlerta(f"Senhas não coincidem. Tente novamente.")
         else:
             self.loading(20)
-            senhaConfirmada = self.usuarioRepositorio.atualizaSenha(self.advogado.usuarioId, self.leConfirmarSenha.text())
-            self.loading(20)
+            senhaConfirmada = self.usuarioRepositorio.atualizaSenha(self.advogado.advogadoId, self.leConfirmarSenha.text())
+            self.loading(10)
             if 'statusCode' not in senhaConfirmada.keys():
                 self.loading(10)
                 self.advogado.senha = senhaConfirmada['senha']
+                self.loading(10)
+                self.advogado.confirmado = True
                 self.loading(10)
                 self.leLogin.setText(self.advogado.numeroOAB)
                 self.loading(10)
@@ -157,20 +171,73 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.showPopupAlerta(f"Não foi possível confirmar o cadastro. Tente novamente.")
 
     def entrar(self):
-        autenticado = self.usuarioRepositorio.loginAuth(self.advogado)
 
-        if autenticado:
-            if ApiFerramentas().conexaoOnline():
-                self.verificaRotinaDiaria()
+        self.loading(20)
+        if self.advogado is not None and self.advogado.escritorioId is not None:
+            self.loading(10)
+            autenticado = self.usuarioRepositorio.loginAuthFromCache(self.advogado)
+            self.loading(30)
+
+            if autenticado:
+                self.loading(10)
+                if ApiFerramentas().conexaoOnline():
+                    self.loading(10)
+                    self.verificaRotinaDiaria()
+                    self.loading(20)
+                else:
+                    self.showPopupAlerta('Sem conexão com o servidor.')
+                    sys.exit()
+
+                self.dashboard = DashboardController(db=self.db)
+                self.dashboard.show()
+                self.close()
             else:
-                self.showPopupAlerta('Sem conexão com o servidor.')
-                sys.exit()
-
-            self.dashboard = DashboardController(db=self.db)
-            self.dashboard.show()
-            self.close()
+                self.showPopupAlerta(f"Usuário {self.advogado.nomeUsuario} não confirmado. \nFavor confirmar senha clicando em 'Primeiro acesso'.")
         else:
-            self.showPopupAlerta(f"Usuário {self.advogado.nomeUsuario} não confirmado. \nFavor confirmar senha clicando em 'Primeiro acesso'.")
+            self.loading(10)
+            self.advogado = self.procuraAdvogado()
+            self.loading(10)
+            if self.advogado is None:
+                self.loading(10)
+                self.tentativasSenha -= 1
+                self.showPopupAlerta(f'Usuário não encontrado. Tente novamente. \nNúmero de tentativas faltantes {self.tentativasSenha}')
+                self.advogado = AdvogadoModelo()
+                self.loading(100)
+                self.limpa()
+                if self.tentativasSenha == 0:
+                    self.close()
+            else:
+                self.loading(10)
+                if self.cbSalvarSenha.isChecked():
+                    self.loading(10)
+                    self.verificaRotinaDiaria()
+                    self.loading(20)
+                    self.dashboard = DashboardController(db=self.db)
+                    self.loading(20)
+                    self.dashboard.show()
+                    self.close()
+                    self.cacheLogin.salvarCache(self.advogado)
+                else:
+                    self.loading(10)
+                    self.cacheLogin.salvarCacheTemporario(self.advogado)
+                    self.loading(10)
+                    self.dashboard = DashboardController(db=self.db)
+                    self.loading(30)
+                    self.dashboard.show()
+                    self.close()
+        self.edittingFinished = True
+
+
+    def procuraAdvogado(self) -> AdvogadoModelo:
+        senha = self.leSenha.text()
+
+        if self.leLogin.text().isdecimal():
+            numeroOAB = self.leLogin.text()
+            return self.usuarioRepositorio.loginAuth(senha, numeroOAB=numeroOAB)
+        else:
+            email = self.leLogin.text()
+            return self.usuarioRepositorio.loginAuth(senha, email=email)
+
 
     def verificaRotinaDiaria(self):
 
@@ -281,3 +348,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
             db=self.config.banco,
             port=self.config.port
         )
+
+    def apresentandoErros(self, tipoErro):
+        if isinstance(tipoErro, ErroConexao):
+            if tipoErro == ErroConexao.ConnectionError:
+                self.showPopupAlerta('Não há conexão com a internet ou com o servidor. \nVerifique se há acesso à internet.')

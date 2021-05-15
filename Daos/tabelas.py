@@ -5,6 +5,8 @@ class TabelasConfig:
 
     def __init__(self, tipoBanco: TiposConexoes = TiposConexoes.local):
 
+        self.__tblAdvogados = 'advogados'
+        self.__tblEscritorios = 'escritorios'
         self.__tblCliente = 'cliente'
         self.__tblCnisRemuneracoes = 'cnisRemuneracoes'
         self.__tblCnisBeneficios = 'cnisBeneficios'
@@ -16,6 +18,68 @@ class TabelasConfig:
         self.__tblConvMon = 'convMon'
         self.tipoBanco = tipoBanco
 
+
+    # Comando SQL para criar tabela de advogados
+    @property
+    def sqlCreateAdvogados(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'advogadoId INT AUTO_INCREMENT,'
+            bottom = """,
+            PRIMARY KEY (advogadoId)
+        );"""
+        else:
+            cabecalho = 'advogadoId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
+        CREATE TABLE IF NOT EXISTS {self.tblAdvogados}(
+            {cabecalho}
+            escritorioId INTEGER REFERENCES {self.tblEscritorios}(escritorioId) ON DELETE CASCADE,
+            nomeUsuario VARCHAR(20) NOT NULL,
+            sobrenomeUsuario VARCHAR(40) NOT NULL,
+            login VARCHAR(30) NOT NULL,
+            senha VARCHAR(30) NOT NULL,
+            email VARCHAR(40) NOT NULL,
+            numeroOAB VARCHAR(9) NOT NULL,
+            nacionalidade VARCHAR(40) NOT NULL,
+            estadoCivil VARCHAR(20) NOT NULL,
+            admin BOOLEAN NOT NULL,
+            ativo BOOLEAN NOT NULL,
+            confirmado BOOLEAN NOT NULL,
+            dataCadastro DATETIME NOT NULL,
+            dataUltAlt DATETIME NOT NULL{bottom}
+        """
+
+    # Comando SQL para criar tabela de escritorios
+    @property
+    def sqlCreateEscritorios(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'escritorioId INT AUTO_INCREMENT,'
+            bottom = """,
+            PRIMARY KEY (escritorioId)
+        );"""
+        else:
+            cabecalho = 'escritorioId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
+        CREATE TABLE IF NOT EXISTS {self.tblEscritorios}(
+            {cabecalho}
+            nomeEscritorio VARCHAR(50) NOT NULL,
+            nomeFantasia VARCHAR(50) NOT NULL,
+            cnpj VARCHAR(14) NULL,
+            cpf VARCHAR(11) NOT NULL,
+            telefone VARCHAR(11) NULL,
+            email VARCHAR(60) NOT NULL,
+            inscEstadual VARCHAR(9) NULL,
+            endereco VARCHAR(80) NULL,
+            numero INT NOT NULL,
+            cep VARCHAR(8) NULL,
+            complemento VARCHAR(50) NOT NULL,
+            cidade VARCHAR(30) NULL,
+            estado VARCHAR(2) NOT NULL,
+            bairro VARCHAR(50) NULL,
+            dataCadastro DATETIME NOT NULL,
+            dataUltAlt DATETIME NOT NULL{bottom}
+        """
 
     # Comando SQL para criar tabela de clientes
     @property
@@ -31,6 +95,7 @@ class TabelasConfig:
         return f"""
         CREATE TABLE IF NOT EXISTS {self.tblCliente}(
             {cabecalho}
+            advogadoId INTEGER REFERENCES {self.tblAdvogados}(advogadoId) ON DELETE CASCADE,
             nomeCliente VARCHAR(20) NOT NULL,
             sobrenomeCliente VARCHAR(30) NOT NULL,
             idade INT NOT NULL,
@@ -71,7 +136,7 @@ class TabelasConfig:
         return f"""
         CREATE TABLE IF NOT EXISTS {self.tblCnisRemuneracoes}(
             {cabecalho}
-            clienteId INT NOT NULL,
+            clienteId INTEGER REFERENCES {self.tblCliente}(clienteId) ON DELETE CASCADE,
             seq INT NOT NULL,
             competencia DATETIME NOT NULL,
             remuneracao FLOAT NOT NULL,
@@ -95,7 +160,7 @@ class TabelasConfig:
         return f"""
         CREATE TABLE IF NOT EXISTS {self.tblCnisContribuicoes}(
             {cabecalho}
-            clienteId INT NOT NULL,
+            clienteId INTEGER REFERENCES {self.tblCliente}(clienteId) ON DELETE CASCADE,
             seq INT NOT NULL,
             competencia DATETIME NOT NULL,
             dataPagamento DATETIME NOT NULL,
@@ -121,7 +186,7 @@ class TabelasConfig:
         return f"""
         CREATE TABLE IF NOT EXISTS {self.tblCnisBeneficios}(
             {cabecalho}
-            clienteId INT NOT NULL,
+            clienteId INTEGER REFERENCES {self.tblCliente}(clienteId) ON DELETE CASCADE,
             seq INT NOT NULL,
             nb BIGINT NOT NULL,
             especie VARCHAR(45) NOT NULL,
@@ -147,7 +212,7 @@ class TabelasConfig:
         return f"""
         CREATE TABLE IF NOT EXISTS {self.tblCnisCabecalhos}(
             {cabecalho}
-            clienteId INT NOT NULL,
+            clienteId INTEGER REFERENCES {self.tblCliente}(clienteId) ON DELETE CASCADE,
             seq INT NOT NULL,
             nit VARCHAR(14) NOT NULL,
             cdEmp VARCHAR(18) NOT NULL,
@@ -240,6 +305,14 @@ class TabelasConfig:
             dataUltAlt DATETIME NOT NULL,
             dataCadastro DATETIME NOT NULL{bottom}
         """
+
+    @property
+    def tblEscritorios(self):
+        return self.__tblEscritorios
+
+    @property
+    def tblAdvogados(self):
+        return self.__tblAdvogados
 
     @property
     def tblCliente(self):

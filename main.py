@@ -57,67 +57,79 @@ class Main(Ui_MainWindow, QMainWindow):
 
         tabelas = TabelasConfig(tipoBanco=self.tipoConexao)
 
+        self.lbInfo.setText('CRIANDO TABELA DOS ADVOGADOS...')
+        if self.daoConfigs.criaTabela(tabelas.sqlCreateAdvogados, nomeTabela='advogados'):
+            self.progresso(add=8)
+        else:
+            return False
+
+        self.lbInfo.setText('CRIANDO TABELA DOS ESCRITORIOS...')
+        if self.daoConfigs.criaTabela(tabelas.sqlCreateEscritorios, nomeTabela='escritorios'):
+            self.progresso(add=8)
+        else:
+            return False
+
         self.lbInfo.setText('CRIANDO TABELA DO CLIENTE...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCliente, nomeTabela='cliente'):
-            self.progresso(add=10)
+            self.progresso(add=8)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE REMUNERAÇÕES...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisRemuneracoes, nomeTabela='cnisRemuneracoes'):
-            self.progresso(add=10)
+            self.progresso(add=8)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE CONTRIBUIÇÕES...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisContribuicoes, nomeTabela='cnisContribuicoes'):
-            self.progresso(add=10)
+            self.progresso(add=8)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE BENEFÍCIOS...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisBeneficios, nomeTabela='cnisBeneficios'):
-            self.progresso(add=10)
+            self.progresso(add=8)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE CABEÇALHOS...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisCabecalhos, nomeTabela='cnisCabecalhos'):
-            self.progresso(add=10)
+            self.progresso(add=8)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE ESPÉCIES DE BENEFÍCIOS...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateEspecieBenef, nomeTabela='especieBenef'):
-            self.progresso(add=5)
+            self.progresso(add=2)
             self.daoConfigs.verificaTblEspecieBenef()
-            self.progresso(add=10)
+            self.progresso(add=8)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE INDICADORES...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateIndicadores, nomeTabela='indicadores'):
-            self.progresso(add=5)
+            self.progresso(add=2)
             self.daoConfigs.verificaTblIndicadores()
-            self.progresso(add=10)
+            self.progresso(add=8)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE TETOS PREVIDENCIÁRIOS...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateTetosPrev, nomeTabela='tetosPrev'):
-            self.progresso(add=10)
+            self.progresso(add=8)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE CONVERSÕES MONETÁRIAS...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateConvMon, nomeTabela='convMon'):
-            self.progresso(add=10)
+            self.progresso(add=8)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TELA DE LOGIN...')
         self.loginPage = LoginController(db=self.db)
-        self.progresso(add=10)
+        self.progresso(add=8)
 
         self.iniciaNewPrev()
 

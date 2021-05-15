@@ -5,7 +5,7 @@ class AdvogadoModelo:
 
     def __init__(self):
         self.escritorioId: int = None
-        self.usuarioId: int = None
+        self.advogadoId: int = None
         self.nomeUsuario: str = None
         self.login: str = None
         self.senha: str = None
@@ -22,7 +22,7 @@ class AdvogadoModelo:
     def toDict(self):
         dictUsuario = {
             'escritorioId': self.escritorioId,
-            'usuarioId': self.usuarioId,
+            'advogadoId': self.advogadoId,
             'nomeUsuario': self.nomeUsuario,
             'login': self.login,
             'senha': self.senha,
@@ -39,10 +39,10 @@ class AdvogadoModelo:
 
     def fromDict(self, dictUsuario: dict, retornaInst: bool = True):
         self.escritorioId = dictUsuario['escritorioId']
-        if dictUsuario['usuarioId'] is list or dictUsuario['usuarioId'] is tuple:
-            self.usuarioId = dictUsuario['usuarioId'][0]
+        if dictUsuario['advogadoId'] is list or dictUsuario['advogadoId'] is tuple:
+            self.advogadoId = dictUsuario['advogadoId'][0]
         else:
-            self.usuarioId = dictUsuario['usuarioId']
+            self.advogadoId = dictUsuario['advogadoId']
 
         if 'senha' in dictUsuario.keys():
             self.senha = dictUsuario['senha']
@@ -58,6 +58,7 @@ class AdvogadoModelo:
         self.admin = dictUsuario['admin']
         self.confirmado = dictUsuario['confirmado']
         self.ativo = dictUsuario['ativo']
+
         if retornaInst:
             return self
 
@@ -67,7 +68,7 @@ class AdvogadoModelo:
         else:
             if len(listUsuario) != 0:
                 self.escritorioId = listUsuario[0]
-                self.usuarioId = listUsuario[0]
+                self.advogadoId = listUsuario[0]
                 self.nomeUsuario = listUsuario[1]
                 self.login = listUsuario[4]
                 self.senha = listUsuario[5]
@@ -85,9 +86,10 @@ class AdvogadoModelo:
     def __repr__(self):
         return f"""Usuario(
             escritorioId: {self.escritorioId},
-            usuarioId: {self.usuarioId},
+            advogadoId: {self.advogadoId},
             nomeUsuario: {self.nomeUsuario},
             login: {self.login},
+            senha: {self.senha},
             sobrenomeUsuario: {self.sobrenomeUsuario},
             nacionalidade: {self.nacionalidade},
             email: {self.email},
@@ -106,3 +108,6 @@ class AdvogadoModelo:
         loginAuth: bool = self.login == other.login
 
         return senhaAuth and loginAuth
+
+    def __bool__(self):
+        return self.login is not None and self.nomeUsuario is not None

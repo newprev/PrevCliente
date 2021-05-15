@@ -1,18 +1,28 @@
 import sqlite3
+from sqlite3 import OperationalError
 from datetime import datetime
 
 from Daos.tabelas import TabelasConfig
 from helpers import datetimeToSql, mascaraDataSql
 from logs import logPrioridade, TipoEdicao, Prioridade
 from modelos.clienteModelo import ClienteModelo
+from modelos.advogadoModelo import AdvogadoModelo
+from cache.cachingLogin import CacheLogin
 from pymysql import connections, cursors
 
 
 class DaoCliente:
 
-    def __init__(self, db: connections = None):
+    def __init__(self, db: connections = None, advogado: AdvogadoModelo = None):
         self.db = db
         self.config = TabelasConfig()
+        self.loginCache = CacheLogin()
+        if advogado is None:
+            self.advogado = self.loginCache.carregarCache()
+            if self.advogado.numeroOAB is None:
+                self.advogado = self.loginCache.carregarCacheTemporario()
+        else:
+            self.advogado = advogado
 
     def atualizaCliente(self, cliente: ClienteModelo):
 
@@ -47,6 +57,7 @@ class DaoCliente:
                     dataUltAlt = '{datetimeToSql(datetime.now())}'
                 WHERE
                     clienteId = {cliente.clienteId}
+                AND advogadoId = {self.advogado.advogadoId}
                 """
         try:
             cursor.execute(strComando)
@@ -69,25 +80,25 @@ class DaoCliente:
         strComando = f"""
             INSERT INTO {self.config.tblCliente} 
             (
-                nomeCliente, sobrenomeCliente, idade, 
-                dataNascimento, telefone, email, 
-                rgCliente, cpfCliente, numCarteiraProf, 
-                nit, nomeMae, estadoCivil, 
-                profissao, endereco, numero, 
-                estado, cidade, bairro, 
-                cep, complemento, dataCadastro, 
-                dataUltAlt
+                advogadoId, nomeCliente, sobrenomeCliente, 
+                idade, dataNascimento, telefone, 
+                email, rgCliente, cpfCliente, 
+                numCarteiraProf, nit, nomeMae, 
+                estadoCivil, profissao, endereco, 
+                numero, estado, cidade, 
+                bairro, cep, complemento, 
+                dataCadastro, dataUltAlt
             )
             VALUES
             (
-                '{cliente.nomeCliente}', '{cliente.sobrenomeCliente}', {cliente.idade}, 
-                '{cliente.dataNascimento}', '{cliente.telefone}', '{cliente.email}', 
-                '{cliente.rgCliente}', '{cliente.cpfCliente}', '{cliente.numCartProf}', 
-                '{cliente.nit}', '{cliente.nomeMae}', '{cliente.estadoCivil}', 
-                '{cliente.profissao}', '{cliente.endereco}', {cliente.numero}, 
-                '{cliente.estado}', '{cliente.cidade}', '{cliente.bairro}', 
-                '{cliente.cep}', '{cliente.complemento}', '{datetime.now()}', 
-                '{datetime.now()}'
+                '{self.advogado.advogadoId}', '{cliente.nomeCliente}', '{cliente.sobrenomeCliente}',
+                {cliente.idade}, '{cliente.dataNascimento}', '{cliente.telefone}', 
+                '{cliente.email}', '{cliente.rgCliente}', '{cliente.cpfCliente}', 
+                '{cliente.numCartProf}', '{cliente.nit}', '{cliente.nomeMae}', 
+                '{cliente.estadoCivil}', '{cliente.profissao}', '{cliente.endereco}', 
+                {cliente.numero}, '{cliente.estado}', '{cliente.cidade}', 
+                '{cliente.bairro}', '{cliente.cep}', '{cliente.complemento}', 
+                '{datetime.now()}', '{datetime.now()}'
             );"""
 
         try:
@@ -263,7 +274,7 @@ class DaoCliente:
 
         strComando = f"""
             SELECT 
-                clienteId, nomeCliente, sobrenomeCliente,
+                advogadoId, clienteId, nomeCliente, sobrenomeCliente,
                 idade, dataNascimento, telefone, 
                 email, rgCliente, cpfCliente,
                 numCarteiraProf, nit, nomeMae, 
@@ -281,7 +292,11 @@ class DaoCliente:
                 return ClienteModelo().fromList(cursor.fetchone(), retornaInst=True)
             else:
                 return cursor.fetchall()
+        except IndexError:
+            logPrioridade(f'SELECT<buscaClienteById>(IndexError)___________________{self.config.tblCliente}', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'IndexError - buscaClienteById({self.config.tblCliente}) <SELECT>')
         except:
+            logPrioridade(f'SELECT<buscaClienteById>___________________{self.config.tblCliente}', TipoEdicao.erro, Prioridade.saidaImportante)
             raise Warning(f'Erro SQL - buscaClienteById({self.config.tblCliente}) <SELECT>')
         finally:
             self.disconectBD(cursor)
@@ -296,7 +311,7 @@ class DaoCliente:
 
         strComando = f"""
             SELECT 
-                clienteId, nomeCliente, sobrenomeCliente,
+                advogadoId, clienteId, nomeCliente, sobrenomeCliente,
                 idade, dataNascimento, telefone, 
                 email, rgCliente, cpfCliente,
                 numCarteiraProf, nit, nomeMae, 
@@ -304,7 +319,8 @@ class DaoCliente:
                 estado, cidade, numero, 
                 bairro, cep, complemento, 
                 dataCadastro, dataUltAlt
-            FROM {self.config.tblCliente}"""
+            FROM {self.config.tblCliente}
+            WHERE advogadoId = {self.advogado.advogadoId}"""
 
         try:
             cursor.execute(strComando)
@@ -317,7 +333,13 @@ class DaoCliente:
                 return clientesModel
             else:
                 return cursor.fetchall()
-        except:
+
+        except OperationalError:
+            logPrioridade(f'SELECT<buscaTodos>(OperationalError)___________________{self.config.tblCliente}', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - buscaTodos({self.config.tblCliente}) <SELECT>')
+        except Exception as erro:
+            print(f"{type(erro)} - {erro}")
+            logPrioridade(f'SELECT<buscaTodos>({type(erro)})___________________{self.config.tblCliente}', TipoEdicao.erro, Prioridade.saidaImportante)
             raise Warning(f'Erro SQL - buscaTodos({self.config.tblCliente}) <SELECT>')
         finally:
             self.disconectBD(cursor)

@@ -37,3 +37,6 @@ class TelaLogin(Enum):
     inicio = 1
     buscaEscritorio = 0
     cadastro = 2
+
+class ErroConexao(Enum):
+    ConnectionError = 0

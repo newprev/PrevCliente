@@ -4,33 +4,35 @@ import datetime
 class ClienteModelo:
 
     def __init__(self):
+        self.advogadoId: int = None
         self.clienteId: int = None
         self.nomeCliente: str = None
         self.sobrenomeCliente: str = None
         self.idade: int = None
         self.dataNascimento: datetime = None
-        self.email: str = None
-        self.telefone: str = None
-        self.rgCliente: str = None
-        self.cpfCliente: str = None
-        self.numCartProf: str = None
-        self.nit: str = None
-        self.nomeMae: str = None
-        self.estadoCivil: str = None
-        self.profissao: str = None
-        self.endereco: str = None
-        self.numero: int = None
-        self.estado: str = None
-        self.cidade: str = None
-        self.bairro: str = None
-        self.cep: str = None
-        self.complemento: str = None
-        self.dataCadastro: datetime = None
-        self.dataUltAlt: datetime = None
-        self.pathCnis: str = None
+        self.email: str = ''
+        self.telefone: str = ''
+        self.rgCliente: str = ''
+        self.cpfCliente: str = ''
+        self.numCartProf: str = ''
+        self.nit: str = ''
+        self.nomeMae: str = ''
+        self.estadoCivil: str = ''
+        self.profissao: str = ''
+        self.endereco: str = ''
+        self.numero: int = 0
+        self.estado: str = ''
+        self.cidade: str = ''
+        self.bairro: str = ''
+        self.cep: str = ''
+        self.complemento: str = ''
+        self.dataCadastro: datetime = datetime.datetime.now()
+        self.dataUltAlt: datetime = datetime.datetime.now()
+        self.pathCnis: str = ''
 
     def toDict(self):
         dictUsuario = {
+            'advogadoId': self.advogadoId,
             'clienteId': self.clienteId,
             'nomeCliente': self.nomeCliente,
             'sobrenomeCliente': self.sobrenomeCliente,
@@ -55,19 +57,20 @@ class ClienteModelo:
         return dictUsuario
 
     def fromDict(self, dictCliente):
-        self.clienteId = dictCliente['clienteId'],
-        self.nomeCliente = dictCliente['nomeCliente'],
-        self.sobrenomeCliente = dictCliente['sobrenomeCliente'],
-        self.idade = dictCliente['idade'],
-        self.dataNascimento = dictCliente['dataNascimento'],
-        self.telefone = dictCliente['telefone'],
-        self.email = dictCliente['email'],
-        self.rgCliente = dictCliente['rgCliente'],
-        self.cpfCliente = dictCliente['cpfCliente'],
-        self.numCartProf = dictCliente['numCartProf'],
-        self.nit = dictCliente['nit'],
-        self.nomeMae = dictCliente['nomeMae'],
-        self.estadoCivil = dictCliente['estadoCivil'],
+        self.advogadoId = dictCliente['advogadoId']
+        self.clienteId = dictCliente['clienteId']
+        self.nomeCliente = dictCliente['nomeCliente']
+        self.sobrenomeCliente = dictCliente['sobrenomeCliente']
+        self.idade = dictCliente['idade']
+        self.dataNascimento = dictCliente['dataNascimento']
+        self.telefone = dictCliente['telefone']
+        self.email = dictCliente['email']
+        self.rgCliente = dictCliente['rgCliente']
+        self.cpfCliente = dictCliente['cpfCliente']
+        self.numCartProf = dictCliente['numCartProf']
+        self.nit = dictCliente['nit']
+        self.nomeMae = dictCliente['nomeMae']
+        self.estadoCivil = dictCliente['estadoCivil']
         self.endereco = dictCliente['endereco']
         self.numero = dictCliente['numero']
         self.estado = dictCliente['estado']
@@ -82,35 +85,39 @@ class ClienteModelo:
             return None
         else:
             if len(listCliente) != 0:
-                self.clienteId = listCliente[0]
-                self.nomeCliente = listCliente[1]
-                self.sobrenomeCliente = listCliente[2]
-                self.idade = listCliente[3]
-                self.dataNascimento = listCliente[4]
-                self.telefone = listCliente[5]
-                self.email = listCliente[6]
-                self.rgCliente = listCliente[7]
-                self.cpfCliente = listCliente[8]
-                self.numCartProf = listCliente[9]
-                self.nit = listCliente[10]
-                self.nomeMae = listCliente[11]
-                self.estadoCivil = listCliente[12]
-                self.profissao = listCliente[13]
-                self.endereco = listCliente[14]
-                self.estado = listCliente[15]
-                self.cidade = listCliente[16]
-                self.numero = listCliente[17]
-                self.bairro = listCliente[18]
-                self.cep = listCliente[19]
-                self.complemento = listCliente[20]
-                self.dataCadastro = listCliente[21]
-                self.dataUltAlt = listCliente[22]
+                # for num, info in enumerate(listCliente):
+                #     print(f"{num} - {info}")
+                self.advogadoId = listCliente[0]
+                self.clienteId = listCliente[1]
+                self.nomeCliente = listCliente[2]
+                self.sobrenomeCliente = listCliente[3]
+                self.idade = listCliente[4]
+                self.dataNascimento = listCliente[5]
+                self.telefone = listCliente[6]
+                self.email = listCliente[7]
+                self.rgCliente = listCliente[8]
+                self.cpfCliente = listCliente[9]
+                self.numCartProf = listCliente[10]
+                self.nit = listCliente[11]
+                self.nomeMae = listCliente[12]
+                self.estadoCivil = listCliente[13]
+                self.profissao = listCliente[14]
+                self.endereco = listCliente[15]
+                self.estado = listCliente[16]
+                self.cidade = listCliente[17]
+                self.numero = listCliente[18]
+                self.bairro = listCliente[19]
+                self.cep = listCliente[20]
+                self.complemento = listCliente[21]
+                self.dataCadastro = listCliente[22]
+                self.dataUltAlt = listCliente[23]
                 # pathCnis: {self.pathCnis}
             if retornaInst:
                 return self
 
     def __repr__(self):
         return f"""Cliente(
+            advogadoId: {self.advogadoId},
             clienteId: {self.clienteId},
             nomeCliente: {self.nomeCliente},
             sobrenomeCliente: {self.sobrenomeCliente},

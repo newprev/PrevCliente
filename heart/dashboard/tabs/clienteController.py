@@ -27,6 +27,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.daoCliente = DaoCliente(db=db)
 
         self.tblClientes.resizeColumnsToContents()
+        self.tblClientes.doubleClicked.connect(self.editarCliente)
+        self.tabMain.currentChanged.connect(self.trocaDeAba)
 
         self.frBuscaNome.hide()
         self.frBuscaEmail.hide()
@@ -95,9 +97,9 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def atualizaTblClientes(self, clientes: list = None):
         if clientes is None:
-            clientesModels:list = self.daoCliente.buscaTodos(returnModel=True)
+            clientesModels: list = self.daoCliente.buscaTodos(returnModel=True)
         else:
-            pass
+            clientesModels = []
 
         self.tblClientes.setRowCount(0)
         for numLinha, cliente in enumerate(clientesModels):
@@ -105,7 +107,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
             cdClienteItem = QTableWidgetItem(str(cliente.clienteId))
             cdClienteItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-            # cdClienteItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.tblClientes.setItem(numLinha, 0, cdClienteItem)
 
             nomeCompletoItem = QTableWidgetItem(f"{cliente.nomeCliente} {cliente.sobrenomeCliente}")
@@ -131,12 +132,9 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.tblClientes.resizeColumnsToContents()
 
     def buscaCliente(self):
-        # if self.leCdCliente.text() != '':
         if self.sbCdCliente.text() != '':
-            # cdCliente: int = int(self.leCdCliente.text())
             cdCliente: int = int(self.sbCdCliente.text())
             self.limpaTudo()
-            # self.leCdCliente.setText(str(cdCliente))
             self.sbCdCliente.setValue(cdCliente)
             self.cliente = self.daoCliente.buscaClienteById(cdCliente, returnInstance=True)
             if self.cliente is None:
@@ -241,6 +239,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         elif info == 'sbCliente':
             if self.sbCdCliente.text() != '':
                 self.cliente.clienteId = int(self.sbCdCliente.text())
+                self.buscaCliente()
 
         elif info == 'nomeCliente':
             self.cliente.nomeCliente = self.lePrimeiroNome.text()
@@ -344,7 +343,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.daoCliente.atualizaCliente(self.cliente)
 
     def verificaCodCliente(self) -> bool:
-        # if self.leCdCliente.text() is not None and self.leCdCliente.text() != "":
         if self.sbCdCliente.text() is not None and self.sbCdCliente.text() != "":
             return True
         else:
@@ -390,6 +388,21 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leProfissao.clear()
 
         self.cbxEstado.setCurrentIndex(24)
+
+    def editarCliente(self, *args):
+        numLinha: int = args[0].row()
+        clienteId = int(self.tblClientes.item(numLinha, 0).text())
+        self.sbCdCliente.setValue(clienteId)
+
+        self.buscaCliente()
+        self.tabMain.setCurrentIndex(1)
+
+    def trocaDeAba(self, *args):
+        abaAtual: int = int(args[0])
+
+        if abaAtual == 0:
+            self.atualizaTblClientes()
+            self.limpaTudo()
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

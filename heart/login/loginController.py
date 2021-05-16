@@ -7,7 +7,9 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 from Daos.daoConfiguracoes import DaoConfiguracoes
 from Daos.daoFerramentas import DaoFerramentas
+from Daos.daoEscritorio import DaoEscritorio
 from cache.cachingLogin import CacheLogin
+from cache.cacheEscritorio import CacheEscritorio
 from repositorios.clienteRepositorio import UsuarioRepository
 from repositorios.escritorioRepositorio import EscritorioRepositorio
 from repositorios.ferramentasRepositorio import ApiFerramentas
@@ -37,6 +39,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.escritorioRepositorio = EscritorioRepositorio()
         self.tentativasSenha = 3
         self.edittingFinished = True
+        self.cacheLogin = CacheLogin()
+        self.cacheEscritorio = CacheEscritorio()
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -45,8 +49,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.timer.timeout.connect(self.escondeLoading)
 
         self.daoConfigs = DaoConfiguracoes(self.db)
+        self.daoEscritorio = DaoEscritorio(self.db)
         self.dashboard: DashboardController = None
-        self.cacheLogin = CacheLogin()
 
         self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.inicio.value)
         self.pbPrimeiroAcesso.clicked.connect(self.iniciarPrimeiroAcesso)
@@ -149,7 +153,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
         elif self.lePrimCadSenha.text() != self.leConfirmarSenha.text():
             self.showPopupAlerta(f"Senhas não coincidem. Tente novamente.")
         else:
-            self.loading(20)
             senhaConfirmada = self.usuarioRepositorio.atualizaSenha(self.advogado.advogadoId, self.leConfirmarSenha.text())
             self.loading(10)
             if 'statusCode' not in senhaConfirmada.keys():
@@ -165,6 +168,10 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.inicio.value)
                 self.loading(10)
                 self.cacheLogin.salvarCache(self.advogado)
+                self.loading(10)
+                self.cacheEscritorio.salvarCache(self.escritorio)
+                self.loading(10)
+                self.daoEscritorio.insereEscritorio(self.escritorio)
                 self.loading(10)
             else:
                 self.loading(100)
@@ -212,11 +219,12 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     self.loading(10)
                     self.verificaRotinaDiaria()
                     self.loading(20)
+                    self.cacheLogin.salvarCache(self.advogado)
+                    self.loading(10)
                     self.dashboard = DashboardController(db=self.db)
-                    self.loading(20)
+                    self.loading(10)
                     self.dashboard.show()
                     self.close()
-                    self.cacheLogin.salvarCache(self.advogado)
                 else:
                     self.loading(10)
                     self.cacheLogin.salvarCacheTemporario(self.advogado)
@@ -227,7 +235,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     self.close()
         self.edittingFinished = True
 
-
     def procuraAdvogado(self) -> AdvogadoModelo:
         senha = self.leSenha.text()
 
@@ -237,7 +244,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
         else:
             email = self.leLogin.text()
             return self.usuarioRepositorio.loginAuth(senha, email=email)
-
 
     def verificaRotinaDiaria(self):
 
@@ -288,7 +294,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 daoFerramentas.insereListaTetos(tetosFromApi)
 
         if convMon:
-            convMonFromApi = ApiFerramentas().getAllTetosConvMon()
+            convMonFromApi = ApiFerramentas().getAllConvMon()
             if daoFerramentas.contaQtdMoedas() < len(convMonFromApi):
                 daoFerramentas.insereListaConvMonModel(convMonFromApi)
 

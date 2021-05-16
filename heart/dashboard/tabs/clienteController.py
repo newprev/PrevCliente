@@ -148,7 +148,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.cliente.pathCnis = self.cnisClienteAtual.buscaPath()
         if self.cliente.pathCnis is None:
             return False
-        infoPessoais = self.cnisClienteAtual.getInfoPessoais()
+        infoPessoais: dict = self.cnisClienteAtual.getInfoPessoais()
 
         if infoPessoais is not None:
 
@@ -160,11 +160,21 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.nomeCliente = infoPessoais['nomeCompleto'].split(' ')[0].title()
             self.cliente.sobrenomeCliente = ' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title()
 
-        self.cliente.clienteId = self.daoCliente.cadastroClienteComCnis(self.cliente, self.cnisClienteAtual.getAllDict())
+            if not self.buscaClienteJaCadastrado():
+                self.cliente.clienteId = self.daoCliente.cadastroClienteComCnis(self.cliente, self.cnisClienteAtual.getAllDict())
 
+        self.limpaTudo()
         self.carregaClienteNaTela(cliente=self.cliente)
         if self.cliente.numero is None:
             self.cliente.numero = 0
+
+    def buscaClienteJaCadastrado(self) -> bool:
+        cliente: ClienteModelo = self.daoCliente.buscaClienteByNit(self.cliente.nit)
+        if cliente:
+            self.cliente = cliente
+            return True
+        else:
+            return False
 
     def carregaClienteNaTela(self, cliente: ClienteModelo):
 

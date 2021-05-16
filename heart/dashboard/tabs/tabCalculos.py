@@ -59,7 +59,7 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
 
                 elif contColuna == 3:
-                    strItem = QTableWidgetItem(mascaraDinheiro(info, simbolo=infoLinha[-1]))
+                    strItem = QTableWidgetItem(mascaraDinheiro(info, simbolo=infoLinha[6]))
                     strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
@@ -84,7 +84,6 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
-
 
         self.tblCalculos.resizeColumnsToContents()
         self.tblCalculos.resizeRowsToContents()

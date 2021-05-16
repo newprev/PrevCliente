@@ -139,3 +139,6 @@ class ClienteModelo:
             cep: {self.cep},
             complemento: {self.complemento},
             pathCnis: {self.pathCnis}"""
+
+    def __bool__(self):
+        return self.nit != ''

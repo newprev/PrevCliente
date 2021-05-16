@@ -21,7 +21,8 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
         self.clientes: list = None
         self.clienteSelecionadoId = 0
 
-        self.tblListaClientes.doubleClicked.connect(self.carregaInfoClienteNaTela)
+        self.tblListaClientes.clicked.connect(self.carregaInfoClienteNaTela)
+        self.tblListaClientes.doubleClicked.connect(self.enviaCliente)
         self.pbLimpa.clicked.connect(self.limpaTudo)
         self.pbSeleciona.clicked.connect(self.enviaCliente)
         self.pbCancela.clicked.connect(self.close)

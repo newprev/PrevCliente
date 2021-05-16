@@ -301,6 +301,42 @@ class DaoCliente:
         finally:
             self.disconectBD(cursor)
 
+    def buscaClienteByNit(self, clienteNit: str):
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""
+            SELECT 
+                advogadoId, clienteId, nomeCliente, sobrenomeCliente,
+                idade, dataNascimento, telefone, 
+                email, rgCliente, cpfCliente,
+                numCarteiraProf, nit, nomeMae, 
+                estadoCivil, profissao, endereco,
+                estado, cidade, numero, 
+                bairro, cep, complemento, 
+                dataCadastro, dataUltAlt
+            FROM {self.config.tblCliente} 
+                WHERE nit = '{clienteNit}'
+            AND
+                advogadoId = {self.advogado.advogadoId}"""
+
+        try:
+            cursor.execute(strComando)
+            logPrioridade(f'SELECT<buscaClienteByNit>___________________{self.config.tblCliente}', TipoEdicao.select, Prioridade.saidaComun)
+            return ClienteModelo().fromList(cursor.fetchone(), retornaInst=True)
+        except IndexError:
+            logPrioridade(f'SELECT<buscaClienteByNit>(IndexError)___________________{self.config.tblCliente}', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'IndexError - buscaClienteByNit({self.config.tblCliente}) <SELECT>')
+        except:
+            logPrioridade(f'SELECT<buscaClienteByNit>___________________{self.config.tblCliente}', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - buscaClienteByNit({self.config.tblCliente}) <SELECT>')
+        finally:
+            self.disconectBD(cursor)
+
     def buscaTodos(self, returnModel: bool = False):
 
         if not isinstance(self.db, sqlite3.Connection):

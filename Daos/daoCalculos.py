@@ -41,7 +41,7 @@ class DaoCalculos:
                             ON con.competencia >= cm.dataInicial
                                 AND con.competencia <= cm.dataFinal
                         JOIN {self.config.tblTetosPrev} tp
-                            ON tp.dataValidade == con.competencia 
+                            ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', con.competencia)
                     WHERE clienteId = {clienteId}
                 
                 UNION ALL
@@ -61,7 +61,7 @@ class DaoCalculos:
                             ON rem.competencia >= cm.dataInicial
                                 AND rem.competencia <= cm.dataFinal
                         JOIN {self.config.tblTetosPrev} tp
-                            ON tp.dataValidade == rem.competencia  
+                            ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', rem.competencia) 
                         WHERE clienteId = {clienteId}
                     ORDER BY competencia DESC  """
 

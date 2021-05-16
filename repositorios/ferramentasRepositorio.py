@@ -22,14 +22,14 @@ class ApiFerramentas:
             logPrioridade(f"API(Sync)____________________GET<tetosPrev/ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
             return []
 
-    def getAllTetosConvMon(self, id: int = None) -> list:
+    def getAllConvMon(self, id: int = None) -> list:
         url = self.baseUrl + 'convMon/'
         response = requests.get(url)
 
         if 199 < response.status_code < 400:
-            listaTetos = [ConvMonModelo().fromDict(convMon) for convMon in response.json()]
+            listaConvMon = [ConvMonModelo().fromDict(convMon) for convMon in response.json()]
             logPrioridade(f"API(Sync)____________________GET<convMon/>::::{url}", TipoEdicao.api, Prioridade.sync)
-            return listaTetos
+            return listaConvMon
         else:
             logPrioridade(f"API(Sync)____________________GET<ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
             return []

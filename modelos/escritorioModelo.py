@@ -6,25 +6,19 @@ class EscritorioModelo:
     def __init__(self):
         self.escritorioId: int = None
         self.nomeEscritorio: str = None
-        self.nomeFantasia: str = None
-        self.cnpj: str = None
-        # self.email: str = None
-        # self.telefone: str = None
-        self.cpf: str = None
-        self.inscEstadual: str = None
-        self.numero: str = None
-        self.cep: str = None
-        self.complemento: str = None
-        self.profissao: str = None
-        self.endereco: str = None
-        self.estado: str = None
-        self.cidade: str = None
-        self.bairro: str = None
-        self.cep: str = None
-        self.qtdChaves: int = 0
-        self.dataCadastro: datetime = None
-        self.dataUltAlt: datetime = None
-        self.ativo: bool = True
+        self.nomeFantasia: str = ''
+        self.cnpj: str = ''
+        self.cpf: str = ''
+        self.telefone: str = ''
+        self.email: str = ''
+        self.inscEstadual: str = ''
+        self.endereco: str = ''
+        self.numero: int = None
+        self.cep: str = ''
+        self.complemento: str = ''
+        self.cidade: str = ''
+        self.estado: str = ''
+        self.bairro: str = ''
 
     def toDict(self):
         dictUsuario = {
@@ -32,19 +26,17 @@ class EscritorioModelo:
             'nomeEscritorio': self.nomeEscritorio,
             'nomeFantasia': self.nomeFantasia,
             'cnpj': self.cnpj,
-            # 'telefone': self.telefone,
-            # 'email': self.email,
             'cpf': self.cpf,
+            'telefone': self.telefone,
+            'email': self.email,
             'inscEstadual': self.inscEstadual,
-            'numero': self.numero,
             'endereco': self.endereco,
-            'estado': self.estado,
-            'cidade': self.cidade,
-            'bairro': self.bairro,
+            'numero': self.numero,
             'cep': self.cep,
             'complemento': self.complemento,
-            'qtdChaves': self.qtdChaves,
-            'ativo': self.ativo
+            'cidade': self.cidade,
+            'estado': self.estado,
+            'bairro': self.bairro,
         }
         return dictUsuario
 
@@ -57,8 +49,8 @@ class EscritorioModelo:
         self.nomeEscritorio = dictEscritorio['nomeEscritorio']
         self.nomeFantasia = dictEscritorio['nomeFantasia']
         self.cnpj = dictEscritorio['cnpj']
-        # self.telefone = dictEscritorio['telefone'],
-        # self.email = dictEscritorio['email'],
+        self.telefone = dictEscritorio['telefone'],
+        self.email = dictEscritorio['email'],
         self.cpf = dictEscritorio['cpf']
         self.inscEstadual = dictEscritorio['inscEstadual']
         self.endereco = dictEscritorio['endereco']
@@ -68,8 +60,7 @@ class EscritorioModelo:
         self.bairro = dictEscritorio['bairro']
         self.cep = dictEscritorio['cep']
         self.complemento = dictEscritorio['complemento']
-        self.qtdChaves = dictEscritorio['qtdChaves']
-        self.ativo = dictEscritorio['ativo']
+
         return self
 
     def fromList(self, listEscritorio: list, retornaInst: bool = False):
@@ -81,11 +72,10 @@ class EscritorioModelo:
                 self.nomeEscritorio = listEscritorio[1]
                 self.nomeFantasia = listEscritorio[2]
                 self.cnpj = listEscritorio[4]
-                # self.telefone = listEscritorio[5]
-                # self.email = listEscritorio[6]
+                self.telefone = listEscritorio[5]
+                self.email = listEscritorio[6]
                 self.cpf = listEscritorio[7]
                 self.inscEstadual = listEscritorio[8]
-                self.profissao = listEscritorio[13]
                 self.endereco = listEscritorio[14]
                 self.estado = listEscritorio[15]
                 self.cidade = listEscritorio[16]
@@ -93,9 +83,6 @@ class EscritorioModelo:
                 self.bairro = listEscritorio[18]
                 self.cep = listEscritorio[19]
                 self.complemento = listEscritorio[20]
-                self.dataCadastro = listEscritorio[21]
-                self.dataUltAlt = listEscritorio[22]
-                self.qtdChaves = listEscritorio[23]
             if retornaInst:
                 return self
 
@@ -113,6 +100,5 @@ class EscritorioModelo:
             cidade: {self.cidade},
             bairro: {self.bairro},
             cep: {self.cep},
-            complemento: {self.complemento},
-            qtdChaves: {self.qtdChaves},
-            ativo: {self.ativo}"""
+            complemento: {self.complemento}
+    """

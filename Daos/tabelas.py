@@ -95,7 +95,7 @@ class TabelasConfig:
         return f"""
         CREATE TABLE IF NOT EXISTS {self.tblCliente}(
             {cabecalho}
-            advogadoId INTEGER REFERENCES {self.tblAdvogados}(advogadoId) ON DELETE CASCADE,
+            escritorioId INTEGER REFERENCES {self.tblAdvogados}(escritorioId) ON DELETE CASCADE,
             nomeCliente VARCHAR(20) NOT NULL,
             sobrenomeCliente VARCHAR(30) NOT NULL,
             idade INT NOT NULL,
@@ -104,6 +104,11 @@ class TabelasConfig:
             email VARCHAR(40) NOT NULL,
             rgCliente VARCHAR(9) NOT NULL,
             cpfCliente VARCHAR(11) NULL,
+            nomeBanco VARCHAR(40) NULL,
+            agenciaBanco VARCHAR(10) NULL,
+            numeroConta VARCHAR(15) NULL,
+            grauEscolaridade VARCHAR(30) NULL,
+            senhaINSS VARCHAR(10) NULL,
             numCarteiraProf VARCHAR(15) NULL,
             serieCarteiraProf VARCHAR(15) NULL,
             quaCarteiraProf VARCHAR(15) NULL,

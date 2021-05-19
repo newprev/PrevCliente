@@ -401,7 +401,8 @@ class Ui_wdgTabCliente(object):
 "#lbDescricaoTela, \n"
 "#lbFrTituloInfoPessoal,\n"
 "#lbFrTituloInfoProfissional,\n"
-"#lbFrTituloInfoResidencial {\n"
+"#lbFrTituloInfoResidencial,\n"
+"#lbFrTituloInfoBancarias {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 14px;\n"
 "\n"
@@ -421,7 +422,8 @@ class Ui_wdgTabCliente(object):
 "\n"
 "\n"
 "/*---------------------------------- Frames -----------------------------------*/\n"
-"#frInfoPessoais, #frInfoProfissional, #frInfoResidencial {\n"
+"#frInfoPessoais, #frInfoProfissional, \n"
+"#frInfoResidencial, #frInfoBancarias {\n"
 "    border-radius: 4px;\n"
 "    border: 1px solid rgb(85, 87, 83);\n"
 "}\n"
@@ -440,7 +442,8 @@ class Ui_wdgTabCliente(object):
 "    color: white;\n"
 "\n"
 "    border-radius: 4px;\n"
-"    background-color: rgb(52, 73, 94);\n"
+"/*    background-color: rgb(52, 73, 94);*/\n"
+"    background-color: rgb(92, 53, 102);\n"
 "}\n"
 "\n"
 "#pbCarregaCnis:hover {\n"
@@ -528,14 +531,14 @@ class Ui_wdgTabCliente(object):
 "}")
         self.tabCadastro.setObjectName("tabCadastro")
         self.scrollArea = QtWidgets.QScrollArea(self.tabCadastro)
-        self.scrollArea.setGeometry(QtCore.QRect(-1, 0, 941, 571))
+        self.scrollArea.setGeometry(QtCore.QRect(-1, 0, 991, 571))
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scaCadastro = QtWidgets.QWidget()
-        self.scaCadastro.setGeometry(QtCore.QRect(0, 0, 939, 569))
+        self.scaCadastro.setGeometry(QtCore.QRect(0, 0, 989, 569))
         self.scaCadastro.setObjectName("scaCadastro")
         self.pbCarregaCnis = QtWidgets.QPushButton(self.scaCadastro)
-        self.pbCarregaCnis.setGeometry(QtCore.QRect(830, 110, 83, 51))
+        self.pbCarregaCnis.setGeometry(QtCore.QRect(780, 510, 101, 41))
         self.pbCarregaCnis.setObjectName("pbCarregaCnis")
         self.frInfoPessoais = QtWidgets.QFrame(self.scaCadastro)
         self.frInfoPessoais.setGeometry(QtCore.QRect(10, 80, 361, 471))
@@ -624,6 +627,12 @@ class Ui_wdgTabCliente(object):
         self.sbCdCliente.setGeometry(QtCore.QRect(10, 40, 121, 26))
         self.sbCdCliente.setMaximum(1000)
         self.sbCdCliente.setObjectName("sbCdCliente")
+        self.cbxEscolaridade = QtWidgets.QComboBox(self.frInfoPessoais)
+        self.cbxEscolaridade.setGeometry(QtCore.QRect(150, 350, 191, 25))
+        self.cbxEscolaridade.setObjectName("cbxEscolaridade")
+        self.lbEstCivil_2 = QtWidgets.QLabel(self.frInfoPessoais)
+        self.lbEstCivil_2.setGeometry(QtCore.QRect(150, 330, 191, 17))
+        self.lbEstCivil_2.setObjectName("lbEstCivil_2")
         self.frInfoResidencial = QtWidgets.QFrame(self.scaCadastro)
         self.frInfoResidencial.setGeometry(QtCore.QRect(390, 80, 361, 291))
         self.frInfoResidencial.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -680,10 +689,10 @@ class Ui_wdgTabCliente(object):
         self.lbNumero.setGeometry(QtCore.QRect(290, 30, 111, 17))
         self.lbNumero.setObjectName("lbNumero")
         self.pbCadastrar = QtWidgets.QPushButton(self.scaCadastro)
-        self.pbCadastrar.setGeometry(QtCore.QRect(790, 310, 121, 25))
+        self.pbCadastrar.setGeometry(QtCore.QRect(780, 470, 201, 25))
         self.pbCadastrar.setObjectName("pbCadastrar")
         self.lbInfoCnis = QtWidgets.QLabel(self.scaCadastro)
-        self.lbInfoCnis.setGeometry(QtCore.QRect(780, 60, 131, 41))
+        self.lbInfoCnis.setGeometry(QtCore.QRect(890, 513, 91, 41))
         self.lbInfoCnis.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.lbInfoCnis.setWordWrap(True)
         self.lbInfoCnis.setObjectName("lbInfoCnis")
@@ -730,14 +739,67 @@ class Ui_wdgTabCliente(object):
         self.lbTitulo.setFont(font)
         self.lbTitulo.setObjectName("lbTitulo")
         self.pbLimpar = QtWidgets.QPushButton(self.scaCadastro)
-        self.pbLimpar.setGeometry(QtCore.QRect(790, 270, 121, 25))
+        self.pbLimpar.setGeometry(QtCore.QRect(780, 430, 201, 25))
         self.pbLimpar.setObjectName("pbLimpar")
         self.lbFrTituloInfoProfissional = QtWidgets.QLabel(self.scaCadastro)
         self.lbFrTituloInfoProfissional.setGeometry(QtCore.QRect(410, 380, 171, 17))
         self.lbFrTituloInfoProfissional.setObjectName("lbFrTituloInfoProfissional")
         self.pbAtualizar = QtWidgets.QPushButton(self.scaCadastro)
-        self.pbAtualizar.setGeometry(QtCore.QRect(790, 230, 121, 25))
+        self.pbAtualizar.setGeometry(QtCore.QRect(780, 390, 201, 25))
         self.pbAtualizar.setObjectName("pbAtualizar")
+        self.lbFrTituloInfoBancarias = QtWidgets.QLabel(self.scaCadastro)
+        self.lbFrTituloInfoBancarias.setGeometry(QtCore.QRect(770, 69, 181, 17))
+        self.lbFrTituloInfoBancarias.setObjectName("lbFrTituloInfoBancarias")
+        self.frInfoBancarias = QtWidgets.QFrame(self.scaCadastro)
+        self.frInfoBancarias.setGeometry(QtCore.QRect(760, 80, 221, 291))
+        self.frInfoBancarias.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frInfoBancarias.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoBancarias.setLineWidth(1)
+        self.frInfoBancarias.setMidLineWidth(2)
+        self.frInfoBancarias.setObjectName("frInfoBancarias")
+        self.leNomeBanco = QtWidgets.QLineEdit(self.frInfoBancarias)
+        self.leNomeBanco.setGeometry(QtCore.QRect(10, 50, 161, 25))
+        self.leNomeBanco.setMaxLength(9)
+        self.leNomeBanco.setObjectName("leNomeBanco")
+        self.lbCep_2 = QtWidgets.QLabel(self.frInfoBancarias)
+        self.lbCep_2.setGeometry(QtCore.QRect(10, 30, 141, 17))
+        self.lbCep_2.setObjectName("lbCep_2")
+        self.leNumeroAgencia = QtWidgets.QLineEdit(self.frInfoBancarias)
+        self.leNumeroAgencia.setGeometry(QtCore.QRect(10, 110, 71, 25))
+        self.leNumeroAgencia.setMaxLength(5)
+        self.leNumeroAgencia.setObjectName("leNumeroAgencia")
+        self.lbNumero_2 = QtWidgets.QLabel(self.frInfoBancarias)
+        self.lbNumero_2.setGeometry(QtCore.QRect(10, 90, 51, 17))
+        self.lbNumero_2.setObjectName("lbNumero_2")
+        self.lbNumero_3 = QtWidgets.QLabel(self.frInfoBancarias)
+        self.lbNumero_3.setGeometry(QtCore.QRect(100, 90, 71, 20))
+        self.lbNumero_3.setObjectName("lbNumero_3")
+        self.leNumeroConta = QtWidgets.QLineEdit(self.frInfoBancarias)
+        self.leNumeroConta.setGeometry(QtCore.QRect(100, 110, 71, 25))
+        self.leNumeroConta.setMaxLength(5)
+        self.leNumeroConta.setObjectName("leNumeroConta")
+        self.leSenhaINSS = QtWidgets.QLineEdit(self.frInfoBancarias)
+        self.leSenhaINSS.setGeometry(QtCore.QRect(10, 230, 161, 25))
+        self.leSenhaINSS.setMaxLength(9)
+        self.leSenhaINSS.setObjectName("leSenhaINSS")
+        self.lbCep_3 = QtWidgets.QLabel(self.frInfoBancarias)
+        self.lbCep_3.setGeometry(QtCore.QRect(10, 210, 141, 17))
+        self.lbCep_3.setObjectName("lbCep_3")
+        self.frInfoBancarias.raise_()
+        self.pbCarregaCnis.raise_()
+        self.frInfoPessoais.raise_()
+        self.frInfoResidencial.raise_()
+        self.pbCadastrar.raise_()
+        self.lbInfoCnis.raise_()
+        self.lbFrTituloInfoPessoal.raise_()
+        self.frInfoProfissional.raise_()
+        self.lbDescricaoTela.raise_()
+        self.lbFrTituloInfoResidencial.raise_()
+        self.lbTitulo.raise_()
+        self.pbLimpar.raise_()
+        self.lbFrTituloInfoProfissional.raise_()
+        self.pbAtualizar.raise_()
+        self.lbFrTituloInfoBancarias.raise_()
         self.scrollArea.setWidget(self.scaCadastro)
         self.tabMain.addTab(self.tabCadastro, "")
         self.horizontalLayout.addWidget(self.tabMain)
@@ -797,6 +859,7 @@ class Ui_wdgTabCliente(object):
         self.leIdade.setPlaceholderText(_translate("wdgTabCliente", "35"))
         self.lbIdade.setText(_translate("wdgTabCliente", "Idade"))
         self.lbDataNascimento.setText(_translate("wdgTabCliente", "Data de Nascimento"))
+        self.lbEstCivil_2.setText(_translate("wdgTabCliente", "Grau de escolaridade"))
         self.leCep.setPlaceholderText(_translate("wdgTabCliente", "12345-789"))
         self.leCidade.setPlaceholderText(_translate("wdgTabCliente", "São Paulo"))
         self.lbCep.setText(_translate("wdgTabCliente", "CEP"))
@@ -824,6 +887,15 @@ class Ui_wdgTabCliente(object):
         self.pbLimpar.setText(_translate("wdgTabCliente", "Limpar"))
         self.lbFrTituloInfoProfissional.setText(_translate("wdgTabCliente", "Informações profissionais"))
         self.pbAtualizar.setText(_translate("wdgTabCliente", "Atualizar cliente"))
+        self.lbFrTituloInfoBancarias.setText(_translate("wdgTabCliente", "  Informações bancárias"))
+        self.leNomeBanco.setPlaceholderText(_translate("wdgTabCliente", "12345-789"))
+        self.lbCep_2.setText(_translate("wdgTabCliente", "Nome do banco"))
+        self.leNumeroAgencia.setPlaceholderText(_translate("wdgTabCliente", "12345"))
+        self.lbNumero_2.setText(_translate("wdgTabCliente", "Agência"))
+        self.lbNumero_3.setText(_translate("wdgTabCliente", "Nº Conta"))
+        self.leNumeroConta.setPlaceholderText(_translate("wdgTabCliente", "12345"))
+        self.leSenhaINSS.setPlaceholderText(_translate("wdgTabCliente", "12345-789"))
+        self.lbCep_3.setText(_translate("wdgTabCliente", "Senha Meu INSS"))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabCadastro), _translate("wdgTabCliente", "Cadastro"))
 import Resources.tabCliente
 

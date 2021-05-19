@@ -25,7 +25,7 @@ class CacheEscritorio:
             logPrioridade(f'salvarCache<CacheEscritorio> ({type(erro)})___________________', TipoEdicao.erro, Prioridade.saidaImportante)
 
     def carregarCache(self) -> EscritorioModelo:
-        if '.login.txt' in os.listdir(self.pathCache):
+        if '.escritorio.txt' in os.listdir(self.pathCache):
             with open(self.pathEscritorioTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
 

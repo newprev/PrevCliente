@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1150</width>
-    <height>850</height>
+    <width>1280</width>
+    <height>820</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1150</width>
-    <height>850</height>
+    <width>1280</width>
+    <height>815</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -28,15 +28,6 @@
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
     <string notr="true">/*-------------------------------------- Frames --------------------------------------*/
-/*#frTopBackground{
-	background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgba(0, 180, 219, 255), stop:1 rgba(0, 131, 176, 255));
-}
-
-
-#frTopBackground{
-	background-color: qlineargradient(spread:reflect, x1:0, y1:0.5, x2:0.454, y2:0.5, stop:0 rgba(15, 12, 41, 255), stop:0.80203 rgba(48, 43, 99, 255));
-}
-*/
 #frTopBackground{
 	background-color: qlineargradient(spread:pad, x1:1, y1:0.483, x2:0, y2:0.539773, stop:0 rgba(39, 86, 135, 255), stop:1 rgba(62, 141, 225, 204));
 }
@@ -66,7 +57,7 @@
 }
 
 #frEtapa2 {
-	background-image: url(:/Etapa2/n2-grey.png);
+	background-image: url(:/Etapa2/n1-grey.png);
 	background-repeat: no-repeat;
 	background-position: center;
 }
@@ -93,6 +84,19 @@
 	background-image: url(:/dots/d3-blue.png);
 	background-repeat: no-repeat;
 	background-position: top;
+}
+
+#frNaturezaRight, #frTipoBeneRight, 
+#frTipoProcRight, #frTiposAtiv {
+	background-color: qlineargradient(spread:pad, x1:1, y1:0.443182, x2:0, y2:0.5, stop:0 rgba(66, 120, 178, 255), stop:1 rgba(39, 86, 135, 255));
+	border-radius: 6px;
+}
+
+#frNaturezaIcon, #frTipoBeneIcon,
+#frTipoProcIcon, #frTiposAtivIcon  {
+	background-image: url(:/dots/d3-white.png);
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
 /*-------------------------------------- Labels --------------------------------------*/
@@ -130,7 +134,7 @@
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 14px;
 
-	color: grey;
+	color: white;
 }
 
 /*-------------------------------------- QFrame --------------------------------------*/
@@ -139,7 +143,46 @@
 	border-radius: 5px;
 }
 
-</string>
+/*-------------------------------------- Push Buttons ------------------------------*/
+#pbProxEtapa {
+	background-color: qlineargradient(spread:pad, x1:0.913, y1:0.096, x2:0.005, y2:1, stop:0 rgba(86, 178, 169, 255), stop:1 rgba(21, 135, 133, 255));
+	border-radius: 16px;
+	
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+
+	color: white;
+}
+
+#pbProxEtapa:hover {
+	background-color: qlineargradient(spread:pad, x1:0.913, y1:0.096, x2:0.005, y2:1, stop:0 rgba(86, 178, 169, 255), stop:1 rgba(51, 165, 163, 255));
+	border-radius: 16px;
+	
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+
+	color: white;
+}
+
+#pbVoltaEtapa {
+	background-color: qlineargradient(spread:pad, x1:0.877204, y1:0.193, x2:0.301, y2:0.773, stop:0 rgba(167, 66, 146, 255), stop:1 rgba(131, 52, 169, 255));
+	border-radius: 16px;
+	
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+
+	color: white;
+}
+
+#pbVoltaEtapa:hover {
+	background-color: qlineargradient(spread:pad, x1:0.469, y1:0, x2:0.464, y2:1, stop:0 rgba(102, 70, 147, 255), stop:1 rgba(127, 52, 169, 255));
+	border-radius: 16px;
+	
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+
+	color: white;
+}</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
@@ -162,13 +205,13 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>150</height>
+        <height>120</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>150</height>
+        <height>120</height>
        </size>
       </property>
       <property name="frameShape">
@@ -187,6 +230,21 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <widget class="QLabel" name="lbTopTitulo">
             <property name="text">
@@ -802,7 +860,7 @@ Finalização</string>
      <widget class="QFrame" name="frBottomBackground">
       <property name="minimumSize">
        <size>
-        <width>0</width>
+        <width>800</width>
         <height>700</height>
        </size>
       </property>
@@ -863,22 +921,22 @@ Finalização</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <property name="spacing">
-           <number>0</number>
+           <number>16</number>
           </property>
           <property name="leftMargin">
            <number>8</number>
           </property>
           <property name="topMargin">
-           <number>0</number>
+           <number>8</number>
           </property>
           <property name="rightMargin">
            <number>8</number>
           </property>
           <property name="bottomMargin">
-           <number>0</number>
+           <number>4</number>
           </property>
           <item>
-           <widget class="QFrame" name="frame">
+           <widget class="QFrame" name="frNaturezaRight">
             <property name="minimumSize">
              <size>
               <width>210</width>
@@ -914,7 +972,7 @@ Finalização</string>
               <number>0</number>
              </property>
              <item>
-              <widget class="QFrame" name="frame_2">
+              <widget class="QFrame" name="frNaturezaIcon">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -956,7 +1014,11 @@ Finalização</string>
                 <item>
                  <widget class="QLabel" name="lbInfo1">
                   <property name="text">
-                   <string>Informação 1</string>
+                   <string>Natureza do
+ Processo</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
                   </property>
                  </widget>
                 </item>
@@ -967,7 +1029,7 @@ Finalização</string>
            </widget>
           </item>
           <item>
-           <widget class="QFrame" name="frame_6">
+           <widget class="QFrame" name="frTipoProcRight">
             <property name="minimumSize">
              <size>
               <width>210</width>
@@ -1003,7 +1065,7 @@ Finalização</string>
               <number>0</number>
              </property>
              <item>
-              <widget class="QFrame" name="frame_7">
+              <widget class="QFrame" name="frTipoProcIcon">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1045,7 +1107,11 @@ Finalização</string>
                 <item>
                  <widget class="QLabel" name="lbInfo2">
                   <property name="text">
-                   <string>Informação 2</string>
+                   <string>Tipo do 
+Processo</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
                   </property>
                  </widget>
                 </item>
@@ -1056,7 +1122,7 @@ Finalização</string>
            </widget>
           </item>
           <item>
-           <widget class="QFrame" name="frame_9">
+           <widget class="QFrame" name="frTipoBeneRight">
             <property name="minimumSize">
              <size>
               <width>210</width>
@@ -1092,7 +1158,7 @@ Finalização</string>
               <number>0</number>
              </property>
              <item>
-              <widget class="QFrame" name="frame_10">
+              <widget class="QFrame" name="frTipoBeneIcon">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1134,7 +1200,11 @@ Finalização</string>
                 <item>
                  <widget class="QLabel" name="lbInfo3">
                   <property name="text">
-                   <string>Informação 3</string>
+                   <string>Tipo do 
+Benefício</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
                   </property>
                  </widget>
                 </item>
@@ -1145,7 +1215,7 @@ Finalização</string>
            </widget>
           </item>
           <item>
-           <widget class="QFrame" name="frame_12">
+           <widget class="QFrame" name="frTiposAtiv">
             <property name="minimumSize">
              <size>
               <width>210</width>
@@ -1181,7 +1251,7 @@ Finalização</string>
               <number>0</number>
              </property>
              <item>
-              <widget class="QFrame" name="frame_13">
+              <widget class="QFrame" name="frTiposAtivIcon">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1223,7 +1293,11 @@ Finalização</string>
                 <item>
                  <widget class="QLabel" name="lbInfo4">
                   <property name="text">
-                   <string>Informação 4</string>
+                   <string>Tipos de 
+Atividades</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
                   </property>
                  </widget>
                 </item>
@@ -1231,6 +1305,57 @@ Finalização</string>
               </widget>
              </item>
             </layout>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbProxEtapa">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Próxima etapa</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbVoltaEtapa">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Etapa anterior</string>
+            </property>
            </widget>
           </item>
          </layout>

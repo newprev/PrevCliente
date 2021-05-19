@@ -14,6 +14,11 @@ class ClienteModelo:
         self.telefone: str = ''
         self.rgCliente: str = ''
         self.cpfCliente: str = ''
+        self.nomeBanco: str = ''
+        self.agenciaBanco: str = ''
+        self.numeroConta: str = ''
+        self.grauEscolaridade: str = ''
+        self.senhaINSS: str = ''
         self.numCartProf: str = ''
         self.nit: str = ''
         self.nomeMae: str = ''
@@ -42,6 +47,11 @@ class ClienteModelo:
             'email': self.email,
             'rgCliente': self.rgCliente,
             'cpfCliente': self.cpfCliente,
+            'nomeBanco': self.nomeBanco,
+            'agenciaBanco': self.agenciaBanco,
+            'numeroConta': self.numeroConta,
+            'grauEscolaridade': self.grauEscolaridade,
+            'senhaINSS': self.senhaINSS,
             'numCartProf': self.numCartProf,
             'nit': self.nit,
             'nomeMae': self.nomeMae,
@@ -67,6 +77,11 @@ class ClienteModelo:
         self.email = dictCliente['email']
         self.rgCliente = dictCliente['rgCliente']
         self.cpfCliente = dictCliente['cpfCliente']
+        self.nomeBanco = dictCliente['nomeBanco']
+        self.agenciaBanco = dictCliente['agenciaBanco']
+        self.numeroConta = dictCliente['numeroConta']
+        self.grauEscolaridade = dictCliente['grauEscolaridade']
+        self.senhaINSS = dictCliente['senhaINSS']
         self.numCartProf = dictCliente['numCartProf']
         self.nit = dictCliente['nit']
         self.nomeMae = dictCliente['nomeMae']
@@ -97,7 +112,12 @@ class ClienteModelo:
                 self.email = listCliente[7]
                 self.rgCliente = listCliente[8]
                 self.cpfCliente = listCliente[9]
+                self.nomeBanco = listCliente[10]
+                self.agenciaBanco = listCliente[10]
+                self.numeroConta = listCliente[10]
+                self.grauEscolaridade = listCliente[10]
                 self.numCartProf = listCliente[10]
+                self.senhaINSS = listCliente[10]
                 self.nit = listCliente[11]
                 self.nomeMae = listCliente[12]
                 self.estadoCivil = listCliente[13]
@@ -127,6 +147,11 @@ class ClienteModelo:
             email: {self.email},
             rgCliente: {self.rgCliente},
             cpfCliente: {self.cpfCliente},
+            nomeBanco: {self.nomeBanco},
+            agenciaBanco: {self.agenciaBanco},
+            numeroConta: {self.numeroConta},
+            grauEscolaridade: {self.grauEscolaridade},
+            senhaINSS: {self.senhaINSS},
             numCartProf: {self.numCartProf},
             nit: {self.nit},
             nomeMae: {self.nomeMae},

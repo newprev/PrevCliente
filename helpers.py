@@ -150,6 +150,21 @@ meses = {
 
 situacaoBeneficio = ['Indeferido', 'Cessado', 'Ativo']
 
+def getEscolaridade():
+    return {
+        'Fundamental Incompleto': 'FI',
+        'Fundomantal Completo': 'FC',
+        'Médio Incompleto': 'MI',
+        'Médio Completo': 'MC',
+        'Superior Incompleto': 'SI',
+        'Superior Completo': 'SC',
+    }
+
+def getEscolaridadeBySigla(sigla: str):
+    dictEscolaridade = getEscolaridade()
+    for chave, valor in dictEscolaridade.items():
+        if valor.upper() == sigla.upper():
+            return chave
 
 def getEstados():
     return {

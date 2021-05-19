@@ -40,3 +40,19 @@ class TelaLogin(Enum):
 
 class ErroConexao(Enum):
     ConnectionError = 0
+
+class TelasEntrevista(Enum):
+    cadastro = 0
+    natureza = 1
+    administrativo = 2
+    judicial = 3
+
+class TipoWidget(Enum):
+    label = 0
+    icone = 1
+
+class EtapaEntrevista(Enum):
+    infoPessoais = 0
+    infoProcessual = 1
+    detalhamento = 2
+    documentacao = 3

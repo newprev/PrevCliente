@@ -6,23 +6,23 @@ from Daos.tabelas import TabelasConfig
 from helpers import datetimeToSql, mascaraDataSql
 from logs import logPrioridade, TipoEdicao, Prioridade
 from modelos.clienteModelo import ClienteModelo
-from modelos.advogadoModelo import AdvogadoModelo
-from cache.cachingLogin import CacheLogin
+from modelos.escritorioModelo import EscritorioModelo
+from cache.cacheEscritorio import CacheEscritorio
 from pymysql import connections, cursors
+
 
 
 class DaoCliente:
 
-    def __init__(self, db: connections = None, advogado: AdvogadoModelo = None):
+    def __init__(self, db: connections = None, escritorio: EscritorioModelo = None):
         self.db = db
         self.config = TabelasConfig()
-        self.loginCache = CacheLogin()
-        if advogado is None:
-            self.advogado = self.loginCache.carregarCache()
-            if self.advogado.numeroOAB is None:
-                self.advogado = self.loginCache.carregarCacheTemporario()
+        self.escritorioCache = CacheEscritorio()
+
+        if escritorio is None:
+            self.escritorio = self.escritorioCache.carregarCache()
         else:
-            self.advogado = advogado
+            self.escritorio = escritorio
 
     def atualizaCliente(self, cliente: ClienteModelo):
 
@@ -42,6 +42,11 @@ class DaoCliente:
                     email = '{cliente.email}',
                     rgCliente = '{cliente.rgCliente}',
                     cpfCliente = '{cliente.cpfCliente}',
+                    nomeBanco = '{cliente.nomeBanco}',
+                    agenciaBanco = '{cliente.agenciaBanco}',
+                    numeroConta = '{cliente.numeroConta}',
+                    grauEscolaridade = '{cliente.grauEscolaridade}',
+                    senhaINSS = '{cliente.senhaINSS}',
                     numCarteiraProf = '{cliente.numCartProf}',
                     nit = '{cliente.nit}',
                     nomeMae = '{cliente.nomeMae}',
@@ -57,7 +62,7 @@ class DaoCliente:
                     dataUltAlt = '{datetimeToSql(datetime.now())}'
                 WHERE
                     clienteId = {cliente.clienteId}
-                AND advogadoId = {self.advogado.advogadoId}
+                AND escritorioId = {self.escritorio.escritorioId}
                 """
         try:
             cursor.execute(strComando)
@@ -80,9 +85,11 @@ class DaoCliente:
         strComando = f"""
             INSERT INTO {self.config.tblCliente} 
             (
-                advogadoId, nomeCliente, sobrenomeCliente, 
+                escritorioId, nomeCliente, sobrenomeCliente, 
                 idade, dataNascimento, telefone, 
                 email, rgCliente, cpfCliente, 
+                nomeBanco, agenciaBanco, numeroConta,
+                grauEscolaridade, senhaINSS,
                 numCarteiraProf, nit, nomeMae, 
                 estadoCivil, profissao, endereco, 
                 numero, estado, cidade, 
@@ -91,9 +98,11 @@ class DaoCliente:
             )
             VALUES
             (
-                '{self.advogado.advogadoId}', '{cliente.nomeCliente}', '{cliente.sobrenomeCliente}',
+                '{self.escritorio.escritorioId}', '{cliente.nomeCliente}', '{cliente.sobrenomeCliente}',
                 {cliente.idade}, '{cliente.dataNascimento}', '{cliente.telefone}', 
                 '{cliente.email}', '{cliente.rgCliente}', '{cliente.cpfCliente}', 
+                '{cliente.nomeBanco}', '{cliente.agenciaBanco}', '{cliente.numeroConta}',
+                '{cliente.grauEscolaridade}', '{cliente.senhaINSS}', 
                 '{cliente.numCartProf}', '{cliente.nit}', '{cliente.nomeMae}', 
                 '{cliente.estadoCivil}', '{cliente.profissao}', '{cliente.endereco}', 
                 {cliente.numero}, '{cliente.estado}', '{cliente.cidade}', 
@@ -274,9 +283,11 @@ class DaoCliente:
 
         strComando = f"""
             SELECT 
-                advogadoId, clienteId, nomeCliente, sobrenomeCliente,
+                escritorioId, clienteId, nomeCliente, sobrenomeCliente,
                 idade, dataNascimento, telefone, 
                 email, rgCliente, cpfCliente,
+                nomeBanco, agenciaBanco, numeroConta,
+                grauEscolaridade, senhaINSS,
                 numCarteiraProf, nit, nomeMae, 
                 estadoCivil, profissao, endereco,
                 estado, cidade, numero, 
@@ -311,9 +322,11 @@ class DaoCliente:
 
         strComando = f"""
             SELECT 
-                advogadoId, clienteId, nomeCliente, sobrenomeCliente,
+                escritorioId, clienteId, nomeCliente, sobrenomeCliente,
                 idade, dataNascimento, telefone, 
                 email, rgCliente, cpfCliente,
+                nomeBanco, agenciaBanco, numeroConta,
+                grauEscolaridade, senhaINSS,
                 numCarteiraProf, nit, nomeMae, 
                 estadoCivil, profissao, endereco,
                 estado, cidade, numero, 
@@ -322,7 +335,7 @@ class DaoCliente:
             FROM {self.config.tblCliente} 
                 WHERE nit = '{clienteNit}'
             AND
-                advogadoId = {self.advogado.advogadoId}"""
+                escritorioId = {self.escritorio.escritorioId}"""
 
         try:
             cursor.execute(strComando)
@@ -347,16 +360,18 @@ class DaoCliente:
 
         strComando = f"""
             SELECT 
-                advogadoId, clienteId, nomeCliente, sobrenomeCliente,
+                escritorioId, clienteId, nomeCliente, sobrenomeCliente,
                 idade, dataNascimento, telefone, 
                 email, rgCliente, cpfCliente,
+                nomeBanco, agenciaBanco, numeroConta,
+                grauEscolaridade, senhaINSS,
                 numCarteiraProf, nit, nomeMae, 
                 estadoCivil, profissao, endereco,
                 estado, cidade, numero, 
                 bairro, cep, complemento, 
                 dataCadastro, dataUltAlt
             FROM {self.config.tblCliente}
-            WHERE advogadoId = {self.advogado.advogadoId}"""
+            WHERE escritorioId = {self.escritorio.escritorioId}"""
 
         try:
             cursor.execute(strComando)

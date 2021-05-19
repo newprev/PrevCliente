@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>wdgNatureza</class>
+ <widget class="QWidget" name="wdgNatureza">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>891</width>
+    <height>655</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* ------------------------------ Widgets ------------------------------ */
+#wdgNatureza{
+	background-color: transparent;
+	border-radius: 8px;
+}
+
+/* ------------------------------ Frames ------------------------------ */
+#frMain{
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(255, 255, 246, 255), stop:1 rgba(255, 255, 255, 255));
+	border-radius: 8px;
+}
+
+/* ------------------------------ Labels ------------------------------ */
+#lbTituloNatureza, #lbOu {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+
+	color: grey;
+}
+
+/* ------------------------------ Push Buttons ------------------------------ */
+#pbAdministrativo {
+	background-color: qlineargradient(spread:pad, x1:1, y1:0.443182, x2:0, y2:0.5, stop:0 rgba(66, 163, 178, 200), stop:1 rgba(34, 135, 133, 255));
+	border-radius: 16px;
+
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+	color: white;	
+}
+
+#pbAdministrativo:hover {
+	background-color: qlineargradient(spread:pad, x1:0.505, y1:0.517, x2:0.005, y2:1, stop:0 rgba(86, 178, 169, 255), stop:1 rgba(34, 135, 133, 255));
+	border-radius: 16px;
+
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+	color: white;	
+}
+
+#pbJudicial {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0.534, x2:1, y2:0.54, stop:0 rgba(91, 66, 178, 255), stop:1 rgba(34, 53, 135, 200));
+	border-radius: 16px;
+
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+	color: white;	
+}
+
+#pbJudicial:hover {
+	background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:0.393, y2:0.637, stop:0 rgba(91, 66, 178, 255), stop:1 rgba(48, 74, 186, 255));
+	border-radius: 16px;
+
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+	color: white;	
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="frMain">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLabel" name="lbTituloNatureza">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>20</y>
+        <width>451</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Escolha a natureza do processo</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pbAdministrativo">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>260</y>
+        <width>221</width>
+        <height>201</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Administrativo</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pbJudicial">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>260</y>
+        <width>221</width>
+        <height>201</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Judicial</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbOu">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>340</y>
+        <width>61</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ou</string>
+      </property>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

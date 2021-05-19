@@ -14,24 +14,15 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_mwEntrevistaPage(object):
     def setupUi(self, mwEntrevistaPage):
         mwEntrevistaPage.setObjectName("mwEntrevistaPage")
-        mwEntrevistaPage.resize(1150, 850)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
+        mwEntrevistaPage.resize(1280, 820)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(mwEntrevistaPage.sizePolicy().hasHeightForWidth())
         mwEntrevistaPage.setSizePolicy(sizePolicy)
-        mwEntrevistaPage.setMinimumSize(QtCore.QSize(1150, 850))
+        mwEntrevistaPage.setMinimumSize(QtCore.QSize(1280, 815))
         self.centralwidget = QtWidgets.QWidget(mwEntrevistaPage)
         self.centralwidget.setStyleSheet("/*-------------------------------------- Frames --------------------------------------*/\n"
-"/*#frTopBackground{\n"
-"    background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgba(0, 180, 219, 255), stop:1 rgba(0, 131, 176, 255));\n"
-"}\n"
-"\n"
-"\n"
-"#frTopBackground{\n"
-"    background-color: qlineargradient(spread:reflect, x1:0, y1:0.5, x2:0.454, y2:0.5, stop:0 rgba(15, 12, 41, 255), stop:0.80203 rgba(48, 43, 99, 255));\n"
-"}\n"
-"*/\n"
 "#frTopBackground{\n"
 "    background-color: qlineargradient(spread:pad, x1:1, y1:0.483, x2:0, y2:0.539773, stop:0 rgba(39, 86, 135, 255), stop:1 rgba(62, 141, 225, 204));\n"
 "}\n"
@@ -61,7 +52,7 @@ class Ui_mwEntrevistaPage(object):
 "}\n"
 "\n"
 "#frEtapa2 {\n"
-"    background-image: url(:/Etapa2/n2-grey.png);\n"
+"    background-image: url(:/Etapa2/n1-grey.png);\n"
 "    background-repeat: no-repeat;\n"
 "    background-position: center;\n"
 "}\n"
@@ -88,6 +79,19 @@ class Ui_mwEntrevistaPage(object):
 "    background-image: url(:/dots/d3-blue.png);\n"
 "    background-repeat: no-repeat;\n"
 "    background-position: top;\n"
+"}\n"
+"\n"
+"#frNaturezaRight, #frTipoBeneRight, \n"
+"#frTipoProcRight, #frTiposAtiv {\n"
+"    background-color: qlineargradient(spread:pad, x1:1, y1:0.443182, x2:0, y2:0.5, stop:0 rgba(66, 120, 178, 255), stop:1 rgba(39, 86, 135, 255));\n"
+"    border-radius: 6px;\n"
+"}\n"
+"\n"
+"#frNaturezaIcon, #frTipoBeneIcon,\n"
+"#frTipoProcIcon, #frTiposAtivIcon  {\n"
+"    background-image: url(:/dots/d3-white.png);\n"
+"    background-repeat: no-repeat;\n"
+"    background-position: center;\n"
 "}\n"
 "\n"
 "/*-------------------------------------- Labels --------------------------------------*/\n"
@@ -125,7 +129,7 @@ class Ui_mwEntrevistaPage(object):
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 14px;\n"
 "\n"
-"    color: grey;\n"
+"    color: white;\n"
 "}\n"
 "\n"
 "/*-------------------------------------- QFrame --------------------------------------*/\n"
@@ -134,15 +138,54 @@ class Ui_mwEntrevistaPage(object):
 "    border-radius: 5px;\n"
 "}\n"
 "\n"
-"")
+"/*-------------------------------------- Push Buttons ------------------------------*/\n"
+"#pbProxEtapa {\n"
+"    background-color: qlineargradient(spread:pad, x1:0.913, y1:0.096, x2:0.005, y2:1, stop:0 rgba(86, 178, 169, 255), stop:1 rgba(21, 135, 133, 255));\n"
+"    border-radius: 16px;\n"
+"    \n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"#pbProxEtapa:hover {\n"
+"    background-color: qlineargradient(spread:pad, x1:0.913, y1:0.096, x2:0.005, y2:1, stop:0 rgba(86, 178, 169, 255), stop:1 rgba(51, 165, 163, 255));\n"
+"    border-radius: 16px;\n"
+"    \n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"#pbVoltaEtapa {\n"
+"    background-color: qlineargradient(spread:pad, x1:0.877204, y1:0.193, x2:0.301, y2:0.773, stop:0 rgba(167, 66, 146, 255), stop:1 rgba(131, 52, 169, 255));\n"
+"    border-radius: 16px;\n"
+"    \n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"#pbVoltaEtapa:hover {\n"
+"    background-color: qlineargradient(spread:pad, x1:0.469, y1:0, x2:0.464, y2:1, stop:0 rgba(102, 70, 147, 255), stop:1 rgba(127, 52, 169, 255));\n"
+"    border-radius: 16px;\n"
+"    \n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"\n"
+"    color: white;\n"
+"}")
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frTopBackground = QtWidgets.QFrame(self.centralwidget)
-        self.frTopBackground.setMinimumSize(QtCore.QSize(0, 150))
-        self.frTopBackground.setMaximumSize(QtCore.QSize(16777215, 150))
+        self.frTopBackground.setMinimumSize(QtCore.QSize(0, 120))
+        self.frTopBackground.setMaximumSize(QtCore.QSize(16777215, 120))
         self.frTopBackground.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frTopBackground.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frTopBackground.setObjectName("frTopBackground")
@@ -153,6 +196,8 @@ class Ui_mwEntrevistaPage(object):
         self.frame_15.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_15.setObjectName("frame_15")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.frame_15)
+        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_5.setSpacing(0)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.lbTopTitulo = QtWidgets.QLabel(self.frame_15)
         self.lbTopTitulo.setObjectName("lbTopTitulo")
@@ -335,7 +380,7 @@ class Ui_mwEntrevistaPage(object):
         self.verticalLayout_4.addWidget(self.frBarProgress, 0, QtCore.Qt.AlignHCenter)
         self.verticalLayout.addWidget(self.frTopBackground)
         self.frBottomBackground = QtWidgets.QFrame(self.centralwidget)
-        self.frBottomBackground.setMinimumSize(QtCore.QSize(0, 700))
+        self.frBottomBackground.setMinimumSize(QtCore.QSize(800, 700))
         self.frBottomBackground.setMaximumSize(QtCore.QSize(16777215, 800))
         self.frBottomBackground.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frBottomBackground.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -359,26 +404,26 @@ class Ui_mwEntrevistaPage(object):
         self.frRight.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frRight.setObjectName("frRight")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frRight)
-        self.verticalLayout_3.setContentsMargins(8, 0, 8, 0)
-        self.verticalLayout_3.setSpacing(0)
+        self.verticalLayout_3.setContentsMargins(8, 8, 8, 4)
+        self.verticalLayout_3.setSpacing(16)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.frame = QtWidgets.QFrame(self.frRight)
-        self.frame.setMinimumSize(QtCore.QSize(210, 40))
-        self.frame.setMaximumSize(QtCore.QSize(210, 40))
-        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.frame)
+        self.frNaturezaRight = QtWidgets.QFrame(self.frRight)
+        self.frNaturezaRight.setMinimumSize(QtCore.QSize(210, 40))
+        self.frNaturezaRight.setMaximumSize(QtCore.QSize(210, 40))
+        self.frNaturezaRight.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frNaturezaRight.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frNaturezaRight.setObjectName("frNaturezaRight")
+        self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.frNaturezaRight)
         self.horizontalLayout_10.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_10.setSpacing(0)
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
-        self.frame_2 = QtWidgets.QFrame(self.frame)
-        self.frame_2.setMaximumSize(QtCore.QSize(40, 16777215))
-        self.frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName("frame_2")
-        self.horizontalLayout_10.addWidget(self.frame_2)
-        self.frame_5 = QtWidgets.QFrame(self.frame)
+        self.frNaturezaIcon = QtWidgets.QFrame(self.frNaturezaRight)
+        self.frNaturezaIcon.setMaximumSize(QtCore.QSize(40, 16777215))
+        self.frNaturezaIcon.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frNaturezaIcon.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frNaturezaIcon.setObjectName("frNaturezaIcon")
+        self.horizontalLayout_10.addWidget(self.frNaturezaIcon)
+        self.frame_5 = QtWidgets.QFrame(self.frNaturezaRight)
         self.frame_5.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_5.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_5.setObjectName("frame_5")
@@ -387,27 +432,28 @@ class Ui_mwEntrevistaPage(object):
         self.horizontalLayout_14.setSpacing(0)
         self.horizontalLayout_14.setObjectName("horizontalLayout_14")
         self.lbInfo1 = QtWidgets.QLabel(self.frame_5)
+        self.lbInfo1.setAlignment(QtCore.Qt.AlignCenter)
         self.lbInfo1.setObjectName("lbInfo1")
         self.horizontalLayout_14.addWidget(self.lbInfo1)
         self.horizontalLayout_10.addWidget(self.frame_5)
-        self.verticalLayout_3.addWidget(self.frame)
-        self.frame_6 = QtWidgets.QFrame(self.frRight)
-        self.frame_6.setMinimumSize(QtCore.QSize(210, 40))
-        self.frame_6.setMaximumSize(QtCore.QSize(210, 40))
-        self.frame_6.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_6.setObjectName("frame_6")
-        self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.frame_6)
+        self.verticalLayout_3.addWidget(self.frNaturezaRight)
+        self.frTipoProcRight = QtWidgets.QFrame(self.frRight)
+        self.frTipoProcRight.setMinimumSize(QtCore.QSize(210, 40))
+        self.frTipoProcRight.setMaximumSize(QtCore.QSize(210, 40))
+        self.frTipoProcRight.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTipoProcRight.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTipoProcRight.setObjectName("frTipoProcRight")
+        self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.frTipoProcRight)
         self.horizontalLayout_11.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_11.setSpacing(0)
         self.horizontalLayout_11.setObjectName("horizontalLayout_11")
-        self.frame_7 = QtWidgets.QFrame(self.frame_6)
-        self.frame_7.setMaximumSize(QtCore.QSize(40, 16777215))
-        self.frame_7.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_7.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_7.setObjectName("frame_7")
-        self.horizontalLayout_11.addWidget(self.frame_7)
-        self.frame_8 = QtWidgets.QFrame(self.frame_6)
+        self.frTipoProcIcon = QtWidgets.QFrame(self.frTipoProcRight)
+        self.frTipoProcIcon.setMaximumSize(QtCore.QSize(40, 16777215))
+        self.frTipoProcIcon.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTipoProcIcon.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTipoProcIcon.setObjectName("frTipoProcIcon")
+        self.horizontalLayout_11.addWidget(self.frTipoProcIcon)
+        self.frame_8 = QtWidgets.QFrame(self.frTipoProcRight)
         self.frame_8.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_8.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_8.setObjectName("frame_8")
@@ -416,27 +462,28 @@ class Ui_mwEntrevistaPage(object):
         self.horizontalLayout_15.setSpacing(0)
         self.horizontalLayout_15.setObjectName("horizontalLayout_15")
         self.lbInfo2 = QtWidgets.QLabel(self.frame_8)
+        self.lbInfo2.setAlignment(QtCore.Qt.AlignCenter)
         self.lbInfo2.setObjectName("lbInfo2")
         self.horizontalLayout_15.addWidget(self.lbInfo2)
         self.horizontalLayout_11.addWidget(self.frame_8)
-        self.verticalLayout_3.addWidget(self.frame_6)
-        self.frame_9 = QtWidgets.QFrame(self.frRight)
-        self.frame_9.setMinimumSize(QtCore.QSize(210, 40))
-        self.frame_9.setMaximumSize(QtCore.QSize(210, 40))
-        self.frame_9.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_9.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_9.setObjectName("frame_9")
-        self.horizontalLayout_12 = QtWidgets.QHBoxLayout(self.frame_9)
+        self.verticalLayout_3.addWidget(self.frTipoProcRight)
+        self.frTipoBeneRight = QtWidgets.QFrame(self.frRight)
+        self.frTipoBeneRight.setMinimumSize(QtCore.QSize(210, 40))
+        self.frTipoBeneRight.setMaximumSize(QtCore.QSize(210, 40))
+        self.frTipoBeneRight.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTipoBeneRight.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTipoBeneRight.setObjectName("frTipoBeneRight")
+        self.horizontalLayout_12 = QtWidgets.QHBoxLayout(self.frTipoBeneRight)
         self.horizontalLayout_12.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_12.setSpacing(0)
         self.horizontalLayout_12.setObjectName("horizontalLayout_12")
-        self.frame_10 = QtWidgets.QFrame(self.frame_9)
-        self.frame_10.setMaximumSize(QtCore.QSize(40, 16777215))
-        self.frame_10.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_10.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_10.setObjectName("frame_10")
-        self.horizontalLayout_12.addWidget(self.frame_10)
-        self.frame_11 = QtWidgets.QFrame(self.frame_9)
+        self.frTipoBeneIcon = QtWidgets.QFrame(self.frTipoBeneRight)
+        self.frTipoBeneIcon.setMaximumSize(QtCore.QSize(40, 16777215))
+        self.frTipoBeneIcon.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTipoBeneIcon.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTipoBeneIcon.setObjectName("frTipoBeneIcon")
+        self.horizontalLayout_12.addWidget(self.frTipoBeneIcon)
+        self.frame_11 = QtWidgets.QFrame(self.frTipoBeneRight)
         self.frame_11.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_11.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_11.setObjectName("frame_11")
@@ -445,27 +492,28 @@ class Ui_mwEntrevistaPage(object):
         self.horizontalLayout_16.setSpacing(0)
         self.horizontalLayout_16.setObjectName("horizontalLayout_16")
         self.lbInfo3 = QtWidgets.QLabel(self.frame_11)
+        self.lbInfo3.setAlignment(QtCore.Qt.AlignCenter)
         self.lbInfo3.setObjectName("lbInfo3")
         self.horizontalLayout_16.addWidget(self.lbInfo3)
         self.horizontalLayout_12.addWidget(self.frame_11)
-        self.verticalLayout_3.addWidget(self.frame_9)
-        self.frame_12 = QtWidgets.QFrame(self.frRight)
-        self.frame_12.setMinimumSize(QtCore.QSize(210, 40))
-        self.frame_12.setMaximumSize(QtCore.QSize(210, 40))
-        self.frame_12.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_12.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_12.setObjectName("frame_12")
-        self.horizontalLayout_13 = QtWidgets.QHBoxLayout(self.frame_12)
+        self.verticalLayout_3.addWidget(self.frTipoBeneRight)
+        self.frTiposAtiv = QtWidgets.QFrame(self.frRight)
+        self.frTiposAtiv.setMinimumSize(QtCore.QSize(210, 40))
+        self.frTiposAtiv.setMaximumSize(QtCore.QSize(210, 40))
+        self.frTiposAtiv.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTiposAtiv.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTiposAtiv.setObjectName("frTiposAtiv")
+        self.horizontalLayout_13 = QtWidgets.QHBoxLayout(self.frTiposAtiv)
         self.horizontalLayout_13.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_13.setSpacing(0)
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
-        self.frame_13 = QtWidgets.QFrame(self.frame_12)
-        self.frame_13.setMaximumSize(QtCore.QSize(40, 16777215))
-        self.frame_13.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_13.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_13.setObjectName("frame_13")
-        self.horizontalLayout_13.addWidget(self.frame_13)
-        self.frame_14 = QtWidgets.QFrame(self.frame_12)
+        self.frTiposAtivIcon = QtWidgets.QFrame(self.frTiposAtiv)
+        self.frTiposAtivIcon.setMaximumSize(QtCore.QSize(40, 16777215))
+        self.frTiposAtivIcon.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTiposAtivIcon.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTiposAtivIcon.setObjectName("frTiposAtivIcon")
+        self.horizontalLayout_13.addWidget(self.frTiposAtivIcon)
+        self.frame_14 = QtWidgets.QFrame(self.frTiposAtiv)
         self.frame_14.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_14.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_14.setObjectName("frame_14")
@@ -474,10 +522,23 @@ class Ui_mwEntrevistaPage(object):
         self.horizontalLayout_17.setSpacing(0)
         self.horizontalLayout_17.setObjectName("horizontalLayout_17")
         self.lbInfo4 = QtWidgets.QLabel(self.frame_14)
+        self.lbInfo4.setAlignment(QtCore.Qt.AlignCenter)
         self.lbInfo4.setObjectName("lbInfo4")
         self.horizontalLayout_17.addWidget(self.lbInfo4)
         self.horizontalLayout_13.addWidget(self.frame_14)
-        self.verticalLayout_3.addWidget(self.frame_12)
+        self.verticalLayout_3.addWidget(self.frTiposAtiv)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_3.addItem(spacerItem)
+        self.pbProxEtapa = QtWidgets.QPushButton(self.frRight)
+        self.pbProxEtapa.setMinimumSize(QtCore.QSize(0, 32))
+        self.pbProxEtapa.setMaximumSize(QtCore.QSize(16777215, 32))
+        self.pbProxEtapa.setObjectName("pbProxEtapa")
+        self.verticalLayout_3.addWidget(self.pbProxEtapa)
+        self.pbVoltaEtapa = QtWidgets.QPushButton(self.frRight)
+        self.pbVoltaEtapa.setMinimumSize(QtCore.QSize(0, 32))
+        self.pbVoltaEtapa.setMaximumSize(QtCore.QSize(16777215, 32))
+        self.pbVoltaEtapa.setObjectName("pbVoltaEtapa")
+        self.verticalLayout_3.addWidget(self.pbVoltaEtapa)
         self.horizontalLayout_18.addWidget(self.frRight)
         self.verticalLayout.addWidget(self.frBottomBackground, 0, QtCore.Qt.AlignTop)
         self.frBottomBackground.raise_()
@@ -501,10 +562,16 @@ class Ui_mwEntrevistaPage(object):
         self.lbInfoFinalizacao.setText(_translate("mwEntrevistaPage", "Documentação\n"
 "e\n"
 "Finalização"))
-        self.lbInfo1.setText(_translate("mwEntrevistaPage", "Informação 1"))
-        self.lbInfo2.setText(_translate("mwEntrevistaPage", "Informação 2"))
-        self.lbInfo3.setText(_translate("mwEntrevistaPage", "Informação 3"))
-        self.lbInfo4.setText(_translate("mwEntrevistaPage", "Informação 4"))
+        self.lbInfo1.setText(_translate("mwEntrevistaPage", "Natureza do\n"
+" Processo"))
+        self.lbInfo2.setText(_translate("mwEntrevistaPage", "Tipo do \n"
+"Processo"))
+        self.lbInfo3.setText(_translate("mwEntrevistaPage", "Tipo do \n"
+"Benefício"))
+        self.lbInfo4.setText(_translate("mwEntrevistaPage", "Tipos de \n"
+"Atividades"))
+        self.pbProxEtapa.setText(_translate("mwEntrevistaPage", "Próxima etapa"))
+        self.pbVoltaEtapa.setText(_translate("mwEntrevistaPage", "Etapa anterior"))
 import Resources.entrevistaPage
 
 

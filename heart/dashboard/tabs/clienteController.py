@@ -7,7 +7,7 @@ from Daos.daoCliente import DaoCliente
 from Telas.tabCliente import Ui_wdgTabCliente
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
 from helpers import estCivil, getEstados, unmaskAll, calculaIdadeFromString, getEstadoBySigla, mascaraRG, mascaraCPF, \
-    mascaraTelCel, mascaraCep, strToDatetime, mascaraNit
+    mascaraTelCel, mascaraCep, strToDatetime, mascaraNit, getEscolaridade
 from modelos.clienteModelo import ClienteModelo
 from modelos.cnisModelo import CNISModelo
 from newPrevEnums import TamanhoData
@@ -64,7 +64,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leTelefone.textEdited.connect(lambda: self.carregaInfoTela('telefone'))
         self.leCartProf.textEdited.connect(lambda: self.carregaInfoTela('cartProf'))
         self.leProfissao.textEdited.connect(lambda: self.carregaInfoTela('profissao'))
-        # self.leCdCliente.textEdited.connect(lambda: self.carregaInfoTela('cdCliente'))
         self.sbCdCliente.valueChanged.connect(lambda: self.carregaInfoTela('sbCliente'))
         self.lePrimeiroNome.textEdited.connect(lambda: self.carregaInfoTela('nomeCliente'))
         self.leSobrenome.textEdited.connect(lambda: self.carregaInfoTela('sobrenomeCliente'))
@@ -74,8 +73,12 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leCpf.textEdited.connect(lambda: self.carregaInfoTela('cpf'))
         self.leNomeMae.textEdited.connect(lambda: self.carregaInfoTela('nomeMae'))
         self.cbxEstCivil.activated.connect(lambda: self.carregaInfoTela('estCivil'))
+        self.cbxEscolaridade.activated.connect(lambda: self.carregaInfoTela('cbxEscolaridade'))
         self.leEmail.textEdited.connect(lambda: self.carregaInfoTela('email'))
-        self.leNumero.textEdited.connect(lambda: self.carregaInfoTela('leNumero'))
+        self.leNomeBanco.textEdited.connect(lambda: self.carregaInfoTela('leNomeBanco'))
+        self.leNumeroConta.textEdited.connect(lambda: self.carregaInfoTela('leNumeroConta'))
+        self.leNumeroAgencia.textEdited.connect(lambda: self.carregaInfoTela('leNumeroAgencia'))
+        self.leSenhaINSS.textEdited.connect(lambda: self.carregaInfoTela('leSenhaINSS'))
 
         self.pbCarregaCnis.clicked.connect(self.carregaCnis)
 
@@ -206,6 +209,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.leComplemento.setText(cliente.complemento)
 
         if cliente.nit not in [None, 'None']:
+            print(f"\n\ncliente.nit: {cliente.nit}\n\n")
             self.leNit.setText(mascaraNit(int(cliente.nit)))
 
         if cliente.numCartProf not in [None, 'None']:
@@ -221,6 +225,18 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         elif info == 'endereco':
             self.cliente.endereco = self.leEndereco.text()
 
+        elif info == 'leNomeBanco':
+            self.cliente.leNomeBanco = self.leNomeBanco.text()
+
+        elif info == 'leNumeroConta':
+            self.cliente.leNumeroConta = self.leNumeroConta.text()
+
+        elif info == 'leNumeroAgencia':
+            self.cliente.leNumeroAgencia = self.leNumeroAgencia.text()
+
+        elif info == 'leSenhaINSS':
+            self.cliente.leSenhaINSS = self.leSenhaINSS.text()
+
         elif info == 'cidade':
             self.cliente.cidade = self.leCidade.text()
 
@@ -229,6 +245,9 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
         elif info == 'estado':
             self.cliente.estado = self.cbxEstado.currentText()
+
+        elif info == 'cbxEscolaridade':
+            self.cliente.grauEscolaridade = self.cbxEscolaridade.currentText()
 
         elif info == 'complemento':
             self.cliente.complemento = self.leComplemento.text()
@@ -308,6 +327,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def carregaComboBoxes(self):
         self.cbxEstCivil.addItems(estCivil)
+        self.cbxEscolaridade.addItems(getEscolaridade().keys())
         self.cbxEstado.addItems(getEstados().keys())
         self.cbxEstado.setCurrentIndex(24)
 

@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QTabBar
 from Telas.entrevistaPage import Ui_mwEntrevistaPage
 from connections import ConfigConnection
+from heart.dashboard.entrevista.localStyleSheet.lateral import estadoInfoFinalizado
 from heart.dashboard.entrevista.naturezaController import NaturezaController
 from heart.dashboard.tabs.clienteController import TabCliente
 from newPrevEnums import TiposConexoes, TelasEntrevista, EtapaEntrevista
@@ -20,7 +21,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.sinais = Sinais()
         self.telaAtual = TelasEntrevista.cadastro
 
-        self.clienteController = TabCliente(db=self.db, entrevista=True)
+        self.clienteController = TabCliente(parent=self, db=self.db, entrevista=True)
         self.naturezaPg = NaturezaController(parent=self, db=self.db)
         self.sinais.sTrocaTelaEntrevista.connect(self.trocaTelaCentral)
 
@@ -37,6 +38,11 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.atualizaEtapa(EtapaEntrevista.detalhamento, False)
         self.atualizaEtapa(EtapaEntrevista.documentacao, False)
 
+        self.lbInfo1.setText('Informações \npessoais')
+        self.lbInfo2.setText('Informações \nresidenciais')
+        self.lbInfo3.setText('Informações \nprofissionais')
+        self.lbInfo4.setText('Informações \nbancárias')
+
         self.stackedWidget.setCurrentIndex(self.telaAtual.value)
 
     def avaliaTrocaTela(self, proxima=True):
@@ -52,8 +58,6 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.atualizaEtapa(EtapaEntrevista.infoPessoais, completo=False)
 
     def trocaTelaCentral(self, *args):
-        print(' ---------> trocaTelaCentral')
-        print(args[0])
         tela: TelasEntrevista = args[0]
         self.stackedWidget.setCurrentIndex(tela.value)
 
@@ -73,6 +77,13 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         if etapa == EtapaEntrevista.documentacao:
             self.lbInfoFinalizacao.setStyleSheet(infoLabelCabecalho(etapa, completo=completo))
             self.frEtapa4.setStyleSheet(infoIconeCabecalho(etapa, completo=completo))
+
+    def atualizaInfoLateral(self, *args, **kwargs):
+        estadoEntrevista: dict = args[0]
+        self.frInfo1Icon.setStyleSheet(estadoInfoFinalizado('pessoais', estadoEntrevista['pessoais']))
+        self.frInfo2Icon.setStyleSheet(estadoInfoFinalizado('residenciais', estadoEntrevista['residenciais']))
+        self.frInfo3Icon.setStyleSheet(estadoInfoFinalizado('profissionais', estadoEntrevista['profissionais']))
+        self.frInfo4Icon.setStyleSheet(estadoInfoFinalizado('bancarias', estadoEntrevista['bancarias']))
 
 
 if __name__ == '__main__':

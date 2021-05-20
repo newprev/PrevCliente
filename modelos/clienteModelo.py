@@ -4,7 +4,7 @@ import datetime
 class ClienteModelo:
 
     def __init__(self):
-        self.advogadoId: int = None
+        self.escritorioId: int = None
         self.clienteId: int = None
         self.nomeCliente: str = None
         self.sobrenomeCliente: str = None
@@ -37,7 +37,7 @@ class ClienteModelo:
 
     def toDict(self):
         dictUsuario = {
-            'advogadoId': self.advogadoId,
+            'escritorioId': self.escritorioId,
             'clienteId': self.clienteId,
             'nomeCliente': self.nomeCliente,
             'sobrenomeCliente': self.sobrenomeCliente,
@@ -67,7 +67,7 @@ class ClienteModelo:
         return dictUsuario
 
     def fromDict(self, dictCliente):
-        self.advogadoId = dictCliente['advogadoId']
+        self.escritorioId = dictCliente['escritorioId']
         self.clienteId = dictCliente['clienteId']
         self.nomeCliente = dictCliente['nomeCliente']
         self.sobrenomeCliente = dictCliente['sobrenomeCliente']
@@ -102,7 +102,7 @@ class ClienteModelo:
             if len(listCliente) != 0:
                 # for num, info in enumerate(listCliente):
                 #     print(f"{num} - {info}")
-                self.advogadoId = listCliente[0]
+                self.escritorioId = listCliente[0]
                 self.clienteId = listCliente[1]
                 self.nomeCliente = listCliente[2]
                 self.sobrenomeCliente = listCliente[3]
@@ -113,31 +113,31 @@ class ClienteModelo:
                 self.rgCliente = listCliente[8]
                 self.cpfCliente = listCliente[9]
                 self.nomeBanco = listCliente[10]
-                self.agenciaBanco = listCliente[10]
-                self.numeroConta = listCliente[10]
-                self.grauEscolaridade = listCliente[10]
-                self.numCartProf = listCliente[10]
-                self.senhaINSS = listCliente[10]
-                self.nit = listCliente[11]
-                self.nomeMae = listCliente[12]
-                self.estadoCivil = listCliente[13]
-                self.profissao = listCliente[14]
-                self.endereco = listCliente[15]
-                self.estado = listCliente[16]
-                self.cidade = listCliente[17]
-                self.numero = listCliente[18]
-                self.bairro = listCliente[19]
-                self.cep = listCliente[20]
-                self.complemento = listCliente[21]
-                self.dataCadastro = listCliente[22]
-                self.dataUltAlt = listCliente[23]
+                self.agenciaBanco = listCliente[11]
+                self.numeroConta = listCliente[12]
+                self.grauEscolaridade = listCliente[13]
+                self.senhaINSS = listCliente[14]
+                self.numCartProf = listCliente[15]
+                self.nit = listCliente[16]
+                self.nomeMae = listCliente[17]
+                self.estadoCivil = listCliente[18]
+                self.profissao = listCliente[19]
+                self.endereco = listCliente[20]
+                self.estado = listCliente[21]
+                self.cidade = listCliente[22]
+                self.numero = listCliente[23]
+                self.bairro = listCliente[24]
+                self.cep = listCliente[25]
+                self.complemento = listCliente[26]
+                self.dataCadastro = listCliente[27]
+                self.dataUltAlt = listCliente[28]
                 # pathCnis: {self.pathCnis}
             if retornaInst:
                 return self
 
     def __repr__(self):
         return f"""Cliente(
-            advogadoId: {self.advogadoId},
+            escritorioId: {self.escritorioId},
             clienteId: {self.clienteId},
             nomeCliente: {self.nomeCliente},
             sobrenomeCliente: {self.sobrenomeCliente},

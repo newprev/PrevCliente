@@ -8,3 +8,4 @@ class Sinais(QObject):
     sTrocaWidgetCentral = QtCore.pyqtSignal(TelaPosicao, name='pagina')
     sTrocaPrimeiroAcesso = QtCore.pyqtSignal(AdvogadoModelo, name='advogado')
     sTrocaTelaEntrevista = QtCore.pyqtSignal(TelasEntrevista, name='tela')
+    sTrocaInfoLateral = QtCore.pyqtSignal(dict, name='infoLateral')

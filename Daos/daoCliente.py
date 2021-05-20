@@ -37,7 +37,7 @@ class DaoCliente:
                     nomeCliente = '{cliente.nomeCliente}',
                     sobrenomeCliente = '{cliente.sobrenomeCliente}',
                     idade = {cliente.idade},
-                    dataNascimento = '{mascaraDataSql(cliente.dataNascimento)}',
+                    dataNascimento = '{cliente.dataNascimento}',
                     telefone = '{cliente.telefone}',
                     email = '{cliente.email}',
                     rgCliente = '{cliente.rgCliente}',

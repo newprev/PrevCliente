@@ -92,8 +92,8 @@
 	border-radius: 6px;
 }
 
-#frNaturezaIcon, #frTipoBeneIcon,
-#frTipoProcIcon, #frTiposAtivIcon  {
+#frInfo1Icon, #frInfo2Icon,
+#frInfo3Icon, #frInfo4Icon  {
 	background-image: url(:/dots/d3-white.png);
 	background-repeat: no-repeat;
 	background-position: center;
@@ -972,7 +972,7 @@ Finalização</string>
               <number>0</number>
              </property>
              <item>
-              <widget class="QFrame" name="frNaturezaIcon">
+              <widget class="QFrame" name="frInfo1Icon">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1065,7 +1065,7 @@ Finalização</string>
               <number>0</number>
              </property>
              <item>
-              <widget class="QFrame" name="frTipoProcIcon">
+              <widget class="QFrame" name="frInfo2Icon">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1158,7 +1158,7 @@ Processo</string>
               <number>0</number>
              </property>
              <item>
-              <widget class="QFrame" name="frTipoBeneIcon">
+              <widget class="QFrame" name="frInfo3Icon">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1251,7 +1251,7 @@ Benefício</string>
               <number>0</number>
              </property>
              <item>
-              <widget class="QFrame" name="frTiposAtivIcon">
+              <widget class="QFrame" name="frInfo4Icon">
                <property name="maximumSize">
                 <size>
                  <width>40</width>

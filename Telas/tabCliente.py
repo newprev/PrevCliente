@@ -474,7 +474,7 @@ class Ui_wdgTabCliente(object):
 "    background-color: rgb(52, 93, 114);\n"
 "}\n"
 "\n"
-"#pbLimpar {\n"
+"#pbLimpar, #pbMaisTelefones {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    color: white;\n"
@@ -483,7 +483,7 @@ class Ui_wdgTabCliente(object):
 "    background-color: rgb(52, 73, 94);\n"
 "}\n"
 "\n"
-"#pbLimpar:hover {\n"
+"#pbLimpar:hover, #pbMaisTelefones:hover {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    color: white;\n"
@@ -633,6 +633,9 @@ class Ui_wdgTabCliente(object):
         self.lbEstCivil_2 = QtWidgets.QLabel(self.frInfoPessoais)
         self.lbEstCivil_2.setGeometry(QtCore.QRect(150, 330, 191, 17))
         self.lbEstCivil_2.setObjectName("lbEstCivil_2")
+        self.pbMaisTelefones = QtWidgets.QPushButton(self.frInfoPessoais)
+        self.pbMaisTelefones.setGeometry(QtCore.QRect(10, 390, 121, 25))
+        self.pbMaisTelefones.setObjectName("pbMaisTelefones")
         self.frInfoResidencial = QtWidgets.QFrame(self.scaCadastro)
         self.frInfoResidencial.setGeometry(QtCore.QRect(390, 80, 361, 291))
         self.frInfoResidencial.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -860,6 +863,7 @@ class Ui_wdgTabCliente(object):
         self.lbIdade.setText(_translate("wdgTabCliente", "Idade"))
         self.lbDataNascimento.setText(_translate("wdgTabCliente", "Data de Nascimento"))
         self.lbEstCivil_2.setText(_translate("wdgTabCliente", "Grau de escolaridade"))
+        self.pbMaisTelefones.setText(_translate("wdgTabCliente", "Mais telefones"))
         self.leCep.setPlaceholderText(_translate("wdgTabCliente", "12345-789"))
         self.leCidade.setPlaceholderText(_translate("wdgTabCliente", "São Paulo"))
         self.lbCep.setText(_translate("wdgTabCliente", "CEP"))
@@ -888,7 +892,7 @@ class Ui_wdgTabCliente(object):
         self.lbFrTituloInfoProfissional.setText(_translate("wdgTabCliente", "Informações profissionais"))
         self.pbAtualizar.setText(_translate("wdgTabCliente", "Atualizar cliente"))
         self.lbFrTituloInfoBancarias.setText(_translate("wdgTabCliente", "  Informações bancárias"))
-        self.leNomeBanco.setPlaceholderText(_translate("wdgTabCliente", "12345-789"))
+        self.leNomeBanco.setPlaceholderText(_translate("wdgTabCliente", "Bamerindos"))
         self.lbCep_2.setText(_translate("wdgTabCliente", "Nome do banco"))
         self.leNumeroAgencia.setPlaceholderText(_translate("wdgTabCliente", "12345"))
         self.lbNumero_2.setText(_translate("wdgTabCliente", "Agência"))

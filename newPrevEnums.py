@@ -46,6 +46,9 @@ class TelasEntrevista(Enum):
     natureza = 1
     administrativo = 2
     judicial = 3
+    tipoProcesso = 4
+    tipoBeneficio = 5
+    tipoAtividade = 6
 
 class TipoWidget(Enum):
     label = 0

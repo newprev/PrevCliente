@@ -4,6 +4,8 @@ from Telas.entrevistaPage import Ui_mwEntrevistaPage
 from connections import ConfigConnection
 from heart.dashboard.entrevista.localStyleSheet.lateral import estadoInfoFinalizado
 from heart.dashboard.entrevista.naturezaController import NaturezaController
+from heart.dashboard.entrevista.tipoProcessoController import TipoProcessoController
+from heart.dashboard.entrevista.tipoBeneficioController import TipoBeneficioController
 from heart.dashboard.tabs.clienteController import TabCliente
 from newPrevEnums import TiposConexoes, TelasEntrevista, EtapaEntrevista
 from heart.sinaisCustomizados import Sinais
@@ -23,10 +25,14 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
         self.clienteController = TabCliente(parent=self, db=self.db, entrevista=True)
         self.naturezaPg = NaturezaController(parent=self, db=self.db)
+        self.tipoProcessoPg = TipoProcessoController(parent=self, db=self.db)
+        self.tipoBeneficioPg = TipoBeneficioController(parent=self, db=self.db)
         self.sinais.sTrocaTelaEntrevista.connect(self.trocaTelaCentral)
 
         self.stackedWidget.addWidget(self.clienteController)
         self.stackedWidget.addWidget(self.naturezaPg)
+        self.stackedWidget.addWidget(self.tipoProcessoPg)
+        self.stackedWidget.addWidget(self.tipoBeneficioPg)
         # self.stackedWidget.removeWidget(self.stackedWidget.currentWidget())
         # self.stackedWidget.removeWidget(self.stackedWidget.currentWidget())
 
@@ -59,7 +65,10 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
     def trocaTelaCentral(self, *args):
         tela: TelasEntrevista = args[0]
-        self.stackedWidget.setCurrentIndex(tela.value)
+        if tela == TelasEntrevista.tipoBeneficio:
+            self.stackedWidget.setCurrentIndex(3)
+        else:
+            self.stackedWidget.setCurrentIndex(tela.value)
 
     def atualizaEtapa(self, etapa: EtapaEntrevista, completo: bool):
         if etapa == EtapaEntrevista.infoPessoais:

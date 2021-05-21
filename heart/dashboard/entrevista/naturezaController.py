@@ -18,7 +18,7 @@ class NaturezaController(QWidget, Ui_wdgNatureza):
 
         self.sinais.sTrocaTelaEntrevista.connect(self.trocaTela)
         self.pbAdministrativo.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.administrativo))
-        self.pbJudicial.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.judicial))
+        # self.pbJudicial.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.judicial))
 
         self.efeitos.shadowCards([self.pbJudicial, self.pbAdministrativo])
 

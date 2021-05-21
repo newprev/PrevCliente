@@ -909,7 +909,7 @@ QFrame &gt; QLabel {
 	background-color: rgb(52, 93, 114);
 }
 
-#pbLimpar {
+#pbLimpar, #pbMaisTelefones {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
@@ -918,7 +918,7 @@ QFrame &gt; QLabel {
 	background-color: rgb(52, 73, 94);
 }
 
-#pbLimpar:hover {
+#pbLimpar:hover, #pbMaisTelefones:hover {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
@@ -1368,6 +1368,19 @@ CNIS</string>
           </property>
           <property name="text">
            <string>Grau de escolaridade</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pbMaisTelefones">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>390</y>
+            <width>121</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Mais telefones</string>
           </property>
          </widget>
         </widget>
@@ -1870,7 +1883,7 @@ CNIS</string>
            <number>9</number>
           </property>
           <property name="placeholderText">
-           <string>12345-789</string>
+           <string>Bamerindos</string>
           </property>
          </widget>
          <widget class="QLabel" name="lbCep_2">

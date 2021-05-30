@@ -1,6 +1,6 @@
 import datetime
 
-from newPrevEnums import TamanhoData
+from newPrevEnums import *
 
 estCivil = ['Solteiro(a)', 'Casado(a)', 'Divorciado(a)', 'Viúvo(a)']
 
@@ -150,6 +150,7 @@ meses = {
 
 situacaoBeneficio = ['Indeferido', 'Cessado', 'Ativo']
 
+
 def getEscolaridade():
     return {
         'Fundamental Incompleto': 'FI',
@@ -160,11 +161,13 @@ def getEscolaridade():
         'Superior Completo': 'SC',
     }
 
+
 def getEscolaridadeBySigla(sigla: str):
     dictEscolaridade = getEscolaridade()
     for chave, valor in dictEscolaridade.items():
         if valor.upper() == sigla.upper():
             return chave
+
 
 def getEstados():
     return {
@@ -344,3 +347,50 @@ def strToFloat(valor: str) -> float:
 
 def unmaskAll(info: str):
     return info.replace('.', '').replace('/', '').replace('\\', '').replace(',', '').replace('-', '')
+
+
+def strNatureza(natureza: int) -> str:
+    if natureza == NaturezaProcesso.administrativo.value:
+        return 'Administrativo'
+    elif natureza == NaturezaProcesso.judicial.value:
+        return 'Judcial'
+    else:
+        return '-'
+
+
+def strTipoProcesso(tipoProcesso: int) -> str:
+    if tipoProcesso == TipoProcesso.Revisao.value:
+        return 'Revisão'
+    elif tipoProcesso == TipoProcesso.Concessao.value:
+        return 'Concessão'
+    elif tipoProcesso == TipoProcesso.RecEspecial.value:
+        return 'Recurso Especial'
+    elif tipoProcesso == TipoProcesso.RecOrdinario.value:
+        return 'Recurso Ordinário'
+    else:
+        return '-'
+
+
+def strTipoBeneficio(tipoBeneficio: int) -> str:
+    if tipoBeneficio == TipoBeneficio.Aposentadoria.value:
+        return 'Aposentadoria'
+    elif tipoBeneficio == TipoBeneficio.AposDeficiencia:
+        return 'Aposentadoria da pessoa com deficiencia'
+    elif tipoBeneficio == TipoBeneficio.AposRural:
+        return 'Aposentadoria rural'
+    elif tipoBeneficio == TipoBeneficio.AposEspecial:
+        return 'Aposentadoria especial'
+    elif tipoBeneficio == TipoBeneficio.AuxDoenca:
+        return 'Auxílio doença'
+    elif tipoBeneficio == TipoBeneficio.AuxReclusao:
+        return 'Auxílio reclusão'
+    elif tipoBeneficio == TipoBeneficio.BeneIdoso:
+        return 'Benefício assistencial ao idoso'
+    elif tipoBeneficio == TipoBeneficio.BeneDeficiencia:
+        return 'Benefício assistencial à pessoa com deficiência'
+    elif tipoBeneficio == TipoBeneficio.PensaoMorte:
+        return 'Pensão por morte'
+    elif tipoBeneficio == TipoBeneficio.SalMaternidade:
+        return 'Salário maternidade'
+    else:
+        return '-'

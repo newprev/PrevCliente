@@ -15,29 +15,6 @@ class DaoAdvogado:
         self.tabelas = TabelasConfig()
         self.escritorio: EscritorioModelo = EscritorioModelo()
 
-
-        """
-        self.escritorioId: int = None
-        self.nomeEscritorio: str = None
-        self.nomeFantasia: str = None
-        self.cnpj: str = None
-        self.cpf: str = None
-        self.inscEstadual: str = None
-        self.numero: str = None
-        self.cep: str = None
-        self.complemento: str = None
-        self.profissao: str = None
-        self.endereco: str = None
-        self.estado: str = None
-        self.cidade: str = None
-        self.bairro: str = None
-        self.cep: str = None
-        self.qtdChaves: int = 0
-        self.dataCadastro: datetime = None
-        self.dataUltAlt: datetime = None
-        self.ativo: bool = True
-        """
-
     def insereAdvogado(self, advogado: AdvogadoModelo):
 
         if not isinstance(self.db, sqlite3.Connection):

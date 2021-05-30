@@ -1,14 +1,14 @@
 from PyQt5.QtWidgets import QWidget
-from Telas.pgTipoBeneficio import Ui_wdgTipoBeneficio
+from Telas.pgTipoBeneficioConc import Ui_wdgTipoBeneficioConc
 from heart.sinaisCustomizados import Sinais
-from newPrevEnums import TelasEntrevista
+from newPrevEnums import MomentoEntrevista, TipoBeneficio
 from Telas.efeitos import Efeitos
 
 
-class TipoBeneficioController(QWidget, Ui_wdgTipoBeneficio):
+class TipoBeneficioConcController(QWidget, Ui_wdgTipoBeneficioConc):
 
     def __init__(self, parent=None, db=None):
-        super(TipoBeneficioController, self).__init__(parent)
+        super(TipoBeneficioConcController, self).__init__(parent)
 
         self.setupUi(self)
         self.entrevistaPage = parent
@@ -17,21 +17,25 @@ class TipoBeneficioController(QWidget, Ui_wdgTipoBeneficio):
         self.efeitos = Efeitos()
 
         self.sinais.sTrocaTelaEntrevista.connect(self.trocaTela)
-        self.pbApos.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.tipoAtividade))
-        self.pbAposDeficiencia.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.tipoAtividade))
-        self.pbAposRural.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.tipoAtividade))
-        self.pbAposEspecial.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.tipoAtividade))
-        self.pbAuxilioDoenca.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.tipoAtividade))
-        self.pbAuxReclusao.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.tipoAtividade))
-        self.pbBeneIdoso.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.tipoAtividade))
-        self.pbBeneDeficiencia.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.tipoAtividade))
-        self.pbPensaoMorte.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.tipoAtividade))
-        self.pbSalMaternidade.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.tipoAtividade))
+        self.pbApos.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.Aposentadoria))
+        self.pbAposDeficiencia.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.AposDeficiencia))
+        self.pbAposRural.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.AposRural))
+        self.pbAposEspecial.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.AposEspecial))
+        self.pbAuxilioDoenca.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.AuxDoenca))
+        self.pbAuxReclusao.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.AuxReclusao))
+        self.pbBeneIdoso.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.BeneIdoso))
+        self.pbBeneDeficiencia.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.BeneDeficiencia))
+        self.pbPensaoMorte.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.PensaoMorte))
+        self.pbSalMaternidade.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.SalMaternidade))
 
         # self.efeitos.shadowCards([self.pbJudicial, self.pbAdministrativo])
 
-    def emiteTrocaTela(self, tela: TelasEntrevista):
-        self.sinais.sTrocaTelaEntrevista.emit(tela)
+    def emiteTrocaTela(self, momento: MomentoEntrevista, tipoBeneficio: TipoBeneficio):
+        """
+        QtCore.pyqtSignal([MomentoEntrevista, TipoBeneficio] name='tela')
+        :cvar
+        """
+        self.sinais.sTrocaTelaEntrevista.emit([momento, tipoBeneficio])
 
     def trocaTela(self, *args):
         self.entrevistaPage.trocaTelaCentral(args[0])

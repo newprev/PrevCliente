@@ -69,6 +69,12 @@ class Main(Ui_MainWindow, QMainWindow):
         else:
             return False
 
+        self.lbInfo.setText('CRIANDO TABELA DOS PROCESSOS...')
+        if self.daoConfigs.criaTabela(tabelas.sqlCreateProcessos, nomeTabela='processos'):
+            self.progresso(add=8)
+        else:
+            return False
+
         self.lbInfo.setText('CRIANDO TABELA DO CLIENTE...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCliente, nomeTabela='cliente'):
             self.progresso(add=8)
@@ -83,19 +89,19 @@ class Main(Ui_MainWindow, QMainWindow):
 
         self.lbInfo.setText('CRIANDO TABELA DE CONTRIBUIÇÕES...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisContribuicoes, nomeTabela='cnisContribuicoes'):
-            self.progresso(add=8)
+            self.progresso(add=7)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE BENEFÍCIOS...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisBeneficios, nomeTabela='cnisBeneficios'):
-            self.progresso(add=8)
+            self.progresso(add=7)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE CABEÇALHOS...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisCabecalhos, nomeTabela='cnisCabecalhos'):
-            self.progresso(add=8)
+            self.progresso(add=7)
         else:
             return False
 
@@ -103,7 +109,7 @@ class Main(Ui_MainWindow, QMainWindow):
         if self.daoConfigs.criaTabela(tabelas.sqlCreateEspecieBenef, nomeTabela='especieBenef'):
             self.progresso(add=2)
             self.daoConfigs.verificaTblEspecieBenef()
-            self.progresso(add=8)
+            self.progresso(add=7)
         else:
             return False
 
@@ -111,25 +117,25 @@ class Main(Ui_MainWindow, QMainWindow):
         if self.daoConfigs.criaTabela(tabelas.sqlCreateIndicadores, nomeTabela='indicadores'):
             self.progresso(add=2)
             self.daoConfigs.verificaTblIndicadores()
-            self.progresso(add=8)
+            self.progresso(add=7)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE TETOS PREVIDENCIÁRIOS...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateTetosPrev, nomeTabela='tetosPrev'):
-            self.progresso(add=8)
+            self.progresso(add=7)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE CONVERSÕES MONETÁRIAS...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateConvMon, nomeTabela='convMon'):
-            self.progresso(add=8)
+            self.progresso(add=7)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TELA DE LOGIN...')
         self.loginPage = LoginController(db=self.db)
-        self.progresso(add=8)
+        self.progresso(add=7)
 
         self.iniciaNewPrev()
 

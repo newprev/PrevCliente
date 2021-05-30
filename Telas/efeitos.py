@@ -27,3 +27,7 @@ class Efeitos:
             if parentOnly:
                 for widget in widget.children():
                     widget.setGraphicsEffect(None)
+
+    def desativarSombra(self, listaWdg: list):
+        for widget in listaWdg:
+            widget.setGraphicsEffect(None)

@@ -32,7 +32,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
         super(LoginController, self).__init__()
         self.setupUi(self)
         self.db = db
-        # self.sinais = Sinais()
         self.usuarioRepositorio = UsuarioRepository()
         self.escritorio: EscritorioModelo = None
         self.advogado: AdvogadoModelo = AdvogadoModelo()
@@ -85,7 +84,15 @@ class LoginController(QMainWindow, Ui_mwLogin):
     def carregaCacheLogin(self):
         self.advogado = self.cacheLogin.carregarCache()
         if self.advogado.numeroOAB is not None:
+
+            # Confere informações do escritório
             self.escritorio = self.escritorioRepositorio.buscaEscritorio(self.advogado.escritorioId)
+            if self.escritorio is not None:
+                self.cacheEscritorio.salvarCache(self.escritorio)
+            else:
+                self.showPopupAlerta("Erro ao buscar informações do escritório.\nTente novamente mais tarde")
+                return False
+
             if isinstance(self.escritorio, ErroConexao):
                 self.apresentandoErros(self.escritorio)
                 return False
@@ -247,7 +254,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
     def verificaRotinaDiaria(self):
 
-        pathFile = os.path.join(os.getcwd(), 'sync', 'syncFile')
+        pathFile = os.path.join(os.getcwd(), '.sync', '.syncFile')
         syncJson = {
             'syncConvMon': datetimeToSql(datetime.datetime.now()),
             'syncTetosPrev': datetimeToSql(datetime.datetime.now())

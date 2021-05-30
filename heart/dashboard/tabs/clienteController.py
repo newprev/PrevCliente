@@ -23,6 +23,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.cliente = ClienteModelo()
         self.db = db
         self.sinais = Sinais()
+        self.entrevistaPg = parent
         self.entrevista = entrevista
 
         self.cnisClienteAtual = None
@@ -88,10 +89,11 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.cliente.estadoCivil = self.cbxEstCivil.currentText()
 
         if entrevista:
-            self.entrevista = parent
+            self.entrevistaPg = parent
             self.tabMain.setCurrentIndex(1)
             self.findChild(QTabBar).hide()
             self.sinais.sTrocaInfoLateral.connect(self.atualizaEntrevista)
+            self.sinais.sEnviaCliente.connect(self.enviaClienteParaEntrevista)
         else:
             self.atualizaTblClientes()
 
@@ -144,12 +146,18 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             cdCliente: int = int(self.sbCdCliente.text())
             self.limpaTudo()
             self.sbCdCliente.setValue(cdCliente)
+            self.verificaDados()
             self.cliente = self.daoCliente.buscaClienteById(cdCliente, returnInstance=True)
             if self.cliente is None:
                 self.cliente = ClienteModelo()
                 self.limpaTudo()
             else:
                 self.carregaClienteNaTela(self.cliente)
+                if self.entrevista:
+                    self.sinais.sEnviaCliente.emit()
+
+    def enviaClienteParaEntrevista(self):
+        self.entrevistaPg.atualizaCliente(self.cliente)
 
     def carregaCnis(self):
         self.cnisClienteAtual = CNISModelo()
@@ -439,7 +447,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def limpaTudo(self):
         # self.leCdCliente.clear()
-        self.sbCdCliente.clear()
+        # self.sbCdCliente.clear()
         self.lePrimeiroNome.clear()
         self.leSobrenome.clear()
         self.leRg.clear()
@@ -489,7 +497,11 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         close = dialogPopup.exec_()
 
     def atualizaEntrevista(self, *args, **kwargs):
-        self.entrevista.atualizaInfoLateral(args[0])
+        self.entrevistaPg.atualizaInfoLateral(args[0])
+
+    def verificaDados(self):
+        if self.cliente.estado is None or self.cliente.estado == '':
+            self.cliente.estado = self.cbxEstado.currentText()
 
     def avaliaInfoPessoalCompleta(self) -> bool:
         return self.lePrimeiroNome.text() != '' and \

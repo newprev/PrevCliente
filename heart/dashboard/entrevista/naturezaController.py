@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget
 from Telas.pgNatureza import Ui_wdgNatureza
 from heart.sinaisCustomizados import Sinais
-from newPrevEnums import TelasEntrevista
+from newPrevEnums import MomentoEntrevista, NaturezaProcesso
 from Telas.efeitos import Efeitos
 
 
@@ -17,13 +17,17 @@ class NaturezaController(QWidget, Ui_wdgNatureza):
         self.efeitos = Efeitos()
 
         self.sinais.sTrocaTelaEntrevista.connect(self.trocaTela)
-        self.pbAdministrativo.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.administrativo))
-        # self.pbJudicial.clicked.connect(lambda: self.emiteTrocaTela(TelasEntrevista.judicial))
+        self.pbAdministrativo.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.naturezaProcesso, NaturezaProcesso.administrativo))
+        self.pbJudicial.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.naturezaProcesso, NaturezaProcesso.judicial))
 
         self.efeitos.shadowCards([self.pbJudicial, self.pbAdministrativo])
 
-    def emiteTrocaTela(self, tela: TelasEntrevista):
-        self.sinais.sTrocaTelaEntrevista.emit(tela)
+    def emiteTrocaTela(self, momento: MomentoEntrevista, tela: NaturezaProcesso):
+        """
+        QtCore.pyqtSignal([MomentoEntrevista, NaturezaProcesso] name='tela')
+        :cvar
+        """
+        self.sinais.sTrocaTelaEntrevista.emit([momento, tela])
 
     def trocaTela(self, *args):
         self.entrevistaPage.trocaTelaCentral(args[0])

@@ -294,7 +294,8 @@ class DaoCliente:
                 bairro, cep, complemento, 
                 dataCadastro, dataUltAlt
             FROM {self.config.tblCliente} 
-            WHERE clienteId = {clienteId}"""
+            WHERE clienteId = {clienteId}
+                AND escritorioId = {self.escritorio.escritorioId}"""
 
         try:
             cursor.execute(strComando)
@@ -392,6 +393,70 @@ class DaoCliente:
             print(f"{type(erro)} - {erro}")
             logPrioridade(f'SELECT<buscaTodos>({type(erro)})___________________{self.config.tblCliente}', TipoEdicao.erro, Prioridade.saidaImportante)
             raise Warning(f'Erro SQL - buscaTodos({self.config.tblCliente}) <SELECT>')
+        finally:
+            self.disconectBD(cursor)
+
+    def buscaIndicesByClienteId(self, clienteId: int,  indices: list = []):
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        if len(indices) == 0:
+            indices.append('')
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        if 0 <= len(indices) <= 1:
+
+            strComando = f"""
+            SELECT indicadores FROM cnisCabecalhos
+                WHERE clienteId = {clienteId}
+                    AND indicadores LIKE '%{indices[0]}%'
+            
+            UNION ALL
+            
+            SELECT indicadores FROM cnisContribuicoes
+                WHERE clienteId = {clienteId}
+                    AND indicadores LIKE '%{indices[0]}%'
+            
+            UNION ALL
+            
+            SELECT indicadores FROM cnisRemuneracoes
+                WHERE clienteId = {clienteId}
+                    AND indicadores LIKE '%{indices[0]}%';"""
+        else:
+            strOr: str = ''
+            for condicao in indices:
+                strOr += f"""
+                indicadores LIKE '%{condicao}%' OR"""
+            strOr = strOr.removesuffix(' OR')
+
+            strComando = f"""
+            SELECT indicadores FROM cnisCabecalhos
+                WHERE clienteId = {clienteId}
+                    AND ({strOr})
+
+            UNION ALL
+
+            SELECT indicadores FROM cnisContribuicoes
+                WHERE clienteId = {clienteId}
+                    AND ({strOr})
+
+            UNION ALL
+
+            SELECT indicadores FROM cnisRemuneracoes
+                WHERE clienteId = {clienteId}
+                    AND ({strOr})"""
+
+        try:
+            cursor.execute(strComando)
+            logPrioridade(
+                f'INSERT<getIndicesByClienteId>___________________({self.config.tblCnisCabecalhos}, {self.config.tblCnisContribuicoes}, {self.config.tblCnisRemuneracoes})',
+                TipoEdicao.select, Prioridade.saidaComun)
+            return cursor.fetchall()
+        except:
+            logPrioridade(f'INSERT<getIndicesByClienteId>___________________({self.config.tblCnisCabecalhos}, {self.config.tblCnisContribuicoes}, {self.config.tblCnisRemuneracoes})', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - getIndicesByClienteId({self.config.tblCnisContribuicoes}) <SELECT>')
         finally:
             self.disconectBD(cursor)
 

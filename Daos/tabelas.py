@@ -8,6 +8,7 @@ class TabelasConfig:
         self.__tblAdvogados = 'advogados'
         self.__tblEscritorios = 'escritorios'
         self.__tblCliente = 'cliente'
+        self.__tblTelefones = 'telefones'
         self.__tblProcessos = 'processos'
         self.__tblCnisRemuneracoes = 'cnisRemuneracoes'
         self.__tblCnisBeneficios = 'cnisBeneficios'
@@ -108,8 +109,9 @@ class TabelasConfig:
             nomeBanco VARCHAR(40) NULL,
             agenciaBanco VARCHAR(10) NULL,
             numeroConta VARCHAR(15) NULL,
+            pixCliente VARCHAR(40) NULL,
             grauEscolaridade VARCHAR(30) NULL,
-            senhaINSS VARCHAR(10) NULL,
+            senhaINSS VARCHAR(60) NULL,
             numCarteiraProf VARCHAR(15) NULL,
             serieCarteiraProf VARCHAR(15) NULL,
             quaCarteiraProf VARCHAR(15) NULL,
@@ -127,6 +129,29 @@ class TabelasConfig:
             dataCadastro DATETIME NOT NULL,
             dataUltAlt DATETIME NOT NULL{bottom}
         """
+
+    # Comando SQL para criar tabela de telefones
+    @property
+    def sqlCreateTelefones(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'telefoneId INT AUTO_INCREMENT,'
+            bottom = """,
+                PRIMARY KEY (telefoneId)
+            );"""
+        else:
+            cabecalho = 'telefoneId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
+            CREATE TABLE IF NOT EXISTS {self.tblTelefones}(
+                {cabecalho}
+                clienteId INTEGER REFERENCES {self.tblCliente}(clienteId) ON DELETE CASCADE,
+                numero VARCHAR(11) NOT NULL,
+                tipoTelefone VARCHAR(30) NOT NULL,
+                pessoalRecado INT NOT NULL,
+                ativo BOOLEAN NOT NULL,
+                dataCadastro DATETIME NOT NULL,
+                dataUltAlt DATETIME NOT NULL{bottom}
+            """
 
     # Comando SQL para criar tabela de processos
     @property
@@ -354,6 +379,10 @@ class TabelasConfig:
     @property
     def tblCliente(self):
         return self.__tblCliente
+
+    @property
+    def tblTelefones(self):
+        return self.__tblTelefones
 
     @property
     def tblProcessos(self):

@@ -3,6 +3,7 @@ from sqlite3 import OperationalError
 from datetime import datetime
 
 from Daos.tabelas import TabelasConfig
+from Daos.daoTelAfins import DaoTelAfins
 from helpers import datetimeToSql, mascaraDataSql
 from logs import logPrioridade, TipoEdicao, Prioridade
 from modelos.clienteModelo import ClienteModelo
@@ -11,13 +12,13 @@ from cache.cacheEscritorio import CacheEscritorio
 from pymysql import connections, cursors
 
 
-
 class DaoCliente:
 
     def __init__(self, db: connections = None, escritorio: EscritorioModelo = None):
         self.db = db
         self.config = TabelasConfig()
         self.escritorioCache = CacheEscritorio()
+        self.daoTelefone = DaoTelAfins(db=db)
 
         if escritorio is None:
             self.escritorio = self.escritorioCache.carregarCache()
@@ -38,7 +39,6 @@ class DaoCliente:
                     sobrenomeCliente = '{cliente.sobrenomeCliente}',
                     idade = {cliente.idade},
                     dataNascimento = '{cliente.dataNascimento}',
-                    telefone = '{cliente.telefone}',
                     email = '{cliente.email}',
                     rgCliente = '{cliente.rgCliente}',
                     cpfCliente = '{cliente.cpfCliente}',
@@ -67,6 +67,7 @@ class DaoCliente:
         try:
             cursor.execute(strComando)
             logPrioridade(f'UPDATE<atualizaCliente>___________________{self.config.tblCliente}', TipoEdicao.update, Prioridade.saidaComun)
+            self.daoTelefone.inserirAtualizaTelefone(cliente.telefone)
         except:
             raise Warning(f'Erro SQL - atualizaCliente({self.config.tblCliente}) <UPDATE>')
         finally:
@@ -86,28 +87,26 @@ class DaoCliente:
             INSERT INTO {self.config.tblCliente} 
             (
                 escritorioId, nomeCliente, sobrenomeCliente, 
-                idade, dataNascimento, telefone, 
-                email, rgCliente, cpfCliente, 
-                nomeBanco, agenciaBanco, numeroConta,
-                grauEscolaridade, senhaINSS,
-                numCarteiraProf, nit, nomeMae, 
-                estadoCivil, profissao, endereco, 
-                numero, estado, cidade, 
-                bairro, cep, complemento, 
-                dataCadastro, dataUltAlt
+                idade, dataNascimento, email, 
+                rgCliente, cpfCliente, nomeBanco, 
+                agenciaBanco, numeroConta, grauEscolaridade, 
+                senhaINSS, numCarteiraProf, nit, 
+                nomeMae, estadoCivil, profissao, 
+                endereco, numero, estado, 
+                cidade, bairro, cep, 
+                complemento, dataCadastro, dataUltAlt
             )
             VALUES
             (
                 '{self.escritorio.escritorioId}', '{cliente.nomeCliente}', '{cliente.sobrenomeCliente}',
-                {cliente.idade}, '{cliente.dataNascimento}', '{cliente.telefone}', 
-                '{cliente.email}', '{cliente.rgCliente}', '{cliente.cpfCliente}', 
-                '{cliente.nomeBanco}', '{cliente.agenciaBanco}', '{cliente.numeroConta}',
-                '{cliente.grauEscolaridade}', '{cliente.senhaINSS}', 
-                '{cliente.numCartProf}', '{cliente.nit}', '{cliente.nomeMae}', 
-                '{cliente.estadoCivil}', '{cliente.profissao}', '{cliente.endereco}', 
-                {cliente.numero}, '{cliente.estado}', '{cliente.cidade}', 
-                '{cliente.bairro}', '{cliente.cep}', '{cliente.complemento}', 
-                '{datetime.now()}', '{datetime.now()}'
+                {cliente.idade}, '{cliente.dataNascimento}', '{cliente.email}', 
+                '{cliente.rgCliente}', '{cliente.cpfCliente}', '{cliente.nomeBanco}', 
+                '{cliente.agenciaBanco}', '{cliente.numeroConta}', '{cliente.grauEscolaridade}', 
+                '{cliente.senhaINSS}', '{cliente.numCartProf}', '{cliente.nit}', 
+                '{cliente.nomeMae}', '{cliente.estadoCivil}', '{cliente.profissao}', 
+                '{cliente.endereco}', {cliente.numero}, '{cliente.estado}', 
+                '{cliente.cidade}', '{cliente.bairro}', '{cliente.cep}', 
+                '{cliente.complemento}', '{datetime.now()}', '{datetime.now()}'
             );"""
 
         try:
@@ -282,20 +281,35 @@ class DaoCliente:
         cursor = self.db.cursor()
 
         strComando = f"""
-            SELECT 
-                escritorioId, clienteId, nomeCliente, sobrenomeCliente,
-                idade, dataNascimento, telefone, 
-                email, rgCliente, cpfCliente,
-                nomeBanco, agenciaBanco, numeroConta,
-                grauEscolaridade, senhaINSS,
-                numCarteiraProf, nit, nomeMae, 
-                estadoCivil, profissao, endereco,
-                estado, cidade, numero, 
-                bairro, cep, complemento, 
-                dataCadastro, dataUltAlt
-            FROM {self.config.tblCliente} 
-            WHERE clienteId = {clienteId}
-                AND escritorioId = {self.escritorio.escritorioId}"""
+            SELECT
+                -- Clientes
+                c.escritorioId, c.clienteId, c.nomeCliente, 
+                c.sobrenomeCliente, c.idade, c.dataNascimento, 
+                c.email, c.rgCliente, c.cpfCliente,
+                c.nomeBanco, c.agenciaBanco, c.numeroConta, 
+                c.pixCliente, c.grauEscolaridade, c.senhaINSS,
+                c.numCarteiraProf, c.nit, c.nomeMae, 
+                c.estadoCivil, c.profissao, endereco,
+                c.estado, c.cidade, c.numero, 
+                c.bairro, c.cep, c.complemento,
+                c.dataCadastro, c.dataUltAlt,
+                
+                -- Telefones
+                t.telefoneId, t.clienteId, t.numero, 
+                t.tipoTelefone, t.pessoalRecado, t.ativo
+                
+            FROM cliente c
+                LEFT JOIN telefones t
+                    ON t.telefoneId  = 
+                    (
+                        SELECT 
+                            MIN(t.telefoneId) 
+                        FROM telefones t
+                        WHERE t.clienteId = c.clienteId
+                    )
+            WHERE c.escritorioId = {self.escritorio.escritorioId}
+            AND c.clienteId = {clienteId}
+            """
 
         try:
             cursor.execute(strComando)
@@ -322,21 +336,34 @@ class DaoCliente:
         cursor = self.db.cursor()
 
         strComando = f"""
-            SELECT 
-                escritorioId, clienteId, nomeCliente, sobrenomeCliente,
-                idade, dataNascimento, telefone, 
-                email, rgCliente, cpfCliente,
-                nomeBanco, agenciaBanco, numeroConta,
-                grauEscolaridade, senhaINSS,
-                numCarteiraProf, nit, nomeMae, 
-                estadoCivil, profissao, endereco,
-                estado, cidade, numero, 
-                bairro, cep, complemento, 
-                dataCadastro, dataUltAlt
-            FROM {self.config.tblCliente} 
-                WHERE nit = '{clienteNit}'
-            AND
-                escritorioId = {self.escritorio.escritorioId}"""
+            SELECT
+                -- Clientes
+                c.escritorioId, c.clienteId, c.nomeCliente, 
+                c.sobrenomeCliente, c.idade, c.dataNascimento, 
+                c.email, c.rgCliente, c.cpfCliente,
+                c.nomeBanco, c.agenciaBanco, c.numeroConta, 
+                c.pixCliente, c.grauEscolaridade, c.senhaINSS,
+                c.numCarteiraProf, c.nit, c.nomeMae, 
+                c.estadoCivil, c.profissao, endereco,
+                c.estado, c.cidade, c.numero, 
+                c.bairro, c.cep, c.complemento,
+                c.dataCadastro, c.dataUltAlt,
+                
+                -- Telefones
+                t.telefoneId, t.clienteId, t.numero, 
+                t.tipoTelefone, t.pessoalRecado, t.ativo
+                
+            FROM cliente c
+                LEFT JOIN telefones t 
+                    ON t.telefoneId  = 
+                        (
+                            SELECT 
+                                MIN(t.telefoneId) 
+                            FROM telefones t
+                            WHERE t.clienteId = c.clienteId
+                        ) 
+            WHERE c.escritorioId = {self.escritorio.escritorioId}
+            AND c.nit = {clienteNit}"""
 
         try:
             cursor.execute(strComando)
@@ -360,19 +387,34 @@ class DaoCliente:
         cursor = self.db.cursor()
 
         strComando = f"""
-            SELECT 
-                escritorioId, clienteId, nomeCliente, sobrenomeCliente,
-                idade, dataNascimento, telefone, 
-                email, rgCliente, cpfCliente,
-                nomeBanco, agenciaBanco, numeroConta,
-                grauEscolaridade, senhaINSS,
-                numCarteiraProf, nit, nomeMae, 
-                estadoCivil, profissao, endereco,
-                estado, cidade, numero, 
-                bairro, cep, complemento, 
-                dataCadastro, dataUltAlt
-            FROM {self.config.tblCliente}
-            WHERE escritorioId = {self.escritorio.escritorioId}"""
+            SELECT
+                -- Clientes
+                c.escritorioId, c.clienteId, c.nomeCliente, 
+                c.sobrenomeCliente, c.idade, c.dataNascimento, 
+                c.email, c.rgCliente, c.cpfCliente,
+                c.nomeBanco, c.agenciaBanco, c.numeroConta, 
+                c.pixCliente, c.grauEscolaridade, c.senhaINSS,
+                c.numCarteiraProf, c.nit, c.nomeMae, 
+                c.estadoCivil, c.profissao, endereco,
+                c.estado, c.cidade, c.numero, 
+                c.bairro, c.cep, c.complemento,
+                c.dataCadastro, c.dataUltAlt,
+                
+                -- Telefones
+                t.telefoneId, t.clienteId, t.numero, 
+                t.tipoTelefone, t.pessoalRecado, t.ativo
+                
+            FROM cliente c
+                LEFT JOIN telefones t
+                    ON t.telefoneId  = 
+                    (
+                        SELECT 
+                            MIN(t.telefoneId) 
+                        FROM telefones t
+                        WHERE t.clienteId = c.clienteId
+                    )
+            WHERE c.escritorioId = {self.escritorio.escritorioId}
+            """
 
         try:
             cursor.execute(strComando)

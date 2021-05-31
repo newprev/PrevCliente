@@ -208,14 +208,31 @@ def getEstadoBySigla(uf: str):
             return chave
 
 
+def getTipoTelefone():
+    return {
+        'Whatsapp': 'W',
+        'Celular': 'C',
+        'Fixo': 'F'
+    }
+
+
+def getTipoTelefoneBySigla(sigla: str):
+    dictTipoTelefones = getTipoTelefone()
+    for chave, valor in dictTipoTelefones.items():
+        if valor.upper() == sigla.upper():
+            return chave
+
+
 def getConversoesMonetarias():
     return ['Valorizou', 'Desvalorizou']
 
 
 def mascaraTelCel(telCel):
-    if telCel is None or len(telCel) == 10:
+    if telCel in [None, 'None']:
+        return ''
+    elif len(telCel) == 10:
         return f'({telCel[0:2]}) {telCel[3:7]}-{telCel[7:]}'
-    elif telCel is None or len(telCel) == 11:
+    elif len(telCel) == 11:
         return f'({telCel[0:2]}) {telCel[2:3]}.{telCel[3:7]}-{telCel[7:]}'
     else:
         return telCel

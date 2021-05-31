@@ -4,6 +4,8 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar
 
 from Daos.daoCliente import DaoCliente
+from Daos.daoTelAfins import DaoTelAfins
+
 from Telas.tabCliente import Ui_wdgTabCliente
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
 from heart.sinaisCustomizados import Sinais
@@ -28,6 +30,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
         self.cnisClienteAtual = None
         self.daoCliente = DaoCliente(db=db)
+        self.daoTelAfins = DaoTelAfins(db=db)
 
         self.tblClientes.resizeColumnsToContents()
         self.tblClientes.doubleClicked.connect(self.editarCliente)
@@ -99,15 +102,16 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def atualizaStatusCliente(self):
         if self.cbClienteAntigo.isChecked():
-            # self.leCdCliente.setDisabled(False)
             self.sbCdCliente.setDisabled(False)
         else:
-            # self.leCdCliente.setDisabled(True)
             self.sbCdCliente.setDisabled(True)
 
     def atualizaTblClientes(self, clientes: list = None):
         if clientes is None:
             clientesModels: list = self.daoCliente.buscaTodos(returnModel=True)
+
+            for client in clientesModels:
+                print(client)
         else:
             clientesModels = []
 
@@ -127,7 +131,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             emailItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 2, emailItem)
 
-            telefoneItem = QTableWidgetItem(f"{mascaraTelCel(cliente.telefone)}")
+            telefoneItem = QTableWidgetItem(f"{mascaraTelCel(cliente.telefone.numero)}")
             telefoneItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 3, telefoneItem)
 
@@ -210,7 +214,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.leNumero.setText(str(cliente.numero))
 
         if cliente.telefone not in [None, 'None']:
-            self.leTelefone.setText(mascaraTelCel(cliente.telefone))
+            self.leTelefone.setText(mascaraTelCel(cliente.telefone.numero))
 
         if cliente.email not in [None, 'None']:
             self.leEmail.setText(cliente.email)
@@ -337,7 +341,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.email = self.leEmail.text()
 
         elif info == 'telefone':
-            self.cliente.telefone = self.leTelefone.text()
+            self.cliente.telefone.numero = self.leTelefone.text()
 
         elif info == 'leNumero':
             if self.leNumero.text() != '':
@@ -418,7 +422,13 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def trataAtualizaCliente(self):
         if self.verificaCodCliente():
+            self.avaliaTelefone()
             self.daoCliente.atualizaCliente(self.cliente)
+
+    def avaliaTelefone(self):
+        self.cliente.telefone.clienteId = self.cliente.clienteId
+        self.cliente.telefone.tipoTelefone = 'W'
+        self.cliente.telefone.pessoalRecado = 'P'
 
     def verificaCodCliente(self) -> bool:
         if self.sbCdCliente.text() is not None and self.sbCdCliente.text() != "":

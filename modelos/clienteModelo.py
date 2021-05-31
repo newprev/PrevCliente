@@ -1,5 +1,5 @@
 import datetime
-
+from .telefoneModelo import TelefoneModelo
 
 class ClienteModelo:
 
@@ -11,12 +11,12 @@ class ClienteModelo:
         self.idade: int = None
         self.dataNascimento: datetime = None
         self.email: str = ''
-        self.telefone: str = ''
         self.rgCliente: str = ''
         self.cpfCliente: str = ''
         self.nomeBanco: str = ''
         self.agenciaBanco: str = ''
         self.numeroConta: str = ''
+        self.pixCliente: str = ''
         self.grauEscolaridade: str = ''
         self.senhaINSS: str = ''
         self.numCartProf: str = ''
@@ -30,6 +30,7 @@ class ClienteModelo:
         self.cidade: str = ''
         self.bairro: str = ''
         self.cep: str = ''
+        self.telefone: TelefoneModelo = None
         self.complemento: str = ''
         self.dataCadastro: datetime = datetime.datetime.now()
         self.dataUltAlt: datetime = datetime.datetime.now()
@@ -43,13 +44,13 @@ class ClienteModelo:
             'sobrenomeCliente': self.sobrenomeCliente,
             'idade': self.idade,
             'dataNascimento': self.dataNascimento,
-            'telefone': self.telefone,
             'email': self.email,
             'rgCliente': self.rgCliente,
             'cpfCliente': self.cpfCliente,
             'nomeBanco': self.nomeBanco,
             'agenciaBanco': self.agenciaBanco,
             'numeroConta': self.numeroConta,
+            'pixCliente': self.pixCliente,
             'grauEscolaridade': self.grauEscolaridade,
             'senhaINSS': self.senhaINSS,
             'numCartProf': self.numCartProf,
@@ -61,6 +62,7 @@ class ClienteModelo:
             'cidade': self.cidade,
             'bairro': self.bairro,
             'cep': self.cep,
+            'telefone': self.telefone,
             'complemento': self.complemento,
             'pathCnis': self.pathCnis
         }
@@ -73,13 +75,13 @@ class ClienteModelo:
         self.sobrenomeCliente = dictCliente['sobrenomeCliente']
         self.idade = dictCliente['idade']
         self.dataNascimento = dictCliente['dataNascimento']
-        self.telefone = dictCliente['telefone']
         self.email = dictCliente['email']
         self.rgCliente = dictCliente['rgCliente']
         self.cpfCliente = dictCliente['cpfCliente']
         self.nomeBanco = dictCliente['nomeBanco']
         self.agenciaBanco = dictCliente['agenciaBanco']
         self.numeroConta = dictCliente['numeroConta']
+        self.pixCliente = dictCliente['pixCliente']
         self.grauEscolaridade = dictCliente['grauEscolaridade']
         self.senhaINSS = dictCliente['senhaINSS']
         self.numCartProf = dictCliente['numCartProf']
@@ -92,6 +94,7 @@ class ClienteModelo:
         self.cidade = dictCliente['cidade']
         self.bairro = dictCliente['bairro']
         self.cep = dictCliente['cep']
+        self.telefone = TelefoneModelo().fromList(dictCliente['telefone'])
         self.complemento = dictCliente['complemento']
         self.pathCnis = dictCliente['pathCnis']
 
@@ -100,21 +103,19 @@ class ClienteModelo:
             return None
         else:
             if len(listCliente) != 0:
-                # for num, info in enumerate(listCliente):
-                #     print(f"{num} - {info}")
                 self.escritorioId = listCliente[0]
                 self.clienteId = listCliente[1]
                 self.nomeCliente = listCliente[2]
                 self.sobrenomeCliente = listCliente[3]
                 self.idade = listCliente[4]
                 self.dataNascimento = listCliente[5]
-                self.telefone = listCliente[6]
-                self.email = listCliente[7]
-                self.rgCliente = listCliente[8]
-                self.cpfCliente = listCliente[9]
-                self.nomeBanco = listCliente[10]
-                self.agenciaBanco = listCliente[11]
-                self.numeroConta = listCliente[12]
+                self.email = listCliente[6]
+                self.rgCliente = listCliente[7]
+                self.cpfCliente = listCliente[8]
+                self.nomeBanco = listCliente[9]
+                self.agenciaBanco = listCliente[10]
+                self.numeroConta = listCliente[11]
+                self.pixCliente = listCliente[12]
                 self.grauEscolaridade = listCliente[13]
                 self.senhaINSS = listCliente[14]
                 self.numCartProf = listCliente[15]
@@ -131,25 +132,28 @@ class ClienteModelo:
                 self.complemento = listCliente[26]
                 self.dataCadastro = listCliente[27]
                 self.dataUltAlt = listCliente[28]
+
+                self.telefone = TelefoneModelo().fromList(listCliente[29:])
                 # pathCnis: {self.pathCnis}
             if retornaInst:
                 return self
 
     def __repr__(self):
-        return f"""Cliente(
+        return f"""
+        Cliente(
             escritorioId: {self.escritorioId},
             clienteId: {self.clienteId},
             nomeCliente: {self.nomeCliente},
             sobrenomeCliente: {self.sobrenomeCliente},
             idade: {self.idade},
             dataNascimento: {self.dataNascimento},
-            telefone: {self.telefone},
             email: {self.email},
             rgCliente: {self.rgCliente},
             cpfCliente: {self.cpfCliente},
             nomeBanco: {self.nomeBanco},
             agenciaBanco: {self.agenciaBanco},
             numeroConta: {self.numeroConta},
+            pixCliente: {self.pixCliente},
             grauEscolaridade: {self.grauEscolaridade},
             senhaINSS: {self.senhaINSS},
             numCartProf: {self.numCartProf},
@@ -162,6 +166,7 @@ class ClienteModelo:
             cidade: {self.cidade},
             bairro: {self.bairro},
             cep: {self.cep},
+            telefone: {self.telefone},
             complemento: {self.complemento},
             pathCnis: {self.pathCnis}"""
 

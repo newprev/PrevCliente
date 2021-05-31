@@ -1880,13 +1880,13 @@ CNIS</string>
            </rect>
           </property>
           <property name="maxLength">
-           <number>9</number>
+           <number>40</number>
           </property>
           <property name="placeholderText">
            <string>Bamerindos</string>
           </property>
          </widget>
-         <widget class="QLabel" name="lbCep_2">
+         <widget class="QLabel" name="lbNomeBanco">
           <property name="geometry">
            <rect>
             <x>10</x>
@@ -1915,7 +1915,7 @@ CNIS</string>
            <string>12345</string>
           </property>
          </widget>
-         <widget class="QLabel" name="lbNumero_2">
+         <widget class="QLabel" name="lbAgencia">
           <property name="geometry">
            <rect>
             <x>10</x>
@@ -1928,7 +1928,7 @@ CNIS</string>
            <string>Agência</string>
           </property>
          </widget>
-         <widget class="QLabel" name="lbNumero_3">
+         <widget class="QLabel" name="lbNumeroConta">
           <property name="geometry">
            <rect>
             <x>100</x>
@@ -1967,13 +1967,13 @@ CNIS</string>
            </rect>
           </property>
           <property name="maxLength">
-           <number>9</number>
+           <number>60</number>
           </property>
           <property name="placeholderText">
-           <string>12345-789</string>
+           <string>Senha</string>
           </property>
          </widget>
-         <widget class="QLabel" name="lbCep_3">
+         <widget class="QLabel" name="lbSenhaINSS">
           <property name="geometry">
            <rect>
             <x>10</x>
@@ -1984,6 +1984,35 @@ CNIS</string>
           </property>
           <property name="text">
            <string>Senha Meu INSS</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="lbPix">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>150</y>
+            <width>141</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Pix</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="lePix">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>170</y>
+            <width>161</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="maxLength">
+           <number>9</number>
+          </property>
+          <property name="placeholderText">
+           <string>Aa12-#$</string>
           </property>
          </widget>
         </widget>

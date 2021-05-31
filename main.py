@@ -59,31 +59,37 @@ class Main(Ui_MainWindow, QMainWindow):
 
         self.lbInfo.setText('CRIANDO TABELA DOS ADVOGADOS...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateAdvogados, nomeTabela='advogados'):
-            self.progresso(add=8)
+            self.progresso(add=7)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DOS ESCRITORIOS...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateEscritorios, nomeTabela='escritorios'):
-            self.progresso(add=8)
+            self.progresso(add=7)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DOS PROCESSOS...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateProcessos, nomeTabela='processos'):
-            self.progresso(add=8)
+            self.progresso(add=7)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DO CLIENTE...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCliente, nomeTabela='cliente'):
-            self.progresso(add=8)
+            self.progresso(add=7)
+        else:
+            return False
+
+        self.lbInfo.setText('CRIANDO TABELA DE TELEFONES...')
+        if self.daoConfigs.criaTabela(tabelas.sqlCreateTelefones, nomeTabela='telefones'):
+            self.progresso(add=7)
         else:
             return False
 
         self.lbInfo.setText('CRIANDO TABELA DE REMUNERAÇÕES...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateCnisRemuneracoes, nomeTabela='cnisRemuneracoes'):
-            self.progresso(add=8)
+            self.progresso(add=7)
         else:
             return False
 

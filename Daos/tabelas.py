@@ -8,6 +8,8 @@ class TabelasConfig:
         self.__tblAdvogados = 'advogados'
         self.__tblEscritorios = 'escritorios'
         self.__tblCliente = 'cliente'
+        self.__tblTelefones = 'telefones'
+        self.__tblProcessos = 'processos'
         self.__tblCnisRemuneracoes = 'cnisRemuneracoes'
         self.__tblCnisBeneficios = 'cnisBeneficios'
         self.__tblCnisContribuicoes = 'cnisContribuicoes'
@@ -95,7 +97,7 @@ class TabelasConfig:
         return f"""
         CREATE TABLE IF NOT EXISTS {self.tblCliente}(
             {cabecalho}
-            advogadoId INTEGER REFERENCES {self.tblAdvogados}(advogadoId) ON DELETE CASCADE,
+            escritorioId INTEGER REFERENCES {self.tblAdvogados}(escritorioId) ON DELETE CASCADE,
             nomeCliente VARCHAR(20) NOT NULL,
             sobrenomeCliente VARCHAR(30) NOT NULL,
             idade INT NOT NULL,
@@ -104,6 +106,12 @@ class TabelasConfig:
             email VARCHAR(40) NOT NULL,
             rgCliente VARCHAR(9) NOT NULL,
             cpfCliente VARCHAR(11) NULL,
+            nomeBanco VARCHAR(40) NULL,
+            agenciaBanco VARCHAR(10) NULL,
+            numeroConta VARCHAR(15) NULL,
+            pixCliente VARCHAR(40) NULL,
+            grauEscolaridade VARCHAR(30) NULL,
+            senhaINSS VARCHAR(60) NULL,
             numCarteiraProf VARCHAR(15) NULL,
             serieCarteiraProf VARCHAR(15) NULL,
             quaCarteiraProf VARCHAR(15) NULL,
@@ -118,6 +126,60 @@ class TabelasConfig:
             bairro VARCHAR(30) NULL,
             cep VARCHAR(8) NOT NULL,
             complemento VARCHAR(30) NULL,
+            dataCadastro DATETIME NOT NULL,
+            dataUltAlt DATETIME NOT NULL{bottom}
+        """
+
+    # Comando SQL para criar tabela de telefones
+    @property
+    def sqlCreateTelefones(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'telefoneId INT AUTO_INCREMENT,'
+            bottom = """,
+                PRIMARY KEY (telefoneId)
+            );"""
+        else:
+            cabecalho = 'telefoneId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
+            CREATE TABLE IF NOT EXISTS {self.tblTelefones}(
+                {cabecalho}
+                clienteId INTEGER REFERENCES {self.tblCliente}(clienteId) ON DELETE CASCADE,
+                numero VARCHAR(11) NOT NULL,
+                tipoTelefone VARCHAR(1) NOT NULL,
+                pessoalRecado VARCHAR(1) NOT NULL,
+                ativo BOOLEAN NOT NULL,
+                dataCadastro DATETIME NOT NULL,
+                dataUltAlt DATETIME NOT NULL{bottom}
+            """
+
+    # Comando SQL para criar tabela de processos
+    @property
+    def sqlCreateProcessos(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'processoId INT AUTO_INCREMENT,'
+            bottom = """,
+            PRIMARY KEY (processoId)
+        );"""
+        else:
+            cabecalho = 'processoId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
+        CREATE TABLE IF NOT EXISTS {self.__tblProcessos}(
+            {cabecalho}
+            clienteId INTEGER REFERENCES {self.__tblCliente}(clienteId) ON DELETE CASCADE,
+            advogadoId INTEGER REFERENCES {self.__tblAdvogados}(advogadoId) ON DELETE CASCADE,
+            numeroProcesso VARCHAR(20) NULL,
+            natureza INT NOT NULL,
+            tipoProcesso INT NOT NULL,
+            tipoBeneficio INT NOT NULL,
+            estado VARCHAR(2) NULL,
+            cidade VARCHAR(40) NOT NULL,
+            situacaoId INT NOT NULL DEFAULT 1,
+            dataInicio DATETIME NULL,
+            dataFim DATETIME NULL,
+            incidenteProcessual INT NULL,
+            valorCausa FLOAT VARCHAR(15) NULL,
             dataCadastro DATETIME NOT NULL,
             dataUltAlt DATETIME NOT NULL{bottom}
         """
@@ -317,6 +379,14 @@ class TabelasConfig:
     @property
     def tblCliente(self):
         return self.__tblCliente
+
+    @property
+    def tblTelefones(self):
+        return self.__tblTelefones
+
+    @property
+    def tblProcessos(self):
+        return self.__tblProcessos
 
     @property
     def tblCnisRemuneracoes(self):

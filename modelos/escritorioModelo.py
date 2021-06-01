@@ -46,11 +46,19 @@ class EscritorioModelo:
         else:
             self.escritorioId = dictEscritorio['escritorioId']
 
+        if isinstance(dictEscritorio['email'], list):
+            self.email = dictEscritorio['email'][0]
+        else:
+            self.email = dictEscritorio['email']
+
+        if isinstance(dictEscritorio['telefone'], list):
+            self.telefone = dictEscritorio['telefone'][0]
+        else:
+            self.telefone = dictEscritorio['telefone']
+
         self.nomeEscritorio = dictEscritorio['nomeEscritorio']
         self.nomeFantasia = dictEscritorio['nomeFantasia']
         self.cnpj = dictEscritorio['cnpj']
-        self.telefone = dictEscritorio['telefone'],
-        self.email = dictEscritorio['email'],
         self.cpf = dictEscritorio['cpf']
         self.inscEstadual = dictEscritorio['inscEstadual']
         self.endereco = dictEscritorio['endereco']
@@ -93,6 +101,7 @@ class EscritorioModelo:
             nomeFantasia: {self.nomeFantasia},
             cnpj: {self.cnpj},
             cpf: {self.cpf},
+            email: {self.email},
             inscEstadual: {self.inscEstadual},
             endereco: {self.endereco},
             numero: {self.numero},
@@ -102,3 +111,6 @@ class EscritorioModelo:
             cep: {self.cep},
             complemento: {self.complemento}
     """
+
+    def __bool__(self):
+        return self.escritorioId is not None

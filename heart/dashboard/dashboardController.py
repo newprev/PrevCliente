@@ -7,7 +7,7 @@ from heart.dashboard.localWidgets.cardFuncionalidade import CardFuncionalidade
 from heart.dashboard.tabs.clienteController import TabCliente
 from heart.dashboard.tabs.tabCalculos import TabCalculos
 from heart.menuLateral.ferramentasPage import FerramentasPage
-from heart.dashboard.tabs.entrevista.entrevistaController import EntrevistaController
+from heart.dashboard.entrevista.entrevistaController import EntrevistaController
 from heart.sinaisCustomizados import Sinais
 from cache.cachingLogin import CacheLogin
 

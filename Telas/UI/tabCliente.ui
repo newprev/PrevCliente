@@ -836,7 +836,8 @@ QHeaderView::section {
 #lbDescricaoTela, 
 #lbFrTituloInfoPessoal,
 #lbFrTituloInfoProfissional,
-#lbFrTituloInfoResidencial {
+#lbFrTituloInfoResidencial,
+#lbFrTituloInfoBancarias {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 14px;
 
@@ -856,7 +857,8 @@ QFrame &gt; QLabel {
 
 
 /*---------------------------------- Frames -----------------------------------*/
-#frInfoPessoais, #frInfoProfissional, #frInfoResidencial {
+#frInfoPessoais, #frInfoProfissional, 
+#frInfoResidencial, #frInfoBancarias {
 	border-radius: 4px;
 	border: 1px solid rgb(85, 87, 83);
 }
@@ -875,7 +877,8 @@ QFrame &gt; QLabel {
 	color: white;
 
 	border-radius: 4px;
-	background-color: rgb(52, 73, 94);
+/*	background-color: rgb(52, 73, 94);*/
+	background-color: rgb(92, 53, 102);
 }
 
 #pbCarregaCnis:hover {
@@ -906,7 +909,7 @@ QFrame &gt; QLabel {
 	background-color: rgb(52, 93, 114);
 }
 
-#pbLimpar {
+#pbLimpar, #pbMaisTelefones {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
@@ -915,7 +918,7 @@ QFrame &gt; QLabel {
 	background-color: rgb(52, 73, 94);
 }
 
-#pbLimpar:hover {
+#pbLimpar:hover, #pbMaisTelefones:hover {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
@@ -970,7 +973,7 @@ QFrame &gt; QLabel {
         <rect>
          <x>-1</x>
          <y>0</y>
-         <width>941</width>
+         <width>991</width>
          <height>571</height>
         </rect>
        </property>
@@ -982,17 +985,17 @@ QFrame &gt; QLabel {
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>939</width>
+          <width>989</width>
           <height>569</height>
          </rect>
         </property>
         <widget class="QPushButton" name="pbCarregaCnis">
          <property name="geometry">
           <rect>
-           <x>830</x>
-           <y>110</y>
-           <width>83</width>
-           <height>51</height>
+           <x>780</x>
+           <y>510</y>
+           <width>101</width>
+           <height>41</height>
           </rect>
          </property>
          <property name="text">
@@ -1344,6 +1347,42 @@ CNIS</string>
            <number>1000</number>
           </property>
          </widget>
+         <widget class="QComboBox" name="cbxEscolaridade">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>350</y>
+            <width>191</width>
+            <height>25</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLabel" name="lbEstCivil_2">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>330</y>
+            <width>191</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Grau de escolaridade</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pbMaisTelefones">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>390</y>
+            <width>121</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Mais telefones</string>
+          </property>
+         </widget>
         </widget>
         <widget class="QFrame" name="frInfoResidencial">
          <property name="geometry">
@@ -1568,9 +1607,9 @@ CNIS</string>
         <widget class="QPushButton" name="pbCadastrar">
          <property name="geometry">
           <rect>
-           <x>790</x>
-           <y>310</y>
-           <width>121</width>
+           <x>780</x>
+           <y>470</y>
+           <width>201</width>
            <height>25</height>
           </rect>
          </property>
@@ -1581,9 +1620,9 @@ CNIS</string>
         <widget class="QLabel" name="lbInfoCnis">
          <property name="geometry">
           <rect>
-           <x>780</x>
-           <y>60</y>
-           <width>131</width>
+           <x>890</x>
+           <y>513</y>
+           <width>91</width>
            <height>41</height>
           </rect>
          </property>
@@ -1595,6 +1634,9 @@ CNIS</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
+         </property>
+         <property name="margin">
+          <number>3</number>
          </property>
         </widget>
         <widget class="QLabel" name="lbFrTituloInfoPessoal">
@@ -1758,9 +1800,9 @@ CNIS</string>
         <widget class="QPushButton" name="pbLimpar">
          <property name="geometry">
           <rect>
-           <x>790</x>
-           <y>270</y>
-           <width>121</width>
+           <x>780</x>
+           <y>430</y>
+           <width>201</width>
            <height>25</height>
           </rect>
          </property>
@@ -1784,9 +1826,9 @@ CNIS</string>
         <widget class="QPushButton" name="pbAtualizar">
          <property name="geometry">
           <rect>
-           <x>790</x>
-           <y>230</y>
-           <width>121</width>
+           <x>780</x>
+           <y>390</y>
+           <width>201</width>
            <height>25</height>
           </rect>
          </property>
@@ -1794,6 +1836,201 @@ CNIS</string>
           <string>Atualizar cliente</string>
          </property>
         </widget>
+        <widget class="QLabel" name="lbFrTituloInfoBancarias">
+         <property name="geometry">
+          <rect>
+           <x>770</x>
+           <y>69</y>
+           <width>181</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>  Informações bancárias</string>
+         </property>
+        </widget>
+        <widget class="QFrame" name="frInfoBancarias">
+         <property name="geometry">
+          <rect>
+           <x>760</x>
+           <y>80</y>
+           <width>221</width>
+           <height>291</height>
+          </rect>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="midLineWidth">
+          <number>2</number>
+         </property>
+         <widget class="QLineEdit" name="leNomeBanco">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>50</y>
+            <width>161</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="maxLength">
+           <number>40</number>
+          </property>
+          <property name="placeholderText">
+           <string>Bamerindos</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="lbNomeBanco">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>141</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Nome do banco</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="leNumeroAgencia">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>110</y>
+            <width>71</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="maxLength">
+           <number>5</number>
+          </property>
+          <property name="placeholderText">
+           <string>12345</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="lbAgencia">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>90</y>
+            <width>51</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Agência</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="lbNumeroConta">
+          <property name="geometry">
+           <rect>
+            <x>100</x>
+            <y>90</y>
+            <width>71</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Nº Conta</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="leNumeroConta">
+          <property name="geometry">
+           <rect>
+            <x>100</x>
+            <y>110</y>
+            <width>71</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="maxLength">
+           <number>5</number>
+          </property>
+          <property name="placeholderText">
+           <string>12345</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="leSenhaINSS">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>230</y>
+            <width>161</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="maxLength">
+           <number>60</number>
+          </property>
+          <property name="placeholderText">
+           <string>Senha</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="lbSenhaINSS">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>210</y>
+            <width>141</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Senha Meu INSS</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="lbPix">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>150</y>
+            <width>141</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Pix</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="lePix">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>170</y>
+            <width>161</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="maxLength">
+           <number>9</number>
+          </property>
+          <property name="placeholderText">
+           <string>Aa12-#$</string>
+          </property>
+         </widget>
+        </widget>
+        <zorder>frInfoBancarias</zorder>
+        <zorder>pbCarregaCnis</zorder>
+        <zorder>frInfoPessoais</zorder>
+        <zorder>frInfoResidencial</zorder>
+        <zorder>pbCadastrar</zorder>
+        <zorder>lbInfoCnis</zorder>
+        <zorder>lbFrTituloInfoPessoal</zorder>
+        <zorder>frInfoProfissional</zorder>
+        <zorder>lbDescricaoTela</zorder>
+        <zorder>lbFrTituloInfoResidencial</zorder>
+        <zorder>lbTitulo</zorder>
+        <zorder>pbLimpar</zorder>
+        <zorder>lbFrTituloInfoProfissional</zorder>
+        <zorder>pbAtualizar</zorder>
+        <zorder>lbFrTituloInfoBancarias</zorder>
        </widget>
       </widget>
      </widget>

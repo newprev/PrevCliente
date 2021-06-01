@@ -4,10 +4,14 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar
 
 from Daos.daoCliente import DaoCliente
+from Daos.daoTelAfins import DaoTelAfins
+
 from Telas.tabCliente import Ui_wdgTabCliente
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
+from heart.sinaisCustomizados import Sinais
+from heart.telAfinsController import TelAfinsController
 from helpers import estCivil, getEstados, unmaskAll, calculaIdadeFromString, getEstadoBySigla, mascaraRG, mascaraCPF, \
-    mascaraTelCel, mascaraCep, strToDatetime, mascaraNit
+    mascaraTelCel, mascaraCep, strToDatetime, mascaraNit, getEscolaridade
 from modelos.clienteModelo import ClienteModelo
 from modelos.cnisModelo import CNISModelo
 from newPrevEnums import TamanhoData
@@ -21,10 +25,13 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.setupUi(self)
         self.cliente = ClienteModelo()
         self.db = db
-        self.parent = parent
+        self.sinais = Sinais()
+        self.entrevistaPg = parent
+        self.entrevista = entrevista
 
         self.cnisClienteAtual = None
         self.daoCliente = DaoCliente(db=db)
+        self.daoTelAfins = DaoTelAfins(db=db)
 
         self.tblClientes.resizeColumnsToContents()
         self.tblClientes.doubleClicked.connect(self.editarCliente)
@@ -34,7 +41,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.frBuscaEmail.hide()
         self.frBuscaTelefone.hide()
         self.frBuscaRgcpf.hide()
-        # self.leCdCliente.setDisabled(True)
         self.sbCdCliente.setDisabled(True)
 
         self.carregaFiltroAZ()
@@ -47,14 +53,18 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.pbArrowTelefone.clicked.connect(lambda: self.ativaDesativaFiltro('Telefone'))
         self.pbArrowRgcpf.clicked.connect(lambda: self.ativaDesativaFiltro('Rgcpf'))
         self.pbArrowEmail.clicked.connect(lambda: self.ativaDesativaFiltro('Email'))
+        self.pbCarregaCnis.clicked.connect(self.carregaCnis)
+        self.pbMaisTelefones.clicked.connect(self.abrirPgMaisTelefones)
+
         self.cbClienteAntigo.clicked.connect(self.atualizaStatusCliente)
 
         self.leRg.editingFinished.connect(lambda: self.leRg.setText(mascaraRG(self.leRg.text())))
         self.leCpf.editingFinished.connect(lambda: self.leCpf.setText(mascaraCPF(self.leCpf.text())))
         self.leTelefone.editingFinished.connect(lambda: self.leTelefone.setText(mascaraTelCel(self.leTelefone.text())))
         self.leCep.editingFinished.connect(lambda: self.leCep.setText(mascaraCep(self.leCep.text())))
-        # self.leCdCliente.editingFinished.connect(self.buscaCliente)
+
         self.sbCdCliente.editingFinished.connect(self.buscaCliente)
+        self.sbCdCliente.valueChanged.connect(lambda: self.carregaInfoTela('sbCliente'))
 
         self.leCep.editingFinished.connect(lambda: self.carregaInfoTela('cep'))
         self.leEndereco.textEdited.connect(lambda: self.carregaInfoTela('endereco'))
@@ -64,35 +74,39 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leTelefone.textEdited.connect(lambda: self.carregaInfoTela('telefone'))
         self.leCartProf.textEdited.connect(lambda: self.carregaInfoTela('cartProf'))
         self.leProfissao.textEdited.connect(lambda: self.carregaInfoTela('profissao'))
-        # self.leCdCliente.textEdited.connect(lambda: self.carregaInfoTela('cdCliente'))
-        self.sbCdCliente.valueChanged.connect(lambda: self.carregaInfoTela('sbCliente'))
         self.lePrimeiroNome.textEdited.connect(lambda: self.carregaInfoTela('nomeCliente'))
         self.leSobrenome.textEdited.connect(lambda: self.carregaInfoTela('sobrenomeCliente'))
         self.leRg.textEdited.connect(lambda: self.carregaInfoTela('rg'))
-        self.dtNascimento.dateChanged.connect(lambda: self.carregaInfoTela('dataNascimento'))
+        self.leNumero.textEdited.connect(lambda: self.carregaInfoTela('leNumero'))
         self.leIdade.textEdited.connect(lambda: self.carregaInfoTela('idade'))
         self.leCpf.textEdited.connect(lambda: self.carregaInfoTela('cpf'))
         self.leNomeMae.textEdited.connect(lambda: self.carregaInfoTela('nomeMae'))
-        self.cbxEstCivil.activated.connect(lambda: self.carregaInfoTela('estCivil'))
         self.leEmail.textEdited.connect(lambda: self.carregaInfoTela('email'))
-        self.leNumero.textEdited.connect(lambda: self.carregaInfoTela('leNumero'))
+        self.leNomeBanco.textEdited.connect(lambda: self.carregaInfoTela('leNomeBanco'))
+        self.leNumeroConta.textEdited.connect(lambda: self.carregaInfoTela('leNumeroConta'))
+        self.leNumeroAgencia.textEdited.connect(lambda: self.carregaInfoTela('leNumeroAgencia'))
+        self.leSenhaINSS.textEdited.connect(lambda: self.carregaInfoTela('leSenhaINSS'))
 
-        self.pbCarregaCnis.clicked.connect(self.carregaCnis)
+        self.dtNascimento.dateChanged.connect(lambda: self.carregaInfoTela('dataNascimento'))
+
+        self.cbxEstCivil.activated.connect(lambda: self.carregaInfoTela('estCivil'))
+        self.cbxEscolaridade.activated.connect(lambda: self.carregaInfoTela('cbxEscolaridade'))
 
         self.cliente.estadoCivil = self.cbxEstCivil.currentText()
 
         if entrevista:
+            self.entrevistaPg = parent
             self.tabMain.setCurrentIndex(1)
             self.findChild(QTabBar).hide()
+            self.sinais.sTrocaInfoLateral.connect(self.atualizaEntrevista)
+            self.sinais.sEnviaCliente.connect(self.enviaClienteParaEntrevista)
         else:
             self.atualizaTblClientes()
 
     def atualizaStatusCliente(self):
         if self.cbClienteAntigo.isChecked():
-            # self.leCdCliente.setDisabled(False)
             self.sbCdCliente.setDisabled(False)
         else:
-            # self.leCdCliente.setDisabled(True)
             self.sbCdCliente.setDisabled(True)
 
     def atualizaTblClientes(self, clientes: list = None):
@@ -117,7 +131,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             emailItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 2, emailItem)
 
-            telefoneItem = QTableWidgetItem(f"{mascaraTelCel(cliente.telefone)}")
+            telefoneItem = QTableWidgetItem(f"{mascaraTelCel(cliente.telefone.numero)}")
             telefoneItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 3, telefoneItem)
 
@@ -131,17 +145,27 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
         self.tblClientes.resizeColumnsToContents()
 
+    def abrirPgMaisTelefones(self):
+        pgMaisTelefones = TelAfinsController(self.cliente, db=self.db, parent=self)
+        pgMaisTelefones.show()
+
     def buscaCliente(self):
         if self.sbCdCliente.text() != '':
             cdCliente: int = int(self.sbCdCliente.text())
             self.limpaTudo()
             self.sbCdCliente.setValue(cdCliente)
+            self.verificaDados()
             self.cliente = self.daoCliente.buscaClienteById(cdCliente, returnInstance=True)
             if self.cliente is None:
                 self.cliente = ClienteModelo()
                 self.limpaTudo()
             else:
                 self.carregaClienteNaTela(self.cliente)
+                if self.entrevista:
+                    self.sinais.sEnviaCliente.emit()
+
+    def enviaClienteParaEntrevista(self):
+        self.entrevistaPg.atualizaCliente(self.cliente)
 
     def carregaCnis(self):
         self.cnisClienteAtual = CNISModelo()
@@ -187,6 +211,18 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         # self.leCdCliente.setText(str(self.cliente.clienteId))
         self.sbCdCliente.setValue(self.cliente.clienteId)
 
+        if cliente.rgCliente not in [None, 'None']:
+            self.leRg.setText(mascaraRG(cliente.rgCliente))
+
+        if cliente.numero not in [None, 'None']:
+            self.leNumero.setText(str(cliente.numero))
+
+        if cliente.telefone not in [None, 'None']:
+            self.leTelefone.setText(mascaraTelCel(cliente.telefone.numero))
+
+        if cliente.email not in [None, 'None']:
+            self.leEmail.setText(cliente.email)
+
         if cliente.cep not in [None, 'None']:
             self.leCep.setText(mascaraCep(cliente.cep))
 
@@ -214,12 +250,39 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         if cliente.profissao not in [None, 'None']:
             self.leProfissao.setText(cliente.profissao)
 
+        if cliente.numeroConta not in [None, 'None']:
+            self.leNumeroConta.setText(cliente.numeroConta)
+
+        if cliente.nomeBanco not in [None, 'None']:
+            self.leNomeBanco.setText(cliente.nomeBanco)
+
+        if cliente.agenciaBanco not in [None, 'None']:
+            self.leNumeroAgencia.setText(cliente.agenciaBanco)
+
+        if cliente.grauEscolaridade not in [None, 'None']:
+            self.cbxEscolaridade.setCurrentText(cliente.grauEscolaridade)
+
+        if cliente.senhaINSS not in [None, 'None']:
+            self.leSenhaINSS.setText(cliente.senhaINSS)
+
     def carregaInfoTela(self, info, *args):
         if info == 'cep':
             self.cliente.cep = self.leCep.text().replace('-', '')
 
         elif info == 'endereco':
             self.cliente.endereco = self.leEndereco.text()
+
+        elif info == 'leNomeBanco':
+            self.cliente.nomeBanco = self.leNomeBanco.text()
+
+        elif info == 'leNumeroConta':
+            self.cliente.numeroConta = self.leNumeroConta.text()
+
+        elif info == 'leNumeroAgencia':
+            self.cliente.agenciaBanco = self.leNumeroAgencia.text()
+
+        elif info == 'leSenhaINSS':
+            self.cliente.senhaINSS = self.leSenhaINSS.text()
 
         elif info == 'cidade':
             self.cliente.cidade = self.leCidade.text()
@@ -229,6 +292,9 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
         elif info == 'estado':
             self.cliente.estado = self.cbxEstado.currentText()
+
+        elif info == 'cbxEscolaridade':
+            self.cliente.grauEscolaridade = self.cbxEscolaridade.currentText()
 
         elif info == 'complemento':
             self.cliente.complemento = self.leComplemento.text()
@@ -279,11 +345,20 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.email = self.leEmail.text()
 
         elif info == 'telefone':
-            self.cliente.telefone = self.leTelefone.text()
+            self.cliente.telefone.numero = self.leTelefone.text()
 
         elif info == 'leNumero':
             if self.leNumero.text() != '':
                 self.cliente.numero = int(self.leNumero.text())
+
+        if self.entrevista:
+            estadoEntrevista: dict = {
+                'pessoais': self.avaliaInfoPessoalCompleta(),
+                'residenciais': self.avaliaInfoResidencialCompleta(),
+                'profissionais': self.avaliaInfoProfissionalCompleta(),
+                'bancarias': self.avaliaInfoBancariaCompleta()
+            }
+            self.sinais.sTrocaInfoLateral.emit(estadoEntrevista)
 
     def buscaCep(self):
         integracaoRepository = IntegracaoRepository()
@@ -308,6 +383,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def carregaComboBoxes(self):
         self.cbxEstCivil.addItems(estCivil)
+        self.cbxEscolaridade.addItems(getEscolaridade().keys())
         self.cbxEstado.addItems(getEstados().keys())
         self.cbxEstado.setCurrentIndex(24)
 
@@ -350,7 +426,13 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def trataAtualizaCliente(self):
         if self.verificaCodCliente():
+            self.avaliaTelefone()
             self.daoCliente.atualizaCliente(self.cliente)
+
+    def avaliaTelefone(self):
+        self.cliente.telefone.clienteId = self.cliente.clienteId
+        self.cliente.telefone.tipoTelefone = 'W'
+        self.cliente.telefone.pessoalRecado = 'P'
 
     def verificaCodCliente(self) -> bool:
         if self.sbCdCliente.text() is not None and self.sbCdCliente.text() != "":
@@ -365,7 +447,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
         for i in range(0, len(listAlfabeto)):
 
-            if i == 0 or i == len(listAlfabeto)-1:
+            if i == 0 or i == len(listAlfabeto) - 1:
                 label = QLabel(' ')
                 label.setFixedSize(20, 20)
                 label.setStyleSheet(lbStyleSheet)
@@ -379,7 +461,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def limpaTudo(self):
         # self.leCdCliente.clear()
-        self.sbCdCliente.clear()
+        # self.sbCdCliente.clear()
         self.lePrimeiroNome.clear()
         self.leSobrenome.clear()
         self.leRg.clear()
@@ -396,6 +478,11 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leNit.clear()
         self.leCartProf.clear()
         self.leProfissao.clear()
+        self.leNomeBanco.clear()
+        self.leNumeroAgencia.clear()
+        self.leNumeroConta.clear()
+        self.leSenhaINSS.clear()
+        self.leNumero.clear()
 
         self.cbxEstado.setCurrentIndex(24)
 
@@ -422,3 +509,37 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         dialogPopup.setStandardButtons(QMessageBox.Ok)
 
         close = dialogPopup.exec_()
+
+    def atualizaEntrevista(self, *args, **kwargs):
+        self.entrevistaPg.atualizaInfoLateral(args[0])
+
+    def verificaDados(self):
+        if self.cliente.estado is None or self.cliente.estado == '':
+            self.cliente.estado = self.cbxEstado.currentText()
+
+    def avaliaInfoPessoalCompleta(self) -> bool:
+        return self.lePrimeiroNome.text() != '' and \
+               self.leSobrenome.text() != '' and \
+               self.leRg.text() != '' and \
+               self.leIdade.text() != '' and \
+               self.leCpf.text() != '' and \
+               self.leNomeMae.text() != '' and \
+               self.leTelefone.text() != '' and \
+               self.leEmail.text() != ''
+
+    def avaliaInfoResidencialCompleta(self) -> bool:
+        return self.leCep.text() != '' and \
+               self.leEndereco.text() != '' and \
+               self.leCidade.text() != '' and \
+               self.leNumero.text() != '' and \
+               self.leBairro.text() != ''
+
+    def avaliaInfoProfissionalCompleta(self) -> bool:
+        return self.leNit.text() != '' and \
+               self.leProfissao.text() != ''
+
+    def avaliaInfoBancariaCompleta(self) -> bool:
+        return self.leNomeBanco.text() != '' and \
+               self.leNumeroAgencia.text() != '' and \
+               self.leNumeroConta.text() != '' and \
+               self.leSenhaINSS.text() != ''

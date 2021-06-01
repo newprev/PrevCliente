@@ -25,6 +25,8 @@ import json
 from helpers import datetimeToSql, strToDatetime
 from newPrevEnums import TamanhoData
 
+from requests.exceptions import ConnectionError
+
 
 class LoginController(QMainWindow, Ui_mwLogin):
 
@@ -32,7 +34,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
         super(LoginController, self).__init__()
         self.setupUi(self)
         self.db = db
-        # self.sinais = Sinais()
         self.usuarioRepositorio = UsuarioRepository()
         self.escritorio: EscritorioModelo = None
         self.advogado: AdvogadoModelo = AdvogadoModelo()
@@ -85,10 +86,23 @@ class LoginController(QMainWindow, Ui_mwLogin):
     def carregaCacheLogin(self):
         self.advogado = self.cacheLogin.carregarCache()
         if self.advogado.numeroOAB is not None:
+
+            # Confere informações do escritório
             self.escritorio = self.escritorioRepositorio.buscaEscritorio(self.advogado.escritorioId)
+            # print(f"self.escritorio({type(self.escritorio)}): {self.escritorio}")
+            # print(f"isinstance(self.escritorio, ConnectionError): {isinstance(self.escritorio, ErroConexao)}")
+            # if isinstance(self.escritorio, ConnectionError):
+            #     print('Erro')
+
             if isinstance(self.escritorio, ErroConexao):
                 self.apresentandoErros(self.escritorio)
                 return False
+            elif self.escritorio is not None:
+                self.cacheEscritorio.salvarCache(self.escritorio)
+            else:
+                self.showPopupAlerta("Erro ao buscar informações do escritório.\nTente novamente mais tarde")
+                return False
+
             self.lbNomeDoEscritorio.setText(self.escritorio.nomeFantasia)
             self.leLogin.setText(self.advogado.numeroOAB)
             self.leSenha.setText(self.advogado.senha)
@@ -247,7 +261,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
     def verificaRotinaDiaria(self):
 
-        pathFile = os.path.join(os.getcwd(), 'sync', 'syncFile')
+        pathFile = os.path.join(os.getcwd(), '.sync', '.syncFile')
         syncJson = {
             'syncConvMon': datetimeToSql(datetime.datetime.now()),
             'syncTetosPrev': datetimeToSql(datetime.datetime.now())

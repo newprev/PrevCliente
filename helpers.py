@@ -1,6 +1,6 @@
 import datetime
 
-from newPrevEnums import TamanhoData
+from newPrevEnums import *
 
 estCivil = ['Solteiro(a)', 'Casado(a)', 'Divorciado(a)', 'Viúvo(a)']
 
@@ -151,6 +151,24 @@ meses = {
 situacaoBeneficio = ['Indeferido', 'Cessado', 'Ativo']
 
 
+def getEscolaridade():
+    return {
+        'Fundamental Incompleto': 'FI',
+        'Fundomantal Completo': 'FC',
+        'Médio Incompleto': 'MI',
+        'Médio Completo': 'MC',
+        'Superior Incompleto': 'SI',
+        'Superior Completo': 'SC',
+    }
+
+
+def getEscolaridadeBySigla(sigla: str):
+    dictEscolaridade = getEscolaridade()
+    for chave, valor in dictEscolaridade.items():
+        if valor.upper() == sigla.upper():
+            return chave
+
+
 def getEstados():
     return {
         'Acre': 'AC',
@@ -190,14 +208,45 @@ def getEstadoBySigla(uf: str):
             return chave
 
 
+def getTipoTelefone():
+    return {
+        'Whatsapp': 'W',
+        'Celular': 'C',
+        'Fixo': 'F'
+    }
+
+
+def getTipoTelefoneBySigla(sigla: str):
+    dictTipoTelefones = getTipoTelefone()
+    for chave, valor in dictTipoTelefones.items():
+        if valor.upper() == sigla.upper():
+            return chave
+
+
+def getPessoalRecado():
+    return {
+        'Pessoal': 'P',
+        'Recado': 'R'
+    }
+
+
+def getPessoalRecadoBySigla(sigla: str):
+    dictgetPessoalRecado = getPessoalRecado()
+    for chave, valor in dictgetPessoalRecado.items():
+        if valor.upper() == sigla.upper():
+            return chave
+
+
 def getConversoesMonetarias():
     return ['Valorizou', 'Desvalorizou']
 
 
 def mascaraTelCel(telCel):
-    if telCel is None or len(telCel) == 10:
+    if telCel in [None, 'None']:
+        return ''
+    elif len(telCel) == 10:
         return f'({telCel[0:2]}) {telCel[3:7]}-{telCel[7:]}'
-    elif telCel is None or len(telCel) == 11:
+    elif len(telCel) == 11:
         return f'({telCel[0:2]}) {telCel[2:3]}.{telCel[3:7]}-{telCel[7:]}'
     else:
         return telCel
@@ -329,3 +378,50 @@ def strToFloat(valor: str) -> float:
 
 def unmaskAll(info: str):
     return info.replace('.', '').replace('/', '').replace('\\', '').replace(',', '').replace('-', '')
+
+
+def strNatureza(natureza: int) -> str:
+    if natureza == NaturezaProcesso.administrativo.value:
+        return 'Administrativo'
+    elif natureza == NaturezaProcesso.judicial.value:
+        return 'Judcial'
+    else:
+        return '-'
+
+
+def strTipoProcesso(tipoProcesso: int) -> str:
+    if tipoProcesso == TipoProcesso.Revisao.value:
+        return 'Revisão'
+    elif tipoProcesso == TipoProcesso.Concessao.value:
+        return 'Concessão'
+    elif tipoProcesso == TipoProcesso.RecEspecial.value:
+        return 'Recurso Especial'
+    elif tipoProcesso == TipoProcesso.RecOrdinario.value:
+        return 'Recurso Ordinário'
+    else:
+        return '-'
+
+
+def strTipoBeneficio(tipoBeneficio: int) -> str:
+    if tipoBeneficio == TipoBeneficio.Aposentadoria.value:
+        return 'Aposentadoria'
+    elif tipoBeneficio == TipoBeneficio.AposDeficiencia:
+        return 'Aposentadoria da pessoa com deficiencia'
+    elif tipoBeneficio == TipoBeneficio.AposRural:
+        return 'Aposentadoria rural'
+    elif tipoBeneficio == TipoBeneficio.AposEspecial:
+        return 'Aposentadoria especial'
+    elif tipoBeneficio == TipoBeneficio.AuxDoenca:
+        return 'Auxílio doença'
+    elif tipoBeneficio == TipoBeneficio.AuxReclusao:
+        return 'Auxílio reclusão'
+    elif tipoBeneficio == TipoBeneficio.BeneIdoso:
+        return 'Benefício assistencial ao idoso'
+    elif tipoBeneficio == TipoBeneficio.BeneDeficiencia:
+        return 'Benefício assistencial à pessoa com deficiência'
+    elif tipoBeneficio == TipoBeneficio.PensaoMorte:
+        return 'Pensão por morte'
+    elif tipoBeneficio == TipoBeneficio.SalMaternidade:
+        return 'Salário maternidade'
+    else:
+        return '-'

@@ -40,3 +40,43 @@ class TelaLogin(Enum):
 
 class ErroConexao(Enum):
     ConnectionError = 0
+
+class MomentoEntrevista(Enum):
+    cadastro = 0
+    naturezaProcesso = 1
+    tipoProcesso = 2
+    tipoBeneficio = 3
+    tipoAtividade = 4
+    telaGeraDocs = 5
+
+class NaturezaProcesso(Enum):
+    administrativo = 0
+    judicial = 1
+
+class TipoProcesso(Enum):
+    Concessao = 0
+    Revisao = 1
+    RecOrdinario = 2
+    RecEspecial = 3
+
+class TipoBeneficio(Enum):
+    Aposentadoria = 0
+    AposDeficiencia = 1
+    AposRural = 2
+    AposEspecial = 3
+    AuxDoenca = 4
+    AuxReclusao = 5
+    BeneIdoso = 6
+    BeneDeficiencia = 7
+    PensaoMorte = 8
+    SalMaternidade = 9
+
+class TipoWidget(Enum):
+    label = 0
+    icone = 1
+
+class EtapaEntrevista(Enum):
+    infoPessoais = 0
+    infoProcessual = 1
+    detalhamento = 2
+    documentacao = 3

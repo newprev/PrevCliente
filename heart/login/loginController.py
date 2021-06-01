@@ -25,6 +25,8 @@ import json
 from helpers import datetimeToSql, strToDatetime
 from newPrevEnums import TamanhoData
 
+from requests.exceptions import ConnectionError
+
 
 class LoginController(QMainWindow, Ui_mwLogin):
 
@@ -87,15 +89,20 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
             # Confere informações do escritório
             self.escritorio = self.escritorioRepositorio.buscaEscritorio(self.advogado.escritorioId)
-            if self.escritorio is not None:
+            # print(f"self.escritorio({type(self.escritorio)}): {self.escritorio}")
+            # print(f"isinstance(self.escritorio, ConnectionError): {isinstance(self.escritorio, ErroConexao)}")
+            # if isinstance(self.escritorio, ConnectionError):
+            #     print('Erro')
+
+            if isinstance(self.escritorio, ErroConexao):
+                self.apresentandoErros(self.escritorio)
+                return False
+            elif self.escritorio is not None:
                 self.cacheEscritorio.salvarCache(self.escritorio)
             else:
                 self.showPopupAlerta("Erro ao buscar informações do escritório.\nTente novamente mais tarde")
                 return False
 
-            if isinstance(self.escritorio, ErroConexao):
-                self.apresentandoErros(self.escritorio)
-                return False
             self.lbNomeDoEscritorio.setText(self.escritorio.nomeFantasia)
             self.leLogin.setText(self.advogado.numeroOAB)
             self.leSenha.setText(self.advogado.senha)

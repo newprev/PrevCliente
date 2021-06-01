@@ -9,6 +9,7 @@ from Daos.daoTelAfins import DaoTelAfins
 from Telas.tabCliente import Ui_wdgTabCliente
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
 from heart.sinaisCustomizados import Sinais
+from heart.telAfinsController import TelAfinsController
 from helpers import estCivil, getEstados, unmaskAll, calculaIdadeFromString, getEstadoBySigla, mascaraRG, mascaraCPF, \
     mascaraTelCel, mascaraCep, strToDatetime, mascaraNit, getEscolaridade
 from modelos.clienteModelo import ClienteModelo
@@ -40,7 +41,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.frBuscaEmail.hide()
         self.frBuscaTelefone.hide()
         self.frBuscaRgcpf.hide()
-        # self.leCdCliente.setDisabled(True)
         self.sbCdCliente.setDisabled(True)
 
         self.carregaFiltroAZ()
@@ -53,14 +53,18 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.pbArrowTelefone.clicked.connect(lambda: self.ativaDesativaFiltro('Telefone'))
         self.pbArrowRgcpf.clicked.connect(lambda: self.ativaDesativaFiltro('Rgcpf'))
         self.pbArrowEmail.clicked.connect(lambda: self.ativaDesativaFiltro('Email'))
+        self.pbCarregaCnis.clicked.connect(self.carregaCnis)
+        self.pbMaisTelefones.clicked.connect(self.abrirPgMaisTelefones)
+
         self.cbClienteAntigo.clicked.connect(self.atualizaStatusCliente)
 
         self.leRg.editingFinished.connect(lambda: self.leRg.setText(mascaraRG(self.leRg.text())))
         self.leCpf.editingFinished.connect(lambda: self.leCpf.setText(mascaraCPF(self.leCpf.text())))
         self.leTelefone.editingFinished.connect(lambda: self.leTelefone.setText(mascaraTelCel(self.leTelefone.text())))
         self.leCep.editingFinished.connect(lambda: self.leCep.setText(mascaraCep(self.leCep.text())))
-        # self.leCdCliente.editingFinished.connect(self.buscaCliente)
+
         self.sbCdCliente.editingFinished.connect(self.buscaCliente)
+        self.sbCdCliente.valueChanged.connect(lambda: self.carregaInfoTela('sbCliente'))
 
         self.leCep.editingFinished.connect(lambda: self.carregaInfoTela('cep'))
         self.leEndereco.textEdited.connect(lambda: self.carregaInfoTela('endereco'))
@@ -70,24 +74,23 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leTelefone.textEdited.connect(lambda: self.carregaInfoTela('telefone'))
         self.leCartProf.textEdited.connect(lambda: self.carregaInfoTela('cartProf'))
         self.leProfissao.textEdited.connect(lambda: self.carregaInfoTela('profissao'))
-        self.sbCdCliente.valueChanged.connect(lambda: self.carregaInfoTela('sbCliente'))
         self.lePrimeiroNome.textEdited.connect(lambda: self.carregaInfoTela('nomeCliente'))
         self.leSobrenome.textEdited.connect(lambda: self.carregaInfoTela('sobrenomeCliente'))
         self.leRg.textEdited.connect(lambda: self.carregaInfoTela('rg'))
         self.leNumero.textEdited.connect(lambda: self.carregaInfoTela('leNumero'))
-        self.dtNascimento.dateChanged.connect(lambda: self.carregaInfoTela('dataNascimento'))
         self.leIdade.textEdited.connect(lambda: self.carregaInfoTela('idade'))
         self.leCpf.textEdited.connect(lambda: self.carregaInfoTela('cpf'))
         self.leNomeMae.textEdited.connect(lambda: self.carregaInfoTela('nomeMae'))
-        self.cbxEstCivil.activated.connect(lambda: self.carregaInfoTela('estCivil'))
-        self.cbxEscolaridade.activated.connect(lambda: self.carregaInfoTela('cbxEscolaridade'))
         self.leEmail.textEdited.connect(lambda: self.carregaInfoTela('email'))
         self.leNomeBanco.textEdited.connect(lambda: self.carregaInfoTela('leNomeBanco'))
         self.leNumeroConta.textEdited.connect(lambda: self.carregaInfoTela('leNumeroConta'))
         self.leNumeroAgencia.textEdited.connect(lambda: self.carregaInfoTela('leNumeroAgencia'))
         self.leSenhaINSS.textEdited.connect(lambda: self.carregaInfoTela('leSenhaINSS'))
 
-        self.pbCarregaCnis.clicked.connect(self.carregaCnis)
+        self.dtNascimento.dateChanged.connect(lambda: self.carregaInfoTela('dataNascimento'))
+
+        self.cbxEstCivil.activated.connect(lambda: self.carregaInfoTela('estCivil'))
+        self.cbxEscolaridade.activated.connect(lambda: self.carregaInfoTela('cbxEscolaridade'))
 
         self.cliente.estadoCivil = self.cbxEstCivil.currentText()
 
@@ -109,9 +112,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
     def atualizaTblClientes(self, clientes: list = None):
         if clientes is None:
             clientesModels: list = self.daoCliente.buscaTodos(returnModel=True)
-
-            for client in clientesModels:
-                print(client)
         else:
             clientesModels = []
 
@@ -144,6 +144,10 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.tblClientes.setItem(numLinha, 5, tipoProcessoItem)
 
         self.tblClientes.resizeColumnsToContents()
+
+    def abrirPgMaisTelefones(self):
+        pgMaisTelefones = TelAfinsController(self.cliente, db=self.db, parent=self)
+        pgMaisTelefones.show()
 
     def buscaCliente(self):
         if self.sbCdCliente.text() != '':

@@ -223,6 +223,20 @@ def getTipoTelefoneBySigla(sigla: str):
             return chave
 
 
+def getPessoalRecado():
+    return {
+        'Pessoal': 'P',
+        'Recado': 'R'
+    }
+
+
+def getPessoalRecadoBySigla(sigla: str):
+    dictgetPessoalRecado = getPessoalRecado()
+    for chave, valor in dictgetPessoalRecado.items():
+        if valor.upper() == sigla.upper():
+            return chave
+
+
 def getConversoesMonetarias():
     return ['Valorizou', 'Desvalorizou']
 

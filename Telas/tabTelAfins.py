@@ -14,8 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgTelAfins(object):
     def setupUi(self, wdgTelAfins):
         wdgTelAfins.setObjectName("wdgTelAfins")
-        wdgTelAfins.resize(1195, 611)
-        wdgTelAfins.setMinimumSize(QtCore.QSize(945, 611))
+        wdgTelAfins.resize(1195, 500)
         wdgTelAfins.setStyleSheet("#tabTelefones,\n"
 "#tabMain {\n"
 "    border-radius: 8px;\n"
@@ -59,17 +58,19 @@ class Ui_wdgTelAfins(object):
 "    border: 2px solid white;\n"
 "    padding: 4px;\n"
 "}")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(wdgTelAfins)
-        self.horizontalLayout.setContentsMargins(0, 4, 0, 0)
+        self.centralwidget = QtWidgets.QWidget(wdgTelAfins)
+        self.centralwidget.setObjectName("centralwidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.tabMain = QtWidgets.QTabWidget(wdgTelAfins)
+        self.tabMain = QtWidgets.QTabWidget(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.tabMain.sizePolicy().hasHeightForWidth())
         self.tabMain.setSizePolicy(sizePolicy)
-        self.tabMain.setMinimumSize(QtCore.QSize(0, 400))
+        self.tabMain.setMinimumSize(QtCore.QSize(0, 500))
         self.tabMain.setStyleSheet("")
         self.tabMain.setIconSize(QtCore.QSize(36, 16))
         self.tabMain.setObjectName("tabMain")
@@ -218,7 +219,7 @@ class Ui_wdgTelAfins(object):
 "}")
         self.tabTelefones.setObjectName("tabTelefones")
         self.lbTituloClientes = QtWidgets.QLabel(self.tabTelefones)
-        self.lbTituloClientes.setGeometry(QtCore.QRect(10, 10, 361, 31))
+        self.lbTituloClientes.setGeometry(QtCore.QRect(10, 10, 441, 31))
         self.lbTituloClientes.setObjectName("lbTituloClientes")
         self.lbInfoClientes = QtWidgets.QLabel(self.tabTelefones)
         self.lbInfoClientes.setGeometry(QtCore.QRect(10, 40, 371, 31))
@@ -226,7 +227,8 @@ class Ui_wdgTelAfins(object):
         self.tblTelefones = QtWidgets.QTableWidget(self.tabTelefones)
         self.tblTelefones.setGeometry(QtCore.QRect(20, 100, 991, 261))
         self.tblTelefones.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.tblTelefones.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+        self.tblTelefones.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tblTelefones.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.tblTelefones.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.tblTelefones.setShowGrid(False)
         self.tblTelefones.setWordWrap(True)
@@ -264,7 +266,7 @@ class Ui_wdgTelAfins(object):
         self.pbConfirmar.setGeometry(QtCore.QRect(1030, 300, 101, 31))
         self.pbConfirmar.setObjectName("pbConfirmar")
         self.frInfoCabecalho = QtWidgets.QFrame(self.tabTelefones)
-        self.frInfoCabecalho.setGeometry(QtCore.QRect(420, 10, 491, 81))
+        self.frInfoCabecalho.setGeometry(QtCore.QRect(520, 10, 491, 81))
         self.frInfoCabecalho.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frInfoCabecalho.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frInfoCabecalho.setObjectName("frInfoCabecalho")
@@ -283,7 +285,7 @@ class Ui_wdgTelAfins(object):
         self.lbDocumento.setText("")
         self.lbDocumento.setObjectName("lbDocumento")
         self.lbInfoCabecalho = QtWidgets.QLabel(self.tabTelefones)
-        self.lbInfoCabecalho.setGeometry(QtCore.QRect(440, 0, 141, 17))
+        self.lbInfoCabecalho.setGeometry(QtCore.QRect(540, 0, 141, 17))
         self.lbInfoCabecalho.setObjectName("lbInfoCabecalho")
         self.pbInserir = QtWidgets.QPushButton(self.tabTelefones)
         self.pbInserir.setGeometry(QtCore.QRect(1030, 120, 101, 25))
@@ -317,6 +319,7 @@ class Ui_wdgTelAfins(object):
         self.pbCancelar.setObjectName("pbCancelar")
         self.tabMain.addTab(self.tabTelefones, "")
         self.horizontalLayout.addWidget(self.tabMain)
+        wdgTelAfins.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(wdgTelAfins)
         self.tabMain.setCurrentIndex(0)
@@ -324,7 +327,7 @@ class Ui_wdgTelAfins(object):
 
     def retranslateUi(self, wdgTelAfins):
         _translate = QtCore.QCoreApplication.translate
-        wdgTelAfins.setWindowTitle(_translate("wdgTelAfins", "Form"))
+        wdgTelAfins.setWindowTitle(_translate("wdgTelAfins", "MainWindow"))
         self.lbTituloClientes.setText(_translate("wdgTelAfins", "Tabela de telefones cadastrados"))
         self.lbInfoClientes.setText(_translate("wdgTelAfins", "Pesquise todos os telefones dos clientes"))
         item = self.tblTelefones.horizontalHeaderItem(0)
@@ -353,7 +356,7 @@ class Ui_wdgTelAfins(object):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    wdgTelAfins = QtWidgets.QWidget()
+    wdgTelAfins = QtWidgets.QMainWindow()
     ui = Ui_wdgTelAfins()
     ui.setupUi(wdgTelAfins)
     wdgTelAfins.show()

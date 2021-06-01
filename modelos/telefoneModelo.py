@@ -46,7 +46,7 @@ class TelefoneModelo:
         if listTelefone[5] is not None:
             self.ativo = listTelefone[5]
 
-        if len(listTelefone) == 7:
+        if len(listTelefone) >= 7:
             self.dataCadastro = listTelefone[6]
             self.dataUltAlt = listTelefone[7]
 
@@ -63,5 +63,6 @@ class TelefoneModelo:
                 pessoalRecado: {self.pessoalRecado},
                 ativo: {self.ativo},
                 dataCadastro: {self.dataCadastro},
-                dataUltAlt: {self.dataUltAlt},
+                dataUltAlt: {self.dataUltAlt}
+                )
             """

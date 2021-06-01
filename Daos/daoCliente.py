@@ -69,6 +69,7 @@ class DaoCliente:
             logPrioridade(f'UPDATE<atualizaCliente>___________________{self.config.tblCliente}', TipoEdicao.update, Prioridade.saidaComun)
             self.daoTelefone.inserirAtualizaTelefone(cliente.telefone)
         except:
+            logPrioridade(f'UPDATE<atualizaCliente>___________________Erro({self.config.tblCliente})', TipoEdicao.erro, Prioridade.saidaImportante)
             raise Warning(f'Erro SQL - atualizaCliente({self.config.tblCliente}) <UPDATE>')
         finally:
             self.db.commit()

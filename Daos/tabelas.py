@@ -146,8 +146,8 @@ class TabelasConfig:
                 {cabecalho}
                 clienteId INTEGER REFERENCES {self.tblCliente}(clienteId) ON DELETE CASCADE,
                 numero VARCHAR(11) NOT NULL,
-                tipoTelefone VARCHAR(30) NOT NULL,
-                pessoalRecado INT NOT NULL,
+                tipoTelefone VARCHAR(1) NOT NULL,
+                pessoalRecado VARCHAR(1) NOT NULL,
                 ativo BOOLEAN NOT NULL,
                 dataCadastro DATETIME NOT NULL,
                 dataUltAlt DATETIME NOT NULL{bottom}

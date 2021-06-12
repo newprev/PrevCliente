@@ -5,15 +5,16 @@ from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWid
 
 from Daos.daoCliente import DaoCliente
 from Daos.daoTelAfins import DaoTelAfins
+from Daos.daoProcessos import DaoProcessos
 
 from Telas.tabCliente import Ui_wdgTabCliente
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
 from heart.sinaisCustomizados import Sinais
 from heart.telAfinsController import TelAfinsController
-from helpers import estCivil, getEstados, unmaskAll, calculaIdadeFromString, getEstadoBySigla, mascaraRG, mascaraCPF, \
-    mascaraTelCel, mascaraCep, strToDatetime, mascaraNit, getEscolaridade
+from helpers import *
 from modelos.clienteModelo import ClienteModelo
 from modelos.cnisModelo import CNISModelo
+from modelos.processosModelo import ProcessosModelo
 from newPrevEnums import TamanhoData
 from repositorios.integracaoRepositorio import IntegracaoRepository
 
@@ -28,10 +29,12 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.sinais = Sinais()
         self.entrevistaPg = parent
         self.entrevista = entrevista
+        self.carregandoCliente = False
 
         self.cnisClienteAtual = None
         self.daoCliente = DaoCliente(db=db)
         self.daoTelAfins = DaoTelAfins(db=db)
+        self.daoProcessos = DaoProcessos(db=db)
 
         self.tblClientes.resizeColumnsToContents()
         self.tblClientes.doubleClicked.connect(self.editarCliente)
@@ -55,6 +58,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.pbArrowEmail.clicked.connect(lambda: self.ativaDesativaFiltro('Email'))
         self.pbCarregaCnis.clicked.connect(self.carregaCnis)
         self.pbMaisTelefones.clicked.connect(self.abrirPgMaisTelefones)
+        self.pbLimpar.clicked.connect(self.limpaTudo)
 
         self.cbClienteAntigo.clicked.connect(self.atualizaStatusCliente)
 
@@ -86,6 +90,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leNumeroConta.textEdited.connect(lambda: self.carregaInfoTela('leNumeroConta'))
         self.leNumeroAgencia.textEdited.connect(lambda: self.carregaInfoTela('leNumeroAgencia'))
         self.leSenhaINSS.textEdited.connect(lambda: self.carregaInfoTela('leSenhaINSS'))
+        self.lePix.textEdited.connect(lambda: self.carregaInfoTela('lePix'))
 
         self.dtNascimento.dateChanged.connect(lambda: self.carregaInfoTela('dataNascimento'))
 
@@ -118,6 +123,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.tblClientes.setRowCount(0)
         for numLinha, cliente in enumerate(clientesModels):
             self.tblClientes.insertRow(numLinha)
+            processo: ProcessosModelo = self.daoProcessos.buscaProcessoPorCliente(cliente, limit=1)[0]
 
             cdClienteItem = QTableWidgetItem(str(cliente.clienteId))
             cdClienteItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
@@ -139,7 +145,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             cidadeItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 4, cidadeItem)
 
-            tipoProcessoItem = QTableWidgetItem('Aposentadoria por tempo de serviço')
+            tipoProcessoItem = QTableWidgetItem(strTipoBeneficio(processo.tipoBeneficio, processo.subTipoApos))
             tipoProcessoItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 5, tipoProcessoItem)
 
@@ -156,7 +162,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.sbCdCliente.setValue(cdCliente)
             self.verificaDados()
             self.cliente = self.daoCliente.buscaClienteById(cdCliente, returnInstance=True)
-            if self.cliente is None:
+            if not self.cliente:
                 self.cliente = ClienteModelo()
                 self.limpaTudo()
             else:
@@ -256,6 +262,9 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         if cliente.nomeBanco not in [None, 'None']:
             self.leNomeBanco.setText(cliente.nomeBanco)
 
+        if cliente.pixCliente not in [None, 'None']:
+            self.lePix.setText(cliente.pixCliente)
+
         if cliente.agenciaBanco not in [None, 'None']:
             self.leNumeroAgencia.setText(cliente.agenciaBanco)
 
@@ -313,9 +322,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                 self.cliente.clienteId = int(self.leCdCliente.text())
 
         elif info == 'sbCliente':
-            if self.sbCdCliente.text() != '':
-                self.cliente.clienteId = int(self.sbCdCliente.text())
-                self.buscaCliente()
+            if self.sbCdCliente.text() != '' and not self.carregandoCliente:
+                self.buscaProxCliente()
 
         elif info == 'nomeCliente':
             self.cliente.nomeCliente = self.lePrimeiroNome.text()
@@ -351,6 +359,9 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             if self.leNumero.text() != '':
                 self.cliente.numero = int(self.leNumero.text())
 
+        elif info == 'lePix':
+            self.cliente.pixCliente = self.lePix.text()
+
         if self.entrevista:
             estadoEntrevista: dict = {
                 'pessoais': self.avaliaInfoPessoalCompleta(),
@@ -380,6 +391,23 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.estado = getEstadoBySigla(dictCep['uf'])
         elif 'erro' in dictCep.keys():
             self.showPopupAlerta(dictCep['erro'])
+
+    def buscaProxCliente(self):
+        self.carregandoCliente = True
+        if self.sbCdCliente.text() != '':
+            clienteId = int(self.sbCdCliente.text())
+            self.limpaTudo()
+            self.verificaDados()
+            self.cliente = self.daoCliente.buscaProxCliente(clienteId)
+
+            if not self.cliente:
+                self.cliente = ClienteModelo()
+                self.limpaTudo()
+            else:
+                self.carregaClienteNaTela(self.cliente)
+                if self.entrevista:
+                    self.sinais.sEnviaCliente.emit()
+        self.carregandoCliente = False
 
     def carregaComboBoxes(self):
         self.cbxEstCivil.addItems(estCivil)
@@ -460,8 +488,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                 self.hlFlitroAlfabetico.addWidget(button)
 
     def limpaTudo(self):
-        # self.leCdCliente.clear()
-        # self.sbCdCliente.clear()
         self.lePrimeiroNome.clear()
         self.leSobrenome.clear()
         self.leRg.clear()
@@ -483,6 +509,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leNumeroConta.clear()
         self.leSenhaINSS.clear()
         self.leNumero.clear()
+        self.lePix.clear()
 
         self.cbxEstado.setCurrentIndex(24)
 

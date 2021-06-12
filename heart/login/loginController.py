@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from Daos.daoConfiguracoes import DaoConfiguracoes
 from Daos.daoFerramentas import DaoFerramentas
 from Daos.daoEscritorio import DaoEscritorio
+from Daos.daoAdvogado import DaoAdvogado
+
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 from repositorios.clienteRepositorio import UsuarioRepository
@@ -51,6 +53,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         self.daoConfigs = DaoConfiguracoes(self.db)
         self.daoEscritorio = DaoEscritorio(self.db)
+        self.daoAdvogado = DaoAdvogado(self.db)
+
         self.dashboard: DashboardController = None
 
         self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.inicio.value)
@@ -89,17 +93,15 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
             # Confere informações do escritório
             self.escritorio = self.escritorioRepositorio.buscaEscritorio(self.advogado.escritorioId)
-            # print(f"self.escritorio({type(self.escritorio)}): {self.escritorio}")
-            # print(f"isinstance(self.escritorio, ConnectionError): {isinstance(self.escritorio, ErroConexao)}")
-            # if isinstance(self.escritorio, ConnectionError):
-            #     print('Erro')
 
             if isinstance(self.escritorio, ErroConexao):
                 self.apresentandoErros(self.escritorio)
                 return False
-            elif self.escritorio is not None:
+            elif self.escritorio:
                 self.cacheEscritorio.salvarCache(self.escritorio)
             else:
+                self.cacheLogin.limpaCache()
+                self.cacheEscritorio.limpaCache()
                 self.showPopupAlerta("Erro ao buscar informações do escritório.\nTente novamente mais tarde")
                 return False
 
@@ -109,6 +111,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
             self.cbSalvarSenha.setChecked(True)
         else:
             self.advogado = AdvogadoModelo()
+            self.cacheLogin.limpaCache()
+            self.cacheEscritorio.limpaCache()
             self.leLogin.setFocus()
 
     def trocaPagina(self, *args):
@@ -141,7 +145,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         if nomeEscritorio != '':
             escritorio: EscritorioModelo = self.usuarioRepositorio.buscaEscritorioPrimeiroAcesso(nomeEscritorio)
             self.escritorio = escritorio
-            if escritorio is not None and escritorio.nomeEscritorio == nomeEscritorio:
+            if escritorio and escritorio.nomeEscritorio == nomeEscritorio:
                 self.lbNomeDoEscritorio.setText(escritorio.nomeFantasia)
                 self.carregaAdvNaoCadastrados(escritorio.escritorioId)
             else:
@@ -192,62 +196,145 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.showPopupAlerta(f"Não foi possível confirmar o cadastro. Tente novamente.")
 
     def entrar(self):
+        # TODO: Criar uma verificação se o usuário salvo em cache tem o mesmo login e senha digitado na tela de login
 
         self.loading(20)
-        if self.advogado is not None and self.advogado.escritorioId is not None:
-            self.loading(10)
-            autenticado = self.usuarioRepositorio.loginAuthFromCache(self.advogado)
-            self.loading(30)
-
-            if autenticado:
+        if self.infoNaoNulo:
+            if ApiFerramentas().conexaoOnline():
                 self.loading(10)
-                if ApiFerramentas().conexaoOnline():
-                    self.loading(10)
-                    self.verificaRotinaDiaria()
-                    self.loading(20)
-                else:
-                    self.showPopupAlerta('Sem conexão com o servidor.')
-                    sys.exit()
-
-                self.dashboard = DashboardController(db=self.db)
-                self.dashboard.show()
-                self.close()
+                self.verificaRotinaDiaria()
+                self.loading(20)
             else:
-                self.showPopupAlerta(f"Usuário {self.advogado.nomeUsuario} não confirmado. \nFavor confirmar senha clicando em 'Primeiro acesso'.")
-        else:
-            self.loading(10)
+                self.showPopupAlerta('Sem conexão com o servidor.')
+                return False
+
+            # Autentica advogado
             self.advogado = self.procuraAdvogado()
-            self.loading(10)
-            if self.advogado is None:
-                self.loading(10)
-                self.tentativasSenha -= 1
-                self.showPopupAlerta(f'Usuário não encontrado. Tente novamente. \nNúmero de tentativas faltantes {self.tentativasSenha}')
-                self.advogado = AdvogadoModelo()
-                self.loading(100)
-                self.limpa()
-                if self.tentativasSenha == 0:
-                    self.close()
-            else:
-                self.loading(10)
-                if self.cbSalvarSenha.isChecked():
-                    self.loading(10)
-                    self.verificaRotinaDiaria()
-                    self.loading(20)
-                    self.cacheLogin.salvarCache(self.advogado)
-                    self.loading(10)
+
+            if self.advogado:
+
+                # Autentica escritório
+                self.escritorio = self.procuraEscritorio(self.advogado.escritorioId)
+                if self.escritorio:
+                    escritorioCadastrado = self.daoEscritorio.buscaEscritorioById(self.escritorio.escritorioId)
+                    advogadoCadastrado = self.daoAdvogado.buscaAdvogadoById(self.advogado.advogadoId)
+
+                    if not escritorioCadastrado:
+                        self.daoEscritorio.insereEscritorio(self.escritorio)
+                    if not advogadoCadastrado:
+                        self.daoAdvogado.insereAdvogado(self.advogado)
+
+                    # Decide se salva informações no "temporários", dependendo do checkBox
+                    if self.cbSalvarSenha.isChecked():
+                        self.cacheLogin.salvarCache(self.advogado)
+                        self.cacheEscritorio.salvarCache(self.escritorio)
+                    else:
+                        self.cacheLogin.salvarCacheTemporario(self.advogado)
+                        self.cacheEscritorio.salvarCacheTemporario(self.escritorio)
+
+                    # Inicia programa
                     self.dashboard = DashboardController(db=self.db)
-                    self.loading(10)
                     self.dashboard.show()
                     self.close()
+
                 else:
-                    self.loading(10)
-                    self.cacheLogin.salvarCacheTemporario(self.advogado)
-                    self.loading(10)
-                    self.dashboard = DashboardController(db=self.db)
-                    self.loading(30)
-                    self.dashboard.show()
-                    self.close()
+                    self.showPopupAlerta("Houve um problema ao encontrar o escritório no banco de dados. Entre em contato com o suporte.")
+                    self.cacheLogin.limpaCache()
+                    self.cacheEscritorio.limpaCache()
+                    # TODO: Lógica para clicar no botão "Ok" e fechar o programa
+            else:
+                self.tentativasSenha -= 1
+                self.showPopupAlerta("Usuário ou senha inválidos. Tente novamente")
+                self.cacheLogin.limpaCache()
+                self.cacheEscritorio.limpaCache()
+                # TODO: Lógica para clicar no botão "Ok" e fechar o programa
+                if self.tentativasSenha == 0:
+                    self.showPopupAlerta("A quantidade de tentativas excedeu o limite e o programa será fechado.")
+
+        else:
+            self.showPopupAlerta("Campo login e senha precisam ser preenchidos")
+            self.limpa()
+
+
+        # # Inicia autenticação quando advogado é carregado do cache
+        # if self.advogado is not None and self.advogado.escritorioId is not None:
+        #     self.loading(10)
+        #     autenticado = self.usuarioRepositorio.loginAuthFromCache(self.advogado)
+        #     self.loading(30)
+        #
+        #     if autenticado:
+        #         self.loading(10)
+        #         if ApiFerramentas().conexaoOnline():
+        #             self.loading(10)
+        #             self.verificaRotinaDiaria()
+        #             self.loading(20)
+        #         else:
+        #             self.showPopupAlerta('Sem conexão com o servidor.')
+        #             sys.exit()
+        #
+        #         self.dashboard = DashboardController(db=self.db)
+        #         self.dashboard.show()
+        #         self.close()
+        #     else:
+        #         self.showPopupAlerta(f"Usuário {self.advogado.nomeUsuario} não confirmado. \nFavor confirmar senha clicando em 'Primeiro acesso'.")
+        # else:
+        #
+        #     self.loading(10)
+        #
+        #     # Inicia autenticação por email/numeroOAB e senha
+        #     self.advogado = self.procuraAdvogado()
+        #     self.loading(10)
+        #     if self.advogado is None:
+        #
+        #         # Não foi possível fazer a autenticação
+        #         self.loading(10)
+        #         self.tentativasSenha -= 1
+        #         self.showPopupAlerta(f'Usuário não encontrado. Tente novamente. \nNúmero de tentativas faltantes {self.tentativasSenha}')
+        #         self.advogado = AdvogadoModelo()
+        #         self.loading(100)
+        #         self.limpa()
+        #         if self.tentativasSenha == 0:
+        #             self.close()
+        #     else:
+        #         self.loading(10)
+        #         self.cacheEscritorio.limpaCache()
+        #         self.cacheLogin.limpaCache()
+        #         self.escritorio = self.escritorioRepositorio.buscaEscritorio(self.advogado.escritorioId)
+        #
+        #         # Caso escritório não seja encontrado
+        #         if self.escritorio.escritorioId is None:
+        #             self.cacheLogin.limpaCache()
+        #             self.cacheEscritorio.limpaCache()
+        #             return False
+        #
+        #         # Advogado autenticado com sucesso
+        #         elif self.cbSalvarSenha.isChecked():
+        #             self.loading(20)
+        #             self.cacheEscritorio.salvarCache(self.escritorio)
+        #             self.verificaRotinaDiaria()
+        #             self.loading(10)
+        #             self.cacheLogin.salvarCache(self.advogado)
+        #             self.loading(10)
+        #             self.dashboard = DashboardController(db=self.db)
+        #             self.loading(10)
+        #             self.dashboard.show()
+        #             self.close()
+        #         else:
+        #             self.loading(10)
+        #             self.cacheLogin.salvarCacheTemporario(self.advogado)
+        #             self.cacheEscritorio.salvarCacheTemporario(self.escritorio)
+        #             self.loading(10)
+        #             self.dashboard = DashboardController(db=self.db)
+        #             self.loading(30)
+        #             self.dashboard.show()
+        #             self.close()
         self.edittingFinished = True
+
+    def infoNaoNulo(self):
+        login: bool = self.leLogin.text() != ''
+        senha: bool = self.leSenha.text() != ''
+
+        return login and senha
 
     def procuraAdvogado(self) -> AdvogadoModelo:
         senha = self.leSenha.text()
@@ -258,6 +345,10 @@ class LoginController(QMainWindow, Ui_mwLogin):
         else:
             email = self.leLogin.text()
             return self.usuarioRepositorio.loginAuth(senha, email=email)
+
+    def procuraEscritorio(self, escritorioId: int) -> EscritorioModelo:
+        escritorio: EscritorioModelo = self.escritorioRepositorio.buscaEscritorio(escritorioId)
+        return escritorio
 
     def verificaRotinaDiaria(self):
 

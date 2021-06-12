@@ -360,6 +360,8 @@ def strToDatetime(data: str, tamanho: TamanhoData = TamanhoData.m):
             return datetime.datetime.strptime(data, '%m/%Y')
         elif tamanho == TamanhoData.m:
             return datetime.datetime.strptime(data, '%d/%m/%Y')
+        elif tamanho == TamanhoData.mm:
+            return datetime.datetime.strptime(data, '%Y-%m-%d')
         elif tamanho == TamanhoData.g:
             return datetime.datetime.strptime(data, '%Y-%m-%d %H:%M')
         elif tamanho == TamanhoData.gg:
@@ -402,26 +404,32 @@ def strTipoProcesso(tipoProcesso: int) -> str:
         return '-'
 
 
-def strTipoBeneficio(tipoBeneficio: int) -> str:
+def strTipoBeneficio(tipoBeneficio: int, subTipoApos: int) -> str:
+
     if tipoBeneficio == TipoBeneficio.Aposentadoria.value:
-        return 'Aposentadoria'
-    elif tipoBeneficio == TipoBeneficio.AposDeficiencia:
-        return 'Aposentadoria da pessoa com deficiencia'
-    elif tipoBeneficio == TipoBeneficio.AposRural:
-        return 'Aposentadoria rural'
-    elif tipoBeneficio == TipoBeneficio.AposEspecial:
-        return 'Aposentadoria especial'
-    elif tipoBeneficio == TipoBeneficio.AuxDoenca:
+        if subTipoApos == SubTipoAposentadoria.Idade.value:
+            return 'Aposentadoria por idade'
+        elif subTipoApos == SubTipoAposentadoria.Rural.value:
+            return 'Aposentadoria por idade - Rural'
+        elif subTipoApos == SubTipoAposentadoria.Especial.value:
+            return 'Aposentadoria Especial'
+        elif subTipoApos == SubTipoAposentadoria.Deficiencia.value:
+            return 'Aposentadoria da pessoa com deficiência'
+        elif subTipoApos == SubTipoAposentadoria.Invalidez.value:
+            return 'Aposentadoria por invalidez'
+        elif subTipoApos == SubTipoAposentadoria.TempoContrib.value:
+            return 'Aposentadoria por tempo de contribuição'
+    elif tipoBeneficio == TipoBeneficio.AuxDoenca.value:
         return 'Auxílio doença'
-    elif tipoBeneficio == TipoBeneficio.AuxReclusao:
+    elif tipoBeneficio == TipoBeneficio.AuxReclusao.value:
         return 'Auxílio reclusão'
-    elif tipoBeneficio == TipoBeneficio.BeneIdoso:
+    elif tipoBeneficio == TipoBeneficio.BeneIdoso.value:
         return 'Benefício assistencial ao idoso'
-    elif tipoBeneficio == TipoBeneficio.BeneDeficiencia:
+    elif tipoBeneficio == TipoBeneficio.BeneDeficiencia.value:
         return 'Benefício assistencial à pessoa com deficiência'
-    elif tipoBeneficio == TipoBeneficio.PensaoMorte:
+    elif tipoBeneficio == TipoBeneficio.PensaoMorte.value:
         return 'Pensão por morte'
-    elif tipoBeneficio == TipoBeneficio.SalMaternidade:
+    elif tipoBeneficio == TipoBeneficio.SalMaternidade.value:
         return 'Salário maternidade'
     else:
         return '-'

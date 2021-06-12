@@ -17,10 +17,7 @@ class TipoBeneficioConcController(QWidget, Ui_wdgTipoBeneficioConc):
         self.efeitos = Efeitos()
 
         self.sinais.sTrocaTelaEntrevista.connect(self.trocaTela)
-        self.pbApos.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.Aposentadoria))
-        self.pbAposDeficiencia.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.AposDeficiencia))
-        self.pbAposRural.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.AposRural))
-        self.pbAposEspecial.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.AposEspecial))
+        self.pbAposentadoria.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.Aposentadoria))
         self.pbAuxilioDoenca.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.AuxDoenca))
         self.pbAuxReclusao.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.AuxReclusao))
         self.pbBeneIdoso.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.BeneIdoso))

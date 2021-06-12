@@ -412,8 +412,6 @@ class CNISModelo:
         elif informacao.lower() == 'remuneracoes':
             return pd.DataFrame(self.dictRemuneracoes)
         elif informacao.lower() == 'contribuicoes':
-            # for chave, valor in self.dictContribuicoes.items():
-            #     print(f"{chave}({len(valor)}): {valor}")
             return pd.DataFrame(self.dictContribuicoes)
         elif informacao.lower() == 'indicadores':
             return pd.DataFrame.from_dict(self.dictIndicadores, orient='index', columns=['Descrição'])
@@ -464,3 +462,18 @@ class CNISModelo:
         salarioM = re.match(self.expRegSalarioM, salario) is not None
         salarioG = re.match(self.expRegSalarioG, salario) is not None
         return salarioP or salarioM or salarioG
+
+    def __str__(self):
+        dtRemuneracoes: pd.DataFrame = self.gerarDataframe(informacao='remuneracoes')
+        dtContribuicoes: pd.DataFrame = self.gerarDataframe(informacao='contribuicoes')
+        dtBeneficios: pd.DataFrame = self.gerarDataframe(informacao='cabecalhosbeneficio')
+
+        return f"""
+        ---------------------------------------------------------------
+        = Nome Completo : {self.dictDadosPessoais['nomeCompleto']}
+        = CPF : {self.dictDadosPessoais['cpf']}
+        = Nome da mãe : {self.dictDadosPessoais['nomeMae']}
+        ---------------------------------------------------------------
+        DataFrame(Remuneracoes): {dtRemuneracoes.info}
+        DataFrame(Contribuições): {dtContribuicoes.info}
+        DataFrame(Benefícios): {dtBeneficios.info}"""

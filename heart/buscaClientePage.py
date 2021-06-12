@@ -59,7 +59,7 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
             if cliente.telefone == 'None':
                 telefoneItem = QTableWidgetItem('')
             else:
-                telefoneItem = QTableWidgetItem(mascaraTelCel(cliente.telefone))
+                telefoneItem = QTableWidgetItem(mascaraTelCel(cliente.telefone.numero))
             telefoneItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblListaClientes.setItem(linha, 3, telefoneItem)
 
@@ -91,9 +91,9 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
                 self.clienteSelecionadoId = clienteSelecionado.clienteId
                 break
 
-        self.lbTel.setText(mascaraTelCel(clienteSelecionado.telefone))
+        self.lbTel.setText(mascaraTelCel(clienteSelecionado.telefone.numero))
         self.lbCdCliente.setText(str(clienteSelecionado.clienteId))
-        self.lbNit.setText(mascaraNit(clienteSelecionado.nit))
+        self.lbNit.setText(mascaraNit(int(clienteSelecionado.nit)))
         self.lbIdade.setText(str(clienteSelecionado.idade))
         self.lbEmail.setText(clienteSelecionado.email)
         self.lbNomeCompleto.setText(f"{clienteSelecionado.nomeCliente} {clienteSelecionado.sobrenomeCliente}")

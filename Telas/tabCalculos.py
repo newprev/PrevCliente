@@ -18,7 +18,8 @@ class Ui_wdgTabCalculos(object):
         wdgTabCalculos.setMinimumSize(QtCore.QSize(945, 611))
         wdgTabCalculos.setStyleSheet("#tabContribuicoes,\n"
 "#tabMain, \n"
-"#tabCalculos {\n"
+"#tabCalculos,\n"
+"#tabBeneficios {\n"
 "    border-radius: 8px;\n"
 "    background-color: white;\n"
 "    padding: 4px;\n"
@@ -122,7 +123,7 @@ class Ui_wdgTabCalculos(object):
 "}\n"
 "\n"
 "/*-------------------------------- Tables -----------------------------------------*/\n"
-"#tblClientes{\n"
+"#tblCalculos {\n"
 "    background-color: transparent;\n"
 "}\n"
 "\n"
@@ -303,6 +304,235 @@ class Ui_wdgTabCalculos(object):
         self.pbEditar.setGeometry(QtCore.QRect(1030, 320, 101, 25))
         self.pbEditar.setObjectName("pbEditar")
         self.tabMain.addTab(self.tabContribuicoes, "")
+        self.tabBeneficios = QtWidgets.QWidget()
+        self.tabBeneficios.setStyleSheet("/*-------------------------------- Labels -----------------------------------------*/\n"
+"#lbTituloClientesBen {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 24px;\n"
+"}\n"
+"\n"
+"#lbInfoClientesBen {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;    \n"
+"}\n"
+"\n"
+"#lbTituloFiltroBen {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 16px;\n"
+"}\n"
+"\n"
+"#lbBuscaNomeBen, #lbBuscaEmailBen, \n"
+"#lbBuscaTelefoneBen, #lbBuscaTpProcessoBen,\n"
+"#lbBuscaRgcpfBen {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"}\n"
+"\n"
+"#lbInfoCabecalhoBen, #lbInfoDibDerBen, \n"
+"#lbInfoNomeBen, #lbInfoDocumentoBen {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"#lbDibDerBen, \n"
+"#lbNomeBen, #lbDocumentoBen {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    background-color: white;\n"
+"    font-weight: bold;\n"
+"}\n"
+"\n"
+"/*-------------------------------- Frames -----------------------------------------*/\n"
+"#frInfoCabecalhoBen {\n"
+"    border-radius: 4px;\n"
+"    border: 1px solid rgb(85, 87, 83);\n"
+"\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"/*-------------------------------- Tables -----------------------------------------*/\n"
+"#tblBeneficios {\n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"#tblClientesBen::item{\n"
+"    margin: 4px;\n"
+"}\n"
+"\n"
+"QHeaderView::section {\n"
+"    background-color: rgb(52, 73, 94);\n"
+"    color: white;\n"
+"    padding-left: 4px;\n"
+"    border: 1px solid #6c6c6c;\n"
+"    min-height: 45px;\n"
+"}\n"
+"\n"
+"QHeaderView::down-arrow {\n"
+"    icon-color: white;\n"
+"}\n"
+"\n"
+"QHeaderView::up-arrow {\n"
+"    icon-color: white;\n"
+"}\n"
+"\n"
+"/*-------------------------------- Push Buttons --------------------------------*/\n"
+"#pbArrowNomeBen, \n"
+"#pbArrowEmailBen, \n"
+"#pbArrowTelefoneBen,\n"
+"#pbArrowTpProcessoBen,\n"
+"#pbArrowRgcpfBen {\n"
+"    background-image: url(:/arrowDown/arrowDown.png);\n"
+"    background-repeat: no-repeat;\n"
+"    background-position: center;\n"
+"\n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"#pbBuscarClienteBen {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: rgb(52, 73, 94);\n"
+"}\n"
+"\n"
+"#pbBuscarClienteBen:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    border: 1px solid;\n"
+"    background-color: rgb(72, 93, 114);\n"
+"}\n"
+"\n"
+"#pbInserirBen, #pbEditarBen, #pbExcluirBen {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: rgb(52, 73, 94);\n"
+"}\n"
+"\n"
+"#pbInserirBen:hover, #pbEditarBen:hover, \n"
+"#pbExcluirBen:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    border: 1px solid;\n"
+"    background-color: rgb(72, 93, 114);\n"
+"}")
+        self.tabBeneficios.setObjectName("tabBeneficios")
+        self.pbExcluirBen = QtWidgets.QPushButton(self.tabBeneficios)
+        self.pbExcluirBen.setGeometry(QtCore.QRect(1030, 270, 101, 25))
+        self.pbExcluirBen.setObjectName("pbExcluirBen")
+        self.lbInfoClientesBen = QtWidgets.QLabel(self.tabBeneficios)
+        self.lbInfoClientesBen.setGeometry(QtCore.QRect(10, 40, 371, 31))
+        self.lbInfoClientesBen.setObjectName("lbInfoClientesBen")
+        self.pbBuscarClienteBen = QtWidgets.QPushButton(self.tabBeneficios)
+        self.pbBuscarClienteBen.setGeometry(QtCore.QRect(1030, 150, 101, 41))
+        self.pbBuscarClienteBen.setObjectName("pbBuscarClienteBen")
+        self.pbEditarBen = QtWidgets.QPushButton(self.tabBeneficios)
+        self.pbEditarBen.setGeometry(QtCore.QRect(1030, 320, 101, 25))
+        self.pbEditarBen.setObjectName("pbEditarBen")
+        self.tblBeneficios = QtWidgets.QTableWidget(self.tabBeneficios)
+        self.tblBeneficios.setGeometry(QtCore.QRect(20, 100, 991, 461))
+        self.tblBeneficios.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.tblBeneficios.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+        self.tblBeneficios.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.tblBeneficios.setShowGrid(False)
+        self.tblBeneficios.setWordWrap(True)
+        self.tblBeneficios.setObjectName("tblBeneficios")
+        self.tblBeneficios.setColumnCount(7)
+        self.tblBeneficios.setRowCount(0)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblBeneficios.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("TeX Gyre Adventor")
+        font.setPointSize(12)
+        item.setFont(font)
+        self.tblBeneficios.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("TeX Gyre Adventor")
+        font.setPointSize(12)
+        item.setFont(font)
+        self.tblBeneficios.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("TeX Gyre Adventor")
+        font.setPointSize(12)
+        item.setFont(font)
+        self.tblBeneficios.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("TeX Gyre Adventor")
+        font.setPointSize(12)
+        item.setFont(font)
+        self.tblBeneficios.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("TeX Gyre Adventor")
+        font.setPointSize(12)
+        item.setFont(font)
+        self.tblBeneficios.setHorizontalHeaderItem(5, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("TeX Gyre Adventor")
+        font.setPointSize(12)
+        item.setFont(font)
+        self.tblBeneficios.setHorizontalHeaderItem(6, item)
+        self.tblBeneficios.horizontalHeader().setCascadingSectionResizes(True)
+        self.tblBeneficios.horizontalHeader().setSortIndicatorShown(True)
+        self.tblBeneficios.horizontalHeader().setStretchLastSection(True)
+        self.tblBeneficios.verticalHeader().setVisible(False)
+        self.frInfoCabecalhoBen = QtWidgets.QFrame(self.tabBeneficios)
+        self.frInfoCabecalhoBen.setGeometry(QtCore.QRect(420, 10, 491, 81))
+        self.frInfoCabecalhoBen.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frInfoCabecalhoBen.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoCabecalhoBen.setObjectName("frInfoCabecalhoBen")
+        self.lbInfoNomeBen = QtWidgets.QLabel(self.frInfoCabecalhoBen)
+        self.lbInfoNomeBen.setGeometry(QtCore.QRect(10, 10, 81, 21))
+        self.lbInfoNomeBen.setObjectName("lbInfoNomeBen")
+        self.lbInfoDocumentoBen = QtWidgets.QLabel(self.frInfoCabecalhoBen)
+        self.lbInfoDocumentoBen.setGeometry(QtCore.QRect(10, 50, 81, 21))
+        self.lbInfoDocumentoBen.setObjectName("lbInfoDocumentoBen")
+        self.lbInfoDibDerBen = QtWidgets.QLabel(self.frInfoCabecalhoBen)
+        self.lbInfoDibDerBen.setGeometry(QtCore.QRect(350, 10, 51, 21))
+        self.lbInfoDibDerBen.setObjectName("lbInfoDibDerBen")
+        self.lbNomeBen = QtWidgets.QLabel(self.frInfoCabecalhoBen)
+        self.lbNomeBen.setGeometry(QtCore.QRect(100, 10, 221, 21))
+        self.lbNomeBen.setText("")
+        self.lbNomeBen.setObjectName("lbNomeBen")
+        self.lbDocumentoBen = QtWidgets.QLabel(self.frInfoCabecalhoBen)
+        self.lbDocumentoBen.setGeometry(QtCore.QRect(100, 50, 191, 21))
+        self.lbDocumentoBen.setText("")
+        self.lbDocumentoBen.setObjectName("lbDocumentoBen")
+        self.lbDibDerBen = QtWidgets.QLabel(self.frInfoCabecalhoBen)
+        self.lbDibDerBen.setGeometry(QtCore.QRect(410, 10, 61, 21))
+        self.lbDibDerBen.setObjectName("lbDibDerBen")
+        self.pbInserirBen = QtWidgets.QPushButton(self.tabBeneficios)
+        self.pbInserirBen.setGeometry(QtCore.QRect(1030, 220, 101, 25))
+        self.pbInserirBen.setObjectName("pbInserirBen")
+        self.lbInfoCabecalhoBen = QtWidgets.QLabel(self.tabBeneficios)
+        self.lbInfoCabecalhoBen.setGeometry(QtCore.QRect(440, 0, 141, 17))
+        self.lbInfoCabecalhoBen.setObjectName("lbInfoCabecalhoBen")
+        self.lbTituloClientesBen = QtWidgets.QLabel(self.tabBeneficios)
+        self.lbTituloClientesBen.setGeometry(QtCore.QRect(10, 10, 361, 31))
+        self.lbTituloClientesBen.setObjectName("lbTituloClientesBen")
+        self.tabMain.addTab(self.tabBeneficios, "")
         self.horizontalLayout.addWidget(self.tabMain)
 
         self.retranslateUi(wdgTabCalculos)
@@ -341,6 +571,34 @@ class Ui_wdgTabCalculos(object):
         self.pbExcluir.setText(_translate("wdgTabCalculos", "Excluir"))
         self.pbEditar.setText(_translate("wdgTabCalculos", "Editar"))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabContribuicoes), _translate("wdgTabCalculos", "Contribuições"))
+        self.pbExcluirBen.setText(_translate("wdgTabCalculos", "Excluir"))
+        self.lbInfoClientesBen.setText(_translate("wdgTabCalculos", "Pesquise por toda a sua base de clientes"))
+        self.pbBuscarClienteBen.setText(_translate("wdgTabCalculos", "Buscar \n"
+"cliente"))
+        self.pbEditarBen.setText(_translate("wdgTabCalculos", "Editar"))
+        item = self.tblBeneficios.horizontalHeaderItem(0)
+        item.setText(_translate("wdgTabCalculos", "infoId"))
+        item = self.tblBeneficios.horizontalHeaderItem(1)
+        item.setText(_translate("wdgTabCalculos", "Nº"))
+        item = self.tblBeneficios.horizontalHeaderItem(2)
+        item.setText(_translate("wdgTabCalculos", "Número do\n"
+"benefício"))
+        item = self.tblBeneficios.horizontalHeaderItem(3)
+        item.setText(_translate("wdgTabCalculos", "Data início"))
+        item = self.tblBeneficios.horizontalHeaderItem(4)
+        item.setText(_translate("wdgTabCalculos", "Data Fim"))
+        item = self.tblBeneficios.horizontalHeaderItem(5)
+        item.setText(_translate("wdgTabCalculos", "Situação"))
+        item = self.tblBeneficios.horizontalHeaderItem(6)
+        item.setText(_translate("wdgTabCalculos", "Natureza"))
+        self.lbInfoNomeBen.setText(_translate("wdgTabCalculos", "Nome cliente:"))
+        self.lbInfoDocumentoBen.setText(_translate("wdgTabCalculos", "Documento:"))
+        self.lbInfoDibDerBen.setText(_translate("wdgTabCalculos", "DIB/DER:"))
+        self.lbDibDerBen.setText(_translate("wdgTabCalculos", "DIB/DER:"))
+        self.pbInserirBen.setText(_translate("wdgTabCalculos", "Inserir"))
+        self.lbInfoCabecalhoBen.setText(_translate("wdgTabCalculos", "  Informações pessoais"))
+        self.lbTituloClientesBen.setText(_translate("wdgTabCalculos", "Tabela de Benefícios"))
+        self.tabMain.setTabText(self.tabMain.indexOf(self.tabBeneficios), _translate("wdgTabCalculos", "Benefícios"))
 
 
 if __name__ == "__main__":

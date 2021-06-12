@@ -31,15 +31,13 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
 
         self.tblCalculos.resizeColumnsToContents()
 
-    def carregarTabela(self, clienteId: int):
+    def carregarTabContribuicoes(self, clienteId: int):
         dados = self.daoCalculos.getRemECon(clienteId)
 
         self.tblCalculos.setRowCount(0)
 
         for contLinha, infoLinha in enumerate(dados):
             self.tblCalculos.insertRow(contLinha)
-            if contLinha == 1:
-                print(infoLinha)
 
             for contColuna, info in enumerate(infoLinha):
                 if contColuna == 0:
@@ -83,13 +81,73 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
                     strItem = QTableWidgetItem(strIndicadores)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-                    self.tblCalculos.setItem(contLinha, contColuna, strItem)
+                    self.tblCalculos.setItem(contLinha, contColuna+1, strItem)
 
         self.tblCalculos.resizeColumnsToContents()
         self.tblCalculos.resizeRowsToContents()
 
+    def carregarTblBeneficios(self, clienteId: int):
+
+        dados = self.daoCalculos.getBeneficiosPor(clienteId)
+        print(dados)
+
+        # self.tblBeneficios.setRowCount(0)
+        #
+        # for contLinha, infoLinha in enumerate(dados):
+        #     self.tblBeneficios.insertRow(contLinha)
+        #     if contLinha == 1:
+        #         print(infoLinha)
+        #
+        #     for contColuna, info in enumerate(infoLinha):
+        #         if contColuna == 0:
+        #             strItem = QTableWidgetItem(str(info))
+        #             strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+        #             self.tblBeneficios.setItem(contLinha, contColuna, strItem)
+        #
+        #         elif contColuna == 1:
+        #             strItem = QTableWidgetItem(str(info))
+        #             strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+        #             self.tblBeneficios.setItem(contLinha, contColuna, strItem)
+        #
+        #         elif contColuna == 2:
+        #             strItem = QTableWidgetItem(mascaraDataPequena(info))
+        #             strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        #             strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+        #             self.tblBeneficios.setItem(contLinha, contColuna, strItem)
+        #
+        #         elif contColuna == 3:
+        #             strItem = QTableWidgetItem(mascaraDinheiro(info, simbolo=infoLinha[6]))
+        #             strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        #             strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+        #             self.tblBeneficios.setItem(contLinha, contColuna, strItem)
+        #
+        #         elif contColuna == 4:
+        #             strItem = QTableWidgetItem(info)
+        #             strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        #             strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+        #             self.tblBeneficios.setItem(contLinha, contColuna, strItem)
+        #
+        #         elif contColuna == 5:
+        #             if ',' in info:
+        #                 indicadores = info.split(', ')
+        #                 strIndicadores = ''
+        #                 for indicador in indicadores:
+        #                     strIndicadores += '- ' + indicador + '\n'
+        #             elif info != '':
+        #                 strIndicadores = '- ' + info
+        #             else:
+        #                 strIndicadores = info
+        #             strItem = QTableWidgetItem(strIndicadores)
+        #             strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+        #             strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        #             self.tblBeneficios.setItem(contLinha, contColuna + 1, strItem)
+        #
+        # self.tblBeneficios.resizeColumnsToContents()
+        # self.tblBeneficios.resizeRowsToContents()
+
     def carregarInfoCliente(self, clientId: int = 1):
-        self.carregarTabela(clientId)
+        self.carregarTabContribuicoes(clientId)
+        self.carregarTblBeneficios(clientId)
         self.cliente.fromList(self.daoCliente.buscaClienteById(clientId)[0])
         self.lbNome.setText(self.cliente.nomeCliente + ' ' + self.cliente.sobrenomeCliente)
         self.lbDocumento.setText(mascaraCPF(self.cliente.cpfCliente))

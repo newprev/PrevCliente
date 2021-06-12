@@ -26,17 +26,17 @@
 	border-radius: 8px;
 }
 
-#frProcuracao, #frDocsComprob {
+#frContratoHon, #frProcuracao {
 	background-color: rgb(32, 74, 135);
 	border-radius: 16px;
 }
 
-#frOutro1, #frOutro2 {
+#frDocsComprob, #frDecHipo {
 	background-color: rgb(52, 94, 155);
 	border-radius: 16px;
 }
 
-#frOutro3, #frOutro4 {
+#frDecPensao, #frOutro4 {
 	background-color: rgb(72, 94, 175);
 	border-radius: 16px;
 }
@@ -46,8 +46,10 @@
 	border-radius: 16px;
 }
 
-#frAtiv1, #frAtiv4, #frAtiv7, 
-#frAtiv8, #frAtiv9, #frAtiv10  {
+#frDecHipoInfo, #frProcuracaoInfo,
+#frAtiv7, #frDecPensaoInfo,
+#frAtiv8, #frAtiv9, #frAtiv10,
+#frContratoHonInfo, #frDocsComprobInfo  {
 	background-image: url(:/info/information.png);
 	background-repeat: no-repeat;
 	background-position: center;
@@ -62,8 +64,8 @@
 }
 
 /* ------------------------------ CheckBox ------------------------------ */
-#cbProcuracao, #cbDocsComprob, #cbAtiv3, 
-#cbAtiv4, #cbAtiv5, #cbAtiv6, 
+#cbProcuracao, #cbDocsComprob, #cbContratoHon, 
+#cbDecHipo, #cbDecPensao, #cbAtiv5, #cbAtiv6, 
 #cbAtiv7, #cbAtiv8, #cbAtiv9, 
 #cbAtiv10, #cbAtiv11, #cbAtiv12, 
 #cbAtiv13, #cbAtiv14, #cbAtiv15, 
@@ -74,12 +76,12 @@
 	color: white;
 }
 
-#cbProcuracao::indicator , #cbDocsComprob::indicator , #cbAtiv3::indicator , 
-#cbAtiv4::indicator , #cbAtiv5::indicator , #cbAtiv6::indicator , 
-#cbAtiv7::indicator , #cbAtiv8::indicator , #cbAtiv9::indicator , 
-#cbAtiv10::indicator , #cbAtiv11::indicator , #cbAtiv12::indicator , 
-#cbAtiv13::indicator, #cbAtiv14::indicator, #cbAtiv15::indicator, 
-#cbAtiv16::indicator {
+#cbProcuracao::indicator , #cbDocsComprob::indicator , #cbContratoHon::indicator , 
+#cbDecHipo::indicator , #cbDecPensao::indicator, #cbAtiv5::indicator , 
+#cbAtiv6::indicator , #cbAtiv7::indicator , #cbAtiv8::indicator , 
+#cbAtiv9::indicator , #cbAtiv10::indicator , #cbAtiv11::indicator , 
+#cbAtiv12::indicator , #cbAtiv13::indicator, #cbAtiv14::indicator, 
+#cbAtiv15::indicator, #cbAtiv16::indicator {
 	width: 24px;
 	height: 24px;
 }
@@ -201,6 +203,74 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item alignment="Qt::AlignHCenter">
+           <widget class="QFrame" name="frContratoHon">
+            <property name="minimumSize">
+             <size>
+              <width>800</width>
+              <height>80</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>800</width>
+              <height>80</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>16</number>
+             </property>
+             <property name="topMargin">
+              <number>4</number>
+             </property>
+             <property name="rightMargin">
+              <number>32</number>
+             </property>
+             <property name="bottomMargin">
+              <number>4</number>
+             </property>
+             <item>
+              <widget class="QCheckBox" name="cbContratoHon">
+               <property name="text">
+                <string>    Contrato de honorários</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="frContratoHonInfo">
+               <property name="minimumSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frProcuracao">
             <property name="minimumSize">
              <size>
@@ -238,13 +308,25 @@
              </property>
              <item>
               <widget class="QCheckBox" name="cbProcuracao">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>40</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Procuração</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QFrame" name="frAtiv1">
+              <widget class="QFrame" name="frProcuracaoInfo">
                <property name="minimumSize">
                 <size>
                  <width>36</width>
@@ -299,7 +381,7 @@
               <number>4</number>
              </property>
              <property name="rightMargin">
-              <number>4</number>
+              <number>32</number>
              </property>
              <property name="bottomMargin">
               <number>4</number>
@@ -311,49 +393,25 @@
                </property>
               </widget>
              </item>
-            </layout>
-           </widget>
-          </item>
-          <item alignment="Qt::AlignHCenter">
-           <widget class="QFrame" name="frOutro1">
-            <property name="minimumSize">
-             <size>
-              <width>800</width>
-              <height>80</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>800</width>
-              <height>80</height>
-             </size>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <property name="leftMargin">
-              <number>16</number>
-             </property>
-             <property name="topMargin">
-              <number>4</number>
-             </property>
-             <property name="rightMargin">
-              <number>4</number>
-             </property>
-             <property name="bottomMargin">
-              <number>4</number>
-             </property>
              <item>
-              <widget class="QCheckBox" name="cbAtiv3">
-               <property name="text">
-                <string>    Outro</string>
+              <widget class="QFrame" name="frDocsComprobInfo">
+               <property name="minimumSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
                </property>
               </widget>
              </item>
@@ -361,7 +419,7 @@
            </widget>
           </item>
           <item alignment="Qt::AlignHCenter">
-           <widget class="QFrame" name="frOutro2">
+           <widget class="QFrame" name="frDecHipo">
             <property name="minimumSize">
              <size>
               <width>800</width>
@@ -397,14 +455,20 @@
               <number>4</number>
              </property>
              <item>
-              <widget class="QCheckBox" name="cbAtiv4">
+              <widget class="QCheckBox" name="cbDecHipo">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>40</height>
+                </size>
+               </property>
                <property name="text">
-                <string>    Outro</string>
+                <string>    Declaração de Hipossuficiência</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QFrame" name="frAtiv4">
+              <widget class="QFrame" name="frDecHipoInfo">
                <property name="minimumSize">
                 <size>
                  <width>36</width>
@@ -429,7 +493,7 @@
            </widget>
           </item>
           <item alignment="Qt::AlignHCenter">
-           <widget class="QFrame" name="frOutro3">
+           <widget class="QFrame" name="frDecPensao">
             <property name="minimumSize">
              <size>
               <width>800</width>
@@ -459,15 +523,38 @@
               <number>4</number>
              </property>
              <property name="rightMargin">
-              <number>4</number>
+              <number>32</number>
              </property>
              <property name="bottomMargin">
               <number>4</number>
              </property>
              <item>
-              <widget class="QCheckBox" name="cbAtiv5">
+              <widget class="QCheckBox" name="cbDecPensao">
                <property name="text">
-                <string>    Outro</string>
+                <string>    Declaração recebimento de pensão
+    ou aposentadoria em outro regime</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="frDecPensaoInfo">
+               <property name="minimumSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
                </property>
               </widget>
              </item>

@@ -15,6 +15,7 @@ class TiposConexoes(Enum):
 class TamanhoData(Enum):
     p = 1
     m = 2
+    mm = 5
     g = 3
     gg = 4
 
@@ -61,22 +62,33 @@ class TipoProcesso(Enum):
 
 class TipoBeneficio(Enum):
     Aposentadoria = 0
-    AposDeficiencia = 1
-    AposRural = 2
-    AposEspecial = 3
-    AuxDoenca = 4
-    AuxReclusao = 5
-    BeneIdoso = 6
-    BeneDeficiencia = 7
-    PensaoMorte = 8
-    SalMaternidade = 9
+    AuxDoenca = 1
+    AuxAcidente = 2
+    AuxReclusao = 3
+    BeneIdoso = 4
+    BeneDeficiencia = 5
+    PensaoMorte = 6
+    SalMaternidade = 7
 
-class TipoWidget(Enum):
-    label = 0
-    icone = 1
+class SubTipoAposentadoria(Enum):
+    Idade = 0
+    Rural = 1
+    Deficiencia = 2
+    Especial = 3
+    TempoContrib = 4
+    Invalidez = 5
 
 class EtapaEntrevista(Enum):
     infoPessoais = 0
     infoProcessual = 1
     detalhamento = 2
     documentacao = 3
+
+class TipoWidget(Enum):
+    label = 0
+    icone = 1
+
+class TipoContribuicao(Enum):
+    contribuicao = 0
+    remuneracao = 1
+    beneficio = 2

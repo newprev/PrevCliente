@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QDate
 
 from Daos.daoFerramentas import DaoFerramentas
-from helpers import meses, strToFloat, strToDatetime, mascaraDinheiro, dinheiroToFloat, mascaraDataPequena
+from helpers import meses, strToFloat, strToDatetime, mascaraDinheiro, dinheiroToFloat, mascaraDataPequena, mascaraDataSql
 import datetime as dt
 from heart.localStyleSheet.configuracoes import desabilitaPB
 
@@ -145,7 +145,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
             tetoIdItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.tblTetos.setItem(linha, 0, tetoIdItem)
 
-            dataItem = QTableWidgetItem(mascaraDataPequena(tetoPrev.dataValidade))
+            dataItem = QTableWidgetItem(mascaraDataPequena(strToDatetime(tetoPrev.dataValidade, TamanhoData.mm)))
             dataItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             dataItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.tblTetos.setItem(linha, 1, dataItem)

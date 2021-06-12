@@ -1,0 +1,13 @@
+{
+  "Aposentadoria" : {
+    "Idade": "Certidão de Tempo de Contribuição (CTC).",
+    "Rural": "Comprovantes de atividade rural\nContrato de arrendamento, parceria, meação ou comodato rural\nComprovante de cadastro do Instituto Nacional de Colonização e Reforma Agrária – INCRA\nBloco de notas do produtor rural\nNotas fiscais de entrada de mercadorias.\nComprovantes de recolhimento e/ou renda\nComprovantes de contribuição à Previdência Social\nDeclaração de Imposto de Renda\nComprovante de pagamento de impostos rurais.\nOutros registros\nCertidão fornecida pela FUNAI\nDeclaração de Aptidão do PRONAF (DAP).\nFormulários de Autodeclaração\nPescador\nRural\nSeringueiro e extrativista vegetal.",
+    "Deficiencia": "Certidão de Tempo de Contribuição (CTC).\nPPP ou (DIRBEN 8030, SB-40, DISES BE 5235, DSS 8030)\nLCAT\nCertificados de cursos\nLaudos de insalubridade em reclamatórias trabalhistas.\nComprovantes de deficiência\nLaudos médicos\nAtestados\nDeclarações médicas\nExames\nReceituários",
+    "Especial": "Certidão de Tempo de Contribuição (CTC).\nPPP ou (DIRBEN 8030, SB-40, DISES BE 5235, DSS 8030)\nLCAT\nCertificados de cursos\nLaudos de insalubridade em reclamatórias trabalhistas.",
+    "Invalidez": "Certidão de Tempo de Contribuição (CTC).\nPPP ou (DIRBEN 8030, SB-40, DISES BE 5235, DSS 8030)\nLCAT\nCertificados de cursos\nLaudos de insalubridade em reclamatórias trabalhistas.\nComprovantes de invalidez\nLaudos médicos\nAtestados\nDeclarações médicas\nExames\nReceituários.",
+    "TempoContrib": "Certidão de Tempo de Contribuição (CTC).\nPPP ou (DIRBEN 8030, SB-40, DISES BE 5235, DSS 8030)\nLCAT\nCertificados de cursos\nLaudos de insalubridade em reclamatórias trabalhistas."
+  },
+  "AuxAcidente" : "Laudos\nExames de imagem\nDocumentos complementares\nAtestado médico.",
+  "AuxDoenca" : "Laudos\nExames de imagem\nDocumentos complementares\nAtestado médico.",
+  "AuxReclusao" : "- Certidão emitida pela autoridade competente sobre o efetivo recolhimento do segurado à prisão e o respectivo regime de cumprimento da pena, sendo tal documento renovado trimestralmente (Atestado de permanência carcerária)\n- Documento que certifique o não pagamento do subsídio ou da remuneração ao segurado pelos cofres públicos, em razão da prisão, expedido pelo Órgão de lotação do Servidor\n- Comprovação de dependência (certidão de casamento e / ou nascimento dos filhos)\n- Documentos Pessoais\n- Comprovante de Residência"
+}

@@ -13,7 +13,7 @@ from modelos.remuneracaoModelo import RemuneracoesModelo
 
 class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
 
-    def __init__(self, parent=None, db=None, cliente: ClienteModelo=None):
+    def __init__(self, parent=None, db=None, cliente: ClienteModelo=None, contribuicaoId: int = 0):
         super(InsereContribuicaoPage, self).__init__(parent=parent)
         self.setupUi(self)
         self.tabCalculos = parent
@@ -51,6 +51,13 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
 
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.escondeLoading)
+
+        # if contribuicaoId != 0:
+        #     self.buscaContribuicao()
+
+    def buscaContribuicao(self, contribuicaoId: int):
+        # contribuicao = self.daoCalculos.
+        pass
 
     def carregaComboBoxes(self):
         self.cbxIndicadores.addItems(dictIndicadores.keys())

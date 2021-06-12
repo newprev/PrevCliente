@@ -34,31 +34,30 @@ class BeneficiosModelo:
         return dictUsuario
 
     def fromDict(self, dictBeneficios):
-        self.beneficiosId = dictBeneficios['beneficiosId'],
-        self.clienteId = dictBeneficios['clienteId'],
-        self.seq = dictBeneficios['seq'],
-        self.nb = dictBeneficios['nb'],
-        self.especie = dictBeneficios['especie'],
-        self.dataInicio = dictBeneficios['dataInicio'],
-        self.dataFim = dictBeneficios['dataFim'],
-        self.situacao = dictBeneficios['situacao'],
-        self.dadoOrigem = dictBeneficios['dadoOrigem'],
-        self.dataCadastro = dictBeneficios['dataCadastro'],
-        self.dataUltAlt = dictBeneficios['dataUltAlt'],
+        self.beneficiosId = dictBeneficios['beneficiosId']
+        self.clienteId = dictBeneficios['clienteId']
+        self.seq = dictBeneficios['seq']
+        self.nb = dictBeneficios['nb']
+        self.especie = dictBeneficios['especie']
+        self.dataInicio = dictBeneficios['dataInicio']
+        self.dataFim = dictBeneficios['dataFim']
+        self.situacao = dictBeneficios['situacao']
+        self.dadoOrigem = dictBeneficios['dadoOrigem']
+        self.dataCadastro = dictBeneficios['dataCadastro']
+        self.dataUltAlt = dictBeneficios['dataUltAlt']
 
-
-    def fromList(self, listBeneficios: list, retornaInst: bool = False):
+    def fromList(self, listBeneficios: list, retornaInst: bool = True):
         self.beneficiosId = listBeneficios[0]
         self.clienteId = listBeneficios[1]
         self.seq = listBeneficios[2]
         self.nb = listBeneficios[3]
         self.especie = listBeneficios[4]
-        self.dataInicio = listBeneficios[4]
-        self.dataFim = listBeneficios[4]
-        self.situacao = listBeneficios[5]
-        self.dadoOrigem = listBeneficios[6]
-        self.dataCadastro = listBeneficios[7]
-        self.dataUltAlt = listBeneficios[8]
+        self.dataInicio = listBeneficios[5]
+        self.dataFim = listBeneficios[6]
+        self.situacao = listBeneficios[7]
+        self.dadoOrigem = listBeneficios[8]
+        self.dataCadastro = listBeneficios[9]
+        self.dataUltAlt = listBeneficios[10]
 
         if retornaInst:
             return self

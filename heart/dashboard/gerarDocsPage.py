@@ -31,17 +31,18 @@ class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):
         self.efeitos = Efeitos()
 
         self.frames = [
-            self.frProcuracao, self.frDocsComprob,
-            self.frOutro1, self.frOutro2,
-            self.frOutro3, self.frOutro4,
-            self.frOutro5, self.frOutro6,
+            self.frContratoHon, self.frProcuracao,
+            self.frDocsComprob, self.frDecHipo,
+            self.frDecPensao, self.frOutro4,
+            self.frOutro5, self.frOutro6
         ]
         self.abilitandoEfeitoClique()
 
-        self.frAtiv1.hide()
-        self.frAtiv4.hide()
-        self.frAtiv7.hide()
-        self.frAtiv8.hide()
+        self.frContratoHonInfo.hide()
+        self.frProcuracaoInfo.hide()
+        self.frDocsComprobInfo.hide()
+        self.frDecHipoInfo.hide()
+        self.frDecPensaoInfo.hide()
 
         self.doc: DocEntrevista = None
 
@@ -60,10 +61,25 @@ class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):
         self.doc = DocEntrevista(processo, cliente)
 
     def gerarDocumentosSelecionados(self):
+        self.doc.criaRequerimentoAdm()
+
         if self.cbProcuracao.isChecked():
             self.doc.gerarProcuracao()
+
+        if self.cbContratoHon.isChecked():
+            print('Gera contrato')
+            self.doc.criaContratoHonorarios()
+
+        if self.cbDecHipo.isChecked():
+            print('Cria declaração de hipossuficiência')
+            self.doc.criaDeclaracaoHipo()
+
+        if self.cbDecPensao.isChecked():
+            print('Cria pensão')
+            self.doc.criaDecPensao()
+
         if self.cbDocsComprob.isChecked():
-            self.doc.gerarDocumentosComprobatorios()
+            self.doc.criaDocumentosComprobatorios()
 
     def atividadeSelecionada(self, frame: QFrame, checkBox: QCheckBox):
         self.efeitos.shadowCards([frame])

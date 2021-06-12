@@ -49,8 +49,8 @@ class CacheEscritorio:
             if temp.endswith('escritorio.temp.txt'):
                 os.remove(os.path.join(self.pathCache, temp))
 
-    def salvarCacheTemporario(self, advogado: EscritorioModelo) -> bool:
-        jsonAdv = json.dumps(advogado.toDict())
+    def salvarCacheTemporario(self, escritorio: EscritorioModelo) -> bool:
+        jsonAdv = json.dumps(escritorio.toDict())
 
         try:
             with open(self.pathEscritorioTempTxt, encoding='utf-8', mode='w') as cacheLogin:
@@ -58,3 +58,9 @@ class CacheEscritorio:
             return True
         except Exception as erro:
             print(f'salvarCacheTemporario({type(erro)} - {erro})')
+
+    def limpaCache(self):
+        self.limpaTemporarios()
+        for f in os.listdir(self.pathCache):
+            if f.endswith('escritorio.txt'):
+                os.remove(os.path.join(self.pathCache, f))

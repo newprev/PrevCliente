@@ -22,6 +22,8 @@ class DaoCliente:
 
         if escritorio is None:
             self.escritorio = self.escritorioCache.carregarCache()
+            if not self.escritorio:
+                self.escritorio = self.escritorioCache.carregarCacheTemporario()
         else:
             self.escritorio = escritorio
 
@@ -45,6 +47,7 @@ class DaoCliente:
                     nomeBanco = '{cliente.nomeBanco}',
                     agenciaBanco = '{cliente.agenciaBanco}',
                     numeroConta = '{cliente.numeroConta}',
+                    pixCliente = '{cliente.pixCliente}',
                     grauEscolaridade = '{cliente.grauEscolaridade}',
                     senhaINSS = '{cliente.senhaINSS}',
                     numCarteiraProf = '{cliente.numCartProf}',
@@ -439,7 +442,7 @@ class DaoCliente:
         finally:
             self.disconectBD(cursor)
 
-    def buscaIndicesByClienteId(self, clienteId: int,  indices: list = []):
+    def buscaIndicesByClienteId(self, clienteId: int, indices: list = []):
         if not isinstance(self.db, sqlite3.Connection):
             self.db.ping()
 
@@ -498,8 +501,70 @@ class DaoCliente:
                 TipoEdicao.select, Prioridade.saidaComun)
             return cursor.fetchall()
         except:
-            logPrioridade(f'INSERT<getIndicesByClienteId>___________________({self.config.tblCnisCabecalhos}, {self.config.tblCnisContribuicoes}, {self.config.tblCnisRemuneracoes})', TipoEdicao.erro, Prioridade.saidaImportante)
+            logPrioridade(
+                f'INSERT<getIndicesByClienteId>___________________({self.config.tblCnisCabecalhos}, {self.config.tblCnisContribuicoes}, {self.config.tblCnisRemuneracoes})',
+                TipoEdicao.erro, Prioridade.saidaImportante)
             raise Warning(f'Erro SQL - getIndicesByClienteId({self.config.tblCnisContribuicoes}) <SELECT>')
+        finally:
+            self.disconectBD(cursor)
+
+    def buscaProxCliente(self, clienteId: int):
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""
+            SELECT
+                -- Clientes
+                c.escritorioId, c.clienteId, c.nomeCliente, 
+                c.sobrenomeCliente, c.idade, c.dataNascimento, 
+                c.email, c.rgCliente, c.cpfCliente,
+                c.nomeBanco, c.agenciaBanco, c.numeroConta, 
+                c.pixCliente, c.grauEscolaridade, c.senhaINSS,
+                c.numCarteiraProf, c.nit, c.nomeMae, 
+                c.estadoCivil, c.profissao, endereco,
+                c.estado, c.cidade, c.numero, 
+                c.bairro, c.cep, c.complemento,
+                c.dataCadastro, c.dataUltAlt,
+
+                -- Telefones
+                t.telefoneId, t.clienteId, t.numero, 
+                t.tipoTelefone, t.pessoalRecado, t.ativo
+
+            FROM cliente c
+                LEFT JOIN telefones t
+                    ON t.telefoneId  = 
+                    (
+                        SELECT 
+                            MIN(t.telefoneId) 
+                        FROM telefones t
+                        WHERE t.clienteId = c.clienteId
+                    )
+            WHERE c.escritorioId = {self.escritorio.escritorioId}
+                AND c.clienteId >= {clienteId}
+            LIMIT 1;
+            """
+
+        try:
+            cursor.execute(strComando)
+            logPrioridade(f'SELECT<buscaProxCliente>___________________{self.config.tblCliente}', TipoEdicao.select, Prioridade.saidaComun)
+
+            cliente = cursor.fetchone()
+            if cliente is None:
+                return self.buscaProxCliente(0)
+            else:
+                clienteModel = ClienteModelo().fromList(cliente, retornaInst=True)
+                return clienteModel
+
+        except OperationalError:
+            logPrioridade(f'SELECT<buscaProxCliente>(OperationalError)___________________{self.config.tblCliente}', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - buscaProxCliente({self.config.tblCliente}) <SELECT>')
+        except Exception as erro:
+            print(f"{type(erro)} - {erro}")
+            logPrioridade(f'SELECT<buscaProxCliente>({type(erro)})___________________{self.config.tblCliente}', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - buscaProxCliente({self.config.tblCliente}) <SELECT>')
         finally:
             self.disconectBD(cursor)
 

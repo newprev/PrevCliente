@@ -27,17 +27,17 @@ class Ui_wdgImpressaoDocs(object):
 "    border-radius: 8px;\n"
 "}\n"
 "\n"
-"#frProcuracao, #frDocsComprob {\n"
+"#frContratoHon, #frProcuracao {\n"
 "    background-color: rgb(32, 74, 135);\n"
 "    border-radius: 16px;\n"
 "}\n"
 "\n"
-"#frOutro1, #frOutro2 {\n"
+"#frDocsComprob, #frDecHipo {\n"
 "    background-color: rgb(52, 94, 155);\n"
 "    border-radius: 16px;\n"
 "}\n"
 "\n"
-"#frOutro3, #frOutro4 {\n"
+"#frDecPensao, #frOutro4 {\n"
 "    background-color: rgb(72, 94, 175);\n"
 "    border-radius: 16px;\n"
 "}\n"
@@ -47,8 +47,10 @@ class Ui_wdgImpressaoDocs(object):
 "    border-radius: 16px;\n"
 "}\n"
 "\n"
-"#frAtiv1, #frAtiv4, #frAtiv7, \n"
-"#frAtiv8, #frAtiv9, #frAtiv10  {\n"
+"#frDecHipoInfo, #frProcuracaoInfo,\n"
+"#frAtiv7, #frDecPensaoInfo,\n"
+"#frAtiv8, #frAtiv9, #frAtiv10,\n"
+"#frContratoHonInfo, #frDocsComprobInfo  {\n"
 "    background-image: url(:/info/information.png);\n"
 "    background-repeat: no-repeat;\n"
 "    background-position: center;\n"
@@ -63,8 +65,8 @@ class Ui_wdgImpressaoDocs(object):
 "}\n"
 "\n"
 "/* ------------------------------ CheckBox ------------------------------ */\n"
-"#cbProcuracao, #cbDocsComprob, #cbAtiv3, \n"
-"#cbAtiv4, #cbAtiv5, #cbAtiv6, \n"
+"#cbProcuracao, #cbDocsComprob, #cbContratoHon, \n"
+"#cbDecHipo, #cbDecPensao, #cbAtiv5, #cbAtiv6, \n"
 "#cbAtiv7, #cbAtiv8, #cbAtiv9, \n"
 "#cbAtiv10, #cbAtiv11, #cbAtiv12, \n"
 "#cbAtiv13, #cbAtiv14, #cbAtiv15, \n"
@@ -75,12 +77,12 @@ class Ui_wdgImpressaoDocs(object):
 "    color: white;\n"
 "}\n"
 "\n"
-"#cbProcuracao::indicator , #cbDocsComprob::indicator , #cbAtiv3::indicator , \n"
-"#cbAtiv4::indicator , #cbAtiv5::indicator , #cbAtiv6::indicator , \n"
-"#cbAtiv7::indicator , #cbAtiv8::indicator , #cbAtiv9::indicator , \n"
-"#cbAtiv10::indicator , #cbAtiv11::indicator , #cbAtiv12::indicator , \n"
-"#cbAtiv13::indicator, #cbAtiv14::indicator, #cbAtiv15::indicator, \n"
-"#cbAtiv16::indicator {\n"
+"#cbProcuracao::indicator , #cbDocsComprob::indicator , #cbContratoHon::indicator , \n"
+"#cbDecHipo::indicator , #cbDecPensao::indicator, #cbAtiv5::indicator , \n"
+"#cbAtiv6::indicator , #cbAtiv7::indicator , #cbAtiv8::indicator , \n"
+"#cbAtiv9::indicator , #cbAtiv10::indicator , #cbAtiv11::indicator , \n"
+"#cbAtiv12::indicator , #cbAtiv13::indicator, #cbAtiv14::indicator, \n"
+"#cbAtiv15::indicator, #cbAtiv16::indicator {\n"
 "    width: 24px;\n"
 "    height: 24px;\n"
 "}\n"
@@ -146,6 +148,27 @@ class Ui_wdgImpressaoDocs(object):
         self.scrollCentral.setObjectName("scrollCentral")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollCentral)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.frContratoHon = QtWidgets.QFrame(self.scrollCentral)
+        self.frContratoHon.setMinimumSize(QtCore.QSize(800, 80))
+        self.frContratoHon.setMaximumSize(QtCore.QSize(800, 80))
+        self.frContratoHon.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frContratoHon.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frContratoHon.setObjectName("frContratoHon")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frContratoHon)
+        self.horizontalLayout_4.setContentsMargins(16, 4, 32, 4)
+        self.horizontalLayout_4.setSpacing(0)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.cbContratoHon = QtWidgets.QCheckBox(self.frContratoHon)
+        self.cbContratoHon.setObjectName("cbContratoHon")
+        self.horizontalLayout_4.addWidget(self.cbContratoHon)
+        self.frContratoHonInfo = QtWidgets.QFrame(self.frContratoHon)
+        self.frContratoHonInfo.setMinimumSize(QtCore.QSize(36, 36))
+        self.frContratoHonInfo.setMaximumSize(QtCore.QSize(36, 36))
+        self.frContratoHonInfo.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frContratoHonInfo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frContratoHonInfo.setObjectName("frContratoHonInfo")
+        self.horizontalLayout_4.addWidget(self.frContratoHonInfo)
+        self.verticalLayout_2.addWidget(self.frContratoHon, 0, QtCore.Qt.AlignHCenter)
         self.frProcuracao = QtWidgets.QFrame(self.scrollCentral)
         self.frProcuracao.setMinimumSize(QtCore.QSize(800, 80))
         self.frProcuracao.setMaximumSize(QtCore.QSize(800, 80))
@@ -157,15 +180,21 @@ class Ui_wdgImpressaoDocs(object):
         self.horizontalLayout_14.setSpacing(0)
         self.horizontalLayout_14.setObjectName("horizontalLayout_14")
         self.cbProcuracao = QtWidgets.QCheckBox(self.frProcuracao)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.cbProcuracao.sizePolicy().hasHeightForWidth())
+        self.cbProcuracao.setSizePolicy(sizePolicy)
+        self.cbProcuracao.setMinimumSize(QtCore.QSize(0, 40))
         self.cbProcuracao.setObjectName("cbProcuracao")
         self.horizontalLayout_14.addWidget(self.cbProcuracao)
-        self.frAtiv1 = QtWidgets.QFrame(self.frProcuracao)
-        self.frAtiv1.setMinimumSize(QtCore.QSize(36, 36))
-        self.frAtiv1.setMaximumSize(QtCore.QSize(36, 36))
-        self.frAtiv1.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frAtiv1.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frAtiv1.setObjectName("frAtiv1")
-        self.horizontalLayout_14.addWidget(self.frAtiv1)
+        self.frProcuracaoInfo = QtWidgets.QFrame(self.frProcuracao)
+        self.frProcuracaoInfo.setMinimumSize(QtCore.QSize(36, 36))
+        self.frProcuracaoInfo.setMaximumSize(QtCore.QSize(36, 36))
+        self.frProcuracaoInfo.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frProcuracaoInfo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frProcuracaoInfo.setObjectName("frProcuracaoInfo")
+        self.horizontalLayout_14.addWidget(self.frProcuracaoInfo)
         self.verticalLayout_2.addWidget(self.frProcuracao, 0, QtCore.Qt.AlignHCenter)
         self.frDocsComprob = QtWidgets.QFrame(self.scrollCentral)
         self.frDocsComprob.setMinimumSize(QtCore.QSize(800, 80))
@@ -174,62 +203,63 @@ class Ui_wdgImpressaoDocs(object):
         self.frDocsComprob.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frDocsComprob.setObjectName("frDocsComprob")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frDocsComprob)
-        self.horizontalLayout_3.setContentsMargins(16, 4, 4, 4)
+        self.horizontalLayout_3.setContentsMargins(16, 4, 32, 4)
         self.horizontalLayout_3.setSpacing(0)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.cbDocsComprob = QtWidgets.QCheckBox(self.frDocsComprob)
         self.cbDocsComprob.setObjectName("cbDocsComprob")
         self.horizontalLayout_3.addWidget(self.cbDocsComprob)
+        self.frDocsComprobInfo = QtWidgets.QFrame(self.frDocsComprob)
+        self.frDocsComprobInfo.setMinimumSize(QtCore.QSize(36, 36))
+        self.frDocsComprobInfo.setMaximumSize(QtCore.QSize(36, 36))
+        self.frDocsComprobInfo.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frDocsComprobInfo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frDocsComprobInfo.setObjectName("frDocsComprobInfo")
+        self.horizontalLayout_3.addWidget(self.frDocsComprobInfo)
         self.verticalLayout_2.addWidget(self.frDocsComprob, 0, QtCore.Qt.AlignHCenter)
-        self.frOutro1 = QtWidgets.QFrame(self.scrollCentral)
-        self.frOutro1.setMinimumSize(QtCore.QSize(800, 80))
-        self.frOutro1.setMaximumSize(QtCore.QSize(800, 80))
-        self.frOutro1.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frOutro1.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frOutro1.setObjectName("frOutro1")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frOutro1)
-        self.horizontalLayout_4.setContentsMargins(16, 4, 4, 4)
-        self.horizontalLayout_4.setSpacing(0)
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.cbAtiv3 = QtWidgets.QCheckBox(self.frOutro1)
-        self.cbAtiv3.setObjectName("cbAtiv3")
-        self.horizontalLayout_4.addWidget(self.cbAtiv3)
-        self.verticalLayout_2.addWidget(self.frOutro1, 0, QtCore.Qt.AlignHCenter)
-        self.frOutro2 = QtWidgets.QFrame(self.scrollCentral)
-        self.frOutro2.setMinimumSize(QtCore.QSize(800, 80))
-        self.frOutro2.setMaximumSize(QtCore.QSize(800, 80))
-        self.frOutro2.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frOutro2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frOutro2.setObjectName("frOutro2")
-        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.frOutro2)
+        self.frDecHipo = QtWidgets.QFrame(self.scrollCentral)
+        self.frDecHipo.setMinimumSize(QtCore.QSize(800, 80))
+        self.frDecHipo.setMaximumSize(QtCore.QSize(800, 80))
+        self.frDecHipo.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frDecHipo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frDecHipo.setObjectName("frDecHipo")
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.frDecHipo)
         self.horizontalLayout_5.setContentsMargins(16, 4, 32, 4)
         self.horizontalLayout_5.setSpacing(0)
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.cbAtiv4 = QtWidgets.QCheckBox(self.frOutro2)
-        self.cbAtiv4.setObjectName("cbAtiv4")
-        self.horizontalLayout_5.addWidget(self.cbAtiv4)
-        self.frAtiv4 = QtWidgets.QFrame(self.frOutro2)
-        self.frAtiv4.setMinimumSize(QtCore.QSize(36, 36))
-        self.frAtiv4.setMaximumSize(QtCore.QSize(36, 36))
-        self.frAtiv4.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frAtiv4.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frAtiv4.setObjectName("frAtiv4")
-        self.horizontalLayout_5.addWidget(self.frAtiv4)
-        self.verticalLayout_2.addWidget(self.frOutro2, 0, QtCore.Qt.AlignHCenter)
-        self.frOutro3 = QtWidgets.QFrame(self.scrollCentral)
-        self.frOutro3.setMinimumSize(QtCore.QSize(800, 80))
-        self.frOutro3.setMaximumSize(QtCore.QSize(800, 80))
-        self.frOutro3.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frOutro3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frOutro3.setObjectName("frOutro3")
-        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frOutro3)
-        self.horizontalLayout_6.setContentsMargins(16, 4, 4, 4)
+        self.cbDecHipo = QtWidgets.QCheckBox(self.frDecHipo)
+        self.cbDecHipo.setMinimumSize(QtCore.QSize(0, 40))
+        self.cbDecHipo.setObjectName("cbDecHipo")
+        self.horizontalLayout_5.addWidget(self.cbDecHipo)
+        self.frDecHipoInfo = QtWidgets.QFrame(self.frDecHipo)
+        self.frDecHipoInfo.setMinimumSize(QtCore.QSize(36, 36))
+        self.frDecHipoInfo.setMaximumSize(QtCore.QSize(36, 36))
+        self.frDecHipoInfo.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frDecHipoInfo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frDecHipoInfo.setObjectName("frDecHipoInfo")
+        self.horizontalLayout_5.addWidget(self.frDecHipoInfo)
+        self.verticalLayout_2.addWidget(self.frDecHipo, 0, QtCore.Qt.AlignHCenter)
+        self.frDecPensao = QtWidgets.QFrame(self.scrollCentral)
+        self.frDecPensao.setMinimumSize(QtCore.QSize(800, 80))
+        self.frDecPensao.setMaximumSize(QtCore.QSize(800, 80))
+        self.frDecPensao.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frDecPensao.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frDecPensao.setObjectName("frDecPensao")
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frDecPensao)
+        self.horizontalLayout_6.setContentsMargins(16, 4, 32, 4)
         self.horizontalLayout_6.setSpacing(0)
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        self.cbAtiv5 = QtWidgets.QCheckBox(self.frOutro3)
-        self.cbAtiv5.setObjectName("cbAtiv5")
-        self.horizontalLayout_6.addWidget(self.cbAtiv5)
-        self.verticalLayout_2.addWidget(self.frOutro3, 0, QtCore.Qt.AlignHCenter)
+        self.cbDecPensao = QtWidgets.QCheckBox(self.frDecPensao)
+        self.cbDecPensao.setObjectName("cbDecPensao")
+        self.horizontalLayout_6.addWidget(self.cbDecPensao)
+        self.frDecPensaoInfo = QtWidgets.QFrame(self.frDecPensao)
+        self.frDecPensaoInfo.setMinimumSize(QtCore.QSize(36, 36))
+        self.frDecPensaoInfo.setMaximumSize(QtCore.QSize(36, 36))
+        self.frDecPensaoInfo.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frDecPensaoInfo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frDecPensaoInfo.setObjectName("frDecPensaoInfo")
+        self.horizontalLayout_6.addWidget(self.frDecPensaoInfo)
+        self.verticalLayout_2.addWidget(self.frDecPensao, 0, QtCore.Qt.AlignHCenter)
         self.frOutro4 = QtWidgets.QFrame(self.scrollCentral)
         self.frOutro4.setMinimumSize(QtCore.QSize(800, 80))
         self.frOutro4.setMaximumSize(QtCore.QSize(800, 80))
@@ -297,11 +327,12 @@ class Ui_wdgImpressaoDocs(object):
         _translate = QtCore.QCoreApplication.translate
         wdgImpressaoDocs.setWindowTitle(_translate("wdgImpressaoDocs", "Form"))
         self.lbTituloNatureza.setText(_translate("wdgImpressaoDocs", "Selecione quais documentos gostaria de gerar"))
+        self.cbContratoHon.setText(_translate("wdgImpressaoDocs", "    Contrato de honorários"))
         self.cbProcuracao.setText(_translate("wdgImpressaoDocs", "    Procuração"))
         self.cbDocsComprob.setText(_translate("wdgImpressaoDocs", "    Documentos comprobatórios"))
-        self.cbAtiv3.setText(_translate("wdgImpressaoDocs", "    Outro"))
-        self.cbAtiv4.setText(_translate("wdgImpressaoDocs", "    Outro"))
-        self.cbAtiv5.setText(_translate("wdgImpressaoDocs", "    Outro"))
+        self.cbDecHipo.setText(_translate("wdgImpressaoDocs", "    Declaração de Hipossuficiência"))
+        self.cbDecPensao.setText(_translate("wdgImpressaoDocs", "    Declaração recebimento de pensão\n"
+"    ou aposentadoria em outro regime"))
         self.cbAtiv6.setText(_translate("wdgImpressaoDocs", "    Outro"))
         self.cbAtiv7.setText(_translate("wdgImpressaoDocs", "    Outro"))
         self.cbAtiv8.setText(_translate("wdgImpressaoDocs", "    Outro"))

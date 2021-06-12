@@ -8,6 +8,7 @@ from cache.cacheEscritorio import CacheEscritorio
 from modelos.processosModelo import ProcessosModelo
 from modelos.advogadoModelo import AdvogadoModelo
 from modelos.escritorioModelo import EscritorioModelo
+from modelos.clienteModelo import ClienteModelo
 from datetime import datetime
 
 from newPrevEnums import TipoEdicao, Prioridade
@@ -39,18 +40,18 @@ class DaoProcessos:
             INSERT INTO {self.tabelas.tblProcessos}
             (
                 clienteId, advogadoId, numeroProcesso, 
-                natureza, tipoProcesso, tipoBeneficio, 
-                estado, cidade, situacaoId, 
-                dataInicio, dataFim, valorCausa, 
-                dataCadastro, dataUltAlt
+                natureza, tipoProcesso, tipoBeneficio,
+                subTipoApos, estado, cidade, 
+                situacaoId, dataInicio, dataFim, 
+                valorCausa, dataCadastro, dataUltAlt
             )
             VALUES 
             (
                 {processo.clienteId}, {self.advogado.advogadoId}, '{processo.numeroProcesso}', 
-                {processo.natureza}, {processo.tipoProcesso}, {processo.tipoBeneficio}, 
-                '{processo.estado}', '{processo.cidade}', {processo.situacaoId}, 
-                '{processo.dataInicio}', '{processo.dataFim}', {processo.valorCausa}, 
-                '{datetime.now()}', '{datetime.now()}' 
+                {processo.natureza}, {processo.tipoProcesso}, {processo.tipoBeneficio},
+                {processo.subTipoApos}, '{processo.estado}', '{processo.cidade}', 
+                {processo.situacaoId}, '{processo.dataInicio}', '{processo.dataFim}', 
+                {processo.valorCausa}, '{datetime.now()}', '{datetime.now()}' 
             )"""
 
         try:
@@ -79,9 +80,12 @@ class DaoProcessos:
                     natureza = {processo.natureza},
                     tipoProcesso = {processo.tipoProcesso},
                     tipoBeneficio = {processo.tipoBeneficio},
+                    subTipoApos = {processo.subTipoApos},
                     estado = '{processo.estado}',
                     cidade = '{processo.cidade}',
                     situacaoId = {processo.situacaoId},
+                    dib = '{processo.dib}',
+                    der = '{processo.der}',
                     dataInicio = {processo.dataInicio},
                     dataFim = {processo.dataFim},
                     valorCausa = {processo.valorCausa},
@@ -104,6 +108,48 @@ class DaoProcessos:
 
     def buscaProcessoPorTipo(self):
         pass
+
+    def buscaProcessoPorCliente(self, cliente: ClienteModelo, limit: int = 0) -> list:
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""
+            SELECT 
+                processoId, clienteId, advogadoId,
+                numeroProcesso, natureza, tipoProcesso,
+                tipoBeneficio, subTipoApos, estado, 
+                cidade, situacaoId, dib, 
+                der, dataInicio, dataFim, 
+                valorCausa, incidenteProcessual, dataCadastro, 
+                dataUltAlt
+            FROM processos
+            WHERE clienteId = {cliente.clienteId}"""
+
+        if limit != 0:
+            strComando += f"""
+                LIMIT {limit};"""
+
+        try:
+            cursor.execute(strComando)
+            processos = cursor.fetchall()
+            logPrioridade(f'SELECT<buscaProcessoPorCliente>___________________{self.tabelas.tblProcessos}', TipoEdicao.select, Prioridade.saidaComun)
+
+            if len(processos) == 1:
+                return [ProcessosModelo().fromList(processos[0], retornaInst=True)]
+            elif len(processos) == 0:
+                return [ProcessosModelo()]
+            else:
+                listaProcessos = []
+                for processo in processos:
+                    listaProcessos.append(ProcessosModelo().fromList(processo, retornaInst=True))
+                return listaProcessos
+        except:
+            raise Warning(f'Erro SQL - buscaProcessoPorCliente({self.config.banco}) <INSERT {self.tabelas.tblProcessos}>')
+        finally:
+            self.disconectBD(cursor)
 
     def disconectBD(self, cursor):
         cursor.close()

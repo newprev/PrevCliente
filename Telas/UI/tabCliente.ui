@@ -1247,7 +1247,7 @@ CNIS</string>
            <number>40</number>
           </property>
           <property name="placeholderText">
-           <string>Ex: Cleusa da Silva Santos</string>
+           <string>cliente@gmail.com</string>
           </property>
          </widget>
          <widget class="QLabel" name="lbTelefone">
@@ -2009,7 +2009,7 @@ CNIS</string>
            </rect>
           </property>
           <property name="maxLength">
-           <number>9</number>
+           <number>40</number>
           </property>
           <property name="placeholderText">
            <string>Aa12-#$</string>

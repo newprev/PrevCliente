@@ -36,9 +36,8 @@ class Ui_wdgTipoBeneficioConc(object):
 "}\n"
 "\n"
 "/* ------------------------------ Push Buttons ------------------------------ */\n"
-"#pbApos, #pbAposDeficiencia, #pbAposEspecial,\n"
-"#pbAposRural, #pbAuxReclusao, #pbAuxilioDoenca,\n"
-"#pbBeneDeficiencia, #pbBeneIdoso, #pbPensaoMorte,\n"
+"#pbAposentadoria, #pbAuxReclusao, #pbAuxilioDoenca, \n"
+"#pbBeneDeficiencia, #pbBeneIdoso, #pbPensaoMorte, \n"
 "#pbSalMaternidade {\n"
 "    background-color: rgb(117, 80, 123);\n"
 "    border-radius: 16px;\n"
@@ -48,10 +47,7 @@ class Ui_wdgTipoBeneficioConc(object):
 "    color: white;    \n"
 "}\n"
 "\n"
-"#pbApos:hover, #pbApos:hover, #pbAposDeficiencia:hover, #pbAposEspecial:hover,\n"
-"#pbAposRural:hover, #pbAuxReclusao:hover, #pbAuxilioDoenca:hover,\n"
-"#pbBeneDeficiencia:hover, #pbBeneIdoso:hover, #pbPensaoMorte:hover,\n"
-"#pbSalMaternidade:hover {\n"
+"#pbAposentadoria:hover, #pbAuxReclusao:hover, #pbAuxilioDoenca:hover, #pbBeneDeficiencia:hover, #pbBeneIdoso:hover, #pbPensaoMorte:hover, #pbSalMaternidade:hover {\n"
 "    background-color: rgb(115, 210, 22);\n"
 "    border-radius: 16px;\n"
 "\n"
@@ -88,62 +84,42 @@ class Ui_wdgTipoBeneficioConc(object):
         self.frame.setObjectName("frame")
         self.formLayout = QtWidgets.QFormLayout(self.frame)
         self.formLayout.setObjectName("formLayout")
-        self.pbApos = QtWidgets.QPushButton(self.frame)
-        self.pbApos.setMinimumSize(QtCore.QSize(350, 80))
-        self.pbApos.setMaximumSize(QtCore.QSize(350, 80))
-        self.pbApos.setObjectName("pbApos")
-        self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.pbApos)
+        self.pbAposentadoria = QtWidgets.QPushButton(self.frame)
+        self.pbAposentadoria.setMinimumSize(QtCore.QSize(350, 80))
+        self.pbAposentadoria.setMaximumSize(QtCore.QSize(350, 80))
+        self.pbAposentadoria.setObjectName("pbAposentadoria")
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.pbAposentadoria)
         self.pbAuxReclusao = QtWidgets.QPushButton(self.frame)
         self.pbAuxReclusao.setMinimumSize(QtCore.QSize(350, 80))
         self.pbAuxReclusao.setMaximumSize(QtCore.QSize(350, 80))
         self.pbAuxReclusao.setObjectName("pbAuxReclusao")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.pbAuxReclusao)
-        self.pbAposDeficiencia = QtWidgets.QPushButton(self.frame)
-        self.pbAposDeficiencia.setMinimumSize(QtCore.QSize(350, 80))
-        self.pbAposDeficiencia.setMaximumSize(QtCore.QSize(350, 80))
-        self.pbAposDeficiencia.setObjectName("pbAposDeficiencia")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.pbAposDeficiencia)
         self.pbBeneIdoso = QtWidgets.QPushButton(self.frame)
         self.pbBeneIdoso.setMinimumSize(QtCore.QSize(350, 80))
         self.pbBeneIdoso.setMaximumSize(QtCore.QSize(350, 80))
         self.pbBeneIdoso.setObjectName("pbBeneIdoso")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.pbBeneIdoso)
-        self.pbAposRural = QtWidgets.QPushButton(self.frame)
-        self.pbAposRural.setMinimumSize(QtCore.QSize(350, 80))
-        self.pbAposRural.setMaximumSize(QtCore.QSize(350, 80))
-        self.pbAposRural.setObjectName("pbAposRural")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.pbAposRural)
-        self.pbAposEspecial = QtWidgets.QPushButton(self.frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pbAposEspecial.sizePolicy().hasHeightForWidth())
-        self.pbAposEspecial.setSizePolicy(sizePolicy)
-        self.pbAposEspecial.setMinimumSize(QtCore.QSize(350, 80))
-        self.pbAposEspecial.setMaximumSize(QtCore.QSize(350, 80))
-        self.pbAposEspecial.setObjectName("pbAposEspecial")
-        self.formLayout.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.pbAposEspecial)
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.pbBeneIdoso)
         self.pbBeneDeficiencia = QtWidgets.QPushButton(self.frame)
         self.pbBeneDeficiencia.setMinimumSize(QtCore.QSize(350, 80))
         self.pbBeneDeficiencia.setMaximumSize(QtCore.QSize(350, 80))
         self.pbBeneDeficiencia.setObjectName("pbBeneDeficiencia")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.pbBeneDeficiencia)
-        self.pbPensaoMorte = QtWidgets.QPushButton(self.frame)
-        self.pbPensaoMorte.setMinimumSize(QtCore.QSize(350, 80))
-        self.pbPensaoMorte.setMaximumSize(QtCore.QSize(350, 80))
-        self.pbPensaoMorte.setObjectName("pbPensaoMorte")
-        self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.pbPensaoMorte)
-        self.pbAuxilioDoenca = QtWidgets.QPushButton(self.frame)
-        self.pbAuxilioDoenca.setMinimumSize(QtCore.QSize(350, 80))
-        self.pbAuxilioDoenca.setMaximumSize(QtCore.QSize(350, 80))
-        self.pbAuxilioDoenca.setObjectName("pbAuxilioDoenca")
-        self.formLayout.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.pbAuxilioDoenca)
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.pbBeneDeficiencia)
         self.pbSalMaternidade = QtWidgets.QPushButton(self.frame)
         self.pbSalMaternidade.setMinimumSize(QtCore.QSize(350, 80))
         self.pbSalMaternidade.setMaximumSize(QtCore.QSize(350, 80))
         self.pbSalMaternidade.setObjectName("pbSalMaternidade")
-        self.formLayout.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.pbSalMaternidade)
-        self.gridLayout.addWidget(self.frame, 1, 0, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.pbSalMaternidade)
+        self.pbAuxilioDoenca = QtWidgets.QPushButton(self.frame)
+        self.pbAuxilioDoenca.setMinimumSize(QtCore.QSize(350, 80))
+        self.pbAuxilioDoenca.setMaximumSize(QtCore.QSize(350, 80))
+        self.pbAuxilioDoenca.setObjectName("pbAuxilioDoenca")
+        self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.pbAuxilioDoenca)
+        self.pbPensaoMorte = QtWidgets.QPushButton(self.frame)
+        self.pbPensaoMorte.setMinimumSize(QtCore.QSize(350, 80))
+        self.pbPensaoMorte.setMaximumSize(QtCore.QSize(350, 80))
+        self.pbPensaoMorte.setObjectName("pbPensaoMorte")
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.pbPensaoMorte)
+        self.gridLayout.addWidget(self.frame, 2, 0, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         self.verticalLayout.addWidget(self.frMain)
 
         self.retranslateUi(wdgTipoBeneficioConc)
@@ -153,23 +129,17 @@ class Ui_wdgTipoBeneficioConc(object):
         _translate = QtCore.QCoreApplication.translate
         wdgTipoBeneficioConc.setWindowTitle(_translate("wdgTipoBeneficioConc", "Form"))
         self.lbTituloNatureza.setText(_translate("wdgTipoBeneficioConc", "Escolha o tipo de benefício"))
-        self.pbApos.setText(_translate("wdgTipoBeneficioConc", "Aposentadoria"))
+        self.pbAposentadoria.setText(_translate("wdgTipoBeneficioConc", "Aposentadoria"))
         self.pbAuxReclusao.setText(_translate("wdgTipoBeneficioConc", "Auxílio \n"
 "reclusão"))
-        self.pbAposDeficiencia.setText(_translate("wdgTipoBeneficioConc", "Aposentadoria da pessoa \n"
-"com deficiência"))
         self.pbBeneIdoso.setText(_translate("wdgTipoBeneficioConc", "Benefício assistencial \n"
 "ao idoso"))
-        self.pbAposRural.setText(_translate("wdgTipoBeneficioConc", "Aposentadoria \n"
-"rural"))
-        self.pbAposEspecial.setText(_translate("wdgTipoBeneficioConc", "Aposentadoria \n"
-"especial"))
         self.pbBeneDeficiencia.setText(_translate("wdgTipoBeneficioConc", "Benefício assistencial à \n"
 "pessoa com deficiência"))
-        self.pbPensaoMorte.setText(_translate("wdgTipoBeneficioConc", "Pensão por morte"))
+        self.pbSalMaternidade.setText(_translate("wdgTipoBeneficioConc", "Salário maternidade"))
         self.pbAuxilioDoenca.setText(_translate("wdgTipoBeneficioConc", "Auxílio \n"
 "doença"))
-        self.pbSalMaternidade.setText(_translate("wdgTipoBeneficioConc", "Salário maternidade"))
+        self.pbPensaoMorte.setText(_translate("wdgTipoBeneficioConc", "Pensão por morte"))
 
 
 if __name__ == "__main__":

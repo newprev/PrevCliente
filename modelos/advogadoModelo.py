@@ -18,6 +18,7 @@ class AdvogadoModelo:
         self.ativo: bool = True
         self.confirmado: bool = True
         self.dataCadastro: datetime = None
+        self.dataUltAlt: datetime = None
 
     def toDict(self):
         dictUsuario = {
@@ -33,12 +34,14 @@ class AdvogadoModelo:
             'numeroOAB': self.numeroOAB,
             'admin': self.admin,
             'confirmado': self.confirmado,
-            'ativo': self.ativo
+            'ativo': self.ativo,
+            'dataCadastro': self.dataCadastro,
+            'dataUltAlt': self.dataUltAlt
         }
         return dictUsuario
 
     def fromDict(self, dictUsuario: dict, retornaInst: bool = True):
-        self.escritorioId = dictUsuario['escritorioId']
+
         if dictUsuario['advogadoId'] is list or dictUsuario['advogadoId'] is tuple:
             self.advogadoId = dictUsuario['advogadoId'][0]
         else:
@@ -47,6 +50,13 @@ class AdvogadoModelo:
         if 'senha' in dictUsuario.keys():
             self.senha = dictUsuario['senha']
 
+        if 'dataCadastro' in dictUsuario.keys():
+            self.dataCadastro = dictUsuario['dataCadastro']
+
+        if 'dataUltAlt' in dictUsuario.keys():
+            self.dataUltAlt = dictUsuario['dataUltAlt']
+
+        self.escritorioId = dictUsuario['escritorioId']
         self.nomeUsuario = dictUsuario['nomeUsuario']
         self.login = dictUsuario['login']
         # self.telefone = dictUsuario['telefone'],
@@ -62,24 +72,27 @@ class AdvogadoModelo:
         if retornaInst:
             return self
 
-    def fromList(self, listUsuario: list, retornaInst: bool = False):
+    def fromList(self, listUsuario: list, retornaInst: bool = True):
         if listUsuario is None:
             return None
         else:
             if len(listUsuario) != 0:
-                self.escritorioId = listUsuario[0]
                 self.advogadoId = listUsuario[0]
-                self.nomeUsuario = listUsuario[1]
+                self.escritorioId = listUsuario[1]
+                self.nomeUsuario = listUsuario[2]
+                self.sobrenomeUsuario = listUsuario[3]
                 self.login = listUsuario[4]
                 self.senha = listUsuario[5]
                 self.email = listUsuario[6]
-                self.sobrenomeUsuario = listUsuario[7]
+                self.numeroOAB = listUsuario[7]
                 self.nacionalidade = listUsuario[8]
-                self.numeroOAB = listUsuario[14]
-                self.estadoCivil = listUsuario[17]
-                self.admin = listUsuario[19]
-                self.confirmado = listUsuario[20]
-                self.dataCadastro = listUsuario[21]
+                self.estadoCivil = listUsuario[9]
+                self.admin = listUsuario[10]
+                self.ativo = listUsuario[11]
+                self.confirmado = listUsuario[12]
+                self.dataCadastro = listUsuario[13]
+                self.dataUltAlt = listUsuario[14]
+
             if retornaInst:
                 return self
 

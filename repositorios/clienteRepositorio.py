@@ -131,27 +131,28 @@ class UsuarioRepository:
                 advAuth.ativo = True
 
                 if not advAuth:
-                    logPrioridade(f"API => buscaAdvPor ____________________PATCH</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+                    logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
                     return None
                 else:
                     advogadoALogar = self.buscaAdvPor(advAuth.advogadoId)
+
                     advogadoALogar.senha = senha
                     if advAuth == advogadoALogar:
-                        logPrioridade(f"API => buscaAdvPor ____________________PATCH</advogados/auth/>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
+                        logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
                         return advogadoALogar
                     else:
-                        logPrioridade(f"API => buscaAdvPor ____________________PATCH</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+                        logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
                         return None
             else:
-                logPrioridade(f"API => buscaAdvPor ____________________PATCH</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+                logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
                 return None
         except AttributeError as erro:
             print(f'loginAuth - AttributeError: {erro}')
-            logPrioridade(f"API => buscaAdvPor (AttributeError)____________________PATCH</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+            logPrioridade(f"API => buscaAdvPor (AttributeError)____________________GET</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
             return None
         except Exception as erro:
             print(f'loginAuth - Exception: {type(erro)}')
-            logPrioridade(f"API => buscaAdvPor ____________________PATCH</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+            logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
             return None
 
     def loginAuthFromCache(self, advogado: AdvogadoModelo) -> bool:

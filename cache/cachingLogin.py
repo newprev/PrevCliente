@@ -52,3 +52,9 @@ class CacheLogin:
             return True
         except Exception as erro:
             print(f'salvarCacheTemporario({type(erro)} - {erro})')
+
+    def limpaCache(self):
+        self.limpaTemporarios()
+        for temp in os.listdir(self.pathCache):
+            if temp.endswith('login.txt'):
+                os.remove(os.path.join(self.pathCache, temp))

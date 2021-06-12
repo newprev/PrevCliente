@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QTabBar
 from Telas.entrevistaPage import Ui_mwEntrevistaPage
@@ -8,10 +10,12 @@ from heart.dashboard.entrevista.tipoProcessoAdmController import TipoProcessoAdm
 from heart.dashboard.entrevista.tipoBeneficioController import TipoBeneficioConcController
 from heart.dashboard.entrevista.tipoAtividadeController import TipoAtividadeController
 from heart.dashboard.tabs.clienteController import TabCliente
-from heart.dashboard.entrevista.geracaoDocumentos.docEntrevista import DocEntrevista
 from heart.dashboard.gerarDocsPage import GerarDocsPage
+
 from Daos.daoProcessos import DaoProcessos
 from Daos.daoCliente import DaoCliente
+from Daos.daoCalculos import DaoCalculos
+
 from modelos.processosModelo import ProcessosModelo
 from modelos.clienteModelo import ClienteModelo
 from newPrevEnums import *
@@ -32,6 +36,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.clienteAtual = ClienteModelo()
         self.daoProcesso = DaoProcessos(db=db)
         self.daoCliente = DaoCliente(db=db)
+        self.daoCalculos = DaoCalculos(db=db)
         self.processoModelo = ProcessosModelo()
 
         self.clienteController = TabCliente(parent=self, db=self.db, entrevista=True)
@@ -85,6 +90,11 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 pass
 
             elif self.telaAtual == MomentoEntrevista.tipoAtividade:
+                self.processoModelo.subTipoApos = 0
+
+                self.processoModelo.dib = self.calculaDib()
+                self.processoModelo.der = self.calculaDer()
+                self.processoModelo.tempoContribuicao = self.calculaTempoContribuicao()
 
                 self.daoProcesso.insereProcesso(self.processoModelo)
                 self.tipoAtividadePg.processaQuiz()
@@ -177,20 +187,10 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.processoModelo.tipoBeneficio = TipoBeneficio.Aposentadoria.value
                 self.tipoAtividadePg.pegaClienteAtual(self.clienteAtual)
                 self.stackedWidget.setCurrentIndex(4)
-            elif wdgFuturo == TipoBeneficio.AposDeficiencia:
+            elif wdgFuturo == TipoBeneficio.AposTempoContr:
                 self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.Aposentadoria.value
-                # TODO: wdgAtual dos tipos de atividades aposentadoria por deficiência
-                pass
-            elif wdgFuturo == TipoBeneficio.AposRural:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.AposRural.value
-                # TODO: wdgAtual dos tipos de atividades aposentadoria rural
-                pass
-            elif wdgFuturo == TipoBeneficio.AposEspecial:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.AposEspecial.value
-                # TODO: wdgAtual dos tipos de atividades aposentadoria especial
+                self.processoModelo.tipoBeneficio = TipoBeneficio.AposTempoContr.value
+                # TODO: wdgAtual dos tipos de atividades aposentadoria por tempo de contribuição
                 pass
             elif wdgFuturo == TipoBeneficio.AuxDoenca:
                 self.telaAtual = MomentoEntrevista.tipoAtividade
@@ -261,6 +261,20 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
     def atualizaCliente(self, *args):
         self.clienteAtual: ClienteModelo = args[0]
+
+    def calculaDer(self) -> datetime:
+        if self.processoModelo.natureza == NaturezaProcesso.administrativo.value:
+            if self.processoModelo.tipoProcesso == TipoProcesso.Concessao.value:
+                return datetime.now()
+
+    def calculaDib(self) -> datetime:
+        pass
+
+    def calculaTempoContribuicao(self):
+        if self.processoModelo.natureza == NaturezaProcesso.administrativo.value:
+            if self.processoModelo.tipoProcesso == TipoProcesso.Concessao.value:
+                tempoMeses = self.daoCalculos.getCount(self.clienteAtual.clienteId)
+                return tempoMeses
 
 
 if __name__ == '__main__':

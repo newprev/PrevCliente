@@ -57,5 +57,39 @@ class DaoEscritorio:
             self.db.commit()
             self.disconectBD(cursor)
 
+    def buscaEscritorioById(self, escritorioId: int):
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""
+            SELECT
+                escritorioId, nomeEscritorio, nomeFantasia, 
+                cnpj, cpf, telefone, 
+                email, inscEstadual, endereco, 
+                numero, cep, complemento, 
+                cidade, estado, bairro, 
+                dataCadastro, dataUltAlt
+            FROM 
+                '{self.tabelas.tblEscritorios}'
+            WHERE
+                escritorioId = {escritorioId}
+            """
+
+        try:
+            cursor.execute(strComando)
+            escritorio = cursor.fetchone()
+            logPrioridade(f'SELECT<buscaEscritorioById>___________________{self.tabelas.tblEscritorios}', TipoEdicao.select, Prioridade.saidaComun)
+            return EscritorioModelo().fromList(escritorio)
+        except Exception as erro:
+            logPrioridade(f'SELECT<buscaEscritorioById>___________________ERRO {self.tabelas.tblEscritorios}', TipoEdicao.erro, Prioridade.saidaImportante)
+            print(f"buscaEscritorioById({type(erro)}) - {erro}")
+            raise Warning(f'Erro SQL - buscaEscritorioById <SELECT {self.tabelas.tblEscritorios}>')
+        finally:
+            self.disconectBD(cursor)
+
     def disconectBD(self, cursor):
         cursor.close()

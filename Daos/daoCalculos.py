@@ -7,7 +7,9 @@ from pymysql import connections
 from newPrevEnums import TipoContribuicao
 
 from helpers import datetimeToSql
+
 from logs import logPrioridade, TipoEdicao, Prioridade
+
 from modelos.beneficiosModelo import BeneficiosModelo
 from modelos.contribuicoesModelo import ContribuicoesModelo
 from modelos.remuneracaoModelo import RemuneracoesModelo
@@ -42,7 +44,7 @@ class DaoCalculos:
         try:
             cursor.execute(strComando)
             logPrioridade(f'SELECT<buscaContribuicaoPorId>___________________{self.config.tblCnisContribuicoes}', TipoEdicao.select, Prioridade.saidaComun)
-            return ContribuicoesModelo().fromList(cursor.fetchall())
+            return ContribuicoesModelo().fromList(cursor.fetchone())
         except Exception as erro:
             print(f'buscaContribuicaoPorId ({type(erro)}) - {erro}')
             logPrioridade(f'Erro SQL - buscaContribuicaoPorId {self.config.tblCnisContribuicoes}', TipoEdicao.erro, Prioridade.saidaImportante)
@@ -72,7 +74,7 @@ class DaoCalculos:
         try:
             cursor.execute(strComando)
             logPrioridade(f'SELECT<buscaRemuneracaoPorId>___________________{self.config.tblCnisRemuneracoes}', TipoEdicao.select, Prioridade.saidaComun)
-            return RemuneracoesModelo().fromList(cursor.fetchall())
+            return RemuneracoesModelo().fromList(cursor.fetchone())
         except Exception as erro:
             print(f'buscaRemuneracaoPorId ({type(erro)}) - {erro}')
             logPrioridade(f'Erro SQL - buscaRemuneracaoPorId {self.config.tblCnisRemuneracoes}', TipoEdicao.erro, Prioridade.saidaImportante)
@@ -103,7 +105,7 @@ class DaoCalculos:
         try:
             cursor.execute(strComando)
             logPrioridade(f'SELECT<buscaBeneficioPorId>___________________{self.config.tblCnisBeneficios}', TipoEdicao.select, Prioridade.saidaComun)
-            return BeneficiosModelo().fromList(cursor.fetchall())
+            return BeneficiosModelo().fromList(cursor.fetchone())
         except Exception as erro:
             print(f'buscaBeneficioPorId ({type(erro)}) - {erro}')
             logPrioridade(f'Erro SQL - buscaBeneficioPorId {self.config.tblCnisBeneficios}', TipoEdicao.erro, Prioridade.saidaImportante)
@@ -138,7 +140,7 @@ class DaoCalculos:
                             ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', con.competencia)
                     WHERE clienteId = {clienteId}
                 
-                UNION ALL
+                UNION
                     
                     SELECT 
                         --Remunerações
@@ -404,6 +406,37 @@ class DaoCalculos:
             logPrioridade(f'INSERT<insereBeneficio>___________________{self.config.tblCnisBeneficios}', TipoEdicao.insert, Prioridade.saidaComun)
         except:
             raise Warning(f'Erro SQL - insereBeneficio({self.config.tblCnisBeneficios}) <INSERT>')
+        finally:
+            self.db.commit()
+            self.disconectBD(cursor)
+
+    def delete(self, tipo: TipoContribuicao, contribuicaoId: int):
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        if tipo == TipoContribuicao.contribuicao:
+            tabela: str = self.config.tblCnisContribuicoes
+            where: str = f"contribuicoesId = {contribuicaoId}"
+        elif tipo == TipoContribuicao.remuneracao:
+            tabela: str = self.config.tblCnisRemuneracoes
+            where: str = f"remuneracoesId = {contribuicaoId}"
+        else:
+            tabela: str = self.config.tblCnisBeneficios
+            where: str = f"beneficiosId = {contribuicaoId}"
+
+        strComando = f"""
+            DELETE FROM {tabela}
+            WHERE {where};"""
+
+        try:
+            cursor.execute(strComando)
+            logPrioridade(f'DELETE<delete>___________________{tabela}', TipoEdicao.delete, Prioridade.saidaComun)
+        except:
+            logPrioridade(f'DELETE<delete>___________________ERRO {tabela}', TipoEdicao.delete, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - delete({tabela}) <DELETE>')
         finally:
             self.db.commit()
             self.disconectBD(cursor)

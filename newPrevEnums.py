@@ -92,3 +92,21 @@ class TipoContribuicao(Enum):
     contribuicao = 0
     remuneracao = 1
     beneficio = 2
+
+class AtivApos(Enum):
+    laborInsalubre = 0
+    laborDeficiente = 1
+    tempoMilitar = 2
+    regimeProprio = 3
+    tempoRural = 4
+    professor = 5
+    contribMenorSalMin = 6
+    contribBaixaRenda = 7
+    onzePorCento = 8
+    indicativoCnis = 9
+    editarCnis = 10
+    editarCnisB = 11
+    faltaLaborCnis = 12
+    acaoTrabalhista = 13
+    aprendiz = 14
+    seminarista = 15

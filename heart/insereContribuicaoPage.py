@@ -1,49 +1,61 @@
+from datetime import datetime
+
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 from Daos.daoCalculos import DaoCalculos
+from Daos.daoFerramentas import DaoFerramentas
 from Telas.insereContrib import Ui_mwInsereContrib
 from heart.localStyleSheet.insereContribuicao import habilita
-from helpers import dictIndicadores, dictEspecies, mascaraNit, strToFloat, situacaoBeneficio
+from helpers import dictIndicadores, dictEspecies, mascaraNit, strToFloat, situacaoBeneficio, strToDatetime
 from modelos.beneficiosModelo import BeneficiosModelo
 from modelos.clienteModelo import ClienteModelo
 from modelos.contribuicoesModelo import ContribuicoesModelo
 from modelos.remuneracaoModelo import RemuneracoesModelo
+from newPrevEnums import TipoContribuicao, TamanhoData
 
 
 class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
 
-    def __init__(self, parent=None, db=None, cliente: ClienteModelo=None, contribuicaoId: int = 0):
+    def __init__(self, parent=None, db=None, cliente: ClienteModelo=None, contribuicaoId: int = 0, tipo: TipoContribuicao = TipoContribuicao.contribuicao):
         super(InsereContribuicaoPage, self).__init__(parent=parent)
         self.setupUi(self)
         self.tabCalculos = parent
         self.daoCalculos = DaoCalculos(db=db)
+        self.daoFerramentas = DaoFerramentas(db=db)
         self.db = db
         self.cliente = cliente
         self.remuneracao = RemuneracoesModelo()
         self.contribuicao = ContribuicoesModelo()
         self.beneficio = BeneficiosModelo()
+        self.listaConvMon: list
 
         self.lbNomeCompleto.setText(f"{self.cliente.nomeCliente} {self.cliente.sobrenomeCliente}")
         self.lbNit.setText(mascaraNit(int(self.cliente.nit)))
+
         self.rbBeneficio.setChecked(True)
         self.rbContribuicao.clicked.connect(self.atualizaFoco)
         self.rbRemuneracao.clicked.connect(self.atualizaFoco)
         self.rbBeneficio.clicked.connect(self.atualizaFoco)
+
         self.pbarSistema.hide()
         self.pbarSistema.setValue(0)
+        self.pbConfirmar.clicked.connect(self.trataInsereInfo)
+        self.pbCancelar.clicked.connect(self.sairAtividade)
 
         self.dtCompetencia.dateChanged.connect(lambda: self.getInfo(info='dtCompetencia'))
         self.dtFim.dateChanged.connect(lambda: self.getInfo(info='dtFim'))
         self.dtInicio.dateChanged.connect(lambda: self.getInfo(info='dtInicio'))
         self.dtFimContRem.dateChanged.connect(lambda: self.getInfo(info='dtFimContRem'))
-        self.leRemuneracao.textChanged.connect(lambda: self.getInfo(info='leRemuneracao'))
+
         self.cbxIndicadores.currentTextChanged.connect(lambda: self.getInfo(info='cbxIndicadores'))
-        self.leNb.textChanged.connect(lambda: self.getInfo(info='leNb'))
         self.cbxSituacao.currentTextChanged.connect(lambda: self.getInfo(info='cbxSituacao'))
         self.cbxEspecie.currentTextChanged.connect(lambda: self.getInfo(info='cbxEspecie'))
-        self.pbConfirmar.clicked.connect(self.trataInsereInfo)
-        self.pbCancelar.clicked.connect(self.sairAtividade)
+
+        self.leRemuneracao.textChanged.connect(lambda: self.getInfo(info='leRemuneracao'))
+        self.leNb.textChanged.connect(lambda: self.getInfo(info='leNb'))
+
+        self.listaConvMon = self.carregaConvMons()
 
         self.atualizaFoco()
         self.carregaQtdsRemCont()
@@ -52,14 +64,75 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.escondeLoading)
 
-        # if contribuicaoId != 0:
-        #     self.buscaContribuicao()
+        if tipo == TipoContribuicao.beneficio:
+            self.rbBeneficio.setChecked(True)
+            self.atualizaFoco()
+        elif tipo == TipoContribuicao.contribuicao:
+            self.rbContribuicao.setChecked(True)
+            self.atualizaFoco()
+        elif tipo == TipoContribuicao.remuneracao:
+            self.rbRemuneracao.setChecked(True)
+            self.atualizaFoco()
 
-    def buscaContribuicao(self, contribuicaoId: int):
-        # contribuicao = self.daoCalculos.
-        pass
+        if contribuicaoId != 0:
+            self.buscaContribuicao(contribuicaoId, tipo)
+
+    def buscaContribuicao(self, contribuicaoId: int, tipo: TipoContribuicao):
+
+        if tipo == TipoContribuicao.contribuicao:
+            contribuicao: ContribuicoesModelo = self.daoCalculos.buscaContribuicaoPorId(contribuicaoId)
+            self.mostraInfoTela(contribuicao, TipoContribuicao.contribuicao)
+
+        elif tipo == TipoContribuicao.remuneracao:
+            contribuicao: RemuneracoesModelo = self.daoCalculos.buscaRemuneracaoPorId(contribuicaoId)
+            self.mostraInfoTela(contribuicao, TipoContribuicao.remuneracao)
+
+        elif tipo == TipoContribuicao.beneficio:
+            contribuicao: BeneficiosModelo = self.daoCalculos.buscaBeneficioPorId(contribuicaoId)
+            self.mostraInfoTela(contribuicao, TipoContribuicao.beneficio)
+
+    def mostraInfoTela(self, contribuicao, tipoContribuicao: TipoContribuicao):
+        if tipoContribuicao == TipoContribuicao.contribuicao:
+            self.leRemuneracao.setText(f'{contribuicao.contribuicao}')
+            self.cbxIndicadores.setCurrentText(f'{contribuicao.indicadores}')
+            self.dtCompetencia.setDate(strToDatetime(contribuicao.competencia))
+            self.dtFimContRem.setDate(strToDatetime(contribuicao.dataPagamento))
+            self.cbxIndicadores.setCurrentText(contribuicao.indicadores)
+            self.defineSinalMonetario(contribuicao)
+
+        elif tipoContribuicao == TipoContribuicao.remuneracao:
+            self.leRemuneracao.setText(f'{contribuicao.remuneracao}')
+            self.cbxIndicadores.setCurrentText(contribuicao.indicadores)
+            self.dtCompetencia.setDate(strToDatetime(contribuicao.competencia))
+            self.defineSinalMonetario(contribuicao)
+
+        elif tipoContribuicao == TipoContribuicao.beneficio:
+            especie: str = dictEspecies[contribuicao.especie[:3].strip()]
+            if strToDatetime(contribuicao.dataFim, TamanhoData.gg) == datetime.min:
+                dataFim: datetime = datetime.now()
+            else:
+                dataFim: datetime = strToDatetime(contribuicao.dataFim, TamanhoData.gg)
+
+            self.leNb.setText(str(contribuicao.nb))
+            self.cbxSituacao.setCurrentText(contribuicao.situacao.title())
+            self.cbxEspecie.setCurrentText(especie)
+            self.dtInicio.setDate(strToDatetime(contribuicao.dataInicio, TamanhoData.gg))
+            self.dtFim.setDate(dataFim)
+
+    def defineSinalMonetario(self, contribuicao):
+        if isinstance(contribuicao, ContribuicoesModelo) or isinstance(contribuicao, RemuneracoesModelo):
+            competencia: datetime = strToDatetime(contribuicao.competencia, TamanhoData.gg)
+            for moeda in self.listaConvMon:
+                if moeda.dataInicial <= competencia <= moeda.dataFinal:
+                    self.cbxSinal.setCurrentText(moeda.sinal)
+                    break
+
+    def carregaConvMons(self) -> list:
+        return self.daoFerramentas.getAllMoedas(retornaModelos=True)
 
     def carregaComboBoxes(self):
+        listaSinaisMonetarios: set = {moeda.sinal for moeda in self.listaConvMon}
+        self.cbxSinal.addItems(listaSinaisMonetarios)
         self.cbxIndicadores.addItems(dictIndicadores.keys())
         self.cbxEspecie.addItems(sorted(dictEspecies.values()))
         self.cbxSituacao.addItems(sorted(situacaoBeneficio))

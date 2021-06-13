@@ -258,6 +258,12 @@
              </property>
              <item>
               <widget class="QCheckBox" name="cbAtiv1">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Existe labor em condições insalubres/especiais?</string>
                </property>
@@ -326,6 +332,12 @@
              </property>
              <item>
               <widget class="QCheckBox" name="cbAtiv2">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Existe labor em condição de deficiente?</string>
                </property>
@@ -372,6 +384,12 @@
              </property>
              <item>
               <widget class="QCheckBox" name="cbAtiv3">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Possui tempo de serviço militar?</string>
                </property>
@@ -418,6 +436,12 @@
              </property>
              <item>
               <widget class="QCheckBox" name="cbAtiv4">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Possui tempo em regime próprio?</string>
                </property>
@@ -486,6 +510,12 @@
              </property>
              <item>
               <widget class="QCheckBox" name="cbAtiv5">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Possui tempo rural?</string>
                </property>
@@ -532,6 +562,12 @@
              </property>
              <item>
               <widget class="QCheckBox" name="cbAtiv6">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Possui tempo como professor do ensino fundamental 
     e médio?</string>
@@ -579,6 +615,12 @@
              </property>
              <item>
               <widget class="QCheckBox" name="cbAtiv7">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Existem contribuições inferiores ao salário mínimo?</string>
                </property>
@@ -647,6 +689,12 @@
              </property>
              <item>
               <widget class="QCheckBox" name="cbAtiv8">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Existem contribuições realizadas no percentual 
     de 5% (IMEI) ou 5% baixa renda (IREC-FBR)?</string>
@@ -716,6 +764,12 @@
              </property>
              <item>
               <widget class="QCheckBox" name="cbAtiv9">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Existem contribuições realizadas no 
     percentual de 11% (ILEI123 ou IREC-LC123)?</string>
@@ -785,6 +839,12 @@
              </property>
              <item>
               <widget class="QCheckBox" name="cbAtiv10">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Existe algum indicativo no CNIS?</string>
                </property>
@@ -853,6 +913,12 @@
              </property>
              <item>
               <widget class="QCheckBox" name="cbAtiv11">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Existe algum período laborado que conste 
     no CNIS mas que precisa ser editado?</string>
@@ -900,6 +966,12 @@
              </property>
              <item>
               <widget class="QCheckBox" name="cbAtiv12">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Existe algum período laborado que conste no CNIS mas que 
     o salário de contribuição está incorreto e precisa ser editado?</string>
@@ -932,6 +1004,12 @@
             <layout class="QHBoxLayout" name="horizontalLayout_17">
              <item>
               <widget class="QCheckBox" name="cbAtiv13">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Existe algum período laborado que não conste no CNIS?</string>
                </property>
@@ -963,6 +1041,12 @@
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
               <widget class="QCheckBox" name="cbAtiv14">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Já teve alguma ação trabalhista?</string>
                </property>
@@ -994,6 +1078,12 @@
             <layout class="QHBoxLayout" name="horizontalLayout_13">
              <item>
               <widget class="QCheckBox" name="cbAtiv15">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Já trabalhou como aprendiz em escola 
     técnica SENAI/SENAC?</string>
@@ -1026,6 +1116,12 @@
             <layout class="QHBoxLayout" name="horizontalLayout_16">
              <item>
               <widget class="QCheckBox" name="cbAtiv16">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="text">
                 <string>    Já trabalhou como seminarista ou ministro de 
     confissão religiosa?</string>

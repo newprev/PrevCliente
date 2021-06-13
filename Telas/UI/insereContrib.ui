@@ -392,9 +392,9 @@ Contribuições</string>
        <widget class="QLineEdit" name="leRemuneracao">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>82</x>
           <y>60</y>
-          <width>113</width>
+          <width>101</width>
           <height>25</height>
          </rect>
         </property>
@@ -434,6 +434,9 @@ Contribuições</string>
           <height>26</height>
          </rect>
         </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
        </widget>
        <widget class="QDateEdit" name="dtFimContRem">
         <property name="geometry">
@@ -444,15 +447,34 @@ Contribuições</string>
           <height>26</height>
          </rect>
         </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
        </widget>
        <widget class="QComboBox" name="cbxIndicadores">
         <property name="geometry">
          <rect>
           <x>10</x>
           <y>140</y>
-          <width>141</width>
+          <width>171</width>
           <height>25</height>
          </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="cbxSinal">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>60</y>
+          <width>61</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
         </property>
        </widget>
       </widget>
@@ -558,6 +580,12 @@ Contribuições</string>
           <height>26</height>
          </rect>
         </property>
+        <property name="showGroupSeparator" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
        </widget>
        <widget class="QDateEdit" name="dtFim">
         <property name="geometry">
@@ -567,6 +595,9 @@ Contribuições</string>
           <width>110</width>
           <height>26</height>
          </rect>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
         </property>
        </widget>
        <widget class="QComboBox" name="cbxSituacao">

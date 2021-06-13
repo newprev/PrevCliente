@@ -370,7 +370,7 @@ class DaoFerramentas:
         finally:
             self.disconectBD(cursor)
 
-    def getAllMoedas(self):
+    def getAllMoedas(self, retornaModelos: bool = False):
 
         if not isinstance(self.db, sqlite3.Connection):
             self.db.ping()
@@ -379,13 +379,27 @@ class DaoFerramentas:
         cursor = self.db.cursor()
 
         strComando = f"""
-            SELECT convMonId, nomeMoeda, fator, dataInicial, dataFinal, conversao, moedaCorrente 
-                FROM {self.tabelas.tblConvMon} ORDER BY dataFinal DESC"""
+            SELECT 
+                
+                convMonId, nomeMoeda, fator,
+                dataInicial, dataFinal, conversao,
+                moedaCorrente, sinal, dataUltAlt,
+                dataCadastro 
+                
+            FROM {self.tabelas.tblConvMon} 
+            ORDER BY dataFinal DESC"""
 
         try:
             cursor.execute(strComando)
-            logPrioridade(f'SELECT<getAllMoedas>___________________{self.tabelas.tblConvMon}', TipoEdicao.select, Prioridade.saidaComun)
-            return cursor.fetchall()
+            if not retornaModelos:
+                logPrioridade(f'SELECT<getAllMoedas>___________________{self.tabelas.tblConvMon}', TipoEdicao.select, Prioridade.saidaComun)
+                return cursor.fetchall()
+            else:
+                listaMoedas: list = []
+                logPrioridade(f'SELECT<getAllMoedas>___________________{self.tabelas.tblConvMon}', TipoEdicao.select, Prioridade.saidaComun)
+                for moeda in cursor.fetchall():
+                    listaMoedas.append(ConvMonModelo().fromList(moeda))
+                return listaMoedas
         except:
             raise Warning(f'Erro SQL - getAllTetos({self.config.banco}) <INSERT {self.tabelas.tblTetosPrev}>')
         finally:

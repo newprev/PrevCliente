@@ -46,19 +46,18 @@ class ContribuicoesModelo:
         self.dataCadastro = dictContribuicoes['dataCadastro'],
         self.dataUltAlt = dictContribuicoes['dataUltAlt'],
 
-
-    def fromList(self, listContribuicoes: list, retornaInst: bool = False):
+    def fromList(self, listContribuicoes: list, retornaInst: bool = True):
         self.contribuicoesId = listContribuicoes[0]
         self.clienteId = listContribuicoes[1]
         self.seq = listContribuicoes[2]
         self.competencia = listContribuicoes[3]
         self.dataPagamento = listContribuicoes[4]
-        self.contribuicao = listContribuicoes[4]
-        self.salContribuicao = listContribuicoes[4]
-        self.indicadores = listContribuicoes[5]
-        self.dadoOrigem = listContribuicoes[6]
-        self.dataCadastro = listContribuicoes[7]
-        self.dataUltAlt = listContribuicoes[8]
+        self.contribuicao = listContribuicoes[5]
+        self.salContribuicao = listContribuicoes[6]
+        self.indicadores = listContribuicoes[7]
+        self.dadoOrigem = listContribuicoes[8]
+        self.dataCadastro = listContribuicoes[9]
+        self.dataUltAlt = listContribuicoes[10]
 
         if retornaInst:
             return self

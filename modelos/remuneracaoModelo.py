@@ -40,8 +40,7 @@ class RemuneracoesModelo:
         self.indicadores = dictRemuneracoes['indicadores']
         self.dataUltAlt = dictRemuneracoes['dataUltAlt']
 
-
-    def fromList(self, listRemuneracoes: list, retornaInst: bool = False):
+    def fromList(self, listRemuneracoes: list, retornaInst: bool = True):
         self.remuneracoesId = listRemuneracoes[0]
         self.clienteId = listRemuneracoes[1]
         self.seq = listRemuneracoes[2]

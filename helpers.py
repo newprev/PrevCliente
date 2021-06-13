@@ -5,6 +5,7 @@ from newPrevEnums import *
 estCivil = ['Solteiro(a)', 'Casado(a)', 'Divorciado(a)', 'Viúvo(a)']
 
 dictIndicadores = {
+    '': '',
     'AEXT-VI': 'Acerto de vínculo extemporâneo indeferido.',
     'AEXT-VT': 'Acerto de vínculo extemporâneo validado totalmente.',
     'AVRC-DEF': 'Acerto de vínculo extemporâneo deferido.',

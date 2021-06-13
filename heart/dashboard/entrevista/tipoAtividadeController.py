@@ -1,9 +1,12 @@
 from PyQt5.QtWidgets import QWidget, QFrame, QCheckBox
+from PyQt5.QtCore import Qt
 from Telas.pgQuizAposentadoria import Ui_wdgQuizAposentadoria
+from heart.dashboard.tabs.tabCalculos import TabCalculos
+from heart.insereContribuicaoPage import InsereContribuicaoPage
 from heart.sinaisCustomizados import Sinais
 from modelos.clienteModelo import ClienteModelo
 from Daos.daoCliente import DaoCliente
-from newPrevEnums import MomentoEntrevista
+from newPrevEnums import AtivApos
 from Telas.efeitos import Efeitos
 
 
@@ -36,6 +39,9 @@ class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):
             self.frAtiv9,
             self.frAtiv10,
         ]
+
+        self.cbAtiv11.clicked.connect(lambda: self.apresentarTela(AtivApos(11)))
+
         self.escondeInfos()
         self.abilitandoEfeitoClique()
 
@@ -110,15 +116,10 @@ class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):
         for info in self.avisos:
             info.hide()
 
-    def processaQuiz(self):
-        listaChecbox: list = [
-            self.cbAtiv1, self.cbAtiv2,
-            self.cbAtiv3, self.cbAtiv4,
-            self.cbAtiv5, self.cbAtiv6,
-            self.cbAtiv7, self.cbAtiv8,
-            self.cbAtiv9, self.cbAtiv10,
-            self.cbAtiv11, self.cbAtiv12,
-            self.cbAtiv13, self.cbAtiv14,
-            self.cbAtiv15, self.cbAtiv16,
-        ]
-
+    def apresentarTela(self, cbClicada: AtivApos):
+        if cbClicada == AtivApos.editarCnisB:
+            telaCalculo = TabCalculos(parent=self, db=self.db)
+            telaCalculo.carregarTabContribuicoes(self.clienteAtual.clienteId)
+            telaCalculo.carregarTblBeneficios(self.clienteAtual.clienteId)
+            telaCalculo.setWindowFlags(Qt.Tool | Qt.Dialog)
+            telaCalculo.show()

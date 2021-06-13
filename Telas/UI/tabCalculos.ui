@@ -274,8 +274,11 @@ QHeaderView::up-arrow {
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
        <property name="selectionMode">
-        <enum>QAbstractItemView::NoSelection</enum>
+        <enum>QAbstractItemView::SingleSelection</enum>
        </property>
        <property name="selectionBehavior">
         <enum>QAbstractItemView::SelectRows</enum>
@@ -298,6 +301,11 @@ QHeaderView::up-arrow {
        <attribute name="verticalHeaderVisible">
         <bool>false</bool>
        </attribute>
+       <row>
+        <property name="text">
+         <string>New Row</string>
+        </property>
+       </row>
        <column>
         <property name="text">
          <string>infoId</string>
@@ -389,6 +397,11 @@ Previdenciários</string>
          <set>AlignCenter</set>
         </property>
        </column>
+       <item row="0" column="6">
+        <property name="textAlignment">
+         <set>AlignCenter</set>
+        </property>
+       </item>
       </widget>
       <widget class="QPushButton" name="pbBuscarCliente">
        <property name="geometry">
@@ -744,8 +757,11 @@ cliente</string>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
        <property name="selectionMode">
-        <enum>QAbstractItemView::NoSelection</enum>
+        <enum>QAbstractItemView::SingleSelection</enum>
        </property>
        <property name="selectionBehavior">
         <enum>QAbstractItemView::SelectRows</enum>
@@ -846,7 +862,7 @@ benefício</string>
        </column>
        <column>
         <property name="text">
-         <string>Natureza</string>
+         <string>Origem</string>
         </property>
         <property name="font">
          <font>

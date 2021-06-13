@@ -38,6 +38,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
         self.tblClientes.resizeColumnsToContents()
         self.tblClientes.doubleClicked.connect(self.editarCliente)
+        self.tblClientes.hideColumn(0)
+
         self.tabMain.currentChanged.connect(self.trocaDeAba)
 
         self.frBuscaNome.hide()
@@ -48,7 +50,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
         self.carregaFiltroAZ()
         self.carregaComboBoxes()
-        self.tblClientes.hideColumn(0)
 
         self.pbAtualizar.clicked.connect(self.trataAtualizaCliente)
         self.pbBuscaCep.clicked.connect(self.buscaCep)

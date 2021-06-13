@@ -18,7 +18,6 @@ class ConvMonModelo:
         self.dataUltAlt: datetime = None
         self.dataCadastro: datetime = None
 
-
     def toDict(self):
         dictConvMon = {
             'convMonId': self.convMonId,
@@ -57,12 +56,13 @@ class ConvMonModelo:
         self.sinal = dictConvMon['sinal']
         return self
 
-    def fromList(self, listConvMon: list, retornaInst: bool = False):
+    def fromList(self, listConvMon: list, retornaInst: bool = True):
+
         self.convMonId = listConvMon[0]
         self.nomeMoeda = listConvMon[1]
         self.fator = listConvMon[2]
-        self.dataInicial = strToDatetime(listConvMon[3], tamanho=TamanhoData.g)
-        self.dataFinal = strToDatetime(listConvMon[4], tamanho=TamanhoData.g)
+        self.dataInicial = strToDatetime(listConvMon[3], tamanho=TamanhoData.mm)
+        self.dataFinal = strToDatetime(listConvMon[4], tamanho=TamanhoData.mm)
         self.conversao = listConvMon[5]
         self.moedaCorrente = listConvMon[6]
         self.sinal = listConvMon[7]

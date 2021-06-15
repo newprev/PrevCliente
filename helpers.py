@@ -433,4 +433,24 @@ def strTipoBeneficio(tipoBeneficio: int, subTipoApos: int) -> str:
     elif tipoBeneficio == TipoBeneficio.SalMaternidade.value:
         return 'Salário maternidade'
     else:
-        return '-'
+        return ''
+
+
+def strTipoBeneFacilitado(tipoBeneficio: TipoBeneficio) -> str:
+
+    if tipoBeneficio == TipoBeneficio.Aposentadoria:
+        return 'Aposentadoria'
+    elif tipoBeneficio == TipoBeneficio.AuxDoenca:
+        return 'Auxílio doença'
+    elif tipoBeneficio == TipoBeneficio.AuxReclusao:
+        return 'Auxílio reclusão'
+    elif tipoBeneficio == TipoBeneficio.BeneIdoso:
+        return 'Benefício assistencial ao idoso'
+    elif tipoBeneficio == TipoBeneficio.BeneDeficiencia:
+        return 'Benefício assistencial à pessoa com deficiência'
+    elif tipoBeneficio == TipoBeneficio.PensaoMorte:
+        return 'Pensão por morte'
+    elif tipoBeneficio == TipoBeneficio.SalMaternidade:
+        return 'Salário maternidade'
+    else:
+        return ''

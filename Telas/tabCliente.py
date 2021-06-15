@@ -103,7 +103,7 @@ class Ui_wdgTabCliente(object):
 "#lbBuscaNome, \n"
 "#lbBuscaEmail, \n"
 "#lbBuscaTelefone,\n"
-"#lbBuscaTpProcesso,\n"
+"#lbBuscaTpBeneficio,\n"
 "#lbBuscaRgcpf {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
@@ -178,6 +178,25 @@ class Ui_wdgTabCliente(object):
 "}\n"
 "\n"
 "#pbFiltrar:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: rgb(52, 73, 94);\n"
+"\n"
+"    border-radius: 4px;\n"
+"    border: 1px solid;\n"
+"    background-color: rgb(238, 238, 236);\n"
+"}\n"
+"\n"
+"#pbLimparFiltro {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: rgb(52, 73, 94);\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: rgb(233, 185, 110);\n"
+"}\n"
+"\n"
+"#pbLimparFiltro:hover {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    color: rgb(52, 73, 94);\n"
@@ -297,25 +316,24 @@ class Ui_wdgTabCliente(object):
         self.frUnderlineTpProcesso.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frUnderlineTpProcesso.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frUnderlineTpProcesso.setObjectName("frUnderlineTpProcesso")
-        self.lbBuscaTpProcesso = QtWidgets.QLabel(self.frUnderlineTpProcesso)
-        self.lbBuscaTpProcesso.setGeometry(QtCore.QRect(10, 0, 171, 21))
-        self.lbBuscaTpProcesso.setObjectName("lbBuscaTpProcesso")
-        self.pbArrowTpProcesso = QtWidgets.QPushButton(self.frUnderlineTpProcesso)
-        self.pbArrowTpProcesso.setGeometry(QtCore.QRect(180, 0, 31, 21))
-        self.pbArrowTpProcesso.setText("")
-        self.pbArrowTpProcesso.setObjectName("pbArrowTpProcesso")
-        self.frBuscaTpProcesso = QtWidgets.QFrame(self.frFiltrosBusca)
-        self.frBuscaTpProcesso.setGeometry(QtCore.QRect(0, 380, 211, 40))
-        self.frBuscaTpProcesso.setMaximumSize(QtCore.QSize(16777215, 40))
-        self.frBuscaTpProcesso.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frBuscaTpProcesso.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frBuscaTpProcesso.setObjectName("frBuscaTpProcesso")
-        self.comboBox = QtWidgets.QComboBox(self.frBuscaTpProcesso)
-        self.comboBox.setGeometry(QtCore.QRect(10, 10, 191, 25))
-        self.comboBox.setObjectName("comboBox")
+        self.lbBuscaTpBeneficio = QtWidgets.QLabel(self.frUnderlineTpProcesso)
+        self.lbBuscaTpBeneficio.setGeometry(QtCore.QRect(10, 0, 171, 21))
+        self.lbBuscaTpBeneficio.setObjectName("lbBuscaTpBeneficio")
+        self.frBuscaTpBeneficio = QtWidgets.QFrame(self.frFiltrosBusca)
+        self.frBuscaTpBeneficio.setGeometry(QtCore.QRect(0, 380, 211, 40))
+        self.frBuscaTpBeneficio.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.frBuscaTpBeneficio.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frBuscaTpBeneficio.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frBuscaTpBeneficio.setObjectName("frBuscaTpBeneficio")
+        self.cbxTpBeneficio = QtWidgets.QComboBox(self.frBuscaTpBeneficio)
+        self.cbxTpBeneficio.setGeometry(QtCore.QRect(10, 10, 191, 25))
+        self.cbxTpBeneficio.setObjectName("cbxTpBeneficio")
         self.pbFiltrar = QtWidgets.QPushButton(self.frFiltrosBusca)
         self.pbFiltrar.setGeometry(QtCore.QRect(120, 440, 83, 25))
         self.pbFiltrar.setObjectName("pbFiltrar")
+        self.pbLimparFiltro = QtWidgets.QPushButton(self.frFiltrosBusca)
+        self.pbLimparFiltro.setGeometry(QtCore.QRect(120, 470, 83, 25))
+        self.pbLimparFiltro.setObjectName("pbLimparFiltro")
         self.lbTituloFiltro.raise_()
         self.frBuscaNome.raise_()
         self.frUnderlineNome.raise_()
@@ -326,8 +344,9 @@ class Ui_wdgTabCliente(object):
         self.frBuscaRgcpf.raise_()
         self.frUnderlineRgcpf.raise_()
         self.frUnderlineTpProcesso.raise_()
-        self.frBuscaTpProcesso.raise_()
+        self.frBuscaTpBeneficio.raise_()
         self.pbFiltrar.raise_()
+        self.pbLimparFiltro.raise_()
         self.tblClientes = QtWidgets.QTableWidget(self.tabClientes)
         self.tblClientes.setGeometry(QtCore.QRect(230, 130, 921, 411))
         self.tblClientes.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
@@ -832,8 +851,9 @@ class Ui_wdgTabCliente(object):
         self.lbBuscaTelefone.setText(_translate("wdgTabCliente", "Telefone"))
         self.leBuscaRgcpf.setPlaceholderText(_translate("wdgTabCliente", "RG ou CPF"))
         self.lbBuscaRgcpf.setText(_translate("wdgTabCliente", "RG/CPF"))
-        self.lbBuscaTpProcesso.setText(_translate("wdgTabCliente", "Tipo de Processo"))
+        self.lbBuscaTpBeneficio.setText(_translate("wdgTabCliente", "Tipo de Benefício"))
         self.pbFiltrar.setText(_translate("wdgTabCliente", "Filtrar"))
+        self.pbLimparFiltro.setText(_translate("wdgTabCliente", "Limpar"))
         item = self.tblClientes.horizontalHeaderItem(0)
         item.setText(_translate("wdgTabCliente", "clienteId"))
         item = self.tblClientes.horizontalHeaderItem(1)

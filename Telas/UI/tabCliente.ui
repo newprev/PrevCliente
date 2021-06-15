@@ -138,7 +138,7 @@ QTabBar::tab:selected, QTabBar::tab:hover {
 #lbBuscaNome, 
 #lbBuscaEmail, 
 #lbBuscaTelefone,
-#lbBuscaTpProcesso,
+#lbBuscaTpBeneficio,
 #lbBuscaRgcpf {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
@@ -213,6 +213,25 @@ QHeaderView::section {
 }
 
 #pbFiltrar:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: rgb(52, 73, 94);
+
+	border-radius: 4px;
+	border: 1px solid;
+	background-color: rgb(238, 238, 236);
+}
+
+#pbLimparFiltro {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: rgb(52, 73, 94);
+
+	border-radius: 4px;
+	background-color: rgb(233, 185, 110);
+}
+
+#pbLimparFiltro:hover {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: rgb(52, 73, 94);
@@ -617,7 +636,7 @@ QHeaderView::section {
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <widget class="QLabel" name="lbBuscaTpProcesso">
+        <widget class="QLabel" name="lbBuscaTpBeneficio">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -627,24 +646,11 @@ QHeaderView::section {
           </rect>
          </property>
          <property name="text">
-          <string>Tipo de Processo</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="pbArrowTpProcesso">
-         <property name="geometry">
-          <rect>
-           <x>180</x>
-           <y>0</y>
-           <width>31</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string/>
+          <string>Tipo de Benefício</string>
          </property>
         </widget>
        </widget>
-       <widget class="QFrame" name="frBuscaTpProcesso">
+       <widget class="QFrame" name="frBuscaTpBeneficio">
         <property name="geometry">
          <rect>
           <x>0</x>
@@ -665,7 +671,7 @@ QHeaderView::section {
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="cbxTpBeneficio">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -689,6 +695,19 @@ QHeaderView::section {
          <string>Filtrar</string>
         </property>
        </widget>
+       <widget class="QPushButton" name="pbLimparFiltro">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>470</y>
+          <width>83</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Limpar</string>
+        </property>
+       </widget>
        <zorder>lbTituloFiltro</zorder>
        <zorder>frBuscaNome</zorder>
        <zorder>frUnderlineNome</zorder>
@@ -699,8 +718,9 @@ QHeaderView::section {
        <zorder>frBuscaRgcpf</zorder>
        <zorder>frUnderlineRgcpf</zorder>
        <zorder>frUnderlineTpProcesso</zorder>
-       <zorder>frBuscaTpProcesso</zorder>
+       <zorder>frBuscaTpBeneficio</zorder>
        <zorder>pbFiltrar</zorder>
+       <zorder>pbLimparFiltro</zorder>
       </widget>
       <widget class="QTableWidget" name="tblClientes">
        <property name="geometry">

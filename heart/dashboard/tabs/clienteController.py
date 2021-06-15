@@ -15,7 +15,7 @@ from helpers import *
 from modelos.clienteModelo import ClienteModelo
 from modelos.cnisModelo import CNISModelo
 from modelos.processosModelo import ProcessosModelo
-from newPrevEnums import TamanhoData
+from newPrevEnums import TipoBeneficio
 from repositorios.integracaoRepositorio import IntegracaoRepository
 
 
@@ -60,6 +60,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.pbCarregaCnis.clicked.connect(self.carregaCnis)
         self.pbMaisTelefones.clicked.connect(self.abrirPgMaisTelefones)
         self.pbLimpar.clicked.connect(self.limpaTudo)
+        self.pbLimparFiltro.clicked.connect(self.limpaFiltros)
+        self.pbFiltrar.clicked.connect(self.efetivarFiltro)
 
         self.cbClienteAntigo.clicked.connect(self.atualizaStatusCliente)
 
@@ -415,6 +417,10 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.cbxEscolaridade.addItems(getEscolaridade().keys())
         self.cbxEstado.addItems(getEstados().keys())
         self.cbxEstado.setCurrentIndex(24)
+        tiposBeneficios: list = [strTipoBeneFacilitado(beneficio) for beneficio in TipoBeneficio]
+        tiposBeneficios.sort()
+        for tipoBeneficio in tiposBeneficios:
+            self.cbxTpBeneficio.addItem(tipoBeneficio)
 
     def ativaDesativaFiltro(self, nomeFiltro: str):
         if nomeFiltro.upper() == 'NOME':
@@ -540,6 +546,50 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def atualizaEntrevista(self, *args, **kwargs):
         self.entrevistaPg.atualizaInfoLateral(args[0])
+
+    def efetivarFiltro(self):
+        if self.leBuscaNome.text() != '':
+            nomeBuscado: str = self.leBuscaNome.text().lower()
+            for linha in range(self.tblClientes.rowCount()):
+                nomeCliente: str = self.tblClientes.item(linha, 1).text().lower()
+                if nomeCliente.find(nomeBuscado) == -1:
+                    self.tblClientes.hideRow(linha)
+
+        if self.leBuscaEmail.text() != '':
+            emailBuscado: str = self.leBuscaEmail.text().lower()
+            for linha in range(self.tblClientes.rowCount()):
+                emailCliente: str = self.tblClientes.item(linha, 2).text().lower()
+                if emailCliente.find(emailBuscado) == -1:
+                    self.tblClientes.hideRow(linha)
+
+        if self.leBuscaTelefone.text() != '':
+            telefoneBuscado: str = self.leBuscaTelefone.text()
+            for linha in range(self.tblClientes.rowCount()):
+                telefoneCliente: str = self.tblClientes.item(linha, 3).text()
+                if telefoneCliente.find(telefoneBuscado) == -1:
+                    self.tblClientes.hideRow(linha)
+
+        # if self.leBuscaRgcpf.text() != '':
+        #     rgcpfBuscado: str = self.leBuscaRgcpf.text()
+        #     for linha in range(self.tblClientes.rowCount()):
+        #         rgcpfCliente: str = self.tblClientes.item(linha, 2).text()
+        #         if rgcpfCliente.find(rgcpfBuscado) == -1:
+        #             self.tblClientes.hideRow(linha)
+
+        if self.cbxTpBeneficio.currentText() != '':
+            beneficioBuscado: str = self.cbxTpBeneficio.currentText().lower()
+            for linha in range(self.tblClientes.rowCount()):
+                beneficioCliente: str = self.tblClientes.item(linha, 5).text().lower()
+                if beneficioCliente.find(beneficioBuscado) == -1:
+                    self.tblClientes.hideRow(linha)
+
+    def limpaFiltros(self):
+        self.leBuscaNome.clear()
+        self.leBuscaEmail.clear()
+        self.leBuscaTelefone.clear()
+        self.leBuscaRgcpf.clear()
+        for linha in range(self.tblClientes.rowCount()):
+            self.tblClientes.showRow(linha)
 
     def verificaDados(self):
         if self.cliente.estado is None or self.cliente.estado == '':

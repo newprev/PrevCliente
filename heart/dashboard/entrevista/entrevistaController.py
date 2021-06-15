@@ -97,7 +97,6 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.processoModelo.tempoContribuicao = self.calculaTempoContribuicao()
 
                 self.daoProcesso.insereProcesso(self.processoModelo)
-                self.tipoAtividadePg.processaQuiz()
                 self.impressaoDocsPg.atualizaInformacoes(self.processoModelo, self.clienteAtual)
 
                 self.sinais.sTrocaTelaEntrevista.emit([MomentoEntrevista.tipoAtividade, MomentoEntrevista.telaGeraDocs])

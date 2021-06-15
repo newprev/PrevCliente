@@ -119,7 +119,6 @@ class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):
     def apresentarTela(self, cbClicada: AtivApos):
         if cbClicada == AtivApos.editarCnisB:
             telaCalculo = TabCalculos(parent=self, db=self.db)
-            telaCalculo.carregarTabContribuicoes(self.clienteAtual.clienteId)
-            telaCalculo.carregarTblBeneficios(self.clienteAtual.clienteId)
+            telaCalculo.carregarInfoCliente(clienteModel=self.clienteAtual)
             telaCalculo.setWindowFlags(Qt.Tool | Qt.Dialog)
             telaCalculo.show()

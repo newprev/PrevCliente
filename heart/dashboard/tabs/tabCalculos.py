@@ -51,9 +51,9 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
             tipoContribuicao: str = self.tblCalculos.item(numLinha, 5).text()
             if tipoContribuicao == 'Contribuição':
                 self.abreInsereContribuicoes(contribuicaoId, TipoContribuicao.contribuicao)
-
             else:
                 self.abreInsereContribuicoes(contribuicaoId, TipoContribuicao.remuneracao)
+
         elif tabela == 'tblBeneficios':
             numLinha: int = self.tblBeneficios.selectedIndexes()[0].row()
             contribuicaoId = int(self.tblBeneficios.item(numLinha, 0).text())
@@ -222,14 +222,23 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
         self.tblBeneficios.resizeColumnsToContents()
         self.tblBeneficios.resizeRowsToContents()
 
-    def carregarInfoCliente(self, clientId: int = 1):
-        self.carregarTabContribuicoes(clientId)
-        self.carregarTblBeneficios(clientId)
-        self.cliente.fromList(self.daoCliente.buscaClienteById(clientId)[0])
-        self.lbNome.setText(self.cliente.nomeCliente + ' ' + self.cliente.sobrenomeCliente)
-        self.lbNomeBen.setText(self.cliente.nomeCliente + ' ' + self.cliente.sobrenomeCliente)
-        self.lbDocumento.setText(mascaraCPF(self.cliente.cpfCliente))
-        self.lbDocumentoBen.setText(mascaraCPF(self.cliente.cpfCliente))
+    def carregarInfoCliente(self, clientId: int = 1, clienteModel: ClienteModelo = None):
+        if clienteModel is None:
+            self.carregarTabContribuicoes(clientId)
+            self.carregarTblBeneficios(clientId)
+            self.cliente.fromList(self.daoCliente.buscaClienteById(clientId)[0])
+            self.lbNome.setText(self.cliente.nomeCliente + ' ' + self.cliente.sobrenomeCliente)
+            self.lbNomeBen.setText(self.cliente.nomeCliente + ' ' + self.cliente.sobrenomeCliente)
+            self.lbDocumento.setText(mascaraCPF(self.cliente.cpfCliente))
+            self.lbDocumentoBen.setText(mascaraCPF(self.cliente.cpfCliente))
+        else:
+            self.cliente = clienteModel
+            self.carregarTabContribuicoes(clienteModel.clienteId)
+            self.carregarTblBeneficios(clienteModel.clienteId)
+            self.lbNome.setText(clienteModel.nomeCliente + ' ' + clienteModel.sobrenomeCliente)
+            self.lbNomeBen.setText(clienteModel.nomeCliente + ' ' + clienteModel.sobrenomeCliente)
+            self.lbDocumento.setText(mascaraCPF(clienteModel.cpfCliente))
+            self.lbDocumentoBen.setText(mascaraCPF(clienteModel.cpfCliente))
 
     def abreBuscaClientePage(self):
         self.buscaClientePage = BuscaClientePage(parent=self, db=self.db)

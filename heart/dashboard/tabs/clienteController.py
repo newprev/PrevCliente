@@ -494,10 +494,14 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                 button.clicked.connect(lambda state, i=i: self.filtroAZ(i))
                 self.hlFlitroAlfabetico.addWidget(button)
 
-    def filtroAZ(self, estado, *args):
-        print(f' --------------------------> filtroAZ')
-        print(f"estado: {estado}")
-        print(f"args: {args}")
+    def filtroAZ(self, estado):
+        listAlfabeto = list(' ABCDEFGHIJKLMNOPQRSTUVWXYZ ')
+        letraFiltro: str = listAlfabeto[estado]
+        self.limpaFiltros()
+        for linha in range(self.tblClientes.rowCount()):
+            primeiraLetraNomeCliente: str = self.tblClientes.item(linha, 1).text()[0].upper()
+            if primeiraLetraNomeCliente != letraFiltro:
+                self.tblClientes.hideRow(linha)
 
     def limpaTudo(self):
         self.lePrimeiroNome.clear()

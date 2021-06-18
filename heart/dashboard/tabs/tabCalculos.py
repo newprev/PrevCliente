@@ -18,7 +18,7 @@ from newPrevEnums import TamanhoData, TipoContribuicao
 
 class TabCalculos(QWidget, Ui_wdgTabCalculos):
 
-    def __init__(self, parent=None, db=None):
+    def __init__(self, parent=None, db=None, origemEntrevista: bool = False):
         super(TabCalculos, self).__init__(parent=parent)
         self.setupUi(self)
         self.db = db
@@ -36,11 +36,17 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
 
         self.pbBuscarCliente.clicked.connect(self.abreBuscaClientePage)
         self.pbBuscarClienteBen.clicked.connect(self.abreBuscaClientePage)
+        self.pbEditar.clicked.connect(lambda: self.avaliaEdicao('tblCalculos'))
+        self.pbEditarBen.clicked.connect(lambda: self.avaliaEdicao('tblBeneficios'))
         self.pbExcluir.clicked.connect(lambda: self.avaliaExclusao('pbExcluir'))
         self.pbExcluirBen.clicked.connect(lambda: self.avaliaExclusao('pbExcluirBen'))
 
         self.pbInserir.clicked.connect(self.abreInsereContribuicoes)
         self.pbInserirBen.clicked.connect(self.abreInsereContribuicoes)
+
+        if origemEntrevista:
+            self.pbBuscarClienteBen.hide()
+            self.pbBuscarCliente.hide()
 
         self.tblCalculos.resizeColumnsToContents()
 

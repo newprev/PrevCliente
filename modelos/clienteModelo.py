@@ -1,6 +1,7 @@
 import datetime
 from .telefoneModelo import TelefoneModelo
 
+
 class ClienteModelo:
 
     def __init__(self):
@@ -171,4 +172,4 @@ class ClienteModelo:
             pathCnis: {self.pathCnis}"""
 
     def __bool__(self):
-        return self.nit != ''
+        return self.nit != '' and self.nit is not None

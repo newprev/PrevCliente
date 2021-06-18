@@ -269,6 +269,7 @@ class DaoCalculos:
                 ) total;"""
 
         try:
+            print(strComando)
             cursor.execute(strComando)
             logPrioridade(f'SELECT<getCount>___________________{listaTabelas}', TipoEdicao.select, Prioridade.saidaComun)
             return cursor.fetchone()[0]

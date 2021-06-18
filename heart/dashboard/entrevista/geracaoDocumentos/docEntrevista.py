@@ -68,6 +68,7 @@ class DocEntrevista:
 
     def geraCorpoProcuracao(self):
         estadoSigla: str = getEstados()[self.cliente.estado]
+        siglaEscritorioEstado: str = self.escritorio.estado
 
         # Informações do cliente
         self.dictInfo['nomeCliente'] = self.cliente.nomeCliente
@@ -91,6 +92,14 @@ class DocEntrevista:
         self.dictInfo['estadoCivil'] = self.advogado.estadoCivil
         self.dictInfo['escritorioEstado'] = self.escritorio.estado
         self.dictInfo['numeroOAB'] = self.advogado.numeroOAB
+
+        # Informações do escritório
+        self.dictInfo['siglaEscritorioEstado'] = siglaEscritorioEstado
+        self.dictInfo['enderecoEscritorio'] = self.escritorio.endereco
+        self.dictInfo['escritorioNum'] = self.escritorio.numero
+        self.dictInfo['bairroEscritorio'] = self.escritorio.bairro
+        self.dictInfo['cidadeEscritorio'] = self.escritorio.cidade
+        self.dictInfo['estadoEscritorio'] = self.escritorio.estado
 
         # Informações do processo
         self.dictInfo['tipoBeneficio'] = strTipoBeneficio(self.processo.tipoBeneficio, self.processo.subTipoApos)
@@ -187,7 +196,6 @@ class DocEntrevista:
         self.dictInfo['cidadeEscritorio'] = self.escritorio.cidade
         self.dictInfo['estadoEscritorio'] = self.escritorio.estado
         self.dictInfo['estadoEscritorio'] = self.escritorio.estado
-
 
     def geraDosFatos(self):
 

@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QTabBar
+from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtWidgets import QMainWindow, QTabBar, QMessageBox
 from Telas.entrevistaPage import Ui_mwEntrevistaPage
 from connections import ConfigConnection
 from heart.dashboard.entrevista.localStyleSheet.lateral import estadoInfoFinalizado
@@ -38,6 +38,8 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.daoCliente = DaoCliente(db=db)
         self.daoCalculos = DaoCalculos(db=db)
         self.processoModelo = ProcessosModelo()
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.escondeLoading)
 
         self.clienteController = TabCliente(parent=self, db=self.db, entrevista=True)
         self.naturezaPg = NaturezaController(parent=self, db=self.db)
@@ -47,15 +49,18 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.impressaoDocsPg = GerarDocsPage(None, None, parent=self, db=self.db)
         self.sinais.sTrocaTelaEntrevista.connect(self.trocaTelaCentral)
 
-        self.stackedWidget.addWidget(self.clienteController) #tela: cadastro - 0
-        self.stackedWidget.addWidget(self.naturezaPg) #tela: naturezaProcesso - 1
-        self.stackedWidget.addWidget(self.tipoProcessoAdmPg) #tela: tipos de processos admnistrativos - 2
-        self.stackedWidget.addWidget(self.tipoBeneficioConcPg) #tela: tipos de benefícios Concessão -  3
-        self.stackedWidget.addWidget(self.tipoAtividadePg) #tela: tipos de atividade Aposentadoria - 4
-        self.stackedWidget.addWidget(self.impressaoDocsPg) #tela: tipos de geração de documentos - 5
+        self.stackedWidget.addWidget(self.clienteController)  # tela: cadastro - 0
+        self.stackedWidget.addWidget(self.naturezaPg)  # tela: naturezaProcesso - 1
+        self.stackedWidget.addWidget(self.tipoProcessoAdmPg)  # tela: tipos de processos admnistrativos - 2
+        self.stackedWidget.addWidget(self.tipoBeneficioConcPg)  # tela: tipos de benefícios Concessão -  3
+        self.stackedWidget.addWidget(self.tipoAtividadePg)  # tela: tipos de atividade Aposentadoria - 4
+        self.stackedWidget.addWidget(self.impressaoDocsPg)  # tela: tipos de geração de documentos - 5
 
         self.pbProxEtapa.clicked.connect(lambda: self.avaliaTrocaTela())
         self.pbVoltaEtapa.clicked.connect(lambda: self.avaliaTrocaTela(proxima=False))
+
+        self.pbarProgresso.hide()
+        self.frame.show()
 
         self.atualizaEtapa(EtapaEntrevista.infoPessoais, False)
         self.atualizaEtapa(EtapaEntrevista.infoProcessual, False)
@@ -74,14 +79,28 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         QtCore.pyqtSignal([MomentoEntrevista, Tipo] name='tela')
         :cvar
         """
+        if not self.clienteAtual:
+            self.loading(20)
+            self.showPopupAlerta("Para seguir para a próxima estapa da entrevista, é necessário definir um cliente.")
+            self.loading(100)
+            return False
         if proxima:
             if self.telaAtual == MomentoEntrevista.cadastro:
+
+                self.loading(20)
                 self.processoModelo.clienteId = self.clienteAtual.clienteId
+
+                self.loading(20)
                 self.clienteController.verificaDados()
+
+                self.loading(20)
                 self.daoCliente.atualizaCliente(self.clienteAtual)
+
+                self.loading(20)
                 self.sinais.sTrocaTelaEntrevista.emit([MomentoEntrevista.cadastro, None])
                 self.telaAtual = MomentoEntrevista.naturezaProcesso
                 self.atualizaEtapa(EtapaEntrevista.infoPessoais, completo=True)
+                self.loading(20)
 
             elif self.telaAtual == MomentoEntrevista.tipoBeneficio:
                 self.telaAtual = MomentoEntrevista.naturezaProcesso
@@ -90,15 +109,25 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 pass
 
             elif self.telaAtual == MomentoEntrevista.tipoAtividade:
+                self.loading(20)
                 self.processoModelo.subTipoApos = 0
 
+                self.loading(20)
                 self.processoModelo.dib = self.calculaDib()
+
+                self.loading(20)
                 self.processoModelo.der = self.calculaDer()
+
+                self.loading(10)
                 self.processoModelo.tempoContribuicao = self.calculaTempoContribuicao()
 
+                self.loading(10)
                 self.daoProcesso.insereProcesso(self.processoModelo)
+
+                self.loading(10)
                 self.impressaoDocsPg.atualizaInformacoes(self.processoModelo, self.clienteAtual)
 
+                self.loading(10)
                 self.sinais.sTrocaTelaEntrevista.emit([MomentoEntrevista.tipoAtividade, MomentoEntrevista.telaGeraDocs])
 
             else:
@@ -106,6 +135,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.sinais.sTrocaTelaEntrevista.emit([MomentoEntrevista.telaGeraDocs, MomentoEntrevista.cadastro])
 
         else:
+            self.loading(20)
             if self.telaAtual == MomentoEntrevista.naturezaProcesso:
                 self.sinais.sTrocaTelaEntrevista.emit([None, None])
                 self.telaAtual = MomentoEntrevista.cadastro
@@ -157,6 +187,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
         # O usuário está na wdgAtual sobre o tipo de processo
         elif wdgAtual == MomentoEntrevista.tipoProcesso:
+
             self.telaAtual = MomentoEntrevista.tipoProcesso
             if wdgFuturo == TipoProcesso.Concessao:
                 self.processoModelo.tipoProcesso = TipoProcesso.Concessao.value
@@ -178,6 +209,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
         # O usuário está na wdgAtual sobre o tipo de benefícios
         elif wdgAtual == MomentoEntrevista.tipoBeneficio:
+
             self.telaAtual = MomentoEntrevista.tipoBeneficio
             self.pbProxEtapa.setText('Concluir')
 
@@ -274,6 +306,28 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             if self.processoModelo.tipoProcesso == TipoProcesso.Concessao.value:
                 tempoMeses = self.daoCalculos.getCount(self.clienteAtual.clienteId)
                 return tempoMeses
+
+    def showPopupAlerta(self, mensagem, titulo='Atenção!'):
+        dialogPopup = QMessageBox()
+        dialogPopup.setWindowTitle(titulo)
+        dialogPopup.setText(mensagem)
+        dialogPopup.setIcon(QMessageBox.Warning)
+        dialogPopup.setStandardButtons(QMessageBox.Ok)
+
+        close = dialogPopup.exec_()
+        
+    def loading(self, value: int):
+        self.pbarProgresso.show()
+        valor: int = value + self.pbarProgresso.value()
+        self.pbarProgresso.setValue(valor)
+
+        if valor >= 100:
+            self.timer.start(500)
+            
+    def escondeLoading(self):
+        self.pbarProgresso.hide()
+        self.pbarProgresso.setValue(0)
+        self.timer.stop()
 
 
 if __name__ == '__main__':

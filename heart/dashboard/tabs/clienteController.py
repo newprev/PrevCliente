@@ -491,8 +491,13 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                 button = QPushButton(listAlfabeto[i])
                 button.setFixedSize(20, 20)
                 button.setStyleSheet(pbStrStyleSheet)
-                # button.clicked.connect(lambda state, i=i: self.filtroAZ(i))
+                button.clicked.connect(lambda state, i=i: self.filtroAZ(i))
                 self.hlFlitroAlfabetico.addWidget(button)
+
+    def filtroAZ(self, estado, *args):
+        print(f' --------------------------> filtroAZ')
+        print(f"estado: {estado}")
+        print(f"args: {args}")
 
     def limpaTudo(self):
         self.lePrimeiroNome.clear()
@@ -568,13 +573,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                 telefoneCliente: str = self.tblClientes.item(linha, 3).text()
                 if telefoneCliente.find(telefoneBuscado) == -1:
                     self.tblClientes.hideRow(linha)
-
-        # if self.leBuscaRgcpf.text() != '':
-        #     rgcpfBuscado: str = self.leBuscaRgcpf.text()
-        #     for linha in range(self.tblClientes.rowCount()):
-        #         rgcpfCliente: str = self.tblClientes.item(linha, 2).text()
-        #         if rgcpfCliente.find(rgcpfBuscado) == -1:
-        #             self.tblClientes.hideRow(linha)
 
         if self.cbxTpBeneficio.currentText() != '':
             beneficioBuscado: str = self.cbxTpBeneficio.currentText().lower()

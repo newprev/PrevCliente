@@ -200,7 +200,7 @@ class DocEntrevista:
     def geraDosFatos(self):
 
         self.dictInfo['idadeCliente'] = self.cliente.idade
-        self.dictInfo['tempoContribuicao'] = int(round(self.processo.tempoContribuicao/12, 0))
+        self.dictInfo['tempoContribuicao'] = self.processo.tempoContribuicao/12
         self.dictInfo['pontosCliente'] = int(round(self.processo.tempoContribuicao/12, 0)) + self.cliente.idade
 
     def geraDosFundJurid(self):

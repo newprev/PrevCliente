@@ -304,6 +304,8 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
     def calculaTempoContribuicao(self):
         if self.processoModelo.natureza == NaturezaProcesso.administrativo.value:
             if self.processoModelo.tipoProcesso == TipoProcesso.Concessao.value:
+                print(' -------------------------------------------------> ')
+                print(self.daoCalculos.getRemECon(self.clienteAtual.clienteId)[0])
                 tempoMeses = self.daoCalculos.getCount(self.clienteAtual.clienteId)
                 return tempoMeses
 

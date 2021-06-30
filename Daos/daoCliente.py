@@ -147,7 +147,7 @@ class DaoCliente:
                     raise Warning(f'Erro SQL - cadastroClienteComCnis({self.config.tblCnisCabecalhos}) <INSERT>')
 
             # TODO: TERMINAR DE INSERIR CABEÇALHOS DE BENEFÍCIOS
-            strComando = self.insertSqlCabecalhosBeneficios(dictAllInfo['cabecalho'], clienteId)ASDFSADF
+            strComando = self.insertSqlCabecalhosBeneficios(dictAllInfo['cabecalhoBeneficio'], clienteId)
             if strComando != '':
                 try:
                     cursor.execute(strComando)
@@ -261,7 +261,7 @@ class DaoCliente:
 
     def insertSqlCabecalhosBeneficios(self, cabecalhos: dict, clienteId: int):
         strComando = ''
-        if len(cabecalhos['Seq']) > 0 and clienteId != None and clienteId != 0:
+        if len(cabecalhos['Seq']) > 0 and clienteId is not None and clienteId != 0:
             strComando = f"""
                         INSERT INTO {self.config.tblCnisCabecalhos}
                             (
@@ -289,7 +289,7 @@ class DaoCliente:
 
     def insertSqlRemuneracoes(self, remuneracoes: dict, clienteId: int):
         strComando = ''
-        if len(remuneracoes['Seq']) > 0 and clienteId != None and clienteId != 0:
+        if len(remuneracoes['Seq']) > 0 and clienteId is None and clienteId != 0:
             strComando = f"""
                         INSERT INTO {self.config.tblCnisRemuneracoes}
                             (

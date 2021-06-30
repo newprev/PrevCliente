@@ -122,7 +122,6 @@ class DaoTelAfins:
             self.db.commit()
             self.disconectBD(cursor)
 
-
     def disconectBD(self, cursor):
         cursor.close()
         # self.db.close()

@@ -44,6 +44,13 @@ class Ui_mwInsereContrib(object):
 "    background-color: transparent;\n"
 "}\n"
 "\n"
+"#lbInfoQtdCont{\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    \n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
 "#lbNit, #lbQtdRem, \n"
 "#lbQtdCont, #lbNomeCompleto {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
@@ -69,6 +76,22 @@ class Ui_mwInsereContrib(object):
 "#rbBeneficio, #rbContribuicao, #rbRemuneracao{\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
+"}\n"
+"\n"
+"#pbInfoIndicadores {    \n"
+"    background-image: url(:/infoIndicadores/information-black-16.png);\n"
+"    background-color: transparent;\n"
+"    background-repeat: no-repeat;\n"
+"    background-position: center;\n"
+"}\n"
+"\n"
+"#pbInfoIndicadores:hover {    \n"
+"    background-image: url(:/infoIndicadores/information-white-16.png);\n"
+"    background-color: rgb(46, 52, 54);\n"
+"    background-repeat: no-repeat;\n"
+"    background-position: center;\n"
+"\n"
+"    border-radius: 9px;\n"
 "}\n"
 "\n"
 "\n"
@@ -111,12 +134,8 @@ class Ui_mwInsereContrib(object):
         self.lbInfoNit = QtWidgets.QLabel(self.frInfo)
         self.lbInfoNit.setGeometry(QtCore.QRect(10, 80, 31, 17))
         self.lbInfoNit.setObjectName("lbInfoNit")
-        self.lbInfoQtdRem = QtWidgets.QLabel(self.frInfo)
-        self.lbInfoQtdRem.setGeometry(QtCore.QRect(270, 20, 111, 31))
-        self.lbInfoQtdRem.setAlignment(QtCore.Qt.AlignCenter)
-        self.lbInfoQtdRem.setObjectName("lbInfoQtdRem")
         self.lbInfoQtdCont = QtWidgets.QLabel(self.frInfo)
-        self.lbInfoQtdCont.setGeometry(QtCore.QRect(270, 80, 101, 41))
+        self.lbInfoQtdCont.setGeometry(QtCore.QRect(340, 20, 111, 41))
         self.lbInfoQtdCont.setAlignment(QtCore.Qt.AlignCenter)
         self.lbInfoQtdCont.setObjectName("lbInfoQtdCont")
         self.lbNomeCompleto = QtWidgets.QLabel(self.frInfo)
@@ -128,13 +147,10 @@ class Ui_mwInsereContrib(object):
         self.lbNit.setText("")
         self.lbNit.setObjectName("lbNit")
         self.lbQtdRem = QtWidgets.QLabel(self.frInfo)
-        self.lbQtdRem.setGeometry(QtCore.QRect(400, 30, 64, 17))
+        self.lbQtdRem.setGeometry(QtCore.QRect(340, 60, 111, 20))
         self.lbQtdRem.setText("")
+        self.lbQtdRem.setAlignment(QtCore.Qt.AlignCenter)
         self.lbQtdRem.setObjectName("lbQtdRem")
-        self.lbQtdCont = QtWidgets.QLabel(self.frInfo)
-        self.lbQtdCont.setGeometry(QtCore.QRect(400, 90, 64, 17))
-        self.lbQtdCont.setText("")
-        self.lbQtdCont.setObjectName("lbQtdCont")
         self.lbTitulo = QtWidgets.QLabel(self.frMain)
         self.lbTitulo.setGeometry(QtCore.QRect(30, 10, 591, 31))
         self.lbTitulo.setObjectName("lbTitulo")
@@ -145,21 +161,18 @@ class Ui_mwInsereContrib(object):
         self.lbInfoPessoal.setGeometry(QtCore.QRect(40, 90, 171, 17))
         self.lbInfoPessoal.setObjectName("lbInfoPessoal")
         self.frTipoDado = QtWidgets.QFrame(self.frMain)
-        self.frTipoDado.setGeometry(QtCore.QRect(540, 110, 161, 121))
+        self.frTipoDado.setGeometry(QtCore.QRect(540, 120, 161, 81))
         self.frTipoDado.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frTipoDado.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frTipoDado.setObjectName("frTipoDado")
         self.rbBeneficio = QtWidgets.QRadioButton(self.frTipoDado)
-        self.rbBeneficio.setGeometry(QtCore.QRect(20, 30, 106, 23))
+        self.rbBeneficio.setGeometry(QtCore.QRect(20, 20, 106, 23))
         self.rbBeneficio.setObjectName("rbBeneficio")
-        self.rbRemuneracao = QtWidgets.QRadioButton(self.frTipoDado)
-        self.rbRemuneracao.setGeometry(QtCore.QRect(20, 70, 121, 23))
-        self.rbRemuneracao.setObjectName("rbRemuneracao")
         self.rbContribuicao = QtWidgets.QRadioButton(self.frTipoDado)
-        self.rbContribuicao.setGeometry(QtCore.QRect(20, 50, 106, 23))
+        self.rbContribuicao.setGeometry(QtCore.QRect(20, 40, 106, 23))
         self.rbContribuicao.setObjectName("rbContribuicao")
         self.lbInfoTipoDado = QtWidgets.QLabel(self.frMain)
-        self.lbInfoTipoDado.setGeometry(QtCore.QRect(550, 100, 111, 17))
+        self.lbInfoTipoDado.setGeometry(QtCore.QRect(550, 110, 111, 17))
         self.lbInfoTipoDado.setObjectName("lbInfoTipoDado")
         self.frInfoRemCont = QtWidgets.QFrame(self.frMain)
         self.frInfoRemCont.setGeometry(QtCore.QRect(20, 270, 351, 221))
@@ -167,33 +180,41 @@ class Ui_mwInsereContrib(object):
         self.frInfoRemCont.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frInfoRemCont.setObjectName("frInfoRemCont")
         self.label = QtWidgets.QLabel(self.frInfoRemCont)
-        self.label.setGeometry(QtCore.QRect(210, 40, 101, 17))
+        self.label.setGeometry(QtCore.QRect(230, 40, 101, 17))
         self.label.setObjectName("label")
-        self.lbRemCont = QtWidgets.QLabel(self.frInfoRemCont)
-        self.lbRemCont.setGeometry(QtCore.QRect(10, 40, 101, 17))
-        self.lbRemCont.setObjectName("lbRemCont")
+        self.lbSalRemuneracao = QtWidgets.QLabel(self.frInfoRemCont)
+        self.lbSalRemuneracao.setGeometry(QtCore.QRect(10, 40, 171, 17))
+        self.lbSalRemuneracao.setObjectName("lbSalRemuneracao")
         self.leRemuneracao = QtWidgets.QLineEdit(self.frInfoRemCont)
-        self.leRemuneracao.setGeometry(QtCore.QRect(82, 60, 101, 25))
+        self.leRemuneracao.setGeometry(QtCore.QRect(100, 60, 101, 25))
         self.leRemuneracao.setObjectName("leRemuneracao")
         self.lbInfoDataFim = QtWidgets.QLabel(self.frInfoRemCont)
-        self.lbInfoDataFim.setGeometry(QtCore.QRect(210, 120, 131, 17))
+        self.lbInfoDataFim.setGeometry(QtCore.QRect(230, 120, 111, 17))
         self.lbInfoDataFim.setObjectName("lbInfoDataFim")
         self.label_4 = QtWidgets.QLabel(self.frInfoRemCont)
         self.label_4.setGeometry(QtCore.QRect(10, 120, 91, 17))
         self.label_4.setObjectName("label_4")
         self.dtCompetencia = QtWidgets.QDateEdit(self.frInfoRemCont)
-        self.dtCompetencia.setGeometry(QtCore.QRect(210, 60, 110, 26))
+        self.dtCompetencia.setGeometry(QtCore.QRect(230, 60, 110, 26))
+        self.dtCompetencia.setCalendarPopup(True)
         self.dtCompetencia.setObjectName("dtCompetencia")
         self.dtFimContRem = QtWidgets.QDateEdit(self.frInfoRemCont)
-        self.dtFimContRem.setGeometry(QtCore.QRect(210, 140, 110, 26))
+        self.dtFimContRem.setGeometry(QtCore.QRect(230, 140, 110, 26))
+        self.dtFimContRem.setCalendarPopup(True)
         self.dtFimContRem.setObjectName("dtFimContRem")
         self.cbxIndicadores = QtWidgets.QComboBox(self.frInfoRemCont)
-        self.cbxIndicadores.setGeometry(QtCore.QRect(10, 140, 171, 25))
+        self.cbxIndicadores.setGeometry(QtCore.QRect(10, 140, 191, 25))
         self.cbxIndicadores.setObjectName("cbxIndicadores")
         self.cbxSinal = QtWidgets.QComboBox(self.frInfoRemCont)
-        self.cbxSinal.setGeometry(QtCore.QRect(10, 60, 61, 25))
+        self.cbxSinal.setGeometry(QtCore.QRect(10, 60, 81, 25))
         self.cbxSinal.setIconSize(QtCore.QSize(16, 16))
         self.cbxSinal.setObjectName("cbxSinal")
+        self.pbInfoIndicadores = QtWidgets.QPushButton(self.frInfoRemCont)
+        self.pbInfoIndicadores.setGeometry(QtCore.QRect(90, 120, 18, 18))
+        self.pbInfoIndicadores.setMinimumSize(QtCore.QSize(18, 18))
+        self.pbInfoIndicadores.setMaximumSize(QtCore.QSize(18, 18))
+        self.pbInfoIndicadores.setText("")
+        self.pbInfoIndicadores.setObjectName("pbInfoIndicadores")
         self.lbInfoRemCont = QtWidgets.QLabel(self.frMain)
         self.lbInfoRemCont.setGeometry(QtCore.QRect(40, 260, 221, 17))
         self.lbInfoRemCont.setObjectName("lbInfoRemCont")
@@ -219,9 +240,12 @@ class Ui_mwInsereContrib(object):
         self.label_8.setObjectName("label_8")
         self.dtInicio = QtWidgets.QDateEdit(self.frInfoBeneficio)
         self.dtInicio.setGeometry(QtCore.QRect(220, 50, 110, 26))
+        self.dtInicio.setProperty("showGroupSeparator", False)
+        self.dtInicio.setCalendarPopup(True)
         self.dtInicio.setObjectName("dtInicio")
         self.dtFim = QtWidgets.QDateEdit(self.frInfoBeneficio)
         self.dtFim.setGeometry(QtCore.QRect(220, 110, 110, 26))
+        self.dtFim.setCalendarPopup(True)
         self.dtFim.setObjectName("dtFim")
         self.cbxSituacao = QtWidgets.QComboBox(self.frInfoBeneficio)
         self.cbxSituacao.setGeometry(QtCore.QRect(20, 110, 111, 25))
@@ -275,19 +299,16 @@ class Ui_mwInsereContrib(object):
         mwInsereContrib.setWindowTitle(_translate("mwInsereContrib", "MainWindow"))
         self.lbInfoNomeCompleto.setText(_translate("mwInsereContrib", "Nome:"))
         self.lbInfoNit.setText(_translate("mwInsereContrib", "NIT:"))
-        self.lbInfoQtdRem.setText(_translate("mwInsereContrib", "Quantidade de \n"
-"Remunerações"))
         self.lbInfoQtdCont.setText(_translate("mwInsereContrib", "Quantidade de \n"
 "Contribuições"))
         self.lbTitulo.setText(_translate("mwInsereContrib", "Inserir Contribuição/Remuneração/Benefício"))
-        self.lbSubtitulo.setText(_translate("mwInsereContrib", "Insira as informações de uma determinada Contribuição, Remuneração ou Benefício"))
+        self.lbSubtitulo.setText(_translate("mwInsereContrib", "Insira as informações de uma determinada Contribuição ou Benefício"))
         self.lbInfoPessoal.setText(_translate("mwInsereContrib", "  Informações do cliente"))
         self.rbBeneficio.setText(_translate("mwInsereContrib", "Benefício"))
-        self.rbRemuneracao.setText(_translate("mwInsereContrib", "Remuneração"))
         self.rbContribuicao.setText(_translate("mwInsereContrib", "Contribuição"))
         self.lbInfoTipoDado.setText(_translate("mwInsereContrib", "  Tipo de dado"))
-        self.label.setText(_translate("mwInsereContrib", "Competência"))
-        self.lbRemCont.setText(_translate("mwInsereContrib", "Remuneração"))
+        self.label.setText(_translate("mwInsereContrib", "Data Início"))
+        self.lbSalRemuneracao.setText(_translate("mwInsereContrib", "Salário de contribuição"))
         self.lbInfoDataFim.setText(_translate("mwInsereContrib", "Data Fim"))
         self.label_4.setText(_translate("mwInsereContrib", "Indicadores"))
         self.lbInfoRemCont.setText(_translate("mwInsereContrib", "  Remuneração / Contribuição"))
@@ -299,6 +320,7 @@ class Ui_mwInsereContrib(object):
         self.label_9.setText(_translate("mwInsereContrib", "Espécie"))
         self.pbConfirmar.setText(_translate("mwInsereContrib", "Confirmar"))
         self.pbCancelar.setText(_translate("mwInsereContrib", "Cancelar"))
+import Resources.insereContrib
 
 
 if __name__ == "__main__":

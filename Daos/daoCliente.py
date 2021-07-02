@@ -175,7 +175,7 @@ class DaoCliente:
 
     def insertSqlBenecifio(self, beneficio: dict, clienteId: int) -> str:
         strComando = ''
-        if len(beneficio['Seq']) > 0 and clienteId != None and clienteId != 0:
+        if len(beneficio['Seq']) > 0 and clienteId is not None and clienteId != 0:
             strComando = f"""
                 INSERT INTO {self.config.tblCnisBeneficios}
                     (
@@ -289,7 +289,7 @@ class DaoCliente:
 
     def insertSqlRemuneracoes(self, remuneracoes: dict, clienteId: int):
         strComando = ''
-        if len(remuneracoes['Seq']) > 0 and clienteId is None and clienteId != 0:
+        if len(remuneracoes['Seq']) > 0 and clienteId is not None and clienteId != 0:
             strComando = f"""
                         INSERT INTO {self.config.tblCnisRemuneracoes}
                             (

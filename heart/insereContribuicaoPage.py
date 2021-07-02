@@ -35,7 +35,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
 
         self.rbBeneficio.setChecked(True)
         self.rbContribuicao.clicked.connect(self.atualizaFoco)
-        self.rbRemuneracao.clicked.connect(self.atualizaFoco)
+        # self.rbRemuneracao.clicked.connect(self.atualizaFoco)
         self.rbBeneficio.clicked.connect(self.atualizaFoco)
 
         self.pbarSistema.hide()
@@ -141,7 +141,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         qtdRemuneracoes = self.daoCalculos.contaRemuneracoes(self.cliente.clienteId)[0]
         qtdContribuicoes = self.daoCalculos.contaContribuicoes(self.cliente.clienteId)[0]
 
-        self.lbQtdCont.setText(str(qtdContribuicoes))
+        # self.lbQtdCont.setText(str(qtdContribuicoes))
         self.lbQtdRem.setText(str(qtdRemuneracoes))
 
     def atualizaFoco(self):
@@ -162,7 +162,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         else:
             if self.rbContribuicao.isChecked():
                 self.lbInfoDataFim.setText('Data de Pagamento')
-                self.lbRemCont.setText('Contribuição')
+                # self.lbRemCont.setText('Contribuição')
                 self.dtFimContRem.setDisabled(False)
             else:
                 self.lbInfoDataFim.setText('Data Fim')

@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import QWidget, QFrame, QCheckBox
 from PyQt5.QtCore import Qt
 from Telas.pgQuizAposentadoria import Ui_wdgQuizAposentadoria
 from heart.dashboard.tabs.tabCalculos import TabCalculos
-from heart.insereContribuicaoPage import InsereContribuicaoPage
 from heart.sinaisCustomizados import Sinais
 from modelos.clienteModelo import ClienteModelo
 from Daos.daoCliente import DaoCliente

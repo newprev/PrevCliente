@@ -504,6 +504,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                 self.tblClientes.hideRow(linha)
 
     def limpaTudo(self):
+        # self.cliente = ClienteModelo()
         self.lePrimeiroNome.clear()
         self.leSobrenome.clear()
         self.leRg.clear()

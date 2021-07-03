@@ -31,9 +31,23 @@
 	font-size: 24px;
 }
 
-#lbSubtitulo, #lbSiglaCbx, #lbIndicadorDesc {
+#lbSubtitulo, #lbSiglaCbx {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
+	
+	background-color: transparent;
+}
+
+ #lbDesc {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	
+	background-color: transparent;
+}
+
+#lbResumo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font: bold 14px;
 	
 	background-color: transparent;
 }</string>
@@ -164,7 +178,23 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="lbIndicadorDesc">
+            <widget class="QLabel" name="lbResumo">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>36</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbDescricao">
              <property name="text">
               <string>TextLabel</string>
              </property>

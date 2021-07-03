@@ -16,7 +16,7 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
         self.indicadores = []
 
         self.lbSigla.setText('')
-        self.lbIndicadorDesc.setText('')
+        self.lbDescricao.setText('')
 
         self.cbxIndicadores.currentIndexChanged.connect(self.alteraIndicador)
 
@@ -24,7 +24,7 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
         self.carregaComboBox()
 
     def carregaComboBox(self):
-        listaSiglas = (indicador.sigla for indicador in self.indicadores)
+        listaSiglas = (indicador.indicadorId for indicador in self.indicadores)
         self.cbxIndicadores.addItems(listaSiglas)
 
     def carregaIndicadores(self):
@@ -32,10 +32,11 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
 
     def alteraIndicador(self):
         indicadorAtual: IndicadorModelo = self.returnIndicador(self.cbxIndicadores.currentText())
-        self.lbSigla.setText(indicadorAtual.sigla)
-        self.lbIndicadorDesc.setText(indicadorAtual.descricao)
+        self.lbSigla.setText(indicadorAtual.indicadorId)
+        self.lbDescricao.setText(indicadorAtual.descricao)
+        self.lbResumo.setText(indicadorAtual.resumo)
 
-    def returnIndicador(self, sigla: str):
+    def returnIndicador(self, indicadorId: str):
         for indicador in self.indicadores:
-            if indicador.sigla == sigla:
+            if indicador.indicadorId == indicadorId:
                 return indicador

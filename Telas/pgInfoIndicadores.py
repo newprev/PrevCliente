@@ -32,9 +32,23 @@ class Ui_mwInfoIndicadores(object):
 "    font-size: 24px;\n"
 "}\n"
 "\n"
-"#lbSubtitulo, #lbSiglaCbx, #lbIndicadorDesc {\n"
+"#lbSubtitulo, #lbSiglaCbx {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
+"    \n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+" #lbDesc {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    \n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"#lbResumo {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font: bold 14px;\n"
 "    \n"
 "    background-color: transparent;\n"
 "}")
@@ -83,11 +97,16 @@ class Ui_mwInfoIndicadores(object):
         self.lbSigla.setMaximumSize(QtCore.QSize(16777215, 40))
         self.lbSigla.setObjectName("lbSigla")
         self.verticalLayout_3.addWidget(self.lbSigla)
-        self.lbIndicadorDesc = QtWidgets.QLabel(self.frDescricao)
-        self.lbIndicadorDesc.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
-        self.lbIndicadorDesc.setWordWrap(True)
-        self.lbIndicadorDesc.setObjectName("lbIndicadorDesc")
-        self.verticalLayout_3.addWidget(self.lbIndicadorDesc)
+        self.lbResumo = QtWidgets.QLabel(self.frDescricao)
+        self.lbResumo.setMaximumSize(QtCore.QSize(16777215, 36))
+        self.lbResumo.setWordWrap(True)
+        self.lbResumo.setObjectName("lbResumo")
+        self.verticalLayout_3.addWidget(self.lbResumo)
+        self.lbDescricao = QtWidgets.QLabel(self.frDescricao)
+        self.lbDescricao.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.lbDescricao.setWordWrap(True)
+        self.lbDescricao.setObjectName("lbDescricao")
+        self.verticalLayout_3.addWidget(self.lbDescricao)
         self.verticalLayout_2.addWidget(self.frConteudo)
         self.verticalLayout.addWidget(self.frMain)
         mwInfoIndicadores.setCentralWidget(self.wdgMain)
@@ -102,7 +121,8 @@ class Ui_mwInfoIndicadores(object):
         self.lbSubtitulo.setText(_translate("mwInfoIndicadores", "Encontre todas as informações dos indicadores do CNIS"))
         self.lbSiglaCbx.setText(_translate("mwInfoIndicadores", "Siglas dos indicadores"))
         self.lbSigla.setText(_translate("mwInfoIndicadores", "TextLabel"))
-        self.lbIndicadorDesc.setText(_translate("mwInfoIndicadores", "TextLabel"))
+        self.lbResumo.setText(_translate("mwInfoIndicadores", "TextLabel"))
+        self.lbDescricao.setText(_translate("mwInfoIndicadores", "TextLabel"))
 
 
 if __name__ == "__main__":

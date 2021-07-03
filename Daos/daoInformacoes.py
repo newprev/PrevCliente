@@ -27,7 +27,8 @@ class DaoInformacoes:
 
         strComando = f"""
             SELECT 
-                indicadoresId, indicadoresId, descricao
+                indicadorId, resumo, descricao,
+                fonte, dataUltAlt
             FROM
                 {self.tabelas.tblIndicadores}
              """

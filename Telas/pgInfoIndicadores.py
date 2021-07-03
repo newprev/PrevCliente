@@ -27,12 +27,12 @@ class Ui_mwInfoIndicadores(object):
 "}\n"
 "\n"
 "/* ----------------------------------------------- Label ----------------------------------------------- */\n"
-"#lbTitulo {\n"
+"#lbTitulo, #lbSigla {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 24px;\n"
 "}\n"
 "\n"
-"#lbSubtitulo, #lbSiglaCbx {\n"
+"#lbSubtitulo, #lbSiglaCbx, #lbIndicadorDesc {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    \n"
@@ -84,6 +84,8 @@ class Ui_mwInfoIndicadores(object):
         self.lbSigla.setObjectName("lbSigla")
         self.verticalLayout_3.addWidget(self.lbSigla)
         self.lbIndicadorDesc = QtWidgets.QLabel(self.frDescricao)
+        self.lbIndicadorDesc.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.lbIndicadorDesc.setWordWrap(True)
         self.lbIndicadorDesc.setObjectName("lbIndicadorDesc")
         self.verticalLayout_3.addWidget(self.lbIndicadorDesc)
         self.verticalLayout_2.addWidget(self.frConteudo)

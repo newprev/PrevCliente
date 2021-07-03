@@ -121,9 +121,9 @@ class Main(Ui_MainWindow, QMainWindow):
 
         self.lbInfo.setText('CRIANDO TABELA DE INDICADORES...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreateIndicadores, nomeTabela='indicadores'):
-            self.progresso(add=2)
-            self.daoConfigs.verificaTblIndicadores()
-            self.progresso(add=7)
+            # self.progresso(add=2)
+            # self.daoConfigs.verificaTblIndicadores()
+            self.progresso(add=9)
         else:
             return False
 

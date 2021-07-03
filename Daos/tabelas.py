@@ -301,12 +301,20 @@ class TabelasConfig:
     @property
     def sqlCreateIndicadores(self):
         if self.tipoBanco != TiposConexoes.sqlite:
-            cabecalho = 'indicadoresId VARCHAR(20) NOT NULL,'
+            cabecalho = """
+                indicadorId VARCHAR(20) NOT NULL,
+                resumo VARCHAR(300) NOT NULL,
+                fonte VARCHAR(300) NOT NULL,
+                dataUltAlt DATETIME NOT NULL"""
             bottom = """,
             PRIMARY KEY (indicadoresId)
         );"""
         else:
-            cabecalho = 'indicadoresId VARCHAR(20) PRIMARY KEY,'
+            cabecalho = """
+                indicadorId VARCHAR(20) PRIMARY KEY,
+                resumo VARCHAR(300) NOT NULL,
+                fonte VARCHAR(300) NOT NULL,
+                dataUltAlt DATETIME NOT NULL,"""
             bottom = f""");"""
         return f"""
         CREATE TABLE IF NOT EXISTS {self.tblIndicadores}(

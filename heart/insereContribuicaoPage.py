@@ -7,6 +7,7 @@ from Daos.daoCalculos import DaoCalculos
 from Daos.daoFerramentas import DaoFerramentas
 from Telas.insereContrib import Ui_mwInsereContrib
 from heart.localStyleSheet.insereContribuicao import habilita
+from heart.informacoesTelas.indicadoresTela import IndicadoresController
 from helpers import dictIndicadores, dictEspecies, mascaraNit, strToFloat, situacaoBeneficio, strToDatetime
 from modelos.beneficiosModelo import BeneficiosModelo
 from modelos.clienteModelo import ClienteModelo
@@ -29,6 +30,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.contribuicao = ContribuicoesModelo()
         self.beneficio = BeneficiosModelo()
         self.listaConvMon: list
+        self.indicadoresPg = IndicadoresController(parent=self, db=db)
 
         self.lbNomeCompleto.setText(f"{self.cliente.nomeCliente} {self.cliente.sobrenomeCliente}")
         self.lbNit.setText(mascaraNit(int(self.cliente.nit)))
@@ -42,6 +44,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.pbarSistema.setValue(0)
         self.pbConfirmar.clicked.connect(self.trataInsereInfo)
         self.pbCancelar.clicked.connect(self.sairAtividade)
+        self.pbInfoIndicadores.clicked.connect(self.openInfoIndicadores)
 
         self.dtCompetencia.dateChanged.connect(lambda: self.getInfo(info='dtCompetencia'))
         self.dtFim.dateChanged.connect(lambda: self.getInfo(info='dtFim'))
@@ -295,6 +298,9 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.pbarSistema.setValue(0)
         self.timer.stop()
         self.limpaTudo()
+
+    def openInfoIndicadores(self):
+        self.indicadoresPg.show()
 
     def mensagemSistema(self, mensagem: str):
         self.lbInfoSistema.setText(mensagem)

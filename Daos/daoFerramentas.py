@@ -56,7 +56,7 @@ class DaoFerramentas:
             tetosPrevId = cursor.lastrowid
             logPrioridade(f'INSERT<insereDictListaTetos>___________________{self.tabelas.tblTetosPrev} ({tetosPrevId})', TipoEdicao.insert, Prioridade.saidaComun)
         except:
-            raise Warning(f'Erro SQL - atualizaTetos({self.config.banco}) <INSERT {self.tabelas.tblTetosPrev}>')
+            raise Warning(f'Erro SQL - insereDictListaTetos({self.config.banco}) <INSERT {self.tabelas.tblTetosPrev}>')
         finally:
             self.db.commit()
             self.disconectBD(cursor)

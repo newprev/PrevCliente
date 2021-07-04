@@ -13,6 +13,7 @@ from logs import logPrioridade, TipoEdicao, Prioridade
 from modelos.beneficiosModelo import BeneficiosModelo
 from modelos.contribuicoesModelo import ContribuicoesModelo
 from modelos.remuneracaoModelo import RemuneracoesModelo
+from modelos.cnisCabecalhoModelo import CabecalhoModelo
 
 
 class DaoCalculos:
@@ -20,6 +21,14 @@ class DaoCalculos:
     def __init__(self, db: connections=None):
         self.db = db
         self.config = TabelasConfig()
+        # self.cacheLogin = CacheLogin()
+        # self.cacheEscritorio = CacheEscritorio()
+        # self.advogado: AdvogadoModelo = self.cacheLogin.carregarCache()
+        # self.escritorio: EscritorioModelo = self.cacheEscritorio.carregarCache()
+        # if not self.advogado:
+        #     self.advogado = self.cacheLogin.carregarCacheTemporario()
+        # if not self.escritorio:
+        #     self.escritorio = self.cacheEscritorio.carregarCacheTemporario()
 
     def buscaContribuicaoPorId(self, contribuicaoId: int):
 
@@ -171,6 +180,40 @@ class DaoCalculos:
         finally:
             self.disconectBD(cursor)
 
+    def buscaCabecalhosClienteId(self, clienteId: int):
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""
+            SELECT
+                cabecalhosId, clienteId, seq, 
+                nit, nb, cdEmp,
+                nomeEmp, dataInicio, dataFim,
+                tipoVinculo, orgVinculo, especie,
+                indicadores, ultRem, dadoOrigem,
+                situacao, dataCadastro, dataUltAlt
+            FROM
+                {self.config.tblCnisCabecalhos}
+            WHERE
+                clienteId = {clienteId}               
+        """
+
+        try:
+            cursor.execute(strComando)
+            logPrioridade(f'SELECT<buscaCabecalhosClienteId>___________________{self.config.tblCnisCabecalhos}', TipoEdicao.select, Prioridade.saidaComun)
+            listaCabecalhos = (CabecalhoModelo().fromList(cabecalho) for cabecalho in cursor.fetchall())
+            return listaCabecalhos
+        except Exception as erro:
+            print(f'buscaCabecalhosClienteId ({type(erro)}) - {erro}')
+            logPrioridade(f'Erro SQL - buscaCabecalhosClienteId {self.config.tblCnisCabecalhos}', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - buscaCabecalhosClienteId {self.config.tblCnisCabecalhos} <SELECT>')
+        finally:
+            self.disconectBD(cursor)
+
     def getBeneficiosPor(self, clienteId: int) -> list:
 
         if not isinstance(self.db, sqlite3.Connection):
@@ -269,7 +312,6 @@ class DaoCalculos:
                 ) total;"""
 
         try:
-            print(strComando)
             cursor.execute(strComando)
             logPrioridade(f'SELECT<getCount>___________________{listaTabelas}', TipoEdicao.select, Prioridade.saidaComun)
             return cursor.fetchone()[0]

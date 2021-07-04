@@ -179,7 +179,7 @@ class TabelasConfig:
             situacaoId INT NOT NULL DEFAULT 1,
             tempoContribuicao INT NULL, 
             dib DATETIME NULL,
-            deb DATETIME NULL,
+            der DATETIME NULL,
             dataInicio DATETIME NULL,
             dataFim DATETIME NULL,
             incidenteProcessual INT NULL,
@@ -281,14 +281,18 @@ class TabelasConfig:
             clienteId INTEGER REFERENCES {self.tblCliente}(clienteId) ON DELETE CASCADE,
             seq INT NOT NULL,
             nit VARCHAR(14) NOT NULL,
-            cdEmp VARCHAR(18) NOT NULL,
-            nomeEmp VARCHAR(100) NOT NULL,
+            nb BIGINT NULL,
+            cdEmp VARCHAR(18) NULL,
+            nomeEmp VARCHAR(100) NULL,
             dataInicio DATETIME NOT NULL,
-            dataFim DATETIME NOT NULL,
-            tipoVinculo VARCHAR(30) NOT NULL,
-            indicadores VARCHAR(25) NOT NULL,
-            ultRem DATETIME NOT NULL,
+            dataFim DATETIME NULL,
+            tipoVinculo VARCHAR(30) NULL,
+            orgVinculo VARCHAR(30) NULL,
+            especie VARCHAR(70) NULL,
+            indicadores VARCHAR(25) NULL,
+            ultRem DATETIME NULL,
             dadoOrigem VARCHAR(15) NOT NULL,
+            situacao VARCHAR(20) NULL,
             dataCadastro DATETIME NOT NULL,
             dataUltAlt DATETIME NOT NULL{bottom}
         """
@@ -297,12 +301,20 @@ class TabelasConfig:
     @property
     def sqlCreateIndicadores(self):
         if self.tipoBanco != TiposConexoes.sqlite:
-            cabecalho = 'indicadoresId VARCHAR(20) NOT NULL,'
+            cabecalho = """
+                indicadorId VARCHAR(20) NOT NULL,
+                resumo VARCHAR(300) NOT NULL,
+                fonte VARCHAR(300) NOT NULL,
+                dataUltAlt DATETIME NOT NULL"""
             bottom = """,
             PRIMARY KEY (indicadoresId)
         );"""
         else:
-            cabecalho = 'indicadoresId VARCHAR(20) PRIMARY KEY,'
+            cabecalho = """
+                indicadorId VARCHAR(20) PRIMARY KEY,
+                resumo VARCHAR(300) NOT NULL,
+                fonte VARCHAR(300) NOT NULL,
+                dataUltAlt DATETIME NOT NULL,"""
             bottom = f""");"""
         return f"""
         CREATE TABLE IF NOT EXISTS {self.tblIndicadores}(

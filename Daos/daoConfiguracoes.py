@@ -43,7 +43,7 @@ class DaoConfiguracoes:
         strComando = f"""
             INSERT INTO {self.tabelas.tblIndicadores} 
                 (
-                    indicadoresId, descricao
+                    indicadorId, descricao
                 )
             VALUES """
 

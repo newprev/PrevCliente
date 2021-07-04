@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="infoIndicadores">
+    <file>information-white-16.png</file>
+    <file>information-black-16.png</file>
+  </qresource>
+</RCC>

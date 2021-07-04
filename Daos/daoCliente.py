@@ -146,6 +146,15 @@ class DaoCliente:
                 except:
                     raise Warning(f'Erro SQL - cadastroClienteComCnis({self.config.tblCnisCabecalhos}) <INSERT>')
 
+            # TODO: TERMINAR DE INSERIR CABEÇALHOS DE BENEFÍCIOS
+            strComando = self.insertSqlCabecalhosBeneficios(dictAllInfo['cabecalhoBeneficio'], clienteId)
+            if strComando != '':
+                try:
+                    cursor.execute(strComando)
+                    logPrioridade(f'INSERT<cadastroClienteComCnis>___________________{self.config.tblCnisCabecalhos}', TipoEdicao.insert, Prioridade.saidaComun)
+                except:
+                    raise Warning(f'Erro SQL - cadastroClienteComCnis({self.config.tblCnisCabecalhos}) <INSERT>')
+
             # Verifica se há remunerações para inserir no banco
             strComando = self.insertSqlRemuneracoes(dictAllInfo['remuneracoes'], clienteId)
             if strComando != '':
@@ -166,7 +175,7 @@ class DaoCliente:
 
     def insertSqlBenecifio(self, beneficio: dict, clienteId: int) -> str:
         strComando = ''
-        if len(beneficio['Seq']) > 0 and clienteId != None and clienteId != 0:
+        if len(beneficio['Seq']) > 0 and clienteId is not None and clienteId != 0:
             strComando = f"""
                 INSERT INTO {self.config.tblCnisBeneficios}
                     (
@@ -250,9 +259,37 @@ class DaoCliente:
         else:
             return ''
 
+    def insertSqlCabecalhosBeneficios(self, cabecalhos: dict, clienteId: int):
+        strComando = ''
+        if len(cabecalhos['Seq']) > 0 and clienteId is not None and clienteId != 0:
+            strComando = f"""
+                        INSERT INTO {self.config.tblCnisCabecalhos}
+                            (
+                                clienteId, seq, nit,
+                                nb, orgVinculo, especie, 
+                                dataInicio, dataFim, situacao, 
+                                dadoOrigem, dataUltAlt, dataCadastro
+                            )
+                        VALUES """
+
+            for i in range(0, len(cabecalhos['Seq'])):
+                if i != 0:
+                    strComando += ', '
+                strComando += f""" 
+                            (
+                                {clienteId}, {cabecalhos['Seq'][i]}, '{cabecalhos['nit'][i]}',
+                                '{cabecalhos['NB'][i]}', '{cabecalhos['orgVinculo'][i]}', '{cabecalhos['especie'][i]}',
+                                '{mascaraDataSql(cabecalhos['dataInicio'][i])}', '{mascaraDataSql(cabecalhos['dataFim'][i])}', '{cabecalhos['situacao'][i]}',
+                                'CNIS', '{datetimeToSql(datetime.now())}', '{datetimeToSql(datetime.now())}'
+                            )"""
+
+            return strComando
+        else:
+            return ''
+
     def insertSqlRemuneracoes(self, remuneracoes: dict, clienteId: int):
         strComando = ''
-        if len(remuneracoes['Seq']) > 0 and clienteId != None and clienteId != 0:
+        if len(remuneracoes['Seq']) > 0 and clienteId is not None and clienteId != 0:
             strComando = f"""
                         INSERT INTO {self.config.tblCnisRemuneracoes}
                             (

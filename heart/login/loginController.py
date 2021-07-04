@@ -9,6 +9,7 @@ from Daos.daoConfiguracoes import DaoConfiguracoes
 from Daos.daoFerramentas import DaoFerramentas
 from Daos.daoEscritorio import DaoEscritorio
 from Daos.daoAdvogado import DaoAdvogado
+from Daos.daoInformacoes import DaoInformacoes
 
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
@@ -28,6 +29,8 @@ from helpers import datetimeToSql, strToDatetime
 from newPrevEnums import TamanhoData
 
 from requests.exceptions import ConnectionError
+
+from repositorios.informacoesRepositorio import ApiInformacoes
 
 
 class LoginController(QMainWindow, Ui_mwLogin):
@@ -54,6 +57,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.daoConfigs = DaoConfiguracoes(self.db)
         self.daoEscritorio = DaoEscritorio(self.db)
         self.daoAdvogado = DaoAdvogado(self.db)
+        self.daoInformacoes = DaoInformacoes(self.db)
 
         self.dashboard: DashboardController = None
 
@@ -282,7 +286,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
         pathFile = os.path.join(os.getcwd(), '.sync', '.syncFile')
         syncJson = {
             'syncConvMon': datetimeToSql(datetime.datetime.now()),
-            'syncTetosPrev': datetimeToSql(datetime.datetime.now())
+            'syncTetosPrev': datetimeToSql(datetime.datetime.now()),
+            'syncIndicadores': datetimeToSql(datetime.datetime.now()),
         }
 
         if os.path.isfile(pathFile):
@@ -297,6 +302,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
                     dateSyncConvMon = strToDatetime(syncDict['syncConvMon'], TamanhoData.g)
                     dateSyncTetosPrev = strToDatetime(syncDict['syncTetosPrev'], TamanhoData.g)
+                    dateSyncIndicadores = strToDatetime(syncDict['syncIndicadores'], TamanhoData.g)
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
                         self.atualizaFerramentas(convMon=True)
@@ -308,10 +314,16 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     else:
                         syncJson['syncTetosPrev'] = syncDict['syncTetosPrev']
 
+                    if (datetime.datetime.now() - dateSyncIndicadores).days != 0:
+                        self.atualizaInformacoes(indicadores=True)
+                    else:
+                        syncJson['syncIndicadores'] = syncDict['syncIndicadores']
+
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
                 syncFile.write(json.dumps(syncJson))
         else:
             self.atualizaFerramentas(tetos=True, convMon=True)
+            self.atualizaInformacoes(indicadores=True)
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
                 syncFile.write(json.dumps(syncJson))
 
@@ -329,6 +341,17 @@ class LoginController(QMainWindow, Ui_mwLogin):
             convMonFromApi = ApiFerramentas().getAllConvMon()
             if daoFerramentas.contaQtdMoedas() < len(convMonFromApi):
                 daoFerramentas.insereListaConvMonModel(convMonFromApi)
+
+    def atualizaInformacoes(self, indicadores: bool = False):
+        daoFerramentas = DaoFerramentas(self.db)
+        indicadoresFromApi: list = []
+
+        print('Entrou aqui.......')
+
+        if indicadores:
+            indicadoresFromApi = ApiInformacoes().getAllIndicadores()
+            if self.daoInformacoes.contaIndicadores() < len(indicadoresFromApi):
+                self.daoInformacoes.insereListaIndicadores(indicadoresFromApi)
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

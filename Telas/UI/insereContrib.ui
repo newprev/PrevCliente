@@ -43,6 +43,13 @@
 	background-color: transparent;
 }
 
+#lbInfoQtdCont{
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	
+	background-color: transparent;
+}
+
 #lbNit, #lbQtdRem, 
 #lbQtdCont, #lbNomeCompleto {
 	font-family: &quot;TeX Gyre Adventor&quot;;
@@ -68,6 +75,22 @@
 #rbBeneficio, #rbContribuicao, #rbRemuneracao{
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
+}
+
+#pbInfoIndicadores {	
+	background-image: url(:/infoIndicadores/information-black-16.png);
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+#pbInfoIndicadores:hover {	
+	background-image: url(:/infoIndicadores/information-white-16.png);
+	background-color: rgb(46, 52, 54);
+	background-repeat: no-repeat;
+	background-position: center;
+
+	border-radius: 9px;
 }
 
 
@@ -154,29 +177,12 @@
          <string>NIT:</string>
         </property>
        </widget>
-       <widget class="QLabel" name="lbInfoQtdRem">
-        <property name="geometry">
-         <rect>
-          <x>270</x>
-          <y>20</y>
-          <width>111</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Quantidade de 
-Remunerações</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
        <widget class="QLabel" name="lbInfoQtdCont">
         <property name="geometry">
          <rect>
-          <x>270</x>
-          <y>80</y>
-          <width>101</width>
+          <x>340</x>
+          <y>20</y>
+          <width>111</width>
           <height>41</height>
          </rect>
         </property>
@@ -217,27 +223,17 @@ Contribuições</string>
        <widget class="QLabel" name="lbQtdRem">
         <property name="geometry">
          <rect>
-          <x>400</x>
-          <y>30</y>
-          <width>64</width>
-          <height>17</height>
+          <x>340</x>
+          <y>60</y>
+          <width>111</width>
+          <height>20</height>
          </rect>
         </property>
         <property name="text">
          <string/>
         </property>
-       </widget>
-       <widget class="QLabel" name="lbQtdCont">
-        <property name="geometry">
-         <rect>
-          <x>400</x>
-          <y>90</y>
-          <width>64</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string/>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </widget>
@@ -264,7 +260,7 @@ Contribuições</string>
         </rect>
        </property>
        <property name="text">
-        <string>Insira as informações de uma determinada Contribuição, Remuneração ou Benefício</string>
+        <string>Insira as informações de uma determinada Contribuição ou Benefício</string>
        </property>
       </widget>
       <widget class="QLabel" name="lbInfoPessoal">
@@ -284,9 +280,9 @@ Contribuições</string>
        <property name="geometry">
         <rect>
          <x>540</x>
-         <y>110</y>
+         <y>120</y>
          <width>161</width>
-         <height>121</height>
+         <height>81</height>
         </rect>
        </property>
        <property name="frameShape">
@@ -299,7 +295,7 @@ Contribuições</string>
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>30</y>
+          <y>20</y>
           <width>106</width>
           <height>23</height>
          </rect>
@@ -308,24 +304,11 @@ Contribuições</string>
          <string>Benefício</string>
         </property>
        </widget>
-       <widget class="QRadioButton" name="rbRemuneracao">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>70</y>
-          <width>121</width>
-          <height>23</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Remuneração</string>
-        </property>
-       </widget>
        <widget class="QRadioButton" name="rbContribuicao">
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>50</y>
+          <y>40</y>
           <width>106</width>
           <height>23</height>
          </rect>
@@ -339,7 +322,7 @@ Contribuições</string>
        <property name="geometry">
         <rect>
          <x>550</x>
-         <y>100</y>
+         <y>110</y>
          <width>111</width>
          <height>17</height>
         </rect>
@@ -366,33 +349,33 @@ Contribuições</string>
        <widget class="QLabel" name="label">
         <property name="geometry">
          <rect>
-          <x>210</x>
+          <x>230</x>
           <y>40</y>
           <width>101</width>
           <height>17</height>
          </rect>
         </property>
         <property name="text">
-         <string>Competência</string>
+         <string>Data Início</string>
         </property>
        </widget>
-       <widget class="QLabel" name="lbRemCont">
+       <widget class="QLabel" name="lbSalRemuneracao">
         <property name="geometry">
          <rect>
           <x>10</x>
           <y>40</y>
-          <width>101</width>
+          <width>171</width>
           <height>17</height>
          </rect>
         </property>
         <property name="text">
-         <string>Remuneração</string>
+         <string>Salário de contribuição</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="leRemuneracao">
+       <widget class="QLineEdit" name="leSalContribuicao">
         <property name="geometry">
          <rect>
-          <x>82</x>
+          <x>100</x>
           <y>60</y>
           <width>101</width>
           <height>25</height>
@@ -402,9 +385,9 @@ Contribuições</string>
        <widget class="QLabel" name="lbInfoDataFim">
         <property name="geometry">
          <rect>
-          <x>210</x>
+          <x>230</x>
           <y>120</y>
-          <width>131</width>
+          <width>111</width>
           <height>17</height>
          </rect>
         </property>
@@ -428,7 +411,7 @@ Contribuições</string>
        <widget class="QDateEdit" name="dtCompetencia">
         <property name="geometry">
          <rect>
-          <x>210</x>
+          <x>230</x>
           <y>60</y>
           <width>110</width>
           <height>26</height>
@@ -441,7 +424,7 @@ Contribuições</string>
        <widget class="QDateEdit" name="dtFimContRem">
         <property name="geometry">
          <rect>
-          <x>210</x>
+          <x>230</x>
           <y>140</y>
           <width>110</width>
           <height>26</height>
@@ -456,7 +439,7 @@ Contribuições</string>
          <rect>
           <x>10</x>
           <y>140</y>
-          <width>171</width>
+          <width>191</width>
           <height>25</height>
          </rect>
         </property>
@@ -466,7 +449,7 @@ Contribuições</string>
          <rect>
           <x>10</x>
           <y>60</y>
-          <width>61</width>
+          <width>81</width>
           <height>25</height>
          </rect>
         </property>
@@ -475,6 +458,31 @@ Contribuições</string>
           <width>16</width>
           <height>16</height>
          </size>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pbInfoIndicadores">
+        <property name="geometry">
+         <rect>
+          <x>90</x>
+          <y>120</y>
+          <width>18</width>
+          <height>18</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>18</width>
+          <height>18</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>18</width>
+          <height>18</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </widget>
@@ -718,6 +726,8 @@ Contribuições</string>
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../Resources/insereContrib.qrc"/>
+ </resources>
  <connections/>
 </ui>

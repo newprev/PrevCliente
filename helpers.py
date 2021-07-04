@@ -1,4 +1,5 @@
 import datetime
+from math import floor
 
 from newPrevEnums import *
 
@@ -281,6 +282,17 @@ def mascaraCep(cep: str):
 def mascaraNit(nit: int) -> str:
     strNit = str(nit)
     return f"{strNit[0:3]}.{strNit[3:8]}.{strNit[8:10]}-{strNit[10:]}"
+
+
+def calculaDiaMesAno(totalDias: int) -> list:
+    resto: int = 0
+
+    anos = floor(totalDias / (30 * 12))
+    resto = totalDias % (30 * 12)
+    mes = floor(resto / 30)
+    dias = resto % 30
+
+    return [dias, mes, anos]
 
 
 def mascaraFormaPagamento(pagamento: str):

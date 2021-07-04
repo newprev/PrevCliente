@@ -7,6 +7,7 @@ from Daos.daoCalculos import DaoCalculos
 from Daos.daoFerramentas import DaoFerramentas
 from Telas.insereContrib import Ui_mwInsereContrib
 from heart.localStyleSheet.insereContribuicao import habilita
+from heart.informacoesTelas.indicadoresTela import IndicadoresController
 from helpers import dictIndicadores, dictEspecies, mascaraNit, strToFloat, situacaoBeneficio, strToDatetime
 from modelos.beneficiosModelo import BeneficiosModelo
 from modelos.clienteModelo import ClienteModelo
@@ -29,19 +30,21 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.contribuicao = ContribuicoesModelo()
         self.beneficio = BeneficiosModelo()
         self.listaConvMon: list
+        self.indicadoresPg = IndicadoresController(parent=self, db=db)
 
         self.lbNomeCompleto.setText(f"{self.cliente.nomeCliente} {self.cliente.sobrenomeCliente}")
         self.lbNit.setText(mascaraNit(int(self.cliente.nit)))
 
         self.rbBeneficio.setChecked(True)
         self.rbContribuicao.clicked.connect(self.atualizaFoco)
-        self.rbRemuneracao.clicked.connect(self.atualizaFoco)
+        # self.rbRemuneracao.clicked.connect(self.atualizaFoco)
         self.rbBeneficio.clicked.connect(self.atualizaFoco)
 
         self.pbarSistema.hide()
         self.pbarSistema.setValue(0)
         self.pbConfirmar.clicked.connect(self.trataInsereInfo)
         self.pbCancelar.clicked.connect(self.sairAtividade)
+        self.pbInfoIndicadores.clicked.connect(self.openInfoIndicadores)
 
         self.dtCompetencia.dateChanged.connect(lambda: self.getInfo(info='dtCompetencia'))
         self.dtFim.dateChanged.connect(lambda: self.getInfo(info='dtFim'))
@@ -52,7 +55,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.cbxSituacao.currentTextChanged.connect(lambda: self.getInfo(info='cbxSituacao'))
         self.cbxEspecie.currentTextChanged.connect(lambda: self.getInfo(info='cbxEspecie'))
 
-        self.leRemuneracao.textChanged.connect(lambda: self.getInfo(info='leRemuneracao'))
+        self.leSalContribuicao.textChanged.connect(lambda: self.getInfo(info='leSalContribuicao'))
         self.leNb.textChanged.connect(lambda: self.getInfo(info='leNb'))
 
         self.listaConvMon = self.carregaConvMons()
@@ -93,7 +96,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
 
     def mostraInfoTela(self, contribuicao, tipoContribuicao: TipoContribuicao):
         if tipoContribuicao == TipoContribuicao.contribuicao:
-            self.leRemuneracao.setText(f'{contribuicao.contribuicao}')
+            self.leSalContribuicao.setText(f'{contribuicao.contribuicao}')
             self.cbxIndicadores.setCurrentText(f'{contribuicao.indicadores}')
             self.dtCompetencia.setDate(strToDatetime(contribuicao.competencia))
             self.dtFimContRem.setDate(strToDatetime(contribuicao.dataPagamento))
@@ -101,7 +104,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             self.defineSinalMonetario(contribuicao)
 
         elif tipoContribuicao == TipoContribuicao.remuneracao:
-            self.leRemuneracao.setText(f'{contribuicao.remuneracao}')
+            self.leSalContribuicao.setText(f'{contribuicao.remuneracao}')
             self.cbxIndicadores.setCurrentText(contribuicao.indicadores)
             self.dtCompetencia.setDate(strToDatetime(contribuicao.competencia))
             self.defineSinalMonetario(contribuicao)
@@ -141,7 +144,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         qtdRemuneracoes = self.daoCalculos.contaRemuneracoes(self.cliente.clienteId)[0]
         qtdContribuicoes = self.daoCalculos.contaContribuicoes(self.cliente.clienteId)[0]
 
-        self.lbQtdCont.setText(str(qtdContribuicoes))
+        # self.lbQtdCont.setText(str(qtdContribuicoes))
         self.lbQtdRem.setText(str(qtdRemuneracoes))
 
     def atualizaFoco(self):
@@ -151,7 +154,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             self.frInfoRemCont.setStyleSheet(habilita('remCont', False))
             self.dtCompetencia.setDisabled(True)
             self.dtFimContRem.setDisabled(True)
-            self.leRemuneracao.setDisabled(True)
+            self.leSalContribuicao.setDisabled(True)
             self.cbxIndicadores.setDisabled(True)
 
             self.leNb.setDisabled(False)
@@ -162,7 +165,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         else:
             if self.rbContribuicao.isChecked():
                 self.lbInfoDataFim.setText('Data de Pagamento')
-                self.lbRemCont.setText('Contribuição')
+                # self.lbRemCont.setText('Contribuição')
                 self.dtFimContRem.setDisabled(False)
             else:
                 self.lbInfoDataFim.setText('Data Fim')
@@ -173,7 +176,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             self.frInfoRemCont.setStyleSheet(habilita('remCont', True))
             self.dtCompetencia.setDisabled(False)
             self.dtFimContRem.setDisabled(False)
-            self.leRemuneracao.setDisabled(False)
+            self.leSalContribuicao.setDisabled(False)
             self.cbxIndicadores.setDisabled(False)
 
             self.leNb.setDisabled(True)
@@ -201,11 +204,11 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             else:
                 self.remuneracao.dataFim = self.dtFimContRem.date().toPyDate().strftime('%Y-%m-%d %H:%M')
 
-        elif info == 'leRemuneracao':
+        elif info == 'leSalContribuicao':
             if self.rbContribuicao.isChecked():
-                self.contribuicao.contribuicao = strToFloat(self.leRemuneracao.text())
+                self.contribuicao.salContribuicao = strToFloat(self.leSalContribuicao.text())
             else:
-                self.remuneracao.remuneracao = strToFloat(self.leRemuneracao.text())
+                self.remuneracao.remuneracao = strToFloat(self.leSalContribuicao.text())
 
         elif info == 'cbxIndicadores':
             if self.rbContribuicao.isChecked():
@@ -236,7 +239,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
                 self.daoCalculos.insereBeneficio(self.beneficio)
                 self.mensagemSistema('Benefício inserido com sucesso!')
         elif self.rbContribuicao.isChecked():
-            if self.leRemuneracao.text() != '':
+            if self.leSalContribuicao.text() != '':
                 self.loading(40)
                 self.contribuicao.clienteId = self.cliente.clienteId
                 self.loading(20)
@@ -247,7 +250,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
                 self.daoCalculos.insereContribuicao(self.contribuicao)
                 self.mensagemSistema('Contribuição inserida com sucesso!')
         else:
-            if self.leRemuneracao.text() != '':
+            if self.leSalContribuicao.text() != '':
                 self.loading(40)
                 self.remuneracao.clienteId = self.cliente.clienteId
                 self.loading(20)
@@ -259,7 +262,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
                 self.mensagemSistema('Remuneração inserida com sucesso!')
 
     def sairAtividade(self):
-        remuneracao: bool = self.leRemuneracao.text() == ''
+        remuneracao: bool = self.leSalContribuicao.text() == ''
         nb: bool = self.leNb.text() == ''
         situacao: bool = self.cbxSituacao.currentIndex() in (-1, 0)
 
@@ -269,7 +272,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             self.popUpSimCancela('Você tem informações sem serem salvas. Deseja sair?', funcao=self.close)
 
     def limpaTudo(self):
-        self.leRemuneracao.clear()
+        self.leSalContribuicao.clear()
         self.leNb.clear()
         self.cbxSituacao.setCurrentIndex(0)
         self.cbxEspecie.setCurrentIndex(0)
@@ -295,6 +298,9 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.pbarSistema.setValue(0)
         self.timer.stop()
         self.limpaTudo()
+
+    def openInfoIndicadores(self):
+        self.indicadoresPg.show()
 
     def mensagemSistema(self, mensagem: str):
         self.lbInfoSistema.setText(mensagem)

@@ -67,15 +67,12 @@ class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):
             self.doc.gerarProcuracao()
 
         if self.cbContratoHon.isChecked():
-            print('Gera contrato')
             self.doc.criaContratoHonorarios()
 
         if self.cbDecHipo.isChecked():
-            print('Cria declaração de hipossuficiência')
             self.doc.criaDeclaracaoHipo()
 
         if self.cbDecPensao.isChecked():
-            print('Cria pensão')
             self.doc.criaDecPensao()
 
         if self.cbDocsComprob.isChecked():

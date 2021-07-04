@@ -1,0 +1,115 @@
+import datetime
+from typing import List
+
+from Daos.daoCalculos import DaoCalculos
+from helpers import comparaMesAno
+from modelos.cnisCabecalhoModelo import CabecalhoModelo
+from modelos.processosModelo import ProcessosModelo
+from modelos.clienteModelo import ClienteModelo
+from newPrevEnums import NaturezaProcesso, TipoProcesso
+
+
+# Reforma 13/11/2019
+# Ar: Antes da reforma
+# Dr: Depois da reforma
+
+
+class CalculosAposentadoria:
+
+    def __init__(self, processo: ProcessosModelo, cliente: ClienteModelo, db=None):
+        self.processo = processo
+        self.cliente = cliente
+        self.cabecalhos: list = []
+        self.daoCalculos = DaoCalculos(db)
+
+        self.processo.tempoContribuicao = self.calculaTempoContribuicao()
+
+    def calculaTempoContribuicao(self):
+        dataReforma: datetime.date = datetime.date(2019, 11, 13)
+        listTimedeltas: list = []
+        totalDias: int = 0
+        antesReforma: bool = True
+
+        listaBanco: List[CabecalhoModelo] = list(self.daoCalculos.buscaCabecalhosClienteId(self.cliente.clienteId))
+
+        for cabecalho in listaBanco:
+            
+            if comparaMesAno(cabecalho.dataInicio, dataReforma) != 1:
+                antesReforma = False
+                
+            if antesReforma:    
+                if cabecalho.nb is not None:
+                    if cabecalho.situacao != 'INDEFERIDO':
+                        listTimedeltas.append(self.calculaTimedeltaAr(cabecalho, listaBanco))
+                    else:
+                        listTimedeltas.append(self.calculaTimedeltaAr(cabecalho, listaBanco, buscaProxJob=False))
+                else:
+                    listTimedeltas.append(self.calculaTimedeltaAr(cabecalho, listaBanco))
+                    
+            else:
+                if cabecalho.nb is not None:
+                    if cabecalho.situacao != 'INDEFERIDO':
+                        listTimedeltas.append(self.calculaTimedeltaDr(cabecalho, listaBanco))
+                    else:
+                        listTimedeltas.append(self.calculaTimedeltaDr(cabecalho, listaBanco, buscaProxJob=False))
+                else:
+                    listTimedeltas.append(self.calculaTimedeltaDr(cabecalho, listaBanco))
+
+        for delta in listTimedeltas:
+            totalDias += delta.days
+
+        return totalDias
+
+    def calculaTimedeltaAr(self, cabecalho: CabecalhoModelo, listaCabecalhos: list, buscaProxJob: bool = True) -> datetime.timedelta:
+        """
+        Para o tempo de serviço antes da reforma previdenciária, 13/11/2019, o tempo de contribuição é calculado dia a dia.
+
+        :return - timedalta com a diferença de dias de trabalho
+        """
+
+        if cabecalho.dataInicio is None or cabecalho.dataInicio == datetime.datetime.min:
+            return datetime.timedelta(days=0)
+
+        if cabecalho.dataFim is None or cabecalho.dataFim == datetime.datetime.min:
+            if cabecalho.ultRem is None or cabecalho.ultRem == datetime.datetime.min:
+                if not buscaProxJob:
+                    return datetime.datetime.now() - cabecalho.dataInicio
+
+                # Caso o registro não tenha dataFim nem ultRem, busca a dataInicio do próximo registro
+                else:
+                    index = listaCabecalhos.index(cabecalho) + 1
+                    cabecalhoAux: CabecalhoModelo = listaCabecalhos[index]
+
+                    return cabecalhoAux.dataInicio - cabecalho.dataInicio
+            else:
+                return cabecalho.ultRem - cabecalho.dataInicio
+        else:
+            return cabecalho.dataFim - cabecalho.dataInicio
+
+    def calculaTimedeltaDr(self, cabecalho: CabecalhoModelo, listaCabecalhos: list, buscaProxJob: bool = True) -> datetime.timedelta:
+        """
+        Após a reforma previdenciária, 13/11/2019, o tempo de contribuição é calculado mês a mês, descontando os casos que ocorrem o indicador 'PREC-MENOR-MIN'
+
+        :return - timedalta com a diferença de dias de trabalho
+        """
+
+        if cabecalho.dataInicio is None or cabecalho.dataInicio == datetime.datetime.min:
+            return datetime.timedelta(days=0)
+
+        if cabecalho.dataFim is None or cabecalho.dataFim == datetime.datetime.min:
+            if cabecalho.ultRem is None or cabecalho.ultRem == datetime.datetime.min:
+                if not buscaProxJob:
+                    return datetime.datetime.now() - cabecalho.dataInicio
+
+                # Caso o registro não tenha dataFim nem ultRem, busca a dataInicio do próximo registro
+                else:
+                    index = listaCabecalhos.index(cabecalho) + 1
+                    cabecalhoAux: CabecalhoModelo = listaCabecalhos[index]
+                    diferencaMeses: int = cabecalhoAux.dataInicio.month - cabecalho.dataInicio.month + 1
+                    return datetime.timedelta(days=30 * diferencaMeses)
+            else:
+                diferencaMeses: int = cabecalho.ultRem.month - cabecalho.dataInicio.month + 1
+                return datetime.timedelta(days=30 * diferencaMeses)
+        else:
+            diferencaMeses: int = cabecalho.dataFim.month - cabecalho.dataInicio.month + 1
+            return datetime.timedelta(days=30 * diferencaMeses)

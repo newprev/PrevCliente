@@ -58,6 +58,7 @@ class DaoProcessos:
             cursor.execute(strComando)
             processoId = cursor.lastrowid
             logPrioridade(f'INSERT<insereProcesso>___________________{self.tabelas.tblProcessos} ({processoId})', TipoEdicao.insert, Prioridade.saidaComun)
+            return processoId
         except:
             raise Warning(f'Erro SQL - insereProcesso({self.config.banco}) <INSERT {self.tabelas.tblProcessos}>')
         finally:

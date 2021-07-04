@@ -32,8 +32,8 @@ class IndicadorModelo:
         self.indicadorId = listCliente[0]
         self.resumo = listCliente[1]
         self.descricao = listCliente[2]
-        self.fonte = listCliente[2]
-        self.dataUltAlt = listCliente[2]
+        self.fonte = listCliente[3]
+        self.dataUltAlt = listCliente[4]
 
         if retornaInst:
             return self

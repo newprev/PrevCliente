@@ -10,7 +10,7 @@ from modelos.clienteModelo import ClienteModelo
 from modelos.escritorioModelo import EscritorioModelo
 from modelos.advogadoModelo import AdvogadoModelo
 from modelos.processosModelo import ProcessosModelo
-from helpers import mascaraCep, mascaraTelCel, strTipoBeneficio, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG, strToDatetime
+from helpers import mascaraCep, mascaraTelCel, strTipoBeneficio, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG, strToDatetime, calculaDiaMesAno
 
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
@@ -198,10 +198,14 @@ class DocEntrevista:
         self.dictInfo['estadoEscritorio'] = self.escritorio.estado
 
     def geraDosFatos(self):
+        listaTempoContribuicao = calculaDiaMesAno(self.processo.tempoContribuicao)
 
         self.dictInfo['idadeCliente'] = self.cliente.idade
-        self.dictInfo['tempoContribuicao'] = self.processo.tempoContribuicao/12
-        self.dictInfo['pontosCliente'] = int(round(self.processo.tempoContribuicao/12, 0)) + self.cliente.idade
+        self.dictInfo['pontosCliente'] = sum(listaTempoContribuicao) + self.cliente.idade
+
+        self.dictInfo['diasContribuicao'] = f"e {listaTempoContribuicao[0]} dias"
+        self.dictInfo['mesesContribuicao'] = f"{listaTempoContribuicao[1]} meses"
+        self.dictInfo['anosContribuicao'] = f"{listaTempoContribuicao[2]} anos"
 
     def geraDosFundJurid(self):
         pass

@@ -372,7 +372,7 @@ Contribuições</string>
          <string>Salário de contribuição</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="leRemuneracao">
+       <widget class="QLineEdit" name="leSalContribuicao">
         <property name="geometry">
          <rect>
           <x>100</x>

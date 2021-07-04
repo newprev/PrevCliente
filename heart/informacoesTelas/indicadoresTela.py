@@ -35,6 +35,7 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
         self.lbSigla.setText(indicadorAtual.indicadorId)
         self.lbDescricao.setText(indicadorAtual.descricao)
         self.lbResumo.setText(indicadorAtual.resumo)
+        self.lbFonte.setText(f"Fonte: {indicadorAtual.fonte}")
 
     def returnIndicador(self, indicadorId: str):
         for indicador in self.indicadores:

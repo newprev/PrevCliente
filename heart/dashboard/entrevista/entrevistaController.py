@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QMainWindow, QTabBar, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from Telas.entrevistaPage import Ui_mwEntrevistaPage
 from connections import ConfigConnection
 from heart.dashboard.entrevista.localStyleSheet.lateral import estadoInfoFinalizado
@@ -15,6 +15,7 @@ from heart.dashboard.gerarDocsPage import GerarDocsPage
 from Daos.daoProcessos import DaoProcessos
 from Daos.daoCliente import DaoCliente
 from Daos.daoCalculos import DaoCalculos
+from modelos.cnisCabecalhoModelo import CabecalhoModelo
 
 from modelos.processosModelo import ProcessosModelo
 from modelos.clienteModelo import ClienteModelo
@@ -302,12 +303,47 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         pass
 
     def calculaTempoContribuicao(self):
+        listTimedeltas: list = []
+        totalDias: int = 0
+
         if self.processoModelo.natureza == NaturezaProcesso.administrativo.value:
             if self.processoModelo.tipoProcesso == TipoProcesso.Concessao.value:
-                print(' -------------------------------------------------> ')
-                print(self.daoCalculos.getRemECon(self.clienteAtual.clienteId)[0])
-                tempoMeses = self.daoCalculos.getCount(self.clienteAtual.clienteId)
-                return tempoMeses
+                listaBanco = list(self.daoCalculos.buscaCabecalhosClienteId(self.clienteAtual.clienteId))
+
+                for cabecalho in listaBanco:
+
+                    if cabecalho.nb is not None:
+                        if cabecalho.situacao != 'INDEFERIDO':
+                            listTimedeltas.append(self.calculaTimedelta(cabecalho, listaBanco))
+                        else:
+                            listTimedeltas.append(self.calculaTimedelta(cabecalho, listaBanco, buscaProxJob=False))
+                    else:
+                        listTimedeltas.append(self.calculaTimedelta(cabecalho, listaBanco))
+
+                for delta in listTimedeltas:
+                    totalDias += delta.days
+
+                return totalDias
+
+    def calculaTimedelta(self, cabecalho: CabecalhoModelo, listaCabecalhos: list, buscaProxJob: bool = True) -> timedelta:
+        if cabecalho.dataInicio is None or cabecalho.dataInicio == datetime.min:
+            return timedelta(days=0)
+
+        if cabecalho.dataFim is None or cabecalho.dataFim == datetime.min:
+            if cabecalho.ultRem is None or cabecalho.ultRem == datetime.min:
+                if not buscaProxJob:
+                    return datetime.now() - cabecalho.dataInicio
+
+                # Caso o registro não tenha dataFim nem ultRem, busca a dataInicio do próximo registro
+                else:
+                    index = listaCabecalhos.index(cabecalho) + 1
+                    cabecalhoAux: CabecalhoModelo = listaCabecalhos[index]
+
+                    return cabecalhoAux.dataInicio - cabecalho.dataInicio
+            else:
+                return cabecalho.ultRem - cabecalho.dataInicio
+        else:
+            return cabecalho.dataFim - cabecalho.dataInicio
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

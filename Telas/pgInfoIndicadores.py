@@ -32,7 +32,7 @@ class Ui_mwInfoIndicadores(object):
 "    font-size: 24px;\n"
 "}\n"
 "\n"
-"#lbSubtitulo, #lbSiglaCbx {\n"
+"#lbSubtitulo, #lbSiglaCbx, #lbFonte {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    \n"
@@ -95,6 +95,7 @@ class Ui_mwInfoIndicadores(object):
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.lbSigla = QtWidgets.QLabel(self.frDescricao)
         self.lbSigla.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.lbSigla.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextSelectableByMouse)
         self.lbSigla.setObjectName("lbSigla")
         self.verticalLayout_3.addWidget(self.lbSigla)
         self.lbResumo = QtWidgets.QLabel(self.frDescricao)
@@ -107,6 +108,13 @@ class Ui_mwInfoIndicadores(object):
         self.lbDescricao.setWordWrap(True)
         self.lbDescricao.setObjectName("lbDescricao")
         self.verticalLayout_3.addWidget(self.lbDescricao)
+        self.lbFonte = QtWidgets.QLabel(self.frDescricao)
+        self.lbFonte.setMaximumSize(QtCore.QSize(16777215, 18))
+        self.lbFonte.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbFonte.setOpenExternalLinks(True)
+        self.lbFonte.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextSelectableByMouse)
+        self.lbFonte.setObjectName("lbFonte")
+        self.verticalLayout_3.addWidget(self.lbFonte)
         self.verticalLayout_2.addWidget(self.frConteudo)
         self.verticalLayout.addWidget(self.frMain)
         mwInfoIndicadores.setCentralWidget(self.wdgMain)
@@ -123,6 +131,7 @@ class Ui_mwInfoIndicadores(object):
         self.lbSigla.setText(_translate("mwInfoIndicadores", "TextLabel"))
         self.lbResumo.setText(_translate("mwInfoIndicadores", "TextLabel"))
         self.lbDescricao.setText(_translate("mwInfoIndicadores", "TextLabel"))
+        self.lbFonte.setText(_translate("mwInfoIndicadores", "TextLabel"))
 
 
 if __name__ == "__main__":

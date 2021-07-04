@@ -335,6 +335,23 @@ def mascaraDinheiro(valor: float, simbolo: str = 'R$'):
         return f"{simbolo} {strFinal}"
 
 
+def comparaMesAno(dataInicio: datetime, dataFim: datetime) -> int:
+    inicio = eliminaHoraDias(dataInicio)
+    fim = eliminaHoraDias(dataFim)
+
+    if isinstance(inicio, datetime.datetime):
+        inicio = inicio.date()
+    if isinstance(fim, datetime.datetime):
+        fim = fim.date()
+
+    if inicio == fim:
+        return 0
+    elif fim < inicio:
+        return -1
+    else:
+        return 1
+
+
 def calculaIdadeFromString(dataNascimento: str) -> int:
     dataIdade = datetime.datetime.strptime(dataNascimento, '%d/%m/%Y')
     return int((datetime.datetime.now() - dataIdade).days / 365.25)
@@ -466,3 +483,10 @@ def strTipoBeneFacilitado(tipoBeneficio: TipoBeneficio) -> str:
         return 'Salário maternidade'
     else:
         return ''
+
+
+def eliminaHoraDias(data: datetime):
+    if isinstance(data, datetime.datetime):
+        return data.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    elif isinstance(data, datetime.date):
+        return data.replace(day=1)

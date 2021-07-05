@@ -2,7 +2,8 @@ import datetime
 from typing import List
 
 from Daos.daoCalculos import DaoCalculos
-from helpers import comparaMesAno
+from helpers import comparaMesAno, calculaDiaMesAno
+
 from modelos.cnisCabecalhoModelo import CabecalhoModelo
 from modelos.processosModelo import ProcessosModelo
 from modelos.clienteModelo import ClienteModelo
@@ -57,6 +58,11 @@ class CalculosAposentadoria:
 
         for delta in listTimedeltas:
             totalDias += delta.days
+
+        print(' ------------------------ ')
+        print(totalDias)
+        print(calculaDiaMesAno(totalDias))
+        print(' ------------------------ ')
 
         return totalDias
 

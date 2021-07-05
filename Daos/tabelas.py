@@ -20,7 +20,6 @@ class TabelasConfig:
         self.__tblConvMon = 'convMon'
         self.tipoBanco = tipoBanco
 
-
     # Comando SQL para criar tabela de advogados
     @property
     def sqlCreateAdvogados(self):
@@ -100,6 +99,7 @@ class TabelasConfig:
             escritorioId INTEGER REFERENCES {self.tblAdvogados}(escritorioId) ON DELETE CASCADE,
             nomeCliente VARCHAR(20) NOT NULL,
             sobrenomeCliente VARCHAR(30) NOT NULL,
+            genero VARCHAR(1) NOT NULL DEFAULT 'M',
             idade INT NOT NULL,
             dataNascimento DATETIME NOT NULL,
             telefone VARCHAR(11) NULL,

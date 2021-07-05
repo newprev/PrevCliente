@@ -94,6 +94,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leNumeroAgencia.textEdited.connect(lambda: self.carregaInfoTela('leNumeroAgencia'))
         self.leSenhaINSS.textEdited.connect(lambda: self.carregaInfoTela('leSenhaINSS'))
         self.lePix.textEdited.connect(lambda: self.carregaInfoTela('lePix'))
+        self.rbFeminino.clicked.connect(lambda: self.carregaInfoTela('rbFeminino'))
+        self.rbMasculino.clicked.connect(lambda: self.carregaInfoTela('rbMasculino'))
 
         self.dtNascimento.dateChanged.connect(lambda: self.carregaInfoTela('dataNascimento'))
 
@@ -277,6 +279,11 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         if cliente.senhaINSS not in [None, 'None']:
             self.leSenhaINSS.setText(cliente.senhaINSS)
 
+        if cliente.genero == 'M':
+            self.rbMasculino.setChecked(True)
+        else:
+            self.rbFeminino.setChecked(True)
+
     def carregaInfoTela(self, info, *args):
         if info == 'cep':
             self.cliente.cep = self.leCep.text().replace('-', '')
@@ -357,6 +364,12 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
         elif info == 'telefone':
             self.cliente.telefone.numero = self.leTelefone.text()
+
+        elif info == 'rbMasculino' or info == 'rbFeminino':
+            if self.rbMasculino.isChecked():
+                self.cliente.genero = 'M'
+            else:
+                self.cliente.genero = 'F'
 
         elif info == 'leNumero':
             if self.leNumero.text() != '':

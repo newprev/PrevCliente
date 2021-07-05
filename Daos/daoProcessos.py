@@ -39,19 +39,23 @@ class DaoProcessos:
         strComando = f"""
             INSERT INTO {self.tabelas.tblProcessos}
             (
-                clienteId, advogadoId, numeroProcesso, 
+                clienteId , advogadoId, numeroProcesso,
                 natureza, tipoProcesso, tipoBeneficio,
-                subTipoApos, estado, cidade, 
-                situacaoId, dataInicio, dataFim, 
-                valorCausa, dataCadastro, dataUltAlt
+                subTipoApos, estado, cidade,
+                situacaoId, tempoContribuicao, pontuacao,
+                dib, der, mediaSalarial,
+                dataInicio, dataFim, valorCausa, 
+                dataCadastro, dataUltAlt
             )
             VALUES 
             (
                 {processo.clienteId}, {self.advogado.advogadoId}, '{processo.numeroProcesso}', 
                 {processo.natureza}, {processo.tipoProcesso}, {processo.tipoBeneficio},
                 {processo.subTipoApos}, '{processo.estado}', '{processo.cidade}', 
-                {processo.situacaoId}, '{processo.dataInicio}', '{processo.dataFim}', 
-                {processo.valorCausa}, '{datetime.now()}', '{datetime.now()}' 
+                {processo.situacaoId}, {processo.tempoContribuicao}, {processo.pontuacao},
+                '{processo.dib}', '{processo.der}', {processo.mediaSalarial},
+                '{processo.dataInicio}', '{processo.dataFim}', {processo.valorCausa}, 
+                '{datetime.now()}', '{datetime.now()}' 
             )"""
 
         try:
@@ -85,6 +89,8 @@ class DaoProcessos:
                     estado = '{processo.estado}',
                     cidade = '{processo.cidade}',
                     situacaoId = {processo.situacaoId},
+                    tempoContribuicao = {processo.tempoContribuicao}, 
+                    pontuacao = {processo.pontuacao},
                     dib = '{processo.dib}',
                     der = '{processo.der}',
                     dataInicio = {processo.dataInicio},
@@ -92,7 +98,7 @@ class DaoProcessos:
                     valorCausa = {processo.valorCausa},
                     dataUltAlt = {datetime.now()}
                 WHERE
-                    processosId = {processo.processosId}
+                    processoId = {processo.processoId}
                     """
 
         try:
@@ -121,12 +127,12 @@ class DaoProcessos:
             SELECT 
                 processoId, clienteId, advogadoId,
                 numeroProcesso, natureza, tipoProcesso,
-                tipoBeneficio, subTipoApos, estado, 
-                cidade, situacaoId, dib, 
-                der, dataInicio, dataFim, 
-                valorCausa, incidenteProcessual, dataCadastro, 
-                dataUltAlt
-            FROM processos
+                tipoBeneficio, subTipoApos, estado,
+                cidade, situacaoId, tempoContribuicao,
+                pontuacao, dib, der,
+                mediaSalarial, dataInicio, dataFim,
+                valorCausa, dataCadastro, dataUltAlt
+            FROM {self.tabelas.tblProcessos}
             WHERE clienteId = {cliente.clienteId}"""
 
         if limit != 0:

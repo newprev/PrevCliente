@@ -39,6 +39,7 @@ class DaoCliente:
             UPDATE {self.config.tblCliente} SET
                     nomeCliente = '{cliente.nomeCliente}',
                     sobrenomeCliente = '{cliente.sobrenomeCliente}',
+                    genero = '{cliente.genero}',
                     idade = {cliente.idade},
                     dataNascimento = '{cliente.dataNascimento}',
                     email = '{cliente.email}',
@@ -90,27 +91,29 @@ class DaoCliente:
         strComando = f"""
             INSERT INTO {self.config.tblCliente} 
             (
-                escritorioId, nomeCliente, sobrenomeCliente, 
-                idade, dataNascimento, email, 
-                rgCliente, cpfCliente, nomeBanco, 
-                agenciaBanco, numeroConta, grauEscolaridade, 
-                senhaINSS, numCarteiraProf, nit, 
-                nomeMae, estadoCivil, profissao, 
-                endereco, numero, estado, 
-                cidade, bairro, cep, 
-                complemento, dataCadastro, dataUltAlt
+                escritorioId, nomeCliente, sobrenomeCliente,
+                genero, idade, dataNascimento, 
+                email, rgCliente, cpfCliente, 
+                nomeBanco, agenciaBanco, numeroConta, 
+                grauEscolaridade, senhaINSS, numCarteiraProf, 
+                nit, nomeMae, estadoCivil, 
+                profissao, endereco, numero, 
+                estado, cidade, bairro, 
+                cep, complemento, dataCadastro, 
+                dataUltAlt
             )
             VALUES
             (
                 '{self.escritorio.escritorioId}', '{cliente.nomeCliente}', '{cliente.sobrenomeCliente}',
-                {cliente.idade}, '{cliente.dataNascimento}', '{cliente.email}', 
-                '{cliente.rgCliente}', '{cliente.cpfCliente}', '{cliente.nomeBanco}', 
-                '{cliente.agenciaBanco}', '{cliente.numeroConta}', '{cliente.grauEscolaridade}', 
-                '{cliente.senhaINSS}', '{cliente.numCartProf}', '{cliente.nit}', 
-                '{cliente.nomeMae}', '{cliente.estadoCivil}', '{cliente.profissao}', 
-                '{cliente.endereco}', {cliente.numero}, '{cliente.estado}', 
-                '{cliente.cidade}', '{cliente.bairro}', '{cliente.cep}', 
-                '{cliente.complemento}', '{datetime.now()}', '{datetime.now()}'
+                '{cliente.genero}', {cliente.idade}, '{cliente.dataNascimento}', 
+                '{cliente.email}', '{cliente.rgCliente}', '{cliente.cpfCliente}',
+                '{cliente.nomeBanco}', '{cliente.agenciaBanco}', '{cliente.numeroConta}',
+                '{cliente.grauEscolaridade}', '{cliente.senhaINSS}', '{cliente.numCartProf}', 
+                '{cliente.nit}', '{cliente.nomeMae}', '{cliente.estadoCivil}',
+                '{cliente.profissao}', '{cliente.endereco}', {cliente.numero},
+                '{cliente.estado}', '{cliente.cidade}', '{cliente.bairro}',
+                '{cliente.cep}', '{cliente.complemento}', '{datetime.now()}', 
+                '{datetime.now()}'
             );"""
 
         try:
@@ -325,15 +328,15 @@ class DaoCliente:
             SELECT
                 -- Clientes
                 c.escritorioId, c.clienteId, c.nomeCliente, 
-                c.sobrenomeCliente, c.idade, c.dataNascimento, 
-                c.email, c.rgCliente, c.cpfCliente,
-                c.nomeBanco, c.agenciaBanco, c.numeroConta, 
-                c.pixCliente, c.grauEscolaridade, c.senhaINSS,
-                c.numCarteiraProf, c.nit, c.nomeMae, 
-                c.estadoCivil, c.profissao, endereco,
-                c.estado, c.cidade, c.numero, 
-                c.bairro, c.cep, c.complemento,
-                c.dataCadastro, c.dataUltAlt,
+                c.sobrenomeCliente, c.genero, c.idade, 
+                c.dataNascimento, c.email, c.rgCliente, 
+                c.cpfCliente, c.nomeBanco, c.agenciaBanco, 
+                c.numeroConta, c.pixCliente, c.grauEscolaridade, 
+                c.senhaINSS, c.numCarteiraProf, c.nit, 
+                c.nomeMae, c.estadoCivil, c.profissao, 
+                c.endereco, c.estado, c.cidade, 
+                c.numero, c.bairro, c.cep, 
+                c.complemento, c.dataCadastro, c.dataUltAlt,
                 
                 -- Telefones
                 t.telefoneId, t.clienteId, t.numero, 
@@ -380,15 +383,15 @@ class DaoCliente:
             SELECT
                 -- Clientes
                 c.escritorioId, c.clienteId, c.nomeCliente, 
-                c.sobrenomeCliente, c.idade, c.dataNascimento, 
-                c.email, c.rgCliente, c.cpfCliente,
-                c.nomeBanco, c.agenciaBanco, c.numeroConta, 
-                c.pixCliente, c.grauEscolaridade, c.senhaINSS,
-                c.numCarteiraProf, c.nit, c.nomeMae, 
-                c.estadoCivil, c.profissao, endereco,
-                c.estado, c.cidade, c.numero, 
-                c.bairro, c.cep, c.complemento,
-                c.dataCadastro, c.dataUltAlt,
+                c.sobrenomeCliente, c.genero, c.idade, 
+                c.dataNascimento, c.email, c.rgCliente, 
+                c.cpfCliente, c.nomeBanco, c.agenciaBanco, 
+                c.numeroConta, c.pixCliente, c.grauEscolaridade, 
+                c.senhaINSS, c.numCarteiraProf, c.nit, 
+                c.nomeMae, c.estadoCivil, c.profissao, 
+                c.endereco, c.estado, c.cidade, 
+                c.numero, c.bairro, c.cep, 
+                c.complemento, c.dataCadastro, c.dataUltAlt,
                 
                 -- Telefones
                 t.telefoneId, t.clienteId, t.numero, 
@@ -431,15 +434,15 @@ class DaoCliente:
             SELECT
                 -- Clientes
                 c.escritorioId, c.clienteId, c.nomeCliente, 
-                c.sobrenomeCliente, c.idade, c.dataNascimento, 
-                c.email, c.rgCliente, c.cpfCliente,
-                c.nomeBanco, c.agenciaBanco, c.numeroConta, 
-                c.pixCliente, c.grauEscolaridade, c.senhaINSS,
-                c.numCarteiraProf, c.nit, c.nomeMae, 
-                c.estadoCivil, c.profissao, endereco,
-                c.estado, c.cidade, c.numero, 
-                c.bairro, c.cep, c.complemento,
-                c.dataCadastro, c.dataUltAlt,
+                c.sobrenomeCliente, c.genero, c.idade, 
+                c.dataNascimento, c.email, c.rgCliente, 
+                c.cpfCliente, c.nomeBanco, c.agenciaBanco, 
+                c.numeroConta, c.pixCliente, c.grauEscolaridade, 
+                c.senhaINSS, c.numCarteiraProf, c.nit, 
+                c.nomeMae, c.estadoCivil, c.profissao, 
+                c.endereco, c.estado, c.cidade, 
+                c.numero, c.bairro, c.cep, 
+                c.complemento, c.dataCadastro, c.dataUltAlt,
                 
                 -- Telefones
                 t.telefoneId, t.clienteId, t.numero, 
@@ -556,15 +559,15 @@ class DaoCliente:
             SELECT
                 -- Clientes
                 c.escritorioId, c.clienteId, c.nomeCliente, 
-                c.sobrenomeCliente, c.idade, c.dataNascimento, 
-                c.email, c.rgCliente, c.cpfCliente,
-                c.nomeBanco, c.agenciaBanco, c.numeroConta, 
-                c.pixCliente, c.grauEscolaridade, c.senhaINSS,
-                c.numCarteiraProf, c.nit, c.nomeMae, 
-                c.estadoCivil, c.profissao, endereco,
-                c.estado, c.cidade, c.numero, 
-                c.bairro, c.cep, c.complemento,
-                c.dataCadastro, c.dataUltAlt,
+                c.sobrenomeCliente, c.genero, c.idade, 
+                c.dataNascimento, c.email, c.rgCliente, 
+                c.cpfCliente, c.nomeBanco, c.agenciaBanco, 
+                c.numeroConta, c.pixCliente, c.grauEscolaridade, 
+                c.senhaINSS, c.numCarteiraProf, c.nit, 
+                c.nomeMae, c.estadoCivil, c.profissao, 
+                c.endereco, c.estado, c.cidade, 
+                c.numero, c.bairro, c.cep, 
+                c.complemento, c.dataCadastro, c.dataUltAlt,
 
                 -- Telefones
                 t.telefoneId, t.clienteId, t.numero, 

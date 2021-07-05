@@ -22,10 +22,19 @@ class CalculosAposentadoria:
         self.cliente = cliente
         self.cabecalhos: list = []
         self.daoCalculos = DaoCalculos(db)
-
+        self.listaRemuneracoes = list(self.daoCalculos.buscaTodasRemuneracoes(cliente.clienteId))
+        self.listaContribuicoes = list(self.daoCalculos.buscaTodasContribuicoes(cliente.clienteId))
         self.processo.tempoContribuicao = self.calculaTempoContribuicao()
+        self.pontuacao: int = sum(self.processo.tempoContribuicao) + self.cliente.idade
 
-    def calculaTempoContribuicao(self):
+        print(' ------------------------------------- ')
+        print(f'len(self.listaRemuneracoes): {len(self.listaRemuneracoes)}')
+        print(f'len(self.listaContribuicoes): {len(self.listaContribuicoes)}')
+        print(f'self.processo.tempoContribuicao: {self.processo.tempoContribuicao}')
+
+        print(' ------------------------------------- ')
+
+    def calculaTempoContribuicao(self) -> List[int]:
         dataReforma: datetime.date = datetime.date(2019, 11, 13)
         listTimedeltas: list = []
         totalDias: int = 0
@@ -59,12 +68,7 @@ class CalculosAposentadoria:
         for delta in listTimedeltas:
             totalDias += delta.days
 
-        print(' ------------------------ ')
-        print(totalDias)
-        print(calculaDiaMesAno(totalDias))
-        print(' ------------------------ ')
-
-        return totalDias
+        return calculaDiaMesAno(totalDias)
 
     def calculaTimedeltaAr(self, cabecalho: CabecalhoModelo, listaCabecalhos: list, buscaProxJob: bool = True) -> datetime.timedelta:
         """
@@ -99,8 +103,21 @@ class CalculosAposentadoria:
         :return - timedalta com a diferença de dias de trabalho
         """
 
+        somaIndicadores: int = 0
+        indicadoresASubtrair = ['IREC-LC123', 'PREC-MENOR-MIN']
+
         if cabecalho.dataInicio is None or cabecalho.dataInicio == datetime.datetime.min:
             return datetime.timedelta(days=0)
+
+        for remuneracao in self.listaRemuneracoes:
+            if remuneracao.seq == cabecalho.seq:
+                if remuneracao.indicadores in indicadoresASubtrair:
+                    somaIndicadores += 1
+
+        for contribuicao in self.listaContribuicoes:
+            if contribuicao.seq == cabecalho.seq:
+                if contribuicao.indicadores in indicadoresASubtrair:
+                    somaIndicadores += 1
 
         if cabecalho.dataFim is None or cabecalho.dataFim == datetime.datetime.min:
             if cabecalho.ultRem is None or cabecalho.ultRem == datetime.datetime.min:
@@ -111,11 +128,13 @@ class CalculosAposentadoria:
                 else:
                     index = listaCabecalhos.index(cabecalho) + 1
                     cabecalhoAux: CabecalhoModelo = listaCabecalhos[index]
-                    diferencaMeses: int = cabecalhoAux.dataInicio.month - cabecalho.dataInicio.month + 1
+                    diferencaMeses: int = cabecalhoAux.dataInicio.month - cabecalho.dataInicio.month + 1 - somaIndicadores
                     return datetime.timedelta(days=30 * diferencaMeses)
             else:
-                diferencaMeses: int = cabecalho.ultRem.month - cabecalho.dataInicio.month + 1
+                diferencaMeses: int = cabecalho.ultRem.month - cabecalho.dataInicio.month + 1 - somaIndicadores
                 return datetime.timedelta(days=30 * diferencaMeses)
         else:
-            diferencaMeses: int = cabecalho.dataFim.month - cabecalho.dataInicio.month + 1
+            diferencaMeses: int = cabecalho.dataFim.month - cabecalho.dataInicio.month + 1 - somaIndicadores
             return datetime.timedelta(days=30 * diferencaMeses)
+
+        

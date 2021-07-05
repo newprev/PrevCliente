@@ -167,8 +167,8 @@ class TabelasConfig:
         return f"""
         CREATE TABLE IF NOT EXISTS {self.__tblProcessos}(
             {cabecalho}
-            clienteId INTEGER REFERENCES {self.__tblCliente}(clienteId) ON DELETE CASCADE,
-            advogadoId INTEGER REFERENCES {self.__tblAdvogados}(advogadoId) ON DELETE CASCADE,
+            clienteId INTEGER REFERENCES {self.tblCliente}(clienteId) ON DELETE CASCADE,
+            advogadoId INTEGER REFERENCES {self.tblAdvogados}(advogadoId) ON DELETE CASCADE,
             numeroProcesso VARCHAR(20) NULL,
             natureza INT NOT NULL,
             tipoProcesso INT NOT NULL,
@@ -177,13 +177,15 @@ class TabelasConfig:
             estado VARCHAR(2) NULL,
             cidade VARCHAR(40) NOT NULL,
             situacaoId INT NOT NULL DEFAULT 1,
-            tempoContribuicao INT NULL, 
+            tempoContribuicao INT NULL,
+            pontuacao INT NULL,
             dib DATETIME NULL,
             der DATETIME NULL,
+            mediaSalarial REAL NULL,
             dataInicio DATETIME NULL,
             dataFim DATETIME NULL,
             incidenteProcessual INT NULL,
-            valorCausa FLOAT VARCHAR(15) NULL,
+            valorCausa REAL NULL,
             dataCadastro DATETIME NOT NULL,
             dataUltAlt DATETIME NOT NULL{bottom}
         """

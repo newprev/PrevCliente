@@ -61,6 +61,36 @@ class DaoCalculos:
         finally:
             self.disconectBD(cursor)
 
+    def buscaTodasContribuicoes(self, clienteId: int):
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""
+            SELECT
+                contribuicoesId, clienteId, seq,
+                competencia, dataPagamento, contribuicao,
+                salContribuicao, indicadores, dadoOrigem,
+                dataCadastro, dataUltAlt
+            FROM
+                {self.config.tblCnisContribuicoes}
+            WHERE
+                clienteId = {clienteId}
+        """
+
+        try:
+            cursor.execute(strComando)
+            logPrioridade(f'SELECT<buscaTodasContribuicoes>___________________{self.config.tblCnisContribuicoes}', TipoEdicao.select, Prioridade.saidaComun)
+            return (ContribuicoesModelo().fromList(contribuicao) for contribuicao in cursor.fetchall())
+        except Exception as erro:
+            print(f'buscaTodasContribuicoes ({type(erro)}) - {erro}')
+            logPrioridade(f'Erro SQL - buscaTodasContribuicoes {self.config.tblCnisContribuicoes}', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - buscaTodasContribuicoes {self.config.tblCnisContribuicoes} <SELECT>')
+        finally:
+            self.disconectBD(cursor)
+
     def buscaRemuneracaoPorId(self, remuneracaoId: int):
 
         if not isinstance(self.db, sqlite3.Connection):
@@ -88,6 +118,36 @@ class DaoCalculos:
             print(f'buscaRemuneracaoPorId ({type(erro)}) - {erro}')
             logPrioridade(f'Erro SQL - buscaRemuneracaoPorId {self.config.tblCnisRemuneracoes}', TipoEdicao.erro, Prioridade.saidaImportante)
             raise Warning(f'Erro SQL - buscaRemuneracaoPorId {self.config.tblCnisRemuneracoes} <SELECT>')
+        finally:
+            self.disconectBD(cursor)
+
+    def buscaTodasRemuneracoes(self, clienteId: int):
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""
+            SELECT
+                remuneracoesId, clienteId, seq,
+                competencia, remuneracao, indicadores,
+                dadoOrigem, dataCadastro, dataUltAlt
+            FROM
+                {self.config.tblCnisRemuneracoes}
+            WHERE
+                clienteId = {clienteId}
+        """
+
+        try:
+            cursor.execute(strComando)
+            logPrioridade(f'SELECT<buscaTodasRemuneracoes>___________________{self.config.tblCnisRemuneracoes}', TipoEdicao.select, Prioridade.saidaComun)
+            return (RemuneracoesModelo().fromList(remuneracao) for remuneracao in cursor.fetchall())
+        except Exception as erro:
+            print(f'buscaTodasRemuneracoes ({type(erro)}) - {erro}')
+            logPrioridade(f'Erro SQL - buscaTodasRemuneracoes {self.config.tblCnisRemuneracoes}', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - buscaTodasRemuneracoes {self.config.tblCnisRemuneracoes} <SELECT>')
         finally:
             self.disconectBD(cursor)
 

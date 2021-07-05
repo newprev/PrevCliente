@@ -4,7 +4,7 @@ import datetime
 class ProcessosModelo:
 
     def __init__(self):
-        self.processosId: int = None
+        self.processoId: int = None
         self.clienteId: int = None
         self.advogadoId: int = None
         self.numeroProcesso: str = None
@@ -16,8 +16,10 @@ class ProcessosModelo:
         self.cidade: str = None
         self.situacaoId: int = 0
         self.tempoContribuicao: int = 0
+        self.pontuacao: int = 0
         self.dib: datetime = None
         self.der: datetime = None
+        self.mediaSalarial: float = 0.0
         self.dataInicio: datetime = None
         self.dataFim: datetime = None
         self.valorCausa: float = 0
@@ -26,7 +28,7 @@ class ProcessosModelo:
 
     def toDict(self):
         dictUsuario = {
-            'processosId': self.processosId,
+            'processoId': self.processoId,
             'clienteId': self.clienteId,
             'advogadoId': self.advogadoId,
             'numeroProcesso': self.numeroProcesso,
@@ -38,8 +40,10 @@ class ProcessosModelo:
             'cidade': self.cidade,
             'situacaoId': self.situacaoId,
             'tempoContribuicao': self.tempoContribuicao,
+            'pontuacao': self.pontuacao,
             'dib': self.dib,
             'der': self.der,
+            'mediaSalarial': self.mediaSalarial,
             'dataInicio': self.dataInicio,
             'dataFim': self.dataFim,
             'valorCausa': self.valorCausa,
@@ -49,7 +53,7 @@ class ProcessosModelo:
         return dictUsuario
 
     def fromDict(self, dictProcessos):
-        self.processosId = dictProcessos['processosId']
+        self.processoId = dictProcessos['processoId']
         self.clienteId = dictProcessos['clienteId']
         self.advogadoId = dictProcessos['advogadoId']
         self.numeroProcesso = dictProcessos['numeroProcesso']
@@ -61,8 +65,10 @@ class ProcessosModelo:
         self.cidade = dictProcessos['cidade']
         self.situacaoId = dictProcessos['situacaoId']
         self.tempoContribuicao = dictProcessos['tempoContribuicao']
+        self.pontuacao = dictProcessos['pontuacao']
         self.dib = dictProcessos['dib']
         self.der = dictProcessos['der']
+        self.mediaSalarial = dictProcessos['mediaSalarial']
         self.dataInicio = dictProcessos['dataInicio']
         self.dataFim = dictProcessos['dataFim']
         self.valorCausa = dictProcessos['valorCausa']
@@ -71,9 +77,9 @@ class ProcessosModelo:
 
         return self
 
-    def fromList(self, listProcessos: list, retornaInst: bool = False):
+    def fromList(self, listProcessos: list, retornaInst: bool = True):
 
-        self.processosId = listProcessos[0]
+        self.processoId = listProcessos[0]
         self.clienteId = listProcessos[1]
         self.advogadoId = listProcessos[2]
         self.numeroProcesso = listProcessos[3]
@@ -85,20 +91,22 @@ class ProcessosModelo:
         self.cidade = listProcessos[9]
         self.situacaoId = listProcessos[10]
         self.tempoContribuicao = listProcessos[11]
-        self.dib = listProcessos[12]
-        self.der = listProcessos[13]
-        self.dataInicio = listProcessos[14]
-        self.dataFim = listProcessos[15]
-        self.valorCausa = listProcessos[16]
-        self.dataCadastro = listProcessos[17]
-        self.dataUltAlt = listProcessos[18]
+        self.pontuacao = listProcessos[12]
+        self.dib = listProcessos[13]
+        self.der = listProcessos[14]
+        self.mediaSalarial = listProcessos[15]
+        self.dataInicio = listProcessos[16]
+        self.dataFim = listProcessos[17]
+        self.valorCausa = listProcessos[18]
+        self.dataCadastro = listProcessos[19]
+        self.dataUltAlt = listProcessos[20]
 
         if retornaInst:
             return self
 
     def __repr__(self):
         return f"""Processos(
-            processosId: {self.processosId},
+            processoId: {self.processoId},
             clienteId: {self.clienteId},
             advogadoId: {self.advogadoId},
             numeroProcesso: {self.numeroProcesso},
@@ -110,8 +118,10 @@ class ProcessosModelo:
             cidade: {self.cidade},
             situacaoId: {self.situacaoId},
             tempoContribuicao: {self.tempoContribuicao},
+            pontuacao: {self.pontuacao},
             dib: {self.dib},
             der: {self.der},
+            mediaSalarial: {self.mediaSalarial},
             dataInicio: {self.dataInicio},
             dataFim: {self.dataFim},
             valorCausa: {self.valorCausa},

@@ -7,7 +7,7 @@ from helpers import comparaMesAno, calculaDiaMesAno
 from modelos.cnisCabecalhoModelo import CabecalhoModelo
 from modelos.processosModelo import ProcessosModelo
 from modelos.clienteModelo import ClienteModelo
-from newPrevEnums import NaturezaProcesso, TipoProcesso
+from newPrevEnums import NaturezaProcesso, TipoProcesso, GeneroCliente
 
 
 # Reforma 13/11/2019
@@ -24,8 +24,10 @@ class CalculosAposentadoria:
         self.daoCalculos = DaoCalculos(db)
         self.listaRemuneracoes = list(self.daoCalculos.buscaTodasRemuneracoes(cliente.clienteId))
         self.listaContribuicoes = list(self.daoCalculos.buscaTodasContribuicoes(cliente.clienteId))
-        self.processo.tempoContribuicao = self.calculaTempoContribuicao()
-        self.pontuacao: int = sum(self.processo.tempoContribuicao) + self.cliente.idade
+        self.tempoContribCalculado: list = self.calculaTempoContribuicao()
+        self.pontuacao: int = sum(self.tempoContribCalculado) + self.cliente.idade
+
+        print(f"calculaPontosRegraPontos: {self.regraTransPontos()}")
 
         print(' ------------------------------------- ')
         print(f'len(self.listaRemuneracoes): {len(self.listaRemuneracoes)}')
@@ -137,4 +139,25 @@ class CalculosAposentadoria:
             diferencaMeses: int = cabecalho.dataFim.month - cabecalho.dataInicio.month + 1 - somaIndicadores
             return datetime.timedelta(days=30 * diferencaMeses)
 
-        
+    def regraTransPontos(self):
+        pontuacaoAtingida: bool = False
+        tempoMinimoContrib: bool = False
+
+        if self.cliente.genero == GeneroCliente.masculino.value:
+            pontuacaoAtingida = self.calculaPontosRegraPontos(GeneroCliente.masculino)
+            tempoMinimoContrib = self.tempoContribCalculado[2] >= 35
+        else:
+            pontuacaoAtingida = self.calculaPontosRegraPontos(GeneroCliente.feminino)
+            tempoMinimoContrib = self.tempoContribCalculado[2] >= 30
+
+        print(f"self.tempoContribCalculado[2]: {self.tempoContribCalculado[2]}")
+        print(f"self.pontuacao: {self.pontuacao}")
+
+        return pontuacaoAtingida and tempoMinimoContrib
+
+    def calculaPontosRegraPontos(self, generoCliente: GeneroCliente) -> bool:
+        acrescimoAnual = datetime.date.today().year - 2019
+        if generoCliente == GeneroCliente.masculino:
+            return self.pontuacao >= 96 + acrescimoAnual
+        else:
+            return self.pontuacao >= 96 + acrescimoAnual

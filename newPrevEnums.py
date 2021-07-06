@@ -110,3 +110,8 @@ class AtivApos(Enum):
     acaoTrabalhista = 13
     aprendiz = 14
     seminarista = 15
+
+
+class GeneroCliente(Enum):
+    masculino = 'M'
+    feminino = 'F'

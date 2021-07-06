@@ -9,6 +9,7 @@ class ClienteModelo:
         self.clienteId: int = None
         self.nomeCliente: str = None
         self.sobrenomeCliente: str = None
+        self.genero: str = None
         self.idade: int = None
         self.dataNascimento: datetime = None
         self.email: str = ''
@@ -43,6 +44,7 @@ class ClienteModelo:
             'clienteId': self.clienteId,
             'nomeCliente': self.nomeCliente,
             'sobrenomeCliente': self.sobrenomeCliente,
+            'genero': self.genero,
             'idade': self.idade,
             'dataNascimento': self.dataNascimento,
             'email': self.email,
@@ -74,6 +76,7 @@ class ClienteModelo:
         self.clienteId = dictCliente['clienteId']
         self.nomeCliente = dictCliente['nomeCliente']
         self.sobrenomeCliente = dictCliente['sobrenomeCliente']
+        self.genero = dictCliente['genero']
         self.idade = dictCliente['idade']
         self.dataNascimento = dictCliente['dataNascimento']
         self.email = dictCliente['email']
@@ -108,33 +111,34 @@ class ClienteModelo:
                 self.clienteId = listCliente[1]
                 self.nomeCliente = listCliente[2]
                 self.sobrenomeCliente = listCliente[3]
-                self.idade = listCliente[4]
-                self.dataNascimento = listCliente[5]
-                self.email = listCliente[6]
-                self.rgCliente = listCliente[7]
-                self.cpfCliente = listCliente[8]
-                self.nomeBanco = listCliente[9]
-                self.agenciaBanco = listCliente[10]
-                self.numeroConta = listCliente[11]
-                self.pixCliente = listCliente[12]
-                self.grauEscolaridade = listCliente[13]
-                self.senhaINSS = listCliente[14]
-                self.numCartProf = listCliente[15]
-                self.nit = listCliente[16]
-                self.nomeMae = listCliente[17]
-                self.estadoCivil = listCliente[18]
-                self.profissao = listCliente[19]
-                self.endereco = listCliente[20]
-                self.estado = listCliente[21]
-                self.cidade = listCliente[22]
-                self.numero = listCliente[23]
-                self.bairro = listCliente[24]
-                self.cep = listCliente[25]
-                self.complemento = listCliente[26]
-                self.dataCadastro = listCliente[27]
-                self.dataUltAlt = listCliente[28]
+                self.genero = listCliente[4]
+                self.idade = listCliente[5]
+                self.dataNascimento = listCliente[6]
+                self.email = listCliente[7]
+                self.rgCliente = listCliente[8]
+                self.cpfCliente = listCliente[9]
+                self.nomeBanco = listCliente[10]
+                self.agenciaBanco = listCliente[11]
+                self.numeroConta = listCliente[12]
+                self.pixCliente = listCliente[13]
+                self.grauEscolaridade = listCliente[14]
+                self.senhaINSS = listCliente[15]
+                self.numCartProf = listCliente[16]
+                self.nit = listCliente[17]
+                self.nomeMae = listCliente[18]
+                self.estadoCivil = listCliente[19]
+                self.profissao = listCliente[20]
+                self.endereco = listCliente[21]
+                self.estado = listCliente[22]
+                self.cidade = listCliente[23]
+                self.numero = listCliente[24]
+                self.bairro = listCliente[25]
+                self.cep = listCliente[26]
+                self.complemento = listCliente[27]
+                self.dataCadastro = listCliente[28]
+                self.dataUltAlt = listCliente[29]
 
-                self.telefone = TelefoneModelo().fromList(listCliente[29:])
+                self.telefone = TelefoneModelo().fromList(listCliente[30:])
                 # pathCnis: {self.pathCnis}
             if retornaInst:
                 return self
@@ -146,6 +150,7 @@ class ClienteModelo:
             clienteId: {self.clienteId},
             nomeCliente: {self.nomeCliente},
             sobrenomeCliente: {self.sobrenomeCliente},
+            genero: {self.genero},
             idade: {self.idade},
             dataNascimento: {self.dataNascimento},
             email: {self.email},

@@ -7,7 +7,7 @@ from helpers import comparaMesAno, calculaDiaMesAno
 from modelos.cnisCabecalhoModelo import CabecalhoModelo
 from modelos.processosModelo import ProcessosModelo
 from modelos.clienteModelo import ClienteModelo
-from newPrevEnums import NaturezaProcesso, TipoProcesso, GeneroCliente
+from newPrevEnums import RegraTransicao, GeneroCliente
 
 
 # Reforma 13/11/2019
@@ -26,6 +26,16 @@ class CalculosAposentadoria:
         self.listaContribuicoes = list(self.daoCalculos.buscaTodasContribuicoes(cliente.clienteId))
         self.tempoContribCalculado: list = self.calculaTempoContribuicao()
         self.pontuacao: int = sum(self.tempoContribCalculado) + self.cliente.idade
+
+        self.regrasTransicao = {
+            RegraTransicao.pontos: self.regraTransPontos(),
+        }
+
+        self.valorBeneficios = {
+            RegraTransicao.pontos: 0
+        }
+
+        self.calculaBeneficios()
 
         print(f"calculaPontosRegraPontos: {self.regraTransPontos()}")
 
@@ -161,3 +171,11 @@ class CalculosAposentadoria:
             return self.pontuacao >= 96 + acrescimoAnual
         else:
             return self.pontuacao >= 96 + acrescimoAnual
+
+    def calculaBeneficios(self):
+        if self.regrasTransicao[RegraTransicao.pontos]:
+            
+
+
+
+

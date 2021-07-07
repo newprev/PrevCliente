@@ -112,6 +112,9 @@ class AtivApos(Enum):
     seminarista = 15
 
 
+class RegraTransicao(Enum):
+    pontos = 0
+
 class GeneroCliente(Enum):
     masculino = 'M'
     feminino = 'F'

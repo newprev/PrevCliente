@@ -115,6 +115,7 @@ class AtivApos(Enum):
 class RegraTransicao(Enum):
     pontos = 0
     reducaoIdadeMinima = 1
+    pedagio = 2
 
 
 class GeneroCliente(Enum):

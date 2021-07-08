@@ -21,8 +21,8 @@ class CalculosAposentadoria:
     def __init__(self, processo: ProcessosModelo, cliente: ClienteModelo, db=None):
         self.processo = processo
         self.cliente = cliente
-        self.cabecalhos: list = []
         self.daoCalculos = DaoCalculos(db)
+        self.cabecalhos: list = list(self.daoCalculos.buscaCabecalhosClienteId(self.cliente.clienteId))
         self.listaRemuneracoes = list(self.daoCalculos.buscaTodasRemuneracoes(cliente.clienteId))
         self.listaContribuicoes = list(self.daoCalculos.buscaTodasContribuicoes(cliente.clienteId))
 
@@ -33,12 +33,14 @@ class CalculosAposentadoria:
 
         self.regrasTransicao = {
             RegraTransicao.pontos: self.regraTransPontos(),
-            RegraTransicao.reducaoIdadeMinima: self.regraRedIdadeMinima()
+            RegraTransicao.reducaoIdadeMinima: self.regraRedIdadeMinima(),
+            RegraTransicao.pedagio: self.regraPedagio()
         }
 
         self.valorBeneficios = {
             RegraTransicao.pontos: 0,
-            RegraTransicao.reducaoIdadeMinima: 0
+            RegraTransicao.reducaoIdadeMinima: 0,
+            RegraTransicao.pedagio: 0
         }
 
         self.calculaBeneficios()
@@ -49,18 +51,22 @@ class CalculosAposentadoria:
         print(f'self.processo.tempoContribuicao: {self.processo.tempoContribuicao}')
         print(f'self.regrasTransicao: {self.regrasTransicao}')
         print(f'self.valorBeneficios: {self.valorBeneficios}')
+        print(f'self.tempoContribCalculado: {self.tempoContribCalculado}')
         print('-------------------------------------\n\n')
 
     def calculaMediaSalarial(self):
         dfContribuicoes: pd.DataFrame = self.daoCalculos.buscaRemContPorData(self.cliente.clienteId, '1994-07-31')
         return dfContribuicoes['salContribuicao'].mean()
 
-    def calculaTempoContribuicao(self) -> List[int]:
+    def calculaTempoContribuicao(self, cabecalhos: list = None) -> List[int]:
         listTimedeltas: list = []
         totalDias: int = 0
         antesReforma: bool = True
 
-        listaBanco: List[CabecalhoModelo] = list(self.daoCalculos.buscaCabecalhosClienteId(self.cliente.clienteId))
+        if cabecalhos is None:
+            listaBanco: List[CabecalhoModelo] = self.cabecalhos
+        else:
+            listaBanco: List[CabecalhoModelo] = cabecalhos
 
         for cabecalho in listaBanco:
             
@@ -159,7 +165,7 @@ class CalculosAposentadoria:
             diferencaMeses: int = cabecalho.dataFim.month - cabecalho.dataInicio.month + 1 - somaIndicadores
             return datetime.timedelta(days=30 * diferencaMeses)
 
-    def regraTransPontos(self):
+    def regraTransPontos(self) -> bool:
         pontuacaoAtingida: bool = False
         tempoMinimoContrib: bool = False
 
@@ -172,7 +178,7 @@ class CalculosAposentadoria:
 
         return pontuacaoAtingida and tempoMinimoContrib
 
-    def regraRedIdadeMinima(self):
+    def regraRedIdadeMinima(self) -> bool:
         acrescimoMensal: float = 0
         acrescimoAnual: int = 0
         idadeMesesCliente: float = 0
@@ -209,6 +215,25 @@ class CalculosAposentadoria:
             if totalAcrescimo > 6:
                 totalAcrescimo = 6
             return self.tempoContribCalculado[2] >= 30 and self.cliente.idade + idadeMesesCliente >= 56 + totalAcrescimo
+
+    def regraPedagio(self) -> bool:
+        listaCabecalhosPedagio = []
+        tempoContribAntesReforma = 0
+
+        for cabecalho in self.cabecalhos:
+            if cabecalho.dataFim.date() <= self.dataReforma:
+                listaCabecalhosPedagio.append(cabecalho)
+        tempoContribAntesReforma = self.calculaTempoContribuicao(listaCabecalhosPedagio)[2]
+
+        print('***************************')
+        print(f"self.cliente.idade - (datetime.datetime.now().year - 2019): {self.cliente.idade - (datetime.datetime.now().year - 2019)}")
+        print(f'tempoContribAntesReforma: {tempoContribAntesReforma}')
+        print('***************************')
+
+        if self.cliente.genero == 'M':
+            return 35 - tempoContribAntesReforma <= 2
+        else:
+            return 30 - tempoContribAntesReforma <= 2
 
     def calculaPontosRegraPontos(self, generoCliente: GeneroCliente) -> bool:
         """

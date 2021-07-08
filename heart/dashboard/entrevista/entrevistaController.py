@@ -42,7 +42,6 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.clienteAtual = ClienteModelo()
         self.daoProcesso = DaoProcessos(db=db)
         self.daoCliente = DaoCliente(db=db)
-        # self.daoCalculos = DaoCalculos(db=db)
         self.processoModelo = ProcessosModelo()
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.escondeLoading)

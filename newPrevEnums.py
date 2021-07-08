@@ -110,3 +110,14 @@ class AtivApos(Enum):
     acaoTrabalhista = 13
     aprendiz = 14
     seminarista = 15
+
+
+class RegraTransicao(Enum):
+    pontos = 0
+    reducaoIdadeMinima = 1
+    pedagio = 2
+
+
+class GeneroCliente(Enum):
+    masculino = 'M'
+    feminino = 'F'

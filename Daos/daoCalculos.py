@@ -1,8 +1,10 @@
 import sqlite3
 from datetime import datetime
+from typing import List
 
 from Daos.tabelas import TabelasConfig
 from pymysql import connections
+import pandas as pd
 
 from newPrevEnums import TipoContribuicao
 
@@ -179,6 +181,52 @@ class DaoCalculos:
             print(f'buscaBeneficioPorId ({type(erro)}) - {erro}')
             logPrioridade(f'Erro SQL - buscaBeneficioPorId {self.config.tblCnisBeneficios}', TipoEdicao.erro, Prioridade.saidaImportante)
             raise Warning(f'Erro SQL - buscaBeneficioPorId {self.config.tblCnisBeneficios} <SELECT>')
+        finally:
+            self.disconectBD(cursor)
+
+    def buscaRemContPorData(self, clienteId: int,  dataInicio: str, dataFim: str = '') -> pd.DataFrame:
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""
+            SELECT clienteId, contribuicoesId, competencia, salContribuicao, indicadores, 'CONTRIBUICAO'
+            FROM {self.config.tblCnisContribuicoes}
+            WHERE competencia > '{dataInicio}'
+            AND clienteId = {clienteId}"""
+
+        if dataFim != '':
+            strComando += f"""AND
+                competencia < {dataFim}"""
+
+        strComando += f"""
+        
+            UNION
+                
+            SELECT clienteId, remuneracoesId, competencia, remuneracao, indicadores, 'REMUNERACAO'
+            FROM {self.config.tblCnisRemuneracoes}
+            WHERE competencia > '{dataInicio}'
+            AND clienteId = {clienteId}
+        """
+
+        if dataFim != '':
+            strComando += f"""
+            AND
+                competencia < {dataFim}"""
+
+        try:
+            cursor.execute(strComando)
+            colunas: list = ['clienteId', 'infoId', 'competencia', 'salContribuicao', 'indicadores', 'tipoInfo']
+            dfContribuicoes = pd.DataFrame(cursor.fetchall(), columns=colunas)
+            logPrioridade(f'SELECT<buscaRemContPorData>___________________{self.config.tblCnisBeneficios}', TipoEdicao.select, Prioridade.saidaComun)
+            return dfContribuicoes
+        except Exception as erro:
+            print(f'buscaRemContPorData ({type(erro)}) - {erro}')
+            logPrioridade(f'Erro SQL - buscaRemContPorData {self.config.tblCnisBeneficios}', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - buscaRemContPorData {self.config.tblCnisBeneficios} <SELECT>')
         finally:
             self.disconectBD(cursor)
 

@@ -114,6 +114,8 @@ class AtivApos(Enum):
 
 class RegraTransicao(Enum):
     pontos = 0
+    reducaoIdadeMinima = 1
+
 
 class GeneroCliente(Enum):
     masculino = 'M'

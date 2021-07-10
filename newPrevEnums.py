@@ -116,6 +116,7 @@ class RegraTransicao(Enum):
     pontos = 0
     reducaoIdadeMinima = 1
     pedagio = 2
+    reducaoTempoContribuicao = 3
 
 
 class GeneroCliente(Enum):

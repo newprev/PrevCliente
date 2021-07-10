@@ -10,6 +10,7 @@ class TabelasConfig:
         self.__tblCliente = 'cliente'
         self.__tblTelefones = 'telefones'
         self.__tblProcessos = 'processos'
+        self.__tblExpSobrevida = 'expSobrevida'
         self.__tblCnisRemuneracoes = 'cnisRemuneracoes'
         self.__tblCnisBeneficios = 'cnisBeneficios'
         self.__tblCnisContribuicoes = 'cnisContribuicoes'
@@ -152,6 +153,27 @@ class TabelasConfig:
                 dataCadastro DATETIME NOT NULL,
                 dataUltAlt DATETIME NOT NULL{bottom}
             """
+
+    # Comando SQL para criar tabela de expectativa de sobrevida
+    @property
+    def sqlCreateExpSobrevida(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'infoId INT AUTO_INCREMENT,'
+            bottom = """,
+            PRIMARY KEY (infoId)
+        );"""
+        else:
+            cabecalho = 'infoId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
+        CREATE TABLE IF NOT EXISTS {self.__tblExpSobrevida}(
+            {cabecalho}
+            dataReferente DATETIME NOT NULL,
+            idade INT NOT NULL,
+            expectativaSobrevida INT NOT NULL,
+            dataCadastro DATETIME NOT NULL,
+            dataUltAlt DATETIME NOT NULL{bottom}
+        """
 
     # Comando SQL para criar tabela de processos
     @property
@@ -405,6 +427,10 @@ class TabelasConfig:
     @property
     def tblProcessos(self):
         return self.__tblProcessos
+
+    @property
+    def tblExpSobrevida(self):
+        return self.__tblExpSobrevida
 
     @property
     def tblCnisRemuneracoes(self):

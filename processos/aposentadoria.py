@@ -34,12 +34,14 @@ class CalculosAposentadoria:
         self.regrasTransicao = {
             RegraTransicao.pontos: self.regraTransPontos(),
             RegraTransicao.reducaoIdadeMinima: self.regraRedIdadeMinima(),
-            RegraTransicao.pedagio: self.regraPedagio()
+            RegraTransicao.pedagio: self.regraPedagio(),
+            RegraTransicao.reducaoTempoContribuicao: self.regraRedTempoContrib()
         }
 
         self.valorBeneficios = {
             RegraTransicao.pontos: 0,
             RegraTransicao.reducaoIdadeMinima: 0,
+            # TODO: Para calcular o valor do benefício, preciso saber qual o fator previdenciário
             RegraTransicao.pedagio: 0
         }
 
@@ -225,15 +227,47 @@ class CalculosAposentadoria:
                 listaCabecalhosPedagio.append(cabecalho)
         tempoContribAntesReforma = self.calculaTempoContribuicao(listaCabecalhosPedagio)[2]
 
-        print('***************************')
-        print(f"self.cliente.idade - (datetime.datetime.now().year - 2019): {self.cliente.idade - (datetime.datetime.now().year - 2019)}")
-        print(f'tempoContribAntesReforma: {tempoContribAntesReforma}')
-        print('***************************')
+        # print('***************************')
+        # print(f"self.cliente.idade - (datetime.datetime.now().year - 2019): {self.cliente.idade - (datetime.datetime.now().year - 2019)}")
+        # print(f'tempoContribAntesReforma: {tempoContribAntesReforma}')
+        # print('***************************')
 
         if self.cliente.genero == 'M':
             return 35 - tempoContribAntesReforma <= 2
         else:
             return 30 - tempoContribAntesReforma <= 2
+
+    def regraRedTempoContrib(self) -> bool:
+        """
+        Para as mulheres, a idade mínima para conquistar o benefício é acrescida de 6 meses a cada ano à partir de 2020.
+        Em 2023, esse acréscimo é interrompido, permanecendo com o máximo de 62 anos.
+        :return: bool
+        """
+
+        if self.cliente.genero == 'M':
+            return self.tempoContribCalculado[2] >= 15 and self.cliente.idade >= 65
+        else:
+            mesAtual: int = datetime.date.today().month
+            mesNascCliente: int = strToDatetime(self.cliente.dataNascimento, TamanhoData.gg).month
+
+            if datetime.date.today().year >= 2023:
+                acrescimoTotal: float = 2
+            else:
+                acrescimoTotal: float = 0.5 * (datetime.date.today().year - 2019)
+
+            # Ginática matemática para caclular a qtd de meses até o aniversário do(a) cliente
+            if mesAtual - mesNascCliente > 0:
+                if mesAtual - mesNascCliente < 6:
+                    idadeMesesCliente = 0
+                else:
+                    idadeMesesCliente = 0.5
+            else:
+                if 12 + (mesAtual - mesNascCliente) < 6:
+                    idadeMesesCliente = 0
+                else:
+                    idadeMesesCliente = 0.5
+
+            return self.tempoContribCalculado[2] >= 15 and self.cliente.idade + idadeMesesCliente >= 60 + acrescimoTotal
 
     def calculaPontosRegraPontos(self, generoCliente: GeneroCliente) -> bool:
         """
@@ -242,9 +276,13 @@ class CalculosAposentadoria:
         """
         acrescimoAnual = datetime.date.today().year - 2019
         if generoCliente == GeneroCliente.masculino:
+            if acrescimoAnual >= 9:
+                acrescimoAnual = 9
             return self.pontuacao >= 96 + acrescimoAnual and self.tempoContribCalculado[2] >= 20
         else:
-            return self.pontuacao >= 96 + acrescimoAnual and self.tempoContribCalculado[2] >= 15
+            if acrescimoAnual >= 14:
+                acrescimoAnual = 14
+            return self.pontuacao >= 86 + acrescimoAnual and self.tempoContribCalculado[2] >= 15
 
     def calculaBeneficios(self):
         """
@@ -260,4 +298,7 @@ class CalculosAposentadoria:
 
         if self.regrasTransicao[RegraTransicao.reducaoIdadeMinima]:
             self.valorBeneficios[RegraTransicao.reducaoIdadeMinima] = self.mediaSalarial * (0.6 + 2 * (self.tempoContribCalculado[2] - tempoMinimo) / 100)
+
+        if self.regrasTransicao[RegraTransicao.reducaoTempoContribuicao]:
+            self.valorBeneficios[RegraTransicao.reducaoTempoContribuicao] = self.mediaSalarial * (0.6 + 2 * (self.tempoContribCalculado[2] - tempoMinimo) / 100)
 

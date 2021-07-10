@@ -6,6 +6,7 @@ from Daos.daoCalculos import DaoCalculos
 from helpers import comparaMesAno, calculaDiaMesAno, mascaraDataSql, strToDatetime
 
 from modelos.cnisCabecalhoModelo import CabecalhoModelo
+from modelos.expSobrevidaModelo import ExpectativaSobrevidaModelo
 from modelos.processosModelo import ProcessosModelo
 from modelos.clienteModelo import ClienteModelo
 from newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData
@@ -28,13 +29,14 @@ class CalculosAposentadoria:
 
         self.mediaSalarial: float = self.calculaMediaSalarial()
         self.dataReforma: datetime.date = datetime.date(2019, 11, 13)
+        self.fatorPrevidenciario: int = 1
         self.tempoContribCalculado: list = self.calculaTempoContribuicao()
         self.pontuacao: int = sum(self.tempoContribCalculado) + self.cliente.idade
 
         self.regrasTransicao = {
             RegraTransicao.pontos: self.regraTransPontos(),
             RegraTransicao.reducaoIdadeMinima: self.regraRedIdadeMinima(),
-            RegraTransicao.pedagio: self.regraPedagio(),
+            RegraTransicao.pedagio50: self.regraPedagio50(),
             RegraTransicao.reducaoTempoContribuicao: self.regraRedTempoContrib()
         }
 
@@ -42,7 +44,7 @@ class CalculosAposentadoria:
             RegraTransicao.pontos: 0,
             RegraTransicao.reducaoIdadeMinima: 0,
             # TODO: Para calcular o valor do benefício, preciso saber qual o fator previdenciário
-            RegraTransicao.pedagio: 0
+            RegraTransicao.pedagio50: 0
         }
 
         self.calculaBeneficios()
@@ -55,6 +57,37 @@ class CalculosAposentadoria:
         print(f'self.valorBeneficios: {self.valorBeneficios}')
         print(f'self.tempoContribCalculado: {self.tempoContribCalculado}')
         print('-------------------------------------\n\n')
+
+    def calculaFatorPrevidenciario(self):
+        """
+        Cálculo do fator previdenciário
+
+        :var<float>: tempCont - Tempo de contribuição até o momento da aposentadoria
+        :var<float>: aliq - Alíquota de contribuição
+        :var<float>: expSobrevida - Expectativa de sobrevida após a data do início do benefício (dib)
+        :var<float>: idade - Idade do cliente na data do início do benefício
+
+        :return<float>: fatorPrev  = ((tempCont * aliq) / expSobrevida) * (1 + (idade + (tempCont * aliq)) / 100)
+        """
+        tempCont: float = self.tempoContribCalculado[2] + ((self.tempoContribCalculado[0] / 30) + self.tempoContribCalculado[1] / 12)
+        aliq: float = 0.31
+        idade = self.cliente.idade
+        expSobrevidaModelo: ExpectativaSobrevidaModelo = self.daoCalculos.buscaExpSobrevidaPorData(datetime.datetime.now(), idade)
+        expSobrevida: int = expSobrevidaModelo.expectativaSobrevida
+
+        fatorPrev = ((tempCont * aliq) / expSobrevida) * (1 + (idade + (tempCont * aliq)) / 100)
+
+        print('\n\n------------------------------------ calculaFatorPrevidenciario')
+        print(f"tempCont: {tempCont}")
+        print(f"aliq: {aliq}")
+        print(f"idade: {idade}")
+        print(f"expSobrevida: {expSobrevida}")
+        print(f"fatorPrev: {fatorPrev}")
+        print('------------------------------------ calculaFatorPrevidenciario\n\n')
+        return fatorPrev
+
+
+
 
     def calculaMediaSalarial(self):
         dfContribuicoes: pd.DataFrame = self.daoCalculos.buscaRemContPorData(self.cliente.clienteId, '1994-07-31')
@@ -218,7 +251,7 @@ class CalculosAposentadoria:
                 totalAcrescimo = 6
             return self.tempoContribCalculado[2] >= 30 and self.cliente.idade + idadeMesesCliente >= 56 + totalAcrescimo
 
-    def regraPedagio(self) -> bool:
+    def regraPedagio50(self) -> bool:
         listaCabecalhosPedagio = []
         tempoContribAntesReforma = 0
 
@@ -298,6 +331,10 @@ class CalculosAposentadoria:
 
         if self.regrasTransicao[RegraTransicao.reducaoIdadeMinima]:
             self.valorBeneficios[RegraTransicao.reducaoIdadeMinima] = self.mediaSalarial * (0.6 + 2 * (self.tempoContribCalculado[2] - tempoMinimo) / 100)
+
+        if self.regrasTransicao[RegraTransicao.pedagio50]:
+            self.fatorPrevidenciario = self.calculaFatorPrevidenciario()
+            self.valorBeneficios[RegraTransicao.pedagio50] = 4
 
         if self.regrasTransicao[RegraTransicao.reducaoTempoContribuicao]:
             self.valorBeneficios[RegraTransicao.reducaoTempoContribuicao] = self.mediaSalarial * (0.6 + 2 * (self.tempoContribCalculado[2] - tempoMinimo) / 100)

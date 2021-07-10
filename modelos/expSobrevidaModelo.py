@@ -41,8 +41,9 @@ class ExpectativaSobrevidaModelo:
         return self
 
     def fromList(self, listExpectativaSobrevida: list, retornaInst: bool = True):
+        print(listExpectativaSobrevida)
         self.infoId = listExpectativaSobrevida[0]
-        self.dataReferente = strToDatetime(listExpectativaSobrevida[1], TamanhoData.mm)
+        self.dataReferente = strToDatetime(listExpectativaSobrevida[1], TamanhoData.gg)
         self.idade = listExpectativaSobrevida[2]
         self.expectativaSobrevida = listExpectativaSobrevida[3]
         self.dataCadastro = strToDatetime(listExpectativaSobrevida[4], TamanhoData.gg)

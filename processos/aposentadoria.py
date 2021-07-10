@@ -83,6 +83,7 @@ class CalculosAposentadoria:
         print(f"idade: {idade}")
         print(f"expSobrevida: {expSobrevida}")
         print(f"fatorPrev: {fatorPrev}")
+        print(f"Possível dib: {expSobrevidaModelo.dataReferente}")
         print('------------------------------------ calculaFatorPrevidenciario\n\n')
         return fatorPrev
 

@@ -157,7 +157,8 @@ class Ui_wdgQuizAposentadoria(object):
         self.horizontalLayout.addWidget(self.lbTituloNatureza)
         self.gridLayout.addWidget(self.frame_2, 0, 0, 1, 1)
         self.scrollArea = QtWidgets.QScrollArea(self.frMain)
-        self.scrollArea.setMinimumSize(QtCore.QSize(830, 600))
+        self.scrollArea.setMinimumSize(QtCore.QSize(830, 500))
+        self.scrollArea.setMaximumSize(QtCore.QSize(16777215, 500))
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setAlignment(QtCore.Qt.AlignCenter)
         self.scrollArea.setObjectName("scrollArea")
@@ -441,7 +442,7 @@ class Ui_wdgQuizAposentadoria(object):
         self.horizontalLayout_16.addWidget(self.cbAtiv16)
         self.verticalLayout_2.addWidget(self.frInfo16, 0, QtCore.Qt.AlignHCenter)
         self.scrollArea.setWidget(self.scrollCentral)
-        self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 1, QtCore.Qt.AlignTop)
         self.verticalLayout.addWidget(self.frMain)
 
         self.retranslateUi(wdgQuizAposentadoria)

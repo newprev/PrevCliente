@@ -382,6 +382,10 @@ def datetimeToSql(data: datetime.datetime) -> str:
     return data.strftime('%Y-%m-%d %H:%M')
 
 
+def dateToSql(data: datetime.date) -> str:
+    return data.strftime('%Y-%m-%d')
+
+
 def strToDatetime(data: str, tamanho: TamanhoData = TamanhoData.m):
     if not isinstance(data, str):
         data = data.strftime('%Y-%m-%d %H:%M')

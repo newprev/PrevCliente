@@ -1,11 +1,13 @@
 import sqlite3
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from typing import List
 
 from Daos.tabelas import TabelasConfig
 from pymysql import connections
 import pandas as pd
 
+from modelos.expSobrevidaModelo import ExpectativaSobrevidaModelo
 from newPrevEnums import TipoContribuicao
 
 from helpers import datetimeToSql
@@ -184,6 +186,42 @@ class DaoCalculos:
         finally:
             self.disconectBD(cursor)
 
+    def buscaExpSobrevidaPorData(self, data: datetime, idadeCliente: int) -> ExpectativaSobrevidaModelo:
+        dataReferente: str = datetimeToSql(data)
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""                
+            SELECT 
+                infoId, dataReferente, idade,
+                expectativaSobrevida, dataCadastro, dataUltAlt
+            FROM 
+                {self.config.tblExpSobrevida} 
+            WHERE 
+                dataReferente > '{dataReferente}'
+            AND 
+                idade = {idadeCliente};
+        """
+
+        try:
+            cursor.execute(strComando)
+            logPrioridade(f'SELECT<buscaExpSobrevidaPorData>___________________{self.config.tblExpSobrevida}', TipoEdicao.select, Prioridade.saidaComun)
+            if cursor.fetchone() is None:
+                return self.buscaExpSobrevidaPorData(data - relativedelta(years=1), idadeCliente)
+            else:
+                cursor.execute(strComando)
+                return ExpectativaSobrevidaModelo().fromList(cursor.fetchone())
+        except Exception as erro:
+            print(f'buscaExpSobrevidaPorData ({type(erro)}) - {erro}')
+            logPrioridade(f'Erro SQL - buscaExpSobrevidaPorData {self.config.tblExpSobrevida}', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - buscaExpSobrevidaPorData {self.config.tblExpSobrevida} <SELECT>')
+        finally:
+            self.disconectBD(cursor)
+
     def buscaRemContPorData(self, clienteId: int,  dataInicio: str, dataFim: str = '') -> pd.DataFrame:
 
         if not isinstance(self.db, sqlite3.Connection):
@@ -195,12 +233,12 @@ class DaoCalculos:
         strComando = f"""
             SELECT clienteId, contribuicoesId, competencia, salContribuicao, indicadores, 'CONTRIBUICAO'
             FROM {self.config.tblCnisContribuicoes}
-            WHERE competencia > '{dataInicio}'
-            AND clienteId = {clienteId}"""
+            WHERE clienteId = {clienteId}
+            AND competencia > '{dataInicio}'"""
 
         if dataFim != '':
-            strComando += f"""AND
-                competencia < {dataFim}"""
+            strComando += f"""
+            AND competencia < '{dataFim}'"""
 
         strComando += f"""
         
@@ -208,14 +246,12 @@ class DaoCalculos:
                 
             SELECT clienteId, remuneracoesId, competencia, remuneracao, indicadores, 'REMUNERACAO'
             FROM {self.config.tblCnisRemuneracoes}
-            WHERE competencia > '{dataInicio}'
-            AND clienteId = {clienteId}
-        """
+            WHERE clienteId = {clienteId}
+            AND competencia > '{dataInicio}'"""
 
         if dataFim != '':
             strComando += f"""
-            AND
-                competencia < {dataFim}"""
+            AND competencia < '{dataFim}'"""
 
         try:
             cursor.execute(strComando)

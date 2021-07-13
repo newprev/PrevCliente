@@ -3,9 +3,10 @@ from typing import List
 import pandas as pd
 
 from Daos.daoCalculos import DaoCalculos
-from helpers import comparaMesAno, calculaDiaMesAno, mascaraDataSql, strToDatetime
+from helpers import comparaMesAno, calculaDiaMesAno, mascaraDataSql, strToDatetime, datetimeToSql, dateToSql
 
 from modelos.cnisCabecalhoModelo import CabecalhoModelo
+from modelos.expSobrevidaModelo import ExpectativaSobrevidaModelo
 from modelos.processosModelo import ProcessosModelo
 from modelos.clienteModelo import ClienteModelo
 from newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData
@@ -22,25 +23,40 @@ class CalculosAposentadoria:
         self.processo = processo
         self.cliente = cliente
         self.daoCalculos = DaoCalculos(db)
-        self.cabecalhos: list = list(self.daoCalculos.buscaCabecalhosClienteId(self.cliente.clienteId))
+        self.cabecalhos: List[CabecalhoModelo] = list(self.daoCalculos.buscaCabecalhosClienteId(self.cliente.clienteId))
         self.listaRemuneracoes = list(self.daoCalculos.buscaTodasRemuneracoes(cliente.clienteId))
         self.listaContribuicoes = list(self.daoCalculos.buscaTodasContribuicoes(cliente.clienteId))
 
         self.mediaSalarial: float = self.calculaMediaSalarial()
         self.dataReforma: datetime.date = datetime.date(2019, 11, 13)
+        self.fatorPrevidenciario: int = 1
         self.tempoContribCalculado: list = self.calculaTempoContribuicao()
         self.pontuacao: int = sum(self.tempoContribCalculado) + self.cliente.idade
 
         self.regrasTransicao = {
             RegraTransicao.pontos: self.regraTransPontos(),
             RegraTransicao.reducaoIdadeMinima: self.regraRedIdadeMinima(),
-            RegraTransicao.pedagio: self.regraPedagio()
+            RegraTransicao.pedagio50: self.regraPedagio50(),
+            RegraTransicao.reducaoTempoContribuicao: self.regraRedTempoContrib()
         }
 
         self.valorBeneficios = {
             RegraTransicao.pontos: 0,
             RegraTransicao.reducaoIdadeMinima: 0,
-            RegraTransicao.pedagio: 0
+            # TODO: Para calcular o valor do benefício, preciso saber qual o fator previdenciário
+            RegraTransicao.pedagio50: 0
+        }
+
+        self.dibs = {
+            RegraTransicao.pontos: None,
+            RegraTransicao.reducaoIdadeMinima: None,
+            RegraTransicao.pedagio50: None,
+            RegraTransicao.reducaoTempoContribuicao: None
+        }
+
+        self.aposentadorias = {
+            'direitoAdq': self.calculaDireitoAdquirido(),
+            'regrasTransicao': self.regrasTransicao
         }
 
         self.calculaBeneficios()
@@ -53,6 +69,70 @@ class CalculosAposentadoria:
         print(f'self.valorBeneficios: {self.valorBeneficios}')
         print(f'self.tempoContribCalculado: {self.tempoContribCalculado}')
         print('-------------------------------------\n\n')
+
+    def defineDIB(self, data: datetime):
+        self.processo.dib = data
+
+    def calculaDireitoAdquirido(self):
+        listTimedeltas: list = []
+        totalDias: int = 0
+        anosContribuicao: int = 0
+        antesReforma: bool = True
+
+        listaBanco: List[CabecalhoModelo] = self.cabecalhos
+
+        for cabecalho in listaBanco:
+
+            if comparaMesAno(cabecalho.dataInicio, self.dataReforma) != 1:
+                antesReforma = False
+
+            if antesReforma:
+                if cabecalho.nb is not None:
+                    if cabecalho.situacao != 'INDEFERIDO':
+                        listTimedeltas.append(self.calculaTimedeltaAr(cabecalho, listaBanco))
+                    else:
+                        listTimedeltas.append(self.calculaTimedeltaAr(cabecalho, listaBanco, buscaProxJob=False))
+                else:
+                    listTimedeltas.append(self.calculaTimedeltaAr(cabecalho, listaBanco))
+
+        for delta in listTimedeltas:
+            totalDias += delta.days
+
+        anosContribuicao = calculaDiaMesAno(totalDias)[2]
+
+        if self.cliente.genero == 'M':
+            return anosContribuicao >= 35
+        else:
+            return anosContribuicao >= 30
+
+    def calculaFatorPrevidenciario(self):
+        """
+        Cálculo do fator previdenciário
+
+        :var<float>: tempCont - Tempo de contribuição até o momento da aposentadoria
+        :var<float>: aliq - Alíquota de contribuição
+        :var<float>: expSobrevida - Expectativa de sobrevida após a data do início do benefício (dib)
+        :var<float>: idade - Idade do cliente na data do início do benefício
+
+        :return<float>: fatorPrev  = ((tempCont * aliq) / expSobrevida) * (1 + (idade + (tempCont * aliq)) / 100)
+        """
+        tempCont: float = self.tempoContribCalculado[2] + ((self.tempoContribCalculado[0] / 30) + self.tempoContribCalculado[1] / 12)
+        aliq: float = 0.31
+        idade = self.cliente.idade
+        expSobrevidaModelo: ExpectativaSobrevidaModelo = self.daoCalculos.buscaExpSobrevidaPorData(datetime.datetime.now(), idade)
+        expSobrevida: int = expSobrevidaModelo.expectativaSobrevida
+
+        fatorPrev = ((tempCont * aliq) / expSobrevida) * (1 + (idade + (tempCont * aliq)) / 100)
+
+        print('\n\n------------------------------------ calculaFatorPrevidenciario')
+        print(f"tempCont: {tempCont}")
+        print(f"aliq: {aliq}")
+        print(f"idade: {idade}")
+        print(f"expSobrevida: {expSobrevida}")
+        print(f"fatorPrev: {fatorPrev}")
+        print(f"Possível dib: {expSobrevidaModelo.dataReferente}")
+        print('------------------------------------ calculaFatorPrevidenciario\n\n')
+        return fatorPrev
 
     def calculaMediaSalarial(self):
         dfContribuicoes: pd.DataFrame = self.daoCalculos.buscaRemContPorData(self.cliente.clienteId, '1994-07-31')
@@ -216,7 +296,7 @@ class CalculosAposentadoria:
                 totalAcrescimo = 6
             return self.tempoContribCalculado[2] >= 30 and self.cliente.idade + idadeMesesCliente >= 56 + totalAcrescimo
 
-    def regraPedagio(self) -> bool:
+    def regraPedagio50(self) -> bool:
         listaCabecalhosPedagio = []
         tempoContribAntesReforma = 0
 
@@ -225,15 +305,47 @@ class CalculosAposentadoria:
                 listaCabecalhosPedagio.append(cabecalho)
         tempoContribAntesReforma = self.calculaTempoContribuicao(listaCabecalhosPedagio)[2]
 
-        print('***************************')
-        print(f"self.cliente.idade - (datetime.datetime.now().year - 2019): {self.cliente.idade - (datetime.datetime.now().year - 2019)}")
-        print(f'tempoContribAntesReforma: {tempoContribAntesReforma}')
-        print('***************************')
+        # print('***************************')
+        # print(f"self.cliente.idade - (datetime.datetime.now().year - 2019): {self.cliente.idade - (datetime.datetime.now().year - 2019)}")
+        # print(f'tempoContribAntesReforma: {tempoContribAntesReforma}')
+        # print('***************************')
 
         if self.cliente.genero == 'M':
             return 35 - tempoContribAntesReforma <= 2
         else:
             return 30 - tempoContribAntesReforma <= 2
+
+    def regraRedTempoContrib(self) -> bool:
+        """
+        Para as mulheres, a idade mínima para conquistar o benefício é acrescida de 6 meses a cada ano à partir de 2020.
+        Em 2023, esse acréscimo é interrompido, permanecendo com o máximo de 62 anos.
+        :return: bool
+        """
+
+        if self.cliente.genero == 'M':
+            return self.tempoContribCalculado[2] >= 15 and self.cliente.idade >= 65
+        else:
+            mesAtual: int = datetime.date.today().month
+            mesNascCliente: int = strToDatetime(self.cliente.dataNascimento, TamanhoData.gg).month
+
+            if datetime.date.today().year >= 2023:
+                acrescimoTotal: float = 2
+            else:
+                acrescimoTotal: float = 0.5 * (datetime.date.today().year - 2019)
+
+            # Ginática matemática para caclular a qtd de meses até o aniversário do(a) cliente
+            if mesAtual - mesNascCliente > 0:
+                if mesAtual - mesNascCliente < 6:
+                    idadeMesesCliente = 0
+                else:
+                    idadeMesesCliente = 0.5
+            else:
+                if 12 + (mesAtual - mesNascCliente) < 6:
+                    idadeMesesCliente = 0
+                else:
+                    idadeMesesCliente = 0.5
+
+            return self.tempoContribCalculado[2] >= 15 and self.cliente.idade + idadeMesesCliente >= 60 + acrescimoTotal
 
     def calculaPontosRegraPontos(self, generoCliente: GeneroCliente) -> bool:
         """
@@ -242,9 +354,13 @@ class CalculosAposentadoria:
         """
         acrescimoAnual = datetime.date.today().year - 2019
         if generoCliente == GeneroCliente.masculino:
+            if acrescimoAnual >= 9:
+                acrescimoAnual = 9
             return self.pontuacao >= 96 + acrescimoAnual and self.tempoContribCalculado[2] >= 20
         else:
-            return self.pontuacao >= 96 + acrescimoAnual and self.tempoContribCalculado[2] >= 15
+            if acrescimoAnual >= 14:
+                acrescimoAnual = 14
+            return self.pontuacao >= 86 + acrescimoAnual and self.tempoContribCalculado[2] >= 15
 
     def calculaBeneficios(self):
         """
@@ -260,4 +376,11 @@ class CalculosAposentadoria:
 
         if self.regrasTransicao[RegraTransicao.reducaoIdadeMinima]:
             self.valorBeneficios[RegraTransicao.reducaoIdadeMinima] = self.mediaSalarial * (0.6 + 2 * (self.tempoContribCalculado[2] - tempoMinimo) / 100)
+
+        if self.regrasTransicao[RegraTransicao.pedagio50]:
+            self.fatorPrevidenciario = self.calculaFatorPrevidenciario()
+            self.valorBeneficios[RegraTransicao.pedagio50] = 4
+
+        if self.regrasTransicao[RegraTransicao.reducaoTempoContribuicao]:
+            self.valorBeneficios[RegraTransicao.reducaoTempoContribuicao] = self.mediaSalarial * (0.6 + 2 * (self.tempoContribCalculado[2] - tempoMinimo) / 100)
 

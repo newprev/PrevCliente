@@ -34,24 +34,26 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
 
         self.lbNomeCompleto.setText(f"{self.cliente.nomeCliente} {self.cliente.sobrenomeCliente}")
         self.lbNit.setText(mascaraNit(int(self.cliente.nit)))
+        self.lbRepetirAte.hide()
 
         self.rbBeneficio.setChecked(True)
         self.rbContribuicao.clicked.connect(self.atualizaFoco)
-        # self.rbRemuneracao.clicked.connect(self.atualizaFoco)
         self.rbBeneficio.clicked.connect(self.atualizaFoco)
+
+        self.cbRepetir.clicked.connect(self.avaliaRepetir)
+        self.cbRepetir.setDisabled(True)
 
         self.pbarSistema.hide()
         self.pbarSistema.setValue(0)
         self.pbConfirmar.clicked.connect(self.trataInsereInfo)
         self.pbCancelar.clicked.connect(self.sairAtividade)
-        self.pbInfoIndicadores.clicked.connect(self.openInfoIndicadores)
+        self.pbInsereIndicadores.clicked.connect(self.openInfoIndicadores)
 
         self.dtCompetencia.dateChanged.connect(lambda: self.getInfo(info='dtCompetencia'))
         self.dtFim.dateChanged.connect(lambda: self.getInfo(info='dtFim'))
         self.dtInicio.dateChanged.connect(lambda: self.getInfo(info='dtInicio'))
-        self.dtFimContRem.dateChanged.connect(lambda: self.getInfo(info='dtFimContRem'))
+        self.dtRepetir.hide()
 
-        self.cbxIndicadores.currentTextChanged.connect(lambda: self.getInfo(info='cbxIndicadores'))
         self.cbxSituacao.currentTextChanged.connect(lambda: self.getInfo(info='cbxSituacao'))
         self.cbxEspecie.currentTextChanged.connect(lambda: self.getInfo(info='cbxEspecie'))
 
@@ -97,15 +99,11 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
     def mostraInfoTela(self, contribuicao, tipoContribuicao: TipoContribuicao):
         if tipoContribuicao == TipoContribuicao.contribuicao:
             self.leSalContribuicao.setText(f'{contribuicao.contribuicao}')
-            self.cbxIndicadores.setCurrentText(f'{contribuicao.indicadores}')
             self.dtCompetencia.setDate(strToDatetime(contribuicao.competencia))
-            self.dtFimContRem.setDate(strToDatetime(contribuicao.dataPagamento))
-            self.cbxIndicadores.setCurrentText(contribuicao.indicadores)
             self.defineSinalMonetario(contribuicao)
 
         elif tipoContribuicao == TipoContribuicao.remuneracao:
             self.leSalContribuicao.setText(f'{contribuicao.remuneracao}')
-            self.cbxIndicadores.setCurrentText(contribuicao.indicadores)
             self.dtCompetencia.setDate(strToDatetime(contribuicao.competencia))
             self.defineSinalMonetario(contribuicao)
 
@@ -130,21 +128,27 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
                     self.cbxSinal.setCurrentText(moeda.sinal)
                     break
 
+    def avaliaRepetir(self):
+        if self.cbRepetir.isChecked():
+            self.dtRepetir.show()
+            self.lbRepetirAte.show()
+        else:
+            self.lbRepetirAte.hide()
+            self.dtRepetir.hide()
+
     def carregaConvMons(self) -> list:
         return self.daoFerramentas.getAllMoedas(retornaModelos=True)
 
     def carregaComboBoxes(self):
         listaSinaisMonetarios: set = {moeda.sinal for moeda in self.listaConvMon}
         self.cbxSinal.addItems(listaSinaisMonetarios)
-        self.cbxIndicadores.addItems(dictIndicadores.keys())
+        # self.cbxIndicadores.addItems(dictIndicadores.keys())
         self.cbxEspecie.addItems(sorted(dictEspecies.values()))
         self.cbxSituacao.addItems(sorted(situacaoBeneficio))
 
     def carregaQtdsRemCont(self):
         qtdRemuneracoes = self.daoCalculos.contaRemuneracoes(self.cliente.clienteId)[0]
-        qtdContribuicoes = self.daoCalculos.contaContribuicoes(self.cliente.clienteId)[0]
 
-        # self.lbQtdCont.setText(str(qtdContribuicoes))
         self.lbQtdRem.setText(str(qtdRemuneracoes))
 
     def atualizaFoco(self):
@@ -153,9 +157,11 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             self.frInfoBeneficio.setStyleSheet(habilita('beneficio', True))
             self.frInfoRemCont.setStyleSheet(habilita('remCont', False))
             self.dtCompetencia.setDisabled(True)
-            self.dtFimContRem.setDisabled(True)
             self.leSalContribuicao.setDisabled(True)
-            self.cbxIndicadores.setDisabled(True)
+            self.dtRepetir.setDisabled(True)
+            self.cbRepetir.setDisabled(True)
+            self.cbxSinal.setDisabled(True)
+            self.pbInsereIndicadores.setDisabled(True)
 
             self.leNb.setDisabled(False)
             self.cbxSituacao.setDisabled(False)
@@ -163,21 +169,14 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             self.dtInicio.setDisabled(False)
             self.dtFim.setDisabled(False)
         else:
-            if self.rbContribuicao.isChecked():
-                self.lbInfoDataFim.setText('Data de Pagamento')
-                # self.lbRemCont.setText('Contribuição')
-                self.dtFimContRem.setDisabled(False)
-            else:
-                self.lbInfoDataFim.setText('Data Fim')
-                self.lbRemCont.setText('Remuneração')
-                self.dtFimContRem.setDisabled(True)
-
             self.frInfoBeneficio.setStyleSheet(habilita('beneficio', False))
             self.frInfoRemCont.setStyleSheet(habilita('remCont', True))
             self.dtCompetencia.setDisabled(False)
-            self.dtFimContRem.setDisabled(False)
             self.leSalContribuicao.setDisabled(False)
-            self.cbxIndicadores.setDisabled(False)
+            self.dtRepetir.setDisabled(False)
+            self.cbRepetir.setDisabled(False)
+            self.cbxSinal.setDisabled(False)
+            self.pbInsereIndicadores.setDisabled(False)
 
             self.leNb.setDisabled(True)
             self.cbxSituacao.setDisabled(True)
@@ -198,23 +197,11 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         elif info == 'dtInicio':
             self.beneficio.dataInicio = self.dtInicio.date().toPyDate().strftime('%Y-%m-%d %H:%M')
 
-        elif info == 'dtFimContRem':
-            if self.rbContribuicao.isChecked():
-                self.contribuicao.dataPagamento = self.dtFimContRem.date().toPyDate().strftime('%Y-%m-%d %H:%M')
-            else:
-                self.remuneracao.dataFim = self.dtFimContRem.date().toPyDate().strftime('%Y-%m-%d %H:%M')
-
         elif info == 'leSalContribuicao':
             if self.rbContribuicao.isChecked():
                 self.contribuicao.salContribuicao = strToFloat(self.leSalContribuicao.text())
             else:
                 self.remuneracao.remuneracao = strToFloat(self.leSalContribuicao.text())
-
-        elif info == 'cbxIndicadores':
-            if self.rbContribuicao.isChecked():
-                self.contribuicao.indicadores = self.cbxIndicadores.currentText()
-            else:
-                self.remuneracao.indicadores = self.cbxIndicadores.currentText()
 
         elif info == 'leNb':
             if self.leNb.text() != '':
@@ -276,7 +263,6 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.leNb.clear()
         self.cbxSituacao.setCurrentIndex(0)
         self.cbxEspecie.setCurrentIndex(0)
-        self.cbxIndicadores.setCurrentIndex(0)
 
     def loading(self, adicionaTempo):
         if self.pbarSistema.isHidden():

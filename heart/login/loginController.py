@@ -288,6 +288,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             'syncConvMon': datetimeToSql(datetime.datetime.now()),
             'syncTetosPrev': datetimeToSql(datetime.datetime.now()),
             'syncIndicadores': datetimeToSql(datetime.datetime.now()),
+            'syncExpSobrevida': datetimeToSql(datetime.datetime.now()),
         }
 
         if os.path.isfile(pathFile):
@@ -303,6 +304,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     dateSyncConvMon = strToDatetime(syncDict['syncConvMon'], TamanhoData.g)
                     dateSyncTetosPrev = strToDatetime(syncDict['syncTetosPrev'], TamanhoData.g)
                     dateSyncIndicadores = strToDatetime(syncDict['syncIndicadores'], TamanhoData.g)
+                    dateSyncExpSobrevida = strToDatetime(syncDict['syncExpSobrevida'], TamanhoData.g)
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
                         self.atualizaFerramentas(convMon=True)
@@ -319,11 +321,16 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     else:
                         syncJson['syncIndicadores'] = syncDict['syncIndicadores']
 
+                    if (datetime.datetime.now() - dateSyncExpSobrevida).days != 0:
+                        self.atualizaInformacoes(expSobrevida=True)
+                    else:
+                        syncJson['syncExpSobrevida'] = syncDict['syncExpSobrevida']
+
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
                 syncFile.write(json.dumps(syncJson))
         else:
             self.atualizaFerramentas(tetos=True, convMon=True)
-            self.atualizaInformacoes(indicadores=True)
+            self.atualizaInformacoes(indicadores=True, expSobrevida=True)
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
                 syncFile.write(json.dumps(syncJson))
 
@@ -342,16 +349,20 @@ class LoginController(QMainWindow, Ui_mwLogin):
             if daoFerramentas.contaQtdMoedas() < len(convMonFromApi):
                 daoFerramentas.insereListaConvMonModel(convMonFromApi)
 
-    def atualizaInformacoes(self, indicadores: bool = False):
+    def atualizaInformacoes(self, indicadores: bool = False, expSobrevida: bool = False):
         daoFerramentas = DaoFerramentas(self.db)
         indicadoresFromApi: list = []
-
-        print('Entrou aqui.......')
+        expSobrevidaFromApi: list = []
 
         if indicadores:
             indicadoresFromApi = ApiInformacoes().getAllIndicadores()
             if self.daoInformacoes.contaIndicadores() < len(indicadoresFromApi):
                 self.daoInformacoes.insereListaIndicadores(indicadoresFromApi)
+
+        if expSobrevida:
+            expSobrevidaFromApi = ApiInformacoes().getAllExpSobrevida()
+            if self.daoInformacoes.contaIndicadores() < len(expSobrevidaFromApi):
+                self.daoInformacoes.insereExpSobrevida(expSobrevidaFromApi)
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

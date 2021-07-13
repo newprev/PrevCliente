@@ -99,7 +99,8 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.clienteController.verificaDados()
 
                 self.loading(20)
-                self.daoCliente.atualizaCliente(self.clienteAtual)
+                # self.daoCliente.atualizaCliente(self.clienteAtual)
+                self.clienteController.trataAtualizaCliente()
 
                 self.loading(20)
                 self.sinais.sTrocaTelaEntrevista.emit([MomentoEntrevista.cadastro, None])
@@ -307,49 +308,6 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
     def calculaDib(self) -> datetime:
         pass
-
-    # def calculaTempoContribuicao(self):
-    #     listTimedeltas: list = []
-    #     totalDias: int = 0
-    #
-    #     if self.processoModelo.natureza == NaturezaProcesso.administrativo.value:
-    #         if self.processoModelo.tipoProcesso == TipoProcesso.Concessao.value:
-    #             listaBanco = list(self.daoCalculos.buscaCabecalhosClienteId(self.clienteAtual.clienteId))
-    #
-    #             for cabecalho in listaBanco:
-    #
-    #                 if cabecalho.nb is not None:
-    #                     if cabecalho.situacao != 'INDEFERIDO':
-    #                         listTimedeltas.append(self.calculaTimedelta(cabecalho, listaBanco))
-    #                     else:
-    #                         listTimedeltas.append(self.calculaTimedelta(cabecalho, listaBanco, buscaProxJob=False))
-    #                 else:
-    #                     listTimedeltas.append(self.calculaTimedelta(cabecalho, listaBanco))
-    #
-    #             for delta in listTimedeltas:
-    #                 totalDias += delta.days
-    #
-    #             return totalDias
-    #
-    # def calculaTimedelta(self, cabecalho: CabecalhoModelo, listaCabecalhos: list, buscaProxJob: bool = True) -> timedelta:
-    #     if cabecalho.dataInicio is None or cabecalho.dataInicio == datetime.min:
-    #         return timedelta(days=0)
-    #
-    #     if cabecalho.dataFim is None or cabecalho.dataFim == datetime.min:
-    #         if cabecalho.ultRem is None or cabecalho.ultRem == datetime.min:
-    #             if not buscaProxJob:
-    #                 return datetime.now() - cabecalho.dataInicio
-    #
-    #             # Caso o registro não tenha dataFim nem ultRem, busca a dataInicio do próximo registro
-    #             else:
-    #                 index = listaCabecalhos.index(cabecalho) + 1
-    #                 cabecalhoAux: CabecalhoModelo = listaCabecalhos[index]
-    #
-    #                 return cabecalhoAux.dataInicio - cabecalho.dataInicio
-    #         else:
-    #             return cabecalho.ultRem - cabecalho.dataInicio
-    #     else:
-    #         return cabecalho.dataFim - cabecalho.dataInicio
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

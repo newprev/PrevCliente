@@ -37,7 +37,12 @@ class Ui_mwInsereContrib(object):
 "\n"
 "#lbSubtitulo, #lbInfoNit, \n"
 "#lbInfoQtdRem, #lbInfoQtdCont,\n"
-"#lbInfoNomeCompleto {\n"
+"#lbInfoNomeCompleto, \n"
+"#lbSalRemuneracao, #lbCompetencia,\n"
+"#lbIndicadores, #lbRepetirAte,\n"
+"#lbNb, #lbDataInicio,\n"
+"#lbDataFim, #lbSituacao,\n"
+"#lbEspecie {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;\n"
 "    \n"
@@ -96,7 +101,7 @@ class Ui_mwInsereContrib(object):
 "\n"
 "\n"
 "/*------------------------------ Pushed Button -------------------------------------*/\n"
-"#pbConfirmar, #pbCancelar {\n"
+"#pbConfirmar, #pbCancelar, #pbInsereIndicadores {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 14px;\n"
 "    color: white;\n"
@@ -105,7 +110,8 @@ class Ui_mwInsereContrib(object):
 "    background-color: rgb(52, 73, 94);\n"
 "}\n"
 "\n"
-"#pbConfirmar:hover, #pbCancelar:hover {\n"
+"#pbConfirmar:hover, #pbCancelar:hover, \n"
+"#pbInsereIndicadores:hover {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 14px;\n"
 "    color: white;\n"
@@ -179,44 +185,42 @@ class Ui_mwInsereContrib(object):
         self.frInfoRemCont.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frInfoRemCont.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frInfoRemCont.setObjectName("frInfoRemCont")
-        self.label = QtWidgets.QLabel(self.frInfoRemCont)
-        self.label.setGeometry(QtCore.QRect(230, 40, 101, 17))
-        self.label.setObjectName("label")
+        self.lbCompetencia = QtWidgets.QLabel(self.frInfoRemCont)
+        self.lbCompetencia.setGeometry(QtCore.QRect(230, 60, 101, 17))
+        self.lbCompetencia.setObjectName("lbCompetencia")
         self.lbSalRemuneracao = QtWidgets.QLabel(self.frInfoRemCont)
-        self.lbSalRemuneracao.setGeometry(QtCore.QRect(10, 40, 171, 17))
+        self.lbSalRemuneracao.setGeometry(QtCore.QRect(10, 60, 151, 17))
         self.lbSalRemuneracao.setObjectName("lbSalRemuneracao")
         self.leSalContribuicao = QtWidgets.QLineEdit(self.frInfoRemCont)
-        self.leSalContribuicao.setGeometry(QtCore.QRect(100, 60, 101, 25))
+        self.leSalContribuicao.setGeometry(QtCore.QRect(100, 80, 101, 25))
         self.leSalContribuicao.setObjectName("leSalContribuicao")
-        self.lbInfoDataFim = QtWidgets.QLabel(self.frInfoRemCont)
-        self.lbInfoDataFim.setGeometry(QtCore.QRect(230, 120, 111, 17))
-        self.lbInfoDataFim.setObjectName("lbInfoDataFim")
-        self.label_4 = QtWidgets.QLabel(self.frInfoRemCont)
-        self.label_4.setGeometry(QtCore.QRect(10, 120, 91, 17))
-        self.label_4.setObjectName("label_4")
+        self.lbIndicadores = QtWidgets.QLabel(self.frInfoRemCont)
+        self.lbIndicadores.setGeometry(QtCore.QRect(10, 120, 91, 17))
+        self.lbIndicadores.setObjectName("lbIndicadores")
         self.dtCompetencia = QtWidgets.QDateEdit(self.frInfoRemCont)
-        self.dtCompetencia.setGeometry(QtCore.QRect(230, 60, 110, 26))
+        self.dtCompetencia.setGeometry(QtCore.QRect(230, 80, 91, 26))
+        self.dtCompetencia.setCurrentSection(QtWidgets.QDateTimeEdit.MonthSection)
         self.dtCompetencia.setCalendarPopup(True)
         self.dtCompetencia.setObjectName("dtCompetencia")
-        self.dtFimContRem = QtWidgets.QDateEdit(self.frInfoRemCont)
-        self.dtFimContRem.setGeometry(QtCore.QRect(230, 140, 110, 26))
-        self.dtFimContRem.setCalendarPopup(True)
-        self.dtFimContRem.setObjectName("dtFimContRem")
-        self.cbxIndicadores = QtWidgets.QComboBox(self.frInfoRemCont)
-        self.cbxIndicadores.setGeometry(QtCore.QRect(10, 140, 191, 25))
-        self.cbxIndicadores.setObjectName("cbxIndicadores")
         self.cbxSinal = QtWidgets.QComboBox(self.frInfoRemCont)
-        self.cbxSinal.setGeometry(QtCore.QRect(10, 60, 81, 25))
+        self.cbxSinal.setGeometry(QtCore.QRect(10, 80, 81, 25))
         self.cbxSinal.setIconSize(QtCore.QSize(16, 16))
         self.cbxSinal.setObjectName("cbxSinal")
-        self.pbInfoIndicadores = QtWidgets.QPushButton(self.frInfoRemCont)
-        self.pbInfoIndicadores.setGeometry(QtCore.QRect(90, 120, 18, 18))
-        self.pbInfoIndicadores.setMinimumSize(QtCore.QSize(18, 18))
-        self.pbInfoIndicadores.setMaximumSize(QtCore.QSize(18, 18))
-        self.pbInfoIndicadores.setText("")
-        self.pbInfoIndicadores.setObjectName("pbInfoIndicadores")
+        self.dtRepetir = QtWidgets.QDateEdit(self.frInfoRemCont)
+        self.dtRepetir.setGeometry(QtCore.QRect(230, 140, 91, 26))
+        self.dtRepetir.setCalendarPopup(True)
+        self.dtRepetir.setObjectName("dtRepetir")
+        self.lbRepetirAte = QtWidgets.QLabel(self.frInfoRemCont)
+        self.lbRepetirAte.setGeometry(QtCore.QRect(230, 120, 81, 17))
+        self.lbRepetirAte.setObjectName("lbRepetirAte")
+        self.cbRepetir = QtWidgets.QCheckBox(self.frInfoRemCont)
+        self.cbRepetir.setGeometry(QtCore.QRect(10, 20, 90, 23))
+        self.cbRepetir.setObjectName("cbRepetir")
+        self.pbInsereIndicadores = QtWidgets.QPushButton(self.frInfoRemCont)
+        self.pbInsereIndicadores.setGeometry(QtCore.QRect(10, 140, 191, 25))
+        self.pbInsereIndicadores.setObjectName("pbInsereIndicadores")
         self.lbInfoRemCont = QtWidgets.QLabel(self.frMain)
-        self.lbInfoRemCont.setGeometry(QtCore.QRect(40, 260, 221, 17))
+        self.lbInfoRemCont.setGeometry(QtCore.QRect(40, 260, 101, 17))
         self.lbInfoRemCont.setObjectName("lbInfoRemCont")
         self.lbInfoBeneficio = QtWidgets.QLabel(self.frMain)
         self.lbInfoBeneficio.setGeometry(QtCore.QRect(410, 260, 81, 17))
@@ -226,18 +230,18 @@ class Ui_mwInsereContrib(object):
         self.frInfoBeneficio.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frInfoBeneficio.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frInfoBeneficio.setObjectName("frInfoBeneficio")
-        self.label_5 = QtWidgets.QLabel(self.frInfoBeneficio)
-        self.label_5.setGeometry(QtCore.QRect(220, 30, 101, 17))
-        self.label_5.setObjectName("label_5")
-        self.label_6 = QtWidgets.QLabel(self.frInfoBeneficio)
-        self.label_6.setGeometry(QtCore.QRect(20, 90, 101, 17))
-        self.label_6.setObjectName("label_6")
-        self.label_7 = QtWidgets.QLabel(self.frInfoBeneficio)
-        self.label_7.setGeometry(QtCore.QRect(220, 90, 64, 17))
-        self.label_7.setObjectName("label_7")
-        self.label_8 = QtWidgets.QLabel(self.frInfoBeneficio)
-        self.label_8.setGeometry(QtCore.QRect(20, 30, 91, 17))
-        self.label_8.setObjectName("label_8")
+        self.lbDataInicio = QtWidgets.QLabel(self.frInfoBeneficio)
+        self.lbDataInicio.setGeometry(QtCore.QRect(220, 30, 101, 17))
+        self.lbDataInicio.setObjectName("lbDataInicio")
+        self.lbSituacao = QtWidgets.QLabel(self.frInfoBeneficio)
+        self.lbSituacao.setGeometry(QtCore.QRect(20, 90, 101, 17))
+        self.lbSituacao.setObjectName("lbSituacao")
+        self.lbDataFim = QtWidgets.QLabel(self.frInfoBeneficio)
+        self.lbDataFim.setGeometry(QtCore.QRect(220, 90, 64, 17))
+        self.lbDataFim.setObjectName("lbDataFim")
+        self.lbNb = QtWidgets.QLabel(self.frInfoBeneficio)
+        self.lbNb.setGeometry(QtCore.QRect(20, 30, 91, 17))
+        self.lbNb.setObjectName("lbNb")
         self.dtInicio = QtWidgets.QDateEdit(self.frInfoBeneficio)
         self.dtInicio.setGeometry(QtCore.QRect(220, 50, 110, 26))
         self.dtInicio.setProperty("showGroupSeparator", False)
@@ -250,11 +254,11 @@ class Ui_mwInsereContrib(object):
         self.cbxSituacao = QtWidgets.QComboBox(self.frInfoBeneficio)
         self.cbxSituacao.setGeometry(QtCore.QRect(20, 110, 111, 25))
         self.cbxSituacao.setObjectName("cbxSituacao")
-        self.label_9 = QtWidgets.QLabel(self.frInfoBeneficio)
-        self.label_9.setGeometry(QtCore.QRect(20, 160, 101, 17))
-        self.label_9.setObjectName("label_9")
+        self.lbEspecie = QtWidgets.QLabel(self.frInfoBeneficio)
+        self.lbEspecie.setGeometry(QtCore.QRect(20, 150, 101, 17))
+        self.lbEspecie.setObjectName("lbEspecie")
         self.cbxEspecie = QtWidgets.QComboBox(self.frInfoBeneficio)
-        self.cbxEspecie.setGeometry(QtCore.QRect(20, 180, 311, 25))
+        self.cbxEspecie.setGeometry(QtCore.QRect(20, 170, 311, 25))
         self.cbxEspecie.setObjectName("cbxEspecie")
         self.leNb = QtWidgets.QLineEdit(self.frInfoBeneficio)
         self.leNb.setGeometry(QtCore.QRect(20, 50, 113, 25))
@@ -301,26 +305,29 @@ class Ui_mwInsereContrib(object):
         self.lbInfoNit.setText(_translate("mwInsereContrib", "NIT:"))
         self.lbInfoQtdCont.setText(_translate("mwInsereContrib", "Quantidade de \n"
 "Contribuições"))
-        self.lbTitulo.setText(_translate("mwInsereContrib", "Inserir Contribuição/Remuneração/Benefício"))
+        self.lbTitulo.setText(_translate("mwInsereContrib", "Inserir Contribuição ou Benefício"))
         self.lbSubtitulo.setText(_translate("mwInsereContrib", "Insira as informações de uma determinada Contribuição ou Benefício"))
         self.lbInfoPessoal.setText(_translate("mwInsereContrib", "  Informações do cliente"))
         self.rbBeneficio.setText(_translate("mwInsereContrib", "Benefício"))
         self.rbContribuicao.setText(_translate("mwInsereContrib", "Contribuição"))
         self.lbInfoTipoDado.setText(_translate("mwInsereContrib", "  Tipo de dado"))
-        self.label.setText(_translate("mwInsereContrib", "Data Início"))
+        self.lbCompetencia.setText(_translate("mwInsereContrib", "Competência"))
         self.lbSalRemuneracao.setText(_translate("mwInsereContrib", "Salário de contribuição"))
-        self.lbInfoDataFim.setText(_translate("mwInsereContrib", "Data Fim"))
-        self.label_4.setText(_translate("mwInsereContrib", "Indicadores"))
-        self.lbInfoRemCont.setText(_translate("mwInsereContrib", "  Remuneração / Contribuição"))
+        self.lbIndicadores.setText(_translate("mwInsereContrib", "Indicadores"))
+        self.dtCompetencia.setDisplayFormat(_translate("mwInsereContrib", "MM/yyyy"))
+        self.dtRepetir.setDisplayFormat(_translate("mwInsereContrib", "MM/yyyy"))
+        self.lbRepetirAte.setText(_translate("mwInsereContrib", "Repetir até:"))
+        self.cbRepetir.setText(_translate("mwInsereContrib", "Repetir"))
+        self.pbInsereIndicadores.setText(_translate("mwInsereContrib", "Inserir indicadores"))
+        self.lbInfoRemCont.setText(_translate("mwInsereContrib", "  Contribuição"))
         self.lbInfoBeneficio.setText(_translate("mwInsereContrib", "  Benefício"))
-        self.label_5.setText(_translate("mwInsereContrib", "Data Início"))
-        self.label_6.setText(_translate("mwInsereContrib", "Situação"))
-        self.label_7.setText(_translate("mwInsereContrib", "Data Fim"))
-        self.label_8.setText(_translate("mwInsereContrib", "NB"))
-        self.label_9.setText(_translate("mwInsereContrib", "Espécie"))
+        self.lbDataInicio.setText(_translate("mwInsereContrib", "Data Início"))
+        self.lbSituacao.setText(_translate("mwInsereContrib", "Situação"))
+        self.lbDataFim.setText(_translate("mwInsereContrib", "Data Fim"))
+        self.lbNb.setText(_translate("mwInsereContrib", "NB"))
+        self.lbEspecie.setText(_translate("mwInsereContrib", "Espécie"))
         self.pbConfirmar.setText(_translate("mwInsereContrib", "Confirmar"))
         self.pbCancelar.setText(_translate("mwInsereContrib", "Cancelar"))
-import Resources.insereContrib
 
 
 if __name__ == "__main__":

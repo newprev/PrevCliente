@@ -36,7 +36,12 @@
 
 #lbSubtitulo, #lbInfoNit, 
 #lbInfoQtdRem, #lbInfoQtdCont,
-#lbInfoNomeCompleto {
+#lbInfoNomeCompleto, 
+#lbSalRemuneracao, #lbCompetencia,
+#lbIndicadores, #lbRepetirAte,
+#lbNb, #lbDataInicio,
+#lbDataFim, #lbSituacao,
+#lbEspecie {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	
@@ -95,7 +100,7 @@
 
 
 /*------------------------------ Pushed Button -------------------------------------*/
-#pbConfirmar, #pbCancelar {
+#pbConfirmar, #pbCancelar, #pbInsereIndicadores {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 14px;
 	color: white;
@@ -104,7 +109,8 @@
 	background-color: rgb(52, 73, 94);
 }
 
-#pbConfirmar:hover, #pbCancelar:hover {
+#pbConfirmar:hover, #pbCancelar:hover, 
+#pbInsereIndicadores:hover {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 14px;
 	color: white;
@@ -247,7 +253,7 @@ Contribuições</string>
         </rect>
        </property>
        <property name="text">
-        <string>Inserir Contribuição/Remuneração/Benefício</string>
+        <string>Inserir Contribuição ou Benefício</string>
        </property>
       </widget>
       <widget class="QLabel" name="lbSubtitulo">
@@ -346,25 +352,25 @@ Contribuições</string>
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="lbCompetencia">
         <property name="geometry">
          <rect>
           <x>230</x>
-          <y>40</y>
+          <y>60</y>
           <width>101</width>
           <height>17</height>
          </rect>
         </property>
         <property name="text">
-         <string>Data Início</string>
+         <string>Competência</string>
         </property>
        </widget>
        <widget class="QLabel" name="lbSalRemuneracao">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>40</y>
-          <width>171</width>
+          <y>60</y>
+          <width>151</width>
           <height>17</height>
          </rect>
         </property>
@@ -376,26 +382,13 @@ Contribuições</string>
         <property name="geometry">
          <rect>
           <x>100</x>
-          <y>60</y>
+          <y>80</y>
           <width>101</width>
           <height>25</height>
          </rect>
         </property>
        </widget>
-       <widget class="QLabel" name="lbInfoDataFim">
-        <property name="geometry">
-         <rect>
-          <x>230</x>
-          <y>120</y>
-          <width>111</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Data Fim</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="lbIndicadores">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -412,43 +405,26 @@ Contribuições</string>
         <property name="geometry">
          <rect>
           <x>230</x>
-          <y>60</y>
-          <width>110</width>
+          <y>80</y>
+          <width>91</width>
           <height>26</height>
          </rect>
         </property>
-        <property name="calendarPopup">
-         <bool>true</bool>
+        <property name="currentSection">
+         <enum>QDateTimeEdit::MonthSection</enum>
         </property>
-       </widget>
-       <widget class="QDateEdit" name="dtFimContRem">
-        <property name="geometry">
-         <rect>
-          <x>230</x>
-          <y>140</y>
-          <width>110</width>
-          <height>26</height>
-         </rect>
+        <property name="displayFormat">
+         <string>MM/yyyy</string>
         </property>
         <property name="calendarPopup">
          <bool>true</bool>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="cbxIndicadores">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>140</y>
-          <width>191</width>
-          <height>25</height>
-         </rect>
         </property>
        </widget>
        <widget class="QComboBox" name="cbxSinal">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>60</y>
+          <y>80</y>
           <width>81</width>
           <height>25</height>
          </rect>
@@ -460,29 +436,59 @@ Contribuições</string>
          </size>
         </property>
        </widget>
-       <widget class="QPushButton" name="pbInfoIndicadores">
+       <widget class="QDateEdit" name="dtRepetir">
         <property name="geometry">
          <rect>
-          <x>90</x>
-          <y>120</y>
-          <width>18</width>
-          <height>18</height>
+          <x>230</x>
+          <y>140</y>
+          <width>91</width>
+          <height>26</height>
          </rect>
         </property>
-        <property name="minimumSize">
-         <size>
-          <width>18</width>
-          <height>18</height>
-         </size>
+        <property name="displayFormat">
+         <string>MM/yyyy</string>
         </property>
-        <property name="maximumSize">
-         <size>
-          <width>18</width>
-          <height>18</height>
-         </size>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbRepetirAte">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>120</y>
+          <width>81</width>
+          <height>17</height>
+         </rect>
         </property>
         <property name="text">
-         <string/>
+         <string>Repetir até:</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="cbRepetir">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>90</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Repetir</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pbInsereIndicadores">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>140</y>
+          <width>191</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Inserir indicadores</string>
         </property>
        </widget>
       </widget>
@@ -491,12 +497,12 @@ Contribuições</string>
         <rect>
          <x>40</x>
          <y>260</y>
-         <width>221</width>
+         <width>101</width>
          <height>17</height>
         </rect>
        </property>
        <property name="text">
-        <string>  Remuneração / Contribuição</string>
+        <string>  Contribuição</string>
        </property>
       </widget>
       <widget class="QLabel" name="lbInfoBeneficio">
@@ -527,7 +533,7 @@ Contribuições</string>
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QLabel" name="label_5">
+       <widget class="QLabel" name="lbDataInicio">
         <property name="geometry">
          <rect>
           <x>220</x>
@@ -540,7 +546,7 @@ Contribuições</string>
          <string>Data Início</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_6">
+       <widget class="QLabel" name="lbSituacao">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -553,7 +559,7 @@ Contribuições</string>
          <string>Situação</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_7">
+       <widget class="QLabel" name="lbDataFim">
         <property name="geometry">
          <rect>
           <x>220</x>
@@ -566,7 +572,7 @@ Contribuições</string>
          <string>Data Fim</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_8">
+       <widget class="QLabel" name="lbNb">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -618,11 +624,11 @@ Contribuições</string>
          </rect>
         </property>
        </widget>
-       <widget class="QLabel" name="label_9">
+       <widget class="QLabel" name="lbEspecie">
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>160</y>
+          <y>150</y>
           <width>101</width>
           <height>17</height>
          </rect>
@@ -635,7 +641,7 @@ Contribuições</string>
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>180</y>
+          <y>170</y>
           <width>311</width>
           <height>25</height>
          </rect>
@@ -726,8 +732,6 @@ Contribuições</string>
    </layout>
   </widget>
  </widget>
- <resources>
-  <include location="../../Resources/insereContrib.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

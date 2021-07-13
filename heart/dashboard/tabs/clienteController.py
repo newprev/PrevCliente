@@ -483,10 +483,11 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.cliente.telefone.pessoalRecado = 'P'
 
     def verificaCodCliente(self) -> bool:
-        if self.sbCdCliente.text() is not None and self.sbCdCliente.text() != "":
-            return True
-        else:
-            return False
+        cdClienteNotNone = self.sbCdCliente.text() is not None
+        cdClienteStrVazio = self.sbCdCliente.text() != ""
+        cdClienteNotZero = self.sbCdCliente.text() != 0 and self.sbCdCliente.text() != "0"
+
+        return cdClienteNotZero and cdClienteNotNone and cdClienteStrVazio
 
     def carregaFiltroAZ(self):
         listAlfabeto = list(' ABCDEFGHIJKLMNOPQRSTUVWXYZ ')

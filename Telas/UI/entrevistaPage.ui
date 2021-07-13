@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1280</width>
-    <height>820</height>
+    <height>670</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,19 @@
   <property name="minimumSize">
    <size>
     <width>1280</width>
-    <height>815</height>
+    <height>670</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="styleSheet">
     <string notr="true">/*-------------------------------------- Frames --------------------------------------*/
 #frTopBackground{
@@ -202,6 +208,12 @@
     </property>
     <item>
      <widget class="QFrame" name="frTopBackground">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -858,10 +870,16 @@ Finalização</string>
     </item>
     <item alignment="Qt::AlignTop">
      <widget class="QFrame" name="frBottomBackground">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="minimumSize">
        <size>
         <width>800</width>
-        <height>700</height>
+        <height>550</height>
        </size>
       </property>
       <property name="maximumSize">
@@ -877,10 +895,10 @@ Finalização</string>
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_18">
-       <item>
+       <item alignment="Qt::AlignTop">
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -888,18 +906,18 @@ Finalização</string>
          <property name="minimumSize">
           <size>
            <width>750</width>
-           <height>682</height>
+           <height>530</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>16777215</height>
+           <height>600</height>
           </size>
          </property>
         </widget>
        </item>
-       <item>
+       <item alignment="Qt::AlignTop">
         <widget class="QFrame" name="frRight">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -910,7 +928,7 @@ Finalização</string>
          <property name="minimumSize">
           <size>
            <width>250</width>
-           <height>600</height>
+           <height>500</height>
           </size>
          </property>
          <property name="maximumSize">

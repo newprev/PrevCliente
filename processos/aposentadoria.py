@@ -3,7 +3,7 @@ from typing import List
 import pandas as pd
 
 from Daos.daoCalculos import DaoCalculos
-from helpers import comparaMesAno, calculaDiaMesAno, mascaraDataSql, strToDatetime
+from helpers import comparaMesAno, calculaDiaMesAno, mascaraDataSql, strToDatetime, datetimeToSql, dateToSql
 
 from modelos.cnisCabecalhoModelo import CabecalhoModelo
 from modelos.expSobrevidaModelo import ExpectativaSobrevidaModelo
@@ -23,7 +23,7 @@ class CalculosAposentadoria:
         self.processo = processo
         self.cliente = cliente
         self.daoCalculos = DaoCalculos(db)
-        self.cabecalhos: list = list(self.daoCalculos.buscaCabecalhosClienteId(self.cliente.clienteId))
+        self.cabecalhos: List[CabecalhoModelo] = list(self.daoCalculos.buscaCabecalhosClienteId(self.cliente.clienteId))
         self.listaRemuneracoes = list(self.daoCalculos.buscaTodasRemuneracoes(cliente.clienteId))
         self.listaContribuicoes = list(self.daoCalculos.buscaTodasContribuicoes(cliente.clienteId))
 
@@ -47,6 +47,18 @@ class CalculosAposentadoria:
             RegraTransicao.pedagio50: 0
         }
 
+        self.dibs = {
+            RegraTransicao.pontos: None,
+            RegraTransicao.reducaoIdadeMinima: None,
+            RegraTransicao.pedagio50: None,
+            RegraTransicao.reducaoTempoContribuicao: None
+        }
+
+        self.aposentadorias = {
+            'direitoAdq': self.calculaDireitoAdquirido(),
+            'regrasTransicao': self.regrasTransicao
+        }
+
         self.calculaBeneficios()
 
         print('\n\n------------------------------------- ')
@@ -57,6 +69,41 @@ class CalculosAposentadoria:
         print(f'self.valorBeneficios: {self.valorBeneficios}')
         print(f'self.tempoContribCalculado: {self.tempoContribCalculado}')
         print('-------------------------------------\n\n')
+
+    def defineDIB(self, data: datetime):
+        self.processo.dib = data
+
+    def calculaDireitoAdquirido(self):
+        listTimedeltas: list = []
+        totalDias: int = 0
+        anosContribuicao: int = 0
+        antesReforma: bool = True
+
+        listaBanco: List[CabecalhoModelo] = self.cabecalhos
+
+        for cabecalho in listaBanco:
+
+            if comparaMesAno(cabecalho.dataInicio, self.dataReforma) != 1:
+                antesReforma = False
+
+            if antesReforma:
+                if cabecalho.nb is not None:
+                    if cabecalho.situacao != 'INDEFERIDO':
+                        listTimedeltas.append(self.calculaTimedeltaAr(cabecalho, listaBanco))
+                    else:
+                        listTimedeltas.append(self.calculaTimedeltaAr(cabecalho, listaBanco, buscaProxJob=False))
+                else:
+                    listTimedeltas.append(self.calculaTimedeltaAr(cabecalho, listaBanco))
+
+        for delta in listTimedeltas:
+            totalDias += delta.days
+
+        anosContribuicao = calculaDiaMesAno(totalDias)[2]
+
+        if self.cliente.genero == 'M':
+            return anosContribuicao >= 35
+        else:
+            return anosContribuicao >= 30
 
     def calculaFatorPrevidenciario(self):
         """
@@ -86,9 +133,6 @@ class CalculosAposentadoria:
         print(f"Possível dib: {expSobrevidaModelo.dataReferente}")
         print('------------------------------------ calculaFatorPrevidenciario\n\n')
         return fatorPrev
-
-
-
 
     def calculaMediaSalarial(self):
         dfContribuicoes: pd.DataFrame = self.daoCalculos.buscaRemContPorData(self.cliente.clienteId, '1994-07-31')

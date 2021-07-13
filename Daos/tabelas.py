@@ -10,6 +10,7 @@ class TabelasConfig:
         self.__tblCliente = 'cliente'
         self.__tblTelefones = 'telefones'
         self.__tblProcessos = 'processos'
+        self.__tblPpp = 'ppp'
         self.__tblExpSobrevida = 'expSobrevida'
         self.__tblCnisRemuneracoes = 'cnisRemuneracoes'
         self.__tblCnisBeneficios = 'cnisBeneficios'
@@ -346,6 +347,49 @@ class TabelasConfig:
             descricao VARCHAR(120) NOT NULL{bottom}
         """
 
+    # Comando SQL para criar tabela do ppp (perfil profissiográfico previdenciário)
+    @property
+    def sqlCreatePpp(self):
+        if self.tipoBanco == TiposConexoes.sqlite:
+            cabecalho = """
+            pppId INT AUTO_INCREMENT,
+            cnpj VARCHAR(14) NULL,
+            nomeEmpresa VARCHAR(100) NULL,
+            cnae VARCHAR(10) NULL,
+            sitEmpregado VARCHAR(2) NULL,
+            nit VARCHAR(14) NOT NULL,
+            dataNascimento DATETIME NOT NULL,
+            genero VARCHAR(1) NOT NULL,
+            ctps VARCHAR(8) NULL,
+            dataAdminssao DATETIME NULL,
+            dataRegistro DATETIME NULL,
+            numCAT VARCHAR(20) NULL,
+            profissiografiaData DATETIME NULL,
+            profissiografiaDesc VARCHAR(1000) NULL,
+            exposicaoDataInicio DATETIME NULL,
+            exposicaoDataFim DATETIME NULL,
+            exposicaoTipo VARCHAR(3) NULL,
+            exposicaoFator VARCHAR(15) NULL,
+            exposicaoIntensidade VARCHAR(15) NULL,
+            exposicaoTecnicaUtilizada VARCHAR(30) NULL,
+            eficEpc VARCHAR(10) NULL,
+            eficEpi VARCHAR(10) NULL,
+            caEpi VARCHAR(10) NULL,
+            dataUltAlt DATETIME NOT NULL,
+            dataCadastro DATETIME NOT NULL"""
+            bottom = """,
+            PRIMARY KEY (pppId)
+        );"""
+        else:
+            print('Bug ao gerar script de criação da tabela')
+            cabecalho = ''
+            bottom = ''
+        return f"""
+        CREATE TABLE IF NOT EXISTS {self.tblPpp}(
+            {cabecalho}
+            {bottom}
+        """
+
     # Comando SQL para criar tabela de espécies dos benefícios
     @property
     def sqlCreateEspecieBenef(self):
@@ -451,6 +495,10 @@ class TabelasConfig:
     @property
     def tblIndicadores(self):
         return self.__tblIndicadores
+
+    @property
+    def tblPpp(self):
+        return self.__tblPpp
 
     @property
     def tblEspecieBenef(self):

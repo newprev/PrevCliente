@@ -233,12 +233,12 @@ class DaoCalculos:
         strComando = f"""
             SELECT clienteId, contribuicoesId, competencia, salContribuicao, indicadores, 'CONTRIBUICAO'
             FROM {self.config.tblCnisContribuicoes}
-            WHERE competencia > '{dataInicio}'
-            AND clienteId = {clienteId}"""
+            WHERE clienteId = {clienteId}
+            AND competencia > '{dataInicio}'"""
 
         if dataFim != '':
-            strComando += f"""AND
-                competencia < {dataFim}"""
+            strComando += f"""
+            AND competencia < '{dataFim}'"""
 
         strComando += f"""
         
@@ -246,14 +246,12 @@ class DaoCalculos:
                 
             SELECT clienteId, remuneracoesId, competencia, remuneracao, indicadores, 'REMUNERACAO'
             FROM {self.config.tblCnisRemuneracoes}
-            WHERE competencia > '{dataInicio}'
-            AND clienteId = {clienteId}
-        """
+            WHERE clienteId = {clienteId}
+            AND competencia > '{dataInicio}'"""
 
         if dataFim != '':
             strComando += f"""
-            AND
-                competencia < {dataFim}"""
+            AND competencia < '{dataFim}'"""
 
         try:
             cursor.execute(strComando)

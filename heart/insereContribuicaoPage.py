@@ -30,7 +30,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.contribuicao = ContribuicoesModelo()
         self.beneficio = BeneficiosModelo()
         self.listaConvMon: list
-        self.indicadoresPg = IndicadoresController(parent=self, db=db)
+        self.indicadoresPg = None
 
         self.lbNomeCompleto.setText(f"{self.cliente.nomeCliente} {self.cliente.sobrenomeCliente}")
         self.lbNit.setText(mascaraNit(int(self.cliente.nit)))
@@ -286,6 +286,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.limpaTudo()
 
     def openInfoIndicadores(self):
+        self.indicadoresPg = IndicadoresController(parent=self, db=self.db)
         self.indicadoresPg.show()
 
     def mensagemSistema(self, mensagem: str):

@@ -99,7 +99,6 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.clienteController.verificaDados()
 
                 self.loading(20)
-                # self.daoCliente.atualizaCliente(self.clienteAtual)
                 self.clienteController.trataAtualizaCliente()
 
                 self.loading(20)

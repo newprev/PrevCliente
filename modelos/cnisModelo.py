@@ -1,6 +1,5 @@
 import re
 import pandas as pd
-import os
 from pathlib import Path
 
 from PyPDF3 import PdfFileReader
@@ -41,7 +40,7 @@ class CNISModelo:
 
         self.qtdPaginas = 0
 
-        self.dictIndicadores = dictIndicadores
+        self.dictIndicadores: dict = dictIndicadores
         self.dictRemuneracoes = {
             'Seq': [],
             'remuneracao': [],

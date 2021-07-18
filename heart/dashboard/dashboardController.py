@@ -65,5 +65,8 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         else:
             self.stkMainDashBoard.setCurrentIndex(tela)
 
+    def atualizaTabClientes(self):
+        self.tabCadastro.atualizaTblClientes()
+
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         self.cacheLogin.limpaTemporarios()

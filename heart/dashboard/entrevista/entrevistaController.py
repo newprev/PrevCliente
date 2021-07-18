@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from connections import ConfigConnection
 
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 from Telas.entrevistaPage import Ui_mwEntrevistaPage
@@ -37,6 +37,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.tipoConexao = TiposConexoes.nuvem
         self.dbConnection = ConfigConnection(instanciaBanco=self.tipoConexao)
         self.db = db
+        self.parent = parent
         self.sinais = Sinais()
         self.telaAtual = MomentoEntrevista.cadastro
         self.clienteAtual = ClienteModelo()
@@ -53,6 +54,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.tipoAtividadePg = TipoAtividadeController(parent=self, db=self.db)
         self.impressaoDocsPg = GerarDocsPage(None, None, parent=self, db=self.db)
         self.sinais.sTrocaTelaEntrevista.connect(self.trocaTelaCentral)
+        self.sinais.sAtualizaListaClientes.connect(self.atualizaClientes)
 
         self.stackedWidget.addWidget(self.clienteController)  # tela: cadastro - 0
         self.stackedWidget.addWidget(self.naturezaPg)  # tela: naturezaProcesso - 1
@@ -329,6 +331,15 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.pbarProgresso.hide()
         self.pbarProgresso.setValue(0)
         self.timer.stop()
+
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        print('------------------- closeEvent')
+        print(f'self.parent: {self.parent}')
+        print(f'self.parentWidget(): {self.parentWidget()}')
+        self.sinais.sAtualizaListaClientes.emit()
+
+    def atualizaClientes(self):
+        self.parent.atualizaTabClientes()
 
 
 if __name__ == '__main__':

@@ -19,6 +19,7 @@ dictIndicadores = {
     'IREC-INDPEND': 'Recolhimentos com indicadores e/ou pendências.',
     'IREC-LC123': 'Recolhimentos para fins da LC 123.',
     'IREC-LC123-SUP': 'Recolhimento / Complementação LC 123 superior ao salário mínimo.',
+    'IREM-ACD': 'REMUNERAÇÃO POSSUI PARCELA DE ACORDO, CONVENÇÃO OU DISSÍDIO COLETIVO',
     'PADM-EMPR': 'Inconsistência temporal, admissão anterior ao início da atividade do empregador.',
     'PEMP-CAD': 'Falta de informações cadastrais do CNPJ ou CEI.',
     'PEXT': 'Pendência de vínculo extemporâneo não tratado.',

@@ -19,15 +19,30 @@ def habilita(tipo: str, habilitar: bool):
 	}"""
 
 def habilitaBotao(nomeBotao: str, habilitar: bool):
-    background = ''
+    bgHover = ''
 
     if habilitar:
-        background = "background-color: white;"
+        bgNormal = "background-color: rgb(52, 73, 94);"
+        bgHover = "background-color: rgb(72, 93, 114);"
     else:
-        background = "background-color: rgb(232, 230, 215);"
+        bgNormal = "background-color: grey;"
 
-    return f"""#{nomeBotao}""" + """{
-	border-radius: 8px;
-	border: 1px solid black;
-	""" + background + """
+    btnNormal = f"""#{nomeBotao}""" + """{
+	font-family: "TeX Gyre Adventor";
+	font-size: 14px;
+	color: white;
+
+	border-radius: 4px;
+	""" + bgNormal + """
 	}"""
+
+    btnHover = f"""#{nomeBotao}:hover""" + """{
+	font-family: "TeX Gyre Adventor";
+	font-size: 14px;
+	color: white;
+
+	border-radius: 4px;
+	""" + bgHover + """
+	}"""
+
+    return bgNormal + '\n' + bgHover

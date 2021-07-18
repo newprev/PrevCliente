@@ -13,3 +13,4 @@ class Sinais(QObject):
     sEnviaCliente = QtCore.pyqtSignal(name='enviaCliente')
     sBuscaCliente = QtCore.pyqtSignal(name='buscaCliente')
     sEnviaIndicadores = QtCore.pyqtSignal(list, name='enviaIndicador')
+    sAtualizaListaClientes = QtCore.pyqtSignal(name='atualizaListaClientes')

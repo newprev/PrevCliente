@@ -1,4 +1,7 @@
-from datetime import datetime
+from datetime import datetime, date
+from dateutil.relativedelta import relativedelta
+from math import floor
+from typing import List
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
@@ -6,9 +9,9 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from Daos.daoCalculos import DaoCalculos
 from Daos.daoFerramentas import DaoFerramentas
 from Telas.insereContrib import Ui_mwInsereContrib
-from heart.localStyleSheet.insereContribuicao import habilita
+from heart.localStyleSheet.insereContribuicao import habilita, habilitaBotao
 from heart.informacoesTelas.indicadoresTela import IndicadoresController
-from helpers import dictIndicadores, dictEspecies, mascaraNit, strToFloat, situacaoBeneficio, strToDatetime
+from helpers import dictEspecies, mascaraNit, strToFloat, situacaoBeneficio, strToDatetime
 from modelos.beneficiosModelo import BeneficiosModelo
 from modelos.clienteModelo import ClienteModelo
 from modelos.contribuicoesModelo import ContribuicoesModelo
@@ -18,12 +21,13 @@ from newPrevEnums import TipoContribuicao, TamanhoData
 
 class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
 
-    def __init__(self, parent=None, db=None, cliente: ClienteModelo=None, contribuicaoId: int = 0, tipo: TipoContribuicao = TipoContribuicao.contribuicao):
+    def __init__(self, parent=None, db=None, cliente: ClienteModelo = None, contribuicaoId: int = 0, tipo: TipoContribuicao = TipoContribuicao.contribuicao):
         super(InsereContribuicaoPage, self).__init__(parent=parent)
         self.setupUi(self)
         self.tabCalculos = parent
         self.daoCalculos = DaoCalculos(db=db)
         self.daoFerramentas = DaoFerramentas(db=db)
+        self.indicadoresContrib = []
         self.db = db
         self.cliente = cliente
         self.remuneracao = RemuneracoesModelo()
@@ -156,6 +160,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         if self.rbBeneficio.isChecked():
             self.frInfoBeneficio.setStyleSheet(habilita('beneficio', True))
             self.frInfoRemCont.setStyleSheet(habilita('remCont', False))
+            self.pbInsereIndicadores.setStyleSheet(habilitaBotao('pbInsereIndicadores', False))
             self.dtCompetencia.setDisabled(True)
             self.leSalContribuicao.setDisabled(True)
             self.dtRepetir.setDisabled(True)
@@ -171,6 +176,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         else:
             self.frInfoBeneficio.setStyleSheet(habilita('beneficio', False))
             self.frInfoRemCont.setStyleSheet(habilita('remCont', True))
+            self.pbInsereIndicadores.setStyleSheet(habilitaBotao('pbInsereIndicadores', True))
             self.dtCompetencia.setDisabled(False)
             self.leSalContribuicao.setDisabled(False)
             self.dtRepetir.setDisabled(False)
@@ -227,26 +233,42 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
                 self.mensagemSistema('Benefício inserido com sucesso!')
         elif self.rbContribuicao.isChecked():
             if self.leSalContribuicao.text() != '':
-                self.loading(40)
+                self.loading(20)
                 self.contribuicao.clienteId = self.cliente.clienteId
                 self.loading(20)
                 self.contribuicao.dadoOrigem = 'MANUAL'
                 self.loading(20)
                 self.contribuicao.seq = 0
                 self.loading(20)
-                self.daoCalculos.insereContribuicao(self.contribuicao)
-                self.mensagemSistema('Contribuição inserida com sucesso!')
-        else:
-            if self.leSalContribuicao.text() != '':
-                self.loading(40)
-                self.remuneracao.clienteId = self.cliente.clienteId
-                self.loading(20)
-                self.remuneracao.dadoOrigem = 'MANUAL'
-                self.loading(20)
-                self.remuneracao.seq = 0
-                self.loading(20)
-                self.daoCalculos.insereRemuneracao(self.remuneracao)
-                self.mensagemSistema('Remuneração inserida com sucesso!')
+                if self.cbRepetir.isChecked():
+                    listaDatas: list = self.geraContribsRecorrente()
+                    self.daoCalculos.insereListaContribuicoes(listaDatas)
+                    self.mensagemSistema('Contribuições inseridas com sucesso!')
+                else:
+                    self.contribuicao.indicadores = self.retornaStrIndicadores()
+                    self.daoCalculos.insereContribuicao(self.contribuicao)
+                    self.mensagemSistema('Contribuição inserida com sucesso!')
+
+        self.loading(20)
+
+    def geraContribsRecorrente(self) -> List[ContribuicoesModelo]:
+        difMeses: int = floor((self.dtRepetir.date().toPyDate() - self.dtCompetencia.date().toPyDate()).days/30)
+        listaContribuicoes: List[ContribuicoesModelo] = []
+
+        for mes in range(0, difMeses+1):
+            novaContrib = ContribuicoesModelo()
+            novaContrib.clienteId = self.contribuicao.clienteId
+            novaContrib.contribuicao = self.contribuicao.contribuicao
+            novaContrib.seq = self.contribuicao.seq
+            novaContrib.indicadores = self.retornaStrIndicadores()
+            novaContrib.competencia = relativedelta(months=+mes) + self.dtCompetencia.date().toPyDate()
+            novaContrib.salContribuicao = self.contribuicao.salContribuicao
+            novaContrib.dadoOrigem = self.contribuicao.dadoOrigem
+            novaContrib.dataCadastro = date.today()
+            novaContrib.dataUltAlt = date.today()
+            listaContribuicoes.append(novaContrib)
+
+        return listaContribuicoes
 
     def sairAtividade(self):
         remuneracao: bool = self.leSalContribuicao.text() == ''
@@ -308,3 +330,19 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             return False
         else:
             raise Warning(f'Ocorreu um erro inesperado')
+
+    def recebeIndicadores(self, indicadores: List[str]):
+        self.indicadoresContrib = indicadores
+
+    def retornaStrIndicadores(self):
+        strIndicadores = ''
+        primeiroItem: bool = True
+        
+        for indicador in self.indicadoresContrib:
+            if primeiroItem:
+                strIndicadores += indicador
+                primeiroItem = False
+            else:
+                strIndicadores += ', ' + indicador
+                
+        return strIndicadores

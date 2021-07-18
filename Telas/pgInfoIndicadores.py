@@ -57,6 +57,27 @@ class Ui_mwInfoIndicadores(object):
 "\n"
 "#scaIndicadores {\n"
 "    background-color: white;\n"
+"}\n"
+"\n"
+"/* --------------------------------------------- Push Button --------------------------------------------- */\n"
+"\n"
+"#pbEnviar {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"/*    background-color: rgb(52, 73, 94);*/\n"
+"    background-color: rgb(92, 53, 102);\n"
+"}\n"
+"\n"
+"#pbEnviar:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: rgb(72, 93, 114);\n"
 "}")
         self.wdgMain = QtWidgets.QWidget(mwInfoIndicadores)
         self.wdgMain.setObjectName("wdgMain")
@@ -69,6 +90,7 @@ class Ui_mwInfoIndicadores(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frMain)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.frCabecalho = QtWidgets.QFrame(self.frMain)
+        self.frCabecalho.setMinimumSize(QtCore.QSize(0, 60))
         self.frCabecalho.setMaximumSize(QtCore.QSize(16777215, 80))
         self.frCabecalho.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frCabecalho.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -81,12 +103,11 @@ class Ui_mwInfoIndicadores(object):
         self.lbSubtitulo.setObjectName("lbSubtitulo")
         self.verticalLayout_2.addWidget(self.frCabecalho)
         self.frConteudo = QtWidgets.QFrame(self.frMain)
+        self.frConteudo.setEnabled(True)
         self.frConteudo.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frConteudo.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frConteudo.setObjectName("frConteudo")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.frConteudo)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.frame = QtWidgets.QFrame(self.frConteudo)
         self.frame.setMaximumSize(QtCore.QSize(250, 16777215))
@@ -106,7 +127,7 @@ class Ui_mwInfoIndicadores(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scaIndicadores = QtWidgets.QWidget()
-        self.scaIndicadores.setGeometry(QtCore.QRect(0, 0, 250, 434))
+        self.scaIndicadores.setGeometry(QtCore.QRect(0, 0, 242, 464))
         self.scaIndicadores.setObjectName("scaIndicadores")
         self.scrollArea.setWidget(self.scaIndicadores)
         self.verticalLayout_5.addWidget(self.scrollArea)
@@ -119,8 +140,14 @@ class Ui_mwInfoIndicadores(object):
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setSpacing(0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.frDescricao = QtWidgets.QFrame(self.frame_2)
-        self.frDescricao.setMinimumSize(QtCore.QSize(480, 450))
+        self.frame_3 = QtWidgets.QFrame(self.frame_2)
+        self.frame_3.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_3.setObjectName("frame_3")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.frame_3)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.frDescricao = QtWidgets.QFrame(self.frame_3)
+        self.frDescricao.setMinimumSize(QtCore.QSize(480, 420))
         self.frDescricao.setMaximumSize(QtCore.QSize(450, 450))
         self.frDescricao.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frDescricao.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -152,9 +179,14 @@ class Ui_mwInfoIndicadores(object):
         self.lbFonte.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextSelectableByMouse)
         self.lbFonte.setObjectName("lbFonte")
         self.verticalLayout_3.addWidget(self.lbFonte)
-        self.verticalLayout_4.addWidget(self.frDescricao)
-        self.horizontalLayout.addWidget(self.frame_2, 0, QtCore.Qt.AlignHCenter)
-        self.verticalLayout_2.addWidget(self.frConteudo, 0, QtCore.Qt.AlignVCenter)
+        self.verticalLayout_6.addWidget(self.frDescricao)
+        self.pbEnviar = QtWidgets.QPushButton(self.frame_3)
+        self.pbEnviar.setMinimumSize(QtCore.QSize(110, 24))
+        self.pbEnviar.setObjectName("pbEnviar")
+        self.verticalLayout_6.addWidget(self.pbEnviar, 0, QtCore.Qt.AlignRight)
+        self.verticalLayout_4.addWidget(self.frame_3)
+        self.horizontalLayout.addWidget(self.frame_2)
+        self.verticalLayout_2.addWidget(self.frConteudo)
         self.verticalLayout.addWidget(self.frMain)
         mwInfoIndicadores.setCentralWidget(self.wdgMain)
 
@@ -168,6 +200,7 @@ class Ui_mwInfoIndicadores(object):
         self.lbSubtitulo.setText(_translate("mwInfoIndicadores", "Encontre todas as informações dos indicadores do CNIS"))
         self.lbSiglaCbx.setText(_translate("mwInfoIndicadores", "Escolha o(s) indicador(es)"))
         self.lbFonte.setText(_translate("mwInfoIndicadores", "TextLabel"))
+        self.pbEnviar.setText(_translate("mwInfoIndicadores", "Fechar / Enviar"))
 
 
 if __name__ == "__main__":

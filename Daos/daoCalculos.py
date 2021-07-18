@@ -597,6 +597,59 @@ class DaoCalculos:
             self.db.commit()
             self.disconectBD(cursor)
 
+    def insereListaContribuicoes(self, contribuicoes: List[ContribuicoesModelo]):
+        primeiroValor: bool = True
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""
+            INSERT INTO {self.config.tblCnisContribuicoes}
+                (
+                    clienteId, seq, competencia,
+                    dataPagamento, contribuicao, salContribuicao,
+                    indicadores, dadoOrigem, dataCadastro, 
+                    dataUltAlt
+                )
+            VALUES """
+
+        for contrib in contribuicoes:
+            if primeiroValor:
+                strComando += f"""
+            (
+                {contrib.clienteId}, {contrib.seq}, '{contrib.competencia}',
+                '{contrib.dataPagamento}', '{contrib.contribuicao}', '{contrib.salContribuicao}',
+                '{contrib.indicadores}', '{contrib.dadoOrigem}', '{datetimeToSql(datetime.now())}', 
+                '{datetimeToSql(datetime.now())}'
+            )"""
+                primeiroValor = False
+            else:
+                strComando += f""",
+            (
+                {contrib.clienteId}, {contrib.seq}, '{contrib.competencia}',
+                '{contrib.dataPagamento}', '{contrib.contribuicao}', '{contrib.salContribuicao}',
+                '{contrib.indicadores}', '{contrib.dadoOrigem}', '{datetimeToSql(datetime.now())}', 
+                '{datetimeToSql(datetime.now())}'
+            )"""
+
+            # if isinstance(self.db, sqlite3.Connection):
+            #     strComando += f""", '{datetimeToSql(datetime.now())}', '{datetimeToSql(datetime.now())}'
+            # )"""
+            # else:
+            #     strComando += f""", NOW(), NOW()
+            # )"""
+
+        try:
+            cursor.execute(strComando)
+            logPrioridade(f'INSERT<insereListaContribuicoes>___________________{self.config.tblCnisContribuicoes}', TipoEdicao.insert, Prioridade.saidaComun)
+        except:
+            raise Warning(f'Erro SQL - insereListaContribuicoes({self.config.tipoBanco}) <INSERT {self.config.tblCnisContribuicoes}>')
+        finally:
+            self.disconectBD(cursor)
+            self.db.commit()
+
     def delete(self, tipo: TipoContribuicao, contribuicaoId: int):
 
         if not isinstance(self.db, sqlite3.Connection):

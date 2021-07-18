@@ -1,5 +1,6 @@
 from typing import List
 
+from PyQt5 import QtGui
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout
 
 from Daos.daoInformacoes import DaoInformacoes
@@ -21,11 +22,12 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
         self.indicadoresNoProcesso: List[str] = []
         self.indicadoresVLayout = QVBoxLayout()
         self.sinais = Sinais()
+        self.sinais.sEnviaIndicadores.connect(self.enviaIndicadores)
 
         self.lbSigla.setText('')
         self.lbDescricao.setText('')
 
-        # self.cbxIndicadores.currentIndexChanged.connect(self.alteraIndicador)
+        self.pbEnviar.clicked.connect(lambda: self.close())
 
         self.carregaIndicadores()
         self.carregaLista()
@@ -60,3 +62,9 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
         for indicador in self.indicadores:
             if indicador.indicadorId == indicadorId:
                 return indicador
+
+    def enviaIndicadores(self):
+        self.parent.recebeIndicadores(self.indicadoresNoProcesso)
+
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        self.sinais.sEnviaIndicadores.emit(self.indicadoresNoProcesso)

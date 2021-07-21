@@ -11,6 +11,7 @@ class TabelasConfig:
         self.__tblTelefones = 'telefones'
         self.__tblProcessos = 'processos'
         self.__tblPpp = 'ppp'
+        self.__tblIndiceAtuMonetaria = 'indiceAtuMonetaria'
         self.__tblExpSobrevida = 'expSobrevida'
         self.__tblCnisRemuneracoes = 'cnisRemuneracoes'
         self.__tblCnisBeneficios = 'cnisBeneficios'
@@ -172,6 +173,27 @@ class TabelasConfig:
             dataReferente DATETIME NOT NULL,
             idade INT NOT NULL,
             expectativaSobrevida INT NOT NULL,
+            dataCadastro DATETIME NOT NULL,
+            dataUltAlt DATETIME NOT NULL{bottom}
+        """
+
+    # Comando SQL para criar tabela de índices de atualização monetária
+    @property
+    def sqlCreateIndicesAtuMonetaria(self):
+        if self.tipoBanco != TiposConexoes.sqlite:
+            cabecalho = 'indiceId INT AUTO_INCREMENT,'
+            bottom = """,
+            PRIMARY KEY (indiceId)
+        );"""
+        else:
+            cabecalho = 'indiceId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            bottom = f""");"""
+        return f"""
+        CREATE TABLE IF NOT EXISTS {self.tblIndiceAtuMonetaria}(
+            {cabecalho}
+            dataReferente DATETIME NOT NULL,
+            dib BIGINT NOT NULL,
+            fator FLOAT NOT NULL,
             dataCadastro DATETIME NOT NULL,
             dataUltAlt DATETIME NOT NULL{bottom}
         """
@@ -475,6 +497,10 @@ class TabelasConfig:
     @property
     def tblExpSobrevida(self):
         return self.__tblExpSobrevida
+
+    @property
+    def tblIndiceAtuMonetaria(self):
+        return self.__tblIndiceAtuMonetaria
 
     @property
     def tblCnisRemuneracoes(self):

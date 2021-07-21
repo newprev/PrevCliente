@@ -74,6 +74,7 @@ class Main(Ui_MainWindow, QMainWindow):
             'indicadores',
             'tetosPrev',
             'convMon',
+            'indiceAtuMonetaria',
         ]
 
         percentLoading = ceil(100 / len(listaLoading))
@@ -98,6 +99,12 @@ class Main(Ui_MainWindow, QMainWindow):
 
         self.lbInfo.setText('CRIANDO TABELA DOS PPP...')
         if self.daoConfigs.criaTabela(tabelas.sqlCreatePpp, nomeTabela='ppp'):
+            self.progresso(add=percentLoading)
+        else:
+            return False
+
+        self.lbInfo.setText('CRIANDO TABELA DOS ÍNDICES DE ATUALIZAÇÃO MONETARIA...')
+        if self.daoConfigs.criaTabela(tabelas.sqlCreateIndicesAtuMonetaria, nomeTabela='indicesAtuMonetaria'):
             self.progresso(add=percentLoading)
         else:
             return False

@@ -19,13 +19,18 @@ from newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData
 
 class CalculosAposentadoria:
 
-    def __init__(self, processo: ProcessosModelo, cliente: ClienteModelo, db=None):
+    def __init__(self, processo: ProcessosModelo, cliente: ClienteModelo, dib: datetime = None, db=None):
         self.processo = processo
         self.cliente = cliente
         self.daoCalculos = DaoCalculos(db)
         self.cabecalhos: List[CabecalhoModelo] = list(self.daoCalculos.buscaCabecalhosClienteId(self.cliente.clienteId))
         self.listaRemuneracoes = list(self.daoCalculos.buscaTodasRemuneracoes(cliente.clienteId))
         self.listaContribuicoes = list(self.daoCalculos.buscaTodasContribuicoes(cliente.clienteId))
+
+        if dib is None:
+            self.dibAtual = datetime.datetime.today().strftime('%Y-%m')
+        else:
+            self.dibAtual = dib.strftime('%Y-%m')
 
         self.mediaSalarial: float = self.calculaMediaSalarial()
         self.dataReforma: datetime.date = datetime.date(2019, 11, 13)
@@ -135,8 +140,13 @@ class CalculosAposentadoria:
         return fatorPrev
 
     def calculaMediaSalarial(self):
-        dfContribuicoes: pd.DataFrame = self.daoCalculos.buscaRemContPorData(self.cliente.clienteId, '1994-07-31')
-        return dfContribuicoes['salContribuicao'].mean()
+        avaliaSalario = lambda df: dfContribuicoes['salContribuicao']*dfContribuicoes['fator'] if dfContribuicoes['salContribuicao'] <= dfContribuicoes['teto'] else dfContribuicoes['teto']
+        dfContribuicoes: pd.DataFrame = self.daoCalculos.buscaRemContPorData(self.cliente.clienteId, '1994-07-31', self.dibAtual)
+        dfContribuicoes['salContribuicao1'] = dfContribuicoes.apply(avaliaSalario, axis=1)
+        salAtualizado = dfContribuicoes['salContribuicao']*dfContribuicoes['fator']
+        dfContribuicoes['salAtualizado'] = salAtualizado
+        print(dfContribuicoes[['competencia', 'salContribuicao', 'fator', 'salAtualizado', 'teto']][15:50])
+        return dfContribuicoes['salAtualizado'].mean()
 
     def calculaTempoContribuicao(self, cabecalhos: list = None) -> List[int]:
         listTimedeltas: list = []

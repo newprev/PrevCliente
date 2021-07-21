@@ -222,7 +222,7 @@ class DaoCalculos:
         finally:
             self.disconectBD(cursor)
 
-    def buscaRemContPorData(self, clienteId: int,  dataInicio: str, dataFim: str = '') -> pd.DataFrame:
+    def buscaRemContPorData(self, clienteId: int,  dataInicio: str, dib: str, dataFim: str = '') -> pd.DataFrame:
 
         if not isinstance(self.db, sqlite3.Connection):
             self.db.ping()
@@ -231,9 +231,22 @@ class DaoCalculos:
         cursor = self.db.cursor()
 
         strComando = f"""
-            SELECT clienteId, contribuicoesId, competencia, salContribuicao, indicadores, 'CONTRIBUICAO'
-            FROM {self.config.tblCnisContribuicoes}
-            WHERE clienteId = {clienteId}
+            SELECT 
+                cont.clienteId, 
+                cont.contribuicoesId, 
+                cont.competencia, 
+                cont.salContribuicao, 
+                cont.indicadores,
+                iam.fator,
+                tp.valor,
+                'CONTRIBUICAO'
+            FROM {self.config.tblCnisContribuicoes} cont
+            LEFT JOIN {self.config.tblIndiceAtuMonetaria} iam
+                ON STRFTIME('%Y-%m', iam.dataReferente) = STRFTIME('%Y-%m', cont.competencia)
+                    AND STRFTIME('%Y-%m', iam.dib) = '{dib}'
+            JOIN {self.config.tblTetosPrev} tp
+                ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', cont.competencia)
+            WHERE cont.clienteId = {clienteId}
             AND competencia > '{dataInicio}'"""
 
         if dataFim != '':
@@ -244,10 +257,23 @@ class DaoCalculos:
         
             UNION
                 
-            SELECT clienteId, remuneracoesId, competencia, remuneracao, indicadores, 'REMUNERACAO'
-            FROM {self.config.tblCnisRemuneracoes}
-            WHERE clienteId = {clienteId}
-            AND competencia > '{dataInicio}'"""
+            SELECT 
+                rem.clienteId, 
+                rem.remuneracoesId, 
+                rem.competencia, 
+                rem.remuneracao, 
+                rem.indicadores,	
+                iam.fator,
+                tp.valor,
+                'REMUNERACAO'
+            FROM cnisRemuneracoes rem
+            LEFT JOIN indiceAtuMonetaria iam
+                ON STRFTIME('%Y-%m', iam.dataReferente) = STRFTIME('%Y-%m', rem.competencia)
+                    AND STRFTIME('%Y-%m', iam.dib) = '{dib}'
+            JOIN {self.config.tblTetosPrev} tp
+                ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', rem.competencia)
+            WHERE rem.clienteId = {clienteId}
+            AND rem.competencia > '{dataInicio}';"""
 
         if dataFim != '':
             strComando += f"""
@@ -255,7 +281,7 @@ class DaoCalculos:
 
         try:
             cursor.execute(strComando)
-            colunas: list = ['clienteId', 'infoId', 'competencia', 'salContribuicao', 'indicadores', 'tipoInfo']
+            colunas: list = ['clienteId', 'infoId', 'competencia', 'salContribuicao', 'indicadores', 'fator', 'teto', 'tipoInfo']
             dfContribuicoes = pd.DataFrame(cursor.fetchall(), columns=colunas)
             logPrioridade(f'SELECT<buscaRemContPorData>___________________{self.config.tblCnisBeneficios}', TipoEdicao.select, Prioridade.saidaComun)
             return dfContribuicoes

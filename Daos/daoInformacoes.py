@@ -5,7 +5,7 @@ from connections import ConfigConnection
 from Daos.tabelas import TabelasConfig
 from helpers import datetimeToSql
 from logs import TipoEdicao, Prioridade, logPrioridade
-from modelos.convMonModelo import ConvMonModelo
+from modelos.indicesAtuMonetarioModelo import IndiceAtuMonetarioModelo
 from modelos.indicadorModelo import IndicadorModelo
 from modelos.expSobrevidaModelo import ExpectativaSobrevidaModelo
 from datetime import datetime
@@ -174,6 +174,47 @@ class DaoInformacoes:
         except:
             logPrioridade(f'INSERT<insereExpSobrevida>___________________ Erro {self.tabelas.tblExpSobrevida}', TipoEdicao.erro, Prioridade.saidaImportante)
             raise Warning(f'Erro SQL - insereExpSobrevida({self.config.banco}) <SELECT {self.tabelas.tblExpSobrevida}>')
+        finally:
+            self.db.commit()
+            self.disconectBD(cursor)
+
+    def insereListaIndicesAtuMonetario(self, listaIndices: List[IndiceAtuMonetarioModelo]):
+
+        if not isinstance(self.db, sqlite3.Connection):
+            self.db.ping()
+
+        # self.db.connect()
+        cursor = self.db.cursor()
+
+        strComando = f"""
+                    INSERT INTO {self.tabelas.tblIndiceAtuMonetaria}
+                    (
+                        dataReferente, dib,
+                        fator, dataCadastro, dataUltAlt
+                    )
+                    VALUES """
+
+        for index in range(0, len(listaIndices)):
+            if index == 0:
+                strComando += f"""
+                    (
+                        '{listaIndices[index].dataReferente}', '{listaIndices[index].dib}', {listaIndices[index].fator}, 
+                        '{datetime.utcnow()}', '{datetime.utcnow()}'
+                    )"""
+            else:
+                strComando += f""",
+                    (
+                        '{listaIndices[index].dataReferente}', '{listaIndices[index].dib}', {listaIndices[index].fator},
+                        '{datetime.utcnow()}', '{datetime.utcnow()}'
+                    )"""
+        try:
+            # print(strComando)
+            cursor.execute(strComando)
+            logPrioridade(f'INSERT<insereListaIndicesAtuMonetario>___________________{self.tabelas.tblIndiceAtuMonetaria}', TipoEdicao.insert, Prioridade.saidaComun)
+            return listaIndices
+        except:
+            logPrioridade(f'INSERT<insereListaIndicadores>___________________ Erro {self.tabelas.tblIndicadores}', TipoEdicao.erro, Prioridade.saidaImportante)
+            raise Warning(f'Erro SQL - buscaIndicadores({self.config.banco}) <SELECT {self.tabelas.tblIndicadores}>')
         finally:
             self.db.commit()
             self.disconectBD(cursor)

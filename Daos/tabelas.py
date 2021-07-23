@@ -340,6 +340,7 @@ class TabelasConfig:
             ultRem DATETIME NULL,
             dadoOrigem VARCHAR(15) NOT NULL,
             situacao VARCHAR(20) NULL,
+            dadoFaltante BOOL NOT NULL DEFAULT FALSE,
             dataCadastro DATETIME NOT NULL,
             dataUltAlt DATETIME NOT NULL{bottom}
         """

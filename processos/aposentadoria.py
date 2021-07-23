@@ -140,12 +140,12 @@ class CalculosAposentadoria:
         return fatorPrev
 
     def calculaMediaSalarial(self):
-        avaliaSalario = lambda df: dfContribuicoes['salContribuicao']*dfContribuicoes['fator'] if dfContribuicoes['salContribuicao'] <= dfContribuicoes['teto'] else dfContribuicoes['teto']
+        avaliaSalario = lambda df: df['salContribuicao'] if df['salContribuicao'] <= df['teto'] else df['teto']
+
         dfContribuicoes: pd.DataFrame = self.daoCalculos.buscaRemContPorData(self.cliente.clienteId, '1994-07-31', self.dibAtual)
         dfContribuicoes['salContribuicao1'] = dfContribuicoes.apply(avaliaSalario, axis=1)
-        salAtualizado = dfContribuicoes['salContribuicao']*dfContribuicoes['fator']
+        salAtualizado = dfContribuicoes['salContribuicao1']*dfContribuicoes['fator']
         dfContribuicoes['salAtualizado'] = salAtualizado
-        print(dfContribuicoes[['competencia', 'salContribuicao', 'fator', 'salAtualizado', 'teto']][15:50])
         return dfContribuicoes['salAtualizado'].mean()
 
     def calculaTempoContribuicao(self, cabecalhos: list = None) -> List[int]:
@@ -193,22 +193,29 @@ class CalculosAposentadoria:
         :return - timedalta com a diferença de dias de trabalho
         """
 
+        indicadoresImpeditivos = ['PDT-NASC-FIL-INV']
+
+        if cabecalho.indicadores in indicadoresImpeditivos:
+            print(cabecalho)
+            return datetime.timedelta(days=0)
+
         if cabecalho.dataInicio is None or cabecalho.dataInicio == datetime.datetime.min:
             return datetime.timedelta(days=0)
 
         if cabecalho.dataFim is None or cabecalho.dataFim == datetime.datetime.min:
             if cabecalho.ultRem is None or cabecalho.ultRem == datetime.datetime.min:
-                if not buscaProxJob:
-                    return datetime.datetime.now() - cabecalho.dataInicio
-
-                # Caso o registro não tenha dataFim nem ultRem, busca a dataInicio do próximo registro
-                else:
-                    if listaCabecalhos.index(cabecalho) + 1 >= len(listaCabecalhos):
-                        return datetime.datetime.now() - cabecalho.dataInicio
-                    else:
-                        index = listaCabecalhos.index(cabecalho) + 1
-                        cabecalhoAux: CabecalhoModelo = listaCabecalhos[index]
-                        return cabecalhoAux.dataInicio - cabecalho.dataInicio
+                return datetime.timedelta(days=0)
+                # if not buscaProxJob:
+                #     return datetime.datetime.now() - cabecalho.dataInicio
+                #
+                # # Caso o registro não tenha dataFim nem ultRem, busca a dataInicio do próximo registro
+                # else:
+                #     if listaCabecalhos.index(cabecalho) + 1 >= len(listaCabecalhos):
+                #         return datetime.datetime.now() - cabecalho.dataInicio
+                #     else:
+                #         index = listaCabecalhos.index(cabecalho) + 1
+                #         cabecalhoAux: CabecalhoModelo = listaCabecalhos[index]
+                #         return cabecalhoAux.dataInicio - cabecalho.dataInicio
             else:
                 return cabecalho.ultRem - cabecalho.dataInicio
         else:
@@ -239,15 +246,16 @@ class CalculosAposentadoria:
 
         if cabecalho.dataFim is None or cabecalho.dataFim == datetime.datetime.min:
             if cabecalho.ultRem is None or cabecalho.ultRem == datetime.datetime.min:
-                if not buscaProxJob:
-                    return datetime.datetime.now() - cabecalho.dataInicio
-
-                # Caso o registro não tenha dataFim nem ultRem, busca a dataInicio do próximo registro
-                else:
-                    index = listaCabecalhos.index(cabecalho) + 1
-                    cabecalhoAux: CabecalhoModelo = listaCabecalhos[index]
-                    diferencaMeses: int = cabecalhoAux.dataInicio.month - cabecalho.dataInicio.month + 1 - somaIndicadores
-                    return datetime.timedelta(days=30 * diferencaMeses)
+                return datetime.timedelta(days=0)
+                # if not buscaProxJob:
+                #     return datetime.datetime.now() - cabecalho.dataInicio
+                #
+                # # Caso o registro não tenha dataFim nem ultRem, busca a dataInicio do próximo registro
+                # else:
+                #     index = listaCabecalhos.index(cabecalho) + 1
+                #     cabecalhoAux: CabecalhoModelo = listaCabecalhos[index]
+                #     diferencaMeses: int = cabecalhoAux.dataInicio.month - cabecalho.dataInicio.month + 1 - somaIndicadores
+                #     return datetime.timedelta(days=30 * diferencaMeses)
             else:
                 diferencaMeses: int = cabecalho.ultRem.month - cabecalho.dataInicio.month + 1 - somaIndicadores
                 return datetime.timedelta(days=30 * diferencaMeses)

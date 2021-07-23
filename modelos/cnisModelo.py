@@ -154,6 +154,9 @@ class CNISModelo:
                 elif re.fullmatch(self.expRegCNPJ, documentoLinhas[j]) is not None:
                     self.dictCabecalho['cdEmp'].append(documentoLinhas[j])
                     cdEmp = True
+                elif documentoLinhas[j] in self.dictIndicadores.keys():
+                    self.dictCabecalho['indicadores'].append(documentoLinhas[j])
+                    indicadores = True
                 elif re.match(self.expRegNomeEmp, documentoLinhas[j]) is not None and documentoLinhas[j]:
                     nomeEmp += documentoLinhas[j]
                     orgVinculo = True

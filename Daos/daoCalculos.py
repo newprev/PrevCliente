@@ -365,7 +365,8 @@ class DaoCalculos:
                 nomeEmp, dataInicio, dataFim,
                 tipoVinculo, orgVinculo, especie,
                 indicadores, ultRem, dadoOrigem,
-                situacao, dataCadastro, dataUltAlt
+                situacao, dadoFaltante, dataCadastro, 
+                dataUltAlt
             FROM
                 {self.config.tblCnisCabecalhos}
             WHERE

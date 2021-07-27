@@ -154,7 +154,8 @@ class CNISModelo:
                 elif re.fullmatch(self.expRegCNPJ, documentoLinhas[j]) is not None:
                     self.dictCabecalho['cdEmp'].append(documentoLinhas[j])
                     cdEmp = True
-                elif documentoLinhas[j] in self.dictIndicadores.keys():
+                # elif documentoLinhas[j] in self.dictIndicadores.keys():
+                elif self.isIndicador(documentoLinhas[j]):
                     self.dictCabecalho['indicadores'].append(documentoLinhas[j])
                     indicadores = True
                 elif re.match(self.expRegNomeEmp, documentoLinhas[j]) is not None and documentoLinhas[j]:
@@ -449,6 +450,12 @@ class CNISModelo:
             return pd.DataFrame.from_dict(self.dictDadosPessoais, orient='index', columns=['Descrição'])
         else:
             return self.dictDadosPessoais
+
+    def isIndicador(self, info: str) -> bool:
+        if ',' in info:
+            return info[:info.find(',')] in self.dictIndicadores.keys()
+        else:
+            return info in self.dictIndicadores.keys()
 
     def getAllDict(self) -> dict:
         recolhimentos = {

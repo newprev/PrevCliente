@@ -111,6 +111,11 @@ class AtivApos(Enum):
     aprendiz = 14
     seminarista = 15
 
+class DireitoAdquirido(Enum):
+    lei821391 = 0
+    lei987699 = 1
+    ec1032019 = 2
+
 class RegraTransicao(Enum):
     pontos = 0
     reducaoIdadeMinima = 1

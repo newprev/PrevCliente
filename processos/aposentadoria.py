@@ -13,7 +13,7 @@ from modelos.contribuicoesModelo import ContribuicoesModelo
 from modelos.expSobrevidaModelo import ExpectativaSobrevidaModelo
 from modelos.processosModelo import ProcessosModelo
 from modelos.clienteModelo import ClienteModelo
-from newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData, ComparaData
+from newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData, ComparaData, DireitoAdquirido, SubTipoAposentadoria
 
 
 # Reforma 13/11/2019
@@ -65,8 +65,17 @@ class CalculosAposentadoria:
             RegraTransicao.reducaoTempoContribuicao: None
         }
 
+        self.direitosAdquiridos = {
+            DireitoAdquirido.lei821391: {
+                SubTipoAposentadoria.Idade: self.calculaDireitoAdquirido(DireitoAdquirido.lei821391, subTipo=SubTipoAposentadoria.Idade),
+                SubTipoAposentadoria.TempoContrib: self.calculaDireitoAdquirido(DireitoAdquirido.lei821391, subTipo=SubTipoAposentadoria.TempoContrib)
+            },
+            DireitoAdquirido.lei987699: self.calculaDireitoAdquirido(DireitoAdquirido.lei987699),
+            DireitoAdquirido.ec1032019: self.calculaDireitoAdquirido(DireitoAdquirido.ec1032019)
+        }
+
         self.aposentadorias = {
-            'direitoAdq': self.calculaDireitoAdquirido(),
+            'direitoAdq': self.direitosAdquiridos,
             'regrasTransicao': self.regrasTransicao
         }
 
@@ -84,37 +93,49 @@ class CalculosAposentadoria:
     # def defineDIB(self, data: datetime):
     #     self.processo.dib = data
 
-    def calculaDireitoAdquirido(self):
+    def calculaDireitoAdquirido(self, lei: DireitoAdquirido, subTipo: SubTipoAposentadoria = None):
         listTimedeltas: list = []
         totalDias: int = 0
         anosContribuicao: int = 0
         antesReforma: bool = True
+        listaBanco: List[CabecalhoModelo] = []
 
-        listaBanco: List[CabecalhoModelo] = self.cabecalhos
+        if lei == DireitoAdquirido.lei821391:
+            if subTipo == SubTipoAposentadoria.Idade:
+                # TODO: Implementar regra para verificar direito adquirido
+                return False
+            elif subTipo == SubTipoAposentadoria.TempoContrib:
+                # TODO: Implementar regra para verificar direito adquirido
+                return False
+        elif lei == DireitoAdquirido.lei987699:
+            pass
 
-        for cabecalho in listaBanco:
+        else:
+            listaBanco = self.cabecalhos
 
-            if comparaMesAno(cabecalho.dataInicio, self.dataReforma2019, ComparaData.posterior):
-                antesReforma = False
+            for cabecalho in listaBanco:
 
-            if antesReforma:
-                if cabecalho.nb is not None:
-                    if cabecalho.situacao != 'INDEFERIDO':
-                        listTimedeltas.append(self.calculaTimedeltaAr(cabecalho))
+                if comparaMesAno(cabecalho.dataInicio, self.dataReforma2019, ComparaData.posterior):
+                    antesReforma = False
+
+                if antesReforma:
+                    if cabecalho.nb is not None:
+                        if cabecalho.situacao != 'INDEFERIDO':
+                            listTimedeltas.append(self.calculaTimedeltaAr(cabecalho))
+                        else:
+                            listTimedeltas.append(self.calculaTimedeltaAr(cabecalho))
                     else:
                         listTimedeltas.append(self.calculaTimedeltaAr(cabecalho))
-                else:
-                    listTimedeltas.append(self.calculaTimedeltaAr(cabecalho))
 
-        for delta in listTimedeltas:
-            totalDias += delta.days
+            for delta in listTimedeltas:
+                totalDias += delta.days
 
-        anosContribuicao = calculaDiaMesAno(totalDias)[2]
+            anosContribuicao = calculaDiaMesAno(totalDias)[2]
 
-        if self.cliente.genero == 'M':
-            return anosContribuicao >= 35
-        else:
-            return anosContribuicao >= 30
+            if self.cliente.genero == 'M':
+                return anosContribuicao >= 35
+            else:
+                return anosContribuicao >= 30
 
     def calculaFatorPrevidenciario(self):
         """
@@ -191,8 +212,8 @@ class CalculosAposentadoria:
                 continue
 
             if comparaMesAno(dataReferente, self.dataReforma2019, ComparaData.posterior):
-                listTimedeltas.append(self.calculaTimedeltaDr(remPorSeq[seq], listaBanco), dataLimitante=dataLimitante)
-                listTimedeltas.append(self.calculaTimedeltaDr(contPorSeq[seq], listaBanco), dataLimitante=dataLimitante)
+                listTimedeltas.append(self.calculaTimedeltaDr(remPorSeq[seq], listaBanco, dataLimitante=dataLimitante))
+                listTimedeltas.append(self.calculaTimedeltaDr(contPorSeq[seq], listaBanco, dataLimitante=dataLimitante))
             else:
                 listTimedeltas.append(self.calculaTimedeltaAr(cabecalho))
 

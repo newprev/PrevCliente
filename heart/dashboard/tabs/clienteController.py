@@ -214,12 +214,11 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
     def carregaClienteNaTela(self, cliente: ClienteModelo):
 
         self.leCpf.setText(mascaraCPF(cliente.cpfCliente))
-        self.dtNascimento.setDate(strToDatetime(cliente.dataNascimento))
+        self.dtNascimento.setDate(cliente.dataNascimento.date())
         self.leIdade.setText(f'{cliente.idade}')
         self.leNomeMae.setText(cliente.nomeMae)
         self.lePrimeiroNome.setText(cliente.nomeCliente)
         self.leSobrenome.setText(cliente.sobrenomeCliente)
-        # self.leCdCliente.setText(str(self.cliente.clienteId))
         self.sbCdCliente.setValue(self.cliente.clienteId)
 
         if cliente.rgCliente not in [None, 'None']:

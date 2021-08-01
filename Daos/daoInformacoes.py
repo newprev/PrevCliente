@@ -139,7 +139,6 @@ class DaoInformacoes:
             self.disconectBD(cursor)
 
     def insereExpSobrevida(self, listaExpSobrevida: List[ExpectativaSobrevidaModelo]):
-        print(type(listaExpSobrevida[0].dataReferente))
 
         if not isinstance(self.db, sqlite3.Connection):
             self.db.ping()

@@ -36,7 +36,7 @@ class CalculosAposentadoria:
         else:
             self.dibAtual: datetime = dib.strftime('%Y-%m')
 
-        self.dibAtual = datetime.datetime(year=2020, month=6, day=16)
+        self.dibAtual = datetime.datetime(year=2019, month=10, day=1)
 
         self.mediaSalarial: float = self.calculaMediaSalarial()
         self.dataReforma2019: datetime.date = datetime.date(2019, 11, 13)
@@ -154,7 +154,7 @@ class CalculosAposentadoria:
         dfContribuicoes['salAtualizado'] = salAtualizado
         return dfContribuicoes['salAtualizado'].mean()
 
-    def calculaTempoContribuicao(self, cabecalhos: list = None) -> List[int]:
+    def calculaTempoContribuicao(self, cabecalhos: list = None, dataLimitante: datetime = None) -> List[int]:
         listTimedeltas: list = []
         totalDias: int = 0
 
@@ -165,7 +165,7 @@ class CalculosAposentadoria:
         else:
             listaBanco: List[CabecalhoModelo] = cabecalhos
 
-        # Criando dicionários de remunerações e contribuições por Id ---------------------
+        # Criando dicionários de remunerações e contribuições por Id ----------------
         dictCabecalhos: dict = {cabecalho.seq: cabecalho for cabecalho in listaBanco}
 
         remPorSeq: defaultdict = defaultdict(list)
@@ -179,14 +179,20 @@ class CalculosAposentadoria:
             listaAtual.append(contribuicao)
 
         for seq, cabecalho in dictCabecalhos.items():
+            dataReferente: datetime = cabecalho.dataFim
+
+            if dataReferente is None or dataReferente == datetime.datetime.min:
+                dataReferente = cabecalho.ultRem
+
             if cabecalho.indicadores in indicadoresImpeditivos:
                 continue
 
             if cabecalho.dataFim is None or cabecalho.dataFim == '':
                 continue
 
-            if comparaMesAno(cabecalho.dataFim, self.dataReforma2019, ComparaData.posterior):
-                listTimedeltas.append(self.calculaTimedeltaDr(remPorSeq[seq], listaBanco))
+            if comparaMesAno(dataReferente, self.dataReforma2019, ComparaData.posterior):
+                listTimedeltas.append(self.calculaTimedeltaDr(remPorSeq[seq], listaBanco), dataLimitante=dataLimitante)
+                listTimedeltas.append(self.calculaTimedeltaDr(contPorSeq[seq], listaBanco), dataLimitante=dataLimitante)
             else:
                 listTimedeltas.append(self.calculaTimedeltaAr(cabecalho))
 
@@ -221,10 +227,8 @@ class CalculosAposentadoria:
         #
         i = 1
         for delta in listTimedeltas:
-            print(f"{i} - {delta.days}")
             totalDias += delta.days
             i += 1
-        print(f'listTimedeltas: {listTimedeltas}')
 
         return calculaDiaMesAno(totalDias)
 
@@ -251,7 +255,7 @@ class CalculosAposentadoria:
         else:
             return cabecalho.dataFim - cabecalho.dataInicio
 
-    def calculaTimedeltaDr(self, listContOuRem: list, listCabecalhos: List[CabecalhoModelo]) -> datetime.timedelta:
+    def calculaTimedeltaDr(self, listContOuRem: list, listCabecalhos: List[CabecalhoModelo], dataLimitante: datetime = None) -> datetime.timedelta:
         """
         Após a reforma previdenciária, 13/11/2019, o tempo de contribuição é calculado mês a mês, descontando os casos que ocorrem o indicador 'PREC-MENOR-MIN'
 
@@ -260,18 +264,26 @@ class CalculosAposentadoria:
         if len(listContOuRem) == 0:
             return datetime.timedelta(0)
 
+        dataLimite: datetime = dataLimitante
+        if dataLimite is None:
+            dataLimite = self.dibAtual
+
         if not isinstance(listContOuRem[0], ContribuicoesModelo) and not isinstance(listContOuRem[0], RemuneracoesModelo):
             raise Exception()
 
         indiceDR: int = next(index for index, contrib in enumerate(listContOuRem) if comparaMesAno(contrib.competencia, self.dataReforma2019, ComparaData.posterior))
         cabecalho: CabecalhoModelo = next(cabecalho for cabecalho in listCabecalhos if cabecalho.seq == listContOuRem[indiceDR].seq)
-        timedetlaAR: datetime.timedelta = self.dataReforma2019 - cabecalho.dataInicio.date()
         contaMeses: int = 0
         indicadoresImpeditivos = ['PDT-NASC-FIL-INV', 'IREC-LC123', 'PREC-MENOR-MIN']
 
+        timedetlaAR: datetime.timedelta = self.dataReforma2019 - cabecalho.dataInicio.date()
+        if timedetlaAR.days < 0:
+            timedetlaAR = datetime.timedelta(0)
+
         for i in range(indiceDR, len(listContOuRem)):
             if listContOuRem[i].indicadores not in indicadoresImpeditivos:
-                contaMeses += 1
+                if comparaMesAno(listContOuRem[i].competencia, dataLimite, ComparaData.anterior):
+                    contaMeses += 1
 
         return timedetlaAR + datetime.timedelta(days=30*contaMeses)
 
@@ -373,7 +385,7 @@ class CalculosAposentadoria:
         for cabecalho in self.cabecalhos:
             if cabecalho.dataFim.date() <= self.dataReforma2019:
                 listaCabecalhosPedagio.append(cabecalho)
-        tempoContribAntesReforma = self.calculaTempoContribuicao(listaCabecalhosPedagio)[2]
+        tempoContribAntesReforma = self.calculaTempoContribuicao(listaCabecalhosPedagio, dataLimitante=self.dibAtual)[2]
 
         if self.cliente.genero == 'M':
             return 35 - tempoContribAntesReforma <= 2

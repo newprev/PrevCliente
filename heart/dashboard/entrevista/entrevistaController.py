@@ -333,9 +333,6 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.timer.stop()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
-        print('------------------- closeEvent')
-        print(f'self.parent: {self.parent}')
-        print(f'self.parentWidget(): {self.parentWidget()}')
         self.sinais.sAtualizaListaClientes.emit()
 
     def atualizaClientes(self):

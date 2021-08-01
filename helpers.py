@@ -337,7 +337,7 @@ def mascaraDinheiro(valor: float, simbolo: str = 'R$'):
         return f"{simbolo} {strFinal}"
 
 
-def comparaMesAno(dataInicio: datetime, dataFim: datetime) -> int:
+def comparaMesAno(dataInicio: datetime, dataFim: datetime, comparacao: ComparaData) -> int:
     inicio = eliminaHoraDias(dataInicio)
     fim = eliminaHoraDias(dataFim)
 
@@ -346,12 +346,14 @@ def comparaMesAno(dataInicio: datetime, dataFim: datetime) -> int:
     if isinstance(fim, datetime.datetime):
         fim = fim.date()
 
-    if inicio == fim:
-        return 0
-    elif fim < inicio:
-        return -1
+    if comparacao == ComparaData.igual:
+        return inicio == fim
+    elif comparacao == ComparaData.posterior:
+        return inicio > fim
+    elif comparacao == ComparaData.anterior:
+        return inicio < fim
     else:
-        return 1
+        raise Exception()
 
 
 def calculaIdadeFromString(dataNascimento: str) -> int:

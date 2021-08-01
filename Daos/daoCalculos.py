@@ -244,7 +244,7 @@ class DaoCalculos:
             LEFT JOIN {self.config.tblIndiceAtuMonetaria} iam
                 ON STRFTIME('%Y-%m', iam.dataReferente) = STRFTIME('%Y-%m', cont.competencia)
                     AND STRFTIME('%Y-%m', iam.dib) = '{dib}'
-            JOIN {self.config.tblTetosPrev} tp
+            LEFT JOIN {self.config.tblTetosPrev} tp
                 ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', cont.competencia)
             WHERE cont.clienteId = {clienteId}
             AND competencia > '{dataInicio}'"""
@@ -270,7 +270,7 @@ class DaoCalculos:
             LEFT JOIN indiceAtuMonetaria iam
                 ON STRFTIME('%Y-%m', iam.dataReferente) = STRFTIME('%Y-%m', rem.competencia)
                     AND STRFTIME('%Y-%m', iam.dib) = '{dib}'
-            JOIN {self.config.tblTetosPrev} tp
+            LEFT JOIN {self.config.tblTetosPrev} tp
                 ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', rem.competencia)
             WHERE rem.clienteId = {clienteId}
             AND rem.competencia > '{dataInicio}';"""

@@ -1,5 +1,3 @@
-from PyQt5 import Qt
-from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar
 
@@ -8,14 +6,18 @@ from Daos.daoTelAfins import DaoTelAfins
 from Daos.daoProcessos import DaoProcessos
 
 from Telas.tabCliente import Ui_wdgTabCliente
+
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
 from heart.sinaisCustomizados import Sinais
 from heart.telAfinsController import TelAfinsController
-from helpers import *
+
 from modelos.clienteModelo import ClienteModelo
 from modelos.cnisModelo import CNISModelo
 from modelos.processosModelo import ProcessosModelo
-from newPrevEnums import TipoBeneficio
+from modelos.modelsORM import Cliente
+
+from helpers import *
+
 from repositorios.integracaoRepositorio import IntegracaoRepository
 
 
@@ -411,9 +413,15 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.carregandoCliente = True
         if self.sbCdCliente.text() != '':
             clienteId = int(self.sbCdCliente.text())
+
             self.limpaTudo()
             self.verificaDados()
             self.cliente = self.daoCliente.buscaProxCliente(clienteId)
+            cliente = Cliente.select().where(Cliente.clienteId == clienteId).dicts().get()
+
+            print('\n---------------------------------------')
+            print(cliente)
+            print('---------------------------------------\n')
 
             if not self.cliente:
                 self.cliente = ClienteModelo()

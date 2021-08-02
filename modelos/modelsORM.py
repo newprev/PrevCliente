@@ -2,6 +2,8 @@ from datetime import datetime
 
 from peewee import *
 
+from helpers import escritorioIdAtual
+
 database = SqliteDatabase('Daos/producao.db')
 
 class BaseModel(Model):
@@ -14,15 +16,15 @@ class Escritorios(BaseModel):
     cep = CharField(null=True)
     cidade = CharField(null=True)
     cnpj = CharField(null=True)
-    complemento = CharField()
-    cpf = CharField()
-    email = CharField()
+    complemento = CharField(null=True)
+    cpf = CharField(null=True)
+    email = CharField(null=True)
     endereco = CharField(null=True)
     estado = CharField(default='SP')
     inscEstadual = CharField(column_name='inscEstadual', null=True)
     nomeEscritorio = CharField(column_name='nomeEscritorio')
     nomeFantasia = CharField(column_name='nomeFantasia')
-    numero = IntegerField()
+    numero = IntegerField(null=True)
     telefone = CharField(null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
@@ -52,7 +54,10 @@ class Advogados(BaseModel):
 
 class Cliente(BaseModel):
     clienteId = AutoField(column_name='clienteId', null=True)
-    escritorioId = ForeignKeyField(column_name='escritorioId', field='escritorioId', model=Escritorios, backref='escritorios')
+    escritorioId = ForeignKeyField(column_name='escritorioId', field='escritorioId', model=Escritorios, backref='escritorios', default=escritorioIdAtual())
+    telefoneId = DeferredForeignKey('Telefones', column_name='telefoneId', field='telefoneId', null=True)
+    nomeCliente = CharField(column_name='nomeCliente')
+    sobrenomeCliente = CharField(column_name='sobrenomeCliente')
     agenciaBanco = CharField(column_name='agenciaBanco', null=True)
     bairro = CharField(null=True)
     cep = CharField()
@@ -69,7 +74,6 @@ class Cliente(BaseModel):
     idade = IntegerField()
     nit = CharField()
     nomeBanco = CharField(column_name='nomeBanco', null=True)
-    nomeCliente = CharField(column_name='nomeCliente')
     nomeMae = CharField(column_name='nomeMae')
     numCarteiraProf = CharField(column_name='numCarteiraProf', null=True)
     numero = IntegerField()
@@ -80,17 +84,15 @@ class Cliente(BaseModel):
     rgCliente = CharField(column_name='rgCliente')
     senhaINSS = CharField(column_name='senhaINSS', null=True)
     serieCarteiraProf = CharField(column_name='serieCarteiraProf', null=True)
-    sobrenomeCliente = CharField(column_name='sobrenomeCliente')
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
     dataUltAlt = DateTimeField(column_name='dataUltAlt')
-    # telefone = CharField(null=True)
 
     class Meta:
         table_name = 'cliente'
 
 class CnisBeneficios(BaseModel):
     beneficiosId = AutoField(column_name='beneficiosId', null=True)
-    cliente = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
+    clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
     dado_origem = CharField(column_name='dadoOrigem', default='CNIS')
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
     data_fim = DateField(column_name='dataFim')
@@ -106,7 +108,7 @@ class CnisBeneficios(BaseModel):
 
 class CnisCabecalhos(BaseModel):
     cabecalhosId = AutoField(column_name='cabecalhosId', null=True)
-    cliente = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente)
+    clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente)
     seq = IntegerField(null=False)
     cdEmp = CharField(column_name='cdEmp', null=True)
     dadoFaltante = BooleanField(column_name='dadoFaltante', default=False)
@@ -130,7 +132,7 @@ class CnisCabecalhos(BaseModel):
 
 class CnisContribuicoes(BaseModel):
     contribuicoesId = AutoField(column_name='contribuicoesId', null=True)
-    cliente = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
+    clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
     seq = IntegerField(null=False)
     competencia = DateField(null=False)
     contribuicao = FloatField(null=False)
@@ -146,7 +148,7 @@ class CnisContribuicoes(BaseModel):
 
 class CnisRemuneracoes(BaseModel):
     remuneracoesId = AutoField(column_name='remuneracoesId', null=True)
-    cliente = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, null=True)
+    clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, null=True)
     seq = IntegerField(null=False)
     competencia = DateField(null=False)
     dadoOrigem = CharField(column_name='dadoOrigem')
@@ -246,7 +248,7 @@ class Ppp(BaseModel):
 class Processos(BaseModel):
     processoId = AutoField(column_name='processoId', null=True)
     advogado = ForeignKeyField(column_name='advogadoId', field='advogadoId', model=Advogados, null=True, backref='advogados')
-    cliente = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, null=True, backref='cliente')
+    clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, null=True, backref='cliente')
     cidade = CharField()
     dataFim = DateField(column_name='dataFim', null=True)
     dataInicio = DateField(column_name='dataInicio', null=True)
@@ -280,7 +282,7 @@ class SqliteSequence(BaseModel):
 
 class Telefones(BaseModel):
     telefoneId = AutoField(column_name='telefoneId', null=True)
-    cliente = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
+    clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
     ativo = BooleanField(default=True)
     numero = CharField(null=False)
     pessoalRecado = CharField(column_name='pessoalRecado')

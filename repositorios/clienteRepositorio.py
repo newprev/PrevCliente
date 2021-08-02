@@ -1,8 +1,11 @@
 import requests as http
-
 from logs import logPrioridade
+from playhouse.shortcuts import dict_to_model, model_to_dict
+
 from newPrevEnums import *
+
 from modelos.escritorioModelo import EscritorioModelo
+from modelos.modelsORM import Escritorios
 from modelos.advogadoModelo import AdvogadoModelo
 from modelos.Auth.ClientAuthModelo import ClientAuthModelo
 
@@ -21,7 +24,9 @@ class UsuarioRepository:
         if 199 < response.status_code < 400:
             escritorioJson = response.json()
             if len(escritorioJson) == 1:
-                escritorio = EscritorioModelo().fromDict(escritorioJson[0])
+                escritorio_aux = dict_to_model(Escritorios, escritorioJson[0], ignore_unknown=True)
+                escritorio, created = Escritorios.get_or_create(**model_to_dict(escritorio_aux, recurse=False))
+
                 logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<escritorio/>:::{url+busca}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
                 return escritorio
             else:

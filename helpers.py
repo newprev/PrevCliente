@@ -245,6 +245,17 @@ def getConversoesMonetarias():
     return ['Valorizou', 'Desvalorizou']
 
 
+def escritorioIdAtual() -> int:
+    from cache.cacheEscritorio import CacheEscritorio
+
+    escritorioCache = CacheEscritorio()
+    escritorio = escritorioCache.carregarCache()
+    if not escritorio:
+        escritorio = escritorioCache.carregarCacheTemporario()
+
+    return escritorio.escritorioId
+
+
 def mascaraTelCel(telCel):
     if telCel in [None, 'None']:
         return ''

@@ -14,7 +14,7 @@ from heart.telAfinsController import TelAfinsController
 from modelos.clienteModelo import ClienteModelo
 from modelos.cnisModelo import CNISModelo
 from modelos.processosModelo import ProcessosModelo
-from modelos.modelsORM import Cliente
+from modelos.modelsORM import Cliente, Processos, Telefones
 
 from helpers import *
 
@@ -26,7 +26,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
     def __init__(self, db=None, parent=None, entrevista=False):
         super(TabCliente, self).__init__(parent)
         self.setupUi(self)
-        self.cliente = ClienteModelo()
+        # self.cliente = ClienteModelo()
+        self.cliente = Cliente()
         self.db = db
         self.sinais = Sinais()
         self.entrevistaPg = parent
@@ -34,9 +35,9 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.carregandoCliente = False
 
         self.cnisClienteAtual = None
-        self.daoCliente = DaoCliente(db=db)
+        # self.daoCliente = DaoCliente(db=db)
         self.daoTelAfins = DaoTelAfins(db=db)
-        self.daoProcessos = DaoProcessos(db=db)
+        # self.daoProcessos = DaoProcessos(db=db)
 
         self.tblClientes.resizeColumnsToContents()
         self.tblClientes.doubleClicked.connect(self.editarCliente)
@@ -123,14 +124,22 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def atualizaTblClientes(self, clientes: list = None):
         if clientes is None:
-            clientesModels: list = self.daoCliente.buscaTodos(returnModel=True)
+            # clientesModels: list = self.daoCliente.buscaTodos(returnModel=True)
+
+            clientesModels: list = Cliente.select()
+            print('-----------------------------------------------')
+            for c in clientesModels:
+                print(c.nomeCliente)
+            print('-----------------------------------------------')
         else:
             clientesModels = []
 
         self.tblClientes.setRowCount(0)
         for numLinha, cliente in enumerate(clientesModels):
             self.tblClientes.insertRow(numLinha)
-            processo: ProcessosModelo = self.daoProcessos.buscaProcessoPorCliente(cliente, limit=1)[0]
+            # processo: ProcessosModelo = self.daoProcessos.buscaProcessoPorCliente(cliente, limit=1)[0]
+            processo: Processos = Processos.get_or_none(Processos.clienteId == cliente.clienteId)
+            telefone: Telefones = Telefones.get_or_none(Telefones.clienteId == cliente.clienteId)
 
             cdClienteItem = QTableWidgetItem(str(cliente.clienteId))
             cdClienteItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
@@ -144,7 +153,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             emailItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 2, emailItem)
 
-            telefoneItem = QTableWidgetItem(f"{mascaraTelCel(cliente.telefone.numero)}")
+            # telefoneItem = QTableWidgetItem(f"{mascaraTelCel(cliente.telefone.numero)}")
+            telefoneItem = QTableWidgetItem(f"{mascaraTelCel(telefone.numero)}")
             telefoneItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 3, telefoneItem)
 
@@ -197,8 +207,18 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.nomeCliente = infoPessoais['nomeCompleto'].split(' ')[0].title()
             self.cliente.sobrenomeCliente = ' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title()
 
-            if not self.buscaClienteJaCadastrado():
-                self.cliente.clienteId = self.daoCliente.cadastroClienteComCnis(self.cliente, self.cnisClienteAtual.getAllDict())
+            self.cliente.get_or_create()
+
+            # self.cliente.cpfCliente = unmaskAll(infoPessoais['cpf'])
+            # self.cliente.dataNascimento = strToDatetime(infoPessoais['dataNascimento'])
+            # self.cliente.idade = calculaIdadeFromString(infoPessoais['dataNascimento'])
+            # self.cliente.nit = unmaskAll(infoPessoais['nit'])
+            # self.cliente.nomeMae = infoPessoais['nomeMae'].title()
+            # self.cliente.nomeCliente = infoPessoais['nomeCompleto'].split(' ')[0].title()
+            # self.cliente.sobrenomeCliente = ' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title()
+
+            # if not self.buscaClienteJaCadastrado():
+            #     self.cliente.clienteId = self.daoCliente.cadastroClienteComCnis(self.cliente, self.cnisClienteAtual.getAllDict())
 
         self.limpaTudo()
         self.carregaClienteNaTela(cliente=self.cliente)
@@ -417,11 +437,11 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.limpaTudo()
             self.verificaDados()
             self.cliente = self.daoCliente.buscaProxCliente(clienteId)
-            cliente = Cliente.select().where(Cliente.clienteId == clienteId).dicts().get()
-
-            print('\n---------------------------------------')
-            print(cliente)
-            print('---------------------------------------\n')
+            # cliente = Cliente.select().where(Cliente.clienteId == clienteId).dicts().get()
+            #
+            # print('\n---------------------------------------')
+            # print(cliente)
+            # print('---------------------------------------\n')
 
             if not self.cliente:
                 self.cliente = ClienteModelo()

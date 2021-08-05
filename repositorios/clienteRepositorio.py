@@ -41,7 +41,7 @@ class UsuarioRepository:
 
         if 199 < response.status_code < 400:
             listaAdvogadosJson: list = response.json()
-            listaObjAdv: List[Advogados] = [dict_to_model(Advogados, adv) for adv in listaAdvogadosJson]
+            listaObjAdv: List[Advogados] = [dict_to_model(Advogados, adv, ignore_unknown=True) for adv in listaAdvogadosJson]
 
             logPrioridade(f"API => buscaAdvNaoCadastrados ____________________GET<escritorio/<escritorioId>/advogado:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
             return listaObjAdv
@@ -101,13 +101,15 @@ class UsuarioRepository:
 
     def buscaAdvPor(self, advogadoId: int = None) -> AdvogadoModelo:
         url: str = self.baseUrl + f'advogados/{advogadoId}/'
-        advogado: AdvogadoModelo = AdvogadoModelo()
+        # advogado: AdvogadoModelo = AdvogadoModelo()
+        advogado: Advogados = Advogados()
 
         response = http.get(url)
 
         try:
             if 199 < response.status_code < 400:
-                advogado.fromDict(response.json(), retornaInst=False)
+                # advogado.fromDict(response.json(), retornaInst=False)
+                advogado = dict_to_model(Advogados, response.json(), ignore_unknown=True)
 
                 if not advogado:
                     logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)

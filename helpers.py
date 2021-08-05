@@ -509,3 +509,19 @@ def eliminaHoraDias(data: datetime):
         return data.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     elif isinstance(data, datetime.date):
         return data.replace(day=1)
+
+
+def pyToDefault(dicionario: dict) -> dict:
+    dictReturn: dict = dict()
+    for chave, valor in dicionario.items():
+        if isinstance(valor, datetime.datetime):
+            dictReturn[chave] = valor.strftime('%Y-%m-%d')
+        elif isinstance(valor, datetime.date):
+            dictReturn[chave] = valor.strftime('%Y-%m-%d')
+        else:
+            dictReturn[chave] = valor
+
+    for chave, valor in dictReturn.items():
+        print(f"{chave}: ({type(valor)}) {valor}")
+
+    return dictReturn

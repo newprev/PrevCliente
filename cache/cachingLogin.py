@@ -1,6 +1,10 @@
 import os
 import json
+
+from helpers import pyToDefault
 from modelos.advogadoModelo import AdvogadoModelo
+from modelos.modelsORM import Advogados
+from playhouse.shortcuts import model_to_dict
 
 
 class CacheLogin:
@@ -10,8 +14,9 @@ class CacheLogin:
         self.pathLoginTempTxt = os.path.join(os.getcwd(), 'cache', '.login.temp.txt')
         self.pathCache = os.path.join(os.getcwd(), 'cache')
 
-    def salvarCache(self, advogado: AdvogadoModelo) -> bool:
-        jsonAdv = json.dumps(advogado.toDict())
+    def salvarCache(self, advogado: Advogados) -> bool:
+        # pyToDefault transforma os objetos datetime em str para serem inseridos no json
+        jsonAdv = json.dumps(pyToDefault(model_to_dict(advogado, recurse=False)))
 
         try:
             with open(self.pathLoginTxt, encoding='utf-8', mode='w') as cacheLogin:

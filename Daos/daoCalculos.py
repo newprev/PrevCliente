@@ -17,7 +17,7 @@ from logs import logPrioridade, TipoEdicao, Prioridade
 from modelos.beneficiosModelo import BeneficiosModelo
 from modelos.contribuicoesModelo import ContribuicoesModelo
 from modelos.remuneracaoModelo import RemuneracoesModelo
-from modelos.cnisCabecalhoModelo import CabecalhoModelo
+from modelos.cabecalhoModelo import CabecalhoModelo
 
 
 class DaoCalculos:

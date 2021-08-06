@@ -19,7 +19,6 @@ class ContribuicoesModelo:
         self.dataCadastro: datetime = None
         self.dataUltAlt: datetime = None
 
-
     def toDict(self):
         dictUsuario = {
             'contribuicoesId': self.contribuicoesId,

@@ -16,7 +16,6 @@ class BeneficiosModelo:
         self.dataCadastro: datetime = None
         self.dataUltAlt: datetime = None
 
-
     def toDict(self):
         dictUsuario = {
             'beneficiosId': self.beneficiosId,

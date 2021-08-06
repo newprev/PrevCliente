@@ -1,11 +1,14 @@
 from modelos.baseModelORM import BaseModel
-from modelos.clientesORM import Cliente
+from modelos.clienteORM import Cliente
+from playhouse.signals import Model, post_save, pre_delete
+from logs import logPrioridade
+from newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import CharField, DateTimeField, AutoField, ForeignKeyField, BooleanField
 from datetime import datetime
 
 
-class Telefones(BaseModel):
+class Telefones(BaseModel, Model):
     telefoneId = AutoField(column_name='telefoneId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
     ativo = BooleanField(default=True)
@@ -17,3 +20,53 @@ class Telefones(BaseModel):
 
     class Meta:
         table_name = 'telefones'
+        
+    def toDict(self):
+        dictUsuario = {
+            'telefoneId': self.telefoneId,
+            'clienteId': self.clienteId,
+            'numero': self.numero,
+            'tipoTelefone': self.tipoTelefone,
+            'pessoalRecado': self.pessoalRecado,
+            'ativo': self.ativo,
+            'dataCadastro': self.dataCadastro,
+            'dataUltAlt': self.dataUltAlt
+        }
+        return dictUsuario
+
+    def fromDict(self, dictTelefone):
+        self.telefoneId = dictTelefone['telefoneId'],
+        self.clienteId = dictTelefone['clienteId'],
+        self.numero = dictTelefone['numero'],
+        self.tipoTelefone = dictTelefone['tipoTelefone'],
+        self.pessoalRecado = dictTelefone['pessoalRecado'],
+        self.ativo = dictTelefone['ativo'],
+        self.dataCadastro = dictTelefone['dataCadastro'],
+        self.dataUltAlt = dictTelefone['dataUltAlt'],
+
+    def prettyPrint(self):
+        return f"""
+        Telefone(
+                telefoneId: {self.telefoneId},
+                clienteId: {self.clienteId},
+                numero: {self.numero},
+                tipoTelefone: {self.tipoTelefone},
+                pessoalRecado: {self.pessoalRecado},
+                ativo: {self.ativo},
+                dataCadastro: {self.dataCadastro},
+                dataUltAlt: {self.dataUltAlt}
+                )
+            """
+    
+    
+@post_save(sender=Telefones)
+def inserindoTelefones(*args, **kwargs):
+    if kwargs['created']:
+        logPrioridade(f'INSERT<inserindoTelefones>___________________{Telefones.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+    else:
+        logPrioridade(f'INSERT<inserindoTelefones>___________________ |Erro| {Telefones.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+
+
+@pre_delete(sender=Telefones)
+def deletandoTelefones(*args, **kwargs):
+    logPrioridade(f'DELETE<deletandoTelefones>___________________{Telefones.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)

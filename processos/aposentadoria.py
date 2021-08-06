@@ -7,7 +7,7 @@ from collections import defaultdict
 from Daos.daoCalculos import DaoCalculos
 from helpers import comparaMesAno, calculaDiaMesAno, mascaraDataSql, strToDatetime, datetimeToSql, dateToSql
 
-from modelos.cnisCabecalhoModelo import CabecalhoModelo
+from modelos.cabecalhoModelo import CabecalhoModelo
 from modelos.remuneracaoModelo import RemuneracoesModelo
 from modelos.contribuicoesModelo import ContribuicoesModelo
 from modelos.expSobrevidaModelo import ExpectativaSobrevidaModelo

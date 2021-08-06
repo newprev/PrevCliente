@@ -1,11 +1,14 @@
 from modelos.baseModelORM import BaseModel
-from modelos.clientesORM import Cliente
+from modelos.clienteORM import Cliente
+from playhouse.signals import Model, post_save, pre_delete
+from logs import logPrioridade
+from newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import DateField, DateTimeField, IntegerField, ForeignKeyField, CharField
 from datetime import datetime
 
 
-class Ppp(BaseModel):
+class Ppp(BaseModel, Model):
     pppId = IntegerField(column_name='pppId', null=True, primary_key=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
     caEpi = CharField(column_name='caEpi', null=True)
@@ -35,3 +38,101 @@ class Ppp(BaseModel):
 
     class Meta:
         table_name = 'ppp'
+        
+    def toDict(self):
+        dictPpp = {
+            'pppId': self.pppId,
+            'cnpj': self.cnpj,
+            'nomeEmpresa': self.nomeEmpresa,
+            'cnae': self.cnae,
+            'sitEmpregado': self.sitEmpregado,
+            'nit': self.nit,
+            'dataNascimento': self.dataNascimento,
+            'genero': self.genero,
+            'ctps': self.ctps,
+            'dataAdminssao': self.dataAdminssao,
+            'dataRegistro': self.dataRegistro,
+            'numCAT': self.numCAT,
+            'profissiografiaData': self.profissiografiaData,
+            'profissiografiaDesc': self.profissiografiaDesc,
+            'exposicaoDataInicio': self.exposicaoDataInicio,
+            'exposicaoDataFim': self.exposicaoDataFim,
+            'exposicaoTipo': self.exposicaoTipo,
+            'exposicaoFator': self.exposicaoFator,
+            'exposicaoIntensidade': self.exposicaoIntensidade,
+            'exposicaoTecnicaUtilizada': self.exposicaoTecnicaUtilizada,
+            'eficEpc': self.eficEpc,
+            'eficEpi': self.eficEpi,
+            'caEpi': self.caEpi,
+            'dataUltAlt': self.dataUltAlt
+        }
+        return dictPpp
+
+    def fromDict(self, dictPpp):
+        self.pppId = dictPpp['pppId']
+        self.cnpj = dictPpp['cnpj']
+        self.nomeEmpresa = dictPpp['nomeEmpresa']
+        self.cnae = dictPpp['cnae']
+        self.sitEmpregado = dictPpp['sitEmpregado']
+        self.nit = dictPpp['nit']
+        self.dataNascimento = dictPpp['dataNascimento']
+        self.genero = dictPpp['genero']
+        self.ctps = dictPpp['ctps']
+        self.dataAdminssao = dictPpp['dataAdminssao']
+        self.dataRegistro = dictPpp['dataRegistro']
+        self.numCAT = dictPpp['numCAT']
+        self.profissiografiaData = dictPpp['profissiografiaData']
+        self.profissiografiaDesc = dictPpp['profissiografiaDesc']
+        self.exposicaoDataInicio = dictPpp['exposicaoDataInicio']
+        self.exposicaoDataFim = dictPpp['exposicaoDataFim']
+        self.exposicaoTipo = dictPpp['exposicaoTipo']
+        self.exposicaoFator = dictPpp['exposicaoFator']
+        self.exposicaoIntensidade = dictPpp['exposicaoIntensidade']
+        self.exposicaoTecnicaUtilizada = dictPpp['exposicaoTecnicaUtilizada']
+        self.eficEpc = dictPpp['eficEpc']
+        self.eficEpi = dictPpp['eficEpi']
+        self.caEpi = dictPpp['caEpi']
+        self.dataUltAlt = dictPpp['dataUltAlt']
+        return self
+
+    def prettyPrint(self):
+        return f"""PppModelo(
+            pppId: {self.pppId},
+            cnpj: {self.cnpj},
+            nomeEmpresa: {self.nomeEmpresa},
+            cnae: {self.cnae},
+            sitEmpregado: {self.sitEmpregado},
+            nit: {self.nit},
+            dataNascimento: {self.dataNascimento},
+            genero: {self.genero},
+            ctps: {self.ctps},
+            dataAdminssao: {self.dataAdminssao},
+            dataRegistro: {self.dataRegistro},
+            numCAT: {self.numCAT},
+            profissiografiaData: {self.profissiografiaData},
+            profissiografiaDesc: {self.profissiografiaDesc},
+            exposicaoDataInicio: {self.exposicaoDataInicio},
+            exposicaoDataFim: {self.exposicaoDataFim},
+            exposicaoTipo: {self.exposicaoTipo},
+            exposicaoFator: {self.exposicaoFator},
+            exposicaoIntensidade: {self.exposicaoIntensidade},
+            exposicaoTecnicaUtilizada: {self.exposicaoTecnicaUtilizada},
+            eficEpc: {self.eficEpc},
+            eficEpi: {self.eficEpi},
+            caEpi: {self.caEpi},
+            dataUltAlt: {self.dataUltAlt}
+        )"""
+    
+    
+@post_save(sender=Ppp)
+def inserindoPpp(*args, **kwargs):
+    if kwargs['created']:
+        logPrioridade(f'INSERT<inserindoPpp>___________________{Ppp.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+    else:
+        logPrioridade(f'INSERT<inserindoPpp>___________________ |Erro| {Ppp.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+
+
+@pre_delete(sender=Ppp)
+def deletandoPpp(*args, **kwargs):
+    logPrioridade(f'DELETE<deletandoPpp>___________________{Ppp.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    

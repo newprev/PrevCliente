@@ -13,7 +13,7 @@ from heart.telAfinsController import TelAfinsController
 
 from modelos.clienteModelo import ClienteModelo
 from modelos.cnisModelo import CNISModelo
-from modelos.clientesORM import Cliente
+from modelos.clienteORM import Cliente
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
 

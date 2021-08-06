@@ -3,7 +3,7 @@ from modelos.escritoriosORM import Escritorios
 from logs import *
 
 from peewee import AutoField, ForeignKeyField, BooleanField, CharField, DateTimeField
-from playhouse.signals import Model, post_save, pre_save, pre_init, pre_delete
+from playhouse.signals import Model, post_save, pre_delete
 from datetime import datetime
 
 
@@ -47,6 +47,69 @@ class Advogados(BaseModel, Model):
         }
         return dictUsuario
 
+    def fromDict(self, dictUsuario: dict, retornaInst: bool = True):
+
+        if dictUsuario['advogadoId'] is list or dictUsuario['advogadoId'] is tuple:
+            self.advogadoId = dictUsuario['advogadoId'][0]
+        else:
+            self.advogadoId = dictUsuario['advogadoId']
+
+        if 'senha' in dictUsuario.keys():
+            self.senha = dictUsuario['senha']
+
+        if 'dataCadastro' in dictUsuario.keys():
+            self.dataCadastro = dictUsuario['dataCadastro']
+
+        if 'dataUltAlt' in dictUsuario.keys():
+            self.dataUltAlt = dictUsuario['dataUltAlt']
+
+        self.escritorioId = dictUsuario['escritorioId']
+        self.nomeUsuario = dictUsuario['nomeUsuario']
+        self.login = dictUsuario['login']
+        # self.telefone = dictUsuario['telefone'],
+        self.email = dictUsuario['email'],
+        self.sobrenomeUsuario = dictUsuario['sobrenomeUsuario']
+        self.nacionalidade = dictUsuario['nacionalidade']
+        self.numeroOAB = dictUsuario['numeroOAB']
+        self.estadoCivil = dictUsuario['estadoCivil']
+        self.admin = dictUsuario['admin']
+        self.confirmado = dictUsuario['confirmado']
+        self.ativo = dictUsuario['ativo']
+
+        if retornaInst:
+            return self
+
+    def __eq__(self, other):
+        instVariavel: bool = isinstance(self, type(other))
+        if not instVariavel:
+            return False
+
+        senhaAuth: bool = self.senha == other.senha
+        loginAuth: bool = self.login == other.login
+
+        return senhaAuth and loginAuth
+
+    def __bool__(self):
+        return self.login is not None and self.nomeUsuario is not None
+
+    def __repr__(self):
+        return f"""
+        Usuario(
+            escritorioId: {self.escritorioId},
+            advogadoId: {self.advogadoId},
+            nomeUsuario: {self.nomeUsuario},
+            login: {self.login},
+            senha: {self.senha},
+            sobrenomeUsuario: {self.sobrenomeUsuario},
+            nacionalidade: {self.nacionalidade},
+            email: {self.email},
+            numeroOAB: {self.numeroOAB},
+            estadoCivil: {self.estadoCivil},
+            admin: {self.admin},
+            confirmado: {self.confirmado},
+            ativo: {self.ativo}
+        )"""
+
 
 @post_save(sender=Advogados)
 def inserindoAdvogados(*args, **kwargs):
@@ -56,16 +119,7 @@ def inserindoAdvogados(*args, **kwargs):
         logPrioridade(f'INSERT<inserindoAdvogados>___________________ |Erro| {Advogados.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
-@pre_init(sender=Advogados)
-def criandoTabela(*args, **kwargs):
-    print(f'args: {args}')
-    print(f'kwargs: {kwargs}')
-    logPrioridade(f'CREATE<criandoTabela>___________________ advogados', TipoEdicao.createTable, Prioridade.saidaComun)
-
-
 @pre_delete(sender=Advogados)
 def deletandoAdvogados(*args, **kwargs):
-    print(f'args: {args}')
-    print(f'kwargs: {kwargs}')
-    logPrioridade(f'CREATE<deletandoAdvogados>___________________{Advogados.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<deletandoAdvogados>___________________{Advogados.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
 

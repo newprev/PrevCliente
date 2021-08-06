@@ -20,7 +20,7 @@ from Daos.daoProcessos import DaoProcessos
 from Daos.daoCliente import DaoCliente
 from Daos.daoCalculos import DaoCalculos
 
-from modelos.cnisCabecalhoModelo import CabecalhoModelo
+from modelos.cabecalhoModelo import CabecalhoModelo
 from modelos.processosModelo import ProcessosModelo
 from modelos.clienteModelo import ClienteModelo
 

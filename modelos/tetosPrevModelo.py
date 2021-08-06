@@ -1,7 +1,5 @@
 import datetime
 
-from helpers import mascaraDataPequena
-
 
 class TetosPrevModelo:
 
@@ -11,7 +9,6 @@ class TetosPrevModelo:
         self.valor: int = None
         self.dataUltAlt: datetime = None
         self.dataCadastro: datetime = None
-
 
     def toDict(self):
         dictTetosPrev = {

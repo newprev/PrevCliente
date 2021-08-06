@@ -19,11 +19,11 @@ from modelos.telefonesORM import Telefones
 from modelos.tetosPrevORM import TetosPrev
 from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
-from modelos.clientesORM import Cliente
-from modelos.cnisBeneficiosORM import CnisBeneficios
-from modelos.cnisCabecalhosORM import CnisCabecalhos
-from modelos.cnisContribuicoesORM import CnisContribuicoes
-from modelos.cnisRemuneracoesORM import CnisRemuneracoes
+from modelos.clienteORM import Cliente
+from modelos.beneficiosORM import CnisBeneficios
+from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.contribuicoesORM import CnisContribuicoes
+from modelos.remuneracaoORM import CnisRemuneracoes
 from newPrevEnums import TiposConexoes
 
 

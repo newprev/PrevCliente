@@ -1,10 +1,8 @@
 from PyQt5.QtCore import QObject
 from PyQt5 import QtCore
 
-from modelos.modelsORM import Advogados
+from modelos.advogadoORM import Advogados
 from newPrevEnums import TelaPosicao
-from modelos.advogadoModelo import AdvogadoModelo
-from modelos.clienteModelo import ClienteModelo
 
 
 class Sinais(QObject):

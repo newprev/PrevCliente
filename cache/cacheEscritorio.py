@@ -5,7 +5,7 @@ import json
 from logs import logPrioridade
 from playhouse.shortcuts import model_to_dict
 
-from modelos.modelsORM import Escritorios
+from modelos.escritoriosORM import Escritorios
 from newPrevEnums import *
 from modelos.escritorioModelo import EscritorioModelo
 
@@ -82,8 +82,5 @@ def pyToDefault(dicionario: dict) -> dict:
             dictReturn[chave] = valor.strftime('%Y-%m-%d')
         else:
             dictReturn[chave] = valor
-
-    for chave, valor in dictReturn.items():
-        print(f"{chave}: ({type(valor)}) {valor}")
 
     return dictReturn

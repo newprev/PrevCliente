@@ -1,23 +1,20 @@
 import datetime
-import sys
-
 import pymysql
-from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 from Daos.daoConfiguracoes import DaoConfiguracoes
-from Daos.daoFerramentas import DaoFerramentas
-from Daos.daoEscritorio import DaoEscritorio
-from Daos.daoAdvogado import DaoAdvogado
-from Daos.daoInformacoes import DaoInformacoes
-
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 from repositorios.clienteRepositorio import UsuarioRepository
 from repositorios.escritorioRepositorio import EscritorioRepositorio
 from repositorios.ferramentasRepositorio import ApiFerramentas
-from modelos.escritorioModelo import EscritorioModelo
-from modelos.advogadoModelo import AdvogadoModelo
+from modelos.escritoriosORM import Escritorios
+from modelos.advogadoORM import Advogados
+from modelos.tetosPrevORM import TetosPrev
+from modelos.convMonORM import ConvMon
+from modelos.indicadoresORM import Indicadores
+from modelos.expSobrevidaORM import ExpSobrevida
 from Telas.loginPage import Ui_mwLogin
 from heart.login.wdgAdvController import WdgAdvController
 from heart.dashboard.dashboardController import DashboardController
@@ -25,7 +22,7 @@ from newPrevEnums import *
 import os
 import json
 
-from helpers import datetimeToSql, strToDatetime
+from helpers import datetimeToSql, strToDatetime, pyToDefault
 from newPrevEnums import TamanhoData
 
 from requests.exceptions import ConnectionError
@@ -40,8 +37,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.setupUi(self)
         self.db = db
         self.usuarioRepositorio = UsuarioRepository()
-        self.escritorio: EscritorioModelo = None
-        self.advogado: AdvogadoModelo = AdvogadoModelo()
+        self.escritorio: Escritorios = None
+        self.advogado: Advogados = Advogados()
         self.escritorioRepositorio = EscritorioRepositorio()
         self.tentativasSenha = 3
         self.edittingFinished = True
@@ -55,9 +52,12 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.timer.timeout.connect(self.escondeLoading)
 
         self.daoConfigs = DaoConfiguracoes(self.db)
-        self.daoEscritorio = DaoEscritorio(self.db)
-        self.daoAdvogado = DaoAdvogado(self.db)
-        self.daoInformacoes = DaoInformacoes(self.db)
+        # self.daoEscritorio = DaoEscritorio(self.db)
+        # self.daoAdvogado = DaoAdvogado(self.db)
+        # self.daoInformacoes = DaoInformacoes(self.db)
+
+        self.daoEscritorio = Escritorios()
+        self.daoAdvogado = Advogados(self.db)
 
         self.dashboard: DashboardController = None
 
@@ -96,7 +96,12 @@ class LoginController(QMainWindow, Ui_mwLogin):
         if self.advogado.numeroOAB is not None:
 
             # Confere informações do escritório
-            self.escritorio = self.escritorioRepositorio.buscaEscritorio(self.advogado.escritorioId)
+            # self.escritorio = self.escritorioRepositorio.buscaEscritorio(self.advogado.escritorioId)
+            try:
+                self.escritorio = Escritorios.select().where(Escritorios.escritorioId == self.advogado.escritorioId).get()
+            except Escritorios.DoesNotExist:
+                self.escritorio = Escritorios()
+                self.escritorio.escritorioId = None
 
             if isinstance(self.escritorio, ErroConexao):
                 self.apresentandoErros(self.escritorio)
@@ -114,13 +119,13 @@ class LoginController(QMainWindow, Ui_mwLogin):
             self.leSenha.setText(self.advogado.senha)
             self.cbSalvarSenha.setChecked(True)
         else:
-            self.advogado = AdvogadoModelo()
+            self.advogado = Advogados()
             self.cacheLogin.limpaCache()
             self.cacheEscritorio.limpaCache()
             self.leLogin.setFocus()
 
     def trocaPagina(self, *args):
-        advogado: AdvogadoModelo = args[0]
+        advogado: Advogados = args[0]
         self.advogado = advogado
         senhaProvisoria = self.usuarioRepositorio.buscaSenhaProvisoria(advogado.advogadoId)
 
@@ -147,7 +152,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
     def buscaEscritorio(self):
         nomeEscritorio = self.leCdEscritorio.text()
         if nomeEscritorio != '':
-            escritorio: EscritorioModelo = self.usuarioRepositorio.buscaEscritorioPrimeiroAcesso(nomeEscritorio)
+            escritorio: Escritorios = self.usuarioRepositorio.buscaEscritorioPrimeiroAcesso(nomeEscritorio)
             self.escritorio = escritorio
             if escritorio and escritorio.nomeEscritorio == nomeEscritorio:
                 self.lbNomeDoEscritorio.setText(escritorio.nomeFantasia)
@@ -186,14 +191,22 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.leLogin.setText(self.advogado.numeroOAB)
                 self.loading(10)
                 self.leSenha.setText(self.advogado.senha)
-                self.loading(10)
                 self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.inicio.value)
                 self.loading(10)
                 self.cacheLogin.salvarCache(self.advogado)
-                self.loading(10)
+                print(f"self.advogado({type(self.advogado)}): {self.advogado}")
+                print(self.advogado.toDict())
+
+                try:
+                    self.advogado = Advogados.get_by_id(self.advogado.advogadoId)
+                except Advogados.DoesNotExist:
+                    Advogados.create(**self.advogado.toDict())
+
+                self.loading(20)
                 self.cacheEscritorio.salvarCache(self.escritorio)
                 self.loading(10)
-                self.daoEscritorio.insereEscritorio(self.escritorio)
+                # self.daoEscritorio.insereEscritorio(self.escritorio)
+                self.escritorio.save()
                 self.loading(10)
             else:
                 self.loading(100)
@@ -267,7 +280,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         return login and senha
 
-    def procuraAdvogado(self) -> AdvogadoModelo:
+    def procuraAdvogado(self) -> Advogados:
         senha = self.leSenha.text()
 
         if self.leLogin.text().isdecimal():
@@ -277,8 +290,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
             email = self.leLogin.text()
             return self.usuarioRepositorio.loginAuth(senha, email=email)
 
-    def procuraEscritorio(self, escritorioId: int) -> EscritorioModelo:
-        escritorio: EscritorioModelo = self.escritorioRepositorio.buscaEscritorio(escritorioId)
+    def procuraEscritorio(self, escritorioId: int) -> Escritorios:
+        escritorio: Escritorios = self.escritorioRepositorio.buscaEscritorio(escritorioId)
         return escritorio
 
     def verificaRotinaDiaria(self):
@@ -335,34 +348,47 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 syncFile.write(json.dumps(syncJson))
 
     def atualizaFerramentas(self, tetos: bool = False, convMon: bool = False):
-        daoFerramentas = DaoFerramentas(self.db)
+        # daoFerramentas = DaoFerramentas(self.db)
+        qtdTetosPrev = TetosPrev.select().count()
+        qtdConvMon = ConvMon.select().count()
+
         tetosFromApi: list = []
         convMonFromApi: list = []
 
         if tetos:
             tetosFromApi = ApiFerramentas().getAllTetosPrevidenciarios()
-            if daoFerramentas.contaQtdTetos() < len(tetosFromApi):
-                daoFerramentas.insereListaTetos(tetosFromApi)
+            if qtdTetosPrev < len(tetosFromApi):
+                for teto in tetosFromApi:
+                    print(f'({type(teto)}) {teto}')
+                # daoFerramentas.insereListaTetos(tetosFromApi)
 
         if convMon:
             convMonFromApi = ApiFerramentas().getAllConvMon()
-            if daoFerramentas.contaQtdMoedas() < len(convMonFromApi):
-                daoFerramentas.insereListaConvMonModel(convMonFromApi)
+            if qtdConvMon < len(convMonFromApi):
+                for teto in convMonFromApi:
+                    print(f'({type(teto)}) {teto}')
+                # daoFerramentas.insereListaConvMonModel(convMonFromApi)
 
     def atualizaInformacoes(self, indicadores: bool = False, expSobrevida: bool = False):
-        daoFerramentas = DaoFerramentas(self.db)
+        # daoFerramentas = DaoFerramentas(self.db)
+        qtdIndicadores = Indicadores.select().count()
+        qtdExpSobrevida = ExpSobrevida.select().count()
         indicadoresFromApi: list = []
         expSobrevidaFromApi: list = []
 
         if indicadores:
             indicadoresFromApi = ApiInformacoes().getAllIndicadores()
-            if self.daoInformacoes.contaIndicadores() < len(indicadoresFromApi):
-                self.daoInformacoes.insereListaIndicadores(indicadoresFromApi)
+            if qtdIndicadores < len(indicadoresFromApi):
+                for indicador in indicadoresFromApi:
+                    print(f'({type(indicador)}) {indicador}')
+                # self.daoInformacoes.insereListaIndicadores(indicadoresFromApi)
 
         if expSobrevida:
             expSobrevidaFromApi = ApiInformacoes().getAllExpSobrevida()
-            if self.daoInformacoes.contaIndicadores() < len(expSobrevidaFromApi):
-                self.daoInformacoes.insereExpSobrevida(expSobrevidaFromApi)
+            if qtdExpSobrevida < len(expSobrevidaFromApi):
+                for sobrevida in expSobrevidaFromApi:
+                    print(f'({type(sobrevida)}) {sobrevida}')
+                # self.daoInformacoes.insereExpSobrevida(expSobrevidaFromApi)
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

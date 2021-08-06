@@ -3,8 +3,8 @@ import json
 
 from helpers import pyToDefault
 from modelos.advogadoModelo import AdvogadoModelo
-from modelos.modelsORM import Advogados
-from playhouse.shortcuts import model_to_dict
+from modelos.advogadoORM import Advogados
+from playhouse.shortcuts import model_to_dict, dict_to_model
 
 
 class CacheLogin:
@@ -29,7 +29,7 @@ class CacheLogin:
         if '.login.txt' in os.listdir(self.pathCache):
             with open(self.pathLoginTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
-                return AdvogadoModelo().fromDict(advJson)
+                return dict_to_model(Advogados, advJson, ignore_unknown=True)
 
         else:
             return AdvogadoModelo()

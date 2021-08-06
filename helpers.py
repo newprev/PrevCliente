@@ -394,7 +394,10 @@ def mascaraDataSql(data: str, short: bool = False):
 
 
 def datetimeToSql(data: datetime.datetime) -> str:
-    return data.strftime('%Y-%m-%d %H:%M')
+    if isinstance(data, str):
+        return data
+    else:
+        return data.strftime('%Y-%m-%d %H:%M')
 
 
 def dateToSql(data: datetime.date) -> str:
@@ -520,8 +523,5 @@ def pyToDefault(dicionario: dict) -> dict:
             dictReturn[chave] = valor.strftime('%Y-%m-%d')
         else:
             dictReturn[chave] = valor
-
-    for chave, valor in dictReturn.items():
-        print(f"{chave}: ({type(valor)}) {valor}")
 
     return dictReturn

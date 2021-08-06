@@ -8,9 +8,23 @@ from Daos.tabelas import TabelasConfig
 from Telas.splashScreen import Ui_MainWindow
 from heart.login.loginController import LoginController
 from connections import ConfigConnection
+from modelos.convMonORM import ConvMon
+from modelos.especieBenefORM import EspecieBenef
+from modelos.expSobrevidaORM import ExpSobrevida
+from modelos.indicadoresORM import Indicadores
+from modelos.indiceAtuMonetariaORM import IndiceAtuMonetaria
+from modelos.pppORM import Ppp
+from modelos.processosORM import Processos
+from modelos.telefonesORM import Telefones
+from modelos.tetosPrevORM import TetosPrev
+from modelos.escritoriosORM import Escritorios
+from modelos.advogadoORM import Advogados
+from modelos.clientesORM import Cliente
+from modelos.cnisBeneficiosORM import CnisBeneficios
+from modelos.cnisCabecalhosORM import CnisCabecalhos
+from modelos.cnisContribuicoesORM import CnisContribuicoes
+from modelos.cnisRemuneracoesORM import CnisRemuneracoes
 from newPrevEnums import TiposConexoes
-
-from modelos.modelsORM import *
 
 
 class Main(Ui_MainWindow, QMainWindow):

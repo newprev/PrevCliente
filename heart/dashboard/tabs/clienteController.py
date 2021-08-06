@@ -13,8 +13,9 @@ from heart.telAfinsController import TelAfinsController
 
 from modelos.clienteModelo import ClienteModelo
 from modelos.cnisModelo import CNISModelo
-from modelos.processosModelo import ProcessosModelo
-from modelos.modelsORM import Cliente, Processos, Telefones
+from modelos.clientesORM import Cliente
+from modelos.processosORM import Processos
+from modelos.telefonesORM import Telefones
 
 from helpers import *
 

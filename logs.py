@@ -1,4 +1,3 @@
-from enum import Enum
 from colorama import Fore, init, Back, deinit
 import os
 from datetime import datetime

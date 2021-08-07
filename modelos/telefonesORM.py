@@ -7,6 +7,8 @@ from newPrevEnums import TipoEdicao, Prioridade
 from peewee import CharField, DateTimeField, AutoField, ForeignKeyField, BooleanField
 from datetime import datetime
 
+TABLENAME = 'telefones'
+
 
 class Telefones(BaseModel, Model):
     telefoneId = AutoField(column_name='telefoneId', null=True)
@@ -62,11 +64,11 @@ class Telefones(BaseModel, Model):
 @post_save(sender=Telefones)
 def inserindoTelefones(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoTelefones>___________________{Telefones.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoTelefones>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoTelefones>___________________ |Erro| {Telefones.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoTelefones>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=Telefones)
 def deletandoTelefones(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoTelefones>___________________{Telefones.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<deletandoTelefones>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

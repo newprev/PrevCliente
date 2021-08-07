@@ -7,6 +7,8 @@ from newPrevEnums import TipoEdicao, Prioridade
 from peewee import DateField, DateTimeField, IntegerField, ForeignKeyField, CharField
 from datetime import datetime
 
+TABLENAME = 'ppp'
+
 
 class Ppp(BaseModel, Model):
     pppId = IntegerField(column_name='pppId', null=True, primary_key=True)
@@ -127,12 +129,12 @@ class Ppp(BaseModel, Model):
 @post_save(sender=Ppp)
 def inserindoPpp(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoPpp>___________________{Ppp.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoPpp>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoPpp>___________________ |Erro| {Ppp.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoPpp>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=Ppp)
 def deletandoPpp(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoPpp>___________________{Ppp.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<deletandoPpp>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
     

@@ -8,6 +8,7 @@ from newPrevEnums import TipoEdicao, Prioridade, TamanhoData
 from peewee import AutoField, CharField, ForeignKeyField, DeferredForeignKey, DateField, IntegerField, DateTimeField
 from datetime import datetime
 
+TABLENAME = 'cliente'
 
 def buscaEscritorioIdAtual() -> int:
     from cache.cacheEscritorio import CacheEscritorio
@@ -163,11 +164,11 @@ class Cliente(BaseModel, Model):
 @post_save(sender=Cliente)
 def inserindoCliente(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoCabecalho>___________________{Cliente.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoCabecalho>___________________ |Erro| {Cliente.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoCabecalho>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=Cliente)
 def deletandoCliente(*args, **kwargs):
-    logPrioridade(f'DELETE<inserindoCabecalho>___________________{Cliente.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

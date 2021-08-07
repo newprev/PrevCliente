@@ -7,6 +7,8 @@ from newPrevEnums import TipoEdicao, Prioridade
 from peewee import AutoField, CharField, ForeignKeyField, BooleanField, BigIntegerField, DateField, IntegerField, DateTimeField
 from datetime import datetime
 
+TABLENAME = 'cnisCabecalhos'
+
 
 class CnisCabecalhos(BaseModel, Model):
     cabecalhosId = AutoField(column_name='cabecalhosId', null=True)
@@ -108,11 +110,11 @@ class CnisCabecalhos(BaseModel, Model):
 @post_save(sender=CnisCabecalhos)
 def inserindoCabecalho(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoCabecalho>___________________{CnisCabecalhos.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoCabecalho>___________________ |Erro| {CnisCabecalhos.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoCabecalho>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=CnisCabecalhos)
 def deletandoCabecalho(*args, **kwargs):
-    logPrioridade(f'DELETE<inserindoCabecalho>___________________{CnisCabecalhos.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

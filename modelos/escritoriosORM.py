@@ -6,6 +6,8 @@ from newPrevEnums import TipoEdicao, Prioridade
 from datetime import datetime
 from peewee import AutoField, IntegerField, CharField, DateTimeField
 
+TABLENAME = 'escritorios'
+
 
 class Escritorios(BaseModel, Model):
     escritorioId = AutoField(column_name='escritorioId', null=True)
@@ -27,7 +29,7 @@ class Escritorios(BaseModel, Model):
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 
     class Meta:
-        table_name = 'escritorios'
+        table_name = TABLENAME
 
     def toDict(self):
         dictUsuario = {
@@ -115,11 +117,11 @@ class Escritorios(BaseModel, Model):
 @post_save(sender=Escritorios)
 def inserindoEscritorios(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoEscritorios>___________________{Escritorios.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoEscritorios>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoEscritorios>___________________ |Erro| {Escritorios.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoEscritorios>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=Escritorios)
 def deletandoEscritorios(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoEscritorios>___________________{Escritorios.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<deletandoEscritorios>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

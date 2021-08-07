@@ -6,6 +6,8 @@ from newPrevEnums import TipoEdicao, Prioridade
 from peewee import DateField, DateTimeField, AutoField, FloatField
 from datetime import datetime
 
+TABLENAME = 'tetosPrev'
+
 
 class TetosPrev(BaseModel, Model):
     tetosPrevId = AutoField(column_name='tetosPrevId', null=True)
@@ -44,11 +46,11 @@ class TetosPrev(BaseModel, Model):
 @post_save(sender=TetosPrev)
 def inserindoTetosPrev(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoTetosPrev>___________________{TetosPrev.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoTetosPrev>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoTetosPrev>___________________ |Erro| {TetosPrev.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoTetosPrev>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=TetosPrev)
 def deletandoTetosPrev(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoTetosPrev>___________________{TetosPrev.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<deletandoTetosPrev>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

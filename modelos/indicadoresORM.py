@@ -6,6 +6,8 @@ from newPrevEnums import TipoEdicao, Prioridade
 from peewee import CharField, DateTimeField
 from datetime import datetime
 
+TABLENAME = 'indicadores'
+
 
 class Indicadores(BaseModel, Model):
     indicadorId = CharField(column_name='indicadorId', null=True, primary_key=True)
@@ -48,11 +50,11 @@ class Indicadores(BaseModel, Model):
 @post_save(sender=Indicadores)
 def inserindoIndicadores(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoIndicadores>___________________{Indicadores.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoIndicadores>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoIndicadores>___________________ |Erro| {Indicadores.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoIndicadores>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=Indicadores)
 def deletandoIndicadores(*args, **kwargs):
-    logPrioridade(f'DELETE<inserindoIndicadores>___________________{Indicadores.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<inserindoIndicadores>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

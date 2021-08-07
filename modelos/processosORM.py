@@ -8,6 +8,8 @@ from modelos.baseModelORM import BaseModel
 from modelos.advogadoORM import Advogados
 from modelos.clienteORM import Cliente
 
+TABLENAME = 'processos'
+
 
 class Processos(BaseModel, Model):
     processoId = AutoField(column_name='processoId', null=True)
@@ -118,11 +120,11 @@ class Processos(BaseModel, Model):
 @post_save(sender=Processos)
 def inserindoProcessos(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoProcessos>___________________{Processos.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoProcessos>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoProcessos>___________________ |Erro| {Processos.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoProcessos>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=Processos)
 def deletandoProcessos(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoProcessos>___________________{Processos.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<deletandoProcessos>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

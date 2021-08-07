@@ -8,6 +8,7 @@ from datetime import datetime
 
 from newPrevEnums import TipoEdicao, Prioridade
 
+TABLENAME = 'cnisBeneficios'
 
 class CnisBeneficios(BaseModel, Model):
     beneficiosId = AutoField(column_name='beneficiosId', null=True)
@@ -75,12 +76,12 @@ class CnisBeneficios(BaseModel, Model):
 @post_save(sender=CnisBeneficios)
 def inserindoBeneficios(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoBeneficios>___________________{CnisBeneficios.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoBeneficios>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoBeneficios>___________________ |Erro| {CnisBeneficios.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoBeneficios>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=CnisBeneficios)
 def deletandoBeneficios(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoBeneficios>___________________{CnisBeneficios.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<deletandoBeneficios>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
 

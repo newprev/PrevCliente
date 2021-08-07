@@ -7,6 +7,7 @@ from newPrevEnums import TipoEdicao, Prioridade
 from peewee import AutoField, CharField, ForeignKeyField, FloatField, DateTimeField, DateField, IntegerField
 from datetime import datetime
 
+TABLENAME = 'cnisContribuicoes'
 
 class CnisContribuicoes(BaseModel, Model):
     contribuicoesId = AutoField(column_name='contribuicoesId', null=True)
@@ -74,11 +75,11 @@ class CnisContribuicoes(BaseModel, Model):
 @post_save(sender=CnisContribuicoes)
 def inserindoCnisContribuicoes(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoCnisContribuicoes>___________________{CnisContribuicoes.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoCnisContribuicoes>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoCnisContribuicoes>___________________ |Erro| {CnisContribuicoes.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoCnisContribuicoes>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=CnisContribuicoes)
 def deletandoCnisContribuicoes(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoCnisContribuicoes>___________________{CnisContribuicoes.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<deletandoCnisContribuicoes>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

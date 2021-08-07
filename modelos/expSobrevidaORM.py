@@ -7,6 +7,8 @@ from newPrevEnums import TipoEdicao, Prioridade, TamanhoData
 from datetime import datetime
 from peewee import AutoField, DateField, IntegerField, DateTimeField
 
+TABLENAME = 'expSobrevida'
+
 
 class ExpSobrevida(BaseModel, Model):
     infoId = AutoField(column_name='infoId', null=True)
@@ -61,11 +63,11 @@ class ExpSobrevida(BaseModel, Model):
 @post_save(sender=ExpSobrevida)
 def inserindoExpSobrevida(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoExpSobrevida>___________________{ExpSobrevida.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoExpSobrevida>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoExpSobrevida>___________________ |Erro| {ExpSobrevida.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoExpSobrevida>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=ExpSobrevida)
 def deletandoExpSobrevida(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoExpSobrevida>___________________{ExpSobrevida.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<deletandoExpSobrevida>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

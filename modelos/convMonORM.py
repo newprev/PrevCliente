@@ -6,6 +6,8 @@ from newPrevEnums import TipoEdicao, Prioridade
 from datetime import datetime
 from peewee import AutoField, DateField, BooleanField, CharField, DateTimeField, FloatField
 
+TABLENAME = 'convMon'
+
 
 class ConvMon(BaseModel, Model):
     convMonId = AutoField(column_name='convMonId', null=True)
@@ -79,11 +81,11 @@ class ConvMon(BaseModel, Model):
 @post_save(sender=ConvMon)
 def inserindoConvMon(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoConvMon>___________________{ConvMon.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoConvMon>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoConvMon>___________________ |Erro| {ConvMon.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoConvMon>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=ConvMon)
 def deletandoConvMon(*args, **kwargs):
-    logPrioridade(f'DELETE<inserindoConvMon>___________________{ConvMon.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<inserindoConvMon>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

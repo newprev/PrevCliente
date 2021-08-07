@@ -6,6 +6,8 @@ from newPrevEnums import TipoEdicao, Prioridade
 from peewee import AutoField, DateField, DateTimeField, BigIntegerField, FloatField
 from datetime import datetime
 
+TABLENAME = 'indiceAtuMonetaria'
+
 
 class IndiceAtuMonetaria(BaseModel, Model):
     indiceId = AutoField(column_name='indiceId', null=True)
@@ -53,11 +55,11 @@ class IndiceAtuMonetaria(BaseModel, Model):
 @post_save(sender=IndiceAtuMonetaria)
 def inserindoIndiceAtuMonetaria(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoIndiceAtuMonetaria>___________________{IndiceAtuMonetaria.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoIndiceAtuMonetaria>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoIndiceAtuMonetaria>___________________ |Erro| {IndiceAtuMonetaria.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoIndiceAtuMonetaria>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=IndiceAtuMonetaria)
 def deletandoIndiceAtuMonetaria(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoIndiceAtuMonetaria>___________________{IndiceAtuMonetaria.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<deletandoIndiceAtuMonetaria>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

@@ -6,6 +6,8 @@ from peewee import AutoField, ForeignKeyField, BooleanField, CharField, DateTime
 from playhouse.signals import Model, post_save, pre_delete
 from datetime import datetime
 
+TABLENAME = 'advogados'
+
 
 class Advogados(BaseModel, Model):
     advogadoId = AutoField(column_name='advogadoId', null=True)
@@ -25,7 +27,7 @@ class Advogados(BaseModel, Model):
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 
     class Meta:
-        table_name = 'advogados'
+        table_name = TABLENAME
 
     def toDict(self):
         dictUsuario = {
@@ -114,12 +116,12 @@ class Advogados(BaseModel, Model):
 @post_save(sender=Advogados)
 def inserindoAdvogados(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoAdvogados>___________________{Advogados.Meta.table_name}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoAdvogados>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoAdvogados>___________________ |Erro| {Advogados.Meta.table_name}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'INSERT<inserindoAdvogados>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
 
 
 @pre_delete(sender=Advogados)
 def deletandoAdvogados(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoAdvogados>___________________{Advogados.Meta.table_name}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<deletandoAdvogados>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
 

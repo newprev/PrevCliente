@@ -1,8 +1,9 @@
 import requests
 
 from logs import logPrioridade, TipoEdicao, Prioridade
-from modelos.tetosPrevModelo import TetosPrevModelo
+# from modelos.tetosPrevModelo import TetosPrevModelo
 from modelos.convMonModelo import ConvMonModelo
+from modelos.tetosPrevORM import TetosPrev
 
 
 class ApiFerramentas:
@@ -15,9 +16,8 @@ class ApiFerramentas:
         response = requests.get(url)
 
         if 199 < response.status_code < 400:
-            listaTetos = [TetosPrevModelo().fromDict(teto) for teto in response.json()]
             logPrioridade(f"API(Sync)____________________GET<tetosPrev/>::::{url}", TipoEdicao.api, Prioridade.sync)
-            return listaTetos
+            return response.json()
         else:
             logPrioridade(f"API(Sync)____________________GET<tetosPrev/ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
             return []
@@ -27,9 +27,9 @@ class ApiFerramentas:
         response = requests.get(url)
 
         if 199 < response.status_code < 400:
-            listaConvMon = [ConvMonModelo().fromDict(convMon) for convMon in response.json()]
+            # listaConvMon = [ConvMonModelo().fromDict(convMon) for convMon in response.json()]
             logPrioridade(f"API(Sync)____________________GET<convMon/>::::{url}", TipoEdicao.api, Prioridade.sync)
-            return listaConvMon
+            return response.json()
         else:
             logPrioridade(f"API(Sync)____________________GET<ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
             return []

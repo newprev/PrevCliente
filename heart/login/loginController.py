@@ -1,5 +1,6 @@
 import datetime
 import pymysql
+from typing import List
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
@@ -194,8 +195,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.inicio.value)
                 self.loading(10)
                 self.cacheLogin.salvarCache(self.advogado)
-                print(f"self.advogado({type(self.advogado)}): {self.advogado}")
-                print(self.advogado.toDict())
 
                 try:
                     self.advogado = Advogados.get_by_id(self.advogado.advogadoId)
@@ -233,8 +232,10 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 # Autentica escritório
                 self.escritorio = self.procuraEscritorio(self.advogado.escritorioId)
                 if self.escritorio:
-                    escritorioCadastrado = self.daoEscritorio.buscaEscritorioById(self.escritorio.escritorioId)
-                    advogadoCadastrado = self.daoAdvogado.buscaAdvogadoById(self.advogado.advogadoId)
+                    # escritorioCadastrado = self.daoEscritorio.buscaEscritorioById(self.escritorio.escritorioId)
+                    escritorioCadastrado = Escritorios.get_by_id(self.escritorio.escritorioId)
+                    # advogadoCadastrado = self.daoAdvogado.buscaAdvogadoById(self.advogado.advogadoId)
+                    advogadoCadastrado = Advogados.get_by_id(self.advogado.advogadoId)
 
                     if not escritorioCadastrado:
                         self.daoEscritorio.insereEscritorio(self.escritorio)
@@ -348,47 +349,32 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 syncFile.write(json.dumps(syncJson))
 
     def atualizaFerramentas(self, tetos: bool = False, convMon: bool = False):
-        # daoFerramentas = DaoFerramentas(self.db)
         qtdTetosPrev = TetosPrev.select().count()
         qtdConvMon = ConvMon.select().count()
 
-        tetosFromApi: list = []
-        convMonFromApi: list = []
-
         if tetos:
-            tetosFromApi = ApiFerramentas().getAllTetosPrevidenciarios()
+            tetosFromApi: List[dict] = ApiFerramentas().getAllTetosPrevidenciarios()
             if qtdTetosPrev < len(tetosFromApi):
-                for teto in tetosFromApi:
-                    print(f'({type(teto)}) {teto}')
-                # daoFerramentas.insereListaTetos(tetosFromApi)
+                TetosPrev.insert_many(tetosFromApi).on_conflict('replace').execute()
 
         if convMon:
-            convMonFromApi = ApiFerramentas().getAllConvMon()
+            convMonFromApi: List[dict] = ApiFerramentas().getAllConvMon()
             if qtdConvMon < len(convMonFromApi):
-                for teto in convMonFromApi:
-                    print(f'({type(teto)}) {teto}')
-                # daoFerramentas.insereListaConvMonModel(convMonFromApi)
+                ConvMon.insert_many(convMonFromApi).on_conflict('replace').execute()
 
     def atualizaInformacoes(self, indicadores: bool = False, expSobrevida: bool = False):
-        # daoFerramentas = DaoFerramentas(self.db)
         qtdIndicadores = Indicadores.select().count()
         qtdExpSobrevida = ExpSobrevida.select().count()
-        indicadoresFromApi: list = []
-        expSobrevidaFromApi: list = []
 
         if indicadores:
-            indicadoresFromApi = ApiInformacoes().getAllIndicadores()
+            indicadoresFromApi: List[dict] = ApiInformacoes().getAllIndicadores()
             if qtdIndicadores < len(indicadoresFromApi):
-                for indicador in indicadoresFromApi:
-                    print(f'({type(indicador)}) {indicador}')
-                # self.daoInformacoes.insereListaIndicadores(indicadoresFromApi)
+                Indicadores.insert_many(indicadoresFromApi).on_conflict('replace').execute()
 
         if expSobrevida:
-            expSobrevidaFromApi = ApiInformacoes().getAllExpSobrevida()
+            expSobrevidaFromApi: List[dict] = ApiInformacoes().getAllExpSobrevida()
             if qtdExpSobrevida < len(expSobrevidaFromApi):
-                for sobrevida in expSobrevidaFromApi:
-                    print(f'({type(sobrevida)}) {sobrevida}')
-                # self.daoInformacoes.insereExpSobrevida(expSobrevidaFromApi)
+                ExpSobrevida.insert_many(expSobrevidaFromApi).on_conflict('replace').execute()
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

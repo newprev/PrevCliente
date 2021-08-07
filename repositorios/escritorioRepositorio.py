@@ -4,7 +4,7 @@ import requests as http
 from requests.exceptions import *
 from logs import logPrioridade
 from newPrevEnums import *
-from modelos.escritorioModelo import EscritorioModelo
+from modelos.escritoriosORM import Escritorios
 
 
 class EscritorioRepositorio:
@@ -12,7 +12,7 @@ class EscritorioRepositorio:
     def __init__(self):
         self.baseUrl = 'http://localhost:8000/api/'
 
-    def buscaEscritorio(self, escritorioId) -> EscritorioModelo:
+    def buscaEscritorio(self, escritorioId) -> Escritorios:
         url: str = self.baseUrl + f'escritorio/{escritorioId}/'
 
         try:
@@ -20,11 +20,11 @@ class EscritorioRepositorio:
 
             if 199 < response.status_code < 400:
 
-                escritorioModelo = EscritorioModelo().fromDict(response.json())
+                escritorioModelo = Escritorios().fromDict(response.json())
                 logPrioridade(f"API____________________GET<escritorio/<int:id>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
                 return escritorioModelo
             else:
                 logPrioridade(f"API____________________GET<escritorio/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
-                return EscritorioModelo()
+                return Escritorios()
         except ConnectionError:
             return ErroConexao.ConnectionError

@@ -125,7 +125,7 @@ class UsuarioRepository:
             print(f'buscaAdvPor - Erro: {type(erro)}')
             logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
 
-    def loginAuth(self, senha, numeroOAB: str = None, email: str = None) -> AdvogadoModelo:
+    def loginAuth(self, senha, numeroOAB: str = None, email: str = None) -> Advogados:
         url: str = self.baseUrl + f'advogados/auth/'
         if numeroOAB is not None:
             url += numeroOAB
@@ -142,14 +142,19 @@ class UsuarioRepository:
                     logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
                     return None
                 else:
-                    advogadoALogar = self.buscaAdvPor(advAuth.advogadoId)
+
+                    try:
+                        advogadoALogar = Advogados.get_by_id(advAuth.advogadoId)
+                    except Advogados.DoesNotExist:
+                        logPrioridade(f"API => buscaAdvPor ____________________GET<Advogados.DoesNotExist>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+                        return None
 
                     advogadoALogar.senha = senha
                     if advAuth == advogadoALogar:
                         logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaComun)
                         return advogadoALogar
                     else:
-                        logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
+                        logPrioridade(f"API => buscaAdvPor ____________________GET<Autenticação não confere com o advogado em questão>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
                         return None
             else:
                 logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)

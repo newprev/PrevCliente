@@ -1,4 +1,4 @@
-from modelos.advogadoModelo import AdvogadoModelo
+from modelos.advogadoORM import Advogados
 
 
 class ClientAuthModelo:
@@ -61,7 +61,7 @@ class ClientAuthModelo:
             ativo: {self.ativo}"""
     
     def __eq__(self, other):
-        instVariavel: bool = isinstance(other, AdvogadoModelo)
+        instVariavel: bool = isinstance(other, Advogados)
         if not instVariavel:
             return False
 

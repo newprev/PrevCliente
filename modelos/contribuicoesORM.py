@@ -54,8 +54,8 @@ class CnisContribuicoes(BaseModel, Model):
         self.dataCadastro = dictContribuicoes['dataCadastro']
         self.dataUltAlt = dictContribuicoes['dataUltAlt']
 
-    def prettyPrint(self):
-        return f"""
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
         Contribuicoes(
             contribuicoesId: {self.contribuicoesId},
             clienteId: {self.clienteId},
@@ -68,8 +68,7 @@ class CnisContribuicoes(BaseModel, Model):
             dadoOrigem: {self.dadoOrigem},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}
-        )
-            """
+        )""")
 
 
 @post_save(sender=CnisContribuicoes)

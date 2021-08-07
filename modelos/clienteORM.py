@@ -1,14 +1,15 @@
 from helpers import strToDatetime
 from modelos.baseModelORM import BaseModel
-from modelos.escritoriosORM import Escritorios
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
+from modelos.escritoriosORM import Escritorios
 from newPrevEnums import TipoEdicao, Prioridade, TamanhoData
 
 from peewee import AutoField, CharField, ForeignKeyField, DeferredForeignKey, DateField, IntegerField, DateTimeField
 from datetime import datetime
 
 TABLENAME = 'cliente'
+
 
 def buscaEscritorioIdAtual() -> int:
     from cache.cacheEscritorio import CacheEscritorio
@@ -24,20 +25,20 @@ def buscaEscritorioIdAtual() -> int:
 class Cliente(BaseModel, Model):
     clienteId = AutoField(column_name='clienteId', null=True)
     escritorioId = ForeignKeyField(column_name='escritorioId', field='escritorioId', model=Escritorios, backref='escritorios', default=buscaEscritorioIdAtual())
-    telefoneId = DeferredForeignKey('Telefones', column_name='telefoneId', field='telefoneId', null=True)
+    telefoneId = DeferredForeignKey('Telefones', column_name='telefoneId', field='telefoneId', backref='telefones', null=True)
     nomeCliente = CharField(column_name='nomeCliente')
     sobrenomeCliente = CharField(column_name='sobrenomeCliente')
     agenciaBanco = CharField(column_name='agenciaBanco', null=True)
     bairro = CharField(null=True)
-    cep = CharField()
-    cidade = CharField()
+    cep = CharField(null=True)
+    cidade = CharField(null=True)
     complemento = CharField(null=True)
     cpfCliente = CharField(column_name='cpfCliente', null=True)
     dataNascimento = DateField(column_name='dataNascimento', default=datetime.now)
-    email = CharField()
-    endereco = CharField()
-    estado = CharField()
-    estadoCivil = CharField(column_name='estadoCivil', default='SOLTEIRO(A)', null=True)
+    email = CharField(null=True)
+    endereco = CharField(null=True)
+    estado = CharField(null=True)
+    estadoCivil = CharField(column_name='estadoCivil', default='Solteiro(A)', null=True)
     genero = CharField(default='M')
     grauEscolaridade = CharField(column_name='grauEscolaridade', null=True)
     idade = IntegerField()
@@ -45,16 +46,18 @@ class Cliente(BaseModel, Model):
     nomeBanco = CharField(column_name='nomeBanco', null=True)
     nomeMae = CharField(column_name='nomeMae')
     numCarteiraProf = CharField(column_name='numCarteiraProf', null=True)
-    numero = IntegerField()
+    numero = IntegerField(null=True)
+    numCartProf = CharField(column_name='numCartProf', null=True)
     numeroConta = CharField(column_name='numeroConta', null=True)
     pixCliente = CharField(column_name='pixCliente', null=True)
-    profissao = CharField()
+    profissao = CharField(null=True)
     quaCarteiraProf = CharField(column_name='quaCarteiraProf', null=True)
-    rgCliente = CharField(column_name='rgCliente')
+    rgCliente = CharField(column_name='rgCliente', null=True)
     senhaINSS = CharField(column_name='senhaINSS', null=True)
     serieCarteiraProf = CharField(column_name='serieCarteiraProf', null=True)
+    pathCnis = CharField(column_name='pathCnis', null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt')
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 
     class Meta:
         table_name = 'cliente'
@@ -86,7 +89,7 @@ class Cliente(BaseModel, Model):
             'cidade': self.cidade,
             'bairro': self.bairro,
             'cep': self.cep,
-            'telefone': self.telefone,
+            'telefoneId': self.telefoneId,
             'complemento': self.complemento,
             'pathCnis': self.pathCnis
         }
@@ -109,7 +112,7 @@ class Cliente(BaseModel, Model):
         self.pixCliente = dictCliente['pixCliente']
         self.grauEscolaridade = dictCliente['grauEscolaridade']
         self.senhaINSS = dictCliente['senhaINSS']
-        # self.numCartProf = dictCliente['numCartProf']
+        self.numCartProf = dictCliente['numCartProf']
         self.nit = dictCliente['nit']
         self.nomeMae = dictCliente['nomeMae']
         self.estadoCivil = dictCliente['estadoCivil']
@@ -119,15 +122,22 @@ class Cliente(BaseModel, Model):
         self.cidade = dictCliente['cidade']
         self.bairro = dictCliente['bairro']
         self.cep = dictCliente['cep']
-        self.telefoneId = dictCliente['telefone']
+        self.telefoneId = dictCliente['telefoneId']
         self.complemento = dictCliente['complemento']
-        # self.pathCnis = dictCliente['pathCnis']
+        self.pathCnis = dictCliente['pathCnis']
 
     def __bool__(self):
         return self.nit != '' and self.nit is not None
 
-    def __repr__(self):
-        return f"""
+    def prettyPrint(self, backRef: bool = False):
+
+        if backRef:
+            print('--- backRef', end='')
+            self.escritorioId.prettyPrint()
+            self.telefoneId.prettyPrint()
+            print('backRef ---')
+
+        print(f"""
         Cliente(
             escritorioId: {self.escritorioId},
             clienteId: {self.clienteId},
@@ -145,20 +155,20 @@ class Cliente(BaseModel, Model):
             pixCliente: {self.pixCliente},
             grauEscolaridade: {self.grauEscolaridade},
             senhaINSS: {self.senhaINSS},
-            numCartProf: {self.numCartProf},
             nit: {self.nit},
             nomeMae: {self.nomeMae},
             estadoCivil: {self.estadoCivil},
+            numCartProf: {self.numCartProf},
             endereco: {self.endereco},
             numero: {self.numero},
             estado: {self.estado},
             cidade: {self.cidade},
             bairro: {self.bairro},
             cep: {self.cep},
-            telefone: {self.telefone},
+            telefoneId: {self.telefoneId},
             complemento: {self.complemento},
             pathCnis: {self.pathCnis}
-        )"""
+        )""")
 
 
 @post_save(sender=Cliente)
@@ -166,7 +176,7 @@ def inserindoCliente(*args, **kwargs):
     if kwargs['created']:
         logPrioridade(f'INSERT<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
     else:
-        logPrioridade(f'INSERT<inserindoCabecalho>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoCabecalho>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComun)
 
 
 @pre_delete(sender=Cliente)

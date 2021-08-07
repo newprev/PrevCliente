@@ -88,8 +88,8 @@ class Escritorios(BaseModel, Model):
 
         return self
 
-    def __repr__(self):
-        return f"""
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
         Escritorio(
             escritorioId: {self.escritorioId},
             nomeEscritorio: {self.nomeEscritorio},
@@ -107,8 +107,7 @@ class Escritorios(BaseModel, Model):
             complemento: {self.complemento},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}
-        )         
-    """
+        )""")
 
     def __bool__(self):
         return self.escritorioId is not None

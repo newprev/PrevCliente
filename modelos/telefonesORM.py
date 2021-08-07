@@ -14,6 +14,7 @@ class Telefones(BaseModel, Model):
     telefoneId = AutoField(column_name='telefoneId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
     ativo = BooleanField(default=True)
+    principal = BooleanField(default=True)
     numero = CharField(null=False)
     pessoalRecado = CharField(column_name='pessoalRecado')
     tipoTelefone = CharField(column_name='tipoTelefone')
@@ -31,6 +32,7 @@ class Telefones(BaseModel, Model):
             'tipoTelefone': self.tipoTelefone,
             'pessoalRecado': self.pessoalRecado,
             'ativo': self.ativo,
+            'principal': self.principal,
             'dataCadastro': self.dataCadastro,
             'dataUltAlt': self.dataUltAlt
         }
@@ -43,22 +45,23 @@ class Telefones(BaseModel, Model):
         self.tipoTelefone = dictTelefone['tipoTelefone'],
         self.pessoalRecado = dictTelefone['pessoalRecado'],
         self.ativo = dictTelefone['ativo'],
+        self.principal = dictTelefone['principal'],
         self.dataCadastro = dictTelefone['dataCadastro'],
         self.dataUltAlt = dictTelefone['dataUltAlt'],
 
-    def prettyPrint(self):
-        return f"""
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
         Telefone(
-                telefoneId: {self.telefoneId},
-                clienteId: {self.clienteId},
-                numero: {self.numero},
-                tipoTelefone: {self.tipoTelefone},
-                pessoalRecado: {self.pessoalRecado},
-                ativo: {self.ativo},
-                dataCadastro: {self.dataCadastro},
-                dataUltAlt: {self.dataUltAlt}
-                )
-            """
+            telefoneId: {self.telefoneId},
+            clienteId: {self.clienteId},
+            numero: {self.numero},
+            tipoTelefone: {self.tipoTelefone},
+            pessoalRecado: {self.pessoalRecado},
+            ativo: {self.ativo},
+            principal: {self.principal},
+            dataCadastro: {self.dataCadastro},
+            dataUltAlt: {self.dataUltAlt}
+        )""")
     
     
 @post_save(sender=Telefones)

@@ -62,8 +62,8 @@ class ConvMon(BaseModel, Model):
         self.sinal = dictConvMon['sinal']
         return self
 
-    def prettyPrint(self):
-        return f"""
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
         ConvMonModelo(
             convMonId: {self.convMonId},
             nomeMoeda: {self.nomeMoeda},
@@ -75,7 +75,7 @@ class ConvMon(BaseModel, Model):
             sinal: {self.sinal},
             dataUltAlt: {self.dataUltAlt},
             dataCadastro: {self.dataCadastro}
-        )"""
+        )""")
 
 
 @post_save(sender=ConvMon)

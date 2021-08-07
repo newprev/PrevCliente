@@ -49,8 +49,9 @@ class CnisRemuneracoes(BaseModel, Model):
         self.indicadores = dictRemuneracoes['indicadores']
         self.dataUltAlt = dictRemuneracoes['dataUltAlt']
 
-    def prettyPrint(self):
-        return f"""Remuneracoes(
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
+        Remuneracoes(
             remuneracoesId: {self.remuneracoesId},
             clienteId: {self.clienteId},
             seq: {self.seq},
@@ -60,7 +61,7 @@ class CnisRemuneracoes(BaseModel, Model):
             dadoOrigem: {self.dadoOrigem},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}
-            """
+        )""")
         
         
 @post_save(sender=CnisRemuneracoes)

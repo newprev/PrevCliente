@@ -92,7 +92,6 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         }
 
         for pag in range(0, qtdPaginas):
-        # for pag in range(14, 15):
             page = documento.load_page(pag)
             conteudo: str = page.get_text()
             info: list = conteudo.splitlines()
@@ -299,7 +298,6 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         elif x == QMessageBox.Cancel:
             return False
         else:
-            # self.parent.menssagemSistema('Ocorreu um erro inesperado')
             raise Warning(f'Ocorreu um erro inesperado')
 
     def popUpOkAlerta(self, mensagem, titulo: str = 'Atenção!'):

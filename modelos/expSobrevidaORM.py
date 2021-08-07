@@ -47,8 +47,8 @@ class ExpSobrevida(BaseModel, Model):
 
         return self
 
-    def prettyPrint(self):
-        return f"""
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
         ExpectativaSobrevida(
             infoId: {self.infoId},
             dataReferente: {self.dataReferente},
@@ -56,8 +56,7 @@ class ExpSobrevida(BaseModel, Model):
             expectativaSobrevida: {self.expectativaSobrevida},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}
-        )
-            """
+        )""")
 
 
 @post_save(sender=ExpSobrevida)

@@ -1,3 +1,5 @@
+import json
+
 from modelos.baseModelORM import BaseModel
 from modelos.escritoriosORM import Escritorios
 from logs import *
@@ -30,13 +32,18 @@ class Advogados(BaseModel, Model):
         table_name = TABLENAME
 
     def toDict(self):
+        if self.email is not None and (isinstance(self.email, tuple) or isinstance(self.email, list)):
+            email = self.email[0]
+        else:
+            email = self.email
+
         dictUsuario = {
             'advogadoId': self.advogadoId,
             'escritorioId': self.escritorioId.escritorioId,
             'nomeUsuario': self.nomeUsuario,
             'login': self.login,
             'senha': self.senha,
-            'email': self.email,
+            'email': email,
             'sobrenomeUsuario': self.sobrenomeUsuario,
             'nacionalidade': self.nacionalidade,
             'estadoCivil': self.estadoCivil,
@@ -65,7 +72,12 @@ class Advogados(BaseModel, Model):
         if 'dataUltAlt' in dictUsuario.keys():
             self.dataUltAlt = dictUsuario['dataUltAlt']
 
-        self.escritorioId = dictUsuario['escritorioId']
+        if isinstance(dictUsuario['escritorioId'], dict):
+            escritorio = Escritorios().fromDict(dictUsuario['escritorioId'])
+        else:
+            escritorio = dictUsuario['escritorioId']
+
+        self.escritorioId = escritorio
         self.nomeUsuario = dictUsuario['nomeUsuario']
         self.login = dictUsuario['login']
         # self.telefone = dictUsuario['telefone'],
@@ -94,8 +106,14 @@ class Advogados(BaseModel, Model):
     def __bool__(self):
         return self.login is not None and self.nomeUsuario is not None
 
-    def __repr__(self):
-        return f"""
+    def prettyPrint(self, backRef: bool = False):
+
+        if backRef:
+            print('--- backRef', end='')
+            self.escritorioId.prettyPrint()
+            print('backRef ---')
+
+        print(f"""
         Usuario(
             escritorioId: {self.escritorioId},
             advogadoId: {self.advogadoId},
@@ -110,7 +128,7 @@ class Advogados(BaseModel, Model):
             admin: {self.admin},
             confirmado: {self.confirmado},
             ativo: {self.ativo}
-        )"""
+        )""")
 
 
 @post_save(sender=Advogados)

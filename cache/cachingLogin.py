@@ -25,23 +25,23 @@ class CacheLogin:
         except Exception:
             print('Deu Bosta')
 
-    def carregarCache(self) -> AdvogadoModelo:
+    def carregarCache(self) -> Advogados:
         if '.login.txt' in os.listdir(self.pathCache):
             with open(self.pathLoginTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
-                return dict_to_model(Advogados, advJson, ignore_unknown=True)
+                return Advogados().fromDict(advJson)
 
         else:
-            return AdvogadoModelo()
+            return Advogados()
 
-    def carregarCacheTemporario(self) -> AdvogadoModelo:
+    def carregarCacheTemporario(self) -> Advogados:
         if '.login.temp.txt' in os.listdir(self.pathCache):
             with open(self.pathLoginTempTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
-                return AdvogadoModelo().fromDict(advJson)
+                return Advogados().fromDict(advJson)
 
         else:
-            return AdvogadoModelo()
+            return Advogados()
 
     def limpaTemporarios(self):
         for temp in os.listdir(self.pathCache):

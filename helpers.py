@@ -1,5 +1,6 @@
 import datetime
 from math import floor
+from peewee import ModelSelect
 
 from newPrevEnums import *
 
@@ -431,7 +432,7 @@ def strToFloat(valor: str) -> float:
 
 
 def unmaskAll(info: str):
-    return info.replace('.', '').replace('/', '').replace('\\', '').replace(',', '').replace('-', '')
+    return info.replace('.', '').replace('/', '').replace('\\', '').replace(',', '').replace('-', '').replace('(', '').replace(')', '').replace(' ', '')
 
 
 def strNatureza(natureza: int) -> str:
@@ -515,12 +516,16 @@ def eliminaHoraDias(data: datetime):
 
 
 def pyToDefault(dicionario: dict) -> dict:
+
     dictReturn: dict = dict()
     for chave, valor in dicionario.items():
+
         if isinstance(valor, datetime.datetime):
             dictReturn[chave] = valor.strftime('%Y-%m-%d')
         elif isinstance(valor, datetime.date):
             dictReturn[chave] = valor.strftime('%Y-%m-%d')
+        elif isinstance(valor, ModelSelect):
+            dictReturn[chave] = pyToDefault(valor.get().toDict())
         else:
             dictReturn[chave] = valor
 

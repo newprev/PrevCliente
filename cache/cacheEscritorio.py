@@ -30,16 +30,16 @@ class CacheEscritorio:
             print(f'salvarCache({type(erro)}) - {erro}')
             logPrioridade(f'salvarCache<CacheEscritorio> ({type(erro)})___________________', TipoEdicao.erro, Prioridade.saidaImportante)
 
-    def carregarCache(self) -> EscritorioModelo:
+    def carregarCache(self) -> Escritorios:
         if '.escritorio.txt' in os.listdir(self.pathCache):
             with open(self.pathEscritorioTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
 
             logPrioridade(f'carregarCache<CacheEscritorio>___________________', TipoEdicao.select, Prioridade.saidaComun)
-            return EscritorioModelo().fromDict(advJson)
+            return Escritorios().fromDict(advJson)
 
         else:
-            return EscritorioModelo()
+            return Escritorios()
 
     def carregarCacheTemporario(self) -> EscritorioModelo:
         if '.escritorio.temp.txt' in os.listdir(self.pathCache):

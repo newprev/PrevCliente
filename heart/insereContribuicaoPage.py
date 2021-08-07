@@ -146,7 +146,6 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
     def carregaComboBoxes(self):
         listaSinaisMonetarios: set = {moeda.sinal for moeda in self.listaConvMon}
         self.cbxSinal.addItems(listaSinaisMonetarios)
-        # self.cbxIndicadores.addItems(dictIndicadores.keys())
         self.cbxEspecie.addItems(sorted(dictEspecies.values()))
         self.cbxSituacao.addItems(sorted(situacaoBeneficio))
 

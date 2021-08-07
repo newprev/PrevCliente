@@ -89,8 +89,8 @@ class Processos(BaseModel, Model):
 
         return self
 
-    def prettyPrint(self):
-        return f"""
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
         Processos(
             processoId: {self.processoId},
             clienteId: {self.clienteId},
@@ -113,8 +113,7 @@ class Processos(BaseModel, Model):
             valorCausa: {self.valorCausa},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}
-        )
-            """
+        )""")
         
 
 @post_save(sender=Processos)

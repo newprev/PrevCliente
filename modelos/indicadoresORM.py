@@ -37,14 +37,15 @@ class Indicadores(BaseModel, Model):
         self.dataUltAlt = dictIndicador['dataUltAlt']
         return self
 
-    def prettyPrint(self):
-        return f"""IndicadorModelo(
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
+        IndicadorModelo(
             indicadorId: {self.indicadorId},
             sigla: {self.resumo},
             descricao: {self.descricao},
             fonte: {self.fonte},
             dataUltAlt: {self.dataUltAlt}
-        )"""
+        )""")
 
 
 @post_save(sender=Indicadores)

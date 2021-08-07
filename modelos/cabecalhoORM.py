@@ -82,8 +82,8 @@ class CnisCabecalhos(BaseModel, Model):
     def __eq__(self, other):
         return self.cabecalhosId == other.cabecalhosId
 
-    def __repr__(self):
-        return f"""
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
         Cabecalho(
             cabecalhosId: {self.cabecalhosId},
             clienteId: {self.clienteId},
@@ -104,7 +104,7 @@ class CnisCabecalhos(BaseModel, Model):
             dadoFaltante: {self.dadoFaltante},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}
-        )"""
+        )""")
 
 
 @post_save(sender=CnisCabecalhos)

@@ -35,12 +35,13 @@ class TetosPrev(BaseModel, Model):
         self.dataCadastro = datetime.now()
         return self
 
-    def prettyPrint(self):
-        return f"""TetosPrevModelo(
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
+        TetosPrevModelo(
             tetosPrevId: {self.tetosPrevId},
             dataValidade: {self.dataValidade},
             valor: {self.valor}
-        )"""
+        )""")
     
     
 @post_save(sender=TetosPrev)

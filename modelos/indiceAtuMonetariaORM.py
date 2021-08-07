@@ -40,16 +40,16 @@ class IndiceAtuMonetaria(BaseModel, Model):
         self.dataUltAlt = dictIndiceAtuMonetario['dataUltAlt']
         return self
 
-    def prettyPrint(self):
-        return f"""
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
         IndiceAtuMonetarioModelo(
-               indiceId: {self.indiceId},
-               dataReferente: {self.dataReferente},
-               dib: {self.dib},
-               fator: {self.fator},
-               dataCadastro: {self.dataCadastro},
-               dataUltAlt: {self.dataUltAlt}
-           )"""
+           indiceId: {self.indiceId},
+           dataReferente: {self.dataReferente},
+           dib: {self.dib},
+           fator: {self.fator},
+           dataCadastro: {self.dataCadastro},
+           dataUltAlt: {self.dataUltAlt}
+       )""")
         
         
 @post_save(sender=IndiceAtuMonetaria)

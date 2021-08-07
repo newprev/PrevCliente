@@ -38,7 +38,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.setupUi(self)
         self.db = db
         self.usuarioRepositorio = UsuarioRepository()
-        self.escritorio: Escritorios = None
+        self.escritorio: Escritorios = Escritorios()
         self.advogado: Advogados = Advogados()
         self.escritorioRepositorio = EscritorioRepositorio()
         self.tentativasSenha = 3
@@ -232,9 +232,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 # Autentica escritório
                 self.escritorio = self.procuraEscritorio(self.advogado.escritorioId)
                 if self.escritorio:
-                    # escritorioCadastrado = self.daoEscritorio.buscaEscritorioById(self.escritorio.escritorioId)
                     escritorioCadastrado = Escritorios.get_by_id(self.escritorio.escritorioId)
-                    # advogadoCadastrado = self.daoAdvogado.buscaAdvogadoById(self.advogado.advogadoId)
                     advogadoCadastrado = Advogados.get_by_id(self.advogado.advogadoId)
 
                     if not escritorioCadastrado:

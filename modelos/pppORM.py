@@ -97,8 +97,9 @@ class Ppp(BaseModel, Model):
         self.dataUltAlt = dictPpp['dataUltAlt']
         return self
 
-    def prettyPrint(self):
-        return f"""PppModelo(
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
+        PppModelo(
             pppId: {self.pppId},
             cnpj: {self.cnpj},
             nomeEmpresa: {self.nomeEmpresa},
@@ -123,7 +124,7 @@ class Ppp(BaseModel, Model):
             eficEpi: {self.eficEpi},
             caEpi: {self.caEpi},
             dataUltAlt: {self.dataUltAlt}
-        )"""
+        )""")
     
     
 @post_save(sender=Ppp)

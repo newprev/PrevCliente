@@ -55,8 +55,8 @@ class CnisBeneficios(BaseModel, Model):
         self.dataCadastro = dictBeneficios['dataCadastro']
         self.dataUltAlt = dictBeneficios['dataUltAlt']
 
-    def prettyPrint(self):
-        return f"""
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
         Beneficios(
             beneficiosId: {self.beneficiosId},
             clienteId: {self.clienteId},
@@ -69,8 +69,7 @@ class CnisBeneficios(BaseModel, Model):
             dadoOrigem: {self.dadoOrigem},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}
-        )
-            """
+        )""")
 
 
 @post_save(sender=CnisBeneficios)

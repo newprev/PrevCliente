@@ -15,7 +15,7 @@ class Processos(BaseModel, Model):
     processoId = AutoField(column_name='processoId', null=True)
     advogadoId = ForeignKeyField(column_name='advogadoId', field='advogadoId', model=Advogados, null=True, backref='advogados')
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, null=True, backref='cliente')
-    cidade = CharField()
+    cidade = CharField(default='São Paulo')
     dataFim = DateField(column_name='dataFim', null=True)
     dataInicio = DateField(column_name='dataInicio', null=True)
     der = DateField(null=True)

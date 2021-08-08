@@ -16,12 +16,12 @@ from heart.dashboard.gerarDocsPage import GerarDocsPage
 from heart.dashboard.entrevista.localStyleSheet.cabecalho import *
 from heart.sinaisCustomizados import Sinais
 
-from Daos.daoProcessos import DaoProcessos
-from Daos.daoCliente import DaoCliente
+# from Daos.daoProcessos import DaoProcessos
+# from Daos.daoCliente import DaoCliente
 from Daos.daoCalculos import DaoCalculos
 
 from modelos.cabecalhoModelo import CabecalhoModelo
-from modelos.processosModelo import ProcessosModelo
+from modelos.processosORM import Processos
 from modelos.clienteModelo import ClienteModelo
 
 from processos.aposentadoria import CalculosAposentadoria
@@ -41,9 +41,9 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.sinais = Sinais()
         self.telaAtual = MomentoEntrevista.cadastro
         self.clienteAtual = ClienteModelo()
-        self.daoProcesso = DaoProcessos(db=db)
-        self.daoCliente = DaoCliente(db=db)
-        self.processoModelo = ProcessosModelo()
+        # self.daoProcesso = DaoProcessos(db=db)
+        # self.daoCliente = DaoCliente(db=db)
+        self.processoModelo = Processos()
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.escondeLoading)
 
@@ -129,7 +129,11 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 # self.processoModelo.tempoContribuicao = self.calculaTempoContribuicao()
 
                 self.loading(10)
-                self.processoModelo.processosId = self.daoProcesso.insereProcesso(self.processoModelo)
+                # self.processoModelo.processosId = self.daoProcesso.insereProcesso(self.processoModelo)
+                try:
+                    self.processoModelo.processosId = Processos().insert(**self.processoModelo.toDict()).on_conflict_replace().execute()
+                except Processos.DoesNotExist:
+                    print('Fudeu aqui!')
 
                 self.loading(10)
                 self.impressaoDocsPg.atualizaInformacoes(self.processoModelo, self.clienteAtual)

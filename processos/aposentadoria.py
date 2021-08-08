@@ -169,7 +169,7 @@ class CalculosAposentadoria:
     def calculaMediaSalarial(self):
         avaliaSalario = lambda df: df['salContribuicao'] if df['salContribuicao'] <= df['teto'] else df['teto']
 
-        dfContribuicoes: pd.DataFrame = self.daoCalculos.buscaRemContPorData(self.cliente.clienteId, '1994-07-31', self.dibAtual)
+        dfContribuicoes: pd.DataFrame = self.daoCalculos.buscaRemContPorData(self.cliente.clienteId, '1994-07-31', self.dibAtual.strftime('%Y-%m-%d'))
         dfContribuicoes['salContribuicao1'] = dfContribuicoes.apply(avaliaSalario, axis=1)
         salAtualizado = dfContribuicoes['salContribuicao1']*dfContribuicoes['fator']
         dfContribuicoes['salAtualizado'] = salAtualizado

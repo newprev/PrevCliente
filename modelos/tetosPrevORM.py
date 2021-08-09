@@ -1,4 +1,4 @@
-from modelos.baseModelORM import BaseModel
+from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
 from newPrevEnums import TipoEdicao, Prioridade
@@ -11,7 +11,7 @@ TABLENAME = 'tetosPrev'
 
 class TetosPrev(BaseModel, Model):
     tetosPrevId = AutoField(column_name='tetosPrevId', null=True)
-    dataValidade = DateField(column_name='dataValidade')
+    dataValidade = DateField(column_name='dataValidade', formats=DATEFORMATS)
     valor = FloatField()
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)

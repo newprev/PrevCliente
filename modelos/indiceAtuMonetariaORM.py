@@ -1,4 +1,4 @@
-from modelos.baseModelORM import BaseModel
+from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
 from newPrevEnums import TipoEdicao, Prioridade
@@ -11,7 +11,7 @@ TABLENAME = 'indiceAtuMonetaria'
 
 class IndiceAtuMonetaria(BaseModel, Model):
     indiceId = AutoField(column_name='indiceId', null=True)
-    dataReferente = DateField(column_name='dataReferente')
+    dataReferente = DateField(column_name='dataReferente', formats=DATEFORMATS)
     dib = BigIntegerField()
     fator = FloatField()
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)

@@ -4,7 +4,7 @@ from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
 from newPrevEnums import TipoEdicao, Prioridade
 
-from modelos.baseModelORM import BaseModel
+from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.advogadoORM import Advogados
 from modelos.clienteORM import Cliente
 
@@ -16,10 +16,10 @@ class Processos(BaseModel, Model):
     advogadoId = ForeignKeyField(column_name='advogadoId', field='advogadoId', model=Advogados, null=True, backref='advogados')
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, null=True, backref='cliente')
     cidade = CharField(default='São Paulo')
-    dataFim = DateField(column_name='dataFim', null=True)
-    dataInicio = DateField(column_name='dataInicio', null=True)
-    der = DateField(null=True)
-    dib = DateField(null=True)
+    dataFim = DateField(column_name='dataFim', null=True, formats=DATEFORMATS)
+    dataInicio = DateField(column_name='dataInicio', null=True, formats=DATEFORMATS)
+    der = DateField(null=True, formats=DATEFORMATS)
+    dib = DateField(null=True, formats=DATEFORMATS)
     estado = CharField(null=True)
     incidenteProcessual = IntegerField(column_name='incidenteProcessual', null=True)
     mediaSalarial = FloatField(column_name='mediaSalarial', null=True)

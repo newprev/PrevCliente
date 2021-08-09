@@ -1,4 +1,4 @@
-from modelos.baseModelORM import BaseModel
+from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
@@ -13,10 +13,10 @@ class CnisContribuicoes(BaseModel, Model):
     contribuicoesId = AutoField(column_name='contribuicoesId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
     seq = IntegerField(null=False)
-    competencia = DateField(null=False)
+    competencia = DateField(null=False, formats=DATEFORMATS)
     contribuicao = FloatField(null=False)
-    dadoOrigem = CharField(column_name='dadoOrigem')
-    dataPagamento = DateField(column_name='dataPagamento')
+    dadoOrigem = CharField(column_name='dadoOrigem', default='CNIS')
+    dataPagamento = DateField(column_name='dataPagamento', formats=DATEFORMATS)
     indicadores = CharField(default=None)
     salContribuicao = FloatField(column_name='salContribuicao')
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)

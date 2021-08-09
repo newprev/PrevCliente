@@ -178,7 +178,7 @@ class DaoCliente:
 
     def insertSqlBenecifio(self, beneficio: dict, clienteId: int) -> str:
         strComando = ''
-        if len(beneficio['Seq']) > 0 and clienteId is not None and clienteId != 0:
+        if len(beneficio['seq']) > 0 and clienteId is not None and clienteId != 0:
             strComando = f"""
                 INSERT INTO {self.config.tblCnisBeneficios}
                     (
@@ -189,12 +189,12 @@ class DaoCliente:
                     )
                 VALUES """
 
-            for i in range(0, len(beneficio['Seq'])):
+            for i in range(0, len(beneficio['seq'])):
                 if i != 0:
                     strComando += ', '
                 strComando += f""" 
                     (
-                        {clienteId}, {beneficio['Seq'][i]}, {beneficio['NB'][i]},
+                        {clienteId}, {beneficio['seq'][i]}, {beneficio['NB'][i]},
                         '{beneficio['especie'][i]}', '{mascaraDataSql(beneficio['dataInicio'][i])}', '{mascaraDataSql(beneficio['dataFim'][i])}',
                         '{beneficio['situacao'][i]}', 'CNIS', '{datetime.now()}',
                         '{datetime.now()}'
@@ -206,7 +206,7 @@ class DaoCliente:
 
     def insertSqlContribuicoes(self, contribuicoes: dict, clienteId: int):
         strComando = ''
-        if len(contribuicoes['Seq']) > 0 and clienteId != None and clienteId != 0:
+        if len(contribuicoes['seq']) > 0 and clienteId != None and clienteId != 0:
             strComando = f"""
                         INSERT INTO {self.config.tblCnisContribuicoes}
                             (
@@ -217,12 +217,12 @@ class DaoCliente:
                             )
                         VALUES """
 
-            for i in range(0, len(contribuicoes['Seq'])):
+            for i in range(0, len(contribuicoes['seq'])):
                 if i != 0:
                     strComando += ', '
                 strComando += f""" 
                             (
-                                {clienteId}, {contribuicoes['Seq'][i]}, '{mascaraDataSql(contribuicoes['competencia'][i], short=True)}',
+                                {clienteId}, {contribuicoes['seq'][i]}, '{mascaraDataSql(contribuicoes['competencia'][i], short=True)}',
                                 '{mascaraDataSql(contribuicoes['dataPagamento'][i])}', {contribuicoes['contribuicao'][i]}, {contribuicoes['salContribuicao'][i]},
                                 '{contribuicoes['indicadores'][i]}', 'CNIS', '{datetimeToSql(datetime.now())}', 
                                 '{datetimeToSql(datetime.now())}'
@@ -234,7 +234,7 @@ class DaoCliente:
 
     def insertSqlCabecalhos(self, cabecalhos: dict, clienteId: int):
         strComando = ''
-        if len(cabecalhos['Seq']) > 0 and clienteId != None and clienteId != 0:
+        if len(cabecalhos['seq']) > 0 and clienteId != None and clienteId != 0:
             strComando = f"""
                         INSERT INTO {self.config.tblCnisCabecalhos}
                             (
@@ -246,7 +246,7 @@ class DaoCliente:
                             )
                         VALUES """
 
-            for i in range(0, len(cabecalhos['Seq'])):
+            for i in range(0, len(cabecalhos['seq'])):
                 temDataInicio = len(cabecalhos['dataInicio'][i]) != 0
                 temDataFim = len(cabecalhos['dataFim'][i]) != 0
                 temDataUltRem = len(cabecalhos['ultRem'][i]) != 0
@@ -257,7 +257,7 @@ class DaoCliente:
                     strComando += ', '
                 strComando += f""" 
                             (
-                                {clienteId}, {cabecalhos['Seq'][i]}, '{cabecalhos['nit'][i]}',
+                                {clienteId}, {cabecalhos['seq'][i]}, '{cabecalhos['nit'][i]}',
                                 '{cabecalhos['cdEmp'][i]}', '{cabecalhos['nomeEmp'][i]}', '{mascaraDataSql(cabecalhos['dataInicio'][i])}',
                                 '{mascaraDataSql(cabecalhos['dataFim'][i])}', '{cabecalhos['tipoVinculo'][i]}', '{cabecalhos['indicadores'][i]}',
                                 '{mascaraDataSql(cabecalhos['ultRem'][i], short=True)}', 'CNIS', {dadoFaltante}, '{datetimeToSql(datetime.now())}', 
@@ -270,7 +270,7 @@ class DaoCliente:
 
     def insertSqlCabecalhosBeneficios(self, cabecalhos: dict, clienteId: int):
         strComando = ''
-        if len(cabecalhos['Seq']) > 0 and clienteId is not None and clienteId != 0:
+        if len(cabecalhos['seq']) > 0 and clienteId is not None and clienteId != 0:
             strComando = f"""
                         INSERT INTO {self.config.tblCnisCabecalhos}
                             (
@@ -281,12 +281,12 @@ class DaoCliente:
                             )
                         VALUES """
 
-            for i in range(0, len(cabecalhos['Seq'])):
+            for i in range(0, len(cabecalhos['seq'])):
                 if i != 0:
                     strComando += ', '
                 strComando += f""" 
                             (
-                                {clienteId}, {cabecalhos['Seq'][i]}, '{cabecalhos['nit'][i]}',
+                                {clienteId}, {cabecalhos['seq'][i]}, '{cabecalhos['nit'][i]}',
                                 '{cabecalhos['NB'][i]}', '{cabecalhos['orgVinculo'][i]}', '{cabecalhos['especie'][i]}',
                                 '{mascaraDataSql(cabecalhos['dataInicio'][i])}', '{mascaraDataSql(cabecalhos['dataFim'][i])}', '{cabecalhos['situacao'][i]}',
                                 'CNIS', '{datetimeToSql(datetime.now())}', '{datetimeToSql(datetime.now())}'
@@ -298,7 +298,7 @@ class DaoCliente:
 
     def insertSqlRemuneracoes(self, remuneracoes: dict, clienteId: int):
         strComando = ''
-        if len(remuneracoes['Seq']) > 0 and clienteId is not None and clienteId != 0:
+        if len(remuneracoes['seq']) > 0 and clienteId is not None and clienteId != 0:
             strComando = f"""
                         INSERT INTO {self.config.tblCnisRemuneracoes}
                             (
@@ -308,12 +308,12 @@ class DaoCliente:
                             )
                         VALUES """
 
-            for i in range(0, len(remuneracoes['Seq'])):
+            for i in range(0, len(remuneracoes['seq'])):
                 if i != 0:
                     strComando += ', '
                 strComando += f""" 
                             (
-                                {clienteId}, {remuneracoes['Seq'][i]}, '{mascaraDataSql(remuneracoes['competencia'][i], short=True)}',
+                                {clienteId}, {remuneracoes['seq'][i]}, '{mascaraDataSql(remuneracoes['competencia'][i], short=True)}',
                                 {remuneracoes['remuneracao'][i]}, '{remuneracoes['indicadores'][i]}', 'CNIS',
                                 '{datetimeToSql(datetime.now())}', '{datetimeToSql(datetime.now())}'
                             )"""

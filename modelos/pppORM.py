@@ -1,4 +1,4 @@
-from modelos.baseModelORM import BaseModel
+from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
@@ -17,13 +17,13 @@ class Ppp(BaseModel, Model):
     cnae = CharField(null=True)
     cnpj = CharField(null=True)
     ctps = CharField(null=True)
-    dataAdminssao = DateField(column_name='dataAdminssao', null=True)
-    dataNascimento = DateField(column_name='dataNascimento')
-    dataRegistro = DateField(column_name='dataRegistro', null=True)
+    dataAdminssao = DateField(column_name='dataAdminssao', null=True, formats=DATEFORMATS)
+    dataNascimento = DateField(column_name='dataNascimento', formats=DATEFORMATS)
+    dataRegistro = DateField(column_name='dataRegistro', null=True, formats=DATEFORMATS)
     eficEpc = CharField(column_name='eficEpc', null=True)
     eficEpi = CharField(column_name='eficEpi', null=True)
-    exposicaoDataFim = DateField(column_name='exposicaoDataFim', null=True)
-    exposicaoDataInicio = DateField(column_name='exposicaoDataInicio', null=True)
+    exposicaoDataFim = DateField(column_name='exposicaoDataFim', null=True, formats=DATEFORMATS)
+    exposicaoDataInicio = DateField(column_name='exposicaoDataInicio', null=True, formats=DATEFORMATS)
     exposicaoFator = CharField(column_name='exposicaoFator', null=True)
     exposicaoIntensidade = CharField(column_name='exposicaoIntensidade', null=True)
     exposicaoTecnicaUtilizada = CharField(column_name='exposicaoTecnicaUtilizada', null=True)
@@ -32,7 +32,7 @@ class Ppp(BaseModel, Model):
     nit = CharField()
     nomeEmpresa = CharField(column_name='nomeEmpresa', null=True)
     numCAT = CharField(column_name='numCAT', null=True)
-    profissiografiaData = DateField(column_name='profissiografiaData', null=True)
+    profissiografiaData = DateField(column_name='profissiografiaData', null=True, formats=DATEFORMATS)
     profissiografiaDesc = CharField(column_name='profissiografiaDesc', null=True)
     sitEmpregado = CharField(column_name='sitEmpregado', null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)

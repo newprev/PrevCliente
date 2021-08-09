@@ -1,6 +1,7 @@
 import datetime
 from math import floor
 from peewee import ModelSelect
+from typing import List
 
 from newPrevEnums import *
 
@@ -421,6 +422,17 @@ def strToDatetime(data: str, tamanho: TamanhoData = TamanhoData.m):
             return datetime.datetime.strptime(data, '%Y-%m-%d %H:%M:%S')
     except ValueError:
         return datetime.datetime.min
+
+
+def strToDate(data: str):
+    dateFormats: List[str] = ['%Y-%m-%d', '%d/%m/%Y', '%m/%Y']
+
+    for formato in dateFormats:
+        try:
+            dataRetorno = datetime.datetime.strptime(data, formato).date()
+            return dataRetorno
+        except Exception as err:
+            print(f'strToDate: ({type(data)}) {data} - {err}')
 
 
 def strToFloat(valor: str) -> float:

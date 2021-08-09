@@ -1,5 +1,5 @@
+from modelos.baseModelORM import BaseModel, DATEFORMATS
 from logs import logPrioridade
-from modelos.baseModelORM import BaseModel
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
 
@@ -10,13 +10,14 @@ from newPrevEnums import TipoEdicao, Prioridade
 
 TABLENAME = 'cnisBeneficios'
 
+
 class CnisBeneficios(BaseModel, Model):
     beneficiosId = AutoField(column_name='beneficiosId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
     dadoOrigem = CharField(column_name='dadoOrigem', default='CNIS')
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataFim = DateField(column_name='dataFim')
-    dataInicio = DateField(column_name='dataInicio')
+    dataFim = DateField(column_name='dataFim', formats=DATEFORMATS)
+    dataInicio = DateField(column_name='dataInicio', formats=DATEFORMATS)
     dataUltAlt = DateTimeField(column_name='dataUltAlt')
     especie = CharField()
     nb = BigIntegerField()

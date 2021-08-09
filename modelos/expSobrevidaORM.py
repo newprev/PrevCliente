@@ -1,5 +1,5 @@
+from modelos.baseModelORM import BaseModel, DATEFORMATS
 from helpers import strToDatetime
-from modelos.baseModelORM import BaseModel
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
 from newPrevEnums import TipoEdicao, Prioridade, TamanhoData
@@ -12,7 +12,7 @@ TABLENAME = 'expSobrevida'
 
 class ExpSobrevida(BaseModel, Model):
     infoId = AutoField(column_name='infoId', null=True)
-    dataReferente = DateField(column_name='dataReferente')
+    dataReferente = DateField(column_name='dataReferente', formats=DATEFORMATS)
     expectativaSobrevida = IntegerField(column_name='expectativaSobrevida')
     idade = IntegerField(null=False)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)

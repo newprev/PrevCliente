@@ -1,6 +1,7 @@
 import re
 import pandas as pd
 from pathlib import Path
+from typing import List
 
 from PyPDF3 import PdfFileReader
 from PyQt5.QtWidgets import QFileDialog
@@ -42,13 +43,13 @@ class CNISModelo:
 
         self.dictIndicadores: dict = dictIndicadores
         self.dictRemuneracoes = {
-            'Seq': [],
+            'seq': [],
             'remuneracao': [],
             'competencia': [],
             'indicadores': []
         }
         self.dictContribuicoes = {
-            'Seq': [],
+            'seq': [],
             'competencia': [],
             'dataPagamento': [],
             'contribuicao': [],
@@ -56,7 +57,7 @@ class CNISModelo:
             'indicadores': []
         }
         self.dictCabecalho = {
-            'Seq': [],
+            'seq': [],
             'nit': [],
             'cdEmp': [],
             'nomeEmp': [],
@@ -67,7 +68,7 @@ class CNISModelo:
             'ultRem': []
         }
         self.dictCabecalhoBeneficio = {
-            'Seq': [],
+            'seq': [],
             'nit': [],
             'NB': [],
             'orgVinculo': [],
@@ -179,7 +180,7 @@ class CNISModelo:
                         self.dictCabecalho['tipoVinculo'].append(documentoLinhas[j].replace(',', ''))
                         tipoVinculo = True
                 elif documentoLinhas[j][0].isnumeric() and len(documentoLinhas[j]) <= 3:
-                    self.dictCabecalho['Seq'].append(documentoLinhas[j])
+                    self.dictCabecalho['seq'].append(documentoLinhas[j])
                     seq = True
 
         self.dictCabecalho['nomeEmp'].append(nomeEmp)
@@ -188,7 +189,7 @@ class CNISModelo:
             dataFim = True
 
         if not seq:
-            self.dictCabecalho['Seq'].append('')
+            self.dictCabecalho['seq'].append('')
         if not nit:
             self.dictCabecalho['nit'].append('')
         if not cdEmp:
@@ -244,7 +245,7 @@ class CNISModelo:
                         dataFim = True
                         dataPos = 0
                 elif documentoLinhas[j][0].isnumeric() and len(documentoLinhas[j]) <= 3:
-                    self.dictCabecalhoBeneficio['Seq'].append(documentoLinhas[j])
+                    self.dictCabecalhoBeneficio['seq'].append(documentoLinhas[j])
                     seq = True
                 elif re.match(self.expRegEspecie, documentoLinhas[j]) is not None and documentoLinhas[j] not in self.situacoesPossiveis:
                     if re.match(self.expRegNomeEmp, documentoLinhas[j+1]) and documentoLinhas[j+1] not in self.situacoesPossiveis:
@@ -262,7 +263,7 @@ class CNISModelo:
             dataFim = True
 
         if not seq:
-            self.dictCabecalhoBeneficio['Seq'].append('')
+            self.dictCabecalhoBeneficio['seq'].append('')
         if not nit:
             self.dictCabecalhoBeneficio['nit'].append('')
         if not nb:
@@ -284,7 +285,7 @@ class CNISModelo:
 
         blocoContribuicoes = True
         ehContribuicao = False
-        seq = self.dictCabecalho['Seq'][-1]
+        seq = self.dictCabecalho['seq'][-1]
         contSeq = 0
 
         pos = posInicio
@@ -331,14 +332,14 @@ class CNISModelo:
 
         # Adiciona o Seq de cada contribuição no dicionário de contribuições
         for i in range(contSeq):
-            self.dictContribuicoes['Seq'].append(seq)
+            self.dictContribuicoes['seq'].append(seq)
         return pos
 
     def extrairRemueracoes(self, documentoLinhas, posInicio):
 
         blocoRemuneracoes = True
         pos = posInicio
-        seq = self.dictCabecalho['Seq'][-1]
+        seq = self.dictCabecalho['seq'][-1]
         contSeq = 0
 
         while blocoRemuneracoes:
@@ -375,7 +376,7 @@ class CNISModelo:
 
         # Adiciona o Seq de cada contribuição no dicionário de contribuições
         for i in range(contSeq):
-            self.dictRemuneracoes['Seq'].append(seq)
+            self.dictRemuneracoes['seq'].append(seq)
         return pos
 
     def extraiDadosPessoais(self, documentoLinhas: str):
@@ -457,20 +458,39 @@ class CNISModelo:
         else:
             return info in self.dictIndicadores.keys()
 
-    def getAllDict(self) -> dict:
-        recolhimentos = {
-            'cabecalho': self.dictCabecalho,
-            'cabecalhoBeneficio': self.dictCabecalhoBeneficio,
-            'remuneracoes': self.dictRemuneracoes,
-            'contribuicoes': self.dictContribuicoes
-        }
-        return recolhimentos
+    def getAllDict(self, toInsert: bool = False, clienteId: int = 0) -> dict:
+        if toInsert:
+            return {
+                'cabecalho': self.dictCabecalho,
+                'cabecalhoBeneficio': self.dictCabecalhoBeneficio,
+                'remuneracoes': self.organizaParaInserir(self.dictRemuneracoes, clienteId),
+                'contribuicoes': self.organizaParaInserir(self.dictContribuicoes, clienteId)
+            }
+        else:
+            return {
+                'cabecalho': self.dictCabecalho,
+                'cabecalhoBeneficio': self.dictCabecalhoBeneficio,
+                'remuneracoes': self.dictRemuneracoes,
+                'contribuicoes': self.dictContribuicoes
+            }
 
     def verificaSalario(self, salario: str):
         salarioP = re.match(self.expRegSalarioP, salario) is not None
         salarioM = re.match(self.expRegSalarioM, salario) is not None
         salarioG = re.match(self.expRegSalarioG, salario) is not None
         return salarioP or salarioM or salarioG
+
+    def organizaParaInserir(self, dicionario: dict, clienteId: int):
+        dicionariosRetorno: List[dict] = []
+        qtdInfo: int = len(list(dicionario.values())[0])
+        chaves: List[str] = list(dicionario.keys())
+
+        for index in range(qtdInfo):
+            dicionariosRetorno.append({
+                chave: dicionario[chave][index] for chave in chaves
+            })
+            dicionariosRetorno[index]['clienteId'] = clienteId
+        return dicionariosRetorno
 
     def __str__(self):
         dtRemuneracoes: pd.DataFrame = self.gerarDataframe(informacao='remuneracoes')

@@ -1,11 +1,11 @@
 from helpers import strToDatetime
-from modelos.baseModelORM import BaseModel
+from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
 from modelos.escritoriosORM import Escritorios
 from newPrevEnums import TipoEdicao, Prioridade, TamanhoData
 
-from peewee import AutoField, CharField, ForeignKeyField, DeferredForeignKey, DateField, IntegerField, DateTimeField
+from peewee import AutoField, CharField, ForeignKeyField, DeferredForeignKey, DateField, IntegerField, DateTimeField, fn
 from datetime import datetime
 
 TABLENAME = 'cliente'
@@ -33,8 +33,8 @@ class Cliente(BaseModel, Model):
     cep = CharField(null=True)
     cidade = CharField(null=True)
     complemento = CharField(null=True)
-    cpfCliente = CharField(column_name='cpfCliente', null=True)
-    dataNascimento = DateField(column_name='dataNascimento', default=datetime.now)
+    cpfCliente = CharField(column_name='cpfCliente', unique=True)
+    dataNascimento = DateField(column_name='dataNascimento', default=datetime.now, formats=DATEFORMATS)
     email = CharField(null=True)
     endereco = CharField(null=True)
     estado = CharField(null=True)

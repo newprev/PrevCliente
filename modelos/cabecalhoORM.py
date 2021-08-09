@@ -1,4 +1,4 @@
-from modelos.baseModelORM import BaseModel
+from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
@@ -17,8 +17,8 @@ class CnisCabecalhos(BaseModel, Model):
     cdEmp = CharField(column_name='cdEmp', null=True)
     dadoFaltante = BooleanField(column_name='dadoFaltante', default=False)
     dadoOrigem = CharField(column_name='dadoOrigem', default='CNIS')
-    dataFim = DateField(column_name='dataFim', null=True)
-    dataInicio = DateField(column_name='dataInicio')
+    dataFim = DateField(column_name='dataFim', null=True, formats=DATEFORMATS)
+    dataInicio = DateField(column_name='dataInicio', formats=DATEFORMATS)
     especie = CharField(null=True)
     indicadores = CharField(null=True)
     nb = BigIntegerField(null=True)
@@ -27,7 +27,7 @@ class CnisCabecalhos(BaseModel, Model):
     orgVinculo = CharField(column_name='orgVinculo', null=True)
     situacao = CharField(null=True)
     tipoVinculo = CharField(column_name='tipoVinculo', null=True)
-    ultRem = DateField(column_name='ultRem', null=True)
+    ultRem = DateField(column_name='ultRem', null=True, formats=DATEFORMATS)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 

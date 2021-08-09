@@ -1,4 +1,4 @@
-from modelos.baseModelORM import BaseModel
+from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
 from newPrevEnums import TipoEdicao, Prioridade
@@ -12,8 +12,8 @@ TABLENAME = 'convMon'
 class ConvMon(BaseModel, Model):
     convMonId = AutoField(column_name='convMonId', null=True)
     conversao = CharField(null=False)
-    dataFinal = DateField(column_name='dataFinal')
-    dataInicial = DateField(column_name='dataInicial', null=False)
+    dataFinal = DateField(column_name='dataFinal', formats=DATEFORMATS)
+    dataInicial = DateField(column_name='dataInicial', null=False, formats=DATEFORMATS)
     fator = FloatField(null=False)
     moedaCorrente = BooleanField(column_name='moedaCorrente')
     nomeMoeda = CharField(column_name='nomeMoeda')

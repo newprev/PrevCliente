@@ -1,4 +1,4 @@
-from modelos.baseModelORM import BaseModel
+from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
@@ -14,8 +14,8 @@ class CnisRemuneracoes(BaseModel, Model):
     remuneracoesId = AutoField(column_name='remuneracoesId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, null=True)
     seq = IntegerField(null=False)
-    competencia = DateField(null=False)
-    dadoOrigem = CharField(column_name='dadoOrigem')
+    competencia = DateField(null=False, formats=DATEFORMATS)
+    dadoOrigem = CharField(column_name='dadoOrigem', default='CNIS')
     remuneracao = FloatField()
     indicadores = CharField()
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)

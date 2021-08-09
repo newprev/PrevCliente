@@ -155,7 +155,6 @@ class CNISModelo:
                 elif re.fullmatch(self.expRegCNPJ, documentoLinhas[j]) is not None:
                     self.dictCabecalho['cdEmp'].append(documentoLinhas[j])
                     cdEmp = True
-                # elif documentoLinhas[j] in self.dictIndicadores.keys():
                 elif self.isIndicador(documentoLinhas[j]):
                     self.dictCabecalho['indicadores'].append(documentoLinhas[j])
                     indicadores = True
@@ -461,7 +460,7 @@ class CNISModelo:
     def getAllDict(self, toInsert: bool = False, clienteId: int = 0) -> dict:
         if toInsert:
             return {
-                'cabecalho': self.dictCabecalho,
+                'cabecalho': self.organizaParaInserir(self.dictCabecalho, clienteId),
                 'cabecalhoBeneficio': self.dictCabecalhoBeneficio,
                 'remuneracoes': self.organizaParaInserir(self.dictRemuneracoes, clienteId),
                 'contribuicoes': self.organizaParaInserir(self.dictContribuicoes, clienteId)

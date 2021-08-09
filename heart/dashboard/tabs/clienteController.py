@@ -14,6 +14,7 @@ from modelos.cnisModelo import CNISModelo
 from modelos.clienteORM import Cliente
 from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.remuneracaoORM import CnisRemuneracoes
+from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.escritoriosORM import Escritorios
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
@@ -203,53 +204,67 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
     def carregaCnis(self):
         # TODO: Alterar o nome do banco de um texto puro, para uma variável global ou carregá-la de algum arquivo
 
-        db = SqliteDatabase('Daos/producao.db')
         self.cnisClienteAtual = CNISModelo()
         self.cliente.pathCnis = self.cnisClienteAtual.buscaPath()
+        db: SqliteDatabase = Cliente._meta.database
 
         if self.cliente.pathCnis is None:
             self.showPopupAlerta('Não foi possível carregar o arquivo. Tente novamente.')
             return False
         else:
-            with db.atomic() as transaction:
-                try:
-                    infoPessoais: dict = self.cnisClienteAtual.getInfoPessoais()
+            try:
+                infoPessoais: dict = self.cnisClienteAtual.getInfoPessoais()
 
-                    if infoPessoais is not None:
-                        clienteAInserir = Cliente()
+                if infoPessoais is not None:
+                    clienteAInserir = Cliente()
 
-                        clienteAInserir.cpfCliente = unmaskAll(infoPessoais['cpf'])
-                        clienteAInserir.dataNascimento = strToDatetime(infoPessoais['dataNascimento'])
-                        clienteAInserir.idade = calculaIdadeFromString(infoPessoais['dataNascimento'])
-                        clienteAInserir.nit = unmaskAll(infoPessoais['nit'])
-                        clienteAInserir.nomeMae = infoPessoais['nomeMae'].title()
-                        clienteAInserir.nomeCliente = infoPessoais['nomeCompleto'].split(' ')[0].title()
-                        clienteAInserir.sobrenomeCliente = ' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title()
-                        clienteAInserir.escritorioId = Escritorios.select().where(Escritorios.escritorioId == self.escritorio.escritorioId)
+                    clienteAInserir.cpfCliente = unmaskAll(infoPessoais['cpf'])
+                    clienteAInserir.dataNascimento = strToDatetime(infoPessoais['dataNascimento'])
+                    clienteAInserir.idade = calculaIdadeFromString(infoPessoais['dataNascimento'])
+                    clienteAInserir.nit = unmaskAll(infoPessoais['nit'])
+                    clienteAInserir.nomeMae = infoPessoais['nomeMae'].title()
+                    clienteAInserir.nomeCliente = infoPessoais['nomeCompleto'].split(' ')[0].title()
+                    clienteAInserir.sobrenomeCliente = ' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title()
+                    clienteAInserir.escritorioId = Escritorios.select().where(Escritorios.escritorioId == self.escritorio.escritorioId)
 
+                    with db.atomic() as transaction:
                         try:
                             Cliente.insert(**clienteAInserir.toDict()).on_conflict_replace().execute()
                             self.cliente = Cliente.get(Cliente.cpfCliente == clienteAInserir.cpfCliente)
-                            listaContribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=self.cliente.clienteId)['contribuicoes']
-                            listaRemuneracoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=self.cliente.clienteId)['remuneracoes']
+                            contribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=self.cliente.clienteId)
+                            listaContribuicoes = contribuicoes['contribuicoes']
+                            listaRemuneracoes = contribuicoes['remuneracoes']
+                            cabecalho = contribuicoes['cabecalho']
+                            # print('\n\n===================================================')
+                            # print(contribuicoes['cabecalho'])
+                            # print(contribuicoes['cabecalhoBeneficio'])
+                            # print('===================================================\n\n')
 
                             CnisContribuicoes.insert_many(listaContribuicoes).on_conflict_replace().execute()
                             CnisRemuneracoes.insert_many(listaRemuneracoes).on_conflict_replace().execute()
+                            CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
 
                             self.cliente.telefoneId = Telefones.get_by_id(self.cliente)
+                            transaction.commit()
                         except Cliente.DoesNotExist:
                             self.showPopupAlerta('Erro ao inserir cliente.')
                             return False
                         except Telefones.DoesNotExist:
                             self.cliente.telefoneId = Telefones()
+                            transaction.commit()
+                        except Exception as err:
+                            erro = f"carregaCnis: ({type(err)}) {err}"
+                            self.showPopupAlerta('Erro ao inserir cliente.', erro=erro)
+                            self.limpaTudo()
+                            return False
 
-                    self.limpaTudo()
-                    self.carregaClienteNaTela(cliente=self.cliente)
-                    if self.cliente.numero is None:
-                        self.cliente.numero = 0
+                self.limpaTudo()
+                self.carregaClienteNaTela(cliente=self.cliente)
+                if self.cliente.numero is None:
+                    self.cliente.numero = 0
 
-                except Exception as erro:
-                    print(f'carregaCnis - erro: ({type(erro)}) {erro}')
+            except Exception as erro:
+                print(f'carregaCnis - erro: ({type(erro)}) {erro}')
 
     def buscaClienteJaCadastrado(self) -> bool:
         cliente: Cliente = Cliente.select().where(Cliente.nit == self.cliente.nit).get()
@@ -629,12 +644,14 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                 self.sbCdCliente.setValue(0)
                 self.sbCdCliente.clear()
 
-    def showPopupAlerta(self, mensagem, titulo='Atenção!'):
+    def showPopupAlerta(self, mensagem, titulo: str = 'Atenção!', erro: str = None):
         dialogPopup = QMessageBox()
         dialogPopup.setWindowTitle(titulo)
         dialogPopup.setText(mensagem)
         dialogPopup.setIcon(QMessageBox.Warning)
         dialogPopup.setStandardButtons(QMessageBox.Ok)
+        if erro is not None:
+            dialogPopup.setInformativeText(erro)
 
         close = dialogPopup.exec_()
 
@@ -679,7 +696,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.tblClientes.showRow(linha)
 
     def verificaDados(self):
-        if self.cliente.estado is None or self.cliente.estado == '':
+        if self.cliente is not None and (self.cliente.estado is None or self.cliente.estado == ''):
             self.cliente.estado = self.cbxEstado.currentText()
 
     def avaliaInfoPessoalCompleta(self) -> bool:

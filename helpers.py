@@ -425,14 +425,17 @@ def strToDatetime(data: str, tamanho: TamanhoData = TamanhoData.m):
 
 
 def strToDate(data: str):
-    dateFormats: List[str] = ['%Y-%m-%d', '%d/%m/%Y', '%m/%Y']
+    dateFormats: List[str] = ['%d/%m/%Y', '%m/%Y', '%Y-%m-%d']
 
     for formato in dateFormats:
         try:
             dataRetorno = datetime.datetime.strptime(data, formato).date()
             return dataRetorno
+        except ValueError:
+            pass
         except Exception as err:
-            print(f'strToDate: ({type(data)}) {data} - {err}')
+            print(f'strToDate: ({type(data)}) {data} - ({type(err)}) {err}')
+            raise
 
 
 def strToFloat(valor: str) -> float:

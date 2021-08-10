@@ -2,7 +2,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
 from Telas.tabTelAfins import Ui_wdgTelAfins
 
-from modelos.clienteModelo import ClienteModelo
+from modelos.clienteORM import Cliente
 from helpers import getTipoTelefone, getPessoalRecado, mascaraTelCel, getTipoTelefoneBySigla, getPessoalRecadoBySigla
 from heart.localStyleSheet.teleAfins import desabilita
 from modelos.telefonesORM import Telefones
@@ -10,7 +10,7 @@ from modelos.telefonesORM import Telefones
 
 class TelAfinsController(QMainWindow, Ui_wdgTelAfins):
 
-    def __init__(self, cliente: ClienteModelo, db=None, parent=None):
+    def __init__(self, cliente: Cliente, db=None, parent=None):
         super(TelAfinsController, self).__init__(parent)
         self.setupUi(self)
         self.db = db

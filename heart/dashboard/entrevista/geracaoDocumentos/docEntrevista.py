@@ -6,10 +6,10 @@ import datetime
 from docx.shared import Pt
 from docxtpl import DocxTemplate, InlineImage
 
-from modelos.clienteModelo import ClienteModelo
-from modelos.escritorioModelo import EscritorioModelo
-from modelos.advogadoModelo import AdvogadoModelo
-from modelos.processosModelo import ProcessosModelo
+from modelos.clienteORM import Cliente
+from modelos.escritoriosORM import Escritorios
+from modelos.advogadoORM import Advogados
+from modelos.processosORM import Processos
 from helpers import mascaraCep, mascaraTelCel, strTipoBeneficio, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG, strToDatetime, calculaDiaMesAno
 
 from cache.cachingLogin import CacheLogin
@@ -20,7 +20,7 @@ from newPrevEnums import NaturezaProcesso, TipoProcesso, TipoBeneficio, SubTipoA
 
 class DocEntrevista:
 
-    def __init__(self, procModel: ProcessosModelo, clientModel: ClienteModelo):
+    def __init__(self, procModel: Processos, clientModel: Cliente):
         self.cacheLogin = CacheLogin()
         self.cacheEscritorio = CacheEscritorio()
 
@@ -384,7 +384,7 @@ class DocEntrevista:
         self.dictInfo = {}
         self.nomeArquivoSaida = f'{self.cliente.clienteId}'
 
-    def getAdvogado(self) -> AdvogadoModelo:
+    def getAdvogado(self) -> Advogados:
         adv = self.cacheLogin.carregarCache()
         if not adv:
             return self.cacheLogin.carregarCacheTemporario()
@@ -398,7 +398,7 @@ class DocEntrevista:
         else:
             return self.escritorio.cidade
 
-    def getEscritorio(self) -> EscritorioModelo:
+    def getEscritorio(self) -> Escritorios:
         escritorio = self.cacheEscritorio.carregarCache()
         if not escritorio:
             return self.cacheEscritorio.carregarCacheTemporario()
@@ -407,7 +407,7 @@ class DocEntrevista:
 
 if __name__ == '__main__':
     import sys
-    processo = ProcessosModelo()
+    processo = Processos()
     processo.tipoProcesso = 2
     processo.tipoBeneficio = 3
     processo.natureza = 2
@@ -421,7 +421,7 @@ if __name__ == '__main__':
     processo.dataCadastro = datetime.datetime.now()
     processo.dataUltAlt = datetime.datetime.now()
 
-    cliente = ClienteModelo()
+    cliente = Cliente()
     cliente.nomeCliente = 'Fulano'
     cliente.sobrenomeCliente = 'de Tal'
     cliente.numero = '12'
@@ -437,7 +437,6 @@ if __name__ == '__main__':
     cliente.nomeCliente = 'Fulano'
     cliente.nomeCliente = 'Fulano'
 
-
     docClass = DocEntrevista(
-        ProcessosModelo()
+        Processos()
     )

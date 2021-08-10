@@ -7,7 +7,7 @@ from playhouse.shortcuts import model_to_dict
 
 from modelos.escritoriosORM import Escritorios
 from newPrevEnums import *
-from modelos.escritorioModelo import EscritorioModelo
+from modelos.escritoriosORM import Escritorios
 
 
 class CacheEscritorio:
@@ -41,21 +41,21 @@ class CacheEscritorio:
         else:
             return Escritorios()
 
-    def carregarCacheTemporario(self) -> EscritorioModelo:
+    def carregarCacheTemporario(self) -> Escritorios:
         if '.escritorio.temp.txt' in os.listdir(self.pathCache):
             with open(self.pathEscritorioTempTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
-                return EscritorioModelo().fromDict(advJson)
+                return Escritorios().fromDict(advJson)
 
         else:
-            return EscritorioModelo()
+            return Escritorios()
 
     def limpaTemporarios(self):
         for temp in os.listdir(self.pathCache):
             if temp.endswith('escritorio.temp.txt'):
                 os.remove(os.path.join(self.pathCache, temp))
 
-    def salvarCacheTemporario(self, escritorio: EscritorioModelo) -> bool:
+    def salvarCacheTemporario(self, escritorio: Escritorios) -> bool:
         jsonAdv = json.dumps(escritorio.toDict())
 
         try:

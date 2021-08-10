@@ -7,7 +7,6 @@ from newPrevEnums import *
 
 from modelos.advogadoORM import Advogados
 from modelos.escritoriosORM import Escritorios
-from modelos.advogadoModelo import AdvogadoModelo
 from modelos.Auth.ClientAuthModelo import ClientAuthModelo
 from repositorios.escritorioRepositorio import EscritorioRepositorio
 
@@ -182,7 +181,7 @@ class UsuarioRepository:
             logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante)
             return None
 
-    def loginAuthFromCache(self, advogado: AdvogadoModelo) -> bool:
+    def loginAuthFromCache(self, advogado: Advogados) -> bool:
         url: str = self.baseUrl + f'advogados/auth/{advogado.numeroOAB}'
 
         try:

@@ -7,32 +7,31 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 from Daos.daoCalculos import DaoCalculos
-from Daos.daoFerramentas import DaoFerramentas
 from Telas.insereContrib import Ui_mwInsereContrib
 from heart.localStyleSheet.insereContribuicao import habilita, habilitaBotao
 from heart.informacoesTelas.indicadoresTela import IndicadoresController
 from helpers import dictEspecies, mascaraNit, strToFloat, situacaoBeneficio, strToDatetime
-from modelos.beneficiosModelo import BeneficiosModelo
-from modelos.clienteModelo import ClienteModelo
-from modelos.contribuicoesModelo import ContribuicoesModelo
-from modelos.remuneracaoModelo import RemuneracoesModelo
+from modelos.beneficiosORM import CnisBeneficios
+from modelos.clienteORM import Cliente
+from modelos.contribuicoesORM import CnisContribuicoes
+from modelos.remuneracaoORM import CnisRemuneracoes
+from modelos.convMonORM import ConvMon
 from newPrevEnums import TipoContribuicao, TamanhoData
 
 
 class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
 
-    def __init__(self, parent=None, db=None, cliente: ClienteModelo = None, contribuicaoId: int = 0, tipo: TipoContribuicao = TipoContribuicao.contribuicao):
+    def __init__(self, parent=None, db=None, cliente: Cliente = None, contribuicaoId: int = 0, tipo: TipoContribuicao = TipoContribuicao.contribuicao):
         super(InsereContribuicaoPage, self).__init__(parent=parent)
         self.setupUi(self)
         self.tabCalculos = parent
         self.daoCalculos = DaoCalculos(db=db)
-        self.daoFerramentas = DaoFerramentas(db=db)
         self.indicadoresContrib = []
         self.db = db
         self.cliente = cliente
-        self.remuneracao = RemuneracoesModelo()
-        self.contribuicao = ContribuicoesModelo()
-        self.beneficio = BeneficiosModelo()
+        self.remuneracao = CnisRemuneracoes()
+        self.contribuicao = CnisContribuicoes()
+        self.beneficio = CnisBeneficios()
         self.listaConvMon: list
         self.indicadoresPg = None
 
@@ -64,7 +63,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.leSalContribuicao.textChanged.connect(lambda: self.getInfo(info='leSalContribuicao'))
         self.leNb.textChanged.connect(lambda: self.getInfo(info='leNb'))
 
-        self.listaConvMon = self.carregaConvMons()
+        self.listaConvMon = ConvMon.select()
 
         self.atualizaFoco()
         self.carregaQtdsRemCont()
@@ -89,15 +88,15 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
     def buscaContribuicao(self, contribuicaoId: int, tipo: TipoContribuicao):
 
         if tipo == TipoContribuicao.contribuicao:
-            contribuicao: ContribuicoesModelo = self.daoCalculos.buscaContribuicaoPorId(contribuicaoId)
+            contribuicao: CnisContribuicoes = self.daoCalculos.buscaContribuicaoPorId(contribuicaoId)
             self.mostraInfoTela(contribuicao, TipoContribuicao.contribuicao)
 
         elif tipo == TipoContribuicao.remuneracao:
-            contribuicao: RemuneracoesModelo = self.daoCalculos.buscaRemuneracaoPorId(contribuicaoId)
+            contribuicao: CnisRemuneracoes = self.daoCalculos.buscaRemuneracaoPorId(contribuicaoId)
             self.mostraInfoTela(contribuicao, TipoContribuicao.remuneracao)
 
         elif tipo == TipoContribuicao.beneficio:
-            contribuicao: BeneficiosModelo = self.daoCalculos.buscaBeneficioPorId(contribuicaoId)
+            contribuicao: CnisBeneficios = self.daoCalculos.buscaBeneficioPorId(contribuicaoId)
             self.mostraInfoTela(contribuicao, TipoContribuicao.beneficio)
 
     def mostraInfoTela(self, contribuicao, tipoContribuicao: TipoContribuicao):
@@ -125,7 +124,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             self.dtFim.setDate(dataFim)
 
     def defineSinalMonetario(self, contribuicao):
-        if isinstance(contribuicao, ContribuicoesModelo) or isinstance(contribuicao, RemuneracoesModelo):
+        if isinstance(contribuicao, CnisContribuicoes) or isinstance(contribuicao, CnisRemuneracoes):
             competencia: datetime = strToDatetime(contribuicao.competencia, TamanhoData.gg)
             for moeda in self.listaConvMon:
                 if moeda.dataInicial <= competencia <= moeda.dataFinal:
@@ -139,9 +138,6 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         else:
             self.lbRepetirAte.hide()
             self.dtRepetir.hide()
-
-    def carregaConvMons(self) -> list:
-        return self.daoFerramentas.getAllMoedas(retornaModelos=True)
 
     def carregaComboBoxes(self):
         listaSinaisMonetarios: set = {moeda.sinal for moeda in self.listaConvMon}
@@ -250,12 +246,12 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
 
         self.loading(20)
 
-    def geraContribsRecorrente(self) -> List[ContribuicoesModelo]:
+    def geraContribsRecorrente(self) -> List[CnisContribuicoes]:
         difMeses: int = floor((self.dtRepetir.date().toPyDate() - self.dtCompetencia.date().toPyDate()).days/30)
-        listaContribuicoes: List[ContribuicoesModelo] = []
+        listaContribuicoes: List[CnisContribuicoes] = []
 
         for mes in range(0, difMeses+1):
-            novaContrib = ContribuicoesModelo()
+            novaContrib = CnisContribuicoes()
             novaContrib.clienteId = self.contribuicao.clienteId
             novaContrib.contribuicao = self.contribuicao.contribuicao
             novaContrib.seq = self.contribuicao.seq

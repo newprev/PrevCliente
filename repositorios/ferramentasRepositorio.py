@@ -1,7 +1,7 @@
 import requests
 
 from logs import logPrioridade, TipoEdicao, Prioridade
-from modelos.convMonModelo import ConvMonModelo
+from modelos.convMonORM import ConvMon
 from modelos.tetosPrevORM import TetosPrev
 
 

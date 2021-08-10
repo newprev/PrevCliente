@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QVBoxLayout
 from Daos.daoInformacoes import DaoInformacoes
 from Telas.pgInfoIndicadores import Ui_mwInfoIndicadores
 from heart.sinaisCustomizados import Sinais
-from modelos.indicadorModelo import IndicadorModelo
+from modelos.indicadoresORM import Indicadores
 from heart.informacoesTelas.localWidgets.wdgIndicadorController import WdgIndicadorController
 
 
@@ -49,17 +49,18 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
         self.scaIndicadores.setLayout(self.indicadoresVLayout)
 
     def carregaIndicadores(self):
-        self.indicadores = list(self.daoInformacoes.buscaIndicadores())
+        # self.indicadores = list(self.daoInformacoes.buscaIndicadores())
+        self.indicadores = Indicadores.sele
 
     def alteraIndicador(self, indicadorId: str):
-        indicadorAtual: IndicadorModelo = self.returnIndicador(indicadorId)
+        indicadorAtual: Indicadores = self.returnIndicador(indicadorId)
         self.lbSigla.setText(indicadorAtual.indicadorId)
         self.lbDescricao.setText(indicadorAtual.descricao)
         self.lbResumo.setText(indicadorAtual.resumo)
         self.lbFonte.setText(f"Fonte: {indicadorAtual.fonte}")
 
     def returnIndicador(self, indicadorId: str):
-        for indicador in self.indicadores:
+        for indicador in Indicadores.indicadores:
             if indicador.indicadorId == indicadorId:
                 return indicador
 

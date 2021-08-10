@@ -2,8 +2,8 @@ import requests
 from typing import List
 
 from logs import logPrioridade, TipoEdicao, Prioridade
-from modelos.indicadorModelo import IndicadorModelo
-from modelos.expSobrevidaModelo import ExpectativaSobrevidaModelo
+from modelos.indicadoresORM import Indicadores
+from modelos.expSobrevidaORM import ExpSobrevida
 
 
 class ApiInformacoes:

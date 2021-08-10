@@ -70,7 +70,7 @@ class CNISModelo:
         self.dictCabecalhoBeneficio = {
             'seq': [],
             'nit': [],
-            'NB': [],
+            'nb': [],
             'orgVinculo': [],
             'especie': [],
             'dataInicio': [],
@@ -85,7 +85,7 @@ class CNISModelo:
             'nomeMae': None
         }
 
-        self.pathCnis = path
+        self.pathCnis: str = path
 
     def carregaDoc(self, path: str):
         self.documento = PdfFileReader(open(path, 'rb'))
@@ -229,7 +229,7 @@ class CNISModelo:
                     self.dictCabecalhoBeneficio['nit'].append(documentoLinhas[j])
                     nit = True
                 elif re.fullmatch(self.expRegNB, documentoLinhas[j]) is not None:
-                    self.dictCabecalhoBeneficio['NB'].append(documentoLinhas[j])
+                    self.dictCabecalhoBeneficio['nb'].append(documentoLinhas[j])
                     nb = True
                 elif re.match(self.expRegNomeEmp, documentoLinhas[j]) is not None and documentoLinhas[j].lower() in self.situacoesPossiveis:
                     self.dictCabecalhoBeneficio['situacao'].append(documentoLinhas[j])
@@ -266,7 +266,7 @@ class CNISModelo:
         if not nit:
             self.dictCabecalhoBeneficio['nit'].append('')
         if not nb:
-            self.dictCabecalhoBeneficio['NB'].append('')
+            self.dictCabecalhoBeneficio['nb'].append('')
         if not orgVinculo:
             self.dictCabecalhoBeneficio['orgVinculo'].append('')
         if not especie:
@@ -343,7 +343,7 @@ class CNISModelo:
 
         while blocoRemuneracoes:
 
-            if re.fullmatch(self.expRegData, documentoLinhas[pos]) != None:
+            if re.fullmatch(self.expRegData, documentoLinhas[pos]) is not None:
                 self.dictRemuneracoes['competencia'].append(documentoLinhas[pos])
                 contSeq += 1
             elif documentoLinhas[pos][0].isnumeric():
@@ -425,7 +425,7 @@ class CNISModelo:
         df = self.gerarDataframe(informacao=informacao)
         df.to_csv(path)
 
-    def buscaPath(self):
+    def buscaPath(self) -> str:
         home = str(Path.home())
         pathAux = None
 
@@ -461,7 +461,7 @@ class CNISModelo:
         if toInsert:
             return {
                 'cabecalho': self.organizaParaInserir(self.dictCabecalho, clienteId),
-                'cabecalhoBeneficio': self.dictCabecalhoBeneficio,
+                'cabecalhoBeneficio': self.organizaParaInserir(self.dictCabecalhoBeneficio, clienteId),
                 'remuneracoes': self.organizaParaInserir(self.dictRemuneracoes, clienteId),
                 'contribuicoes': self.organizaParaInserir(self.dictContribuicoes, clienteId)
             }

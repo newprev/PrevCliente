@@ -20,9 +20,9 @@ from heart.sinaisCustomizados import Sinais
 # from Daos.daoCliente import DaoCliente
 from Daos.daoCalculos import DaoCalculos
 
-from modelos.cabecalhoModelo import CabecalhoModelo
+from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.processosORM import Processos
-from modelos.clienteModelo import ClienteModelo
+from modelos.clienteORM import Cliente
 
 from processos.aposentadoria import CalculosAposentadoria
 
@@ -40,7 +40,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.parent = parent
         self.sinais = Sinais()
         self.telaAtual = MomentoEntrevista.cadastro
-        self.clienteAtual = ClienteModelo()
+        self.clienteAtual = Cliente()
         # self.daoProcesso = DaoProcessos(db=db)
         # self.daoCliente = DaoCliente(db=db)
         self.processoModelo = Processos()
@@ -304,7 +304,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.frInfo4Icon.setStyleSheet(estadoInfoFinalizado('bancarias', estadoEntrevista['bancarias']))
 
     def atualizaCliente(self, *args):
-        self.clienteAtual: ClienteModelo = args[0]
+        self.clienteAtual: Cliente = args[0]
 
     def calculaDer(self) -> datetime:
         if self.processoModelo.natureza == NaturezaProcesso.administrativo.value:

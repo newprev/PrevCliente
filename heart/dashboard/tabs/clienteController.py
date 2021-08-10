@@ -15,6 +15,7 @@ from modelos.clienteORM import Cliente
 from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.remuneracaoORM import CnisRemuneracoes
 from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.beneficiosORM import CnisBeneficios
 from modelos.escritoriosORM import Escritorios
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
@@ -204,7 +205,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
     def carregaCnis(self):
         # TODO: Alterar o nome do banco de um texto puro, para uma variável global ou carregá-la de algum arquivo
 
-        self.cnisClienteAtual = CNISModelo()
+        self.cnisClienteAtual: CNISModelo = CNISModelo()
         self.cliente.pathCnis = self.cnisClienteAtual.buscaPath()
         db: SqliteDatabase = Cliente._meta.database
 
@@ -235,25 +236,28 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                             listaContribuicoes = contribuicoes['contribuicoes']
                             listaRemuneracoes = contribuicoes['remuneracoes']
                             cabecalho = contribuicoes['cabecalho']
-                            # print('\n\n===================================================')
-                            # print(contribuicoes['cabecalho'])
-                            # print(contribuicoes['cabecalhoBeneficio'])
-                            # print('===================================================\n\n')
+                            beneficios = contribuicoes['cabecalhoBeneficio']
+
+                            for ben in beneficios:
+                                print(ben)
 
                             CnisContribuicoes.insert_many(listaContribuicoes).on_conflict_replace().execute()
                             CnisRemuneracoes.insert_many(listaRemuneracoes).on_conflict_replace().execute()
-                            CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
+                            CnisCabecalhos.insert_many(cabecalho + beneficios).on_conflict_replace().execute()
+                            CnisBeneficios.insert_many(beneficios).on_conflict_replace().execute()
 
                             self.cliente.telefoneId = Telefones.get_by_id(self.cliente)
                             transaction.commit()
                         except Cliente.DoesNotExist:
                             self.showPopupAlerta('Erro ao inserir cliente.')
+                            transaction.rollback()
                             return False
                         except Telefones.DoesNotExist:
                             self.cliente.telefoneId = Telefones()
                             transaction.commit()
                         except Exception as err:
                             erro = f"carregaCnis: ({type(err)}) {err}"
+                            transaction.rollback()
                             self.showPopupAlerta('Erro ao inserir cliente.', erro=erro)
                             self.limpaTudo()
                             return False

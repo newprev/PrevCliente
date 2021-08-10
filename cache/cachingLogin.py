@@ -2,7 +2,6 @@ import os
 import json
 
 from helpers import pyToDefault
-from modelos.advogadoModelo import AdvogadoModelo
 from modelos.advogadoORM import Advogados
 from playhouse.shortcuts import model_to_dict, dict_to_model
 
@@ -48,7 +47,7 @@ class CacheLogin:
             if temp.endswith('temp.txt'):
                 os.remove(os.path.join(self.pathCache, temp))
 
-    def salvarCacheTemporario(self, advogado: AdvogadoModelo) -> bool:
+    def salvarCacheTemporario(self, advogado: Advogados) -> bool:
         jsonAdv = json.dumps(advogado.toDict())
 
         try:

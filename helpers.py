@@ -331,6 +331,13 @@ def mascaraDataPequena(data: datetime.date):
     return f'{data.month}/{data.year}'
 
 
+def dataUSAtoBR(dataUSA: str, comDias: bool = False) -> str:
+    if comDias:
+        return f"{dataUSA[8:]}/{dataUSA[5:7]}/{dataUSA[:5]}"
+    else:
+        return f"{dataUSA[5:7]}/{dataUSA[:4]}"
+
+
 def mascaraDinheiro(valor: float, simbolo: str = 'R$'):
     strValor = str(valor).replace('.', ',')
     pointPosition = strValor.find(",") - 3

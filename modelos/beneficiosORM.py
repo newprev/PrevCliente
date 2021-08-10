@@ -19,6 +19,7 @@ class CnisBeneficios(BaseModel, Model):
     dataFim = DateField(column_name='dataFim', formats=DATEFORMATS)
     dataInicio = DateField(column_name='dataInicio', formats=DATEFORMATS)
     dataUltAlt = DateTimeField(column_name='dataUltAlt')
+    nit = CharField(column_name='nit')
     especie = CharField()
     nb = BigIntegerField()
     seq = IntegerField()

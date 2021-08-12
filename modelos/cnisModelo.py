@@ -48,6 +48,12 @@ class CNISModelo:
             'competencia': [],
             'indicadores': []
         }
+        self.dictBeneficios = {
+            'seq': [],
+            'remuneracao': [],
+            'competencia': [],
+            'indicadores': []
+        }
         self.dictContribuicoes = {
             'seq': [],
             'competencia': [],
@@ -96,6 +102,7 @@ class CNISModelo:
         for pg in range(self.qtdPaginas):
             blocoRemuneracoes = False
             blocoContribuicoes = False
+            blocoBeneficio = False
             pos = 0
 
             documentoLinhas = self.documento.getPage(pg).extractText().split('\n')
@@ -110,6 +117,14 @@ class CNISModelo:
                 if documentoLinhas[pos] == 'Contribuições':
                     blocoContribuicoes = True
                     blocoRemuneracoes = False
+                if blocoBeneficio:
+                    blocoContribuicoes = False
+                    blocoRemuneracoes = False
+
+                print(f'\n----------------------------------------')
+                print(f'blocoRemuneracoes: {blocoRemuneracoes}')
+                print(f'blocoContribuicoes: {blocoContribuicoes}')
+                print(f'blocoBeneficio: {blocoBeneficio}')
 
                 if blocoContribuicoes and documentoLinhas[pos] != 'Contribuições':
                     pos = self.extrairContribuicoes(documentoLinhas, pos)
@@ -119,16 +134,20 @@ class CNISModelo:
                     pos = self.extrairRemueracoes(documentoLinhas, pos)
                     blocoRemuneracoes = False
 
+                elif blocoBeneficio:
+                    pos = self.extrairBeneficios(documentoLinhas, pos)
+                    blocoBeneficio = False
+
                 elif documentoLinhas[pos] == 'Seq.':
-                    pos = self.trataExtrairCabecalhos(documentoLinhas, pos)
+                    pos, blocoBeneficio = self.trataExtrairCabecalhos(documentoLinhas, pos)
 
                 pos += 1
 
     def trataExtrairCabecalhos(self, documentoLinhas, posInicio):
         if any(filter(lambda item: re.fullmatch(self.expRegNB, item), documentoLinhas[posInicio:posInicio+16])):
-            return self.extrairCabecalhosBeneficio(documentoLinhas, posInicio)
+            return self.extrairCabecalhosBeneficio(documentoLinhas, posInicio), True
         else:
-            return self.extrairCabecalhosPadrao(documentoLinhas, posInicio)
+            return self.extrairCabecalhosPadrao(documentoLinhas, posInicio), False
 
     def extrairCabecalhosPadrao(self, documentoLinhas, posInicio):
 
@@ -338,8 +357,8 @@ class CNISModelo:
 
         blocoRemuneracoes = True
         pos = posInicio
-        seq = self.dictCabecalho['seq'][-1]
         contSeq = 0
+        seq = self.dictCabecalho['seq'][-1]
 
         while blocoRemuneracoes:
 
@@ -376,6 +395,50 @@ class CNISModelo:
         # Adiciona o Seq de cada contribuição no dicionário de contribuições
         for i in range(contSeq):
             self.dictRemuneracoes['seq'].append(seq)
+        return pos
+
+    def extrairBeneficios(self, documentoLinhas, posInicio):
+
+        blocoBeneficio = True
+        pos = posInicio
+        contSeq = 0
+        seq = self.dictCabecalhoBeneficio['seq'][-1]
+
+        while blocoBeneficio:
+
+            if re.fullmatch(self.expRegData, documentoLinhas[pos]) is not None:
+                self.dictBeneficios['competencia'].append(documentoLinhas[pos])
+                contSeq += 1
+            elif documentoLinhas[pos][0].isnumeric():
+                self.dictBeneficios['remuneracao'].append(strToFloat(documentoLinhas[pos]))
+                if documentoLinhas[pos + 1].split(',')[0] not in self.dictIndicadores.keys():
+                    self.dictBeneficios['indicadores'].append('')
+                    if not documentoLinhas[pos + 1][0].isnumeric():
+                        blocoBeneficio = False
+            elif documentoLinhas[pos].split(',')[0] in self.dictIndicadores.keys():
+                indicadores = (documentoLinhas[pos] + documentoLinhas[pos + 1]).split(',')
+
+                if indicadores[0].strip() in self.dictIndicadores.keys():
+                    if indicadores[1].strip() in self.dictIndicadores.keys():
+                        self.dictBeneficios['indicadores'].append(
+                            documentoLinhas[pos] + documentoLinhas[pos + 1])
+                        documentoLinhas[pos + 1] = 'pula'
+                    else:
+                        self.dictBeneficios['indicadores'].append(documentoLinhas[pos])
+                        if re.fullmatch(self.expRegData, documentoLinhas[pos + 1]) is None:
+                            blocoBeneficio = False
+                else:
+                    self.dictBeneficios['indicadores'].append(documentoLinhas[pos])
+            elif documentoLinhas[pos] == 'pula':
+                pass
+            else:
+                blocoBeneficio = False
+
+            pos += 1
+
+        # Adiciona o Seq de cada contribuição no dicionário de contribuições
+        for i in range(contSeq):
+            self.dictBeneficios['seq'].append(seq)
         return pos
 
     def extraiDadosPessoais(self, documentoLinhas: str):
@@ -463,14 +526,16 @@ class CNISModelo:
                 'cabecalho': self.organizaParaInserir(self.dictCabecalho, clienteId),
                 'cabecalhoBeneficio': self.organizaParaInserir(self.dictCabecalhoBeneficio, clienteId),
                 'remuneracoes': self.organizaParaInserir(self.dictRemuneracoes, clienteId),
-                'contribuicoes': self.organizaParaInserir(self.dictContribuicoes, clienteId)
+                'contribuicoes': self.organizaParaInserir(self.dictContribuicoes, clienteId),
+                'beneficios': self.organizaParaInserir(self.dictBeneficios, clienteId),
             }
         else:
             return {
                 'cabecalho': self.dictCabecalho,
                 'cabecalhoBeneficio': self.dictCabecalhoBeneficio,
                 'remuneracoes': self.dictRemuneracoes,
-                'contribuicoes': self.dictContribuicoes
+                'contribuicoes': self.dictContribuicoes,
+                'beneficios': self.dictBeneficios
             }
 
     def verificaSalario(self, salario: str):

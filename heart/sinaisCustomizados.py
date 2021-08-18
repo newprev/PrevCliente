@@ -12,3 +12,5 @@ class Sinais(QObject):
     sTrocaInfoLateral = QtCore.pyqtSignal(dict, name='infoLateral')
     sEnviaCliente = QtCore.pyqtSignal(name='enviaCliente')
     sBuscaCliente = QtCore.pyqtSignal(name='buscaCliente')
+    sEnviaIndicadores = QtCore.pyqtSignal(list, name='enviaIndicador')
+    sAtualizaListaClientes = QtCore.pyqtSignal(name='atualizaListaClientes')

@@ -1,5 +1,8 @@
 import datetime
 
+from helpers import strToDatetime
+from newPrevEnums import TamanhoData
+
 
 class RemuneracoesModelo:
 
@@ -44,7 +47,7 @@ class RemuneracoesModelo:
         self.remuneracoesId = listRemuneracoes[0]
         self.clienteId = listRemuneracoes[1]
         self.seq = listRemuneracoes[2]
-        self.competencia = listRemuneracoes[3]
+        self.competencia = strToDatetime(listRemuneracoes[3], TamanhoData.gg)
         self.remuneracao = listRemuneracoes[4]
         self.indicadores = listRemuneracoes[5]
         self.dadoOrigem = listRemuneracoes[6]

@@ -1,6 +1,5 @@
 import re
 import pandas as pd
-import os
 from pathlib import Path
 
 from PyPDF3 import PdfFileReader
@@ -41,7 +40,7 @@ class CNISModelo:
 
         self.qtdPaginas = 0
 
-        self.dictIndicadores = dictIndicadores
+        self.dictIndicadores: dict = dictIndicadores
         self.dictRemuneracoes = {
             'Seq': [],
             'remuneracao': [],
@@ -155,6 +154,10 @@ class CNISModelo:
                 elif re.fullmatch(self.expRegCNPJ, documentoLinhas[j]) is not None:
                     self.dictCabecalho['cdEmp'].append(documentoLinhas[j])
                     cdEmp = True
+                # elif documentoLinhas[j] in self.dictIndicadores.keys():
+                elif self.isIndicador(documentoLinhas[j]):
+                    self.dictCabecalho['indicadores'].append(documentoLinhas[j])
+                    indicadores = True
                 elif re.match(self.expRegNomeEmp, documentoLinhas[j]) is not None and documentoLinhas[j]:
                     nomeEmp += documentoLinhas[j]
                     orgVinculo = True
@@ -447,6 +450,12 @@ class CNISModelo:
             return pd.DataFrame.from_dict(self.dictDadosPessoais, orient='index', columns=['Descrição'])
         else:
             return self.dictDadosPessoais
+
+    def isIndicador(self, info: str) -> bool:
+        if ',' in info:
+            return info[:info.find(',')] in self.dictIndicadores.keys()
+        else:
+            return info in self.dictIndicadores.keys()
 
     def getAllDict(self) -> dict:
         recolhimentos = {

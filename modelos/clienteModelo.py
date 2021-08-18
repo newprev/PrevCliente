@@ -1,4 +1,7 @@
 import datetime
+
+from helpers import strToDatetime
+from newPrevEnums import TamanhoData
 from .telefoneModelo import TelefoneModelo
 
 
@@ -78,7 +81,7 @@ class ClienteModelo:
         self.sobrenomeCliente = dictCliente['sobrenomeCliente']
         self.genero = dictCliente['genero']
         self.idade = dictCliente['idade']
-        self.dataNascimento = dictCliente['dataNascimento']
+        self.dataNascimento = strToDatetime(dictCliente['dataNascimento'], TamanhoData.gg)
         self.email = dictCliente['email']
         self.rgCliente = dictCliente['rgCliente']
         self.cpfCliente = dictCliente['cpfCliente']
@@ -113,7 +116,7 @@ class ClienteModelo:
                 self.sobrenomeCliente = listCliente[3]
                 self.genero = listCliente[4]
                 self.idade = listCliente[5]
-                self.dataNascimento = listCliente[6]
+                self.dataNascimento = strToDatetime(listCliente[6], TamanhoData.gg)
                 self.email = listCliente[7]
                 self.rgCliente = listCliente[8]
                 self.cpfCliente = listCliente[9]

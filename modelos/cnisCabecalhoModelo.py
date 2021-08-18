@@ -23,6 +23,7 @@ class CabecalhoModelo:
         self.ultRem: datetime = None
         self.dadoOrigem: str = None
         self.situacao: str = None
+        self.dadoFaltante: bool = False
         self.dataCadastro: datetime = None
         self.dataUltAlt: datetime = None
 
@@ -44,6 +45,7 @@ class CabecalhoModelo:
             'ultRem': self.ultRem,
             'dadoOrigem': self.dadoOrigem,
             'situacao': self.situacao,
+            'dadoFaltante': self.dadoFaltante,
             'dataCadastro': self.dataCadastro,
             'dataUltAlt': self.dataUltAlt
         }
@@ -66,6 +68,7 @@ class CabecalhoModelo:
         self.ultRem = dictCabecalho['ultRem']
         self.dadoOrigem = dictCabecalho['dadoOrigem']
         self.situacao = dictCabecalho['situacao']
+        self.dadoFaltante = dictCabecalho['dadoFaltante']
         self.dataCadastro = dictCabecalho['dataCadastro']
         self.dataUltAlt = dictCabecalho['dataUltAlt']
 
@@ -100,8 +103,9 @@ class CabecalhoModelo:
 
         self.dadoOrigem = listCabecalho[14]
         self.situacao = listCabecalho[15]
-        self.dataCadastro = strToDatetime(listCabecalho[16], tamanho=TamanhoData.g)
-        self.dataUltAlt = strToDatetime(listCabecalho[17], tamanho=TamanhoData.g)
+        self.dadoFaltante = listCabecalho[16]
+        self.dataCadastro = strToDatetime(listCabecalho[17], tamanho=TamanhoData.g)
+        self.dataUltAlt = strToDatetime(listCabecalho[18], tamanho=TamanhoData.g)
 
         if retornaInst:
             return self
@@ -124,6 +128,7 @@ class CabecalhoModelo:
             ultRem: {self.ultRem},
             dadoOrigem: {self.dadoOrigem},
             situacao: {self.situacao},
+            dadoFaltante: {self.dadoFaltante},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}
             """

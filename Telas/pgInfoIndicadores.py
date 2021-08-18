@@ -51,6 +51,33 @@ class Ui_mwInfoIndicadores(object):
 "    font: bold 14px;\n"
 "    \n"
 "    background-color: transparent;\n"
+"}\n"
+"\n"
+"/* ----------------------------------------------- ScrollArea ----------------------------------------------- */\n"
+"\n"
+"#scaIndicadores {\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"/* --------------------------------------------- Push Button --------------------------------------------- */\n"
+"\n"
+"#pbEnviar {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"/*    background-color: rgb(52, 73, 94);*/\n"
+"    background-color: rgb(92, 53, 102);\n"
+"}\n"
+"\n"
+"#pbEnviar:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: rgb(72, 93, 114);\n"
 "}")
         self.wdgMain = QtWidgets.QWidget(mwInfoIndicadores)
         self.wdgMain.setObjectName("wdgMain")
@@ -63,6 +90,7 @@ class Ui_mwInfoIndicadores(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frMain)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.frCabecalho = QtWidgets.QFrame(self.frMain)
+        self.frCabecalho.setMinimumSize(QtCore.QSize(0, 60))
         self.frCabecalho.setMaximumSize(QtCore.QSize(16777215, 80))
         self.frCabecalho.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frCabecalho.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -75,18 +103,51 @@ class Ui_mwInfoIndicadores(object):
         self.lbSubtitulo.setObjectName("lbSubtitulo")
         self.verticalLayout_2.addWidget(self.frCabecalho)
         self.frConteudo = QtWidgets.QFrame(self.frMain)
+        self.frConteudo.setEnabled(True)
         self.frConteudo.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frConteudo.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frConteudo.setObjectName("frConteudo")
-        self.lbSiglaCbx = QtWidgets.QLabel(self.frConteudo)
-        self.lbSiglaCbx.setGeometry(QtCore.QRect(20, 10, 151, 17))
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.frConteudo)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.frame = QtWidgets.QFrame(self.frConteudo)
+        self.frame.setMaximumSize(QtCore.QSize(250, 16777215))
+        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.frame)
+        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_5.setSpacing(4)
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.lbSiglaCbx = QtWidgets.QLabel(self.frame)
         self.lbSiglaCbx.setObjectName("lbSiglaCbx")
-        self.cbxIndicadores = QtWidgets.QComboBox(self.frConteudo)
-        self.cbxIndicadores.setGeometry(QtCore.QRect(20, 30, 181, 25))
-        self.cbxIndicadores.setObjectName("cbxIndicadores")
-        self.frDescricao = QtWidgets.QFrame(self.frConteudo)
-        self.frDescricao.setGeometry(QtCore.QRect(260, 10, 480, 450))
-        self.frDescricao.setMinimumSize(QtCore.QSize(480, 450))
+        self.verticalLayout_5.addWidget(self.lbSiglaCbx)
+        self.scrollArea = QtWidgets.QScrollArea(self.frame)
+        self.scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scrollArea.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName("scrollArea")
+        self.scaIndicadores = QtWidgets.QWidget()
+        self.scaIndicadores.setGeometry(QtCore.QRect(0, 0, 242, 464))
+        self.scaIndicadores.setObjectName("scaIndicadores")
+        self.scrollArea.setWidget(self.scaIndicadores)
+        self.verticalLayout_5.addWidget(self.scrollArea)
+        self.horizontalLayout.addWidget(self.frame)
+        self.frame_2 = QtWidgets.QFrame(self.frConteudo)
+        self.frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_2.setObjectName("frame_2")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.frame_2)
+        self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_4.setSpacing(0)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.frame_3 = QtWidgets.QFrame(self.frame_2)
+        self.frame_3.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_3.setObjectName("frame_3")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.frame_3)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.frDescricao = QtWidgets.QFrame(self.frame_3)
+        self.frDescricao.setMinimumSize(QtCore.QSize(480, 420))
         self.frDescricao.setMaximumSize(QtCore.QSize(450, 450))
         self.frDescricao.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frDescricao.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -95,15 +156,18 @@ class Ui_mwInfoIndicadores(object):
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.lbSigla = QtWidgets.QLabel(self.frDescricao)
         self.lbSigla.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.lbSigla.setText("")
         self.lbSigla.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextSelectableByMouse)
         self.lbSigla.setObjectName("lbSigla")
         self.verticalLayout_3.addWidget(self.lbSigla)
         self.lbResumo = QtWidgets.QLabel(self.frDescricao)
         self.lbResumo.setMaximumSize(QtCore.QSize(16777215, 36))
+        self.lbResumo.setText("")
         self.lbResumo.setWordWrap(True)
         self.lbResumo.setObjectName("lbResumo")
         self.verticalLayout_3.addWidget(self.lbResumo)
         self.lbDescricao = QtWidgets.QLabel(self.frDescricao)
+        self.lbDescricao.setText("")
         self.lbDescricao.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.lbDescricao.setWordWrap(True)
         self.lbDescricao.setObjectName("lbDescricao")
@@ -115,6 +179,13 @@ class Ui_mwInfoIndicadores(object):
         self.lbFonte.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextSelectableByMouse)
         self.lbFonte.setObjectName("lbFonte")
         self.verticalLayout_3.addWidget(self.lbFonte)
+        self.verticalLayout_6.addWidget(self.frDescricao)
+        self.pbEnviar = QtWidgets.QPushButton(self.frame_3)
+        self.pbEnviar.setMinimumSize(QtCore.QSize(110, 24))
+        self.pbEnviar.setObjectName("pbEnviar")
+        self.verticalLayout_6.addWidget(self.pbEnviar, 0, QtCore.Qt.AlignRight)
+        self.verticalLayout_4.addWidget(self.frame_3)
+        self.horizontalLayout.addWidget(self.frame_2)
         self.verticalLayout_2.addWidget(self.frConteudo)
         self.verticalLayout.addWidget(self.frMain)
         mwInfoIndicadores.setCentralWidget(self.wdgMain)
@@ -127,11 +198,9 @@ class Ui_mwInfoIndicadores(object):
         mwInfoIndicadores.setWindowTitle(_translate("mwInfoIndicadores", "MainWindow"))
         self.lbTitulo.setText(_translate("mwInfoIndicadores", "Informações dos indicadores"))
         self.lbSubtitulo.setText(_translate("mwInfoIndicadores", "Encontre todas as informações dos indicadores do CNIS"))
-        self.lbSiglaCbx.setText(_translate("mwInfoIndicadores", "Siglas dos indicadores"))
-        self.lbSigla.setText(_translate("mwInfoIndicadores", "TextLabel"))
-        self.lbResumo.setText(_translate("mwInfoIndicadores", "TextLabel"))
-        self.lbDescricao.setText(_translate("mwInfoIndicadores", "TextLabel"))
+        self.lbSiglaCbx.setText(_translate("mwInfoIndicadores", "Escolha o(s) indicador(es)"))
         self.lbFonte.setText(_translate("mwInfoIndicadores", "TextLabel"))
+        self.pbEnviar.setText(_translate("mwInfoIndicadores", "Fechar / Enviar"))
 
 
 if __name__ == "__main__":

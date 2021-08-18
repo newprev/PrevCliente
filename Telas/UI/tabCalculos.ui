@@ -422,7 +422,7 @@ cliente</string>
         <rect>
          <x>420</x>
          <y>10</y>
-         <width>491</width>
+         <width>401</width>
          <height>81</height>
         </rect>
        </property>
@@ -458,19 +458,6 @@ cliente</string>
          <string>Documento:</string>
         </property>
        </widget>
-       <widget class="QLabel" name="lbInfoDibDer">
-        <property name="geometry">
-         <rect>
-          <x>350</x>
-          <y>10</y>
-          <width>51</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>DIB/DER:</string>
-        </property>
-       </widget>
        <widget class="QLabel" name="lbNome">
         <property name="geometry">
          <rect>
@@ -495,19 +482,6 @@ cliente</string>
         </property>
         <property name="text">
          <string/>
-        </property>
-       </widget>
-       <widget class="QLabel" name="lbDibDer">
-        <property name="geometry">
-         <rect>
-          <x>410</x>
-          <y>10</y>
-          <width>61</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>DIB/DER:</string>
         </property>
        </widget>
       </widget>
@@ -880,7 +854,7 @@ benefício</string>
         <rect>
          <x>420</x>
          <y>10</y>
-         <width>491</width>
+         <width>401</width>
          <height>81</height>
         </rect>
        </property>
@@ -916,19 +890,6 @@ benefício</string>
          <string>Documento:</string>
         </property>
        </widget>
-       <widget class="QLabel" name="lbInfoDibDerBen">
-        <property name="geometry">
-         <rect>
-          <x>350</x>
-          <y>10</y>
-          <width>51</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>DIB/DER:</string>
-        </property>
-       </widget>
        <widget class="QLabel" name="lbNomeBen">
         <property name="geometry">
          <rect>
@@ -953,19 +914,6 @@ benefício</string>
         </property>
         <property name="text">
          <string/>
-        </property>
-       </widget>
-       <widget class="QLabel" name="lbDibDerBen">
-        <property name="geometry">
-         <rect>
-          <x>410</x>
-          <y>10</y>
-          <width>61</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>DIB/DER:</string>
         </property>
        </widget>
       </widget>

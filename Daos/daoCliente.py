@@ -241,12 +241,18 @@ class DaoCliente:
                                 clienteId, seq, nit,
                                 cdEmp, nomeEmp, dataInicio,
                                 dataFim, tipoVinculo, indicadores, 
-                                ultRem, dadoOrigem, dataCadastro, 
+                                ultRem, dadoOrigem, dadoFaltante, dataCadastro, 
                                 dataUltAlt
                             )
                         VALUES """
 
             for i in range(0, len(cabecalhos['Seq'])):
+                temDataInicio = len(cabecalhos['dataInicio'][i]) != 0
+                temDataFim = len(cabecalhos['dataFim'][i]) != 0
+                temDataUltRem = len(cabecalhos['ultRem'][i]) != 0
+
+                dadoFaltante = not (temDataInicio and (temDataFim or temDataUltRem))
+
                 if i != 0:
                     strComando += ', '
                 strComando += f""" 
@@ -254,7 +260,7 @@ class DaoCliente:
                                 {clienteId}, {cabecalhos['Seq'][i]}, '{cabecalhos['nit'][i]}',
                                 '{cabecalhos['cdEmp'][i]}', '{cabecalhos['nomeEmp'][i]}', '{mascaraDataSql(cabecalhos['dataInicio'][i])}',
                                 '{mascaraDataSql(cabecalhos['dataFim'][i])}', '{cabecalhos['tipoVinculo'][i]}', '{cabecalhos['indicadores'][i]}',
-                                '{mascaraDataSql(cabecalhos['ultRem'][i], short=True)}', 'CNIS', '{datetimeToSql(datetime.now())}', 
+                                '{mascaraDataSql(cabecalhos['ultRem'][i], short=True)}', 'CNIS', {dadoFaltante}, '{datetimeToSql(datetime.now())}', 
                                 '{datetimeToSql(datetime.now())}'
                             )"""
 

@@ -19,7 +19,9 @@ dictIndicadores = {
     'IREC-INDPEND': 'Recolhimentos com indicadores e/ou pendências.',
     'IREC-LC123': 'Recolhimentos para fins da LC 123.',
     'IREC-LC123-SUP': 'Recolhimento / Complementação LC 123 superior ao salário mínimo.',
+    'IREM-ACD': 'Remuneração possui parcela de acordo, convenção ou dissídio coletivo',
     'PADM-EMPR': 'Inconsistência temporal, admissão anterior ao início da atividade do empregador.',
+    'PDT-NASC-FIL-INV': 'Idade do filiado menor que a permitida pela IN20 de outubro de 2007',
     'PEMP-CAD': 'Falta de informações cadastrais do CNPJ ou CEI.',
     'PEXT': 'Pendência de vínculo extemporâneo não tratado.',
     'PREC-COD1821': 'Recolhimento com código de pagamento 1821 – Mandato Eletivo.',
@@ -335,7 +337,7 @@ def mascaraDinheiro(valor: float, simbolo: str = 'R$'):
         return f"{simbolo} {strFinal}"
 
 
-def comparaMesAno(dataInicio: datetime, dataFim: datetime) -> int:
+def comparaMesAno(dataInicio: datetime, dataFim: datetime, comparacao: ComparaData) -> int:
     inicio = eliminaHoraDias(dataInicio)
     fim = eliminaHoraDias(dataFim)
 
@@ -344,12 +346,14 @@ def comparaMesAno(dataInicio: datetime, dataFim: datetime) -> int:
     if isinstance(fim, datetime.datetime):
         fim = fim.date()
 
-    if inicio == fim:
-        return 0
-    elif fim < inicio:
-        return -1
+    if comparacao == ComparaData.igual:
+        return inicio == fim
+    elif comparacao == ComparaData.posterior:
+        return inicio > fim
+    elif comparacao == ComparaData.anterior:
+        return inicio < fim
     else:
-        return 1
+        raise Exception()
 
 
 def calculaIdadeFromString(dataNascimento: str) -> int:

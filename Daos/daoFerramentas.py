@@ -58,8 +58,8 @@ class DaoFerramentas:
         except:
             raise Warning(f'Erro SQL - insereDictListaTetos({self.config.banco}) <INSERT {self.tabelas.tblTetosPrev}>')
         finally:
-            self.db.commit()
             self.disconectBD(cursor)
+            self.db.commit()
 
     def insereListaTetos(self, tetos: list, deletarTabela: bool = False):
 

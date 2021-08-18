@@ -130,3 +130,7 @@ class ComparaData(Enum):
     anterior = 0
     posterior = 1
     igual = 2
+
+class TipoIcone(Enum):
+    beneficio = 0
+    remuneracao = 1

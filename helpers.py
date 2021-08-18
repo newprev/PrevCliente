@@ -332,8 +332,10 @@ def mascaraDataPequena(data: datetime.date):
 
 
 def dataUSAtoBR(dataUSA: str, comDias: bool = False) -> str:
-    if comDias:
-        return f"{dataUSA[8:]}/{dataUSA[5:7]}/{dataUSA[:5]}"
+    if dataUSA == '':
+        return dataUSA
+    elif comDias:
+        return f"{dataUSA[8:]}/{dataUSA[5:7]}/{dataUSA[:4]}"
     else:
         return f"{dataUSA[5:7]}/{dataUSA[:4]}"
 

@@ -239,16 +239,14 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                             cabecalhoBeneficio = contribuicoes['cabecalhoBeneficio']
                             beneficios = contribuicoes['beneficios']
 
-                            # for chave, valor in listaRemuneracoes:
-                            #     print(f'{chave}: {valor}')
-
-                            for ben in beneficios:
-                                print(ben)
+                            for b in beneficios:
+                                print(b)
 
                             CnisContribuicoes.insert_many(listaContribuicoes).on_conflict_replace().execute()
                             CnisRemuneracoes.insert_many(listaRemuneracoes).on_conflict_replace().execute()
-                            CnisCabecalhos.insert_many(cabecalho + cabecalhoBeneficio).on_conflict_replace().execute()
-                            # CnisBeneficios.insert_many(beneficios).on_conflict_replace().execute()
+                            CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
+                            CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
+                            CnisBeneficios.insert_many(beneficios).on_conflict_replace().execute()
 
                             self.cliente.telefoneId = Telefones.get_by_id(self.cliente)
                             transaction.commit()

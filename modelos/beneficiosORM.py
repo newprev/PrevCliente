@@ -3,7 +3,7 @@ from logs import logPrioridade
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
 
-from peewee import AutoField, CharField, ForeignKeyField, DateTimeField, BigIntegerField, DateField, IntegerField
+from peewee import AutoField, CharField, ForeignKeyField, DateTimeField, IntegerField, FloatField, BigIntegerField
 from datetime import datetime
 
 from newPrevEnums import TipoEdicao, Prioridade
@@ -14,16 +14,14 @@ TABLENAME = 'cnisBeneficios'
 class CnisBeneficios(BaseModel, Model):
     beneficiosId = AutoField(column_name='beneficiosId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
+    nb = BigIntegerField(column_name='nb', null=True)
     dadoOrigem = CharField(column_name='dadoOrigem', default='CNIS')
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataFim = DateField(column_name='dataFim', formats=DATEFORMATS)
-    dataInicio = DateField(column_name='dataInicio', formats=DATEFORMATS)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt')
-    nit = CharField(column_name='nit')
-    especie = CharField()
-    nb = BigIntegerField()
+    competencia = DateTimeField(column_name='competencia', default=datetime.min, formats=DATEFORMATS)
+    remuneracao = FloatField(column_name='remuneracao')
+    indicadores = CharField(default=None)
     seq = IntegerField()
-    situacao = CharField()
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 
     class Meta:
         table_name = 'cnisBeneficios'

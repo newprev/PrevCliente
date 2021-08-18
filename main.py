@@ -114,7 +114,6 @@ class Main(Ui_MainWindow, QMainWindow):
             instancia.create_table()
             self.progresso(add=percentLoading)
 
-
         # self.lbInfo.setText('CRIANDO TABELA DOS ADVOGADOS...')
         # if self.daoConfigs.criaTabela(tabelas.sqlCreateAdvogados, nomeTabela='advogados'):
         #     self.progresso(add=percentLoading)

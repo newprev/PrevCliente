@@ -21,7 +21,7 @@ class CnisCabecalhos(BaseModel, Model):
     dataInicio = DateField(column_name='dataInicio', formats=DATEFORMATS)
     especie = CharField(null=True)
     indicadores = CharField(null=True)
-    nb = BigIntegerField(null=True)
+    nb = BigIntegerField(column_name='nb', null=True)
     nit = CharField(null=False)
     nomeEmp = CharField(column_name='nomeEmp', null=True)
     orgVinculo = CharField(column_name='orgVinculo', null=True)
@@ -63,7 +63,7 @@ class CnisCabecalhos(BaseModel, Model):
         self.clienteId = dictCabecalho['clienteId']
         self.seq = dictCabecalho['seq']
         self.nit = dictCabecalho['nit']
-        self.nb = dictCabecalho['nb']
+        self.nb = int(dictCabecalho['nb'])
         self.cdEmp = dictCabecalho['cdEmp']
         self.nomeEmp = dictCabecalho['nomeEmp']
         self.dataInicio = dictCabecalho['dataInicio']

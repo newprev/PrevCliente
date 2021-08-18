@@ -2,10 +2,10 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from typing import List
-from peewee import JOIN
 
 from Daos.daoCliente import DaoCliente
 from Telas.buscaCliente import Ui_mwBuscaCliente
+from Telas.efeitos import Efeitos
 from helpers import mascaraTelCel, mascaraNit
 from modelos.clienteORM import Cliente
 from modelos.telefonesORM import Telefones
@@ -23,6 +23,7 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
         self.daoCliente = DaoCliente(db=db)
         self.clientes: list = None
         self.clienteSelecionadoId = 0
+        self.efeito = Efeitos()
 
         self.tblListaClientes.clicked.connect(self.carregaInfoClienteNaTela)
         self.tblListaClientes.doubleClicked.connect(self.enviaCliente)
@@ -39,7 +40,11 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
             listaClientes: List[Cliente] = Cliente.select()
 
             for cliente in listaClientes:
-                cliente.telefoneId = Telefones.get(Telefones.clienteId == cliente.clienteId)
+                # cliente.telefoneId = Telefones.get(Telefones.clienteId == cliente.clienteId)
+                try:
+                    cliente.telefoneId = Telefones.get(Telefones.clienteId == cliente.clienteId)
+                except Telefones.DoesNotExist:
+                    cliente.telefoneId = Telefones()
 
             self.clientes = listaClientes
         else:

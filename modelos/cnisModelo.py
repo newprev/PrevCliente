@@ -23,10 +23,11 @@ class CNISModelo:
         self.expRegData = "[0-1]{1}[0-9]{1}/[0-9]{4}"
         self.expRegDataMenor = "^[0-9]{2}/[0-9]{4}$"
         self.expRegDataMaior = "^[0-9]{2}/[0-9]{2}/[0-9]{4}$"
-        self.expRegNomeEmp = "^[A-Z]{2,20}"
+        self.expRegNomeEmp = "^[A-Z_ ]{2,20}"
         self.expRegNB = "[0-9]{10}"
         self.expRegEspecie = "[0-9]{0,3} - [A-Z]{2,40}"
         self.expRegCNPJ = "[0-9]{2}\.[0-9]{3}\.[0-9]{3}/[0-9]{4}-[0-9]{2}"
+        self.expRegCNPJalter = "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
         self.expRegNit = "[0-9]{3}\.[0-9]{5}\.[0-9]{2}-[0-9]{1}"
         self.expRegCPF = "[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}"
         self.expRegTipoVinculo = "[A-Z]{1}[a-z]{2,20}"
@@ -50,6 +51,7 @@ class CNISModelo:
         }
         self.dictBeneficios = {
             'seq': [],
+            'nb': [],
             'remuneracao': [],
             'competencia': [],
             'indicadores': []
@@ -98,8 +100,10 @@ class CNISModelo:
         self.qtdPaginas = self.documento.numPages
 
     def carregaDados(self):
+        terminarBeneficio: bool = False
 
         for pg in range(self.qtdPaginas):
+
             blocoRemuneracoes = False
             blocoContribuicoes = False
             blocoBeneficio = False
@@ -111,35 +115,32 @@ class CNISModelo:
                 pos = self.extraiDadosPessoais(documentoLinhas)
 
             while pos in range(pos, len(documentoLinhas) - 1):
+                if documentoLinhas[pos] == 'NB' or terminarBeneficio:
+                    blocoBeneficio = True
+                    blocoContribuicoes = False
                 if documentoLinhas[pos] == 'Remunerações':
                     blocoRemuneracoes = True
                     blocoContribuicoes = False
-                if documentoLinhas[pos] == 'Contribuições':
+                if documentoLinhas[pos] == 'Contribuições' and not blocoBeneficio:
                     blocoContribuicoes = True
                     blocoRemuneracoes = False
-                if blocoBeneficio:
-                    blocoContribuicoes = False
-                    blocoRemuneracoes = False
-
-                print(f'\n----------------------------------------')
-                print(f'blocoRemuneracoes: {blocoRemuneracoes}')
-                print(f'blocoContribuicoes: {blocoContribuicoes}')
-                print(f'blocoBeneficio: {blocoBeneficio}')
 
                 if blocoContribuicoes and documentoLinhas[pos] != 'Contribuições':
                     pos = self.extrairContribuicoes(documentoLinhas, pos)
                     blocoContribuicoes = False
 
                 elif blocoRemuneracoes and documentoLinhas[pos] != 'Remunerações':
-                    pos = self.extrairRemueracoes(documentoLinhas, pos)
-                    blocoRemuneracoes = False
+                    if blocoBeneficio:
+                        pos = self.extrairBeneficios(documentoLinhas, pos)
+                    else:
+                        pos = self.extrairRemueracoes(documentoLinhas, pos)
 
-                elif blocoBeneficio:
-                    pos = self.extrairBeneficios(documentoLinhas, pos)
                     blocoBeneficio = False
+                    blocoRemuneracoes = False
 
                 elif documentoLinhas[pos] == 'Seq.':
                     pos, blocoBeneficio = self.trataExtrairCabecalhos(documentoLinhas, pos)
+                    terminarBeneficio = blocoBeneficio
 
                 pos += 1
 
@@ -171,7 +172,7 @@ class CNISModelo:
                 if re.fullmatch(self.expRegNit, documentoLinhas[j]) is not None:
                     self.dictCabecalho['nit'].append(documentoLinhas[j])
                     nit = True
-                elif re.fullmatch(self.expRegCNPJ, documentoLinhas[j]) is not None:
+                elif re.fullmatch(self.expRegCNPJ, documentoLinhas[j]) is not None or re.fullmatch(self.expRegCNPJalter, documentoLinhas[j]):
                     self.dictCabecalho['cdEmp'].append(documentoLinhas[j])
                     cdEmp = True
                 elif self.isIndicador(documentoLinhas[j]):
@@ -195,10 +196,10 @@ class CNISModelo:
                 elif re.match(self.expRegTipoVinculo, documentoLinhas[j]) is not None:
                     pularInfo = documentoLinhas[j]
                     if pularInfo not in self.infoASerPulada:
-                        self.dictCabecalho['tipoVinculo'].append(documentoLinhas[j].replace(',', ''))
+                        self.dictCabecalho['tipoVinculo'].append(documentoLinhas[j].replace(',', '').upper())
                         tipoVinculo = True
                 elif documentoLinhas[j][0].isnumeric() and len(documentoLinhas[j]) <= 3:
-                    self.dictCabecalho['seq'].append(documentoLinhas[j])
+                    self.dictCabecalho['seq'].append(int(documentoLinhas[j]))
                     seq = True
 
         self.dictCabecalho['nomeEmp'].append(nomeEmp)
@@ -248,7 +249,7 @@ class CNISModelo:
                     self.dictCabecalhoBeneficio['nit'].append(documentoLinhas[j])
                     nit = True
                 elif re.fullmatch(self.expRegNB, documentoLinhas[j]) is not None:
-                    self.dictCabecalhoBeneficio['nb'].append(documentoLinhas[j])
+                    self.dictCabecalhoBeneficio['nb'].append(int(documentoLinhas[j]))
                     nb = True
                 elif re.match(self.expRegNomeEmp, documentoLinhas[j]) is not None and documentoLinhas[j].lower() in self.situacoesPossiveis:
                     self.dictCabecalhoBeneficio['situacao'].append(documentoLinhas[j])
@@ -263,7 +264,7 @@ class CNISModelo:
                         dataFim = True
                         dataPos = 0
                 elif documentoLinhas[j][0].isnumeric() and len(documentoLinhas[j]) <= 3:
-                    self.dictCabecalhoBeneficio['seq'].append(documentoLinhas[j])
+                    self.dictCabecalhoBeneficio['seq'].append(int(documentoLinhas[j]))
                     seq = True
                 elif re.match(self.expRegEspecie, documentoLinhas[j]) is not None and documentoLinhas[j] not in self.situacoesPossiveis:
                     if re.match(self.expRegNomeEmp, documentoLinhas[j+1]) and documentoLinhas[j+1] not in self.situacoesPossiveis:
@@ -273,7 +274,7 @@ class CNISModelo:
                         self.dictCabecalhoBeneficio['especie'].append(documentoLinhas[j])
                     especie = True
                 elif re.match(self.expRegTipoVinculo, documentoLinhas[j]) is not None and documentoLinhas[j].lower() not in self.situacoesPossiveis:
-                    self.dictCabecalhoBeneficio['orgVinculo'].append(documentoLinhas[j])
+                    self.dictCabecalhoBeneficio['orgVinculo'].append(documentoLinhas[j].replace('í', 'i').upper())
                     orgVinculo = True
 
         if dataPos != 0:
@@ -303,7 +304,7 @@ class CNISModelo:
 
         blocoContribuicoes = True
         ehContribuicao = False
-        seq = self.dictCabecalho['seq'][-1]
+        seq = int(self.dictCabecalho['seq'][-1])
         contSeq = 0
 
         pos = posInicio
@@ -358,7 +359,7 @@ class CNISModelo:
         blocoRemuneracoes = True
         pos = posInicio
         contSeq = 0
-        seq = self.dictCabecalho['seq'][-1]
+        seq = int(self.dictCabecalho['seq'][-1])
 
         while blocoRemuneracoes:
 
@@ -381,7 +382,7 @@ class CNISModelo:
                         documentoLinhas[pos + 1] = 'pula'
                     else:
                         self.dictRemuneracoes['indicadores'].append(documentoLinhas[pos])
-                        if re.fullmatch(self.expRegData, documentoLinhas[pos + 1]) == None:
+                        if re.fullmatch(self.expRegData, documentoLinhas[pos + 1]) is None:
                             blocoRemuneracoes = False
                 else:
                     self.dictRemuneracoes['indicadores'].append(documentoLinhas[pos])
@@ -402,7 +403,7 @@ class CNISModelo:
         blocoBeneficio = True
         pos = posInicio
         contSeq = 0
-        seq = self.dictCabecalhoBeneficio['seq'][-1]
+        seq = int(self.dictCabecalhoBeneficio['seq'][-1])
 
         while blocoBeneficio:
 
@@ -439,6 +440,7 @@ class CNISModelo:
         # Adiciona o Seq de cada contribuição no dicionário de contribuições
         for i in range(contSeq):
             self.dictBeneficios['seq'].append(seq)
+            self.dictBeneficios['nb'].append(self.dictCabecalhoBeneficio['nb'][-1])
         return pos
 
     def extraiDadosPessoais(self, documentoLinhas: str):

@@ -14,12 +14,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgTabCalculos(object):
     def setupUi(self, wdgTabCalculos):
         wdgTabCalculos.setObjectName("wdgTabCalculos")
-        wdgTabCalculos.resize(1195, 611)
+        wdgTabCalculos.resize(1195, 795)
         wdgTabCalculos.setMinimumSize(QtCore.QSize(945, 611))
         wdgTabCalculos.setStyleSheet("#tabContribuicoes,\n"
 "#tabMain, \n"
 "#tabCalculos,\n"
-"#tabBeneficios {\n"
+"#tabBeneficios,\n"
+"#tabResumo {\n"
 "    border-radius: 8px;\n"
 "    background-color: white;\n"
 "    padding: 4px;\n"
@@ -75,6 +76,151 @@ class Ui_wdgTabCalculos(object):
         self.tabMain.setStyleSheet("")
         self.tabMain.setIconSize(QtCore.QSize(36, 16))
         self.tabMain.setObjectName("tabMain")
+        self.tabResumo = QtWidgets.QWidget()
+        self.tabResumo.setStyleSheet("/*-------------------------------- Labels -----------------------------------------*/\n"
+"#lbTituloClientesResumo {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 24px;\n"
+"}\n"
+"\n"
+"#lbInfoClientesResumo {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;    \n"
+"}\n"
+"\n"
+"#lbTituloFiltroResumo {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 16px;\n"
+"}\n"
+"\n"
+"#lbBuscaNomeResumo, #lbBuscaEmailResumo, \n"
+"#lbBuscaTelefoneResumo, #lbBuscaTpProcessoResumo,\n"
+"#lbBuscaRgcpfResumo {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"}\n"
+"\n"
+"#lbInfoCabecalhoResumo, #lbInfoDibDerResumo, \n"
+"#lbInfoNomeResumo, #lbInfoDocumentoResumo {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"#lbDibDerResumo, \n"
+"#lbNomeResumo, #lbDocumentoResumo {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    background-color: white;\n"
+"    font-weight: bold;\n"
+"}\n"
+"\n"
+"/*-------------------------------- Frames -----------------------------------------*/\n"
+"#frInfoCabecalhoResumo {\n"
+"    border-radius: 4px;\n"
+"    border: 1px solid rgb(85, 87, 83);\n"
+"\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"/*-------------------------------- Push Buttons --------------------------------*/\n"
+"\n"
+"#pbBuscarClienteResumo {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: rgb(52, 73, 94);\n"
+"}\n"
+"\n"
+"#pbBuscarClienteResumo:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    border: 1px solid;\n"
+"    background-color: rgb(72, 93, 114);\n"
+"}\n"
+"\n"
+"#pbInserirResumo, #pbEditarResumo, #pbExcluirResumo {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: rgb(52, 73, 94);\n"
+"}\n"
+"\n"
+"#pbInserirResumo:hover, #pbEditarResumo:hover, \n"
+"#pbExcluirResumo:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    border: 1px solid;\n"
+"    background-color: rgb(72, 93, 114);\n"
+"}\n"
+"\n"
+"/*-------------------------------- Scroll Area --------------------------------*/\n"
+"#scaResumos {\n"
+"    background-color: white;\n"
+"}\n"
+"")
+        self.tabResumo.setObjectName("tabResumo")
+        self.frInfoCabecalhoResumo = QtWidgets.QFrame(self.tabResumo)
+        self.frInfoCabecalhoResumo.setGeometry(QtCore.QRect(420, 10, 401, 81))
+        self.frInfoCabecalhoResumo.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frInfoCabecalhoResumo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoCabecalhoResumo.setObjectName("frInfoCabecalhoResumo")
+        self.lbInfoNomeResumo = QtWidgets.QLabel(self.frInfoCabecalhoResumo)
+        self.lbInfoNomeResumo.setGeometry(QtCore.QRect(10, 10, 81, 21))
+        self.lbInfoNomeResumo.setObjectName("lbInfoNomeResumo")
+        self.lbInfoDocumentoResumo = QtWidgets.QLabel(self.frInfoCabecalhoResumo)
+        self.lbInfoDocumentoResumo.setGeometry(QtCore.QRect(10, 50, 81, 21))
+        self.lbInfoDocumentoResumo.setObjectName("lbInfoDocumentoResumo")
+        self.lbNomeResumo = QtWidgets.QLabel(self.frInfoCabecalhoResumo)
+        self.lbNomeResumo.setGeometry(QtCore.QRect(100, 10, 221, 21))
+        self.lbNomeResumo.setText("")
+        self.lbNomeResumo.setObjectName("lbNomeResumo")
+        self.lbDocumentoResumo = QtWidgets.QLabel(self.frInfoCabecalhoResumo)
+        self.lbDocumentoResumo.setGeometry(QtCore.QRect(100, 50, 191, 21))
+        self.lbDocumentoResumo.setText("")
+        self.lbDocumentoResumo.setObjectName("lbDocumentoResumo")
+        self.lbTituloClientesResumo = QtWidgets.QLabel(self.tabResumo)
+        self.lbTituloClientesResumo.setGeometry(QtCore.QRect(10, 10, 361, 31))
+        self.lbTituloClientesResumo.setObjectName("lbTituloClientesResumo")
+        self.pbBuscarClienteResumo = QtWidgets.QPushButton(self.tabResumo)
+        self.pbBuscarClienteResumo.setGeometry(QtCore.QRect(1030, 160, 101, 41))
+        self.pbBuscarClienteResumo.setObjectName("pbBuscarClienteResumo")
+        self.pbInserirResumo = QtWidgets.QPushButton(self.tabResumo)
+        self.pbInserirResumo.setGeometry(QtCore.QRect(1030, 230, 101, 25))
+        self.pbInserirResumo.setObjectName("pbInserirResumo")
+        self.lbInfoCabecalhoResumo = QtWidgets.QLabel(self.tabResumo)
+        self.lbInfoCabecalhoResumo.setGeometry(QtCore.QRect(440, 0, 141, 17))
+        self.lbInfoCabecalhoResumo.setObjectName("lbInfoCabecalhoResumo")
+        self.lbInfoClientesResumo = QtWidgets.QLabel(self.tabResumo)
+        self.lbInfoClientesResumo.setGeometry(QtCore.QRect(10, 40, 371, 31))
+        self.lbInfoClientesResumo.setObjectName("lbInfoClientesResumo")
+        self.scrollArea = QtWidgets.QScrollArea(self.tabResumo)
+        self.scrollArea.setGeometry(QtCore.QRect(10, 110, 991, 400))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
+        self.scrollArea.setSizePolicy(sizePolicy)
+        self.scrollArea.setMinimumSize(QtCore.QSize(800, 400))
+        self.scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.scrollArea.setObjectName("scrollArea")
+        self.scaResumos = QtWidgets.QWidget()
+        self.scaResumos.setGeometry(QtCore.QRect(0, 0, 991, 400))
+        self.scaResumos.setObjectName("scaResumos")
+        self.scrollArea.setWidget(self.scaResumos)
+        self.tabMain.addTab(self.tabResumo, "")
         self.tabContribuicoes = QtWidgets.QWidget()
         self.tabContribuicoes.setStyleSheet("/*-------------------------------- Labels -----------------------------------------*/\n"
 "#lbTituloClientes {\n"
@@ -148,17 +294,6 @@ class Ui_wdgTabCalculos(object):
 "}\n"
 "\n"
 "/*-------------------------------- Push Buttons --------------------------------*/\n"
-"#pbArrowNome, \n"
-"#pbArrowEmail, \n"
-"#pbArrowTelefone,\n"
-"#pbArrowTpProcesso,\n"
-"#pbArrowRgcpf {\n"
-"    background-image: url(:/arrowDown/arrowDown.png);\n"
-"    background-repeat: no-repeat;\n"
-"    background-position: center;\n"
-"\n"
-"    background-color: transparent;\n"
-"}\n"
 "\n"
 "#pbBuscarCliente {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
@@ -537,6 +672,15 @@ class Ui_wdgTabCalculos(object):
     def retranslateUi(self, wdgTabCalculos):
         _translate = QtCore.QCoreApplication.translate
         wdgTabCalculos.setWindowTitle(_translate("wdgTabCalculos", "Form"))
+        self.lbInfoNomeResumo.setText(_translate("wdgTabCalculos", "Nome cliente:"))
+        self.lbInfoDocumentoResumo.setText(_translate("wdgTabCalculos", "Documento:"))
+        self.lbTituloClientesResumo.setText(_translate("wdgTabCalculos", "Resumo do CNIS"))
+        self.pbBuscarClienteResumo.setText(_translate("wdgTabCalculos", "Buscar \n"
+"cliente"))
+        self.pbInserirResumo.setText(_translate("wdgTabCalculos", "Inserir"))
+        self.lbInfoCabecalhoResumo.setText(_translate("wdgTabCalculos", "  Informações pessoais"))
+        self.lbInfoClientesResumo.setText(_translate("wdgTabCalculos", "Resumo das contribuições e benefícios"))
+        self.tabMain.setTabText(self.tabMain.indexOf(self.tabResumo), _translate("wdgTabCalculos", "Resumo"))
         self.lbTituloClientes.setText(_translate("wdgTabCalculos", "Tabela de Remunerações"))
         self.lbInfoClientes.setText(_translate("wdgTabCalculos", "Pesquise por toda a sua base de clientes"))
         item = self.tblCalculos.verticalHeaderItem(0)

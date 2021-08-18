@@ -2,22 +2,20 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
 from Telas.tabTelAfins import Ui_wdgTelAfins
 
-from modelos.clienteModelo import ClienteModelo
+from modelos.clienteORM import Cliente
 from helpers import getTipoTelefone, getPessoalRecado, mascaraTelCel, getTipoTelefoneBySigla, getPessoalRecadoBySigla
-from Daos.daoTelAfins import DaoTelAfins
-from modelos.telefoneModelo import TelefoneModelo
 from heart.localStyleSheet.teleAfins import desabilita
+from modelos.telefonesORM import Telefones
 
 
 class TelAfinsController(QMainWindow, Ui_wdgTelAfins):
 
-    def __init__(self, cliente: ClienteModelo, db=None, parent=None):
+    def __init__(self, cliente: Cliente, db=None, parent=None):
         super(TelAfinsController, self).__init__(parent)
         self.setupUi(self)
         self.db = db
-        self.daoTelAfins = DaoTelAfins(db=db)
         self.clienteAtivo = cliente
-        self.telefoneAtual = TelefoneModelo()
+        self.telefoneAtual = Telefones()
 
         self.editando = False
 
@@ -56,7 +54,8 @@ class TelAfinsController(QMainWindow, Ui_wdgTelAfins):
 
     def insereNovoTelefone(self):
         if self.avaliaInsercao():
-            self.daoTelAfins.inserirAtualizaTelefone(self.telefoneAtual)
+            # self.daoTelAfins.inserirAtualizaTelefone(self.telefoneAtual)
+            Telefones.insert(**self.telefoneAtual.toDict()).on_conflict_replace().execute()
             self.atualizaTabela()
             self.habilitaEdicao(False)
         else:
@@ -101,7 +100,7 @@ class TelAfinsController(QMainWindow, Ui_wdgTelAfins):
         self.habilitaEdicao(False)
 
     def iniciandoInsercao(self):
-        self.telefoneAtual = TelefoneModelo()
+        self.telefoneAtual = Telefones()
         self.habilitaEdicao(True)
         self.leNumero.setFocus()
 
@@ -111,7 +110,8 @@ class TelAfinsController(QMainWindow, Ui_wdgTelAfins):
 
     def atualizaTabela(self):
         if self.clienteAtivo.clienteId not in [None, 'None']:
-            listaTelefones = self.daoTelAfins.telByClienteId(self.clienteAtivo.clienteId)
+            # listaTelefones = self.daoTelAfins.telByClienteId(self.clienteAtivo.clienteId)
+            listaTelefones = Telefones.select().where(Telefones.clienteId == self.clienteAtivo.clienteId)
 
             self.tblTelefones.setRowCount(0)
             for numLinha, telefone in enumerate(listaTelefones):

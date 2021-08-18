@@ -1,31 +1,38 @@
-import datetime
+from modelos.baseModelORM import BaseModel, DATEFORMATS
+from modelos.clienteORM import Cliente
+from playhouse.signals import Model, post_save, pre_delete
+from logs import logPrioridade
+from newPrevEnums import TipoEdicao, Prioridade
 
-from helpers import strToDatetime
-from newPrevEnums import TamanhoData
+from peewee import AutoField, CharField, ForeignKeyField, BooleanField, BigIntegerField, DateField, IntegerField, DateTimeField
+from datetime import datetime
+
+TABLENAME = 'cnisCabecalhos'
 
 
-class CabecalhoModelo:
+class CnisCabecalhos(BaseModel, Model):
+    cabecalhosId = AutoField(column_name='cabecalhosId', null=True)
+    clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente)
+    seq = IntegerField(null=False)
+    cdEmp = CharField(column_name='cdEmp', null=True)
+    dadoFaltante = BooleanField(column_name='dadoFaltante', default=False)
+    dadoOrigem = CharField(column_name='dadoOrigem', default='CNIS')
+    dataFim = DateField(column_name='dataFim', null=True, formats=DATEFORMATS)
+    dataInicio = DateField(column_name='dataInicio', formats=DATEFORMATS)
+    especie = CharField(null=True)
+    indicadores = CharField(null=True)
+    nb = BigIntegerField(column_name='nb', null=True)
+    nit = CharField(null=False)
+    nomeEmp = CharField(column_name='nomeEmp', null=True)
+    orgVinculo = CharField(column_name='orgVinculo', null=True)
+    situacao = CharField(null=True)
+    tipoVinculo = CharField(column_name='tipoVinculo', null=True)
+    ultRem = DateField(column_name='ultRem', null=True, formats=DATEFORMATS)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 
-    def __init__(self):
-        self.cabecalhosId: int = None
-        self.clienteId: int = None
-        self.seq: int = None
-        self.nit: str = None
-        self.nb: int = None
-        self.cdEmp: str = None
-        self.nomeEmp: str = None
-        self.dataInicio: datetime = None
-        self.dataFim: datetime = None
-        self.tipoVinculo: str = None
-        self.orgVinculo: str = None
-        self.especie: str = None
-        self.indicadores: str = None
-        self.ultRem: datetime = None
-        self.dadoOrigem: str = None
-        self.situacao: str = None
-        self.dadoFaltante: bool = False
-        self.dataCadastro: datetime = None
-        self.dataUltAlt: datetime = None
+    class Meta:
+        table_name = 'cnisCabecalhos'
 
     def toDict(self):
         dictUsuario = {
@@ -56,7 +63,7 @@ class CabecalhoModelo:
         self.clienteId = dictCabecalho['clienteId']
         self.seq = dictCabecalho['seq']
         self.nit = dictCabecalho['nit']
-        self.nb = dictCabecalho['nb']
+        self.nb = int(dictCabecalho['nb'])
         self.cdEmp = dictCabecalho['cdEmp']
         self.nomeEmp = dictCabecalho['nomeEmp']
         self.dataInicio = dictCabecalho['dataInicio']
@@ -72,46 +79,12 @@ class CabecalhoModelo:
         self.dataCadastro = dictCabecalho['dataCadastro']
         self.dataUltAlt = dictCabecalho['dataUltAlt']
 
-    def fromList(self, listCabecalho: list, retornaInst: bool = True):
-        self.cabecalhosId = listCabecalho[0]
-        self.clienteId = listCabecalho[1]
-        self.seq = listCabecalho[2]
-        self.nit = listCabecalho[3]
-        self.nb = listCabecalho[4]
-        self.cdEmp = listCabecalho[5]
-        self.nomeEmp = listCabecalho[6]
+    def __eq__(self, other):
+        return self.cabecalhosId == other.cabecalhosId
 
-        if listCabecalho[7] is not None:
-            self.dataInicio = strToDatetime(listCabecalho[7], tamanho=TamanhoData.gg)
-        else:
-            self.dataInicio = listCabecalho[7]
-
-        if listCabecalho[8] is not None:
-            self.dataFim = strToDatetime(listCabecalho[8], tamanho=TamanhoData.gg)
-        else:
-            self.dataFim = listCabecalho[8]
-
-        self.tipoVinculo = listCabecalho[9]
-        self.orgVinculo = listCabecalho[10]
-        self.especie = listCabecalho[11]
-        self.indicadores = listCabecalho[12]
-
-        if listCabecalho[13] is not None:
-            self.ultRem = strToDatetime(listCabecalho[13], tamanho=TamanhoData.gg)
-        else:
-            self.ultRem = listCabecalho[13]
-
-        self.dadoOrigem = listCabecalho[14]
-        self.situacao = listCabecalho[15]
-        self.dadoFaltante = listCabecalho[16]
-        self.dataCadastro = strToDatetime(listCabecalho[17], tamanho=TamanhoData.g)
-        self.dataUltAlt = strToDatetime(listCabecalho[18], tamanho=TamanhoData.g)
-
-        if retornaInst:
-            return self
-
-    def __repr__(self):
-        return f"""Cabecalho(
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
+        Cabecalho(
             cabecalhosId: {self.cabecalhosId},
             clienteId: {self.clienteId},
             seq: {self.seq},
@@ -131,7 +104,17 @@ class CabecalhoModelo:
             dadoFaltante: {self.dadoFaltante},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}
-            """
+        )""")
 
-    def __eq__(self, other):
-        return self.cabecalhosId == other.cabecalhosId
+
+@post_save(sender=CnisCabecalhos)
+def inserindoCabecalho(*args, **kwargs):
+    if kwargs['created']:
+        logPrioridade(f'INSERT<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+    else:
+        logPrioridade(f'INSERT<inserindoCabecalho>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+
+
+@pre_delete(sender=CnisCabecalhos)
+def deletandoCabecalho(*args, **kwargs):
+    logPrioridade(f'DELETE<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

@@ -2,8 +2,8 @@ import requests
 from typing import List
 
 from logs import logPrioridade, TipoEdicao, Prioridade
-from modelos.indicadorModelo import IndicadorModelo
-from modelos.expSobrevidaModelo import ExpectativaSobrevidaModelo
+from modelos.indicadoresORM import Indicadores
+from modelos.expSobrevidaORM import ExpSobrevida
 
 
 class ApiInformacoes:
@@ -11,26 +11,26 @@ class ApiInformacoes:
     def __init__(self):
         self.baseUrl = 'http://localhost:8000/api/'
 
-    def getAllIndicadores(self) -> List[IndicadorModelo]:
+    def getAllIndicadores(self) -> List[dict]:
         url = self.baseUrl + 'indicadores/'
         response = requests.get(url)
 
         if 199 < response.status_code < 400:
-            listaIndicadores = [IndicadorModelo().fromDict(indicador) for indicador in response.json()]
+            # listaIndicadores = [IndicadorModelo().fromDict(indicador) for indicador in response.json()]
             logPrioridade(f"API(Sync)____________________GET<indicadores/>::::{url}", TipoEdicao.api, Prioridade.sync)
-            return listaIndicadores
+            return response.json()
         else:
             logPrioridade(f"API(Sync)____________________GET<indicadores/ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
             return []
 
-    def getAllExpSobrevida(self) -> List[ExpectativaSobrevidaModelo]:
+    def getAllExpSobrevida(self) -> List[dict]:
         url = self.baseUrl + 'expSobrevida/'
         response = requests.get(url)
 
         if 199 < response.status_code < 400:
-            listaExpSobrevida = [ExpectativaSobrevidaModelo().fromDict(expSobrevida) for expSobrevida in response.json()]
+            # listaExpSobrevida = [ExpectativaSobrevidaModelo().fromDict(expSobrevida) for expSobrevida in response.json()]
             logPrioridade(f"API(Sync)____________________GET<expSobrevida>::::{url}", TipoEdicao.api, Prioridade.sync)
-            return listaExpSobrevida
+            return response.json()
         else:
             logPrioridade(f"API(Sync)____________________GET<expSobrevidaERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
             return []

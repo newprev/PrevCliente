@@ -1,30 +1,42 @@
-import datetime
+from datetime import datetime
+from peewee import AutoField, ForeignKeyField, CharField, DateField, IntegerField, FloatField, DateTimeField
+from playhouse.signals import Model, post_save, pre_delete
+from logs import logPrioridade
+from newPrevEnums import TipoEdicao, Prioridade
+
+from modelos.baseModelORM import BaseModel, DATEFORMATS
+from modelos.advogadoORM import Advogados
+from modelos.clienteORM import Cliente
+
+TABLENAME = 'processos'
 
 
-class ProcessosModelo:
+class Processos(BaseModel, Model):
+    processoId = AutoField(column_name='processoId', null=True)
+    advogadoId = ForeignKeyField(column_name='advogadoId', field='advogadoId', model=Advogados, null=True, backref='advogados')
+    clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, null=True, backref='cliente')
+    cidade = CharField(default='São Paulo')
+    dataFim = DateField(column_name='dataFim', null=True, formats=DATEFORMATS)
+    dataInicio = DateField(column_name='dataInicio', null=True, formats=DATEFORMATS)
+    der = DateField(null=True, formats=DATEFORMATS)
+    dib = DateField(null=True, formats=DATEFORMATS)
+    estado = CharField(null=True)
+    incidenteProcessual = IntegerField(column_name='incidenteProcessual', null=True)
+    mediaSalarial = FloatField(column_name='mediaSalarial', null=True)
+    natureza = IntegerField()
+    numeroProcesso = CharField(column_name='numeroProcesso', null=True)
+    pontuacao = IntegerField(null=True)
+    situacaoId = IntegerField(column_name='situacaoId', default=1)
+    subTipoApos = IntegerField(column_name='subTipoApos')
+    tempoContribuicao = IntegerField(column_name='tempoContribuicao', null=True)
+    tipoBeneficio = IntegerField(column_name='tipoBeneficio')
+    tipoProcesso = IntegerField(column_name='tipoProcesso')
+    valorCausa = FloatField(column_name='valorCausa', null=True)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 
-    def __init__(self):
-        self.processoId: int = None
-        self.clienteId: int = None
-        self.advogadoId: int = None
-        self.numeroProcesso: str = None
-        self.natureza: int = None
-        self.tipoProcesso: int = None
-        self.tipoBeneficio: int = None
-        self.subTipoApos: int = None
-        self.estado: str = None
-        self.cidade: str = None
-        self.situacaoId: int = 0
-        self.tempoContribuicao: int = 0
-        self.pontuacao: int = 0
-        self.dib: datetime = None
-        self.der: datetime = None
-        self.mediaSalarial: float = 0.0
-        self.dataInicio: datetime = None
-        self.dataFim: datetime = None
-        self.valorCausa: float = 0
-        self.dataCadastro: datetime = None
-        self.dataUltAlt: datetime = None
+    class Meta:
+        table_name = 'processos'
 
     def toDict(self):
         dictUsuario = {
@@ -77,35 +89,9 @@ class ProcessosModelo:
 
         return self
 
-    def fromList(self, listProcessos: list, retornaInst: bool = True):
-
-        self.processoId = listProcessos[0]
-        self.clienteId = listProcessos[1]
-        self.advogadoId = listProcessos[2]
-        self.numeroProcesso = listProcessos[3]
-        self.natureza = listProcessos[4]
-        self.tipoProcesso = listProcessos[5]
-        self.tipoBeneficio = listProcessos[6]
-        self.subTipoApos = listProcessos[7]
-        self.estado = listProcessos[8]
-        self.cidade = listProcessos[9]
-        self.situacaoId = listProcessos[10]
-        self.tempoContribuicao = listProcessos[11]
-        self.pontuacao = listProcessos[12]
-        self.dib = listProcessos[13]
-        self.der = listProcessos[14]
-        self.mediaSalarial = listProcessos[15]
-        self.dataInicio = listProcessos[16]
-        self.dataFim = listProcessos[17]
-        self.valorCausa = listProcessos[18]
-        self.dataCadastro = listProcessos[19]
-        self.dataUltAlt = listProcessos[20]
-
-        if retornaInst:
-            return self
-
-    def __repr__(self):
-        return f"""Processos(
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
+        Processos(
             processoId: {self.processoId},
             clienteId: {self.clienteId},
             advogadoId: {self.advogadoId},
@@ -127,4 +113,17 @@ class ProcessosModelo:
             valorCausa: {self.valorCausa},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}
-            """
+        )""")
+        
+
+@post_save(sender=Processos)
+def inserindoProcessos(*args, **kwargs):
+    if kwargs['created']:
+        logPrioridade(f'INSERT<inserindoProcessos>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+    else:
+        logPrioridade(f'INSERT<inserindoProcessos>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+
+
+@pre_delete(sender=Processos)
+def deletandoProcessos(*args, **kwargs):
+    logPrioridade(f'DELETE<deletandoProcessos>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

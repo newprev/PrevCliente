@@ -1,6 +1,9 @@
 import os
 import json
-from modelos.advogadoModelo import AdvogadoModelo
+
+from helpers import pyToDefault
+from modelos.advogadoORM import Advogados
+from playhouse.shortcuts import model_to_dict, dict_to_model
 
 
 class CacheLogin:
@@ -10,8 +13,9 @@ class CacheLogin:
         self.pathLoginTempTxt = os.path.join(os.getcwd(), 'cache', '.login.temp.txt')
         self.pathCache = os.path.join(os.getcwd(), 'cache')
 
-    def salvarCache(self, advogado: AdvogadoModelo) -> bool:
-        jsonAdv = json.dumps(advogado.toDict())
+    def salvarCache(self, advogado: Advogados) -> bool:
+        # pyToDefault transforma os objetos datetime em str para serem inseridos no json
+        jsonAdv = json.dumps(pyToDefault(model_to_dict(advogado, recurse=False)))
 
         try:
             with open(self.pathLoginTxt, encoding='utf-8', mode='w') as cacheLogin:
@@ -20,30 +24,30 @@ class CacheLogin:
         except Exception:
             print('Deu Bosta')
 
-    def carregarCache(self) -> AdvogadoModelo:
+    def carregarCache(self) -> Advogados:
         if '.login.txt' in os.listdir(self.pathCache):
             with open(self.pathLoginTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
-                return AdvogadoModelo().fromDict(advJson)
+                return Advogados().fromDict(advJson)
 
         else:
-            return AdvogadoModelo()
+            return Advogados()
 
-    def carregarCacheTemporario(self) -> AdvogadoModelo:
+    def carregarCacheTemporario(self) -> Advogados:
         if '.login.temp.txt' in os.listdir(self.pathCache):
             with open(self.pathLoginTempTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
-                return AdvogadoModelo().fromDict(advJson)
+                return Advogados().fromDict(advJson)
 
         else:
-            return AdvogadoModelo()
+            return Advogados()
 
     def limpaTemporarios(self):
         for temp in os.listdir(self.pathCache):
             if temp.endswith('temp.txt'):
                 os.remove(os.path.join(self.pathCache, temp))
 
-    def salvarCacheTemporario(self, advogado: AdvogadoModelo) -> bool:
+    def salvarCacheTemporario(self, advogado: Advogados) -> bool:
         jsonAdv = json.dumps(advogado.toDict())
 
         try:

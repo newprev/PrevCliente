@@ -1,35 +1,46 @@
-import datetime
+from modelos.baseModelORM import BaseModel, DATEFORMATS
+from modelos.clienteORM import Cliente
+from playhouse.signals import Model, post_save, pre_delete
+from logs import logPrioridade
+from newPrevEnums import TipoEdicao, Prioridade
+
+from peewee import DateField, DateTimeField, IntegerField, ForeignKeyField, CharField
+from datetime import datetime
+
+TABLENAME = 'ppp'
 
 
-class PppModelo:
+class Ppp(BaseModel, Model):
+    pppId = IntegerField(column_name='pppId', null=True, primary_key=True)
+    clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
+    caEpi = CharField(column_name='caEpi', null=True)
+    cnae = CharField(null=True)
+    cnpj = CharField(null=True)
+    ctps = CharField(null=True)
+    dataAdminssao = DateField(column_name='dataAdminssao', null=True, formats=DATEFORMATS)
+    dataNascimento = DateField(column_name='dataNascimento', formats=DATEFORMATS)
+    dataRegistro = DateField(column_name='dataRegistro', null=True, formats=DATEFORMATS)
+    eficEpc = CharField(column_name='eficEpc', null=True)
+    eficEpi = CharField(column_name='eficEpi', null=True)
+    exposicaoDataFim = DateField(column_name='exposicaoDataFim', null=True, formats=DATEFORMATS)
+    exposicaoDataInicio = DateField(column_name='exposicaoDataInicio', null=True, formats=DATEFORMATS)
+    exposicaoFator = CharField(column_name='exposicaoFator', null=True)
+    exposicaoIntensidade = CharField(column_name='exposicaoIntensidade', null=True)
+    exposicaoTecnicaUtilizada = CharField(column_name='exposicaoTecnicaUtilizada', null=True)
+    exposicaoTipo = CharField(column_name='exposicaoTipo', null=True)
+    genero = CharField()
+    nit = CharField()
+    nomeEmpresa = CharField(column_name='nomeEmpresa', null=True)
+    numCAT = CharField(column_name='numCAT', null=True)
+    profissiografiaData = DateField(column_name='profissiografiaData', null=True, formats=DATEFORMATS)
+    profissiografiaDesc = CharField(column_name='profissiografiaDesc', null=True)
+    sitEmpregado = CharField(column_name='sitEmpregado', null=True)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 
-    def __init__(self):
-        self.pppId: str = None
-        self.cnpj: str = None
-        self.nomeEmpresa: str = None
-        self.cnae: str = None
-        self.sitEmpregado: datetime = None
-        self.nit: datetime = None
-        self.dataNascimento: datetime = None
-        self.genero: datetime = None
-        self.ctps: datetime = None
-        self.dataAdminssao: datetime = None
-        self.regimeRevezamento: datetime = None
-        self.dataRegistro: datetime = None
-        self.numCAT: datetime = None
-        self.profissiografiaData: datetime = None
-        self.profissiografiaDesc: datetime = None
-        self.exposicaoDataInicio: datetime = None
-        self.exposicaoDataFim: datetime = None
-        self.exposicaoTipo: datetime = None
-        self.exposicaoFator: datetime = None
-        self.exposicaoIntensidade: datetime = None
-        self.exposicaoTecnicaUtilizada: datetime = None
-        self.eficEpc: datetime = None
-        self.eficEpi: datetime = None
-        self.caEpi: datetime = None
-        self.dataUltAlt: datetime = None
-
+    class Meta:
+        table_name = 'ppp'
+        
     def toDict(self):
         dictPpp = {
             'pppId': self.pppId,
@@ -86,37 +97,9 @@ class PppModelo:
         self.dataUltAlt = dictPpp['dataUltAlt']
         return self
 
-    def fromList(self, listCliente: list, retornaInst: bool = True):
-        self.pppId = listCliente[0]
-        self.cnpj = listCliente[1]
-        self.nomeEmpresa = listCliente[2]
-        self.cnae = listCliente[3]
-        self.sitEmpregado = listCliente[4]
-        self.nit = listCliente[5]
-        self.dataNascimento = listCliente[6]
-        self.genero = listCliente[7]
-        self.ctps = listCliente[8]
-        self.dataAdminssao = listCliente[9]
-        self.dataRegistro = listCliente[10]
-        self.numCAT = listCliente[11]
-        self.profissiografiaData = listCliente[12]
-        self.profissiografiaDesc = listCliente[13]
-        self.exposicaoDataInicio = listCliente[14]
-        self.exposicaoDataFim = listCliente[15]
-        self.exposicaoTipo = listCliente[16]
-        self.exposicaoFator = listCliente[17]
-        self.exposicaoIntensidade = listCliente[18]
-        self.exposicaoTecnicaUtilizada = listCliente[19]
-        self.eficEpc = listCliente[20]
-        self.eficEpi = listCliente[21]
-        self.caEpi = listCliente[22]
-        self.dataUltAlt = listCliente[23]
-
-        if retornaInst:
-            return self
-
-    def __repr__(self):
-        return f"""PppModelo(
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
+        PppModelo(
             pppId: {self.pppId},
             cnpj: {self.cnpj},
             nomeEmpresa: {self.nomeEmpresa},
@@ -141,4 +124,18 @@ class PppModelo:
             eficEpi: {self.eficEpi},
             caEpi: {self.caEpi},
             dataUltAlt: {self.dataUltAlt}
-        )"""
+        )""")
+    
+    
+@post_save(sender=Ppp)
+def inserindoPpp(*args, **kwargs):
+    if kwargs['created']:
+        logPrioridade(f'INSERT<inserindoPpp>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+    else:
+        logPrioridade(f'INSERT<inserindoPpp>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+
+
+@pre_delete(sender=Ppp)
+def deletandoPpp(*args, **kwargs):
+    logPrioridade(f'DELETE<deletandoPpp>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    

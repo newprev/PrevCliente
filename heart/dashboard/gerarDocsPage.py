@@ -5,8 +5,8 @@ from Telas.pgImpressaoDocs import Ui_wdgImpressaoDocs
 from heart.dashboard.entrevista.geracaoDocumentos.docEntrevista import DocEntrevista
 from heart.sinaisCustomizados import Sinais
 
-from modelos.clienteModelo import ClienteModelo
-from modelos.processosModelo import ProcessosModelo
+from modelos.clienteORM import Cliente
+from modelos.processosORM import Processos
 
 from Daos.daoProcessos import DaoProcessos
 from Daos.daoCliente import DaoCliente
@@ -16,14 +16,14 @@ from newPrevEnums import TipoProcesso, NaturezaProcesso, TipoBeneficio
 
 class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):
 
-    def __init__(self,  cliente: ClienteModelo, processo: ProcessosModelo, parent=None, db=None):
+    def __init__(self,  cliente: Cliente, processo: Processos, parent=None, db=None):
         super(GerarDocsPage, self).__init__(parent)
 
         self.setupUi(self)
         self.entrevistaPage = parent
         self.db = db
-        self.clienteAtual: ClienteModelo = ClienteModelo()
-        self.daoCliente = DaoCliente(db=db)
+        self.clienteAtual: Cliente = Cliente()
+        # self.daoCliente = DaoCliente(db=db)
         self.processo = processo
         self.cliente = cliente
 
@@ -54,7 +54,7 @@ class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):
                 self.cbProcuracao.setChecked(True)
                 self.efeitos.shadowCards([self.frProcuracao])
 
-    def atualizaInformacoes(self, processo: ProcessosModelo, cliente: ClienteModelo):
+    def atualizaInformacoes(self, processo: Processos, cliente: Cliente):
         self.processo = processo
         self.cliente = cliente
 

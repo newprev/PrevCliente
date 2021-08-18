@@ -1,22 +1,28 @@
-import datetime
+from modelos.baseModelORM import BaseModel, DATEFORMATS
+from playhouse.signals import Model, post_save, pre_delete
+from logs import logPrioridade
+from newPrevEnums import TipoEdicao, Prioridade
 
-from helpers import strToDatetime
-from newPrevEnums import TamanhoData
+from datetime import datetime
+from peewee import AutoField, DateField, BooleanField, CharField, DateTimeField, FloatField
+
+TABLENAME = 'convMon'
 
 
-class ConvMonModelo:
+class ConvMon(BaseModel, Model):
+    convMonId = AutoField(column_name='convMonId', null=True)
+    conversao = CharField(null=False)
+    dataFinal = DateField(column_name='dataFinal', formats=DATEFORMATS)
+    dataInicial = DateField(column_name='dataInicial', null=False, formats=DATEFORMATS)
+    fator = FloatField(null=False)
+    moedaCorrente = BooleanField(column_name='moedaCorrente')
+    nomeMoeda = CharField(column_name='nomeMoeda')
+    sinal = CharField(null=False)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 
-    def __init__(self):
-        self.convMonId: int = None
-        self.nomeMoeda: str = None
-        self.fator: float = 1
-        self.dataInicial: datetime = None
-        self.dataFinal: datetime = None
-        self.conversao: str = 'Valorizou'
-        self.moedaCorrente: bool = True
-        self.sinal: str = None
-        self.dataUltAlt: datetime = None
-        self.dataCadastro: datetime = None
+    class Meta:
+        table_name = 'convMon'
 
     def toDict(self):
         dictConvMon = {
@@ -56,24 +62,9 @@ class ConvMonModelo:
         self.sinal = dictConvMon['sinal']
         return self
 
-    def fromList(self, listConvMon: list, retornaInst: bool = True):
-
-        self.convMonId = listConvMon[0]
-        self.nomeMoeda = listConvMon[1]
-        self.fator = listConvMon[2]
-        self.dataInicial = strToDatetime(listConvMon[3], tamanho=TamanhoData.mm)
-        self.dataFinal = strToDatetime(listConvMon[4], tamanho=TamanhoData.mm)
-        self.conversao = listConvMon[5]
-        self.moedaCorrente = listConvMon[6]
-        self.sinal = listConvMon[7]
-        self.dataUltAlt = listConvMon[8]
-        self.dataCadastro = listConvMon[9]
-
-        if retornaInst:
-            return self
-
-    def __repr__(self):
-        return f"""ConvMonModelo(
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
+        ConvMonModelo(
             convMonId: {self.convMonId},
             nomeMoeda: {self.nomeMoeda},
             fator: {self.fator},
@@ -84,4 +75,17 @@ class ConvMonModelo:
             sinal: {self.sinal},
             dataUltAlt: {self.dataUltAlt},
             dataCadastro: {self.dataCadastro}
-        )"""
+        )""")
+
+
+@post_save(sender=ConvMon)
+def inserindoConvMon(*args, **kwargs):
+    if kwargs['created']:
+        logPrioridade(f'INSERT<inserindoConvMon>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+    else:
+        logPrioridade(f'INSERT<inserindoConvMon>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+
+
+@pre_delete(sender=ConvMon)
+def deletandoConvMon(*args, **kwargs):
+    logPrioridade(f'DELETE<inserindoConvMon>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

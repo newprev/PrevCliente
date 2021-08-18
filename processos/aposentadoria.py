@@ -7,12 +7,12 @@ from collections import defaultdict
 from Daos.daoCalculos import DaoCalculos
 from helpers import comparaMesAno, calculaDiaMesAno, mascaraDataSql, strToDatetime, datetimeToSql, dateToSql
 
-from modelos.cnisCabecalhoModelo import CabecalhoModelo
-from modelos.remuneracaoModelo import RemuneracoesModelo
-from modelos.contribuicoesModelo import ContribuicoesModelo
-from modelos.expSobrevidaModelo import ExpectativaSobrevidaModelo
-from modelos.processosModelo import ProcessosModelo
-from modelos.clienteModelo import ClienteModelo
+from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.remuneracaoORM import CnisRemuneracoes
+from modelos.contribuicoesORM import CnisContribuicoes
+from modelos.expSobrevidaORM import ExpSobrevida
+from modelos.processosORM import Processos
+from modelos.clienteORM import Cliente
 from newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData, ComparaData, DireitoAdquirido, SubTipoAposentadoria
 
 
@@ -23,11 +23,11 @@ from newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData, ComparaData
 
 class CalculosAposentadoria:
 
-    def __init__(self, processo: ProcessosModelo, cliente: ClienteModelo, dib: datetime = None, db=None):
+    def __init__(self, processo: Processos, cliente: Cliente, dib: datetime = None, db=None):
         self.processo = processo
         self.cliente = cliente
         self.daoCalculos = DaoCalculos(db)
-        self.cabecalhos: List[CabecalhoModelo] = list(self.daoCalculos.buscaCabecalhosClienteId(self.cliente.clienteId))
+        self.cabecalhos: List[CnisCabecalhos] = list(self.daoCalculos.buscaCabecalhosClienteId(self.cliente.clienteId))
         self.listaRemuneracoes = list(self.daoCalculos.buscaTodasRemuneracoes(cliente.clienteId))
         self.listaContribuicoes = list(self.daoCalculos.buscaTodasContribuicoes(cliente.clienteId))
 
@@ -98,7 +98,7 @@ class CalculosAposentadoria:
         totalDias: int = 0
         anosContribuicao: int = 0
         antesReforma: bool = True
-        listaBanco: List[CabecalhoModelo] = []
+        listaBanco: List[CnisCabecalhos] = []
 
         if lei == DireitoAdquirido.lei821391:
             if subTipo == SubTipoAposentadoria.Idade:
@@ -151,7 +151,7 @@ class CalculosAposentadoria:
         tempCont: float = self.tempoContribCalculado[2] + ((self.tempoContribCalculado[0] / 30) + self.tempoContribCalculado[1] / 12)
         aliq: float = 0.31
         idade = self.cliente.idade
-        expSobrevidaModelo: ExpectativaSobrevidaModelo = self.daoCalculos.buscaExpSobrevidaPorData(self.dibAtual, idade)
+        expSobrevidaModelo: ExpSobrevida = self.daoCalculos.buscaExpSobrevidaPorData(self.dibAtual, idade)
         expSobrevida: int = expSobrevidaModelo.expectativaSobrevida
 
         fatorPrev = ((tempCont * aliq) / expSobrevida) * (1 + (idade + (tempCont * aliq)) / 100)
@@ -169,7 +169,7 @@ class CalculosAposentadoria:
     def calculaMediaSalarial(self):
         avaliaSalario = lambda df: df['salContribuicao'] if df['salContribuicao'] <= df['teto'] else df['teto']
 
-        dfContribuicoes: pd.DataFrame = self.daoCalculos.buscaRemContPorData(self.cliente.clienteId, '1994-07-31', self.dibAtual)
+        dfContribuicoes: pd.DataFrame = self.daoCalculos.buscaRemContPorData(self.cliente.clienteId, '1994-07-31', self.dibAtual.strftime('%Y-%m-%d'))
         dfContribuicoes['salContribuicao1'] = dfContribuicoes.apply(avaliaSalario, axis=1)
         salAtualizado = dfContribuicoes['salContribuicao1']*dfContribuicoes['fator']
         dfContribuicoes['salAtualizado'] = salAtualizado
@@ -182,21 +182,21 @@ class CalculosAposentadoria:
         indicadoresImpeditivos = ['PDT-NASC-FIL-INV', 'IREC-LC123', 'PREC-MENOR-MIN']
 
         if cabecalhos is None:
-            listaBanco: List[CabecalhoModelo] = self.cabecalhos
+            listaBanco: List[CnisCabecalhos] = self.cabecalhos
         else:
-            listaBanco: List[CabecalhoModelo] = cabecalhos
+            listaBanco: List[CnisCabecalhos] = cabecalhos
 
         # Criando dicionários de remunerações e contribuições por Id ----------------
         dictCabecalhos: dict = {cabecalho.seq: cabecalho for cabecalho in listaBanco}
 
         remPorSeq: defaultdict = defaultdict(list)
         for remuneracao in self.listaRemuneracoes:
-            listaAtual: List[RemuneracoesModelo] = remPorSeq[remuneracao.seq]
+            listaAtual: List[CnisRemuneracoes] = remPorSeq[remuneracao.seq]
             listaAtual.append(remuneracao)
 
         contPorSeq: defaultdict = defaultdict(list)
         for contribuicao in self.listaContribuicoes:
-            listaAtual: List[RemuneracoesModelo] = contPorSeq[contribuicao.seq]
+            listaAtual: List[CnisRemuneracoes] = contPorSeq[contribuicao.seq]
             listaAtual.append(contribuicao)
 
         for seq, cabecalho in dictCabecalhos.items():
@@ -253,7 +253,7 @@ class CalculosAposentadoria:
 
         return calculaDiaMesAno(totalDias)
 
-    def calculaTimedeltaAr(self, cabecalho: CabecalhoModelo) -> datetime.timedelta:
+    def calculaTimedeltaAr(self, cabecalho: CnisCabecalhos) -> datetime.timedelta:
         """
         Para o tempo de serviço antes da reforma previdenciária, 13/11/2019, o tempo de contribuição é calculado dia a dia.
 
@@ -276,7 +276,7 @@ class CalculosAposentadoria:
         else:
             return cabecalho.dataFim - cabecalho.dataInicio
 
-    def calculaTimedeltaDr(self, listContOuRem: list, listCabecalhos: List[CabecalhoModelo], dataLimitante: datetime = None) -> datetime.timedelta:
+    def calculaTimedeltaDr(self, listContOuRem: list, listCabecalhos: List[CnisCabecalhos], dataLimitante: datetime = None) -> datetime.timedelta:
         """
         Após a reforma previdenciária, 13/11/2019, o tempo de contribuição é calculado mês a mês, descontando os casos que ocorrem o indicador 'PREC-MENOR-MIN'
 
@@ -289,11 +289,11 @@ class CalculosAposentadoria:
         if dataLimite is None:
             dataLimite = self.dibAtual
 
-        if not isinstance(listContOuRem[0], ContribuicoesModelo) and not isinstance(listContOuRem[0], RemuneracoesModelo):
+        if not isinstance(listContOuRem[0], CnisContribuicoes) and not isinstance(listContOuRem[0], CnisRemuneracoes):
             raise Exception()
 
         indiceDR: int = next(index for index, contrib in enumerate(listContOuRem) if comparaMesAno(contrib.competencia, self.dataReforma2019, ComparaData.posterior))
-        cabecalho: CabecalhoModelo = next(cabecalho for cabecalho in listCabecalhos if cabecalho.seq == listContOuRem[indiceDR].seq)
+        cabecalho: CnisCabecalhos = next(cabecalho for cabecalho in listCabecalhos if cabecalho.seq == listContOuRem[indiceDR].seq)
         contaMeses: int = 0
         indicadoresImpeditivos = ['PDT-NASC-FIL-INV', 'IREC-LC123', 'PREC-MENOR-MIN']
 

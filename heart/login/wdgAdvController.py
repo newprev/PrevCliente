@@ -1,12 +1,12 @@
 from PyQt5.QtWidgets import QWidget
 from Telas.wdgAdvogados import Ui_wdgAdv
-from modelos.advogadoModelo import AdvogadoModelo
+from modelos.advogadoORM import Advogados
 from heart.sinaisCustomizados import Sinais
 
 
 class WdgAdvController(QWidget, Ui_wdgAdv):
 
-    def __init__(self, advogado: AdvogadoModelo,  parent=None):
+    def __init__(self, advogado: Advogados,  parent=None):
         super(WdgAdvController, self).__init__(parent=parent)
         self.setupUi(self)
         self.sinais = Sinais()

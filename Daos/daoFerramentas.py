@@ -4,8 +4,8 @@ from connections import ConfigConnection
 from Daos.tabelas import TabelasConfig
 from helpers import datetimeToSql
 from logs import TipoEdicao, Prioridade, logPrioridade
-from modelos.convMonModelo import ConvMonModelo
-from modelos.tetosPrevModelo import TetosPrevModelo
+# from modelos.convMonModelo import ConvMonModelo
+# from modelos.tetosPrevModelo import TetosPrevModelo
 from datetime import datetime
 
 
@@ -217,62 +217,62 @@ class DaoFerramentas:
             self.db.commit()
             self.disconectBD(cursor)
 
-    def insereConvMon(self, convMon: ConvMonModelo):
+    # def insereConvMon(self, convMon: ConvMonModelo):
+    #
+    #     if not isinstance(self.db, sqlite3.Connection):
+    #         self.db.ping()
+    #
+    #     # self.db.connect()
+    #     cursor = self.db.cursor()
+    #
+    #     strComando = f"""
+    #         INSERT INTO {self.tabelas.tblConvMon}
+    #         (
+    #             nomeMoeda, fator, dataInicial,
+    #             dataFinal, conversao, moedaCorrente,
+    #             sinal, dataUltAlt, dataCadastro
+    #         )
+    #         VALUES
+    #         (
+    #             '{convMon.nomeMoeda}', {convMon.fator}, '{convMon.dataInicial}',
+    #             '{convMon.dataFinal}', '{convMon.conversao}', {convMon.moedaCorrente},
+    #             '{convMon.sinal}', '{datetimeToSql(datetime.now())}', '{datetimeToSql(datetime.now())}'
+    #         )"""
+    #
+    #     try:
+    #         cursor.execute(strComando)
+    #         convMonId = cursor.lastrowid
+    #         logPrioridade(f'INSERT<insereConvMon>___________________{self.tabelas.tblConvMon} ({convMonId})', TipoEdicao.insert, Prioridade.saidaComun)
+    #     except:
+    #         raise Warning(f'Erro SQL - insereConvMon({self.config.banco}) <INSERT {self.tabelas.tblConvMon}>')
+    #     finally:
+    #         self.db.commit()
+    #         self.disconectBD(cursor)
 
-        if not isinstance(self.db, sqlite3.Connection):
-            self.db.ping()
-
-        # self.db.connect()
-        cursor = self.db.cursor()
-
-        strComando = f"""
-            INSERT INTO {self.tabelas.tblConvMon}
-            (
-                nomeMoeda, fator, dataInicial, 
-                dataFinal, conversao, moedaCorrente, 
-                sinal, dataUltAlt, dataCadastro
-            )
-            VALUES 
-            (
-                '{convMon.nomeMoeda}', {convMon.fator}, '{convMon.dataInicial}',
-                '{convMon.dataFinal}', '{convMon.conversao}', {convMon.moedaCorrente}, 
-                '{convMon.sinal}', '{datetimeToSql(datetime.now())}', '{datetimeToSql(datetime.now())}'
-            )"""
-
-        try:
-            cursor.execute(strComando)
-            convMonId = cursor.lastrowid
-            logPrioridade(f'INSERT<insereConvMon>___________________{self.tabelas.tblConvMon} ({convMonId})', TipoEdicao.insert, Prioridade.saidaComun)
-        except:
-            raise Warning(f'Erro SQL - insereConvMon({self.config.banco}) <INSERT {self.tabelas.tblConvMon}>')
-        finally:
-            self.db.commit()
-            self.disconectBD(cursor)
-
-    def atualizaTeto(self, tetoModel: TetosPrevModelo):
-
-        if not isinstance(self.db, sqlite3.Connection):
-            self.db.ping()
-
-        # self.db.connect()
-        cursor = self.db.cursor()
-
-        strComando = f"""
-            UPDATE {self.tabelas.tblTetosPrev} SET
-                dataValidade = '{tetoModel.dataValidade}',
-                valor = {tetoModel.valor},
-                dataUltAlt = '{datetime.now()}'
-            WHERE 
-                tetosPrevId = {tetoModel.tetosPrevId}"""
-
-        try:
-            cursor.execute(strComando)
-            logPrioridade(f'UPDATE<atualizaTeto>___________________{self.tabelas.tblTetosPrev} ({tetoModel.tetosPrevId})', TipoEdicao.update, Prioridade.saidaComun)
-        except:
-            raise Warning(f'Erro SQL - atualizaTeto({self.config.banco}) <UPDATE {self.tabelas.tblTetosPrev}>')
-        finally:
-            self.db.commit()
-            self.disconectBD(cursor)
+    # def atualizaTeto(self, tetoModel: TetosPrevModelo):
+    #
+    #     if not isinstance(self.db, sqlite3.Connection):
+    #         self.db.ping()
+    #
+    #     # self.db.connect()
+    #     cursor = self.db.cursor()
+    #
+    #     strComando = f"""
+    #         UPDATE {self.tabelas.tblTetosPrev} SET
+    #             dataValidade = '{tetoModel.dataValidade}',
+    #             valor = {tetoModel.valor},
+    #             dataUltAlt = '{datetime.now()}'
+    #         WHERE
+    #             tetosPrevId = {tetoModel.tetosPrevId}"""
+    #
+    #     try:
+    #         cursor.execute(strComando)
+    #         logPrioridade(f'UPDATE<atualizaTeto>___________________{self.tabelas.tblTetosPrev} ({tetoModel.tetosPrevId})', TipoEdicao.update, Prioridade.saidaComun)
+    #     except:
+    #         raise Warning(f'Erro SQL - atualizaTeto({self.config.banco}) <UPDATE {self.tabelas.tblTetosPrev}>')
+    #     finally:
+    #         self.db.commit()
+    #         self.disconectBD(cursor)
 
     def deletaTetoById(self, tetoPrevId: int):
 
@@ -370,71 +370,71 @@ class DaoFerramentas:
         finally:
             self.disconectBD(cursor)
 
-    def getAllMoedas(self, retornaModelos: bool = False):
+    # def getAllMoedas(self, retornaModelos: bool = False):
+    #
+    #     if not isinstance(self.db, sqlite3.Connection):
+    #         self.db.ping()
+    #
+    #     # self.db.connect()
+    #     cursor = self.db.cursor()
+    #
+    #     strComando = f"""
+    #         SELECT
+    #
+    #             convMonId, nomeMoeda, fator,
+    #             dataInicial, dataFinal, conversao,
+    #             moedaCorrente, sinal, dataUltAlt,
+    #             dataCadastro
+    #
+    #         FROM {self.tabelas.tblConvMon}
+    #         ORDER BY dataFinal DESC"""
+    #
+    #     try:
+    #         cursor.execute(strComando)
+    #         if not retornaModelos:
+    #             logPrioridade(f'SELECT<getAllMoedas>___________________{self.tabelas.tblConvMon}', TipoEdicao.select, Prioridade.saidaComun)
+    #             return cursor.fetchall()
+    #         else:
+    #             listaMoedas: list = []
+    #             logPrioridade(f'SELECT<getAllMoedas>___________________{self.tabelas.tblConvMon}', TipoEdicao.select, Prioridade.saidaComun)
+    #             for moeda in cursor.fetchall():
+    #                 listaMoedas.append(ConvMonModelo().fromList(moeda))
+    #             return listaMoedas
+    #     except:
+    #         raise Warning(f'Erro SQL - getAllTetos({self.config.banco}) <INSERT {self.tabelas.tblTetosPrev}>')
+    #     finally:
+    #         self.disconectBD(cursor)
 
-        if not isinstance(self.db, sqlite3.Connection):
-            self.db.ping()
-
-        # self.db.connect()
-        cursor = self.db.cursor()
-
-        strComando = f"""
-            SELECT 
-                
-                convMonId, nomeMoeda, fator,
-                dataInicial, dataFinal, conversao,
-                moedaCorrente, sinal, dataUltAlt,
-                dataCadastro 
-                
-            FROM {self.tabelas.tblConvMon} 
-            ORDER BY dataFinal DESC"""
-
-        try:
-            cursor.execute(strComando)
-            if not retornaModelos:
-                logPrioridade(f'SELECT<getAllMoedas>___________________{self.tabelas.tblConvMon}', TipoEdicao.select, Prioridade.saidaComun)
-                return cursor.fetchall()
-            else:
-                listaMoedas: list = []
-                logPrioridade(f'SELECT<getAllMoedas>___________________{self.tabelas.tblConvMon}', TipoEdicao.select, Prioridade.saidaComun)
-                for moeda in cursor.fetchall():
-                    listaMoedas.append(ConvMonModelo().fromList(moeda))
-                return listaMoedas
-        except:
-            raise Warning(f'Erro SQL - getAllTetos({self.config.banco}) <INSERT {self.tabelas.tblTetosPrev}>')
-        finally:
-            self.disconectBD(cursor)
-
-    def atualizaConvMon(self, convMon: ConvMonModelo):
-
-        if not isinstance(self.db, sqlite3.Connection):
-            self.db.ping()
-
-        # self.db.connect()
-        cursor = self.db.cursor()
-
-        strComando = f"""
-            UPDATE {self.tabelas.tblConvMon} 
-                SET
-                    nomeMoeda = '{convMon.nomeMoeda}',
-                    fator = {convMon.fator},
-                    dataInicial = '{convMon.dataInicial}',
-                    dataFinal = '{convMon.dataFinal}',
-                    conversao = '{convMon.conversao}',
-                    moedaCorrente = {convMon.moedaCorrente},
-                    sinal = '{convMon.sinal}',
-                    dataUltAlt = '{datetimeToSql(datetime.now())}'
-            WHERE
-                convMonId = {convMon.convMonId}"""
-
-        try:
-            cursor.execute(strComando)
-            logPrioridade(f'UPDATE<atualizaConvMon>___________________{self.tabelas.tblConvMon}', TipoEdicao.update, Prioridade.saidaComun)
-            return cursor.fetchall()
-        except:
-            raise Warning(f'Erro SQL - atualizaConvMon({self.config.banco}) <UPDATE {self.tabelas.tblConvMon}>')
-        finally:
-            self.disconectBD(cursor)
+    # def atualizaConvMon(self, convMon: ConvMonModelo):
+    #
+    #     if not isinstance(self.db, sqlite3.Connection):
+    #         self.db.ping()
+    #
+    #     # self.db.connect()
+    #     cursor = self.db.cursor()
+    #
+    #     strComando = f"""
+    #         UPDATE {self.tabelas.tblConvMon}
+    #             SET
+    #                 nomeMoeda = '{convMon.nomeMoeda}',
+    #                 fator = {convMon.fator},
+    #                 dataInicial = '{convMon.dataInicial}',
+    #                 dataFinal = '{convMon.dataFinal}',
+    #                 conversao = '{convMon.conversao}',
+    #                 moedaCorrente = {convMon.moedaCorrente},
+    #                 sinal = '{convMon.sinal}',
+    #                 dataUltAlt = '{datetimeToSql(datetime.now())}'
+    #         WHERE
+    #             convMonId = {convMon.convMonId}"""
+    #
+    #     try:
+    #         cursor.execute(strComando)
+    #         logPrioridade(f'UPDATE<atualizaConvMon>___________________{self.tabelas.tblConvMon}', TipoEdicao.update, Prioridade.saidaComun)
+    #         return cursor.fetchall()
+    #     except:
+    #         raise Warning(f'Erro SQL - atualizaConvMon({self.config.banco}) <UPDATE {self.tabelas.tblConvMon}>')
+    #     finally:
+    #         self.disconectBD(cursor)
 
     def contaQtdMoedas(self) -> int:
 

@@ -1,5 +1,7 @@
 import datetime
 from math import floor
+from peewee import ModelSelect
+from typing import List
 
 from newPrevEnums import *
 
@@ -245,6 +247,17 @@ def getConversoesMonetarias():
     return ['Valorizou', 'Desvalorizou']
 
 
+def escritorioIdAtual() -> int:
+    from cache.cacheEscritorio import CacheEscritorio
+
+    escritorioCache = CacheEscritorio()
+    escritorio = escritorioCache.carregarCache()
+    if not escritorio:
+        escritorio = escritorioCache.carregarCacheTemporario()
+
+    return escritorio.escritorioId
+
+
 def mascaraTelCel(telCel):
     if telCel in [None, 'None']:
         return ''
@@ -318,6 +331,15 @@ def mascaraDataPequena(data: datetime.date):
     return f'{data.month}/{data.year}'
 
 
+def dataUSAtoBR(dataUSA: str, comDias: bool = False) -> str:
+    if dataUSA == '':
+        return dataUSA
+    elif comDias:
+        return f"{dataUSA[8:]}/{dataUSA[5:7]}/{dataUSA[:4]}"
+    else:
+        return f"{dataUSA[5:7]}/{dataUSA[:4]}"
+
+
 def mascaraDinheiro(valor: float, simbolo: str = 'R$'):
     strValor = str(valor).replace('.', ',')
     pointPosition = strValor.find(",") - 3
@@ -383,7 +405,10 @@ def mascaraDataSql(data: str, short: bool = False):
 
 
 def datetimeToSql(data: datetime.datetime) -> str:
-    return data.strftime('%Y-%m-%d %H:%M')
+    if isinstance(data, str):
+        return data
+    else:
+        return data.strftime('%Y-%m-%d %H:%M')
 
 
 def dateToSql(data: datetime.date) -> str:
@@ -408,6 +433,20 @@ def strToDatetime(data: str, tamanho: TamanhoData = TamanhoData.m):
         return datetime.datetime.min
 
 
+def strToDate(data: str):
+    dateFormats: List[str] = ['%d/%m/%Y', '%m/%Y', '%Y-%m-%d']
+
+    for formato in dateFormats:
+        try:
+            dataRetorno = datetime.datetime.strptime(data, formato).date()
+            return dataRetorno
+        except ValueError:
+            pass
+        except Exception as err:
+            print(f'strToDate: ({type(data)}) {data} - ({type(err)}) {err}')
+            raise
+
+
 def strToFloat(valor: str) -> float:
     try:
         retorno = valor.replace('.', '').replace(',', '.')
@@ -417,7 +456,7 @@ def strToFloat(valor: str) -> float:
 
 
 def unmaskAll(info: str):
-    return info.replace('.', '').replace('/', '').replace('\\', '').replace(',', '').replace('-', '')
+    return info.replace('.', '').replace('/', '').replace('\\', '').replace(',', '').replace('-', '').replace('(', '').replace(')', '').replace(' ', '')
 
 
 def strNatureza(natureza: int) -> str:
@@ -498,3 +537,20 @@ def eliminaHoraDias(data: datetime):
         return data.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     elif isinstance(data, datetime.date):
         return data.replace(day=1)
+
+
+def pyToDefault(dicionario: dict) -> dict:
+
+    dictReturn: dict = dict()
+    for chave, valor in dicionario.items():
+
+        if isinstance(valor, datetime.datetime):
+            dictReturn[chave] = valor.strftime('%Y-%m-%d')
+        elif isinstance(valor, datetime.date):
+            dictReturn[chave] = valor.strftime('%Y-%m-%d')
+        elif isinstance(valor, ModelSelect):
+            dictReturn[chave] = pyToDefault(valor.get().toDict())
+        else:
+            dictReturn[chave] = valor
+
+    return dictReturn

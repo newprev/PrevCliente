@@ -1,26 +1,35 @@
-import datetime
+from modelos.baseModelORM import BaseModel
+from playhouse.signals import Model, post_save, pre_delete
+from logs import logPrioridade
+from newPrevEnums import TipoEdicao, Prioridade
+
+from datetime import datetime
+from peewee import AutoField, IntegerField, CharField, DateTimeField
+
+TABLENAME = 'escritorios'
 
 
-class EscritorioModelo:
+class Escritorios(BaseModel, Model):
+    escritorioId = AutoField(column_name='escritorioId', null=True)
+    bairro = CharField(null=True)
+    cep = CharField(null=True)
+    cidade = CharField(null=True)
+    cnpj = CharField(null=True)
+    complemento = CharField(null=True)
+    cpf = CharField(null=True)
+    email = CharField(null=True)
+    endereco = CharField(null=True)
+    estado = CharField(default='SP')
+    inscEstadual = CharField(column_name='inscEstadual', null=True)
+    nomeEscritorio = CharField(column_name='nomeEscritorio')
+    nomeFantasia = CharField(column_name='nomeFantasia')
+    numero = IntegerField(null=True)
+    telefone = CharField(null=True)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 
-    def __init__(self):
-        self.escritorioId: int = None
-        self.nomeEscritorio: str = None
-        self.nomeFantasia: str = ''
-        self.cnpj: str = ''
-        self.cpf: str = ''
-        self.telefone: str = ''
-        self.email: str = ''
-        self.inscEstadual: str = ''
-        self.endereco: str = ''
-        self.numero: int = None
-        self.cep: str = ''
-        self.complemento: str = ''
-        self.cidade: str = ''
-        self.estado: str = ''
-        self.bairro: str = ''
-        self.dataCadastro: datetime = None
-        self.dataUltAlt: datetime = None
+    class Meta:
+        table_name = TABLENAME
 
     def toDict(self):
         dictUsuario = {
@@ -79,34 +88,9 @@ class EscritorioModelo:
 
         return self
 
-    def fromList(self, listEscritorio: list, retornaInst: bool = True):
-        if listEscritorio is None:
-            return None
-        else:
-            if len(listEscritorio) != 0:
-                self.escritorioId = listEscritorio[0]
-                self.nomeEscritorio = listEscritorio[1]
-                self.nomeFantasia = listEscritorio[2]
-                self.cnpj = listEscritorio[3]
-                self.cpf = listEscritorio[4]
-                self.telefone = listEscritorio[5]
-                self.email = listEscritorio[6]
-                self.inscEstadual = listEscritorio[7]
-                self.endereco = listEscritorio[8]
-                self.numero = listEscritorio[9]
-                self.cep = listEscritorio[10]
-                self.complemento = listEscritorio[11]
-                self.cidade = listEscritorio[12]
-                self.estado = listEscritorio[13]
-                self.bairro = listEscritorio[14]
-                self.dataCadastro = listEscritorio[15]
-                self.dataUltAlt = listEscritorio[16]
-
-            if retornaInst:
-                return self
-
-    def __repr__(self):
-        return f"""Escritorio(
+    def prettyPrint(self, backRef: bool = False):
+        print(f"""
+        Escritorio(
             escritorioId: {self.escritorioId},
             nomeEscritorio: {self.nomeEscritorio},
             nomeFantasia: {self.nomeFantasia},
@@ -122,8 +106,21 @@ class EscritorioModelo:
             cep: {self.cep},
             complemento: {self.complemento},
             dataCadastro: {self.dataCadastro},
-            dataUltAlt: {self.dataUltAlt}            
-    """
+            dataUltAlt: {self.dataUltAlt}
+        )""")
 
     def __bool__(self):
         return self.escritorioId is not None
+
+
+@post_save(sender=Escritorios)
+def inserindoEscritorios(*args, **kwargs):
+    if kwargs['created']:
+        logPrioridade(f'INSERT<inserindoEscritorios>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+    else:
+        logPrioridade(f'INSERT<inserindoEscritorios>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+
+
+@pre_delete(sender=Escritorios)
+def deletandoEscritorios(*args, **kwargs):
+    logPrioridade(f'DELETE<deletandoEscritorios>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

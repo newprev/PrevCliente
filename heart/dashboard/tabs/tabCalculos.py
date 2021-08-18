@@ -1,19 +1,22 @@
-import datetime
-
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QMessageBox
+from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QMessageBox, QVBoxLayout
+from Telas.tabCalculos import Ui_wdgTabCalculos
+from typing import List
 
 from Daos.daoCalculos import DaoCalculos
 from Daos.daoCliente import DaoCliente
-from Telas.tabCalculos import Ui_wdgTabCalculos
+from heart.dashboard.tabs.localWidgets.itemResumoCNIS import ItemResumoCnis
 from heart.buscaClientePage import BuscaClientePage
 from heart.insereContribuicaoPage import InsereContribuicaoPage
+from Telas.efeitos import Efeitos
 
-from helpers import mascaraDataPequena, mascaraDinheiro, mascaraCPF, strToDatetime
+from helpers import mascaraDinheiro, mascaraCPF, dataUSAtoBR
 
-from modelos.clienteModelo import ClienteModelo
-from newPrevEnums import TamanhoData, TipoContribuicao
+from modelos.clienteORM import Cliente
+from modelos.beneficiosORM import CnisBeneficios
+from modelos.cabecalhoORM import CnisCabecalhos
+from newPrevEnums import TipoContribuicao
 
 
 class TabCalculos(QWidget, Ui_wdgTabCalculos):
@@ -22,9 +25,11 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
         super(TabCalculos, self).__init__(parent=parent)
         self.setupUi(self)
         self.db = db
-        self.cliente = ClienteModelo()
+        self.cliente = Cliente()
         self.daoCalculos = DaoCalculos(db=db)
         self.daoCliente = DaoCliente(db=db)
+        self.efeito = Efeitos()
+        self.vlResumos = QVBoxLayout()
 
         self.buscaClientePage = None
         self.inserirContribuicao = None
@@ -36,6 +41,7 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
 
         self.pbBuscarCliente.clicked.connect(self.abreBuscaClientePage)
         self.pbBuscarClienteBen.clicked.connect(self.abreBuscaClientePage)
+        self.pbBuscarClienteResumo.clicked.connect(self.abreBuscaClientePage)
         self.pbEditar.clicked.connect(lambda: self.avaliaEdicao('tblCalculos'))
         self.pbEditarBen.clicked.connect(lambda: self.avaliaEdicao('tblBeneficios'))
         self.pbExcluir.clicked.connect(lambda: self.avaliaExclusao('pbExcluir'))
@@ -98,10 +104,10 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
         elif tipo == TipoContribuicao.beneficio:
             self.daoCalculos.delete(tipo, contribuicaoId)
 
-        self.carregarTabContribuicoes(self.cliente.clienteId)
+        self.carregarTblContribuicoes(self.cliente.clienteId)
         self.carregarTblBeneficios(self.cliente.clienteId)
 
-    def carregarTabContribuicoes(self, clienteId: int):
+    def carregarTblContribuicoes(self, clienteId: int):
         dados = self.daoCalculos.getRemECon(clienteId)
 
         self.tblCalculos.setRowCount(0)
@@ -110,34 +116,41 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
             self.tblCalculos.insertRow(contLinha)
 
             for contColuna, info in enumerate(infoLinha):
+
+                # RemuneracaoId/ContribuiçãoId - Coluna 0 (escondida)
                 if contColuna == 0:
                     strItem = QTableWidgetItem(str(info))
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
 
+                # Seq - Coluna 1 (ativa)
                 elif contColuna == 1:
                     strItem = QTableWidgetItem(str(info))
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
 
+                # Competência - Coluna 2 (ativa)
                 elif contColuna == 2:
-                    strItem = QTableWidgetItem(mascaraDataPequena(info))
+                    strItem = QTableWidgetItem(dataUSAtoBR(info))
                     strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
 
+                # Salário de contribuição - Coluna 3 (escondida)
                 elif contColuna == 3:
                     strItem = QTableWidgetItem(mascaraDinheiro(info, simbolo=infoLinha[6]))
                     strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     self.tblCalculos.setItem(contLinha, contColuna, strItem)
 
+                # Natureza dos dados (Remuneração/Contribuição) - Coluna 4 (ativa)
                 elif contColuna == 4:
                     strItem = QTableWidgetItem(info)
                     strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     self.tblCalculos.setItem(contLinha, contColuna+1, strItem)
 
+                # Natureza dos dados (Remuneração/Contribuição) - Coluna 6 (ativa)
                 elif contColuna == 5:
                     if ',' in info:
                         indicadores = info.split(', ')
@@ -157,6 +170,7 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
                     strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter | Qt.AlignCenter)
                     self.tblCalculos.setItem(contLinha, contColuna+1, strItem)
 
+                # Tetos previdenciários - Coluna 4 (ativa)
                 elif contColuna == 10:
                     strItem = QTableWidgetItem(mascaraDinheiro(info, simbolo=infoLinha[6]))
                     strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
@@ -168,11 +182,14 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
 
     def carregarTblBeneficios(self, clienteId: int):
 
-        dados = self.daoCalculos.getBeneficiosPor(clienteId)
+        # TODO: ALTERAR FILTRO PARA SELECIONAR APENAS LINHAS QUE TENHAM NB
+        dictCabecalhos: List[dict] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == clienteId & CnisCabecalhos.nb.is_null(False)).dicts()
+        dados: List[CnisBeneficios] = CnisBeneficios.select().where(CnisBeneficios.clienteId == clienteId)
 
         self.tblBeneficios.setRowCount(0)
 
         for contLinha, beneficio in enumerate(dados):
+            # numeroBeneficio: int = dictCabecalhos.
             self.tblBeneficios.insertRow(contLinha)
 
             # BenefícioId - Coluna 0 (escondida)
@@ -195,32 +212,26 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
             strNb.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblBeneficios.setItem(contLinha, 2, strNb)
 
-            # DataInício - Coluna 3 (ativa)
-            if strToDatetime(beneficio.dataInicio, TamanhoData.gg) == datetime.datetime.min:
-                strDataInicio = QTableWidgetItem('-')
-            else:
-                strDataInicio = QTableWidgetItem(mascaraDataPequena(strToDatetime(beneficio.dataInicio, TamanhoData.gg)))
+            # Competência - Coluna 3 (ativa)
+            strDataInicio = QTableWidgetItem(dataUSAtoBR(beneficio.competencia))
             strDataInicio.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             strDataInicio.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblBeneficios.setItem(contLinha, 3, strDataInicio)
 
             # DataFim - Coluna 4 (ativa)
-            if strToDatetime(beneficio.dataFim, TamanhoData.gg) == datetime.datetime.min:
-                strDataFim = QTableWidgetItem('-')
-            else:
-                strDataFim = QTableWidgetItem(mascaraDataPequena(strToDatetime(beneficio.dataFim, TamanhoData.gg)))
+            strDataFim = QTableWidgetItem('')
             strDataFim.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             strDataFim.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblBeneficios.setItem(contLinha, 4, strDataFim)
 
             # Situação do benefício - Coluna 5 (ativa)
-            strSituacao = QTableWidgetItem(beneficio.situacao)
+            strSituacao = QTableWidgetItem('')
             strSituacao.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             strSituacao.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblBeneficios.setItem(contLinha, 5, strSituacao)
 
             # Dado Origem - Coluna 6 (ativa)
-            strOrigem = QTableWidgetItem(beneficio.dadoOrigem)
+            strOrigem = QTableWidgetItem('')
             strOrigem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             strOrigem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblBeneficios.setItem(contLinha, 6, strOrigem)
@@ -228,23 +239,47 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
         self.tblBeneficios.resizeColumnsToContents()
         self.tblBeneficios.resizeRowsToContents()
 
-    def carregarInfoCliente(self, clientId: int = 1, clienteModel: ClienteModelo = None):
+    def carregarInfoCliente(self, clientId: int = 1, clienteModel: Cliente = None):
         if clienteModel is None:
-            self.carregarTabContribuicoes(clientId)
+            self.carregarTblContribuicoes(clientId)
             self.carregarTblBeneficios(clientId)
-            self.cliente.fromList(self.daoCliente.buscaClienteById(clientId)[0])
+            self.carregarResumos(clientId)
+            self.cliente = Cliente.get_by_id(clientId)
             self.lbNome.setText(self.cliente.nomeCliente + ' ' + self.cliente.sobrenomeCliente)
             self.lbNomeBen.setText(self.cliente.nomeCliente + ' ' + self.cliente.sobrenomeCliente)
+            self.lbNomeResumo.setText(self.cliente.nomeCliente + ' ' + self.cliente.sobrenomeCliente)
             self.lbDocumento.setText(mascaraCPF(self.cliente.cpfCliente))
             self.lbDocumentoBen.setText(mascaraCPF(self.cliente.cpfCliente))
+            self.lbDocumentoResumo.setText(mascaraCPF(self.cliente.cpfCliente))
         else:
             self.cliente = clienteModel
-            self.carregarTabContribuicoes(clienteModel.clienteId)
+            self.carregarTblContribuicoes(clienteModel.clienteId)
             self.carregarTblBeneficios(clienteModel.clienteId)
             self.lbNome.setText(clienteModel.nomeCliente + ' ' + clienteModel.sobrenomeCliente)
             self.lbNomeBen.setText(clienteModel.nomeCliente + ' ' + clienteModel.sobrenomeCliente)
+            self.lbNomeResumo.setText(clienteModel.nomeCliente + ' ' + clienteModel.sobrenomeCliente)
             self.lbDocumento.setText(mascaraCPF(clienteModel.cpfCliente))
             self.lbDocumentoBen.setText(mascaraCPF(clienteModel.cpfCliente))
+            self.lbDocumentoResumo.setText(mascaraCPF(clienteModel.cpfCliente))
+
+    def carregarResumos(self, clienteId: int):
+
+        self.limpaLayoutResumos()
+
+        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == clienteId)
+
+        if listaCabecalhos is not None:
+            for cabecalho in listaCabecalhos:
+                item = ItemResumoCnis(cabecalho)
+                self.efeito.shadowCards([item])
+                self.vlResumos.addWidget(item)
+
+        if self.vlResumos.count():
+            self.scaResumos.setLayout(self.vlResumos)
+
+    def limpaLayoutResumos(self):
+        for index in reversed(range(self.vlResumos.count())):
+            self.vlResumos.takeAt(index).widget().setParent(None)
 
     def abreBuscaClientePage(self):
         self.buscaClientePage = BuscaClientePage(parent=self, db=self.db)
@@ -270,3 +305,14 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
             return False
         else:
             raise Warning(f'Ocorreu um erro inesperado')
+
+    def limpaTudo(self):
+        self.tblCalculos.setRowCount(0)
+        self.tblBeneficios.setRowCount(0)
+        self.lbNomeResumo.setText('')
+        self.lbNome.setText('')
+        self.lbNomeBen.setText('')
+        self.lbDocumentoResumo.setText('')
+        self.lbDocumento.setText('')
+        self.lbDocumentoBen.setText('')
+        self.limpaLayoutResumos()

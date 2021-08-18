@@ -1,21 +1,27 @@
-from PyQt5 import Qt
-from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar
+from peewee import SqliteDatabase
 
-from Daos.daoCliente import DaoCliente
-from Daos.daoTelAfins import DaoTelAfins
-from Daos.daoProcessos import DaoProcessos
+from cache.cacheEscritorio import CacheEscritorio
 
 from Telas.tabCliente import Ui_wdgTabCliente
+
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
 from heart.sinaisCustomizados import Sinais
 from heart.telAfinsController import TelAfinsController
-from helpers import *
-from modelos.clienteModelo import ClienteModelo
+
 from modelos.cnisModelo import CNISModelo
-from modelos.processosModelo import ProcessosModelo
-from newPrevEnums import TipoBeneficio
+from modelos.clienteORM import Cliente
+from modelos.contribuicoesORM import CnisContribuicoes
+from modelos.remuneracaoORM import CnisRemuneracoes
+from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.beneficiosORM import CnisBeneficios
+from modelos.escritoriosORM import Escritorios
+from modelos.processosORM import Processos
+from modelos.telefonesORM import Telefones
+
+from helpers import *
+
 from repositorios.integracaoRepositorio import IntegracaoRepository
 
 
@@ -24,17 +30,17 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
     def __init__(self, db=None, parent=None, entrevista=False):
         super(TabCliente, self).__init__(parent)
         self.setupUi(self)
-        self.cliente = ClienteModelo()
+        self.cliente = Cliente()
         self.db = db
         self.sinais = Sinais()
         self.entrevistaPg = parent
         self.entrevista = entrevista
         self.carregandoCliente = False
+        self.editandoCliente: bool = False
 
         self.cnisClienteAtual = None
-        self.daoCliente = DaoCliente(db=db)
-        self.daoTelAfins = DaoTelAfins(db=db)
-        self.daoProcessos = DaoProcessos(db=db)
+        self.cacheEscritorio = CacheEscritorio()
+        self.escritorio: Escritorios = self.cacheEscritorio.carregarCache()
 
         self.tblClientes.resizeColumnsToContents()
         self.tblClientes.doubleClicked.connect(self.editarCliente)
@@ -121,14 +127,21 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
     def atualizaTblClientes(self, clientes: list = None):
         if clientes is None:
-            clientesModels: list = self.daoCliente.buscaTodos(returnModel=True)
+
+            clientesModels: list = Cliente.select().order_by(Cliente.nomeCliente)
         else:
             clientesModels = []
 
         self.tblClientes.setRowCount(0)
         for numLinha, cliente in enumerate(clientesModels):
             self.tblClientes.insertRow(numLinha)
-            processo: ProcessosModelo = self.daoProcessos.buscaProcessoPorCliente(cliente, limit=1)[0]
+            processo: Processos = Processos.get_or_none(Processos.clienteId == cliente.clienteId)
+            telefone: Telefones = Telefones.get_or_none(Telefones.clienteId == cliente.clienteId)
+
+            if processo is None:
+                processo = Processos()
+            if telefone is None:
+                telefone = Telefones()
 
             cdClienteItem = QTableWidgetItem(str(cliente.clienteId))
             cdClienteItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
@@ -138,15 +151,21 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             nomeCompletoItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 1, nomeCompletoItem)
 
-            emailItem = QTableWidgetItem(f"{cliente.email}")
+            if cliente.email is None:
+                emailItem = QTableWidgetItem('')
+            else:
+                emailItem = QTableWidgetItem(f"{cliente.email}")
             emailItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 2, emailItem)
 
-            telefoneItem = QTableWidgetItem(f"{mascaraTelCel(cliente.telefone.numero)}")
+            telefoneItem = QTableWidgetItem(f"{mascaraTelCel(telefone.numero)}")
             telefoneItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 3, telefoneItem)
 
-            cidadeItem = QTableWidgetItem(f"{cliente.cidade}")
+            if cliente.cidade is None:
+                cidadeItem = QTableWidgetItem('')
+            else:
+                cidadeItem = QTableWidgetItem(f"{cliente.cidade}")
             cidadeItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 4, cidadeItem)
 
@@ -166,55 +185,105 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.limpaTudo()
             self.sbCdCliente.setValue(cdCliente)
             self.verificaDados()
-            self.cliente = self.daoCliente.buscaClienteById(cdCliente, returnInstance=True)
-            if not self.cliente:
-                self.cliente = ClienteModelo()
-                self.limpaTudo()
-            else:
-                self.carregaClienteNaTela(self.cliente)
-                if self.entrevista:
-                    self.sinais.sEnviaCliente.emit()
+
+            try:
+                self.cliente = Cliente.get_by_id(cdCliente)
+                self.cliente.telefoneId = Telefones.select().where(Telefones.clienteId == cdCliente).first()
+                if not self.cliente:
+                    self.cliente = Cliente()
+                    self.limpaTudo()
+                else:
+                    self.carregaClienteNaTela(self.cliente)
+                    if self.entrevista:
+                        self.sinais.sEnviaCliente.emit()
+            except Exception as err:
+                print(f'buscaCliente ({type(err)}): {err}')
 
     def enviaClienteParaEntrevista(self):
         self.entrevistaPg.atualizaCliente(self.cliente)
 
     def carregaCnis(self):
-        self.cnisClienteAtual = CNISModelo()
+        # TODO: Alterar o nome do banco de um texto puro, para uma variável global ou carregá-la de algum arquivo
+
+        self.cnisClienteAtual: CNISModelo = CNISModelo()
         self.cliente.pathCnis = self.cnisClienteAtual.buscaPath()
+        db: SqliteDatabase = Cliente._meta.database
+
         if self.cliente.pathCnis is None:
+            self.showPopupAlerta('Não foi possível carregar o arquivo. Tente novamente.')
             return False
-        infoPessoais: dict = self.cnisClienteAtual.getInfoPessoais()
+        else:
+            try:
+                infoPessoais: dict = self.cnisClienteAtual.getInfoPessoais()
 
-        if infoPessoais is not None:
+                if infoPessoais is not None:
+                    clienteAInserir = Cliente()
 
-            self.cliente.cpfCliente = unmaskAll(infoPessoais['cpf'])
-            self.cliente.dataNascimento = strToDatetime(infoPessoais['dataNascimento'])
-            self.cliente.idade = calculaIdadeFromString(infoPessoais['dataNascimento'])
-            self.cliente.nit = unmaskAll(infoPessoais['nit'])
-            self.cliente.nomeMae = infoPessoais['nomeMae'].title()
-            self.cliente.nomeCliente = infoPessoais['nomeCompleto'].split(' ')[0].title()
-            self.cliente.sobrenomeCliente = ' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title()
+                    clienteAInserir.cpfCliente = unmaskAll(infoPessoais['cpf'])
+                    clienteAInserir.dataNascimento = strToDatetime(infoPessoais['dataNascimento'])
+                    clienteAInserir.idade = calculaIdadeFromString(infoPessoais['dataNascimento'])
+                    clienteAInserir.nit = unmaskAll(infoPessoais['nit'])
+                    clienteAInserir.nomeMae = infoPessoais['nomeMae'].title()
+                    clienteAInserir.nomeCliente = infoPessoais['nomeCompleto'].split(' ')[0].title()
+                    clienteAInserir.sobrenomeCliente = ' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title()
+                    clienteAInserir.escritorioId = Escritorios.select().where(Escritorios.escritorioId == self.escritorio.escritorioId)
 
-            if not self.buscaClienteJaCadastrado():
-                self.cliente.clienteId = self.daoCliente.cadastroClienteComCnis(self.cliente, self.cnisClienteAtual.getAllDict())
+                    with db.atomic() as transaction:
+                        try:
+                            Cliente.insert(**clienteAInserir.toDict()).on_conflict_replace().execute()
+                            self.cliente = Cliente.get(Cliente.cpfCliente == clienteAInserir.cpfCliente)
+                            contribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=self.cliente.clienteId)
+                            listaContribuicoes = contribuicoes['contribuicoes']
+                            listaRemuneracoes = contribuicoes['remuneracoes']
+                            cabecalho = contribuicoes['cabecalho']
+                            cabecalhoBeneficio = contribuicoes['cabecalhoBeneficio']
+                            beneficios = contribuicoes['beneficios']
 
-        self.limpaTudo()
-        self.carregaClienteNaTela(cliente=self.cliente)
-        if self.cliente.numero is None:
-            self.cliente.numero = 0
+                            for b in beneficios:
+                                print(b)
+
+                            CnisContribuicoes.insert_many(listaContribuicoes).on_conflict_replace().execute()
+                            CnisRemuneracoes.insert_many(listaRemuneracoes).on_conflict_replace().execute()
+                            CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
+                            CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
+                            CnisBeneficios.insert_many(beneficios).on_conflict_replace().execute()
+
+                            self.cliente.telefoneId = Telefones.get_by_id(self.cliente)
+                            transaction.commit()
+                        except Cliente.DoesNotExist:
+                            self.showPopupAlerta('Erro ao inserir cliente.')
+                            transaction.rollback()
+                            return False
+                        except Telefones.DoesNotExist:
+                            self.cliente.telefoneId = Telefones()
+                            transaction.commit()
+                        except Exception as err:
+                            erro = f"carregaCnis: ({type(err)}) {err}"
+                            transaction.rollback()
+                            self.showPopupAlerta('Erro ao inserir cliente.', erro=erro)
+                            self.limpaTudo()
+                            return False
+
+                self.limpaTudo()
+                self.carregaClienteNaTela(cliente=self.cliente)
+                if self.cliente.numero is None:
+                    self.cliente.numero = 0
+
+            except Exception as erro:
+                print(f'carregaCnis - erro: ({type(erro)}) {erro}')
 
     def buscaClienteJaCadastrado(self) -> bool:
-        cliente: ClienteModelo = self.daoCliente.buscaClienteByNit(self.cliente.nit)
+        cliente: Cliente = Cliente.select().where(Cliente.nit == self.cliente.nit).get()
         if cliente:
             self.cliente = cliente
             return True
         else:
             return False
 
-    def carregaClienteNaTela(self, cliente: ClienteModelo):
+    def carregaClienteNaTela(self, cliente: Cliente):
 
         self.leCpf.setText(mascaraCPF(cliente.cpfCliente))
-        self.dtNascimento.setDate(cliente.dataNascimento.date())
+        self.dtNascimento.setDate(strToDate(cliente.dataNascimento))
         self.leIdade.setText(f'{cliente.idade}')
         self.leNomeMae.setText(cliente.nomeMae)
         self.lePrimeiroNome.setText(cliente.nomeCliente)
@@ -227,8 +296,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         if cliente.numero not in [None, 'None']:
             self.leNumero.setText(str(cliente.numero))
 
-        if cliente.telefone not in [None, 'None']:
-            self.leTelefone.setText(mascaraTelCel(cliente.telefone.numero))
+        if cliente.telefoneId is not None:
+            self.leTelefone.setText(mascaraTelCel(cliente.telefoneId.numero))
 
         if cliente.email not in [None, 'None']:
             self.leEmail.setText(cliente.email)
@@ -362,7 +431,9 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.email = self.leEmail.text()
 
         elif info == 'telefone':
-            self.cliente.telefone.numero = self.leTelefone.text()
+            if self.cliente.telefoneId is None:
+                self.cliente.telefoneId = Telefones()
+            self.cliente.telefoneId.numero = self.leTelefone.text()
 
         elif info == 'rbMasculino' or info == 'rbFeminino':
             if self.rbMasculino.isChecked():
@@ -411,17 +482,22 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.carregandoCliente = True
         if self.sbCdCliente.text() != '':
             clienteId = int(self.sbCdCliente.text())
-            self.limpaTudo()
-            self.verificaDados()
-            self.cliente = self.daoCliente.buscaProxCliente(clienteId)
 
-            if not self.cliente:
-                self.cliente = ClienteModelo()
-                self.limpaTudo()
-            else:
-                self.carregaClienteNaTela(self.cliente)
-                if self.entrevista:
-                    self.sinais.sEnviaCliente.emit()
+            self.verificaDados()
+            try:
+                self.cliente = Cliente.select().where(Cliente.clienteId == clienteId).get()
+
+                if not self.cliente:
+                    self.cliente = Cliente()
+                    self.limpaTudo()
+                else:
+                    self.limpaTudo()
+                    self.carregaClienteNaTela(self.cliente)
+                    if self.entrevista:
+                        self.sinais.sEnviaCliente.emit()
+            except Cliente.DoesNotExist:
+                self.sbCdCliente.setValue(clienteId - 1)
+
         self.carregandoCliente = False
 
     def carregaComboBoxes(self):
@@ -474,12 +550,18 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
     def trataAtualizaCliente(self):
         if self.verificaCodCliente():
             self.avaliaTelefone()
-            self.daoCliente.atualizaCliente(self.cliente)
+            self.cliente.save()
 
     def avaliaTelefone(self):
-        self.cliente.telefone.clienteId = self.cliente.clienteId
-        self.cliente.telefone.tipoTelefone = 'W'
-        self.cliente.telefone.pessoalRecado = 'P'
+        if len(self.leTelefone.text()) >= 8:
+            telefone: Telefones = Telefones()
+            telefone.clienteId = self.cliente.clienteId
+            telefone.tipoTelefone = 'W'
+            telefone.pessoalRecado = 'P'
+            telefone.numero = unmaskAll(self.leTelefone.text())
+
+            Telefones.insert(**telefone.toDict()).on_conflict_replace().execute()
+            self.cliente.telefoneId = telefone
 
     def verificaCodCliente(self) -> bool:
         cdClienteNotNone = self.sbCdCliente.text() is not None
@@ -517,7 +599,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                 self.tblClientes.hideRow(linha)
 
     def limpaTudo(self):
-        # self.cliente = ClienteModelo()
         self.lePrimeiroNome.clear()
         self.leSobrenome.clear()
         self.leRg.clear()
@@ -540,16 +621,21 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leSenhaINSS.clear()
         self.leNumero.clear()
         self.lePix.clear()
+        self.sbCdCliente.clear()
+        self.sbCdCliente.setValue(0)
+        self.editandoCliente = False
 
         self.cbxEstado.setCurrentIndex(24)
 
     def editarCliente(self, *args):
+        self.editandoCliente = True
         numLinha: int = args[0].row()
         clienteId = int(self.tblClientes.item(numLinha, 0).text())
         self.sbCdCliente.setValue(clienteId)
 
         self.buscaCliente()
         self.tabMain.setCurrentIndex(1)
+        self.cbClienteAntigo.setChecked(True)
 
     def trocaDeAba(self, *args):
         abaAtual: int = int(args[0])
@@ -557,13 +643,21 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         if abaAtual == 0:
             self.atualizaTblClientes()
             self.limpaTudo()
+            self.cliente = None
+        else:
+            if self.cliente is None:
+                self.cbClienteAntigo.setChecked(False)
+                self.sbCdCliente.setValue(0)
+                self.sbCdCliente.clear()
 
-    def showPopupAlerta(self, mensagem, titulo='Atenção!'):
+    def showPopupAlerta(self, mensagem, titulo: str = 'Atenção!', erro: str = None):
         dialogPopup = QMessageBox()
         dialogPopup.setWindowTitle(titulo)
         dialogPopup.setText(mensagem)
         dialogPopup.setIcon(QMessageBox.Warning)
         dialogPopup.setStandardButtons(QMessageBox.Ok)
+        if erro is not None:
+            dialogPopup.setInformativeText(erro)
 
         close = dialogPopup.exec_()
 
@@ -608,7 +702,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.tblClientes.showRow(linha)
 
     def verificaDados(self):
-        if self.cliente.estado is None or self.cliente.estado == '':
+        if self.cliente is not None and (self.cliente.estado is None or self.cliente.estado == ''):
             self.cliente.estado = self.cbxEstado.currentText()
 
     def avaliaInfoPessoalCompleta(self) -> bool:

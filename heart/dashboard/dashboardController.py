@@ -1,4 +1,4 @@
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import QMainWindow, QHBoxLayout
 
 from Telas.dashboard import Ui_mwDashBoard
@@ -59,9 +59,13 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.scaTelas.setLayout(self.boxLayout)
 
     def trocarParaPagina(self, *args):
+        telaEnum: TelaPosicao = args[0]
         tela = int(args[0].value)
         if tela == 4:
             EntrevistaController(parent=self, db=self.db).show()
+        elif telaEnum == TelaPosicao.Calculos:
+            self.tabCalculos.limpaTudo()
+            self.stkMainDashBoard.setCurrentIndex(tela)
         else:
             self.stkMainDashBoard.setCurrentIndex(tela)
 

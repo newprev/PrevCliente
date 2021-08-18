@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1195</width>
-    <height>611</height>
+    <height>795</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -23,7 +23,8 @@
    <string notr="true">#tabContribuicoes,
 #tabMain, 
 #tabCalculos,
-#tabBeneficios {
+#tabBeneficios,
+#tabResumo {
 	border-radius: 8px;
 	background-color: white;
 	padding: 4px;
@@ -108,6 +109,280 @@ QTabBar::tab:selected, QTabBar::tab:hover {
        <height>16</height>
       </size>
      </property>
+     <widget class="QWidget" name="tabResumo">
+      <property name="styleSheet">
+       <string notr="true">/*-------------------------------- Labels -----------------------------------------*/
+#lbTituloClientesResumo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+}
+
+#lbInfoClientesResumo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;	
+}
+
+#lbTituloFiltroResumo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+}
+
+#lbBuscaNomeResumo, #lbBuscaEmailResumo, 
+#lbBuscaTelefoneResumo, #lbBuscaTpProcessoResumo,
+#lbBuscaRgcpfResumo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+}
+
+#lbInfoCabecalhoResumo, #lbInfoDibDerResumo, 
+#lbInfoNomeResumo, #lbInfoDocumentoResumo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	background-color: white;
+}
+
+#lbDibDerResumo, 
+#lbNomeResumo, #lbDocumentoResumo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	background-color: white;
+	font-weight: bold;
+}
+
+/*-------------------------------- Frames -----------------------------------------*/
+#frInfoCabecalhoResumo {
+	border-radius: 4px;
+	border: 1px solid rgb(85, 87, 83);
+
+	background-color: white;
+}
+
+/*-------------------------------- Push Buttons --------------------------------*/
+
+#pbBuscarClienteResumo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: white;
+
+	border-radius: 4px;
+	background-color: rgb(52, 73, 94);
+}
+
+#pbBuscarClienteResumo:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	color: white;
+
+	border-radius: 4px;
+	border: 1px solid;
+	background-color: rgb(72, 93, 114);
+}
+
+#pbInserirResumo, #pbEditarResumo, #pbExcluirResumo {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: white;
+
+	border-radius: 4px;
+	background-color: rgb(52, 73, 94);
+}
+
+#pbInserirResumo:hover, #pbEditarResumo:hover, 
+#pbExcluirResumo:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	color: white;
+
+	border-radius: 4px;
+	border: 1px solid;
+	background-color: rgb(72, 93, 114);
+}
+
+/*-------------------------------- Scroll Area --------------------------------*/
+#scaResumos {
+	background-color: white;
+}
+</string>
+      </property>
+      <attribute name="title">
+       <string>Resumo</string>
+      </attribute>
+      <widget class="QFrame" name="frInfoCabecalhoResumo">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>10</y>
+         <width>401</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="lbInfoNomeResumo">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>81</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Nome cliente:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbInfoDocumentoResumo">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>50</y>
+          <width>81</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Documento:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbNomeResumo">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>10</y>
+          <width>221</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbDocumentoResumo">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>50</y>
+          <width>191</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QLabel" name="lbTituloClientesResumo">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>361</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Resumo do CNIS</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbBuscarClienteResumo">
+       <property name="geometry">
+        <rect>
+         <x>1030</x>
+         <y>160</y>
+         <width>101</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Buscar 
+cliente</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbInserirResumo">
+       <property name="geometry">
+        <rect>
+         <x>1030</x>
+         <y>230</y>
+         <width>101</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Inserir</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbInfoCabecalhoResumo">
+       <property name="geometry">
+        <rect>
+         <x>440</x>
+         <y>0</y>
+         <width>141</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Informações pessoais</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbInfoClientesResumo">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>371</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Resumo das contribuições e benefícios</string>
+       </property>
+      </widget>
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>110</y>
+         <width>991</width>
+         <height>400</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>800</width>
+         <height>400</height>
+        </size>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+       </property>
+       <widget class="QWidget" name="scaResumos">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>991</width>
+          <height>400</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+     </widget>
      <widget class="QWidget" name="tabContribuicoes">
       <property name="styleSheet">
        <string notr="true">/*-------------------------------- Labels -----------------------------------------*/
@@ -182,17 +457,6 @@ QHeaderView::up-arrow {
 }
 
 /*-------------------------------- Push Buttons --------------------------------*/
-#pbArrowNome, 
-#pbArrowEmail, 
-#pbArrowTelefone,
-#pbArrowTpProcesso,
-#pbArrowRgcpf {
-	background-image: url(:/arrowDown/arrowDown.png);
-	background-repeat: no-repeat;
-	background-position: center;
-
-	background-color: transparent;
-}
 
 #pbBuscarCliente {
 	font-family: &quot;TeX Gyre Adventor&quot;;

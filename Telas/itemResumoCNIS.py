@@ -27,10 +27,16 @@ class Ui_WdgItemRes(object):
 "    font-size: 16px;\n"
 "}\n"
 "\n"
-"#lbInfoDataInicio, #lbInfoDataFim, #lbInfoSituacao {\n"
+"#lbInfoDataInicio, #lbInfoDataFim, \n"
+"#lbInfoSituacao {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 14px;\n"
 "    text-decoration: underline;\n"
+"}\n"
+"\n"
+"#lbInfoFalta {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
 "}\n"
 "\n"
 "/* --------------------------------- Frames --------------------------------- */\n"
@@ -45,6 +51,23 @@ class Ui_WdgItemRes(object):
 "    background: url(:/remuneracao/remuneracao.png);\n"
 "    background-repeat: no-repeat;\n"
 "    background-position: center;\n"
+"}\n"
+"\n"
+"#frInfoTag {\n"
+"    background: url(:/info/information-black-16.png);\n"
+"    background-repeat: no-repeat;\n"
+"    background-position: center;\n"
+"\n"
+"    border-radius: 4px;\n"
+"}\n"
+"\n"
+"#frInfoTag:hover {\n"
+"    background: url(:/info/information-white-16.png);\n"
+"    background-repeat: no-repeat;\n"
+"    background-position: center;\n"
+"\n"
+"    border-radius: 12px;\n"
+"    background-color: rgb(136, 138, 133);\n"
 "}\n"
 "\n"
 "\n"
@@ -134,7 +157,7 @@ class Ui_WdgItemRes(object):
         self.lbCdEmp.setMaximumSize(QtCore.QSize(16777215, 60))
         self.lbCdEmp.setWordWrap(True)
         self.lbCdEmp.setObjectName("lbCdEmp")
-        self.horizontalLayout_5.addWidget(self.lbCdEmp, 0, QtCore.Qt.AlignVCenter)
+        self.horizontalLayout_5.addWidget(self.lbCdEmp)
         self.horizontalLayout_3.addWidget(self.frame_8)
         self.verticalLayout_2.addWidget(self.frame_3)
         self.frame_4 = QtWidgets.QFrame(self.frame_2)
@@ -192,6 +215,27 @@ class Ui_WdgItemRes(object):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(4)
         self.verticalLayout.setObjectName("verticalLayout")
+        self.frDadoFaltante = QtWidgets.QFrame(self.frame)
+        self.frDadoFaltante.setMinimumSize(QtCore.QSize(0, 24))
+        self.frDadoFaltante.setMaximumSize(QtCore.QSize(16777215, 24))
+        self.frDadoFaltante.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frDadoFaltante.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frDadoFaltante.setObjectName("frDadoFaltante")
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frDadoFaltante)
+        self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_6.setSpacing(2)
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.lbInfoFalta = QtWidgets.QLabel(self.frDadoFaltante)
+        self.lbInfoFalta.setObjectName("lbInfoFalta")
+        self.horizontalLayout_6.addWidget(self.lbInfoFalta, 0, QtCore.Qt.AlignVCenter)
+        self.frInfoTag = QtWidgets.QFrame(self.frDadoFaltante)
+        self.frInfoTag.setMinimumSize(QtCore.QSize(24, 24))
+        self.frInfoTag.setMaximumSize(QtCore.QSize(24, 24))
+        self.frInfoTag.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfoTag.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoTag.setObjectName("frInfoTag")
+        self.horizontalLayout_6.addWidget(self.frInfoTag)
+        self.verticalLayout.addWidget(self.frDadoFaltante)
         self.pbEditar = QtWidgets.QPushButton(self.frame)
         self.pbEditar.setMinimumSize(QtCore.QSize(0, 26))
         self.pbEditar.setObjectName("pbEditar")
@@ -216,6 +260,7 @@ class Ui_WdgItemRes(object):
         self.lbInfoDataFim.setText(_translate("WdgItemRes", "Data fim:"))
         self.lbInfoSituacao.setText(_translate("WdgItemRes", "Situação:"))
         self.lbSituacao.setText(_translate("WdgItemRes", "Situação:"))
+        self.lbInfoFalta.setText(_translate("WdgItemRes", "Dado faltante"))
         self.pbEditar.setText(_translate("WdgItemRes", "Editar"))
         self.pbRemover.setText(_translate("WdgItemRes", "Remover"))
 import Resources.itemResumo

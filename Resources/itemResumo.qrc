@@ -2,6 +2,10 @@
   <qresource prefix="remuneracao">
     <file>remuneracao.png</file>
   </qresource>
+  <qresource prefix="info">
+    <file>information-white-16.png</file>
+    <file>information-black-16.png</file>
+  </qresource>
   <qresource prefix="beneficio">
     <file>beneficio.png</file>
   </qresource>

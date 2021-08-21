@@ -4,7 +4,7 @@ import pandas as pd
 from collections import defaultdict
 
 from Daos.daoCalculos import DaoCalculos
-from util.helpers import comparaMesAno, calculaDiaMesAno, strToDatetime
+from util.helpers import comparaMesAno, calculaDiaMesAno, strToDatetime, strToDate
 
 from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.remuneracaoORM import CnisRemuneracoes
@@ -21,14 +21,16 @@ from util.enums.newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData, 
 
 
 class CalculosAposentadoria:
+    listaCabecalhos: List[CnisCabecalhos] = []
+    listaRemuneracoes: List[CnisRemuneracoes] = []
+    listaContribuicoes: List[CnisContribuicoes] = []
+    mediaSalarial: float
 
     def __init__(self, processo: Processos, cliente: Cliente, dib: datetime = None, db=None):
         self.processo = processo
         self.cliente = cliente
         self.daoCalculos = DaoCalculos(db)
-        self.cabecalhos: List[CnisCabecalhos] = list(self.daoCalculos.buscaCabecalhosClienteId(self.cliente.clienteId))
-        self.listaRemuneracoes = list(self.daoCalculos.buscaTodasRemuneracoes(cliente.clienteId))
-        self.listaContribuicoes = list(self.daoCalculos.buscaTodasContribuicoes(cliente.clienteId))
+        self.carregaInfoCliente()
 
         if dib is None:
             self.dibAtual: datetime = datetime.datetime.today()
@@ -92,6 +94,11 @@ class CalculosAposentadoria:
     # def defineDIB(self, data: datetime):
     #     self.processo.dib = data
 
+    def carregaInfoCliente(self):
+        self.listaCabecalhos = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == self.cliente.clienteId)
+        self.listaRemuneracoes = CnisRemuneracoes.select().where(CnisRemuneracoes.clienteId == self.cliente.clienteId)
+        self.listaContribuicoes = CnisContribuicoes.select().where(CnisContribuicoes.clienteId == self.cliente.clienteId)
+
     def calculaDireitoAdquirido(self, lei: DireitoAdquirido, subTipo: SubTipoAposentadoria = None):
         listTimedeltas: list = []
         totalDias: int = 0
@@ -110,9 +117,13 @@ class CalculosAposentadoria:
             pass
 
         else:
-            listaBanco = self.cabecalhos
+            listaBanco = self.listaCabecalhos
 
             for cabecalho in listaBanco:
+                if cabecalho.dataFim is None or cabecalho.dataFim == '':
+                    cabecalho.dadoFaltante = True
+                    cabecalho.save()
+                    continue
 
                 if comparaMesAno(cabecalho.dataInicio, self.dataReforma2019, ComparaData.posterior):
                     antesReforma = False
@@ -181,9 +192,10 @@ class CalculosAposentadoria:
         indicadoresImpeditivos = ['PDT-NASC-FIL-INV', 'IREC-LC123', 'PREC-MENOR-MIN']
 
         if cabecalhos is None:
-            listaBanco: List[CnisCabecalhos] = self.cabecalhos
+            listaBanco: List[CnisCabecalhos] = self.listaCabecalhos
         else:
             listaBanco: List[CnisCabecalhos] = cabecalhos
+
 
         # Criando dicionários de remunerações e contribuições por Id ----------------
         dictCabecalhos: dict = {cabecalho.seq: cabecalho for cabecalho in listaBanco}
@@ -202,7 +214,10 @@ class CalculosAposentadoria:
             dataReferente: datetime = cabecalho.dataFim
 
             if dataReferente is None or dataReferente == datetime.datetime.min:
-                dataReferente = cabecalho.ultRem
+                if cabecalho.ultRem is None:
+                    continue
+                else:
+                    dataReferente = cabecalho.ultRem
 
             if cabecalho.indicadores in indicadoresImpeditivos:
                 continue
@@ -271,9 +286,9 @@ class CalculosAposentadoria:
             if cabecalho.ultRem is None or cabecalho.ultRem == datetime.datetime.min:
                 return datetime.timedelta(days=0)
             else:
-                return cabecalho.ultRem - cabecalho.dataInicio
+                return strToDate(cabecalho.ultRem) - strToDate(cabecalho.dataInicio)
         else:
-            return cabecalho.dataFim - cabecalho.dataInicio
+            return strToDate(cabecalho.dataFim) - strToDate(cabecalho.dataInicio)
 
     def calculaTimedeltaDr(self, listContOuRem: list, listCabecalhos: List[CnisCabecalhos], dataLimitante: datetime = None) -> datetime.timedelta:
         """
@@ -402,8 +417,12 @@ class CalculosAposentadoria:
         listaCabecalhosPedagio = []
         tempoContribAntesReforma = 0
 
-        for cabecalho in self.cabecalhos:
-            if cabecalho.dataFim.date() <= self.dataReforma2019:
+        for cabecalho in self.listaCabecalhos:
+            if cabecalho.dataFim is None or cabecalho.dataFim == '':
+                cabecalho.dadoFaltante = True
+                cabecalho.save()
+                continue
+            if strToDate(cabecalho.dataFim) <= self.dataReforma2019:
                 listaCabecalhosPedagio.append(cabecalho)
         tempoContribAntesReforma = self.calculaTempoContribuicao(listaCabecalhosPedagio, dataLimitante=self.dibAtual)[2]
 

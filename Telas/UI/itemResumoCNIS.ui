@@ -26,10 +26,16 @@
 	font-size: 16px;
 }
 
-#lbInfoDataInicio, #lbInfoDataFim, #lbInfoSituacao {
+#lbInfoDataInicio, #lbInfoDataFim, 
+#lbInfoSituacao {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 14px;
 	text-decoration: underline;
+}
+
+#lbInfoFalta {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
 }
 
 /* --------------------------------- Frames --------------------------------- */
@@ -44,6 +50,23 @@
 	background: url(:/remuneracao/remuneracao.png);
 	background-repeat: no-repeat;
 	background-position: center;
+}
+
+#frInfoTag {
+	background: url(:/info/information-black-16.png);
+	background-repeat: no-repeat;
+	background-position: center;
+
+	border-radius: 4px;
+}
+
+#frInfoTag:hover {
+	background: url(:/info/information-white-16.png);
+	background-repeat: no-repeat;
+	background-position: center;
+
+	border-radius: 12px;
+	background-color: rgb(136, 138, 133);
 }
 
 
@@ -217,7 +240,7 @@
                <property name="bottomMargin">
                 <number>0</number>
                </property>
-               <item alignment="Qt::AlignVCenter">
+               <item>
                 <widget class="QLabel" name="lbCdEmp">
                  <property name="minimumSize">
                   <size>
@@ -431,6 +454,74 @@
          <property name="bottomMargin">
           <number>0</number>
          </property>
+         <item>
+          <widget class="QFrame" name="frDadoFaltante">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item alignment="Qt::AlignVCenter">
+             <widget class="QLabel" name="lbInfoFalta">
+              <property name="text">
+               <string>Dado faltante</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFrame" name="frInfoTag">
+              <property name="minimumSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
          <item>
           <widget class="QPushButton" name="pbEditar">
            <property name="minimumSize">

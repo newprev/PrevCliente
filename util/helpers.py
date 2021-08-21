@@ -544,6 +544,8 @@ def eliminaHoraDias(data: datetime):
         return data.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     elif isinstance(data, datetime.date):
         return data.replace(day=1)
+    elif isinstance(data, str):
+        return datetime.datetime.strptime(data, '%Y-%m-%d').date().replace(day=1)
 
 
 def pyToDefault(dicionario: dict) -> dict:

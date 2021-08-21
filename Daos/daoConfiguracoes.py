@@ -1,5 +1,5 @@
 from connections import ConfigConnection
-from helpers import dictIndicadores, dictEspecies
+from util.helpers import dictIndicadores, dictEspecies
 from Daos.tabelas import TabelasConfig
 
 import sqlite3

@@ -1,17 +1,11 @@
-import sqlite3
-
 from connections import ConfigConnection
 from Daos.tabelas import TabelasConfig
-from logs import logPrioridade
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 # from modelos.processosModelo import ProcessosModelo
 # from modelos.advogadoModelo import AdvogadoModelo
 # from modelos.escritorioModelo import EscritorioModelo
 # from modelos.clienteModelo import ClienteModelo
-from datetime import datetime
-
-from newPrevEnums import TipoEdicao, Prioridade
 
 
 class DaoProcessos:

@@ -6,7 +6,7 @@ from typing import List
 from PyPDF3 import PdfFileReader
 from PyQt5.QtWidgets import QFileDialog
 
-from helpers import strToFloat, dictIndicadores
+from util.helpers import strToFloat, dictIndicadores
 
 
 class CNISModelo:

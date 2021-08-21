@@ -1,11 +1,10 @@
 import datetime
 from typing import List
 import pandas as pd
-from math import floor
 from collections import defaultdict
 
 from Daos.daoCalculos import DaoCalculos
-from helpers import comparaMesAno, calculaDiaMesAno, mascaraDataSql, strToDatetime, datetimeToSql, dateToSql
+from util.helpers import comparaMesAno, calculaDiaMesAno, strToDatetime
 
 from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.remuneracaoORM import CnisRemuneracoes
@@ -13,7 +12,7 @@ from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.expSobrevidaORM import ExpSobrevida
 from modelos.processosORM import Processos
 from modelos.clienteORM import Cliente
-from newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData, ComparaData, DireitoAdquirido, SubTipoAposentadoria
+from util.enums.newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData, ComparaData, DireitoAdquirido, SubTipoAposentadoria
 
 
 # Reforma 13/11/2019

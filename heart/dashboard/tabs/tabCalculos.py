@@ -11,12 +11,12 @@ from heart.buscaClientePage import BuscaClientePage
 from heart.insereContribuicaoPage import InsereContribuicaoPage
 from Telas.efeitos import Efeitos
 
-from helpers import mascaraDinheiro, mascaraCPF, dataUSAtoBR
+from util.helpers import mascaraDinheiro, mascaraCPF, dataUSAtoBR
 
 from modelos.clienteORM import Cliente
 from modelos.beneficiosORM import CnisBeneficios
 from modelos.cabecalhoORM import CnisCabecalhos
-from newPrevEnums import TipoContribuicao
+from util.enums.newPrevEnums import TipoContribuicao
 
 
 class TabCalculos(QWidget, Ui_wdgTabCalculos):
@@ -47,8 +47,8 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
         self.pbExcluir.clicked.connect(lambda: self.avaliaExclusao('pbExcluir'))
         self.pbExcluirBen.clicked.connect(lambda: self.avaliaExclusao('pbExcluirBen'))
 
-        self.pbInserir.clicked.connect(self.abreInsereContribuicoes)
-        self.pbInserirBen.clicked.connect(self.abreInsereContribuicoes)
+        self.pbInserir.clicked.connect(lambda: self.abreInsereContribuicoes(0, TipoContribuicao.contribuicao))
+        self.pbInserirBen.clicked.connect(lambda: self.abreInsereContribuicoes(0, TipoContribuicao.beneficio))
 
         if origemEntrevista:
             self.pbBuscarClienteBen.hide()
@@ -58,6 +58,10 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
 
     def avaliaEdicao(self, tabela: str):
         if tabela == 'tblCalculos':
+            if len(self.tblCalculos.selectedIndexes()) <= 0:
+                self.popUpOkAlerta('Nenhuma remuneração selecionada. Selecione alguma linha e tente novamente')
+                return False
+
             numLinha: int = self.tblCalculos.selectedIndexes()[0].row()
             contribuicaoId = int(self.tblCalculos.item(numLinha, 0).text())
             tipoContribuicao: str = self.tblCalculos.item(numLinha, 5).text()
@@ -67,8 +71,14 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
                 self.abreInsereContribuicoes(contribuicaoId, TipoContribuicao.remuneracao)
 
         elif tabela == 'tblBeneficios':
+            if len(self.tblBeneficios.selectedIndexes()) <= 0:
+                self.popUpOkAlerta('Nenhum benefício selecionado. Selecione alguma linha e tente novamente')
+                return False
+
+            print(self.tblBeneficios.selectedIndexes())
             numLinha: int = self.tblBeneficios.selectedIndexes()[0].row()
             contribuicaoId = int(self.tblBeneficios.item(numLinha, 0).text())
+            print(f"contribuicaoId: {contribuicaoId}")
             self.abreInsereContribuicoes(contribuicaoId, TipoContribuicao.beneficio)
 
     def avaliaExclusao(self, tipoBotao: str):
@@ -287,7 +297,7 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
 
     def abreInsereContribuicoes(self, contribuicaoId: int, tipo: TipoContribuicao = None):
         if self.cliente.nomeCliente is not None:
-            self.inserirContribuicao = InsereContribuicaoPage(parent=self, db=self.db, cliente=self.cliente, contribuicaoId=contribuicaoId, tipo=tipo)
+            self.inserirContribuicao = InsereContribuicaoPage(parent=self, cliente=self.cliente, contribuicaoId=contribuicaoId, tipo=tipo)
             self.inserirContribuicao.show()
 
     def popUpSimCancela(self, mensagem, titulo: str = 'Atenção!', funcao=None):
@@ -305,6 +315,15 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
             return False
         else:
             raise Warning(f'Ocorreu um erro inesperado')
+
+    def popUpOkAlerta(self, mensagem, titulo: str = 'Atenção!'):
+        pop = QMessageBox()
+        pop.setWindowTitle(titulo)
+        pop.setText(mensagem)
+        pop.setIcon(QMessageBox.Warning)
+        pop.setStandardButtons(QMessageBox.Ok)
+
+        x = pop.exec_()
 
     def limpaTudo(self):
         self.tblCalculos.setRowCount(0)

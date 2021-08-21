@@ -10,12 +10,12 @@ from modelos.clienteORM import Cliente
 from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
 from modelos.processosORM import Processos
-from helpers import mascaraCep, mascaraTelCel, strTipoBeneficio, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG, strToDatetime, calculaDiaMesAno
+from util.helpers import mascaraCep, mascaraTelCel, strTipoBeneficio, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG, strToDatetime, calculaDiaMesAno
 
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 
-from newPrevEnums import NaturezaProcesso, TipoProcesso, TipoBeneficio, SubTipoAposentadoria, TamanhoData
+from util.enums.newPrevEnums import TipoBeneficio, SubTipoAposentadoria, TamanhoData
 
 
 class DocEntrevista:
@@ -406,7 +406,6 @@ class DocEntrevista:
 
 
 if __name__ == '__main__':
-    import sys
     processo = Processos()
     processo.tipoProcesso = 2
     processo.tipoBeneficio = 3

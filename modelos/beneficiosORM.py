@@ -6,7 +6,7 @@ from playhouse.signals import Model, post_save, pre_delete
 from peewee import AutoField, CharField, ForeignKeyField, DateTimeField, IntegerField, FloatField, BigIntegerField
 from datetime import datetime
 
-from newPrevEnums import TipoEdicao, Prioridade
+from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 TABLENAME = 'cnisBeneficios'
 
@@ -14,12 +14,12 @@ TABLENAME = 'cnisBeneficios'
 class CnisBeneficios(BaseModel, Model):
     beneficiosId = AutoField(column_name='beneficiosId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
+    seq = IntegerField()
     nb = BigIntegerField(column_name='nb', null=True)
     dadoOrigem = CharField(column_name='dadoOrigem', default='CNIS')
     competencia = DateTimeField(column_name='competencia', default=datetime.min, formats=DATEFORMATS)
     remuneracao = FloatField(column_name='remuneracao')
     indicadores = CharField(default=None)
-    seq = IntegerField()
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 
@@ -32,11 +32,10 @@ class CnisBeneficios(BaseModel, Model):
             'clienteId': self.clienteId,
             'seq': self.seq,
             'nb': self.nb,
-            'especie': self.especie,
-            'dataInicio': self.dataInicio,
-            'dataFim': self.dataFim,
-            'situacao': self.situacao,
             'dadoOrigem': self.dadoOrigem,
+            'competencia': self.competencia,
+            'remuneracao': self.remuneracao,
+            'indicadores': self.indicadores,
             'dataCadastro': self.dataCadastro,
             'dataUltAlt': self.dataUltAlt
         }
@@ -47,11 +46,10 @@ class CnisBeneficios(BaseModel, Model):
         self.clienteId = dictBeneficios['clienteId']
         self.seq = dictBeneficios['seq']
         self.nb = dictBeneficios['nb']
-        self.especie = dictBeneficios['especie']
-        self.dataInicio = dictBeneficios['dataInicio']
-        self.dataFim = dictBeneficios['dataFim']
-        self.situacao = dictBeneficios['situacao']
         self.dadoOrigem = dictBeneficios['dadoOrigem']
+        self.competencia = dictBeneficios['competencia']
+        self.remuneracao = dictBeneficios['remuneracao']
+        self.indicadores = dictBeneficios['indicadores']
         self.dataCadastro = dictBeneficios['dataCadastro']
         self.dataUltAlt = dictBeneficios['dataUltAlt']
 
@@ -62,10 +60,9 @@ class CnisBeneficios(BaseModel, Model):
             clienteId: {self.clienteId},
             seq: {self.seq},
             nb: {self.nb},
-            especie: {self.especie},
-            dataInicio: {self.dataInicio},
-            dataFim: {self.dataFim},
-            situacao: {self.situacao},
+            competencia: {self.competencia},
+            remuneracao: {self.remuneracao},
+            indicadores: {self.indicadores},
             dadoOrigem: {self.dadoOrigem},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}

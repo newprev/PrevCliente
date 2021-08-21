@@ -1,9 +1,7 @@
-import json
-
 import requests as http
 from requests.exceptions import *
 from logs import logPrioridade
-from newPrevEnums import *
+from util.enums.newPrevEnums import *
 from modelos.escritoriosORM import Escritorios
 
 

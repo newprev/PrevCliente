@@ -1,6 +1,8 @@
 import datetime
 import pymysql
+import asyncio as aio
 from typing import List
+import time
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
@@ -19,14 +21,13 @@ from modelos.expSobrevidaORM import ExpSobrevida
 from Telas.loginPage import Ui_mwLogin
 from heart.login.wdgAdvController import WdgAdvController
 from heart.dashboard.dashboardController import DashboardController
-from newPrevEnums import *
+from util.enums.newPrevEnums import *
+from util.enums.ferramentasEInfo import FerramentasEInfo
 import os
 import json
 
-from helpers import datetimeToSql, strToDatetime, pyToDefault
-from newPrevEnums import TamanhoData
-
-from requests.exceptions import ConnectionError
+from util.helpers import datetimeToSql, strToDatetime
+from util.enums.newPrevEnums import TamanhoData
 
 from repositorios.informacoesRepositorio import ApiInformacoes
 
@@ -214,6 +215,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
     def entrar(self):
         # TODO: Criar uma verificação se o usuário salvo em cache tem o mesmo login e senha digitado na tela de login
 
+        loop = aio.get_event_loop()
+
         self.loading(20)
         if self.infoNaoNulo:
             if ApiFerramentas().conexaoOnline():
@@ -302,6 +305,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             'syncIndicadores': datetimeToSql(datetime.datetime.now()),
             'syncExpSobrevida': datetimeToSql(datetime.datetime.now()),
         }
+        loop = aio.get_event_loop()
 
         if os.path.isfile(pathFile):
             with open(pathFile, encoding='utf-8', mode='r') as syncFile:
@@ -310,6 +314,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     self.verificaRotinaDiaria()
                     return True
                 else:
+                    infoToUpdate = {}
                     syncFile.seek(0)
                     syncDict = json.load(syncFile)
 
@@ -319,60 +324,143 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     dateSyncExpSobrevida = strToDatetime(syncDict['syncExpSobrevida'], TamanhoData.g)
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
-                        self.atualizaFerramentas(convMon=True)
+                        infoToUpdate[FerramentasEInfo.convMon] = True
                     else:
                         syncJson['syncConvMon'] = syncDict['syncConvMon']
 
                     if (datetime.datetime.now() - dateSyncTetosPrev).days != 0:
-                        self.atualizaFerramentas(tetos=True)
+                        infoToUpdate[FerramentasEInfo.tetos] = True
                     else:
                         syncJson['syncTetosPrev'] = syncDict['syncTetosPrev']
 
                     if (datetime.datetime.now() - dateSyncIndicadores).days != 0:
-                        self.atualizaInformacoes(indicadores=True)
+                        infoToUpdate[FerramentasEInfo.indicadores] = True
                     else:
                         syncJson['syncIndicadores'] = syncDict['syncIndicadores']
 
                     if (datetime.datetime.now() - dateSyncExpSobrevida).days != 0:
-                        self.atualizaInformacoes(expSobrevida=True)
+                        infoToUpdate[FerramentasEInfo.expSobrevida] = True
                     else:
                         syncJson['syncExpSobrevida'] = syncDict['syncExpSobrevida']
+
+                    loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
 
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
                 syncFile.write(json.dumps(syncJson))
         else:
-            self.atualizaFerramentas(tetos=True, convMon=True)
-            self.atualizaInformacoes(indicadores=True, expSobrevida=True)
+            infoToUpdate = {
+                FerramentasEInfo.tetos: True,
+                FerramentasEInfo.convMon: True,
+                FerramentasEInfo.indicadores: True,
+                FerramentasEInfo.expSobrevida: True
+            }
+            loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
+
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
                 syncFile.write(json.dumps(syncJson))
 
-    def atualizaFerramentas(self, tetos: bool = False, convMon: bool = False):
+    # def atualizaFerramentas(self, tetos: bool = False, convMon: bool = False):
+    #     qtdTetosPrev = TetosPrev.select().count()
+    #     qtdConvMon = ConvMon.select().count()
+    #
+    #     if tetos:
+    #         tetosFromApi: List[dict] = ApiFerramentas().getAllTetosPrevidenciarios()
+    #         if qtdTetosPrev < len(tetosFromApi):
+    #             TetosPrev.insert_many(tetosFromApi).on_conflict('replace').execute()
+    #
+    #     if convMon:
+    #         convMonFromApi: List[dict] = ApiFerramentas().getAllConvMon()
+    #         if qtdConvMon < len(convMonFromApi):
+    #             ConvMon.insert_many(convMonFromApi).on_conflict('replace').execute()
+
+    async def atualizaInformacoes(self, infoToUpdate: dict):
+        qtdIndicadores = Indicadores.select().count()
+        qtdExpSobrevida = ExpSobrevida.select().count()
         qtdTetosPrev = TetosPrev.select().count()
         qtdConvMon = ConvMon.select().count()
 
-        if tetos:
-            tetosFromApi: List[dict] = ApiFerramentas().getAllTetosPrevidenciarios()
-            if qtdTetosPrev < len(tetosFromApi):
-                TetosPrev.insert_many(tetosFromApi).on_conflict('replace').execute()
+        asyncTasks = []
+        for tipoInfo, sync in infoToUpdate.items():
+            if sync:
+                if tipoInfo == FerramentasEInfo.tetos:
+                    asyncTasks.append(aio.ensure_future(ApiFerramentas().getAllTetosPrevidenciarios()))
+                elif tipoInfo == FerramentasEInfo.convMon:
+                    asyncTasks.append(aio.ensure_future(ApiFerramentas().getAllConvMon()))
+                elif tipoInfo == FerramentasEInfo.indicadores:
+                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllIndicadores()))
+                elif tipoInfo == FerramentasEInfo.expSobrevida:
+                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllExpSobrevida()))
 
-        if convMon:
-            convMonFromApi: List[dict] = ApiFerramentas().getAllConvMon()
-            if qtdConvMon < len(convMonFromApi):
-                ConvMon.insert_many(convMonFromApi).on_conflict('replace').execute()
+        gather = await aio.gather(*asyncTasks)
 
-    def atualizaInformacoes(self, indicadores: bool = False, expSobrevida: bool = False):
-        qtdIndicadores = Indicadores.select().count()
-        qtdExpSobrevida = ExpSobrevida.select().count()
+        tasks: dict = dict(zip(infoToUpdate.keys(), gather))
 
-        if indicadores:
-            indicadoresFromApi: List[dict] = ApiInformacoes().getAllIndicadores()
-            if qtdIndicadores < len(indicadoresFromApi):
-                Indicadores.insert_many(indicadoresFromApi).on_conflict('replace').execute()
+        for aioTask, infoApi in tasks.items():
+            if aioTask == FerramentasEInfo.tetos:
+                tetosFromApi: List[dict] = infoApi
+                if qtdTetosPrev < len(tetosFromApi):
+                    TetosPrev.insert_many(tetosFromApi).on_conflict('replace').execute()
 
-        if expSobrevida:
-            expSobrevidaFromApi: List[dict] = ApiInformacoes().getAllExpSobrevida()
-            if qtdExpSobrevida < len(expSobrevidaFromApi):
-                ExpSobrevida.insert_many(expSobrevidaFromApi).on_conflict('replace').execute()
+            elif aioTask == FerramentasEInfo.convMon:
+                convMonFromApi: List[dict] = infoApi
+                if qtdConvMon < len(convMonFromApi):
+                    ConvMon.insert_many(convMonFromApi).on_conflict('replace').execute()
+
+            elif aioTask == FerramentasEInfo.indicadores:
+                indicadoresFromApi: List[dict] = infoApi
+                if qtdIndicadores < len(indicadoresFromApi):
+                    Indicadores.insert_many(indicadoresFromApi).on_conflict('replace').execute()
+
+            elif aioTask == FerramentasEInfo.expSobrevida:
+                expSobrevidaFromApi: List[dict] = infoApi
+                if qtdExpSobrevida < len(expSobrevidaFromApi):
+                    ExpSobrevida.insert_many(expSobrevidaFromApi).on_conflict('replace').execute()
+
+        # if indicadores:
+        #     indicadoresFromApi: List[dict] = ApiInformacoes().getAllIndicadores()
+        #     if qtdIndicadores < len(indicadoresFromApi):
+        #         Indicadores.insert_many(indicadoresFromApi).on_conflict('replace').execute()
+
+        # if expSobrevida:
+        #     expSobrevidaFromApi: List[dict] = ApiInformacoes().getAllExpSobrevida()
+        #     if qtdExpSobrevida < len(expSobrevidaFromApi):
+        #         ExpSobrevida.insert_many(expSobrevidaFromApi).on_conflict('replace').execute()
+
+        # if tetos:
+        #     tetosFromApi: List[dict] = ApiFerramentas().getAllTetosPrevidenciarios()
+        #     if qtdTetosPrev < len(tetosFromApi):
+        #         TetosPrev.insert_many(tetosFromApi).on_conflict('replace').execute()
+
+        # if convMon:
+        #     convMonFromApi: List[dict] = ApiFerramentas().getAllConvMon()
+        #     if qtdConvMon < len(convMonFromApi):
+        #         ConvMon.insert_many(convMonFromApi).on_conflict('replace').execute()
+
+    # def atualizaInformacoes(self, indicadores: bool = False, expSobrevida: bool = False, tetos: bool = False, convMon: bool = False):
+    #     qtdIndicadores = Indicadores.select().count()
+    #     qtdExpSobrevida = ExpSobrevida.select().count()
+    #     qtdTetosPrev = TetosPrev.select().count()
+    #     qtdConvMon = ConvMon.select().count()
+    #
+    #     if indicadores:
+    #         indicadoresFromApi: List[dict] = ApiInformacoes().getAllIndicadores()
+    #         if qtdIndicadores < len(indicadoresFromApi):
+    #             Indicadores.insert_many(indicadoresFromApi).on_conflict('replace').execute()
+    #
+    #     if expSobrevida:
+    #         expSobrevidaFromApi: List[dict] = ApiInformacoes().getAllExpSobrevida()
+    #         if qtdExpSobrevida < len(expSobrevidaFromApi):
+    #             ExpSobrevida.insert_many(expSobrevidaFromApi).on_conflict('replace').execute()
+    #
+    #     if tetos:
+    #         tetosFromApi: List[dict] = ApiFerramentas().getAllTetosPrevidenciarios()
+    #         if qtdTetosPrev < len(tetosFromApi):
+    #             TetosPrev.insert_many(tetosFromApi).on_conflict('replace').execute()
+    #
+    #     if convMon:
+    #         convMonFromApi: List[dict] = ApiFerramentas().getAllConvMon()
+    #         if qtdConvMon < len(convMonFromApi):
+    #             ConvMon.insert_many(convMonFromApi).on_conflict('replace').execute()
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

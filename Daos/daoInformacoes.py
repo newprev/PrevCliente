@@ -1,14 +1,11 @@
 import sqlite3
-from typing import List
 
 from connections import ConfigConnection
 from Daos.tabelas import TabelasConfig
-from helpers import datetimeToSql
 from logs import TipoEdicao, Prioridade, logPrioridade
 # from modelos.indicesAtuMonetarioModelo import IndiceAtuMonetarioModelo
 # from modelos.indicadorModelo import IndicadorModelo
 # from modelos.expSobrevidaModelo import ExpectativaSobrevidaModelo
-from datetime import datetime
 
 class DaoInformacoes:
 

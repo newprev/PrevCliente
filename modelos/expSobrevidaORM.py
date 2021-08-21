@@ -1,8 +1,8 @@
 from modelos.baseModelORM import BaseModel, DATEFORMATS
-from helpers import strToDatetime
+from util.helpers import strToDatetime
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
-from newPrevEnums import TipoEdicao, Prioridade, TamanhoData
+from util.enums.newPrevEnums import TipoEdicao, Prioridade, TamanhoData
 
 from datetime import datetime
 from peewee import AutoField, DateField, IntegerField, DateTimeField

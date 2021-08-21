@@ -1,9 +1,9 @@
 import os
 import json
 
-from helpers import pyToDefault
+from util.helpers import pyToDefault
 from modelos.advogadoORM import Advogados
-from playhouse.shortcuts import model_to_dict, dict_to_model
+from playhouse.shortcuts import model_to_dict
 
 
 class CacheLogin:

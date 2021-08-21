@@ -577,12 +577,12 @@ Contribuições</string>
          <rect>
           <x>20</x>
           <y>30</y>
-          <width>91</width>
+          <width>171</width>
           <height>17</height>
          </rect>
         </property>
         <property name="text">
-         <string>NB</string>
+         <string>Número do benefício (NB)</string>
         </property>
        </widget>
        <widget class="QDateEdit" name="dtInicio">
@@ -652,7 +652,7 @@ Contribuições</string>
          <rect>
           <x>20</x>
           <y>50</y>
-          <width>113</width>
+          <width>121</width>
           <height>25</height>
          </rect>
         </property>

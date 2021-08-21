@@ -24,7 +24,7 @@ from modelos.beneficiosORM import CnisBeneficios
 from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.remuneracaoORM import CnisRemuneracoes
-from newPrevEnums import TiposConexoes
+from util.enums.newPrevEnums import TiposConexoes
 
 
 class Main(Ui_MainWindow, QMainWindow):

@@ -1,11 +1,11 @@
-from helpers import strToDatetime
+from util.helpers import strToDatetime
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
 from modelos.escritoriosORM import Escritorios
-from newPrevEnums import TipoEdicao, Prioridade, TamanhoData
+from util.enums.newPrevEnums import TipoEdicao, Prioridade, TamanhoData
 
-from peewee import AutoField, CharField, ForeignKeyField, DeferredForeignKey, DateField, IntegerField, DateTimeField, fn
+from peewee import AutoField, CharField, ForeignKeyField, DeferredForeignKey, DateField, IntegerField, DateTimeField
 from datetime import datetime
 
 TABLENAME = 'cliente'

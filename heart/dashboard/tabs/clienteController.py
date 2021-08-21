@@ -20,7 +20,7 @@ from modelos.escritoriosORM import Escritorios
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
 
-from helpers import *
+from util.helpers import *
 
 from repositorios.integracaoRepositorio import IntegracaoRepository
 

@@ -3,7 +3,7 @@ from logs import logPrioridade
 from typing import List
 from playhouse.shortcuts import dict_to_model, model_to_dict
 
-from newPrevEnums import *
+from util.enums.newPrevEnums import *
 
 from modelos.advogadoORM import Advogados
 from modelos.escritoriosORM import Escritorios

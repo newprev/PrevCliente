@@ -1,12 +1,12 @@
 from PyQt5.QtWidgets import QWidget, QMessageBox
 from Telas.itemResumoCNIS import Ui_WdgItemRes
-from helpers import dataUSAtoBR
+from util.helpers import dataUSAtoBR
 
 from heart.dashboard.tabs.localWidgets.wdgCabecalhoBeneficio import WdgBeneficio
 from heart.dashboard.tabs.localWidgets.wdgCabecalhoContribuicao import WdgContribuicao
 from modelos.cabecalhoORM import CnisCabecalhos
 from heart.dashboard.tabs.localStyleSheet.iconesResumo import iconeItem
-from newPrevEnums import TipoIcone
+from util.enums.newPrevEnums import TipoIcone
 
 
 class ItemResumoCnis(QWidget, Ui_WdgItemRes):

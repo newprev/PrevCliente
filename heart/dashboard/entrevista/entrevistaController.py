@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from connections import ConfigConnection
 
 from PyQt5 import QtWidgets, QtCore, QtGui
@@ -18,15 +18,13 @@ from heart.sinaisCustomizados import Sinais
 
 # from Daos.daoProcessos import DaoProcessos
 # from Daos.daoCliente import DaoCliente
-from Daos.daoCalculos import DaoCalculos
 
-from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.processosORM import Processos
 from modelos.clienteORM import Cliente
 
 from processos.aposentadoria import CalculosAposentadoria
 
-from newPrevEnums import *
+from util.enums.newPrevEnums import *
 
 
 class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):

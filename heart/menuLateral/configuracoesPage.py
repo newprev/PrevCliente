@@ -7,13 +7,13 @@ import re
 import fitz
 from typing import List
 
-from helpers import meses, strToFloat, strToDatetime, mascaraDinheiro, dinheiroToFloat, mascaraDataPequena, mascaraDataSql
+from util.helpers import meses, strToFloat, strToDatetime, mascaraDinheiro, dinheiroToFloat, mascaraDataPequena
 import datetime as dt
 from heart.localStyleSheet.configuracoes import desabilitaPB
 
 from Telas.configuracoesPage import Ui_wdgTabConfiguracoes
 from modelos.tetosPrevORM import TetosPrev
-from newPrevEnums import TamanhoData
+from util.enums.newPrevEnums import TamanhoData
 
 
 class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):

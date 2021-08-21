@@ -5,8 +5,7 @@ import json
 from logs import logPrioridade
 from playhouse.shortcuts import model_to_dict
 
-from modelos.escritoriosORM import Escritorios
-from newPrevEnums import *
+from util.enums.newPrevEnums import *
 from modelos.escritoriosORM import Escritorios
 
 

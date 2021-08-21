@@ -5,7 +5,7 @@ from Daos.tabelas import TabelasConfig
 from connections import ConfigConnection
 from logs import logPrioridade
 from modelos.telefonesORM import Telefones
-from newPrevEnums import TipoEdicao, Prioridade
+from util.enums.newPrevEnums import TipoEdicao, Prioridade
 from cache.cacheEscritorio import CacheEscritorio
 
 

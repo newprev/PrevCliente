@@ -1,4 +1,4 @@
-from PyQt5 import QtGui, QtCore
+from PyQt5 import QtGui
 from PyQt5.QtWidgets import QMainWindow, QHBoxLayout
 
 from Telas.dashboard import Ui_mwDashBoard
@@ -11,7 +11,7 @@ from heart.dashboard.entrevista.entrevistaController import EntrevistaController
 from heart.sinaisCustomizados import Sinais
 from cache.cachingLogin import CacheLogin
 
-from newPrevEnums import TelaPosicao
+from util.enums.newPrevEnums import TelaPosicao
 
 
 class DashboardController(QMainWindow, Ui_mwDashBoard):

@@ -1,9 +1,9 @@
 import datetime
 from math import floor
 from peewee import ModelSelect
-from typing import List
+from typing import List, Union
 
-from newPrevEnums import *
+from util.enums.newPrevEnums import *
 
 estCivil = ['Solteiro(a)', 'Casado(a)', 'Divorciado(a)', 'Viúvo(a)']
 
@@ -391,6 +391,13 @@ def dinheiroToFloat(valor: str):
     comPontoDecimal = semPontoDivisor.replace(',', '.')
 
     return float(comPontoDecimal)
+
+
+def floatToDinheiro(valor: Union[float, str]):
+    if isinstance(valor, float):
+        valor = str(valor)
+
+    return valor.replace('.', ',')
 
 
 def mascaraDataSql(data: str, short: bool = False):

@@ -1,4 +1,4 @@
-from newPrevEnums import TipoIcone
+from util.enums.newPrevEnums import TipoIcone
 
 
 def iconeItem(icone: TipoIcone) -> str:

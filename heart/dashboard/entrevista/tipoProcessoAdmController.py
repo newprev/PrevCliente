@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget
 from Telas.pgTipoProcessoAdm import Ui_wdgTipoProcessoAdm
 from heart.sinaisCustomizados import Sinais
-from newPrevEnums import MomentoEntrevista, TipoProcesso
+from util.enums.newPrevEnums import MomentoEntrevista, TipoProcesso
 from Telas.efeitos import Efeitos
 
 

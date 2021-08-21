@@ -2,19 +2,20 @@ from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
-from newPrevEnums import TipoEdicao, Prioridade
+from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import AutoField, CharField, ForeignKeyField, FloatField, DateTimeField, DateField, IntegerField
 from datetime import datetime
 
 TABLENAME = 'cnisContribuicoes'
 
+
 class CnisContribuicoes(BaseModel, Model):
     contribuicoesId = AutoField(column_name='contribuicoesId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
     seq = IntegerField(null=False)
     competencia = DateField(null=False, formats=DATEFORMATS)
-    contribuicao = FloatField(null=False)
+    contribuicao = FloatField(null=True)
     dadoOrigem = CharField(column_name='dadoOrigem', default='CNIS')
     dataPagamento = DateField(column_name='dataPagamento', formats=DATEFORMATS)
     indicadores = CharField(default=None)

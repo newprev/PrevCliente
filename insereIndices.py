@@ -1,10 +1,10 @@
 from os import path
 import os
-from datetime import date, datetime
+from datetime import datetime
 from Daos.daoInformacoes import DaoInformacoes
 from connections import ConfigConnection
 from modelos.indicesAtuMonetarioModelo import IndiceAtuMonetarioModelo
-from newPrevEnums import TiposConexoes
+from util.enums.newPrevEnums import TiposConexoes
 
 meses = {
     1: 'Janeiro',

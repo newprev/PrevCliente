@@ -8,10 +8,7 @@ from heart.sinaisCustomizados import Sinais
 from modelos.clienteORM import Cliente
 from modelos.processosORM import Processos
 
-from Daos.daoProcessos import DaoProcessos
-from Daos.daoCliente import DaoCliente
-
-from newPrevEnums import TipoProcesso, NaturezaProcesso, TipoBeneficio
+from util.enums.newPrevEnums import TipoBeneficio
 
 
 class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):

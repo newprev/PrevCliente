@@ -5,7 +5,7 @@ from heart.dashboard.tabs.tabCalculos import TabCalculos
 from heart.sinaisCustomizados import Sinais
 from modelos.clienteORM import Cliente
 from Daos.daoCliente import DaoCliente
-from newPrevEnums import AtivApos
+from util.enums.newPrevEnums import AtivApos
 from Telas.efeitos import Efeitos
 
 

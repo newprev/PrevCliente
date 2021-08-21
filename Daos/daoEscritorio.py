@@ -1,14 +1,11 @@
 import sqlite3
-from sqlite3 import OperationalError
 from datetime import datetime
 
 from Daos.tabelas import TabelasConfig
-from helpers import datetimeToSql, mascaraDataSql
 from logs import logPrioridade, TipoEdicao, Prioridade
-from modelos.clienteModelo import ClienteModelo
 from modelos.escritorioModelo import EscritorioModelo
 from cache.cacheEscritorio import CacheEscritorio
-from pymysql import connections, cursors
+from pymysql import connections
 
 
 class DaoEscritorio:

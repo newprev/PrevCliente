@@ -6,17 +6,19 @@ from typing import List
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
-from Daos.daoCalculos import DaoCalculos
+from util.helpers import dictEspecies, mascaraNit, strToFloat, situacaoBeneficio, strToDatetime, floatToDinheiro
+from util.popUps import popUpOkAlerta
+
 from Telas.insereContrib import Ui_mwInsereContrib
 from heart.localStyleSheet.insereContribuicao import habilita, habilitaBotao
 from heart.informacoesTelas.indicadoresTela import IndicadoresController
-from helpers import dictEspecies, mascaraNit, strToFloat, situacaoBeneficio, strToDatetime
 from modelos.beneficiosORM import CnisBeneficios
+from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.clienteORM import Cliente
 from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.remuneracaoORM import CnisRemuneracoes
 from modelos.convMonORM import ConvMon
-from newPrevEnums import TipoContribuicao, TamanhoData
+from util.enums.newPrevEnums import TipoContribuicao, TamanhoData
 
 
 class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
@@ -25,15 +27,15 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         super(InsereContribuicaoPage, self).__init__(parent=parent)
         self.setupUi(self)
         self.tabCalculos = parent
-        self.daoCalculos = DaoCalculos(db=db)
         self.indicadoresContrib = []
         self.db = db
         self.cliente = cliente
-        self.remuneracao = CnisRemuneracoes()
-        self.contribuicao = CnisContribuicoes()
-        self.beneficio = CnisBeneficios()
+        self.remuneracao: CnisRemuneracoes = CnisRemuneracoes()
+        self.contribuicao: CnisContribuicoes = CnisContribuicoes()
+        self.beneficio: CnisBeneficios = CnisBeneficios()
         self.listaConvMon: list
         self.indicadoresPg = None
+        self.tipo = tipo
 
         self.lbNomeCompleto.setText(f"{self.cliente.nomeCliente} {self.cliente.sobrenomeCliente}")
         self.lbNit.setText(mascaraNit(int(self.cliente.nit)))
@@ -63,7 +65,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.leSalContribuicao.textChanged.connect(lambda: self.getInfo(info='leSalContribuicao'))
         self.leNb.textChanged.connect(lambda: self.getInfo(info='leNb'))
 
-        self.listaConvMon = ConvMon.select()
+        self.listaConvMon: ConvMon = ConvMon.select()
 
         self.atualizaFoco()
         self.carregaQtdsRemCont()
@@ -75,12 +77,12 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         if tipo == TipoContribuicao.beneficio:
             self.rbBeneficio.setChecked(True)
             self.atualizaFoco()
-        elif tipo == TipoContribuicao.contribuicao:
+        elif tipo == TipoContribuicao.contribuicao or tipo == TipoContribuicao.remuneracao:
             self.rbContribuicao.setChecked(True)
             self.atualizaFoco()
-        elif tipo == TipoContribuicao.remuneracao:
-            self.rbRemuneracao.setChecked(True)
-            self.atualizaFoco()
+        # elif tipo == TipoContribuicao.remuneracao:
+        #     self.rbRemuneracao.setChecked(True)
+        #     self.atualizaFoco()
 
         if contribuicaoId != 0:
             self.buscaContribuicao(contribuicaoId, tipo)
@@ -88,20 +90,23 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
     def buscaContribuicao(self, contribuicaoId: int, tipo: TipoContribuicao):
 
         if tipo == TipoContribuicao.contribuicao:
-            contribuicao: CnisContribuicoes = self.daoCalculos.buscaContribuicaoPorId(contribuicaoId)
+            contribuicao: CnisContribuicoes = CnisContribuicoes.get_by_id(contribuicaoId)
+            self.contribuicao = contribuicao
             self.mostraInfoTela(contribuicao, TipoContribuicao.contribuicao)
 
         elif tipo == TipoContribuicao.remuneracao:
-            contribuicao: CnisRemuneracoes = self.daoCalculos.buscaRemuneracaoPorId(contribuicaoId)
+            contribuicao: CnisRemuneracoes = CnisRemuneracoes.get_by_id(contribuicaoId)
+            self.remuneracao = contribuicao
             self.mostraInfoTela(contribuicao, TipoContribuicao.remuneracao)
 
         elif tipo == TipoContribuicao.beneficio:
-            contribuicao: CnisBeneficios = self.daoCalculos.buscaBeneficioPorId(contribuicaoId)
+            contribuicao: CnisBeneficios = CnisBeneficios.get_by_id(contribuicaoId)
+            self.beneficio = contribuicao
             self.mostraInfoTela(contribuicao, TipoContribuicao.beneficio)
 
     def mostraInfoTela(self, contribuicao, tipoContribuicao: TipoContribuicao):
         if tipoContribuicao == TipoContribuicao.contribuicao:
-            self.leSalContribuicao.setText(f'{contribuicao.contribuicao}')
+            self.leSalContribuicao.setText(floatToDinheiro(contribuicao.contribuicao))
             self.dtCompetencia.setDate(strToDatetime(contribuicao.competencia))
             self.defineSinalMonetario(contribuicao)
 
@@ -111,23 +116,26 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             self.defineSinalMonetario(contribuicao)
 
         elif tipoContribuicao == TipoContribuicao.beneficio:
-            especie: str = dictEspecies[contribuicao.especie[:3].strip()]
-            if strToDatetime(contribuicao.dataFim, TamanhoData.gg) == datetime.min:
+            cabecalho: CnisCabecalhos = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == self.cliente.clienteId, CnisCabecalhos.seq == contribuicao.seq).get()
+            if strToDatetime(cabecalho.dataFim, TamanhoData.gg) == datetime.min:
                 dataFim: datetime = datetime.now()
             else:
-                dataFim: datetime = strToDatetime(contribuicao.dataFim, TamanhoData.gg)
+                dataFim: datetime = strToDatetime(cabecalho.dataFim, TamanhoData.gg)
 
             self.leNb.setText(str(contribuicao.nb))
-            self.cbxSituacao.setCurrentText(contribuicao.situacao.title())
-            self.cbxEspecie.setCurrentText(especie)
-            self.dtInicio.setDate(strToDatetime(contribuicao.dataInicio, TamanhoData.gg))
+            self.cbxSituacao.setCurrentText(cabecalho.situacao.title())
+            self.cbxEspecie.setCurrentText(cabecalho.especie)
+            self.dtInicio.setDate(strToDatetime(cabecalho.dataInicio, TamanhoData.gg))
             self.dtFim.setDate(dataFim)
 
     def defineSinalMonetario(self, contribuicao):
         if isinstance(contribuicao, CnisContribuicoes) or isinstance(contribuicao, CnisRemuneracoes):
             competencia: datetime = strToDatetime(contribuicao.competencia, TamanhoData.gg)
+
             for moeda in self.listaConvMon:
-                if moeda.dataInicial <= competencia <= moeda.dataFinal:
+                dataInicial = strToDatetime(moeda.dataInicial)
+                dataFinal = strToDatetime(moeda.dataFinal)
+                if dataInicial <= competencia <= dataFinal:
                     self.cbxSinal.setCurrentText(moeda.sinal)
                     break
 
@@ -146,7 +154,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.cbxSituacao.addItems(sorted(situacaoBeneficio))
 
     def carregaQtdsRemCont(self):
-        qtdRemuneracoes = self.daoCalculos.contaRemuneracoes(self.cliente.clienteId)[0]
+        qtdRemuneracoes = CnisRemuneracoes.select().count()
 
         self.lbQtdRem.setText(str(qtdRemuneracoes))
 
@@ -215,36 +223,58 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             self.beneficio.especie = self.cbxEspecie.currentText()
 
     def trataInsereInfo(self):
-        if self.rbBeneficio.isChecked():
-            if self.leNb.text() != '' and self.cbxSituacao.currentText() not in (-1, 0):
-                self.loading(40)
-                self.beneficio.clienteId = self.cliente.clienteId
-                self.loading(20)
-                self.beneficio.dadoOrigem = 'MANUAL'
-                self.loading(20)
-                self.beneficio.seq = 0
-                self.loading(20)
-                self.daoCalculos.insereBeneficio(self.beneficio)
-                self.mensagemSistema('Benefício inserido com sucesso!')
-        elif self.rbContribuicao.isChecked():
-            if self.leSalContribuicao.text() != '':
-                self.loading(20)
-                self.contribuicao.clienteId = self.cliente.clienteId
-                self.loading(20)
-                self.contribuicao.dadoOrigem = 'MANUAL'
-                self.loading(20)
-                self.contribuicao.seq = 0
-                self.loading(20)
-                if self.cbRepetir.isChecked():
-                    listaDatas: list = self.geraContribsRecorrente()
-                    self.daoCalculos.insereListaContribuicoes(listaDatas)
-                    self.mensagemSistema('Contribuições inseridas com sucesso!')
-                else:
-                    self.contribuicao.indicadores = self.retornaStrIndicadores()
-                    self.daoCalculos.insereContribuicao(self.contribuicao)
+        if self.verificaCampos():
+            if self.rbBeneficio.isChecked():
+                if self.leNb.text() != '' and self.cbxSituacao.currentText() not in (-1, 0):
+                    self.loading(40)
+                    self.beneficio.clienteId = self.cliente.clienteId
+                    self.loading(20)
+                    self.beneficio.dadoOrigem = 'MANUAL'
+                    self.loading(20)
+                    self.beneficio.seq = 0
+                    self.loading(20)
+                    self.beneficio.save()
+                    # self.daoCalculos.insereBeneficio(self.beneficio)
+                    self.mensagemSistema('Benefício inserido com sucesso!')
+            elif self.rbContribuicao.isChecked():
+                if self.leSalContribuicao.text() != '':
+                    self.loading(20)
+                    self.contribuicao.clienteId = self.cliente.clienteId
+                    self.loading(20)
+                    self.contribuicao.dadoOrigem = 'MANUAL'
+                    self.loading(20)
+                    self.contribuicao.seq = 0
+                    self.loading(20)
+                    if self.cbRepetir.isChecked():
+                        listaDatas: list = self.geraContribsRecorrente()
+                        print('\nlistaDatas ----------------')
+                        print(listaDatas)
+                        print('listaDatas ----------------\n')
+                        # self.daoCalculos.insereListaContribuicoes(listaDatas)
+                        self.daoCalculos.insereListaContribuicoes(listaDatas)
+                        self.mensagemSistema('Contribuições inseridas com sucesso!')
+                    else:
+                        if self.tipo == TipoContribuicao.remuneracao:
+                            self.remuneracao.indicadores = self.retornaStrIndicadores()
+                            self.remuneracao.save()
+
+                        elif self.contribuicao.contribuicoesId is not None:
+                            if self.contribuicao.dataPagamento is None:
+                                self.contribuicao.dataPagamento = self.contribuicao.competencia
+
+                            self.contribuicao.indicadores = self.retornaStrIndicadores()
+                            self.contribuicao.save()
+
+                        elif self.contribuicao.contribuicoesId is None:
+                            if self.contribuicao.dataPagamento is None:
+                                self.contribuicao.dataPagamento = self.contribuicao.competencia
+
+                            self.contribuicao.indicadores = self.retornaStrIndicadores()
+                            CnisContribuicoes.insert(**self.contribuicao.toDict()).on_conflict_replace().execute()
+
                     self.mensagemSistema('Contribuição inserida com sucesso!')
 
-        self.loading(20)
+            self.loading(20)
 
     def geraContribsRecorrente(self) -> List[CnisContribuicoes]:
         difMeses: int = floor((self.dtRepetir.date().toPyDate() - self.dtCompetencia.date().toPyDate()).days/30)
@@ -274,6 +304,34 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             self.close()
         else:
             self.popUpSimCancela('Você tem informações sem serem salvas. Deseja sair?', funcao=self.close)
+
+    def verificaCampos(self):
+
+        if self.rbBeneficio.isChecked():
+            if self.leNb.text() == '':
+                popUpOkAlerta('O campo Número do benefício é obrigatório. \nPreencha-o e tente novamente.')
+                self.leNb.setFocus()
+                return False
+
+        else:
+            if len(self.leSalContribuicao.text()) == 0:
+                popUpOkAlerta('O campo Salário de contribuição é obrigatório. \nPreencha-o e tente novamente.')
+                self.leSalContribuicao.clear()
+                self.leSalContribuicao.setFocus()
+                return False
+
+            elif not self.leSalContribuicao.text().isdigit():
+                popUpOkAlerta('O campo Salário de contribuição precisa ser um valor monetário. \nPreencha-o e tente novamente.')
+                self.leSalContribuicao.clear()
+                self.leSalContribuicao.setFocus()
+                return False
+
+            elif self.dtCompetencia.date().toPyDate() > date.today():
+                popUpOkAlerta('O campo Competência precisa ter uma data anterior a hoje. Tente novamente.')
+                self.dtCompetencia.setFocus()
+                return False
+
+        return True
 
     def limpaTudo(self):
         self.leSalContribuicao.clear()

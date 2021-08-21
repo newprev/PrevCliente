@@ -6,7 +6,7 @@ from typing import List
 from Daos.daoCliente import DaoCliente
 from Telas.buscaCliente import Ui_mwBuscaCliente
 from Telas.efeitos import Efeitos
-from helpers import mascaraTelCel, mascaraNit
+from util.helpers import mascaraTelCel, mascaraNit
 from modelos.clienteORM import Cliente
 from modelos.telefonesORM import Telefones
 

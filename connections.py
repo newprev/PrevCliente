@@ -3,7 +3,7 @@ import os
 import sqlite3
 import pymysql
 
-from newPrevEnums import TiposConexoes
+from util.enums.newPrevEnums import TiposConexoes
 
 
 class ConfigConnection:

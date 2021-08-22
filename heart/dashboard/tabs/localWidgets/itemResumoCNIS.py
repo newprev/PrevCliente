@@ -14,6 +14,7 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
     def __init__(self, cabecalho: CnisCabecalhos, parent=None):
         super(ItemResumoCnis, self).__init__(parent=parent)
         self.setupUi(self)
+        self.frDadoFaltante.hide()
 
         self.cabecalho = cabecalho
 
@@ -21,6 +22,7 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
         self.pbRemover.clicked.connect(lambda: self.popUpSimCancela(f'Você deseja excluir as contribuições da empresa\n {self.cabecalho.nomeEmp}?'))
 
         self.carregaInformacoes()
+        self.avaliaDadoFaltante()
 
     def carregaInformacoes(self):
         if self.cabecalho is not None:
@@ -49,6 +51,18 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
         else:
             wdgContrib = WdgContribuicao(self.cabecalho, parent=self)
             wdgContrib.show()
+
+    def avaliaDadoFaltante(self):
+        possuiDadoFaltante: bool = False
+        msgDadoFaltante: str = 'É necessário inserir as informações abaixo:'
+
+        if self.cabecalho.dataFim is None or self.cabecalho.dataFim == '':
+            possuiDadoFaltante = True
+            msgDadoFaltante += '\n - Data fim;'
+
+        if possuiDadoFaltante:
+            self.frDadoFaltante.show()
+            self.frDadoFaltante.setToolTip(msgDadoFaltante)
 
     def popUpSimCancela(self, mensagem, titulo: str = 'Atenção!', funcao=None):
         pop = QMessageBox()

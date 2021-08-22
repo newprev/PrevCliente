@@ -1,3 +1,5 @@
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtCore import QObject, QEvent
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar
 from peewee import SqliteDatabase
@@ -65,7 +67,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.pbArrowEmail.clicked.connect(lambda: self.ativaDesativaFiltro('Email'))
         self.pbCarregaCnis.clicked.connect(self.carregaCnis)
         self.pbMaisTelefones.clicked.connect(self.abrirPgMaisTelefones)
-        self.pbLimpar.clicked.connect(self.limpaTudo)
+        self.pbLimpar.clicked.connect(lambda: self.cancelaEdicao() if self.editandoCliente else self.limpaTudo())
         self.pbLimparFiltro.clicked.connect(self.limpaFiltros)
         self.pbFiltrar.clicked.connect(self.efetivarFiltro)
 
@@ -199,6 +201,10 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             except Exception as err:
                 print(f'buscaCliente ({type(err)}): {err}')
 
+    def cancelaEdicao(self):
+        self.buscaProxCliente(clienteId=self.cliente.clienteId)
+        self.modoEdicao(False)
+
     def enviaClienteParaEntrevista(self):
         self.entrevistaPg.atualizaCliente(self.cliente)
 
@@ -238,9 +244,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                             cabecalho = contribuicoes['cabecalho']
                             cabecalhoBeneficio = contribuicoes['cabecalhoBeneficio']
                             beneficios = contribuicoes['beneficios']
-
-                            for b in beneficios:
-                                print(b)
 
                             CnisContribuicoes.insert_many(listaContribuicoes).on_conflict_replace().execute()
                             CnisRemuneracoes.insert_many(listaRemuneracoes).on_conflict_replace().execute()
@@ -352,7 +355,17 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         else:
             self.rbFeminino.setChecked(True)
 
+    def modoEdicao(self, ativar: bool):
+        self.editandoCliente = ativar
+
+        if ativar:
+            self.pbLimpar.setText('Cancelar')
+        else:
+            self.pbLimpar.setText('Limpar')
+
     def carregaInfoTela(self, info, *args):
+        self.modoEdicao(True)
+
         if info == 'cep':
             self.cliente.cep = self.leCep.text().replace('-', '')
 
@@ -478,14 +491,19 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         elif 'erro' in dictCep.keys():
             self.showPopupAlerta(dictCep['erro'])
 
-    def buscaProxCliente(self):
+    def buscaProxCliente(self, clienteId: int = None):
         self.carregandoCliente = True
+
+        if clienteId is not None:
+            self.sbCdCliente.setValue(clienteId)
+
         if self.sbCdCliente.text() != '':
             clienteId = int(self.sbCdCliente.text())
 
             self.verificaDados()
             try:
                 self.cliente = Cliente.select().where(Cliente.clienteId == clienteId).get()
+                self.cliente.telefoneId = Telefones.select().where(Telefones.clienteId == clienteId).get()
 
                 if not self.cliente:
                     self.cliente = Cliente()
@@ -551,6 +569,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         if self.verificaCodCliente():
             self.avaliaTelefone()
             self.cliente.save()
+            self.modoEdicao(False)
 
     def avaliaTelefone(self):
         if len(self.leTelefone.text()) >= 8:
@@ -623,7 +642,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.lePix.clear()
         self.sbCdCliente.clear()
         self.sbCdCliente.setValue(0)
-        self.editandoCliente = False
+        self.modoEdicao(False)
 
         self.cbxEstado.setCurrentIndex(24)
 
@@ -643,6 +662,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         if abaAtual == 0:
             self.atualizaTblClientes()
             self.limpaTudo()
+            if self.cliente is not None:
+                self.cliente.save()
             self.cliente = None
         else:
             if self.cliente is None:

@@ -1,8 +1,9 @@
 import datetime
-
 from PyQt5.QtWidgets import QWidget, QMessageBox
+
 from Telas.wdgCabecalhoContribuicao import Ui_wdgCabecalhoContribuicao
 from util.helpers import strToDate, unmaskAll
+from heart.sinaisCustomizados import Sinais
 
 from modelos.cabecalhoORM import CnisCabecalhos
 
@@ -13,6 +14,11 @@ class WdgContribuicao(QWidget, Ui_wdgCabecalhoContribuicao):
         super(WdgContribuicao, self).__init__(parent=parent)
         self.setupUi(self)
         self.cabecalho = cabecalho
+        self.itemResumo = parent
+        self.tabCalculo = parent.parent()
+
+        self.sinais = Sinais()
+        self.sinais.sAtualizaCabecalho.connect(self.enviaAtualizaCabecalho)
 
         self.carregaCampos()
         self.pbCancelar.clicked.connect(lambda: self.close())
@@ -52,7 +58,11 @@ class WdgContribuicao(QWidget, Ui_wdgCabecalhoContribuicao):
 
     def salvaAlteracoesESai(self):
         self.cabecalho.save()
+        self.sinais.sAtualizaCabecalho.emit()
         self.close()
+
+    def enviaAtualizaCabecalho(self):
+        self.itemResumo.carregaInformacoes()
 
     def popUpSimCancela(self, mensagem, titulo: str = 'Atenção!', funcao=None):
         pop = QMessageBox()

@@ -332,6 +332,12 @@ def mascaraDataPequena(data: datetime.date):
 
 
 def dataUSAtoBR(dataUSA: str, comDias: bool = False) -> str:
+    if isinstance(dataUSA, datetime.date) or isinstance(dataUSA, datetime.datetime):
+        if comDias:
+            return f"{dataUSA.day}/{dataUSA.month}/{dataUSA.year}"
+        else:
+            return f"{dataUSA.month}/{dataUSA.year}"
+
     if dataUSA == '':
         return dataUSA
     elif comDias:
@@ -442,16 +448,20 @@ def strToDatetime(data: str, tamanho: TamanhoData = TamanhoData.m):
 
 def strToDate(data: str):
     dateFormats: List[str] = ['%d/%m/%Y', '%m/%Y', '%Y-%m-%d']
-
-    for formato in dateFormats:
-        try:
-            dataRetorno = datetime.datetime.strptime(data, formato).date()
-            return dataRetorno
-        except ValueError:
-            pass
-        except Exception as err:
-            print(f'strToDate: ({type(data)}) {data} - ({type(err)}) {err}')
-            raise
+    if isinstance(data, datetime.date):
+        return data
+    elif isinstance(data, datetime.datetime):
+        return data.date()
+    else:
+        for formato in dateFormats:
+            try:
+                dataRetorno = datetime.datetime.strptime(data, formato).date()
+                return dataRetorno
+            except ValueError:
+                pass
+            except Exception as err:
+                print(f'strToDate: ({type(data)}) {data} - ({type(err)}) {err}')
+                raise
 
 
 def strToFloat(valor: str) -> float:

@@ -238,11 +238,12 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                         try:
                             Cliente.insert(**clienteAInserir.toDict()).on_conflict_replace().execute()
                             self.cliente = Cliente.get(Cliente.cpfCliente == clienteAInserir.cpfCliente)
+
                             contribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=self.cliente.clienteId)
                             listaContribuicoes = contribuicoes['contribuicoes']
                             listaRemuneracoes = contribuicoes['remuneracoes']
-                            cabecalho = contribuicoes['cabecalho']
-                            cabecalhoBeneficio = contribuicoes['cabecalhoBeneficio']
+                            cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
+                            cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
                             beneficios = contribuicoes['beneficios']
 
                             CnisContribuicoes.insert_many(listaContribuicoes).on_conflict_replace().execute()
@@ -274,6 +275,18 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
             except Exception as erro:
                 print(f'carregaCnis - erro: ({type(erro)}) {erro}')
+
+    def avaliaDadosFaltantesNoCNIS(self, cabecalhos: List[dict]) -> List[dict]:
+        listaReturn: List[dict] = []
+
+        for cabecalho in cabecalhos:
+            faltaDataFim = cabecalho['dataFim'] is None or cabecalho['dataFim'] == ''
+            faltaDataInicio = cabecalho['dataInicio'] is None or cabecalho['dataInicio'] == ''
+
+            cabecalho['dadoFaltante'] = faltaDataFim or faltaDataInicio
+            listaReturn.append(cabecalho)
+
+        return listaReturn
 
     def buscaClienteJaCadastrado(self) -> bool:
         cliente: Cliente = Cliente.select().where(Cliente.nit == self.cliente.nit).get()
@@ -515,6 +528,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                         self.sinais.sEnviaCliente.emit()
             except Cliente.DoesNotExist:
                 self.sbCdCliente.setValue(clienteId - 1)
+            except Telefones.DoesNotExist:
+                self.cliente.telefoneId = Telefones()
 
         self.carregandoCliente = False
 

@@ -15,6 +15,7 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
         super(ItemResumoCnis, self).__init__(parent=parent)
         self.setupUi(self)
         self.frDadoFaltante.hide()
+        self.tabCalculo = parent
 
         self.cabecalho = cabecalho
 
@@ -59,10 +60,17 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
         if self.cabecalho.dataFim is None or self.cabecalho.dataFim == '':
             possuiDadoFaltante = True
             msgDadoFaltante += '\n - Data fim;'
+        if self.cabecalho.dataInicio is None or self.cabecalho.dataInicio == '':
+            possuiDadoFaltante = True
+            msgDadoFaltante += '\n - Data início;'
 
         if possuiDadoFaltante:
             self.frDadoFaltante.show()
             self.frDadoFaltante.setToolTip(msgDadoFaltante)
+
+        if self.cabecalho.dadoFaltante != possuiDadoFaltante:
+            self.cabecalho.dadoFaltante = possuiDadoFaltante
+            self.cabecalho.save()
 
     def popUpSimCancela(self, mensagem, titulo: str = 'Atenção!', funcao=None):
         pop = QMessageBox()

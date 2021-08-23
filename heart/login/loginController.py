@@ -2,7 +2,6 @@ import datetime
 import pymysql
 import asyncio as aio
 from typing import List
-import time
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
@@ -18,6 +17,7 @@ from modelos.tetosPrevORM import TetosPrev
 from modelos.convMonORM import ConvMon
 from modelos.indicadoresORM import Indicadores
 from modelos.expSobrevidaORM import ExpSobrevida
+from modelos.carenciasLei91 import CarenciaLei91
 from Telas.loginPage import Ui_mwLogin
 from heart.login.wdgAdvController import WdgAdvController
 from heart.dashboard.dashboardController import DashboardController
@@ -304,6 +304,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             'syncTetosPrev': datetimeToSql(datetime.datetime.now()),
             'syncIndicadores': datetimeToSql(datetime.datetime.now()),
             'syncExpSobrevida': datetimeToSql(datetime.datetime.now()),
+            'syncCarenciasLei91': datetimeToSql(datetime.datetime.now()),
         }
         loop = aio.get_event_loop()
 
@@ -322,6 +323,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     dateSyncTetosPrev = strToDatetime(syncDict['syncTetosPrev'], TamanhoData.g)
                     dateSyncIndicadores = strToDatetime(syncDict['syncIndicadores'], TamanhoData.g)
                     dateSyncExpSobrevida = strToDatetime(syncDict['syncExpSobrevida'], TamanhoData.g)
+                    dateSyncCarenciasLei91 = strToDatetime(syncDict['syncCarenciasLei91'], TamanhoData.g)
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
                         infoToUpdate[FerramentasEInfo.convMon] = True
@@ -343,6 +345,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     else:
                         syncJson['syncExpSobrevida'] = syncDict['syncExpSobrevida']
 
+                    if (datetime.datetime.now() - dateSyncCarenciasLei91).days != 0:
+                        infoToUpdate[FerramentasEInfo.carenciasLei91] = True
+                    else:
+                        syncJson['syncCarenciasLei91'] = syncDict['syncCarenciasLei91']
+
                     loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
 
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
@@ -352,32 +359,20 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 FerramentasEInfo.tetos: True,
                 FerramentasEInfo.convMon: True,
                 FerramentasEInfo.indicadores: True,
-                FerramentasEInfo.expSobrevida: True
+                FerramentasEInfo.expSobrevida: True,
+                FerramentasEInfo.carenciasLei91: True
             }
             loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
 
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
                 syncFile.write(json.dumps(syncJson))
 
-    # def atualizaFerramentas(self, tetos: bool = False, convMon: bool = False):
-    #     qtdTetosPrev = TetosPrev.select().count()
-    #     qtdConvMon = ConvMon.select().count()
-    #
-    #     if tetos:
-    #         tetosFromApi: List[dict] = ApiFerramentas().getAllTetosPrevidenciarios()
-    #         if qtdTetosPrev < len(tetosFromApi):
-    #             TetosPrev.insert_many(tetosFromApi).on_conflict('replace').execute()
-    #
-    #     if convMon:
-    #         convMonFromApi: List[dict] = ApiFerramentas().getAllConvMon()
-    #         if qtdConvMon < len(convMonFromApi):
-    #             ConvMon.insert_many(convMonFromApi).on_conflict('replace').execute()
-
     async def atualizaInformacoes(self, infoToUpdate: dict):
         qtdIndicadores = Indicadores.select().count()
         qtdExpSobrevida = ExpSobrevida.select().count()
         qtdTetosPrev = TetosPrev.select().count()
         qtdConvMon = ConvMon.select().count()
+        qtdCarenciasLei91 = CarenciaLei91.select().count()
 
         asyncTasks = []
         for tipoInfo, sync in infoToUpdate.items():
@@ -390,6 +385,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllIndicadores()))
                 elif tipoInfo == FerramentasEInfo.expSobrevida:
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllExpSobrevida()))
+                elif tipoInfo == FerramentasEInfo.carenciasLei91:
+                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllCarenciasLei91()))
 
         gather = await aio.gather(*asyncTasks)
 
@@ -416,51 +413,10 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 if qtdExpSobrevida < len(expSobrevidaFromApi):
                     ExpSobrevida.insert_many(expSobrevidaFromApi).on_conflict('replace').execute()
 
-        # if indicadores:
-        #     indicadoresFromApi: List[dict] = ApiInformacoes().getAllIndicadores()
-        #     if qtdIndicadores < len(indicadoresFromApi):
-        #         Indicadores.insert_many(indicadoresFromApi).on_conflict('replace').execute()
-
-        # if expSobrevida:
-        #     expSobrevidaFromApi: List[dict] = ApiInformacoes().getAllExpSobrevida()
-        #     if qtdExpSobrevida < len(expSobrevidaFromApi):
-        #         ExpSobrevida.insert_many(expSobrevidaFromApi).on_conflict('replace').execute()
-
-        # if tetos:
-        #     tetosFromApi: List[dict] = ApiFerramentas().getAllTetosPrevidenciarios()
-        #     if qtdTetosPrev < len(tetosFromApi):
-        #         TetosPrev.insert_many(tetosFromApi).on_conflict('replace').execute()
-
-        # if convMon:
-        #     convMonFromApi: List[dict] = ApiFerramentas().getAllConvMon()
-        #     if qtdConvMon < len(convMonFromApi):
-        #         ConvMon.insert_many(convMonFromApi).on_conflict('replace').execute()
-
-    # def atualizaInformacoes(self, indicadores: bool = False, expSobrevida: bool = False, tetos: bool = False, convMon: bool = False):
-    #     qtdIndicadores = Indicadores.select().count()
-    #     qtdExpSobrevida = ExpSobrevida.select().count()
-    #     qtdTetosPrev = TetosPrev.select().count()
-    #     qtdConvMon = ConvMon.select().count()
-    #
-    #     if indicadores:
-    #         indicadoresFromApi: List[dict] = ApiInformacoes().getAllIndicadores()
-    #         if qtdIndicadores < len(indicadoresFromApi):
-    #             Indicadores.insert_many(indicadoresFromApi).on_conflict('replace').execute()
-    #
-    #     if expSobrevida:
-    #         expSobrevidaFromApi: List[dict] = ApiInformacoes().getAllExpSobrevida()
-    #         if qtdExpSobrevida < len(expSobrevidaFromApi):
-    #             ExpSobrevida.insert_many(expSobrevidaFromApi).on_conflict('replace').execute()
-    #
-    #     if tetos:
-    #         tetosFromApi: List[dict] = ApiFerramentas().getAllTetosPrevidenciarios()
-    #         if qtdTetosPrev < len(tetosFromApi):
-    #             TetosPrev.insert_many(tetosFromApi).on_conflict('replace').execute()
-    #
-    #     if convMon:
-    #         convMonFromApi: List[dict] = ApiFerramentas().getAllConvMon()
-    #         if qtdConvMon < len(convMonFromApi):
-    #             ConvMon.insert_many(convMonFromApi).on_conflict('replace').execute()
+            elif aioTask == FerramentasEInfo.carenciasLei91:
+                carenciasLei91FromApi: List[dict] = infoApi
+                if qtdCarenciasLei91 < len(carenciasLei91FromApi):
+                    CarenciaLei91.insert_many(carenciasLei91FromApi).on_conflict('replace').execute()
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

@@ -4,7 +4,7 @@ import pandas as pd
 from collections import defaultdict
 
 from Daos.daoCalculos import DaoCalculos
-from util.helpers import comparaMesAno, calculaDiaMesAno, strToDatetime, strToDate
+from util.helpers import comparaMesAno, calculaDiaMesAno, strToDatetime, strToDate, calculaIdade
 
 from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.remuneracaoORM import CnisRemuneracoes
@@ -37,10 +37,11 @@ class CalculosAposentadoria:
         else:
             self.dibAtual: datetime = dib.strftime('%Y-%m')
 
-        self.dibAtual = datetime.datetime(year=2019, month=10, day=1)
+        # self.dibAtual = datetime.datetime(year=2019, month=10, day=1)
 
         self.mediaSalarial: float = self.calculaMediaSalarial()
         self.dataReforma2019: datetime.date = datetime.date(2019, 11, 13)
+        self.dataTrocaMoeda = datetime.date = datetime.date(1994, 7, 1)
         self.fatorPrevidenciario: int = 1
         self.tempoContribCalculado: list = self.calculaTempoContribuicao()
         self.pontuacao: int = sum(self.tempoContribCalculado) + self.cliente.idade
@@ -71,7 +72,10 @@ class CalculosAposentadoria:
                 SubTipoAposentadoria.Idade: self.calculaDireitoAdquirido(DireitoAdquirido.lei821391, subTipo=SubTipoAposentadoria.Idade),
                 SubTipoAposentadoria.TempoContrib: self.calculaDireitoAdquirido(DireitoAdquirido.lei821391, subTipo=SubTipoAposentadoria.TempoContrib)
             },
-            DireitoAdquirido.lei987699: self.calculaDireitoAdquirido(DireitoAdquirido.lei987699),
+            DireitoAdquirido.lei987699: {
+                SubTipoAposentadoria.Idade: self.calculaDireitoAdquirido(DireitoAdquirido.lei987699, subTipo=SubTipoAposentadoria.Idade),
+                SubTipoAposentadoria.TempoContrib: False,
+            },
             DireitoAdquirido.ec1032019: self.calculaDireitoAdquirido(DireitoAdquirido.ec1032019)
         }
 
@@ -114,7 +118,30 @@ class CalculosAposentadoria:
                 # TODO: Implementar regra para verificar direito adquirido
                 return False
         elif lei == DireitoAdquirido.lei987699:
-            pass
+            listaBanco: List[CnisCabecalhos] = self.listaCabecalhos
+            tempoContribuicao: List[int] = self.calculaTempoContribuicao(cabecalhos=listaBanco, dataLimitante=self.dataTrocaMoeda)
+
+            if subTipo == SubTipoAposentadoria.Idade:
+                idadeAteReforma: List[int] = calculaIdade(self.cliente.dataNascimento, self.dataReforma2019)
+
+                if tempoContribuicao[2] < 15:
+                    return False
+
+
+
+            elif subTipo == SubTipoAposentadoria.TempoContrib:
+                if self.cliente.genero == 'M':
+                    return 35 - tempoContribuicao[2] >= 0
+
+                elif self.cliente.genero == 'F':
+                    return 30 - tempoContribuicao[2] >= 0
+                else:
+                    raise ValueError('Cliente não possui o campo "genero" preenchido.')
+
+            else:
+                raise ValueError('Nenhum subtipo foi informado para o cáclulo da aposentadoria.')
+
+
 
         else:
             listaBanco = self.listaCabecalhos

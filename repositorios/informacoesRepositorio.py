@@ -71,6 +71,18 @@ class ApiInformacoes:
     #         logPrioridade(f"API(Sync)____________________GET<ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
     #         return []
 
+    async def getAllCarenciasLei91(self) -> List[dict]:
+        url = self.baseUrl + 'carenciasLei91/'
+        async with aiohttp.ClientSession() as http:
+            async with http.get(url) as response:
+                statusCode = response.status
+                if 199 < statusCode < 400:
+                    logPrioridade(f"API(Sync)____________________GET<carenciasLei91>::::{url}", TipoEdicao.api, Prioridade.sync)
+                    return await response.json()
+                else:
+                    logPrioridade(f"API(Sync)____________________GET<carenciasLei91ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
+                    return []
+
     def conexaoOnline(self) -> bool:
         try:
             response = requests.get(self.baseUrl)

@@ -310,6 +310,18 @@ def calculaDiaMesAno(totalDias: int) -> list:
     return [dias, mes, anos]
 
 
+def calculaIdade(dataNascimento: datetime.date, dataLimite: datetime.date) -> list[int]:
+    totalDias: int = (dataLimite - dataNascimento).days
+    resto: int = 0
+
+    anos = floor(totalDias / (30 * 12))
+    resto = totalDias % (30 * 12)
+    mes = floor(resto / 30)
+    dias = resto % 30
+
+    return [dias, mes, anos]
+
+
 def mascaraFormaPagamento(pagamento: str):
     if (pagamento.upper() == 'CC'):
         return 'Cartão de crédito'

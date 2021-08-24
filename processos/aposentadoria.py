@@ -1,5 +1,5 @@
 import datetime
-from typing import List
+from typing import List, Generator, Union
 import pandas as pd
 from collections import defaultdict
 
@@ -12,6 +12,7 @@ from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.expSobrevidaORM import ExpSobrevida
 from modelos.processosORM import Processos
 from modelos.clienteORM import Cliente
+from modelos.carenciasLei91 import CarenciaLei91
 from util.enums.newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData, ComparaData, DireitoAdquirido, SubTipoAposentadoria
 
 
@@ -90,9 +91,11 @@ class CalculosAposentadoria:
         print(f'len(self.listaRemuneracoes): {len(self.listaRemuneracoes)}')
         print(f'len(self.listaContribuicoes): {len(self.listaContribuicoes)}')
         print(f'self.processo.tempoContribuicao: {self.processo.tempoContribuicao}')
-        print(f'self.regrasTransicao: {self.regrasTransicao}')
         print(f'self.valorBeneficios: {self.valorBeneficios}')
         print(f'self.tempoContribCalculado: {self.tempoContribCalculado}')
+        print('*********')
+        for chave, valor in self.aposentadorias.items():
+            print(f'{chave}: {valor}')
         print('-------------------------------------\n\n')
 
     # def defineDIB(self, data: datetime):
@@ -118,18 +121,32 @@ class CalculosAposentadoria:
                 # TODO: Implementar regra para verificar direito adquirido
                 return False
         elif lei == DireitoAdquirido.lei987699:
-            listaBanco: List[CnisCabecalhos] = self.listaCabecalhos
-            tempoContribuicao: List[int] = self.calculaTempoContribuicao(cabecalhos=listaBanco, dataLimitante=self.dataTrocaMoeda)
+            # TODO: Implementar o acréscimo da profissão. Caso professor, por exemplo, adicionar 5 anos de contribuição
+            acrescimoIdade: int = 0
+            acrescimoProfissao: int = 0
+
+            if self.cliente.genero == 'F':
+                acrescimoIdade = 5
 
             if subTipo == SubTipoAposentadoria.Idade:
-                idadeAteReforma: List[int] = calculaIdade(self.cliente.dataNascimento, self.dataReforma2019)
+                listaCarencias: List[CarenciaLei91] = CarenciaLei91.select()
 
-                if tempoContribuicao[2] < 15:
-                    return False
+                for carencia in listaCarencias:
+                    listaAux: Generator[CnisCabecalhos] = self.retornaCabecalhosDesde(self.listaCabecalhos, carencia.dataImplemento)
+                    idadeReferente: List[int] = calculaIdade(self.cliente.dataNascimento, carencia.dataImplemento)
+                    tempoContribuicao: List[int] = self.calculaTempoContribuicao(listaAux)
+                    # Idade: M - 65 / F - 60
+                    # Tempo Contribuição: 15 anos ou tabela
 
+                    if idadeReferente[2] + acrescimoIdade > 65 and tempoContribuicao[2] + acrescimoProfissao >= carencia.tempoContribuicao:
+                        return True
 
+                return False
 
             elif subTipo == SubTipoAposentadoria.TempoContrib:
+                listaBanco: List[CnisCabecalhos] = self.listaCabecalhos
+                tempoContribuicao: List[int] = self.calculaTempoContribuicao(listaBanco)
+
                 if self.cliente.genero == 'M':
                     return 35 - tempoContribuicao[2] >= 0
 
@@ -212,7 +229,7 @@ class CalculosAposentadoria:
         dfContribuicoes['salAtualizado'] = salAtualizado
         return dfContribuicoes['salAtualizado'].mean()
 
-    def calculaTempoContribuicao(self, cabecalhos: list = None, dataLimitante: datetime = None) -> List[int]:
+    def calculaTempoContribuicao(self, cabecalhos: Union[list, Generator] = None, dataLimitante: datetime = None) -> List[int]:
         listTimedeltas: list = []
         totalDias: int = 0
 
@@ -527,3 +544,5 @@ class CalculosAposentadoria:
         if self.regrasTransicao[RegraTransicao.reducaoTempoContribuicao]:
             self.valorBeneficios[RegraTransicao.reducaoTempoContribuicao] = self.mediaSalarial * (0.6 + 2 * (self.tempoContribCalculado[2] - tempoMinimo) / 100)
 
+    def retornaCabecalhosDesde(self, listaCabecalhos: List[CnisCabecalhos], dataInicio: datetime.date) -> List[CnisCabecalhos]:
+        return [cabecalho for cabecalho in listaCabecalhos if cabecalho.dataInicio <= dataInicio]

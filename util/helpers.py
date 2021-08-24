@@ -562,12 +562,15 @@ def strTipoBeneFacilitado(tipoBeneficio: TipoBeneficio) -> str:
 
 
 def eliminaHoraDias(data: datetime):
-    if isinstance(data, datetime.datetime):
-        return data.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    elif isinstance(data, datetime.date):
-        return data.replace(day=1)
-    elif isinstance(data, str):
-        return datetime.datetime.strptime(data, '%Y-%m-%d').date().replace(day=1)
+    try:
+        if isinstance(data, datetime.datetime):
+            return data.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        elif isinstance(data, datetime.date):
+            return data.replace(day=1)
+        elif isinstance(data, str):
+            return datetime.datetime.strptime(data, '%Y-%m-%d').date().replace(day=1)
+    except TypeError as err:
+        print(f'eliminaHoraDias ({type(err)}): {err}')
 
 
 def pyToDefault(dicionario: dict) -> dict:

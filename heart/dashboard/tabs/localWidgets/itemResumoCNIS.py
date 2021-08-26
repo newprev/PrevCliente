@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QMessageBox
 from Telas.itemResumoCNIS import Ui_WdgItemRes
-from util.helpers import dataUSAtoBR
+from util.helpers import dataUSAtoBR, mascaraCNPJ, mascaraNB
 
 from heart.dashboard.tabs.localWidgets.wdgCabecalhoBeneficio import WdgBeneficio
 from heart.dashboard.tabs.localWidgets.wdgCabecalhoContribuicao import WdgContribuicao
@@ -28,17 +28,20 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
     def carregaInformacoes(self):
         if self.cabecalho is not None:
             if self.cabecalho.orgVinculo is not None and self.cabecalho.nb is not None:
-                self.lbCdEmp.setText(f"Benefício: {self.cabecalho.nb}")
+                # self.lbCdEmp.setText(f"Benefício: {self.cabecalho.nb}")
+                self.lbCNPJouNB.setText(mascaraNB(self.cabecalho.nb))
                 self.lbCdEmp.setText(self.cabecalho.especie[5:])
                 self.frIcone.setStyleSheet(iconeItem(TipoIcone.beneficio))
                 self.lbSituacao.setText(self.cabecalho.situacao)
 
             elif self.cabecalho.nomeEmp == 'RECOLHIMENTO':
                 self.lbCdEmp.setText(self.cabecalho.tipoVinculo)
+                self.lbCNPJouNB.setText(self.cabecalho.nb)
                 self.lbSituacao.hide()
                 self.lbInfoSituacao.hide()
             else:
                 self.lbCdEmp.setText(self.cabecalho.nomeEmp)
+                self.lbCNPJouNB.setText(mascaraCNPJ(self.cabecalho.cdEmp))
                 self.lbSituacao.hide()
                 self.lbInfoSituacao.hide()
 

@@ -16,6 +16,7 @@ class WdgContribuicao(QWidget, Ui_wdgCabecalhoContribuicao):
         self.cabecalho = cabecalho
         self.itemResumo = parent
         self.tabCalculo = parent.parent()
+        self.parent = parent
 
         self.sinais = Sinais()
         self.sinais.sAtualizaCabecalho.connect(self.enviaAtualizaCabecalho)
@@ -28,6 +29,8 @@ class WdgContribuicao(QWidget, Ui_wdgCabecalhoContribuicao):
         self.dtDataFim.dateChanged.connect(lambda: self.getInfo('dtDataFim'))
         self.leNomeEmp.textChanged.connect(lambda: self.getInfo('leNomeEmp'))
         self.leCNPJ.textChanged.connect(lambda: self.getInfo('leCNPJ'))
+
+        self.ajustandoTamanho()
 
     def carregaCampos(self):
         self.leCNPJ.setText(self.cabecalho.cdEmp)
@@ -63,6 +66,13 @@ class WdgContribuicao(QWidget, Ui_wdgCabecalhoContribuicao):
 
     def enviaAtualizaCabecalho(self):
         self.itemResumo.carregaInformacoes()
+
+    def ajustandoTamanho(self):
+        parentWidth = self.parent.size().width()
+        parentHeight = self.parent.size().height()
+
+        self.resize(parentWidth, parentHeight)
+        self.frMain.resize(parentWidth, parentHeight)
 
     def popUpSimCancela(self, mensagem, titulo: str = 'Atenção!', funcao=None):
         pop = QMessageBox()

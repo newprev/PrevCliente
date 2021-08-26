@@ -5,6 +5,7 @@ from collections import defaultdict
 
 from Daos.daoCalculos import DaoCalculos
 from util.helpers import comparaMesAno, calculaDiaMesAno, strToDatetime, strToDate, calculaIdade
+from util.ferramentas.tools import prettyPrintDict
 
 from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.remuneracaoORM import CnisRemuneracoes
@@ -87,16 +88,14 @@ class CalculosAposentadoria:
 
         self.calculaBeneficios()
 
-        print('\n\n------------------------------------- ')
+        print('\n\n------------------------------------------------------------------ ')
         print(f'len(self.listaRemuneracoes): {len(self.listaRemuneracoes)}')
         print(f'len(self.listaContribuicoes): {len(self.listaContribuicoes)}')
         print(f'self.processo.tempoContribuicao: {self.processo.tempoContribuicao}')
         print(f'self.valorBeneficios: {self.valorBeneficios}')
         print(f'self.tempoContribCalculado: {self.tempoContribCalculado}')
-        print('*********')
-        for chave, valor in self.aposentadorias.items():
-            print(f'{chave}: {valor}')
-        print('-------------------------------------\n\n')
+        prettyPrintDict(self.aposentadorias)
+        print('------------------------------------------------------------------\n\n')
 
     # def defineDIB(self, data: datetime):
     #     self.processo.dib = data
@@ -157,9 +156,6 @@ class CalculosAposentadoria:
 
             else:
                 raise ValueError('Nenhum subtipo foi informado para o cáclulo da aposentadoria.')
-
-
-
         else:
             listaBanco = self.listaCabecalhos
 
@@ -239,7 +235,6 @@ class CalculosAposentadoria:
             listaBanco: List[CnisCabecalhos] = self.listaCabecalhos
         else:
             listaBanco: List[CnisCabecalhos] = cabecalhos
-
 
         # Criando dicionários de remunerações e contribuições por Id ----------------
         dictCabecalhos: dict = {cabecalho.seq: cabecalho for cabecalho in listaBanco}

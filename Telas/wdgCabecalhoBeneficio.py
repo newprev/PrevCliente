@@ -14,7 +14,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgCabecalhoBeneficio(object):
     def setupUi(self, wdgCabecalhoBeneficio):
         wdgCabecalhoBeneficio.setObjectName("wdgCabecalhoBeneficio")
-        wdgCabecalhoBeneficio.resize(734, 144)
+        wdgCabecalhoBeneficio.resize(735, 144)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(wdgCabecalhoBeneficio.sizePolicy().hasHeightForWidth())
+        wdgCabecalhoBeneficio.setSizePolicy(sizePolicy)
         wdgCabecalhoBeneficio.setStyleSheet("/*-------------------------------- Labels -----------------------------------------*/\n"
 "#lbCdEmp {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
@@ -99,6 +104,11 @@ class Ui_wdgCabecalhoBeneficio(object):
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.frMain = QtWidgets.QFrame(wdgCabecalhoBeneficio)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frMain.sizePolicy().hasHeightForWidth())
+        self.frMain.setSizePolicy(sizePolicy)
         self.frMain.setMinimumSize(QtCore.QSize(680, 140))
         self.frMain.setMaximumSize(QtCore.QSize(16777215, 140))
         self.frMain.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -204,6 +214,8 @@ class Ui_wdgCabecalhoBeneficio(object):
         self.horizontalLayout_4.addWidget(self.frame_6)
         self.verticalLayout_2.addWidget(self.frame_4)
         self.horizontalLayout_2.addWidget(self.frame_2, 0, QtCore.Qt.AlignHCenter)
+        spacerItem = QtWidgets.QSpacerItem(400, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
         self.frame = QtWidgets.QFrame(self.frMain)
         self.frame.setMinimumSize(QtCore.QSize(90, 0))
         self.frame.setMaximumSize(QtCore.QSize(120, 16777215))

@@ -311,6 +311,13 @@ def calculaDiaMesAno(totalDias: int) -> list:
 
 
 def calculaIdade(dataNascimento: datetime.date, dataLimite: datetime.date) -> list[int]:
+
+    if isinstance(dataNascimento, str):
+        dataNascimento = strToDate(dataNascimento)
+
+    if isinstance(dataLimite, str):
+        dataLimite = strToDate(dataLimite)
+
     totalDias: int = (dataLimite - dataNascimento).days
     resto: int = 0
 
@@ -377,13 +384,35 @@ def mascaraDinheiro(valor: float, simbolo: str = 'R$'):
         return f"{simbolo} {strFinal}"
 
 
+def mascaraNB(valor: int):
+    strValor = str(valor)
+    pointPosition = len(strValor) - 3
+    if pointPosition > 0:
+        strFinal = strValor[:pointPosition] + '.' + strValor[pointPosition:]
+        pointPosition = strFinal.find(".") - 3
+
+        while pointPosition > 0:
+            strFinal = strFinal[:pointPosition] + '.' + strFinal[pointPosition:]
+            pointPosition = strFinal.find(".") - 3
+    else:
+        strFinal = strValor
+
+    if strFinal.startswith('.'):
+        return f"{strFinal[1:]}"
+    else:
+        return f"{strFinal}"
+
+
 def comparaMesAno(dataInicio: datetime, dataFim: datetime, comparacao: ComparaData) -> int:
+    if isinstance(dataInicio, str):
+        dataInicio = strToDate(dataInicio)
+
     inicio = eliminaHoraDias(dataInicio)
     fim = eliminaHoraDias(dataFim)
 
-    if isinstance(inicio, datetime.datetime):
+    if isinstance(inicio, type(datetime.datetime)):
         inicio = inicio.date()
-    if isinstance(fim, datetime.datetime):
+    if isinstance(fim, type(datetime.datetime)):
         fim = fim.date()
 
     if comparacao == ComparaData.igual:
@@ -458,21 +487,22 @@ def strToDatetime(data: str, tamanho: TamanhoData = TamanhoData.m):
         return datetime.datetime.min
 
 
-def strToDate(data: str):
+def strToDate(dataAvaliar: str):
     dateFormats: List[str] = ['%d/%m/%Y', '%m/%Y', '%Y-%m-%d']
-    if isinstance(data, datetime.date):
-        return data
-    elif isinstance(data, datetime.datetime):
-        return data.date()
+
+    if isinstance(dataAvaliar, type(datetime.datetime)):
+        return dataAvaliar.date()
+    elif isinstance(dataAvaliar, type(datetime.date)):
+        return dataAvaliar
     else:
         for formato in dateFormats:
             try:
-                dataRetorno = datetime.datetime.strptime(data, formato).date()
+                dataRetorno = datetime.datetime.strptime(dataAvaliar, formato).date()
                 return dataRetorno
             except ValueError:
                 pass
             except Exception as err:
-                print(f'strToDate: ({type(data)}) {data} - ({type(err)}) {err}')
+                print(f'strToDate: ({type(dataAvaliar)}) {dataAvaliar} - ({type(err)}) {err}')
                 raise
 
 
@@ -563,9 +593,9 @@ def strTipoBeneFacilitado(tipoBeneficio: TipoBeneficio) -> str:
 
 def eliminaHoraDias(data: datetime):
     try:
-        if isinstance(data, datetime.datetime):
+        if isinstance(data, type(datetime.datetime)):
             return data.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        elif isinstance(data, datetime.date):
+        elif isinstance(data, type(datetime.date)):
             return data.replace(day=1)
         elif isinstance(data, str):
             return datetime.datetime.strptime(data, '%Y-%m-%d').date().replace(day=1)

@@ -13,12 +13,15 @@ class WdgBeneficio(QWidget, Ui_wdgCabecalhoBeneficio):
         super(WdgBeneficio, self).__init__(parent=parent)
         self.setupUi(self)
         self.cabecalho = cabecalho
+        self.parent = parent
 
         self.pbCancelar.clicked.connect(lambda: self.close())
         self.carregaCampos()
         self.pbCancelar.clicked.connect(lambda: self.close())
         self.pbConfirmar.clicked.connect(lambda: self.popUpSimCancela('Você deseja salvar suas alterações?', funcao=self.salvaAlteracoesESai))
         self.leNb.textChanged.connect(lambda: self.getInfo('leNb'))
+
+        self.ajustandoTamanho()
 
     def carregaCampos(self):
         self.cbxSituacao.addItems([''] + situacaoBeneficio)
@@ -44,6 +47,13 @@ class WdgBeneficio(QWidget, Ui_wdgCabecalhoBeneficio):
     def getInfo(self, dado: str):
         if dado == 'leNb':
             self.cabecalho.nb = self.leNb.text()
+
+    def ajustandoTamanho(self):
+        parentWidth = self.parent.size().width()
+        parentHeight = self.parent.size().height()
+
+        self.resize(parentWidth, parentHeight)
+        self.frMain.resize(parentWidth, parentHeight)
 
     def salvaAlteracoesESai(self):
         self.cabecalho.save()

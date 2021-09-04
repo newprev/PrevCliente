@@ -22,3 +22,13 @@ def calculaIdade(dtNascimento, dtLimite) -> relativedelta:
     idadeRelativa = relativedelta(idadeDias)
 
     return idadeRelativa
+
+
+def mascaraDataPequena(data: datetime.date):
+    if isinstance(data, str):
+        if len(data) <= 16:
+            data = strToDatetime(data)
+        else:
+            data = strToDatetime(data)
+
+    return f'{data.month}/{data.year}'

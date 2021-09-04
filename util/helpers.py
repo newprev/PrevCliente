@@ -323,16 +323,6 @@ def mascaraMeses(data: datetime.date):
     return f'{data.day} de {meses[data.month]} de {data.year}'
 
 
-def mascaraDataPequena(data: datetime.date):
-    if isinstance(data, str):
-        if len(data) <= 16:
-            data = strToDatetime(data)
-        else:
-            data = strToDatetime(data)
-
-    return f'{data.month}/{data.year}'
-
-
 def dataUSAtoBR(dataUSA: str, comDias: bool = False) -> str:
     if isinstance(dataUSA, datetime.date) or isinstance(dataUSA, datetime.datetime):
         if comDias:

@@ -8,7 +8,7 @@ from modelos.indicadoresORM import Indicadores
 
 class WdgIndicadorController(QWidget, Ui_wdgIndicador):
 
-    def __init__(self, indicador: Indicadores, parent=None):
+    def __init__(self, indicador: Indicadores, mostraCb=True, parent=None):
         super(WdgIndicadorController, self).__init__(parent=parent)
         self.setupUi(self)
         self.cbIndicador.setText(indicador.indicadorId)

@@ -78,7 +78,6 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
             self.tabCalculos.limpaTudo()
             self.stkMainDashBoard.setCurrentIndex(telaAlvo.value)
         elif telaAlvo == TelaPosicao.InformacoesGerais:
-            print(f'telaAlvo: {telaAlvo}')
             self.stkMainDashBoard.setCurrentIndex(telaAlvo.value - 1)
         else:
             self.stkMainDashBoard.setCurrentIndex(telaAlvo.value)

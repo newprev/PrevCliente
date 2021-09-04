@@ -12,7 +12,7 @@ from heart.informacoesTelas.localWidgets.wdgIndicadorController import WdgIndica
 
 class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
 
-    def __init__(self, parent=None, db=None):
+    def __init__(self, retornaIndicadores=False, parent=None, db=None):
         super(IndicadoresController, self).__init__(parent=parent)
         self.setupUi(self)
         self.db = db
@@ -22,6 +22,7 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
         self.indicadoresNoProcesso: List[str] = []
         self.indicadoresVLayout = QVBoxLayout()
         self.sinais = Sinais()
+        self.retornaIndicadores = retornaIndicadores
         self.sinais.sEnviaIndicadores.connect(self.enviaIndicadores)
 
         self.lbSigla.setText('')
@@ -31,6 +32,8 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
 
         self.carregaIndicadores()
         self.carregaLista()
+        if not retornaIndicadores:
+            self.pbEnviar.setText('Fechar')
 
     def recebeIndicador(self, indicador: str, ativo: bool):
         if ativo:
@@ -43,14 +46,13 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
     def carregaLista(self):
         listaIndicadores = list(self.indicadores)
         for indicador in listaIndicadores:
-            wdgIndicador = WdgIndicadorController(indicador, parent=self)
+            wdgIndicador = WdgIndicadorController(indicador, mostraCb=False, parent=self)
             self.indicadoresVLayout.addWidget(wdgIndicador)
 
         self.scaIndicadores.setLayout(self.indicadoresVLayout)
 
     def carregaIndicadores(self):
-        # self.indicadores = list(self.daoInformacoes.buscaIndicadores())
-        self.indicadores = Indicadores.sele
+        self.indicadores = Indicadores.select()
 
     def alteraIndicador(self, indicadorId: str):
         indicadorAtual: Indicadores = self.returnIndicador(indicadorId)
@@ -60,12 +62,13 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
         self.lbFonte.setText(f"Fonte: {indicadorAtual.fonte}")
 
     def returnIndicador(self, indicadorId: str):
-        for indicador in Indicadores.indicadores:
+        for indicador in self.indicadores:
             if indicador.indicadorId == indicadorId:
                 return indicador
 
     def enviaIndicadores(self):
-        self.parent.recebeIndicadores(self.indicadoresNoProcesso)
+        if self.retornaIndicadores:
+            self.parent.recebeIndicadores(self.indicadoresNoProcesso)
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         self.sinais.sEnviaIndicadores.emit(self.indicadoresNoProcesso)

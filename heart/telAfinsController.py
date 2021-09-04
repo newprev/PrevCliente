@@ -1,6 +1,6 @@
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
-from Telas.tabTelAfins import Ui_wdgTelAfins
+from Design.pyUi.tabTelAfins import Ui_wdgTelAfins
 
 from modelos.clienteORM import Cliente
 from util.helpers import getTipoTelefone, getPessoalRecado, mascaraTelCel, getTipoTelefoneBySigla, getPessoalRecadoBySigla
@@ -16,6 +16,8 @@ class TelAfinsController(QMainWindow, Ui_wdgTelAfins):
         self.db = db
         self.clienteAtivo = cliente
         self.telefoneAtual = Telefones()
+
+        self.setWindowTitle('Telefones - [telAfinsController]')
 
         self.editando = False
 

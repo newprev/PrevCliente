@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget
 
-from Telas.efeitos import Efeitos
-from Telas.wdgIndicador import Ui_wdgIndicador
+from Design.pyUi.efeitos import Efeitos
+from Design.pyUi.wdgIndicador import Ui_wdgIndicador
 from heart.sinaisCustomizados import Sinais
 from modelos.indicadoresORM import Indicadores
 

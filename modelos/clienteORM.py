@@ -102,7 +102,7 @@ class Cliente(BaseModel, Model):
         self.sobrenomeCliente = dictCliente['sobrenomeCliente']
         self.genero = dictCliente['genero']
         self.idade = dictCliente['idade']
-        self.dataNascimento = strToDatetime(dictCliente['dataNascimento'], TamanhoData.gg)
+        self.dataNascimento = strToDatetime(dictCliente['dataNascimento'])
         self.email = dictCliente['email']
         self.rgCliente = dictCliente['rgCliente']
         self.cpfCliente = dictCliente['cpfCliente']

@@ -11,9 +11,8 @@ from util.helpers import meses, strToFloat, strToDatetime, mascaraDinheiro, dinh
 import datetime as dt
 from heart.localStyleSheet.configuracoes import desabilitaPB
 
-from Telas.configuracoesPage import Ui_wdgTabConfiguracoes
+from Design.pyUi.configuracoesPage import Ui_wdgTabConfiguracoes
 from modelos.tetosPrevORM import TetosPrev
-from util.enums.newPrevEnums import TamanhoData
 
 
 class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
@@ -145,7 +144,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
             tetoIdItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.tblTetos.setItem(linha, 0, tetoIdItem)
 
-            dataItem = QTableWidgetItem(mascaraDataPequena(strToDatetime(tetoPrev.dataValidade, TamanhoData.mm)))
+            dataItem = QTableWidgetItem(mascaraDataPequena(strToDatetime(tetoPrev.dataValidade)))
             dataItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             dataItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.tblTetos.setItem(linha, 1, dataItem)
@@ -175,7 +174,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
 
             linhaSelecionada = self.tblTetos.selectedIndexes()[0].row()
             self.tetoPrev.tetosPrevId = int(self.tblTetos.item(linhaSelecionada, 0).text())
-            self.tetoPrev.data = strToDatetime(self.tblTetos.item(linhaSelecionada, 1).text(), short=True)
+            self.tetoPrev.data = strToDatetime(self.tblTetos.item(linhaSelecionada, 1).text())
             self.tetoPrev.valor = dinheiroToFloat(self.tblTetos.item(linhaSelecionada, 2).text())
 
             self.dtData.setDate(self.tetoPrev.data)
@@ -244,7 +243,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         else:
             linhaSelecionada = self.tblTetos.selectedIndexes()[0].row()
             self.tetoPrev.tetosPrevId = int(self.tblTetos.item(linhaSelecionada, 0).text())
-            self.tetoPrev.data = strToDatetime(self.tblTetos.item(linhaSelecionada, 1).text(), TamanhoData.g)
+            self.tetoPrev.data = strToDatetime(self.tblTetos.item(linhaSelecionada, 1).text())
             self.tetoPrev.valor = dinheiroToFloat(self.tblTetos.item(linhaSelecionada, 2).text())
 
             self.popUpSimCancela(
@@ -264,7 +263,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         self.inserindo = False
 
         self.tetoPrev.tetosPrevId = int(self.tblTetos.item(args[0].row(), 0).text())
-        self.tetoPrev.data = strToDatetime(self.tblTetos.item(args[0].row(), 1).text(), short=True)
+        self.tetoPrev.data = strToDatetime(self.tblTetos.item(args[0].row(), 1).text())
         self.tetoPrev.valor = dinheiroToFloat(self.tblTetos.item(args[0].row(), 2).text())
 
         self.dtData.setDate(self.tetoPrev.data)

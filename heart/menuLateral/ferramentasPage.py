@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget
 
 from Daos.daoFerramentas import DaoFerramentas
-from Telas.ferramentasPage import Ui_wdgFerramentas
+from Design.pyUi.ferramentasPage import Ui_wdgFerramentas
 from modelos.convMonORM import ConvMon
 
 from util.helpers import dinheiroToFloat, getConversoesMonetarias, datetimeToSql, strToFloat

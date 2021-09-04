@@ -1,4 +1,6 @@
 import datetime
+from datetime import date
+from dateutil.relativedelta import *
 from math import floor
 from peewee import ModelSelect
 from typing import List, Union
@@ -310,25 +312,6 @@ def calculaDiaMesAno(totalDias: int) -> list:
     return [dias, mes, anos]
 
 
-def calculaIdade(dataNascimento: datetime.date, dataLimite: datetime.date) -> list[int]:
-
-    if isinstance(dataNascimento, str):
-        dataNascimento = strToDate(dataNascimento)
-
-    if isinstance(dataLimite, str):
-        dataLimite = strToDate(dataLimite)
-
-    totalDias: int = (dataLimite - dataNascimento).days
-    resto: int = 0
-
-    anos = floor(totalDias / (30 * 12))
-    resto = totalDias % (30 * 12)
-    mes = floor(resto / 30)
-    dias = resto % 30
-
-    return [dias, mes, anos]
-
-
 def mascaraFormaPagamento(pagamento: str):
     if (pagamento.upper() == 'CC'):
         return 'Cartão de crédito'
@@ -343,9 +326,9 @@ def mascaraMeses(data: datetime.date):
 def mascaraDataPequena(data: datetime.date):
     if isinstance(data, str):
         if len(data) <= 16:
-            data = strToDatetime(data, tamanho=TamanhoData.g)
+            data = strToDatetime(data)
         else:
-            data = strToDatetime(data, tamanho=TamanhoData.gg)
+            data = strToDatetime(data)
 
     return f'{data.month}/{data.year}'
 
@@ -410,9 +393,9 @@ def comparaMesAno(dataInicio: datetime, dataFim: datetime, comparacao: ComparaDa
     inicio = eliminaHoraDias(dataInicio)
     fim = eliminaHoraDias(dataFim)
 
-    if isinstance(inicio, type(datetime.datetime)):
+    if isinstance(inicio, datetime.datetime):
         inicio = inicio.date()
-    if isinstance(fim, type(datetime.datetime)):
+    if isinstance(fim, datetime.datetime):
         fim = fim.date()
 
     if comparacao == ComparaData.igual:
@@ -469,22 +452,17 @@ def dateToSql(data: datetime.date) -> str:
     return data.strftime('%Y-%m-%d')
 
 
-def strToDatetime(data: str, tamanho: TamanhoData = TamanhoData.m):
+def strToDatetime(data: str) -> datetime:
     if not isinstance(data, str):
         data = data.strftime('%Y-%m-%d %H:%M')
-    try:
-        if tamanho == TamanhoData.p:
-            return datetime.datetime.strptime(data, '%m/%Y')
-        elif tamanho == TamanhoData.m:
-            return datetime.datetime.strptime(data, '%d/%m/%Y')
-        elif tamanho == TamanhoData.mm:
-            return datetime.datetime.strptime(data, '%Y-%m-%d')
-        elif tamanho == TamanhoData.g:
-            return datetime.datetime.strptime(data, '%Y-%m-%d %H:%M')
-        elif tamanho == TamanhoData.gg:
-            return datetime.datetime.strptime(data, '%Y-%m-%d %H:%M:%S')
-    except ValueError:
-        return datetime.datetime.min
+
+    dateFormats: List[str] = ['%Y-%m-%d %H:%M', '%d/%m/%Y', '%m/%Y', '%Y-%m-%d', '%Y-%m-%d %H:%M:%S']
+    for formato in dateFormats:
+        try:
+            dataRetorno = datetime.datetime.strptime(data, formato)
+            return dataRetorno
+        except ValueError as err:
+            pass
 
 
 def strToDate(dataAvaliar: str):

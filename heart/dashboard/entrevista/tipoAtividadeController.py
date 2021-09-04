@@ -1,12 +1,12 @@
 from PyQt5.QtWidgets import QWidget, QFrame, QCheckBox
 from PyQt5.QtCore import Qt
-from Telas.pgQuizAposentadoria import Ui_wdgQuizAposentadoria
+from Design.pyUi.pgQuizAposentadoria import Ui_wdgQuizAposentadoria
 from heart.dashboard.tabs.tabCalculos import TabCalculos
 from heart.sinaisCustomizados import Sinais
 from modelos.clienteORM import Cliente
 from Daos.daoCliente import DaoCliente
 from util.enums.newPrevEnums import AtivApos
-from Telas.efeitos import Efeitos
+from Design.pyUi.efeitos import Efeitos
 
 
 class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):

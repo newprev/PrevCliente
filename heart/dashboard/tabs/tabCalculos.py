@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QMessageBox, QVBoxLayout
-from Telas.tabCalculos import Ui_wdgTabCalculos
+from Design.pyUi.tabCalculos import Ui_wdgTabCalculos
 from typing import List
 
 from Daos.daoCalculos import DaoCalculos
@@ -9,9 +9,9 @@ from Daos.daoCliente import DaoCliente
 from heart.dashboard.tabs.localWidgets.itemResumoCNIS import ItemResumoCnis
 from heart.buscaClientePage import BuscaClientePage
 from heart.insereContribuicaoPage import InsereContribuicaoPage
-from Telas.efeitos import Efeitos
+from Design.pyUi.efeitos import Efeitos
 
-from util.helpers import mascaraDinheiro, mascaraCPF, dataUSAtoBR, floatToDinheiro
+from util.helpers import mascaraDinheiro, mascaraCPF, dataUSAtoBR
 
 from modelos.clienteORM import Cliente
 from modelos.beneficiosORM import CnisBeneficios

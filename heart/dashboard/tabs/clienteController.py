@@ -1,12 +1,10 @@
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtCore import QObject, QEvent
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar
 from peewee import SqliteDatabase
 
 from cache.cacheEscritorio import CacheEscritorio
 
-from Telas.tabCliente import Ui_wdgTabCliente
+from Design.pyUi.tabCliente import Ui_wdgTabCliente
 
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
 from heart.sinaisCustomizados import Sinais
@@ -677,7 +675,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         if abaAtual == 0:
             self.atualizaTblClientes()
             self.limpaTudo()
-            if self.cliente is not None:
+            if self.cliente.nit is not None:
                 self.cliente.save()
             self.cliente = None
         else:

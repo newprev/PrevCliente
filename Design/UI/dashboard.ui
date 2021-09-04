@@ -40,14 +40,14 @@
 /*---------------------------- Push Buttons ------------------------------------------*/
 
 #pbConfig, #pbHome, 
-#pbSobre, #pbFerramentas {
+#pbInfoGerais, #pbFerramentas {
 	background-color: rgb(41, 128, 185);
 	border-radius: 20px;
 }
 
 #pbConfig:hover, 
 #pbHome:hover, 
-#pbSobre:hover,
+#pbInfoGerais:hover,
 #pbFerramentas:hover {
 	background-color: rgba(190, 250, 245, 190);
 	border-radius: 20px;
@@ -65,7 +65,7 @@
 	background-position: center;
 }
 
-#pbSobre {
+#pbInfoGerais {
 	background-image: url(:/sobre/information.png);
 	background-repeat: no-repeat;
 	background-position: center;
@@ -279,7 +279,7 @@
               </widget>
              </item>
              <item alignment="Qt::AlignHCenter">
-              <widget class="QPushButton" name="pbSobre">
+              <widget class="QPushButton" name="pbInfoGerais">
                <property name="minimumSize">
                 <size>
                  <width>40</width>

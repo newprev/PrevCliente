@@ -89,7 +89,7 @@ class CnisCabecalhos(BaseModel, Model):
             clienteId: {self.clienteId},
             seq: {self.seq},
             nit: {self.nit},
-            seq: {self.nb},
+            nb: {self.nb},
             cdEmp: {self.cdEmp},
             nomeEmp: {self.nomeEmp},
             dataInicio: {self.dataInicio},

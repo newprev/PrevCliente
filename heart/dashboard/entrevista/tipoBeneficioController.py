@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget
-from Telas.pgTipoBeneficioConc import Ui_wdgTipoBeneficioConc
+from Design.pyUi.pgTipoBeneficioConc import Ui_wdgTipoBeneficioConc
 from heart.sinaisCustomizados import Sinais
 from util.enums.newPrevEnums import MomentoEntrevista, TipoBeneficio
 

@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow
 
-from Telas.cadastroCliente import Ui_mwCadastroCliente
+from Design.pyUi.cadastroCliente import Ui_mwCadastroCliente
 from util.helpers import estCivil
 from modelos.cnisModelo import CNISModelo
 

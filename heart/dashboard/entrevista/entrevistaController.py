@@ -4,7 +4,7 @@ from connections import ConfigConnection
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
-from Telas.entrevistaPage import Ui_mwEntrevistaPage
+from Design.pyUi.entrevistaPage import Ui_mwEntrevistaPage
 
 from heart.dashboard.entrevista.localStyleSheet.lateral import estadoInfoFinalizado
 from heart.dashboard.entrevista.naturezaController import NaturezaController
@@ -39,11 +39,11 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.sinais = Sinais()
         self.telaAtual = MomentoEntrevista.cadastro
         self.clienteAtual = Cliente()
-        # self.daoProcesso = DaoProcessos(db=db)
-        # self.daoCliente = DaoCliente(db=db)
         self.processoModelo = Processos()
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.escondeLoading)
+
+        self.setWindowTitle("Entrevista - [entrevistaController]")
 
         self.clienteController = TabCliente(parent=self, db=self.db, entrevista=True)
         self.naturezaPg = NaturezaController(parent=self, db=self.db)

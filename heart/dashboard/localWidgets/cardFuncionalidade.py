@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import QWidget
 
-from Telas.buttonFuncionalidade import Ui_wdgFuncionalidade
+from Design.pyUi.buttonFuncionalidade import Ui_wdgFuncionalidade
 from heart.dashboard.localStyleSheet.cardsFuncionalidade import inicializaCard
 from heart.sinaisCustomizados import Sinais
-from util.enums.newPrevEnums import TelaPosicao
+from util.enums.telaEnums import TelaPosicao
 
 
 class CardFuncionalidade(QWidget, Ui_wdgFuncionalidade):

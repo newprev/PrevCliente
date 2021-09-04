@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QWidget
-from Telas.pgNatureza import Ui_wdgNatureza
+from Design.pyUi.pgNatureza import Ui_wdgNatureza
 from heart.sinaisCustomizados import Sinais
 from util.enums.newPrevEnums import MomentoEntrevista, NaturezaProcesso
-from Telas.efeitos import Efeitos
+from Design.pyUi.efeitos import Efeitos
 
 
 class NaturezaController(QWidget, Ui_wdgNatureza):

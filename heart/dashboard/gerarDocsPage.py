@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QFrame, QCheckBox
 
-from Telas.efeitos import Efeitos
-from Telas.pgImpressaoDocs import Ui_wdgImpressaoDocs
+from Design.pyUi.efeitos import Efeitos
+from Design.pyUi.pgImpressaoDocs import Ui_wdgImpressaoDocs
 from heart.dashboard.entrevista.geracaoDocumentos.docEntrevista import DocEntrevista
 from heart.sinaisCustomizados import Sinais
 
@@ -20,9 +20,10 @@ class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):
         self.entrevistaPage = parent
         self.db = db
         self.clienteAtual: Cliente = Cliente()
-        # self.daoCliente = DaoCliente(db=db)
         self.processo = processo
         self.cliente = cliente
+
+        self.setWindowTitle('Gerar documentos - [gerarDocsPage]')
 
         self.sinais = Sinais()
         self.efeitos = Efeitos()

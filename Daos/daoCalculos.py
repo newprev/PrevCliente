@@ -219,6 +219,10 @@ class DaoCalculos:
         # self.db.connect()
         cursor = self.db.cursor()
 
+        caseFator = f"""CASE
+        WHEN iam.fator
+                    """
+
         strComando = f"""
             SELECT 
                 cont.clienteId, 
@@ -226,13 +230,13 @@ class DaoCalculos:
                 cont.competencia, 
                 cont.salContribuicao, 
                 cont.indicadores,
-                iam.fator,
+                IFNULL(iam.fator, 1),
                 tp.valor,
                 'CONTRIBUICAO'
             FROM {self.config.tblCnisContribuicoes} cont
             LEFT JOIN {self.config.tblIndiceAtuMonetaria} iam
                 ON STRFTIME('%Y-%m', iam.dataReferente) = STRFTIME('%Y-%m', cont.competencia)
-                    AND STRFTIME('%Y-%m', iam.dib) = '{dib}'
+                    AND STRFTIME('%Y-%m', iam.dib) = STRFTIME('%Y-%m', '{dib}')
             LEFT JOIN {self.config.tblTetosPrev} tp
                 ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', cont.competencia)
             WHERE cont.clienteId = {clienteId}
@@ -252,13 +256,13 @@ class DaoCalculos:
                 rem.competencia, 
                 rem.remuneracao, 
                 rem.indicadores,	
-                iam.fator,
+                IFNULL(iam.fator, 1),
                 tp.valor,
                 'REMUNERACAO'
             FROM cnisRemuneracoes rem
             LEFT JOIN indiceAtuMonetaria iam
                 ON STRFTIME('%Y-%m', iam.dataReferente) = STRFTIME('%Y-%m', rem.competencia)
-                    AND STRFTIME('%Y-%m', iam.dib) = '{dib}'
+                    AND STRFTIME('%Y-%m', iam.dib) = STRFTIME('%Y-%m', '{dib}')
             LEFT JOIN {self.config.tblTetosPrev} tp
                 ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', rem.competencia)
             WHERE rem.clienteId = {clienteId}

@@ -2,7 +2,7 @@ from PyQt5.QtCore import QObject
 from PyQt5 import QtCore
 
 from modelos.advogadoORM import Advogados
-from util.enums.newPrevEnums import TelaPosicao
+from util.enums.telaEnums import TelaPosicao
 
 
 class Sinais(QObject):

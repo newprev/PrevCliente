@@ -1,7 +1,7 @@
 import datetime
 from PyQt5.QtWidgets import QWidget, QMessageBox
 
-from Telas.wdgCabecalhoContribuicao import Ui_wdgCabecalhoContribuicao
+from Design.pyUi.wdgCabecalhoContribuicao import Ui_wdgCabecalhoContribuicao
 from util.helpers import strToDate, unmaskAll
 from heart.sinaisCustomizados import Sinais
 

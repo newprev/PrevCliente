@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from util.helpers import dictEspecies, mascaraNit, strToFloat, situacaoBeneficio, strToDatetime, floatToDinheiro
 from util.popUps import popUpOkAlerta
 
-from Telas.insereContrib import Ui_mwInsereContrib
+from Design.pyUi.insereContrib import Ui_mwInsereContrib
 from heart.localStyleSheet.insereContribuicao import habilita, habilitaBotao
 from heart.informacoesTelas.indicadoresTela import IndicadoresController
 from modelos.beneficiosORM import CnisBeneficios
@@ -18,7 +18,7 @@ from modelos.clienteORM import Cliente
 from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.remuneracaoORM import CnisRemuneracoes
 from modelos.convMonORM import ConvMon
-from util.enums.newPrevEnums import TipoContribuicao, TamanhoData
+from util.enums.newPrevEnums import TipoContribuicao
 
 
 class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
@@ -117,20 +117,20 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
 
         elif tipoContribuicao == TipoContribuicao.beneficio:
             cabecalho: CnisCabecalhos = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == self.cliente.clienteId, CnisCabecalhos.seq == contribuicao.seq).get()
-            if strToDatetime(cabecalho.dataFim, TamanhoData.gg) == datetime.min:
+            if strToDatetime(cabecalho.dataFim) == datetime.min:
                 dataFim: datetime = datetime.now()
             else:
-                dataFim: datetime = strToDatetime(cabecalho.dataFim, TamanhoData.gg)
+                dataFim: datetime = strToDatetime(cabecalho.dataFim)
 
             self.leNb.setText(str(contribuicao.nb))
             self.cbxSituacao.setCurrentText(cabecalho.situacao.title())
             self.cbxEspecie.setCurrentText(cabecalho.especie)
-            self.dtInicio.setDate(strToDatetime(cabecalho.dataInicio, TamanhoData.gg))
+            self.dtInicio.setDate(strToDatetime(cabecalho.dataInicio))
             self.dtFim.setDate(dataFim)
 
     def defineSinalMonetario(self, contribuicao):
         if isinstance(contribuicao, CnisContribuicoes) or isinstance(contribuicao, CnisRemuneracoes):
-            competencia: datetime = strToDatetime(contribuicao.competencia, TamanhoData.gg)
+            competencia: datetime = strToDatetime(contribuicao.competencia)
 
             for moeda in self.listaConvMon:
                 dataInicial = strToDatetime(moeda.dataInicial)

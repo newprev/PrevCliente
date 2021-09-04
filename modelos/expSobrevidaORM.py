@@ -35,7 +35,7 @@ class ExpSobrevida(BaseModel, Model):
     def fromDict(self, dictExpectativaSobrevida: dict):
 
         self.infoId = dictExpectativaSobrevida['infoId']
-        self.dataReferente = strToDatetime(dictExpectativaSobrevida['dataReferente'], TamanhoData.mm)
+        self.dataReferente = strToDatetime(dictExpectativaSobrevida['dataReferente'])
         self.idade = dictExpectativaSobrevida['idade']
         self.expectativaSobrevida = dictExpectativaSobrevida['expectativaSobrevida']
 

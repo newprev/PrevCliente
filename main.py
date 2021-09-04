@@ -4,8 +4,7 @@ from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QMainWindow
 
 from Daos.daoConfiguracoes import DaoConfiguracoes
-from Daos.tabelas import TabelasConfig
-from Telas.splashScreen import Ui_MainWindow
+from Design.pyUi.splashScreen import Ui_MainWindow
 from heart.login.loginController import LoginController
 from connections import ConfigConnection
 from modelos.convMonORM import ConvMon

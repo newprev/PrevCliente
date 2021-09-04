@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QMessageBox
-from Telas.itemResumoCNIS import Ui_WdgItemRes
+from Design.pyUi.itemResumoCNIS import Ui_WdgItemRes
 from util.helpers import dataUSAtoBR, mascaraCNPJ, mascaraNB
 
 from heart.dashboard.tabs.localWidgets.wdgCabecalhoBeneficio import WdgBeneficio

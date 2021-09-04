@@ -36,75 +36,80 @@
 
 /* ------------------------------ Push Buttons ------------------------------ */
 #pbConcessao {
-	background-color: qlineargradient(spread:pad, x1:0.336, y1:0.232727, x2:0.541, y2:1, stop:0 rgba(28, 180, 91, 255), stop:1 rgba(48, 215, 149, 255));
+	background-color: #048BA8;
 	border-radius: 16px;
 
 	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 24px;
-	color: white;	
+	font-size: 30px;
+	color: white;
 }
 
 #pbConcessao:hover {
-	background-color: qlineargradient(spread:pad, x1:0.336, y1:0.232727, x2:0.541, y2:1, stop:0 rgba(28, 180, 91, 255), stop:1 rgba(48, 215, 149, 200));
+	background-color: qlineargradient(spread:pad, x1:0.481102, y1:0.688, x2:0.477, y2:0, stop:0 rgba(41, 128, 185, 255), stop:1 rgba(66, 147, 215, 255));
 	border-radius: 16px;
 
 	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 24px;
-	color: white;	
+	font-size: 34px;
+	color: white;
+	font-weight: bold;	
 }
 
 #pbRecursoOrdinario {
-	background-color: qlineargradient(spread:pad, x1:1, y1:0.108, x2:0.459184, y2:1, stop:0 rgba(15, 77, 163, 255), stop:1 rgba(30, 101, 199, 255));
+	background-color: #048BA8;
+/*	background-color: qlineargradient(spread:pad, x1:1, y1:0.108, x2:0.459184, y2:1, stop:0 rgba(15, 77, 163, 255), stop:1 rgba(30, 101, 199, 255));*/
 	border-radius: 16px;
 
 	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 24px;
+	font-size: 30px;
 	color: white;	
 }
 
 #pbRecursoOrdinario:hover {
-	background-color: qlineargradient(spread:pad, x1:1, y1:0.108, x2:0.459184, y2:1, stop:0 rgba(15, 77, 163, 255), stop:1 rgba(30, 80, 150, 200));
+	background-color: qlineargradient(spread:pad, x1:0.481102, y1:0.688, x2:0.477, y2:0, stop:0 rgba(41, 128, 185, 255), stop:1 rgba(66, 147, 215, 255));
 	border-radius: 16px;
 
 	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 24px;
+	font-size: 34px;
 	color: white;	
+	font-weight: bold;	
 }
 
 #pbRecursoEspecial {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0.244, x2:0.546, y2:1, stop:0 rgba(245, 121, 0, 255), stop:1 rgba(245, 158, 43, 255));
+	background-color: #048BA8;
 	border-radius: 16px;
 
 	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 24px;
+	font-size: 30px;
 	color: white;	
 }
 
 #pbRecursoEspecial:hover {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0.244, x2:0.546, y2:1, stop:0 rgba(245, 150, 30, 255), stop:1 rgba(245, 158, 43, 255));
+	background-color: qlineargradient(spread:pad, x1:0.481102, y1:0.688, x2:0.477, y2:0, stop:0 rgba(41, 128, 185, 255), stop:1 rgba(66, 147, 215, 255));
 	border-radius: 16px;
 
 	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 24px;
+	font-size: 34px;
 	color: white;	
+	font-weight: bold;	
 }
 
 #pbRevisao {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.577, y2:1, stop:0 rgba(85, 87, 83, 255), stop:1 rgba(124, 127, 121, 255));
+	background-color: #048BA8;
 	border-radius: 16px;
 
 	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 24px;
+	font-size: 30px;
 	color: white;	
 }
 
 #pbRevisao:hover {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.577, y2:1, stop:0 rgba(85, 87, 83, 255), stop:1 rgba(150, 150, 150, 255));
+	background-color: qlineargradient(spread:pad, x1:0.481102, y1:0.688, x2:0.477, y2:0, stop:0 rgba(41, 128, 185, 255), stop:1 rgba(66, 147, 215, 255));
 	border-radius: 16px;
 
 	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 24px;
+	font-size: 34px;
 	color: white;	
+	font-weight: bold;	
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -200,8 +205,8 @@
           <widget class="QPushButton" name="pbConcessao">
            <property name="minimumSize">
             <size>
-             <width>250</width>
-             <height>250</height>
+             <width>180</width>
+             <height>180</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -219,8 +224,8 @@
           <widget class="QPushButton" name="pbRevisao">
            <property name="minimumSize">
             <size>
-             <width>250</width>
-             <height>250</height>
+             <width>180</width>
+             <height>180</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -244,8 +249,8 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>250</width>
-             <height>250</height>
+             <width>180</width>
+             <height>180</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -264,8 +269,8 @@ Ordinário</string>
           <widget class="QPushButton" name="pbRecursoEspecial">
            <property name="minimumSize">
             <size>
-             <width>250</width>
-             <height>250</height>
+             <width>180</width>
+             <height>180</height>
             </size>
            </property>
            <property name="maximumSize">

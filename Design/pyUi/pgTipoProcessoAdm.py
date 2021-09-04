@@ -37,75 +37,80 @@ class Ui_wdgTipoProcessoAdm(object):
 "\n"
 "/* ------------------------------ Push Buttons ------------------------------ */\n"
 "#pbConcessao {\n"
-"    background-color: qlineargradient(spread:pad, x1:0.336, y1:0.232727, x2:0.541, y2:1, stop:0 rgba(28, 180, 91, 255), stop:1 rgba(48, 215, 149, 255));\n"
+"    background-color: #048BA8;\n"
 "    border-radius: 16px;\n"
 "\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 24px;\n"
-"    color: white;    \n"
+"    font-size: 30px;\n"
+"    color: white;\n"
 "}\n"
 "\n"
 "#pbConcessao:hover {\n"
-"    background-color: qlineargradient(spread:pad, x1:0.336, y1:0.232727, x2:0.541, y2:1, stop:0 rgba(28, 180, 91, 255), stop:1 rgba(48, 215, 149, 200));\n"
+"    background-color: qlineargradient(spread:pad, x1:0.481102, y1:0.688, x2:0.477, y2:0, stop:0 rgba(41, 128, 185, 255), stop:1 rgba(66, 147, 215, 255));\n"
 "    border-radius: 16px;\n"
 "\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 24px;\n"
-"    color: white;    \n"
+"    font-size: 34px;\n"
+"    color: white;\n"
+"    font-weight: bold;    \n"
 "}\n"
 "\n"
 "#pbRecursoOrdinario {\n"
-"    background-color: qlineargradient(spread:pad, x1:1, y1:0.108, x2:0.459184, y2:1, stop:0 rgba(15, 77, 163, 255), stop:1 rgba(30, 101, 199, 255));\n"
+"    background-color: #048BA8;\n"
+"/*    background-color: qlineargradient(spread:pad, x1:1, y1:0.108, x2:0.459184, y2:1, stop:0 rgba(15, 77, 163, 255), stop:1 rgba(30, 101, 199, 255));*/\n"
 "    border-radius: 16px;\n"
 "\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 24px;\n"
+"    font-size: 30px;\n"
 "    color: white;    \n"
 "}\n"
 "\n"
 "#pbRecursoOrdinario:hover {\n"
-"    background-color: qlineargradient(spread:pad, x1:1, y1:0.108, x2:0.459184, y2:1, stop:0 rgba(15, 77, 163, 255), stop:1 rgba(30, 80, 150, 200));\n"
+"    background-color: qlineargradient(spread:pad, x1:0.481102, y1:0.688, x2:0.477, y2:0, stop:0 rgba(41, 128, 185, 255), stop:1 rgba(66, 147, 215, 255));\n"
 "    border-radius: 16px;\n"
 "\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 24px;\n"
+"    font-size: 34px;\n"
 "    color: white;    \n"
+"    font-weight: bold;    \n"
 "}\n"
 "\n"
 "#pbRecursoEspecial {\n"
-"    background-color: qlineargradient(spread:pad, x1:0, y1:0.244, x2:0.546, y2:1, stop:0 rgba(245, 121, 0, 255), stop:1 rgba(245, 158, 43, 255));\n"
+"    background-color: #048BA8;\n"
 "    border-radius: 16px;\n"
 "\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 24px;\n"
+"    font-size: 30px;\n"
 "    color: white;    \n"
 "}\n"
 "\n"
 "#pbRecursoEspecial:hover {\n"
-"    background-color: qlineargradient(spread:pad, x1:0, y1:0.244, x2:0.546, y2:1, stop:0 rgba(245, 150, 30, 255), stop:1 rgba(245, 158, 43, 255));\n"
+"    background-color: qlineargradient(spread:pad, x1:0.481102, y1:0.688, x2:0.477, y2:0, stop:0 rgba(41, 128, 185, 255), stop:1 rgba(66, 147, 215, 255));\n"
 "    border-radius: 16px;\n"
 "\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 24px;\n"
+"    font-size: 34px;\n"
 "    color: white;    \n"
+"    font-weight: bold;    \n"
 "}\n"
 "\n"
 "#pbRevisao {\n"
-"    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.577, y2:1, stop:0 rgba(85, 87, 83, 255), stop:1 rgba(124, 127, 121, 255));\n"
+"    background-color: #048BA8;\n"
 "    border-radius: 16px;\n"
 "\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 24px;\n"
+"    font-size: 30px;\n"
 "    color: white;    \n"
 "}\n"
 "\n"
 "#pbRevisao:hover {\n"
-"    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.577, y2:1, stop:0 rgba(85, 87, 83, 255), stop:1 rgba(150, 150, 150, 255));\n"
+"    background-color: qlineargradient(spread:pad, x1:0.481102, y1:0.688, x2:0.477, y2:0, stop:0 rgba(41, 128, 185, 255), stop:1 rgba(66, 147, 215, 255));\n"
 "    border-radius: 16px;\n"
 "\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 24px;\n"
+"    font-size: 34px;\n"
 "    color: white;    \n"
+"    font-weight: bold;    \n"
 "}")
         self.verticalLayout = QtWidgets.QVBoxLayout(wdgTipoProcessoAdm)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -139,12 +144,12 @@ class Ui_wdgTipoProcessoAdm(object):
         self.gridLayout.setSpacing(20)
         self.gridLayout.setObjectName("gridLayout")
         self.pbConcessao = QtWidgets.QPushButton(self.frame)
-        self.pbConcessao.setMinimumSize(QtCore.QSize(250, 250))
+        self.pbConcessao.setMinimumSize(QtCore.QSize(180, 180))
         self.pbConcessao.setMaximumSize(QtCore.QSize(250, 250))
         self.pbConcessao.setObjectName("pbConcessao")
         self.gridLayout.addWidget(self.pbConcessao, 0, 0, 1, 1)
         self.pbRevisao = QtWidgets.QPushButton(self.frame)
-        self.pbRevisao.setMinimumSize(QtCore.QSize(250, 250))
+        self.pbRevisao.setMinimumSize(QtCore.QSize(180, 180))
         self.pbRevisao.setMaximumSize(QtCore.QSize(250, 250))
         self.pbRevisao.setObjectName("pbRevisao")
         self.gridLayout.addWidget(self.pbRevisao, 0, 1, 1, 1)
@@ -154,12 +159,12 @@ class Ui_wdgTipoProcessoAdm(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pbRecursoOrdinario.sizePolicy().hasHeightForWidth())
         self.pbRecursoOrdinario.setSizePolicy(sizePolicy)
-        self.pbRecursoOrdinario.setMinimumSize(QtCore.QSize(250, 250))
+        self.pbRecursoOrdinario.setMinimumSize(QtCore.QSize(180, 180))
         self.pbRecursoOrdinario.setMaximumSize(QtCore.QSize(250, 250))
         self.pbRecursoOrdinario.setObjectName("pbRecursoOrdinario")
         self.gridLayout.addWidget(self.pbRecursoOrdinario, 1, 0, 1, 1)
         self.pbRecursoEspecial = QtWidgets.QPushButton(self.frame)
-        self.pbRecursoEspecial.setMinimumSize(QtCore.QSize(250, 250))
+        self.pbRecursoEspecial.setMinimumSize(QtCore.QSize(180, 180))
         self.pbRecursoEspecial.setMaximumSize(QtCore.QSize(250, 250))
         self.pbRecursoEspecial.setObjectName("pbRecursoEspecial")
         self.gridLayout.addWidget(self.pbRecursoEspecial, 1, 1, 1, 1)

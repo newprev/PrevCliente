@@ -4,7 +4,7 @@ from PyQt5 import QtGui
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout
 
 from Daos.daoInformacoes import DaoInformacoes
-from Telas.pgInfoIndicadores import Ui_mwInfoIndicadores
+from Design.pyUi.pgInfoIndicadores import Ui_mwInfoIndicadores
 from heart.sinaisCustomizados import Sinais
 from modelos.indicadoresORM import Indicadores
 from heart.informacoesTelas.localWidgets.wdgIndicadorController import WdgIndicadorController

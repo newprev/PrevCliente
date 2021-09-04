@@ -18,16 +18,16 @@ from modelos.convMonORM import ConvMon
 from modelos.indicadoresORM import Indicadores
 from modelos.expSobrevidaORM import ExpSobrevida
 from modelos.carenciasLei91 import CarenciaLei91
-from Telas.loginPage import Ui_mwLogin
+from modelos.indiceAtuMonetariaORM import IndiceAtuMonetaria
+from Design.pyUi.loginPage import Ui_mwLogin
 from heart.login.wdgAdvController import WdgAdvController
 from heart.dashboard.dashboardController import DashboardController
 from util.enums.newPrevEnums import *
-from util.enums.ferramentasEInfo import FerramentasEInfo
+from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 import os
 import json
 
 from util.helpers import datetimeToSql, strToDatetime
-from util.enums.newPrevEnums import TamanhoData
 
 from repositorios.informacoesRepositorio import ApiInformacoes
 
@@ -305,6 +305,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             'syncIndicadores': datetimeToSql(datetime.datetime.now()),
             'syncExpSobrevida': datetimeToSql(datetime.datetime.now()),
             'syncCarenciasLei91': datetimeToSql(datetime.datetime.now()),
+            'syncAtuMonetaria': datetimeToSql(datetime.datetime.now()),
         }
         loop = aio.get_event_loop()
 
@@ -319,11 +320,12 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     syncFile.seek(0)
                     syncDict = json.load(syncFile)
 
-                    dateSyncConvMon = strToDatetime(syncDict['syncConvMon'], TamanhoData.g)
-                    dateSyncTetosPrev = strToDatetime(syncDict['syncTetosPrev'], TamanhoData.g)
-                    dateSyncIndicadores = strToDatetime(syncDict['syncIndicadores'], TamanhoData.g)
-                    dateSyncExpSobrevida = strToDatetime(syncDict['syncExpSobrevida'], TamanhoData.g)
-                    dateSyncCarenciasLei91 = strToDatetime(syncDict['syncCarenciasLei91'], TamanhoData.g)
+                    dateSyncConvMon = strToDatetime(syncDict['syncConvMon'])
+                    dateSyncTetosPrev = strToDatetime(syncDict['syncTetosPrev'])
+                    dateSyncIndicadores = strToDatetime(syncDict['syncIndicadores'])
+                    dateSyncExpSobrevida = strToDatetime(syncDict['syncExpSobrevida'])
+                    dateSyncCarenciasLei91 = strToDatetime(syncDict['syncCarenciasLei91'])
+                    dateSyncAtuMonetaria = strToDatetime(syncDict['syncAtuMonetaria'])
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
                         infoToUpdate[FerramentasEInfo.convMon] = True
@@ -350,6 +352,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     else:
                         syncJson['syncCarenciasLei91'] = syncDict['syncCarenciasLei91']
 
+                    if (datetime.datetime.now() - dateSyncAtuMonetaria).days != 0:
+                        infoToUpdate[FerramentasEInfo.atuMonetaria] = True
+                    else:
+                        syncJson['syncAtuMonetaria'] = syncDict['syncAtuMonetaria']
+
                     loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
 
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
@@ -360,7 +367,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 FerramentasEInfo.convMon: True,
                 FerramentasEInfo.indicadores: True,
                 FerramentasEInfo.expSobrevida: True,
-                FerramentasEInfo.carenciasLei91: True
+                FerramentasEInfo.carenciasLei91: True,
+                FerramentasEInfo.atuMonetaria: True
             }
             loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
 
@@ -373,20 +381,23 @@ class LoginController(QMainWindow, Ui_mwLogin):
         qtdTetosPrev = TetosPrev.select().count()
         qtdConvMon = ConvMon.select().count()
         qtdCarenciasLei91 = CarenciaLei91.select().count()
+        qtdAtuMonetarias = IndiceAtuMonetaria.select().count()
 
         asyncTasks = []
         for tipoInfo, sync in infoToUpdate.items():
             if sync:
                 if tipoInfo == FerramentasEInfo.tetos:
-                    asyncTasks.append(aio.ensure_future(ApiFerramentas().getAllTetosPrevidenciarios()))
+                    asyncTasks.append(aio.ensure_future(ApiFerramentas().getAllFerramentas(FerramentasEInfo.tetos)))
                 elif tipoInfo == FerramentasEInfo.convMon:
-                    asyncTasks.append(aio.ensure_future(ApiFerramentas().getAllConvMon()))
+                    asyncTasks.append(aio.ensure_future(ApiFerramentas().getAllFerramentas(FerramentasEInfo.convMon)))
                 elif tipoInfo == FerramentasEInfo.indicadores:
-                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllIndicadores()))
+                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.indicadores)))
                 elif tipoInfo == FerramentasEInfo.expSobrevida:
-                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllExpSobrevida()))
+                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.expSobrevida)))
                 elif tipoInfo == FerramentasEInfo.carenciasLei91:
-                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllCarenciasLei91()))
+                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.carenciasLei91)))
+                elif tipoInfo == FerramentasEInfo.atuMonetaria:
+                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.atuMonetaria)))
 
         gather = await aio.gather(*asyncTasks)
 
@@ -417,6 +428,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 carenciasLei91FromApi: List[dict] = infoApi
                 if qtdCarenciasLei91 < len(carenciasLei91FromApi):
                     CarenciaLei91.insert_many(carenciasLei91FromApi).on_conflict('replace').execute()
+
+            elif aioTask == FerramentasEInfo.atuMonetaria:
+                indicesAtuMonetaria: List[dict] = infoApi
+                if qtdAtuMonetarias < len(indicesAtuMonetaria):
+                    IndiceAtuMonetaria.insert_many(indicesAtuMonetaria).on_conflict('replace').execute()
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

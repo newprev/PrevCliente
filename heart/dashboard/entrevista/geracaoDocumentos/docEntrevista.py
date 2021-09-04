@@ -173,7 +173,7 @@ class DocEntrevista:
         self.dictInfo['rgCliente'] = mascaraRG(self.cliente.rgCliente)
         self.dictInfo['cpfCliente'] = mascaraCPF(self.cliente.cpfCliente)
         self.dictInfo['nomeMaeCliente'] = self.cliente.nomeMae
-        self.dictInfo['dataNascimentoCliente'] = mascaraMeses(strToDatetime(self.cliente.dataNascimento, TamanhoData.gg))
+        self.dictInfo['dataNascimentoCliente'] = mascaraMeses(strToDatetime(self.cliente.dataNascimento))
         self.dictInfo['enderecoCliente'] = self.cliente.endereco
         self.dictInfo['numeroCliente'] = self.cliente.numero
         self.dictInfo['bairroCliente'] = self.cliente.bairro

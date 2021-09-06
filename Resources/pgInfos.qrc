@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="refresh">
+    <file>refresh.png</file>
+  </qresource>
+  <qresource prefix="refreshHover">
+    <file>refreshHover.png</file>
+  </qresource>
+</RCC>

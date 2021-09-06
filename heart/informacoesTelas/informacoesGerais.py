@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QWidget
 from Design.pyUi.pgInformacoesGerais import Ui_wdgInfoGerais
 from heart.informacoesTelas.indicadoresTela import IndicadoresController
 from heart.informacoesTelas.tetosPrevidenciáriosTela import TetosPrevidenciarios
+from heart.informacoesTelas.expSobrevidaTela import ExpSobrevidaTela
 
 
 class InformacoesGerais(QWidget, Ui_wdgInfoGerais):
@@ -21,5 +22,5 @@ class InformacoesGerais(QWidget, Ui_wdgInfoGerais):
         TetosPrevidenciarios(parent=self).show()
 
     def abrirExpSobrevida(self):
-        pass
+        ExpSobrevidaTela(parent=self).show()
 

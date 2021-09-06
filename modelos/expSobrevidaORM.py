@@ -2,10 +2,10 @@ from modelos.baseModelORM import BaseModel, DATEFORMATS
 from util.helpers import strToDatetime
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
-from util.enums.newPrevEnums import TipoEdicao, Prioridade, TamanhoData
+from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from datetime import datetime
-from peewee import AutoField, DateField, IntegerField, DateTimeField
+from peewee import AutoField, DateField, IntegerField, DateTimeField, CharField
 
 TABLENAME = 'expSobrevida'
 
@@ -15,6 +15,7 @@ class ExpSobrevida(BaseModel, Model):
     dataReferente = DateField(column_name='dataReferente', formats=DATEFORMATS)
     expectativaSobrevida = IntegerField(column_name='expectativaSobrevida')
     idade = IntegerField(null=False)
+    genero = CharField(null=False, max_length=1)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 

@@ -42,7 +42,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.cacheEscritorio = CacheEscritorio()
         self.escritorio: Escritorios = self.cacheEscritorio.carregarCache()
 
-        self.tblClientes.resizeColumnsToContents()
+        # self.tblClientes.resizeColumnsToContents()
         self.tblClientes.doubleClicked.connect(self.editarCliente)
         self.tblClientes.hideColumn(0)
 
@@ -173,7 +173,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             tipoProcessoItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 5, tipoProcessoItem)
 
-        self.tblClientes.resizeColumnsToContents()
+        # self.tblClientes.resizeColumnsToContents()
 
     def abrirPgMaisTelefones(self):
         pgMaisTelefones = TelAfinsController(self.cliente, db=self.db, parent=self)

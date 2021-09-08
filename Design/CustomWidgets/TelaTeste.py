@@ -17,8 +17,14 @@ class MainWindow(QMainWindow):
         self.container.setStyleSheet('#container { background-color: #222 }')
         self.layout = QVBoxLayout()
 
-        self.toggle = NewCheckBox()
+        self.toggle = NewCheckBox(
+            width=60,
+            height=20
+        )
+        self.toggle2 = NewCheckBox()
+
         self.layout.addWidget(self.toggle, Qt.AlignCenter, Qt.AlignCenter)
+        self.layout.addWidget(self.toggle2, Qt.AlignCenter, Qt.AlignCenter)
 
         self.container.setLayout(self.layout)
         self.setCentralWidget(self.container)

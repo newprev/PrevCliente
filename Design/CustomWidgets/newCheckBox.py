@@ -7,15 +7,16 @@ class NewCheckBox(QCheckBox):
     def __init__(
             self,
             width=60,
+            height=28,
             bg_color="#777",
             circle_color="#DDD",
-            active_color="#00BCff",
+            active_color="#048BA8",
             animation_curve=QEasingCurve.OutBounce
     ):
         QCheckBox.__init__(self)
 
         # Parametrização padrão
-        self.setFixedSize(width, 28)
+        self.setFixedSize(width, height)
         self.setCursor(Qt.PointingHandCursor)
 
         # Cores
@@ -55,13 +56,13 @@ class NewCheckBox(QCheckBox):
             p.drawRoundedRect(0, 0, rect.width(), self.height(), self.height() / 2, self.height() / 2)
 
             p.setBrush(QColor(self._circle_color))
-            p.drawEllipse(self._circle_position, 3, 22, 22)
+            p.drawEllipse(self._circle_position, self.height()*(18/100), 2*self.height() / 3, 2*self.height() / 3)
         else:
             p.setBrush(QColor(self._active_color))
             p.drawRoundedRect(0, 0, rect.width(), self.height(), self.height() / 2, self.height() / 2)
 
             p.setBrush(QColor(self._circle_color))
-            p.drawEllipse(self._circle_position, 3, 22, 22)
+            p.drawEllipse(self._circle_position, self.height()*(18/100), 2*self.height() / 3, 2*self.height() / 3)
 
         p.end()
 
@@ -75,7 +76,7 @@ class NewCheckBox(QCheckBox):
         # self.animation.start()
 
         if value:
-            self.circle_position = self.width() - 25
+            self.circle_position = self.width() - (self.width()/3)
         else:
             # self.animation.setEndValue(3)
             self.circle_position = 3

@@ -78,7 +78,7 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
             telefoneItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblListaClientes.setItem(linha, 3, telefoneItem)
 
-        # self.tblListaClientes.resizeColumnsToContents()
+        self.tblListaClientes.resizeColumnsToContents()
 
     def enviaCliente(self):
         clienteSelecionado: Cliente = None

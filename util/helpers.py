@@ -324,7 +324,7 @@ def mascaraMeses(data: datetime.date):
 
 
 def dataUSAtoBR(dataUSA: str, comDias: bool = False) -> str:
-    if isinstance(dataUSA, datetime.date) or isinstance(dataUSA, datetime.datetime):
+    if not isinstance(dataUSA, str):
         if comDias:
             return f"{dataUSA.day}/{dataUSA.month}/{dataUSA.year}"
         else:

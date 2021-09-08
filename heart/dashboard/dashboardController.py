@@ -42,13 +42,13 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.pbHome.clicked.connect(lambda: self.trocarParaPagina(TelaPosicao.Cliente))
         self.pbInfoGerais.clicked.connect(lambda: self.trocarParaPagina(TelaPosicao.InformacoesGerais))
 
-        self.tabCadastro = TabCliente(parent=self, db=db)
+        self.tabCliente = TabCliente(parent=self, db=db)
         self.tabCalculos = TabCalculos(parent=self, db=db)
         self.configuracoesPage = ConfiguracoesPage(parent=self, db=db)
         self.ferramentasPage = FerramentasPage(parent=self, db=db)
         self.informacoePage = InformacoesGerais(parent=self)
 
-        self.stkMainDashBoard.addWidget(self.tabCadastro)
+        self.stkMainDashBoard.addWidget(self.tabCliente)
         self.stkMainDashBoard.addWidget(self.tabCalculos)
         self.stkMainDashBoard.addWidget(self.configuracoesPage)
         self.stkMainDashBoard.addWidget(self.ferramentasPage)
@@ -80,10 +80,11 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         elif telaAlvo == TelaPosicao.InformacoesGerais:
             self.stkMainDashBoard.setCurrentIndex(telaAlvo.value - 1)
         else:
+            self.tabCliente.tabMain.setCurrentIndex(0)
             self.stkMainDashBoard.setCurrentIndex(telaAlvo.value)
 
     def atualizaTabClientes(self):
-        self.tabCadastro.atualizaTblClientes()
+        self.tabCliente.atualizaTblClientes()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         self.cacheLogin.limpaTemporarios()

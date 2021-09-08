@@ -1,3 +1,4 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar
 from peewee import SqliteDatabase
@@ -5,6 +6,7 @@ from peewee import SqliteDatabase
 from cache.cacheEscritorio import CacheEscritorio
 
 from Design.pyUi.tabCliente import Ui_wdgTabCliente
+from Design.CustomWidgets.newCheckBox import NewCheckBox
 
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
 from heart.sinaisCustomizados import Sinais
@@ -41,12 +43,19 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.cnisClienteAtual = None
         self.cacheEscritorio = CacheEscritorio()
         self.escritorio: Escritorios = self.cacheEscritorio.carregarCache()
+        self.cbClienteAntigo = NewCheckBox(
+            width=44,
+            height=20
+        )
+        self.lbClienteAntigo = QLabel('Cliente antigo')
 
         # self.tblClientes.resizeColumnsToContents()
         self.tblClientes.doubleClicked.connect(self.editarCliente)
         self.tblClientes.hideColumn(0)
 
         self.tabMain.currentChanged.connect(self.trocaDeAba)
+        self.hlCheckBox.addWidget(self.cbClienteAntigo, Qt.AlignTop, Qt.AlignTop)
+        self.hlCheckBox.addWidget(self.lbClienteAntigo, Qt.AlignTop, Qt.AlignTop)
 
         self.frBuscaNome.hide()
         self.frBuscaEmail.hide()
@@ -173,7 +182,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             tipoProcessoItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 5, tipoProcessoItem)
 
-        # self.tblClientes.resizeColumnsToContents()
+        self.tblClientes.resizeColumnsToContents()
 
     def abrirPgMaisTelefones(self):
         pgMaisTelefones = TelAfinsController(self.cliente, db=self.db, parent=self)
@@ -669,13 +678,13 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.tabMain.setCurrentIndex(1)
         self.cbClienteAntigo.setChecked(True)
 
-    def trocaDeAba(self, *args):
-        abaAtual: int = int(args[0])
+    def trocaDeAba(self, aba):
+        abaAtual: int = aba
 
         if abaAtual == 0:
             self.atualizaTblClientes()
             self.limpaTudo()
-            if self.cliente.nit is not None:
+            if self.cliente is not None and self.cliente.nit is not None:
                 self.cliente.save()
             self.cliente = None
         else:

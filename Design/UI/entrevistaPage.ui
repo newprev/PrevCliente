@@ -895,6 +895,18 @@ Finalização</string>
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_18">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>16</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item alignment="Qt::AlignTop">
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="sizePolicy">
@@ -927,13 +939,13 @@ Finalização</string>
          </property>
          <property name="minimumSize">
           <size>
-           <width>250</width>
+           <width>200</width>
            <height>500</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>280</width>
+           <width>260</width>
            <height>600</height>
           </size>
          </property>
@@ -944,11 +956,23 @@ Finalização</string>
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frNaturezaRight">
             <property name="minimumSize">
              <size>
-              <width>210</width>
+              <width>150</width>
               <height>40</height>
              </size>
             </property>
@@ -1041,7 +1065,7 @@ Finalização</string>
            <widget class="QFrame" name="frTipoProcRight">
             <property name="minimumSize">
              <size>
-              <width>210</width>
+              <width>150</width>
               <height>40</height>
              </size>
             </property>
@@ -1134,7 +1158,7 @@ Processo</string>
            <widget class="QFrame" name="frTipoBeneRight">
             <property name="minimumSize">
              <size>
-              <width>210</width>
+              <width>150</width>
               <height>40</height>
              </size>
             </property>
@@ -1227,7 +1251,7 @@ Benefício</string>
            <widget class="QFrame" name="frTiposAtiv">
             <property name="minimumSize">
              <size>
-              <width>210</width>
+              <width>150</width>
               <height>40</height>
              </size>
             </property>
@@ -1333,7 +1357,7 @@ Atividades</string>
            <widget class="QPushButton" name="pbProxEtapa">
             <property name="minimumSize">
              <size>
-              <width>230</width>
+              <width>150</width>
               <height>32</height>
              </size>
             </property>
@@ -1352,7 +1376,7 @@ Atividades</string>
            <widget class="QPushButton" name="pbVoltaEtapa">
             <property name="minimumSize">
              <size>
-              <width>230</width>
+              <width>150</width>
               <height>32</height>
              </size>
             </property>
@@ -1420,7 +1444,7 @@ Atividades</string>
               <widget class="QProgressBar" name="pbarProgresso">
                <property name="minimumSize">
                 <size>
-                 <width>220</width>
+                 <width>150</width>
                  <height>10</height>
                 </size>
                </property>

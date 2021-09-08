@@ -68,8 +68,15 @@ class TelAfinsController(QMainWindow, Ui_wdgTelAfins):
         self.cbxPouR.addItems(getPessoalRecado().keys())
 
     def carregaInfoCliente(self):
-        self.lbNome.setText(f"{self.clienteAtivo.nomeCliente} {self.clienteAtivo.sobrenomeCliente}")
-        self.lbDocumento.setText(f"{self.clienteAtivo.clienteId}")
+        if self.clienteAtivo.nomeCliente is None:
+            self.lbNome.setText("")
+        else:
+            self.lbNome.setText(f"{self.clienteAtivo.nomeCliente} {self.clienteAtivo.sobrenomeCliente}")
+
+        if self.clienteAtivo.clienteId is None:
+            self.lbDocumento.setText("")
+        else:
+            self.lbDocumento.setText(f"{self.clienteAtivo.clienteId}")
 
     def editarTelefone(self):
         linha: int = self.tblTelefones.selectedIndexes()[0]

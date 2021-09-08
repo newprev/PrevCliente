@@ -89,4 +89,5 @@ class ExpSobrevidaTela(QMainWindow, Ui_mwExpSobrevida):
             self.tblInfo.setItem(contLinha, 4, strGenero)
 
         # self.tblInfo.resizeColumnsToContents()
+        self.tblInfo.resizeColumnToContents(3)
         self.tblInfo.resizeRowsToContents()

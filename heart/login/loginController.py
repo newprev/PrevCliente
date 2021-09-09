@@ -253,7 +253,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
                     # Inicia programa
                     self.dashboard = DashboardController(db=self.db)
-                    self.dashboard.show()
+                    self.dashboard.showMaximized()
                     self.close()
 
                 else:

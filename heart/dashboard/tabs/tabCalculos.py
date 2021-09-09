@@ -54,7 +54,7 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
             self.pbBuscarClienteBen.hide()
             self.pbBuscarCliente.hide()
 
-        # self.tblCalculos.resizeColumnsToContents()
+        self.tblCalculos.resizeColumnsToContents()
 
     def avaliaEdicao(self, tabela: str):
         if tabela == 'tblCalculos':
@@ -187,7 +187,7 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     self.tblCalculos.setItem(contLinha, 4, strItem)
 
-        # self.tblCalculos.resizeColumnsToContents()
+        self.tblCalculos.resizeColumnsToContents()
         self.tblCalculos.resizeRowsToContents()
 
     def carregarTblBeneficios(self, clienteId: int):
@@ -233,7 +233,7 @@ class TabCalculos(QWidget, Ui_wdgTabCalculos):
             strRemuneracao.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblBeneficios.setItem(contLinha, 4, strRemuneracao)
 
-        # self.tblBeneficios.resizeColumnsToContents()
+        self.tblBeneficios.resizeColumnsToContents()
         self.tblBeneficios.resizeRowsToContents()
 
     def carregarInfoCliente(self, clientId: int = 1, clienteModel: Cliente = None):

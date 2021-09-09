@@ -142,7 +142,7 @@ class TelAfinsController(QMainWindow, Ui_wdgTelAfins):
                 telefonePessoaRecado.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                 self.tblTelefones.setItem(numLinha, 3, telefonePessoaRecado)
 
-            # self.tblTelefones.resizeColumnsToContents()
+            self.tblTelefones.resizeColumnsToContents()
 
     def pegaLinhaSelecionada(self, *args):
         self.habilitaEdicao(True)

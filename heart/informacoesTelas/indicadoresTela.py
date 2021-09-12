@@ -25,6 +25,8 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
         self.retornaIndicadores = retornaIndicadores
         self.sinais.sEnviaIndicadores.connect(self.enviaIndicadores)
 
+        self.setWindowTitle('Indicadores no CNIS - [indicadoresTela]')
+
         self.lbSigla.setText('')
         self.lbDescricao.setText('')
 

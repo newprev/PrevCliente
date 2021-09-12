@@ -231,10 +231,10 @@ QRadioButton{
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="leDe">
+           <widget class="QSpinBox" name="sbDeExp">
             <property name="maximumSize">
              <size>
-              <width>90</width>
+              <width>60</width>
               <height>16777215</height>
              </size>
             </property>
@@ -248,10 +248,10 @@ QRadioButton{
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="leAte">
+           <widget class="QSpinBox" name="sbAteExp">
             <property name="maximumSize">
              <size>
-              <width>90</width>
+              <width>60</width>
               <height>16777215</height>
              </size>
             </property>
@@ -312,20 +312,11 @@ QRadioButton{
            </widget>
           </item>
           <item>
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+           <widget class="QRadioButton" name="rbAmbos">
+            <property name="text">
+             <string>Ambos</string>
             </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Minimum</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -375,7 +366,7 @@ QRadioButton{
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="spDe">
+           <widget class="QSpinBox" name="sbDe">
             <property name="maximumSize">
              <size>
               <width>60</width>
@@ -392,7 +383,7 @@ QRadioButton{
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="spPara">
+           <widget class="QSpinBox" name="sbPara">
             <property name="maximumSize">
              <size>
               <width>60</width>
@@ -449,7 +440,7 @@ QRadioButton{
            </widget>
           </item>
           <item>
-           <widget class="QDateEdit" name="dateEdit">
+           <widget class="QDateEdit" name="dtDeDataRef">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -475,7 +466,7 @@ QRadioButton{
            </widget>
           </item>
           <item>
-           <widget class="QDateEdit" name="dateEdit_2">
+           <widget class="QDateEdit" name="dtAteDataRef">
             <property name="minimumSize">
              <size>
               <width>0</width>

@@ -20,6 +20,7 @@ class TetosPrevidenciarios(QMainWindow, Ui_mwTetosPrev):
 
         self.setupUi(self)
         self.desativaFiltros(True)
+        self.setWindowTitle('Tetos previdenciários - [tetosPrevidenciariosTela]')
 
         self.cbAtivaFiltros = NewCheckBox(active_color=NewColors.primary.value)
         self.vlCheckBox.addWidget(self.cbAtivaFiltros)

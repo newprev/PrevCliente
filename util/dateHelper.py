@@ -35,3 +35,7 @@ def mascaraDataPequena(data: datetime.date, onlyYear=False):
         return f'{data.year}'
     else:
         return f'{data.month}/{data.year}'
+
+
+def strAnoToDate(data: str) -> date:
+    return date(year=int(data), month=1, day=1)

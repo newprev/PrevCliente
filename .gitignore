@@ -9,14 +9,14 @@
 
 Daos/producao.db
 
-Daos/historicoLogs/
+Daos/historicoLogs/*
 /envCliente/
 
 .idea/
 
 cache/login.txt
 
-sync/syncFile
+sync/syncFile/*
 
 cache/.loginOld.txt
 
@@ -28,6 +28,6 @@ DocGerados/
 
 prevCliEnv/
 
-.sync/
+.sync/*
 
 .templates/.~lock.requerimentoAdm.docx#

@@ -495,10 +495,10 @@ class CNISModelo:
         pathAux = None
 
         # Ambiente de desenvolvimento
-        pathAux = QFileDialog.getOpenFileName(directory=home, options=QFileDialog.DontUseNativeDialog)
+        # pathAux = QFileDialog.getOpenFileName(directory=home, options=QFileDialog.DontUseNativeDialog)
 
         # Ambiente de produção
-        # pathAux = QFileDialog.getOpenFileName(directory=home)
+        pathAux = QFileDialog.getOpenFileName(directory=home)
 
         if pathAux[0] is not None and pathAux[0] != '':
             self.pathCnis = pathAux[0]

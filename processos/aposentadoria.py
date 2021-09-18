@@ -29,6 +29,7 @@ class CalculosAposentadoria:
     listaRemuneracoes: List[CnisRemuneracoes] = []
     listaContribuicoes: List[CnisContribuicoes] = []
     mediaSalarial: float
+    idadeCalculada: relativedelta
 
     def __init__(self, processo: Processos, cliente: Cliente, dib: datetime = None, db=None):
         self.processo = processo
@@ -45,6 +46,7 @@ class CalculosAposentadoria:
 
         self.dibAtual = datetime.datetime(year=2020, month=6, day=15)
 
+        self.idadeCalculada = calculaIdade(self.cliente.dataNascimento, self.dibAtual)
         self.dataReforma2019: datetime.date = datetime.date(2019, 11, 13)
         self.dataTrocaMoeda = datetime.date = datetime.date(1994, 7, 1)
 
@@ -137,7 +139,7 @@ class CalculosAposentadoria:
 
                 for carencia in listaCarencias:
                     listaAux: Generator[CnisCabecalhos] = self.retornaCabecalhosDesde(self.listaCabecalhos, carencia.dataImplemento)
-                    idadeReferente: relativedelta = calculaIdade(self.cliente.dataNascimento, carencia.dataImplemento)
+                    idadeReferente: relativedelta = self.idadeCalculada
                     tempoContribuicao: List[int] = self.calculaTempoContribuicao(listaAux)
                     # Idade: M - 65 / F - 60
                     # Tempo Contribuição: 15 anos ou tabela
@@ -205,7 +207,7 @@ class CalculosAposentadoria:
         """
         tempCont: float = self.tempoContribCalculado[2] + ((self.tempoContribCalculado[0] / 30) + self.tempoContribCalculado[1] / 12)
         aliq: float = 0.31
-        intIdade: relativedelta = calculaIdade(self.cliente.dataNascimento, self.dibAtual)
+        intIdade: relativedelta = self.idadeCalculada
         floatIdade: float = (intIdade.days/30 + intIdade.months)/12 + intIdade.years  # Para a fórmula é importante que a idade seja completa com dias e meses transformados em anos
 
         try:
@@ -386,7 +388,7 @@ class CalculosAposentadoria:
         #     acrescimoMensal = 1
         # dataNascimento: datetime = strToDatetime(self.cliente.dataNascimento)
 
-        idadeCliente: relativedelta = calculaIdade(self.cliente.dataNascimento, self.dibAtual)
+        idadeCliente: relativedelta = self.idadeCalculada
 
         acrescimoAnual: int = self.dibAtual.year - self.dataReforma2019.year
         totalAcrescimo = acrescimoAnual * (1 + acrescimoMensal)
@@ -467,7 +469,6 @@ class CalculosAposentadoria:
         Avalia a pontuação mínima e o tempo mínimo de contribuição (20 anos Homens / 15 anos Mulheres)
         :return bool
         """
-        # print(f"****** calculaPontosRegraPontos")
         acrescimoAnual = self.dibAtual.year - 2019
         tempoContribuicao = self.calculaTempoContribuicao(dataLimitante=self.dibAtual)
         if generoCliente == GeneroCliente.masculino:
@@ -481,8 +482,6 @@ class CalculosAposentadoria:
             if acrescimoAnual >= 14:
                 acrescimoAnual = 14
 
-            # print(f"self.pontuacao: {self.pontuacao}")
-            # print(f"***tempoContribuicao: {tempoContribuicao[2]}\n\n")
             return self.pontuacao >= 86 + acrescimoAnual and tempoContribuicao[2] >= 15
 
     def calculaBeneficios(self):

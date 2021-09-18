@@ -1,6 +1,4 @@
 import datetime
-from datetime import date
-from dateutil.relativedelta import *
 from math import floor
 from peewee import ModelSelect
 from typing import List, Union
@@ -376,7 +374,7 @@ def mascaraNB(valor: int):
         return f"{strFinal}"
 
 
-def comparaMesAno(dataInicio: datetime, dataFim: datetime, comparacao: ComparaData) -> int:
+def comparaMesAno(dataInicio: datetime.datetime, dataFim: datetime.datetime, comparacao: ComparaData) -> int:
     if isinstance(dataInicio, str):
         dataInicio = strToDate(dataInicio)
 
@@ -442,7 +440,7 @@ def dateToSql(data: datetime.date) -> str:
     return data.strftime('%Y-%m-%d')
 
 
-def strToDatetime(data: str) -> datetime:
+def strToDatetime(data: str) -> datetime.datetime:
     if not isinstance(data, str):
         data = data.strftime('%Y-%m-%d %H:%M')
 
@@ -559,7 +557,7 @@ def strTipoBeneFacilitado(tipoBeneficio: TipoBeneficio) -> str:
         return ''
 
 
-def eliminaHoraDias(data: datetime):
+def eliminaHoraDias(data: datetime.datetime):
     try:
         if isinstance(data, type(datetime.datetime)):
             return data.replace(day=1, hour=0, minute=0, second=0, microsecond=0)

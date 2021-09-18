@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 from util.helpers import strToDatetime
 from dateutil.relativedelta import relativedelta
-from datetime import date, datetime
+import datetime
 
 
 def calculaIdade(dtNascimento, dtLimite) -> relativedelta:
@@ -11,15 +12,13 @@ def calculaIdade(dtNascimento, dtLimite) -> relativedelta:
     :return: List[dias, meses, anos]
     """
 
-    if not (isinstance(dtNascimento, datetime) or isinstance(dtNascimento, date)):
+    if not (isinstance(dtNascimento, type(datetime.datetime)) or isinstance(dtNascimento, type(datetime.date))):
         dtNascimento = strToDatetime(dtNascimento)
 
-    if not (isinstance(dtLimite, datetime) or isinstance(dtLimite, date)):
+    if not (isinstance(dtLimite, datetime.datetime) or isinstance(dtLimite, datetime.date)):
         dtLimite = strToDatetime(dtLimite)
 
-    idadeDias = (dtLimite - dtNascimento).days
-
-    idadeRelativa = relativedelta(idadeDias)
+    idadeRelativa = relativedelta(dtLimite, dtNascimento)
 
     return idadeRelativa
 
@@ -37,5 +36,5 @@ def mascaraDataPequena(data: datetime.date, onlyYear=False):
         return f'{data.month}/{data.year}'
 
 
-def strAnoToDate(data: str) -> date:
-    return date(year=int(data), month=1, day=1)
+def strAnoToDate(data: str) -> datetime.date:
+    return datetime.date(year=int(data), month=1, day=1)

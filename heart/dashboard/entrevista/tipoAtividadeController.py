@@ -1,12 +1,12 @@
 from PyQt5.QtWidgets import QWidget, QFrame, QCheckBox
 from PyQt5.QtCore import Qt
-from Telas.pgQuizAposentadoria import Ui_wdgQuizAposentadoria
+from Design.pyUi.pgQuizAposentadoria import Ui_wdgQuizAposentadoria
 from heart.dashboard.tabs.tabCalculos import TabCalculos
 from heart.sinaisCustomizados import Sinais
-from modelos.clienteModelo import ClienteModelo
+from modelos.clienteORM import Cliente
 from Daos.daoCliente import DaoCliente
-from newPrevEnums import AtivApos
-from Telas.efeitos import Efeitos
+from util.enums.newPrevEnums import AtivApos
+from Design.pyUi.efeitos import Efeitos
 
 
 class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):
@@ -17,7 +17,7 @@ class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):
         self.setupUi(self)
         self.entrevistaPage = parent
         self.db = db
-        self.clienteAtual: ClienteModelo = ClienteModelo()
+        self.clienteAtual: Cliente = Cliente()
         self.daoCliente = DaoCliente(db=db)
 
         self.sinais = Sinais()
@@ -44,7 +44,7 @@ class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):
         self.escondeInfos()
         self.abilitandoEfeitoClique()
 
-    def pegaClienteAtual(self, clienteAtual: ClienteModelo):
+    def pegaClienteAtual(self, clienteAtual: Cliente):
         self.clienteAtual = clienteAtual
         self.atualizaInfos()
 

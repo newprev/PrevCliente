@@ -1,11 +1,14 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
+from typing import List
 
 from Daos.daoCliente import DaoCliente
-from Telas.buscaCliente import Ui_mwBuscaCliente
-from helpers import mascaraTelCel, mascaraNit
-from modelos.clienteModelo import ClienteModelo
+from Design.pyUi.buscaCliente import Ui_mwBuscaCliente
+from Design.pyUi.efeitos import Efeitos
+from util.helpers import mascaraTelCel, mascaraNit
+from modelos.clienteORM import Cliente
+from modelos.telefonesORM import Telefones
 
 
 class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
@@ -20,6 +23,7 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
         self.daoCliente = DaoCliente(db=db)
         self.clientes: list = None
         self.clienteSelecionadoId = 0
+        self.efeito = Efeitos()
 
         self.tblListaClientes.clicked.connect(self.carregaInfoClienteNaTela)
         self.tblListaClientes.doubleClicked.connect(self.enviaCliente)
@@ -32,12 +36,23 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
     def atualizaTabelaClientes(self, clientes: list = None):
 
         if clientes is None:
-            clientes = [ClienteModelo().fromList(cliente, retornaInst=True) for cliente in self.daoCliente.buscaTodos()]
-            self.clientes = clientes
+            # clientes = [ClienteModelo().fromList(cliente, retornaInst=True) for cliente in self.daoCliente.buscaTodos()]
+            listaClientes: List[Cliente] = Cliente.select()
+
+            for cliente in listaClientes:
+                # cliente.telefoneId = Telefones.get(Telefones.clienteId == cliente.clienteId)
+                try:
+                    cliente.telefoneId = Telefones.get(Telefones.clienteId == cliente.clienteId)
+                except Telefones.DoesNotExist:
+                    cliente.telefoneId = Telefones()
+
+            self.clientes = listaClientes
+        else:
+            return False
 
         self.tblListaClientes.setRowCount(0)
 
-        for linha, cliente in enumerate(clientes):
+        for linha, cliente in enumerate(listaClientes):
             self.tblListaClientes.insertRow(linha)
 
             cdClienteItem = QTableWidgetItem(str(cliente.clienteId))
@@ -56,17 +71,17 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
             cidadeItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblListaClientes.setItem(linha, 2, cidadeItem)
 
-            if cliente.telefone == 'None':
+            if cliente.telefoneId is None:
                 telefoneItem = QTableWidgetItem('')
             else:
-                telefoneItem = QTableWidgetItem(mascaraTelCel(cliente.telefone.numero))
+                telefoneItem = QTableWidgetItem(mascaraTelCel(cliente.telefoneId.numero))
             telefoneItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblListaClientes.setItem(linha, 3, telefoneItem)
 
         self.tblListaClientes.resizeColumnsToContents()
 
     def enviaCliente(self):
-        clienteSelecionado: ClienteModelo = None
+        clienteSelecionado: Cliente = None
 
         if self.clienteSelecionadoId != 0:
             if self.lbCdCliente.text() == '':
@@ -83,7 +98,7 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
 
     def carregaInfoClienteNaTela(self, *args):
         clienteId = int(self.tblListaClientes.item(args[0].row(), 0).text())
-        clienteSelecionado = ClienteModelo()
+        clienteSelecionado = Cliente()
 
         for cliente in self.clientes:
             if cliente.clienteId == clienteId:
@@ -91,7 +106,7 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
                 self.clienteSelecionadoId = clienteSelecionado.clienteId
                 break
 
-        self.lbTel.setText(mascaraTelCel(clienteSelecionado.telefone.numero))
+        self.lbTel.setText(mascaraTelCel(clienteSelecionado.telefoneId.numero))
         self.lbCdCliente.setText(str(clienteSelecionado.clienteId))
         self.lbNit.setText(mascaraNit(int(clienteSelecionado.nit)))
         self.lbIdade.setText(str(clienteSelecionado.idade))

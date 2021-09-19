@@ -1,4 +1,4 @@
-from newPrevEnums import TiposConexoes
+from util.enums.newPrevEnums import TiposConexoes
 
 
 class TabelasConfig:

@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QWidget
-from Telas.pgTipoProcessoAdm import Ui_wdgTipoProcessoAdm
+from Design.pyUi.pgTipoProcessoAdm import Ui_wdgTipoProcessoAdm
 from heart.sinaisCustomizados import Sinais
-from newPrevEnums import MomentoEntrevista, TipoProcesso
-from Telas.efeitos import Efeitos
+from util.enums.newPrevEnums import MomentoEntrevista, TipoProcesso
+from Design.pyUi.efeitos import Efeitos
 
 
 class TipoProcessoAdmController(QWidget, Ui_wdgTipoProcessoAdm):

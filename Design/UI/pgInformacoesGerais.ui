@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>wdgInfoGerais</class>
+ <widget class="QWidget" name="wdgInfoGerais">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>891</width>
+    <height>655</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* ------------------------------ Widgets ------------------------------ */
+#wdgNatureza{
+	background-color: transparent;
+	border-radius: 8px;
+}
+
+/* ------------------------------ Frames ------------------------------ */
+#frMain{
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(255, 255, 246, 255), stop:1 rgba(255, 255, 255, 255));
+	border-radius: 8px;
+}
+
+/* ------------------------------ Labels ------------------------------ */
+#lbTituloNatureza, #lbOu {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+
+	color: grey;
+}
+
+/* ------------------------------ Push Buttons ------------------------------ */
+#pbIndicadores {
+	background-color: #048BA8;
+	border-radius: 16px;
+
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 30px;
+	color: white;
+}
+
+#pbIndicadores:hover {
+	background-color: qlineargradient(spread:pad, x1:0.481102, y1:0.688, x2:0.477, y2:0, stop:0 rgba(41, 128, 185, 255), stop:1 rgba(66, 147, 215, 255));
+	border-radius: 16px;
+
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 34px;
+	color: white;
+	font-weight: bold;	
+}
+
+#pbExpSobrevida {
+	background-color: #048BA8;
+/*	background-color: qlineargradient(spread:pad, x1:1, y1:0.108, x2:0.459184, y2:1, stop:0 rgba(15, 77, 163, 255), stop:1 rgba(30, 101, 199, 255));*/
+	border-radius: 16px;
+
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 30px;
+	color: white;	
+}
+
+#pbExpSobrevida:hover {
+	background-color: qlineargradient(spread:pad, x1:0.481102, y1:0.688, x2:0.477, y2:0, stop:0 rgba(41, 128, 185, 255), stop:1 rgba(66, 147, 215, 255));
+	border-radius: 16px;
+
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 34px;
+	color: white;	
+	font-weight: bold;	
+}
+
+#pbTetosPrev {
+	background-color: #048BA8;
+	border-radius: 16px;
+
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 30px;
+	color: white;	
+}
+
+#pbTetosPrev:hover {
+	background-color: qlineargradient(spread:pad, x1:0.481102, y1:0.688, x2:0.477, y2:0, stop:0 rgba(41, 128, 185, 255), stop:1 rgba(66, 147, 215, 255));
+	border-radius: 16px;
+
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 34px;
+	color: white;	
+	font-weight: bold;	
+}
+
+#pbRevisao {
+	background-color: #048BA8;
+	border-radius: 16px;
+
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 30px;
+	color: white;	
+}
+
+#pbRevisao:hover {
+	background-color: qlineargradient(spread:pad, x1:0.481102, y1:0.688, x2:0.477, y2:0, stop:0 rgba(41, 128, 185, 255), stop:1 rgba(66, 147, 215, 255));
+	border-radius: 16px;
+
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 34px;
+	color: white;	
+	font-weight: bold;	
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="frMain">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QFrame" name="frame_2">
+        <property name="maximumSize">
+         <size>
+          <width>16777214</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="lbTituloNatureza">
+           <property name="text">
+            <string>Busca de informações gerais</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QScrollArea" name="scrollArea">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>873</width>
+           <height>590</height>
+          </rect>
+         </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::ActionsContextMenu</enum>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetMaximumSize</enum>
+          </property>
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::ExpandingFieldsGrow</enum>
+          </property>
+          <property name="rowWrapPolicy">
+           <enum>QFormLayout::DontWrapRows</enum>
+          </property>
+          <property name="labelAlignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="formAlignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="horizontalSpacing">
+           <number>40</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>40</number>
+          </property>
+          <property name="topMargin">
+           <number>9</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="pbIndicadores">
+            <property name="minimumSize">
+             <size>
+              <width>260</width>
+              <height>180</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>270</width>
+              <height>250</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Indicadores 
+do CNIS   </string>
+            </property>
+            <property name="autoDefault">
+             <bool>true</bool>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pbRevisao">
+            <property name="minimumSize">
+             <size>
+              <width>260</width>
+              <height>180</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>270</width>
+              <height>250</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Revisão</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="pbExpSobrevida">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>260</width>
+              <height>180</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>270</width>
+              <height>250</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Expectativas de
+Sobrevida</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="pbTetosPrev">
+            <property name="minimumSize">
+             <size>
+              <width>260</width>
+              <height>180</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>270</width>
+              <height>250</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Tetos 
+Previdenciários</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

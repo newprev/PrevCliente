@@ -1,10 +1,9 @@
-from enum import Enum
 from colorama import Fore, init, Back, deinit
 import os
 from datetime import datetime
-from newPrevEnums import *
+from util.enums.newPrevEnums import *
 
-from helpers import datetimeToSql
+from util.helpers import datetimeToSql
 
 
 def logPrioridade(mensagem: str, tipoEdicao: TipoEdicao = TipoEdicao.select, priodiade: Prioridade = Prioridade.saidaComun):

@@ -4,8 +4,8 @@ from datetime import datetime
 from Daos.tabelas import TabelasConfig
 from connections import ConfigConnection
 from logs import logPrioridade
-from modelos.telefoneModelo import TelefoneModelo
-from newPrevEnums import TipoEdicao, Prioridade
+from modelos.telefonesORM import Telefones
+from util.enums.newPrevEnums import TipoEdicao, Prioridade
 from cache.cacheEscritorio import CacheEscritorio
 
 
@@ -21,7 +21,7 @@ class DaoTelAfins:
         if self.escritorio.escritorioId is None:
             self.escritorio = self.escritorioCache.carregarCacheTemporario()
 
-    def inserirAtualizaTelefone(self, telefone: TelefoneModelo):
+    def inserirAtualizaTelefone(self, telefone: Telefones):
 
         if not isinstance(self.db, sqlite3.Connection):
             self.db.ping()
@@ -72,55 +72,55 @@ class DaoTelAfins:
             self.db.commit()
             self.disconectBD(cursor)
 
-    def telByClienteId(self, clienteId: int) -> list:
-        if not isinstance(self.db, sqlite3.Connection):
-            self.db.ping()
+    # def telByClienteId(self, clienteId: int) -> list:
+    #     if not isinstance(self.db, sqlite3.Connection):
+    #         self.db.ping()
+    #
+    #     cursor = self.db.cursor()
+    #
+    #     strComando = f"""
+    #         SELECT
+    #             telefoneId, clienteId, numero,
+    #             tipoTelefone, pessoalRecado, ativo,
+    #             dataCadastro, dataUltAlt
+    #         FROM {self.tabelas.tblTelefones}
+    #         WHERE clienteId = {clienteId}
+    #             ORDER BY ativo DESC;
+    #                 """
+    #     try:
+    #         listaTelefones: list = []
+    #         cursor.execute(strComando)
+    #         logPrioridade(f'SELECT<telByClienteId>___________________{self.tabelas.tblTelefones}', TipoEdicao.select, Prioridade.saidaComun)
+    #         for tel in cursor.fetchall():
+    #             listaTelefones.append(TelefoneModelo().fromList(tel))
+    #         return listaTelefones
+    #     except Exception as err:
+    #         print(f"telByClienteId ---- ({type(err)}) {err}")
+    #         logPrioridade(f'SELECT<telByClienteId>___________________Erro({self.tabelas.tblTelefones})', TipoEdicao.erro, Prioridade.saidaImportante)
+    #         raise Warning(f'Erro SQL - telByClienteId({self.tabelas.tblTelefones}) <SELECT>')
+    #     finally:
+    #         self.disconectBD(cursor)
 
-        cursor = self.db.cursor()
-
-        strComando = f"""
-            SELECT 
-                telefoneId, clienteId, numero, 
-                tipoTelefone, pessoalRecado, ativo, 
-                dataCadastro, dataUltAlt
-            FROM {self.tabelas.tblTelefones}
-            WHERE clienteId = {clienteId}
-                ORDER BY ativo DESC;
-                    """
-        try:
-            listaTelefones: list = []
-            cursor.execute(strComando)
-            logPrioridade(f'SELECT<telByClienteId>___________________{self.tabelas.tblTelefones}', TipoEdicao.select, Prioridade.saidaComun)
-            for tel in cursor.fetchall():
-                listaTelefones.append(TelefoneModelo().fromList(tel))
-            return listaTelefones
-        except Exception as err:
-            print(f"telByClienteId ---- ({type(err)}) {err}")
-            logPrioridade(f'SELECT<telByClienteId>___________________Erro({self.tabelas.tblTelefones})', TipoEdicao.erro, Prioridade.saidaImportante)
-            raise Warning(f'Erro SQL - telByClienteId({self.tabelas.tblTelefones}) <SELECT>')
-        finally:
-            self.disconectBD(cursor)
-
-    def excluirTelefone(self, telefone: TelefoneModelo):
-        if not isinstance(self.db, sqlite3.Connection):
-            self.db.ping()
-
-        cursor = self.db.cursor()
-
-        strComando = f"""
-            DELETE FROM {self.tabelas.tblTelefones}
-            WHERE telefoneId = {telefone.telefoneId};
-                    """
-        try:
-            cursor.execute(strComando)
-            logPrioridade(f'DELETE<excluirTelefone>___________________{self.tabelas.tblTelefones}', TipoEdicao.delete, Prioridade.saidaComun)
-        except Exception as err:
-            print(f"excluirTelefone ---- ({type(err)}) {err}")
-            logPrioridade(f'DELETE<excluirTelefone>___________________Erro({self.tabelas.tblTelefones})', TipoEdicao.erro, Prioridade.saidaImportante)
-            raise Warning(f'Erro SQL - excluirTelefone({self.tabelas.tblTelefones}) <DELETE>')
-        finally:
-            self.db.commit()
-            self.disconectBD(cursor)
+    # def excluirTelefone(self, telefone: TelefoneModelo):
+    #     if not isinstance(self.db, sqlite3.Connection):
+    #         self.db.ping()
+    #
+    #     cursor = self.db.cursor()
+    #
+    #     strComando = f"""
+    #         DELETE FROM {self.tabelas.tblTelefones}
+    #         WHERE telefoneId = {telefone.telefoneId};
+    #                 """
+    #     try:
+    #         cursor.execute(strComando)
+    #         logPrioridade(f'DELETE<excluirTelefone>___________________{self.tabelas.tblTelefones}', TipoEdicao.delete, Prioridade.saidaComun)
+    #     except Exception as err:
+    #         print(f"excluirTelefone ---- ({type(err)}) {err}")
+    #         logPrioridade(f'DELETE<excluirTelefone>___________________Erro({self.tabelas.tblTelefones})', TipoEdicao.erro, Prioridade.saidaImportante)
+    #         raise Warning(f'Erro SQL - excluirTelefone({self.tabelas.tblTelefones}) <DELETE>')
+    #     finally:
+    #         self.db.commit()
+    #         self.disconectBD(cursor)
 
     def disconectBD(self, cursor):
         cursor.close()

@@ -1,10 +1,10 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from connections import ConfigConnection
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
-from Telas.entrevistaPage import Ui_mwEntrevistaPage
+from Design.pyUi.entrevistaPage import Ui_mwEntrevistaPage
 
 from heart.dashboard.entrevista.localStyleSheet.lateral import estadoInfoFinalizado
 from heart.dashboard.entrevista.naturezaController import NaturezaController
@@ -16,17 +16,15 @@ from heart.dashboard.gerarDocsPage import GerarDocsPage
 from heart.dashboard.entrevista.localStyleSheet.cabecalho import *
 from heart.sinaisCustomizados import Sinais
 
-from Daos.daoProcessos import DaoProcessos
-from Daos.daoCliente import DaoCliente
-from Daos.daoCalculos import DaoCalculos
+# from Daos.daoProcessos import DaoProcessos
+# from Daos.daoCliente import DaoCliente
 
-from modelos.cnisCabecalhoModelo import CabecalhoModelo
-from modelos.processosModelo import ProcessosModelo
-from modelos.clienteModelo import ClienteModelo
+from modelos.processosORM import Processos
+from modelos.clienteORM import Cliente
 
 from processos.aposentadoria import CalculosAposentadoria
 
-from newPrevEnums import *
+from util.enums.newPrevEnums import *
 
 
 class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
@@ -40,12 +38,12 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.parent = parent
         self.sinais = Sinais()
         self.telaAtual = MomentoEntrevista.cadastro
-        self.clienteAtual = ClienteModelo()
-        self.daoProcesso = DaoProcessos(db=db)
-        self.daoCliente = DaoCliente(db=db)
-        self.processoModelo = ProcessosModelo()
+        self.clienteAtual = Cliente()
+        self.processoModelo = Processos()
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.escondeLoading)
+
+        self.setWindowTitle("Entrevista - [entrevistaController]")
 
         self.clienteController = TabCliente(parent=self, db=self.db, entrevista=True)
         self.naturezaPg = NaturezaController(parent=self, db=self.db)
@@ -129,7 +127,11 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 # self.processoModelo.tempoContribuicao = self.calculaTempoContribuicao()
 
                 self.loading(10)
-                self.processoModelo.processosId = self.daoProcesso.insereProcesso(self.processoModelo)
+                # self.processoModelo.processosId = self.daoProcesso.insereProcesso(self.processoModelo)
+                try:
+                    self.processoModelo.processosId = Processos().insert(**self.processoModelo.toDict()).on_conflict_replace().execute()
+                except Processos.DoesNotExist:
+                    print('Fudeu aqui!')
 
                 self.loading(10)
                 self.impressaoDocsPg.atualizaInformacoes(self.processoModelo, self.clienteAtual)
@@ -268,7 +270,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             self.pbProxEtapa.setText('Gerar documentos')
             self.stackedWidget.setCurrentIndex(5)
 
-            calculaAposentadoria = CalculosAposentadoria(self.processoModelo, self.clienteAtual, db=self.db)
+            calculaAposentadoria = CalculosAposentadoria(self.processoModelo, self.clienteAtual, db=self.db, dib=datetime(year=2020, month=6, day=15))
         else:
             if wdgFuturo == MomentoEntrevista.cadastro:
                 self.telaAtual = MomentoEntrevista.cadastro
@@ -300,7 +302,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.frInfo4Icon.setStyleSheet(estadoInfoFinalizado('bancarias', estadoEntrevista['bancarias']))
 
     def atualizaCliente(self, *args):
-        self.clienteAtual: ClienteModelo = args[0]
+        self.clienteAtual: Cliente = args[0]
 
     def calculaDer(self) -> datetime:
         if self.processoModelo.natureza == NaturezaProcesso.administrativo.value:

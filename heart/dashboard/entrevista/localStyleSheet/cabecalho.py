@@ -1,4 +1,4 @@
-from newPrevEnums import EtapaEntrevista
+from util.enums.newPrevEnums import EtapaEntrevista
 
 
 def infoLabelCabecalho(etapa: EtapaEntrevista, completo=False):

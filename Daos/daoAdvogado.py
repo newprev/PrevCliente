@@ -1,12 +1,11 @@
 import sqlite3
 from datetime import datetime
 from logs import logPrioridade
-from newPrevEnums import *
+from util.enums.newPrevEnums import *
 
 from Daos.tabelas import TabelasConfig
 from pymysql import connections
 from modelos.advogadoModelo import AdvogadoModelo
-from modelos.escritorioModelo import EscritorioModelo
 
 
 class DaoAdvogado:

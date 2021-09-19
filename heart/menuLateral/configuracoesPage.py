@@ -1,19 +1,19 @@
-from pathlib import Path
-import re
-import fitz
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QDate
+from PyQt5.QtWidgets import QWidget, QFileDialog, QTableWidgetItem, QMessageBox
+from pathlib import Path
+import re
+import fitz
+from typing import List
 
-from Daos.daoFerramentas import DaoFerramentas
-from helpers import meses, strToFloat, strToDatetime, mascaraDinheiro, dinheiroToFloat, mascaraDataPequena, mascaraDataSql
+from util.dateHelper import mascaraDataPequena
+from util.helpers import meses, strToFloat, strToDatetime, mascaraDinheiro, dinheiroToFloat
 import datetime as dt
 from heart.localStyleSheet.configuracoes import desabilitaPB
 
-from PyQt5.QtWidgets import QWidget, QFileDialog, QTableWidgetItem, QMessageBox
-from Telas.configuracoesPage import Ui_wdgTabConfiguracoes
-from modelos.tetosPrevModelo import TetosPrevModelo
-from newPrevEnums import TamanhoData
+from Design.pyUi.configuracoesPage import Ui_wdgTabConfiguracoes
+from modelos.tetosPrevORM import TetosPrev
 
 
 class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
@@ -24,10 +24,10 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         self.pathTetosPrev = ''
         self.editando = False
         self.inserindo = False
-        self.tetoPrev = TetosPrevModelo()
+        self.tetoPrev = TetosPrev()
 
         self.tblTetos.hideColumn(0)
-        self.daoFerramentas = DaoFerramentas(db=db)
+        # self.daoFerramentas = DaoFerramentas(db=db)
 
         self.dashboard = parent
         self.db = db
@@ -49,7 +49,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         self.expRegAno = "[0-9]{4}"
         self.infoAPular = ['Período', 'Mês', 'Valores Correntes', 'Maior Valor-Teto do', 'Salário-de-Benefício']
 
-        self.atualizaTbl()
+        # self.atualizaTbl()
         self.pbEditar.clicked.connect(self.habilitarEditar)
         self.pbEfetivar.clicked.connect(self.trataEfetiva)
         self.pbExcluir.clicked.connect(self.trataExclui)
@@ -92,7 +92,6 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         }
 
         for pag in range(0, qtdPaginas):
-        # for pag in range(14, 15):
             page = documento.load_page(pag)
             conteudo: str = page.get_text()
             info: list = conteudo.splitlines()
@@ -127,12 +126,13 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         else:
             print('Erro')
 
-    def atualizaTbl(self, tetos:list = None):
+    def atualizaTbl(self, tetos: list = None):
 
         if tetos is None:
-            listaTetos = self.daoFerramentas.getAllTetos()
-            tetos = [TetosPrevModelo().fromList(teto, retornaInst=True) for teto in listaTetos]
-        elif tetos[0] is not TetosPrevModelo:
+            # listaTetos = self.daoFerramentas.getAllTetos()
+            listaTetos: List[TetosPrev] = TetosPrev.select()
+            # tetos = [TetosPrev().fromList(teto, retornaInst=True) for teto in listaTetos]
+        elif tetos[0] is not TetosPrev:
             return False
 
         self.tblTetos.setRowCount(0)
@@ -145,7 +145,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
             tetoIdItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.tblTetos.setItem(linha, 0, tetoIdItem)
 
-            dataItem = QTableWidgetItem(mascaraDataPequena(strToDatetime(tetoPrev.dataValidade, TamanhoData.mm)))
+            dataItem = QTableWidgetItem(mascaraDataPequena(strToDatetime(tetoPrev.dataValidade)))
             dataItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             dataItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.tblTetos.setItem(linha, 1, dataItem)
@@ -157,7 +157,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
     def habilitarInserir(self):
         self.editando = False
         self.inserindo = True
-        self.tetoPrev = TetosPrevModelo()
+        self.tetoPrev = TetosPrev()
 
         texto = self.lbInfoAcao.text()
         self.lbInfoAcao.setText(texto.replace('Editar', 'Inserir'))
@@ -175,7 +175,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
 
             linhaSelecionada = self.tblTetos.selectedIndexes()[0].row()
             self.tetoPrev.tetosPrevId = int(self.tblTetos.item(linhaSelecionada, 0).text())
-            self.tetoPrev.data = strToDatetime(self.tblTetos.item(linhaSelecionada, 1).text(), short=True)
+            self.tetoPrev.data = strToDatetime(self.tblTetos.item(linhaSelecionada, 1).text())
             self.tetoPrev.valor = dinheiroToFloat(self.tblTetos.item(linhaSelecionada, 2).text())
 
             self.dtData.setDate(self.tetoPrev.data)
@@ -244,7 +244,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         else:
             linhaSelecionada = self.tblTetos.selectedIndexes()[0].row()
             self.tetoPrev.tetosPrevId = int(self.tblTetos.item(linhaSelecionada, 0).text())
-            self.tetoPrev.data = strToDatetime(self.tblTetos.item(linhaSelecionada, 1).text(), TamanhoData.g)
+            self.tetoPrev.data = strToDatetime(self.tblTetos.item(linhaSelecionada, 1).text())
             self.tetoPrev.valor = dinheiroToFloat(self.tblTetos.item(linhaSelecionada, 2).text())
 
             self.popUpSimCancela(
@@ -264,7 +264,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         self.inserindo = False
 
         self.tetoPrev.tetosPrevId = int(self.tblTetos.item(args[0].row(), 0).text())
-        self.tetoPrev.data = strToDatetime(self.tblTetos.item(args[0].row(), 1).text(), short=True)
+        self.tetoPrev.data = strToDatetime(self.tblTetos.item(args[0].row(), 1).text())
         self.tetoPrev.valor = dinheiroToFloat(self.tblTetos.item(args[0].row(), 2).text())
 
         self.dtData.setDate(self.tetoPrev.data)
@@ -281,7 +281,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
 
     def excluiTeto(self):
         self.daoFerramentas.deletaTetoById(self.tetoPrev.tetosPrevId)
-        self.tetoPrev = TetosPrevModelo()
+        self.tetoPrev = TetosPrev()
         self.atualizaTbl()
         self.limpaTudo()
 
@@ -299,7 +299,6 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
         elif x == QMessageBox.Cancel:
             return False
         else:
-            # self.parent.menssagemSistema('Ocorreu um erro inesperado')
             raise Warning(f'Ocorreu um erro inesperado')
 
     def popUpOkAlerta(self, mensagem, titulo: str = 'Atenção!'):

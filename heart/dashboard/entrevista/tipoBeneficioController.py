@@ -1,8 +1,7 @@
 from PyQt5.QtWidgets import QWidget
-from Telas.pgTipoBeneficioConc import Ui_wdgTipoBeneficioConc
+from Design.pyUi.pgTipoBeneficioConc import Ui_wdgTipoBeneficioConc
 from heart.sinaisCustomizados import Sinais
-from newPrevEnums import MomentoEntrevista, TipoBeneficio
-from Telas.efeitos import Efeitos
+from util.enums.newPrevEnums import MomentoEntrevista, TipoBeneficio
 
 
 class TipoBeneficioConcController(QWidget, Ui_wdgTipoBeneficioConc):
@@ -14,7 +13,6 @@ class TipoBeneficioConcController(QWidget, Ui_wdgTipoBeneficioConc):
         self.entrevistaPage = parent
         self.db = db
         self.sinais = Sinais()
-        self.efeitos = Efeitos()
 
         self.sinais.sTrocaTelaEntrevista.connect(self.trocaTela)
         self.pbAposentadoria.clicked.connect(lambda: self.emiteTrocaTela(MomentoEntrevista.tipoBeneficio, TipoBeneficio.Aposentadoria))

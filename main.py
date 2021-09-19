@@ -24,7 +24,9 @@ from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.remuneracaoORM import CnisRemuneracoes
 from modelos.carenciasLei91 import CarenciaLei91
+from modelos.configGeraisORM import ConfigGerais
 from util.enums.newPrevEnums import TiposConexoes
+from cache.cachingLogin import CacheLogin
 
 
 class Main(Ui_MainWindow, QMainWindow):
@@ -82,7 +84,8 @@ class Main(Ui_MainWindow, QMainWindow):
             Processos: 'CRIANDO TABELA DOS PROCESSOS...',
             Telefones: 'CRIANDO TABELA DE TELEFONES...',
             TetosPrev: 'CRIANDO TABELA DE TETOS PREVIDENCIÁRIOS...',
-            CarenciaLei91: 'CRIANDO TABELA DE CARÊNCIAS LEI 8.213/91...'
+            CarenciaLei91: 'CRIANDO TABELA DE CARÊNCIAS LEI 8.213/91...',
+            ConfigGerais: 'CRIANDO TABELA DE CONFIGURAÇÕES GERAIS...'
         }
 
         # percentLoading = ceil(100 / len(listaLoading))
@@ -94,10 +97,29 @@ class Main(Ui_MainWindow, QMainWindow):
             self.progresso(add=percentLoading)
 
         self.lbInfo.setText('CRIANDO TELA DE LOGIN...')
-        self.loginPage = LoginController(db=self.db)
         self.progresso(add=percentLoading)
 
-        self.iniciaNewPrev()
+        # self.iniciaNewPrev()
+        self.avaliaAbrirTelaLogin()
+
+    def avaliaAbrirTelaLogin(self):
+        advogado = CacheLogin().carregarCache()
+        self.loginPage = LoginController(db=self.db)
+
+        if advogado:
+            try:
+                configGeral: ConfigGerais = ConfigGerais().get(ConfigGerais.advogadoId == advogado.advogadoId)
+
+                if configGeral.iniciaAuto:
+                    self.loginPage.verificaRotinaDiaria()
+                    self.loginPage.iniciaDashboard()
+                    self.close()
+                else:
+                    self.iniciaNewPrev()
+
+            except ConfigGerais.DoesNotExist:
+                print('Não encontrou configurações')
+                self.iniciaNewPrev()
 
     def iniciaNewPrev(self):
         self.loginPage.show()

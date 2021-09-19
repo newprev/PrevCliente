@@ -19,6 +19,7 @@ from modelos.indicadoresORM import Indicadores
 from modelos.expSobrevidaORM import ExpSobrevida
 from modelos.carenciasLei91 import CarenciaLei91
 from modelos.indiceAtuMonetariaORM import IndiceAtuMonetaria
+from modelos.configGeraisORM import ConfigGerais
 from Design.pyUi.loginPage import Ui_mwLogin
 from heart.login.wdgAdvController import WdgAdvController
 from heart.dashboard.dashboardController import DashboardController
@@ -54,10 +55,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.escondeLoading)
 
-        self.daoConfigs = DaoConfiguracoes(self.db)
-        # self.daoEscritorio = DaoEscritorio(self.db)
-        # self.daoAdvogado = DaoAdvogado(self.db)
-        # self.daoInformacoes = DaoInformacoes(self.db)
+        self.configGerais = ConfigGerais()
 
         self.daoEscritorio = Escritorios()
         self.daoAdvogado = Advogados(self.db)
@@ -71,10 +69,12 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.pbCadastrar.clicked.connect(self.avaliaConfirmacaoCadastro)
         self.pbFechar.clicked.connect(self.close)
         self.pbEntrar.clicked.connect(self.entrar)
-        # self.leSenha.editingFinished.connect(self.resolveBugEntrar)
 
         self.iniciaCampos()
         self.carregaCacheLogin()
+
+        if self.advogado:
+            self.iniciarAutomaticamente()
 
         self.center()
 
@@ -85,14 +85,12 @@ class LoginController(QMainWindow, Ui_mwLogin):
         frameGm.moveCenter(centerPoint)
         self.move(frameGm.topLeft())
 
-    def resolveBugEntrar(self):
-        if self.edittingFinished:
-            self.edittingFinished = not self.edittingFinished
-            self.entrar()
-
     def iniciarPrimeiroAcesso(self):
         self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.buscaEscritorio.value)
         self.leCdEscritorio.setFocus()
+
+    def iniciarAutomaticamente(self):
+        pass
 
     def carregaCacheLogin(self):
         self.advogado = self.cacheLogin.carregarCache()
@@ -252,10 +250,14 @@ class LoginController(QMainWindow, Ui_mwLogin):
                         self.cacheLogin.salvarCacheTemporario(self.advogado)
                         self.cacheEscritorio.salvarCacheTemporario(self.escritorio)
 
+                    # Busca e define configurações
+                    try:
+                        ConfigGerais.get(ConfigGerais.advogadoId == self.advogado.advogadoId)
+                    except ConfigGerais.DoesNotExist:
+                        ConfigGerais(advogadoId=self.advogado).save()
+
                     # Inicia programa
-                    self.dashboard = DashboardController(db=self.db)
-                    self.dashboard.showMaximized()
-                    self.close()
+                    self.iniciaDashboard()
 
                 else:
                     self.showPopupAlerta("Houve um problema ao encontrar o escritório no banco de dados. Entre em contato com o suporte.")
@@ -276,6 +278,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
             self.limpa()
 
         self.edittingFinished = True
+
+    def iniciaDashboard(self):
+        self.dashboard = DashboardController(db=self.db)
+        self.dashboard.showMaximized()
+        self.close()
 
     def infoNaoNulo(self):
         login: bool = self.leLogin.text() != ''

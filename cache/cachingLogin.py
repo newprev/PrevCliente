@@ -1,6 +1,9 @@
 import os
 import json
 
+from logs import logPrioridade
+from util.enums.logEnums import TipoLog
+from util.enums.newPrevEnums import TipoEdicao, Prioridade
 from util.helpers import pyToDefault
 from modelos.advogadoORM import Advogados
 from playhouse.shortcuts import model_to_dict
@@ -19,9 +22,11 @@ class CacheLogin:
 
         try:
             with open(self.pathLoginTxt, encoding='utf-8', mode='w') as cacheLogin:
+                logPrioridade(f'CacheLogin<salvarCache>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComun, tipoLog=TipoLog.Cache)
                 cacheLogin.write(jsonAdv)
             return True
         except Exception:
+            logPrioridade(f'CacheLogin<salvarCache> ___________________ Erro', tipoEdicao=TipoEdicao.erro, priodiade=Prioridade.saidaImportante, tipoLog=TipoLog.Cache)
             print('Deu Bosta')
 
     def carregarCache(self) -> Advogados:
@@ -52,9 +57,11 @@ class CacheLogin:
 
         try:
             with open(self.pathLoginTempTxt, encoding='utf-8', mode='w') as cacheLogin:
+                logPrioridade(f'CacheLogin<salvarCacheTemporario>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComun, tipoLog=TipoLog.Cache)
                 cacheLogin.write(jsonAdv)
             return True
         except Exception as erro:
+            logPrioridade(f'CacheLogin<salvarCacheTemporario>___________________ Erro', tipoEdicao=TipoEdicao.erro, priodiade=Prioridade.saidaImportante, tipoLog=TipoLog.Cache)
             print(f'salvarCacheTemporario({type(erro)} - {erro})')
 
     def limpaCache(self):

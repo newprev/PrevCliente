@@ -63,8 +63,8 @@ class Ui_wdgTabConfiguracoes(object):
         self.tabMain = QtWidgets.QTabWidget(wdgTabConfiguracoes)
         self.tabMain.setMinimumSize(QtCore.QSize(0, 0))
         self.tabMain.setObjectName("tabMain")
-        self.tabTetosPrev = QtWidgets.QWidget()
-        self.tabTetosPrev.setStyleSheet("/*------------------------------------ Tables --------------------------------------*/\n"
+        self.tabGeral = QtWidgets.QWidget()
+        self.tabGeral.setStyleSheet("/*------------------------------------ Tables --------------------------------------*/\n"
 "#tblTetos{\n"
 "    background-color: transparent;\n"
 "}\n"
@@ -95,18 +95,17 @@ class Ui_wdgTabConfiguracoes(object):
 "    font-size: 24px;\n"
 "}\n"
 "\n"
-"#lbSubtitulo, #lbInfoValor,\n"
-"#lbInfoData, #lbInfoAcao {\n"
+"#lbInicioAutomatico {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 12px;    \n"
 "}\n"
 "\n"
-"#lbInfoTitulo {\n"
+"/*#lbInfoTitulo {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 14px;\n"
 "\n"
 "    background-color: white;    \n"
-"}\n"
+"}*/\n"
 "\n"
 "/*-------------------------------- Push Buttons --------------------------------*/\n"
 "#pbBuscarArq, #pbEditar, \n"
@@ -150,102 +149,76 @@ class Ui_wdgTabConfiguracoes(object):
 "    background-color: rgb(225, 240, 73);\n"
 "}\n"
 "\n"
-"/*-------------------------------- Frames -----------------------------------------*/\n"
-"#frInfo{\n"
-"    border-radius: 4px;\n"
-"    border: 1px solid rgb(85, 87, 83);\n"
+"/*-------------------------------- Group Box -----------------------------------------*/\n"
+"QGroupBox {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 16px;\n"
+"    border: 1px solid transparent;\n"
 "\n"
 "    background-color: white;\n"
 "}\n"
+"\n"
+"QGroupBox QGroupBox {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"#gpIniciando::title {\n"
+"    subcontrol-position: top left;\n"
+"    background-color: #3A405A;\n"
+"    border-top-left-radius: 8px;\n"
+"    border-top-right-radius: 8px;\n"
+"    color: white;\n"
+"    padding: 4px;\n"
+"}\n"
+"\n"
+"#gpIniciando {\n"
+"    border: 1px dashed grey;\n"
+"}\n"
 "")
-        self.tabTetosPrev.setObjectName("tabTetosPrev")
-        self.tblTetos = QtWidgets.QTableWidget(self.tabTetosPrev)
-        self.tblTetos.setGeometry(QtCore.QRect(10, 180, 471, 371))
-        self.tblTetos.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        self.tblTetos.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-        self.tblTetos.setTextElideMode(QtCore.Qt.ElideNone)
-        self.tblTetos.setObjectName("tblTetos")
-        self.tblTetos.setColumnCount(3)
-        self.tblTetos.setRowCount(0)
-        item = QtWidgets.QTableWidgetItem()
-        self.tblTetos.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        item.setTextAlignment(QtCore.Qt.AlignCenter)
-        font = QtGui.QFont()
-        font.setFamily("TeX Gyre Adventor")
-        font.setPointSize(14)
-        item.setFont(font)
-        self.tblTetos.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        item.setTextAlignment(QtCore.Qt.AlignCenter)
-        font = QtGui.QFont()
-        font.setFamily("TeX Gyre Adventor")
-        font.setPointSize(14)
-        item.setFont(font)
-        self.tblTetos.setHorizontalHeaderItem(2, item)
-        self.tblTetos.horizontalHeader().setCascadingSectionResizes(True)
-        self.tblTetos.horizontalHeader().setStretchLastSection(True)
-        self.tblTetos.verticalHeader().setVisible(False)
-        self.lbTitulo = QtWidgets.QLabel(self.tabTetosPrev)
-        self.lbTitulo.setGeometry(QtCore.QRect(30, 10, 451, 31))
+        self.tabGeral.setObjectName("tabGeral")
+        self.gridLayout = QtWidgets.QGridLayout(self.tabGeral)
+        self.gridLayout.setObjectName("gridLayout")
+        self.gpIniciando = QtWidgets.QGroupBox(self.tabGeral)
+        self.gpIniciando.setObjectName("gpIniciando")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.gpIniciando)
+        self.verticalLayout.setContentsMargins(16, 26, 4, 4)
+        self.verticalLayout.setSpacing(4)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.frame = QtWidgets.QFrame(self.gpIniciando)
+        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame)
+        self.horizontalLayout_2.setContentsMargins(0, 2, 0, -1)
+        self.horizontalLayout_2.setSpacing(4)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.hlInicioAutomatico = QtWidgets.QHBoxLayout()
+        self.hlInicioAutomatico.setObjectName("hlInicioAutomatico")
+        self.horizontalLayout_2.addLayout(self.hlInicioAutomatico)
+        self.lbInicioAutomatico = QtWidgets.QLabel(self.frame)
+        self.lbInicioAutomatico.setObjectName("lbInicioAutomatico")
+        self.horizontalLayout_2.addWidget(self.lbInicioAutomatico)
+        self.verticalLayout.addWidget(self.frame)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
+        self.gridLayout.addWidget(self.gpIniciando, 1, 0, 1, 1)
+        self.lbTitulo = QtWidgets.QLabel(self.tabGeral)
+        self.lbTitulo.setMaximumSize(QtCore.QSize(16777215, 60))
         self.lbTitulo.setObjectName("lbTitulo")
-        self.lbSubtitulo = QtWidgets.QLabel(self.tabTetosPrev)
-        self.lbSubtitulo.setGeometry(QtCore.QRect(30, 40, 371, 21))
-        self.lbSubtitulo.setObjectName("lbSubtitulo")
-        self.pbBuscarArq = QtWidgets.QPushButton(self.tabTetosPrev)
-        self.pbBuscarArq.setGeometry(QtCore.QRect(500, 20, 111, 41))
-        self.pbBuscarArq.setObjectName("pbBuscarArq")
-        self.pbInserir = QtWidgets.QPushButton(self.tabTetosPrev)
-        self.pbInserir.setGeometry(QtCore.QRect(500, 160, 111, 25))
-        self.pbInserir.setObjectName("pbInserir")
-        self.pbExcluir = QtWidgets.QPushButton(self.tabTetosPrev)
-        self.pbExcluir.setGeometry(QtCore.QRect(500, 210, 111, 25))
-        self.pbExcluir.setObjectName("pbExcluir")
-        self.pbEditar = QtWidgets.QPushButton(self.tabTetosPrev)
-        self.pbEditar.setGeometry(QtCore.QRect(500, 260, 111, 25))
-        self.pbEditar.setObjectName("pbEditar")
-        self.frInfo = QtWidgets.QFrame(self.tabTetosPrev)
-        self.frInfo.setGeometry(QtCore.QRect(10, 90, 471, 81))
-        self.frInfo.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frInfo.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frInfo.setObjectName("frInfo")
-        self.lbInfoData = QtWidgets.QLabel(self.frInfo)
-        self.lbInfoData.setGeometry(QtCore.QRect(20, 20, 64, 17))
-        self.lbInfoData.setObjectName("lbInfoData")
-        self.lbInfoValor = QtWidgets.QLabel(self.frInfo)
-        self.lbInfoValor.setGeometry(QtCore.QRect(160, 20, 64, 17))
-        self.lbInfoValor.setObjectName("lbInfoValor")
-        self.dtData = QtWidgets.QDateEdit(self.frInfo)
-        self.dtData.setGeometry(QtCore.QRect(20, 40, 110, 26))
-        self.dtData.setButtonSymbols(QtWidgets.QAbstractSpinBox.UpDownArrows)
-        self.dtData.setCurrentSection(QtWidgets.QDateTimeEdit.MonthSection)
-        self.dtData.setCalendarPopup(True)
-        self.dtData.setObjectName("dtData")
-        self.leValor = QtWidgets.QLineEdit(self.frInfo)
-        self.leValor.setGeometry(QtCore.QRect(160, 40, 91, 25))
-        self.leValor.setObjectName("leValor")
-        self.lbInfoAcao = QtWidgets.QLabel(self.frInfo)
-        self.lbInfoAcao.setGeometry(QtCore.QRect(300, 10, 161, 20))
-        self.lbInfoAcao.setObjectName("lbInfoAcao")
-        self.pbEfetivar = QtWidgets.QPushButton(self.frInfo)
-        self.pbEfetivar.setGeometry(QtCore.QRect(280, 40, 83, 25))
-        self.pbEfetivar.setObjectName("pbEfetivar")
-        self.pbCancelar = QtWidgets.QPushButton(self.frInfo)
-        self.pbCancelar.setGeometry(QtCore.QRect(380, 40, 83, 25))
-        self.pbCancelar.setObjectName("pbCancelar")
-        self.lbInfoTitulo = QtWidgets.QLabel(self.tabTetosPrev)
-        self.lbInfoTitulo.setGeometry(QtCore.QRect(30, 80, 111, 17))
-        self.lbInfoTitulo.setObjectName("lbInfoTitulo")
-        self.frInfo.raise_()
-        self.tblTetos.raise_()
-        self.lbTitulo.raise_()
-        self.lbSubtitulo.raise_()
-        self.pbBuscarArq.raise_()
-        self.pbInserir.raise_()
-        self.pbExcluir.raise_()
-        self.pbEditar.raise_()
-        self.lbInfoTitulo.raise_()
-        self.tabMain.addTab(self.tabTetosPrev, "")
+        self.gridLayout.addWidget(self.lbTitulo, 0, 0, 1, 1)
+        self.groupBox = QtWidgets.QGroupBox(self.tabGeral)
+        self.groupBox.setObjectName("groupBox")
+        self.gridLayout.addWidget(self.groupBox, 1, 1, 1, 1)
+        self.groupBox_2 = QtWidgets.QGroupBox(self.tabGeral)
+        self.groupBox_2.setObjectName("groupBox_2")
+        self.gridLayout.addWidget(self.groupBox_2, 2, 0, 1, 1)
+        self.groupBox_3 = QtWidgets.QGroupBox(self.tabGeral)
+        self.groupBox_3.setObjectName("groupBox_3")
+        self.gridLayout.addWidget(self.groupBox_3, 2, 1, 1, 1)
+        self.tabMain.addTab(self.tabGeral, "")
         self.clientes = QtWidgets.QWidget()
         self.clientes.setObjectName("clientes")
         self.tabMain.addTab(self.clientes, "")
@@ -258,28 +231,14 @@ class Ui_wdgTabConfiguracoes(object):
     def retranslateUi(self, wdgTabConfiguracoes):
         _translate = QtCore.QCoreApplication.translate
         wdgTabConfiguracoes.setWindowTitle(_translate("wdgTabConfiguracoes", "Form"))
-        item = self.tblTetos.horizontalHeaderItem(0)
-        item.setText(_translate("wdgTabConfiguracoes", "tetoId"))
-        item = self.tblTetos.horizontalHeaderItem(1)
-        item.setText(_translate("wdgTabConfiguracoes", "Data"))
-        item = self.tblTetos.horizontalHeaderItem(2)
-        item.setText(_translate("wdgTabConfiguracoes", "Valor"))
-        self.lbTitulo.setText(_translate("wdgTabConfiguracoes", "Histórico dos tetos previdenciários"))
-        self.lbSubtitulo.setText(_translate("wdgTabConfiguracoes", "Procure por tetos previdenciários desde 1960"))
-        self.pbBuscarArq.setText(_translate("wdgTabConfiguracoes", "Buscar \n"
-"arquivo"))
-        self.pbInserir.setText(_translate("wdgTabConfiguracoes", "Inserir"))
-        self.pbExcluir.setText(_translate("wdgTabConfiguracoes", "Excluir"))
-        self.pbEditar.setText(_translate("wdgTabConfiguracoes", "Editar"))
-        self.lbInfoData.setText(_translate("wdgTabConfiguracoes", "Data"))
-        self.lbInfoValor.setText(_translate("wdgTabConfiguracoes", "Valor"))
-        self.dtData.setDisplayFormat(_translate("wdgTabConfiguracoes", "MM/yyyy"))
-        self.lbInfoAcao.setText(_translate("wdgTabConfiguracoes", "Inserir ou cancelar edição"))
-        self.pbEfetivar.setText(_translate("wdgTabConfiguracoes", "Efetivar"))
-        self.pbCancelar.setText(_translate("wdgTabConfiguracoes", "Cancelar"))
-        self.lbInfoTitulo.setText(_translate("wdgTabConfiguracoes", "  Inserir / Editar"))
-        self.tabMain.setTabText(self.tabMain.indexOf(self.tabTetosPrev), _translate("wdgTabConfiguracoes", "Tetos Previdenciários"))
-        self.tabMain.setTabText(self.tabMain.indexOf(self.clientes), _translate("wdgTabConfiguracoes", "Clientes"))
+        self.gpIniciando.setTitle(_translate("wdgTabConfiguracoes", "Iniciando o programa"))
+        self.lbInicioAutomatico.setText(_translate("wdgTabConfiguracoes", "Iniciar automaticamente"))
+        self.lbTitulo.setText(_translate("wdgTabConfiguracoes", "Configurações gerais"))
+        self.groupBox.setTitle(_translate("wdgTabConfiguracoes", "GroupBox"))
+        self.groupBox_2.setTitle(_translate("wdgTabConfiguracoes", "GroupBox"))
+        self.groupBox_3.setTitle(_translate("wdgTabConfiguracoes", "GroupBox"))
+        self.tabMain.setTabText(self.tabMain.indexOf(self.tabGeral), _translate("wdgTabConfiguracoes", "Geral"))
+        self.tabMain.setTabText(self.tabMain.indexOf(self.clientes), _translate("wdgTabConfiguracoes", "Backups"))
 
 
 if __name__ == "__main__":

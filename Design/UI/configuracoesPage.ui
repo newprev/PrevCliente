@@ -75,7 +75,7 @@ QTabBar::tab:selected, QTabBar::tab:hover {
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tabTetosPrev">
+     <widget class="QWidget" name="tabGeral">
       <property name="styleSheet">
        <string notr="true">/*------------------------------------ Tables --------------------------------------*/
 #tblTetos{
@@ -108,18 +108,17 @@ QHeaderView::up-arrow {
 	font-size: 24px;
 }
 
-#lbSubtitulo, #lbInfoValor,
-#lbInfoData, #lbInfoAcao {
+#lbInicioAutomatico {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;	
 }
 
-#lbInfoTitulo {
+/*#lbInfoTitulo {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 14px;
 
 	background-color: white;	
-}
+}*/
 
 /*-------------------------------- Push Buttons --------------------------------*/
 #pbBuscarArq, #pbEditar, 
@@ -163,297 +162,150 @@ QHeaderView::up-arrow {
 	background-color: rgb(225, 240, 73);
 }
 
-/*-------------------------------- Frames -----------------------------------------*/
-#frInfo{
-	border-radius: 4px;
-	border: 1px solid rgb(85, 87, 83);
+/*-------------------------------- Group Box -----------------------------------------*/
+QGroupBox {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+	border: 1px solid transparent;
 
 	background-color: white;
+}
+
+QGroupBox QGroupBox {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+
+	background-color: white;
+}
+
+#gpIniciando::title {
+	subcontrol-position: top left;
+	background-color: #3A405A;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	color: white;
+	padding: 4px;
+}
+
+#gpIniciando {
+	border: 1px dashed grey;
 }
 </string>
       </property>
       <attribute name="title">
-       <string>Tetos Previdenciários</string>
+       <string>Geral</string>
       </attribute>
-      <widget class="QTableWidget" name="tblTetos">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>180</y>
-         <width>471</width>
-         <height>371</height>
-        </rect>
-       </property>
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
-       <property name="selectionBehavior">
-        <enum>QAbstractItemView::SelectRows</enum>
-       </property>
-       <property name="textElideMode">
-        <enum>Qt::ElideNone</enum>
-       </property>
-       <attribute name="horizontalHeaderCascadingSectionResizes">
-        <bool>true</bool>
-       </attribute>
-       <attribute name="horizontalHeaderStretchLastSection">
-        <bool>true</bool>
-       </attribute>
-       <attribute name="verticalHeaderVisible">
-        <bool>false</bool>
-       </attribute>
-       <column>
-        <property name="text">
-         <string>tetoId</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Data</string>
-        </property>
-        <property name="font">
-         <font>
-          <family>TeX Gyre Adventor</family>
-          <pointsize>14</pointsize>
-         </font>
-        </property>
-        <property name="textAlignment">
-         <set>AlignCenter</set>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Valor</string>
-        </property>
-        <property name="font">
-         <font>
-          <family>TeX Gyre Adventor</family>
-          <pointsize>14</pointsize>
-         </font>
-        </property>
-        <property name="textAlignment">
-         <set>AlignCenter</set>
-        </property>
-       </column>
-      </widget>
-      <widget class="QLabel" name="lbTitulo">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>10</y>
-         <width>451</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Histórico dos tetos previdenciários</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbSubtitulo">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>40</y>
-         <width>371</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Procure por tetos previdenciários desde 1960</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pbBuscarArq">
-       <property name="geometry">
-        <rect>
-         <x>500</x>
-         <y>20</y>
-         <width>111</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Buscar 
-arquivo</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pbInserir">
-       <property name="geometry">
-        <rect>
-         <x>500</x>
-         <y>160</y>
-         <width>111</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Inserir</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pbExcluir">
-       <property name="geometry">
-        <rect>
-         <x>500</x>
-         <y>210</y>
-         <width>111</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Excluir</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pbEditar">
-       <property name="geometry">
-        <rect>
-         <x>500</x>
-         <y>260</y>
-         <width>111</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Editar</string>
-       </property>
-      </widget>
-      <widget class="QFrame" name="frInfo">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>90</y>
-         <width>471</width>
-         <height>81</height>
-        </rect>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <widget class="QLabel" name="lbInfoData">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>20</y>
-          <width>64</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Data</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="lbInfoValor">
-        <property name="geometry">
-         <rect>
-          <x>160</x>
-          <y>20</y>
-          <width>64</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Valor</string>
-        </property>
-       </widget>
-       <widget class="QDateEdit" name="dtData">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>40</y>
-          <width>110</width>
-          <height>26</height>
-         </rect>
-        </property>
-        <property name="buttonSymbols">
-         <enum>QAbstractSpinBox::UpDownArrows</enum>
-        </property>
-        <property name="currentSection">
-         <enum>QDateTimeEdit::MonthSection</enum>
-        </property>
-        <property name="displayFormat">
-         <string>MM/yyyy</string>
-        </property>
-        <property name="calendarPopup">
-         <bool>true</bool>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="leValor">
-        <property name="geometry">
-         <rect>
-          <x>160</x>
-          <y>40</y>
-          <width>91</width>
-          <height>25</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="lbInfoAcao">
-        <property name="geometry">
-         <rect>
-          <x>300</x>
-          <y>10</y>
-          <width>161</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Inserir ou cancelar edição</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pbEfetivar">
-        <property name="geometry">
-         <rect>
-          <x>280</x>
-          <y>40</y>
-          <width>83</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Efetivar</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pbCancelar">
-        <property name="geometry">
-         <rect>
-          <x>380</x>
-          <y>40</y>
-          <width>83</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Cancelar</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QLabel" name="lbInfoTitulo">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>80</y>
-         <width>111</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>  Inserir / Editar</string>
-       </property>
-      </widget>
-      <zorder>frInfo</zorder>
-      <zorder>tblTetos</zorder>
-      <zorder>lbTitulo</zorder>
-      <zorder>lbSubtitulo</zorder>
-      <zorder>pbBuscarArq</zorder>
-      <zorder>pbInserir</zorder>
-      <zorder>pbExcluir</zorder>
-      <zorder>pbEditar</zorder>
-      <zorder>lbInfoTitulo</zorder>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="gpIniciando">
+         <property name="title">
+          <string>Iniciando o programa</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>4</number>
+          </property>
+          <property name="leftMargin">
+           <number>16</number>
+          </property>
+          <property name="topMargin">
+           <number>26</number>
+          </property>
+          <property name="rightMargin">
+           <number>4</number>
+          </property>
+          <property name="bottomMargin">
+           <number>4</number>
+          </property>
+          <item>
+           <widget class="QFrame" name="frame">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>2</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <layout class="QHBoxLayout" name="hlInicioAutomatico"/>
+             </item>
+             <item alignment="Qt::AlignVCenter">
+              <widget class="QLabel" name="lbInicioAutomatico">
+               <property name="text">
+                <string>Iniciar automaticamente</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lbTitulo">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>60</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Configurações gerais</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="clientes">
       <attribute name="title">
-       <string>Clientes</string>
+       <string>Backups</string>
       </attribute>
      </widget>
     </widget>

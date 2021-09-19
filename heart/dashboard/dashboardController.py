@@ -44,7 +44,7 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
 
         self.tabCliente = TabCliente(parent=self, db=db)
         self.tabCalculos = TabCalculos(parent=self, db=db)
-        self.configuracoesPage = ConfiguracoesPage(parent=self, db=db)
+        self.configuracoesPage = ConfiguracoesPage(parent=self)
         self.ferramentasPage = FerramentasPage(parent=self, db=db)
         self.informacoePage = InformacoesGerais(parent=self)
 

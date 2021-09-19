@@ -1,6 +1,7 @@
 import requests
 import aiohttp
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
+from util.enums.logEnums import TipoLog
 from logs import logPrioridade, TipoEdicao, Prioridade
 
 
@@ -23,48 +24,11 @@ class ApiFerramentas:
             async with http.get(url) as response:
                 statusCode = response.status
                 if 199 < statusCode < 400:
-                    logPrioridade(f"API(Sync)<getAllFerramentas>____________________GET<{endpoint}>::::{url}", TipoEdicao.api, Prioridade.sync)
+                    logPrioridade(f"API(Sync)<getAllFerramentas>____________________GET<{endpoint}>::::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.sync, tipoLog=TipoLog.Rest)
                     return await response.json()
                 else:
-                    logPrioridade(f"API(Sync)<getAllFerramentas>____________________GET<{endpoint}ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
+                    logPrioridade(f"API(Sync)<getAllFerramentas>____________________GET<{endpoint}ERRO>::::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante, tipoLog=TipoLog.Rest)
                     return []
-
-    #
-    # async def getAllTetosPrevidenciarios(self) -> list:
-    #     url = self.baseUrl + 'tetosPrev/'
-    #     async with aiohttp.ClientSession() as http:
-    #         async with http.get(url) as response:
-    #             statusCode = response.status
-    #             if 199 < statusCode < 400:
-    #                 logPrioridade(f"API(Sync)____________________GET<tetosPrev/>::::{url}", TipoEdicao.api, Prioridade.sync)
-    #                 return await response.json()
-    #             else:
-    #                 logPrioridade(f"API(Sync)____________________GET<tetosPrev/ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
-    #                 return []
-    #
-    # async def getAllConvMon(self) -> list:
-    #     url = self.baseUrl + 'convMon/'
-    #     async with aiohttp.ClientSession() as http:
-    #         async with http.get(url) as response:
-    #             statusCode = response.status
-    #             if 199 < statusCode < 400:
-    #                 logPrioridade(f"API(Sync)____________________GET<convMon/>::::{url}", TipoEdicao.api, Prioridade.sync)
-    #                 return await response.json()
-    #             else:
-    #                 logPrioridade(f"API(Sync)____________________GET<convMon/ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
-    #                 return []
-    #
-    # async def getAllIndicesAtuMonetarias(self) -> list:
-    #     url = self.baseUrl + 'indiceAtuMonetaria/'
-    #     async with aiohttp.ClientSession() as http:
-    #         async with http.get(url) as response:
-    #             statusCode = response.status
-    #             if 199 < statusCode < 400:
-    #                 logPrioridade(f"API(Sync)____________________GET<indiceAtuMonetaria/>::::{url}", TipoEdicao.api, Prioridade.sync)
-    #                 return await response.json()
-    #             else:
-    #                 logPrioridade(f"API(Sync)____________________GET<indiceAtuMonetaria/ERRO>::::{url}", TipoEdicao.api, Prioridade.saidaImportante)
-    #                 return []
 
     def conexaoOnline(self) -> bool:
         try:

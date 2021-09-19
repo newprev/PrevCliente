@@ -25,7 +25,8 @@ class TipoEdicao(Enum):
     dropTable = 4
     createTable = 5
     api = 6
-    erro = 7
+    cache = 7
+    erro = 8
 
 class TelaLogin(Enum):
     inicio = 1

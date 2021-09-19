@@ -43,10 +43,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.cnisClienteAtual = None
         self.cacheEscritorio = CacheEscritorio()
         self.escritorio: Escritorios = self.cacheEscritorio.carregarCache()
-        self.cbClienteAntigo = NewCheckBox(
-            width=44,
-            height=20
-        )
+        self.cbClienteAntigo = NewCheckBox(width=44)
         self.lbClienteAntigo = QLabel('Cliente antigo')
 
         # self.tblClientes.resizeColumnsToContents()

@@ -270,7 +270,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             self.pbProxEtapa.setText('Gerar documentos')
             self.stackedWidget.setCurrentIndex(5)
 
-            calculaAposentadoria = CalculosAposentadoria(self.processoModelo, self.clienteAtual, db=self.db)
+            calculaAposentadoria = CalculosAposentadoria(self.processoModelo, self.clienteAtual, db=self.db, dib=datetime(year=2020, month=6, day=15))
         else:
             if wdgFuturo == MomentoEntrevista.cadastro:
                 self.telaAtual = MomentoEntrevista.cadastro

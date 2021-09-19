@@ -27,6 +27,7 @@ from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 import os
 import json
 
+from util.ferramentas.tools import divideListaEmPartes
 from util.helpers import datetimeToSql, strToDatetime
 
 from repositorios.informacoesRepositorio import ApiInformacoes
@@ -432,7 +433,12 @@ class LoginController(QMainWindow, Ui_mwLogin):
             elif aioTask == FerramentasEInfo.atuMonetaria:
                 indicesAtuMonetaria: List[dict] = infoApi
                 if qtdAtuMonetarias < len(indicesAtuMonetaria):
-                    IndiceAtuMonetaria.insert_many(indicesAtuMonetaria).on_conflict('replace').execute()
+                    if len(indicesAtuMonetaria) <= 80:
+                        IndiceAtuMonetaria.insert_many(indicesAtuMonetaria).on_conflict('replace').execute()
+                    else:
+                        listasAAdicionar = divideListaEmPartes(indicesAtuMonetaria, 400)
+                        for listaIndice in listasAAdicionar:
+                            IndiceAtuMonetaria.insert_many(listaIndice).on_conflict('replace').execute()
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

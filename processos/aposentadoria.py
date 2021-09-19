@@ -42,9 +42,9 @@ class CalculosAposentadoria:
         if dib is None:
             self.dibAtual: datetime = datetime.datetime.today()
         else:
-            self.dibAtual: datetime = dib.strftime('%Y-%m')
+            self.dibAtual: datetime = dib
 
-        self.dibAtual = datetime.datetime(year=2020, month=6, day=15)
+        # self.dibAtual = datetime.datetime(year=2020, month=6, day=15)
 
         self.idadeCalculada = calculaIdade(self.cliente.dataNascimento, self.dibAtual)
         self.dataReforma2019: datetime.date = datetime.date(2019, 11, 13)
@@ -362,49 +362,22 @@ class CalculosAposentadoria:
         return pontuacaoAtingida and tempoMinimoContrib
 
     def regraRedIdadeMinima(self) -> bool:
-        acrescimoMensal: float = 0
-        acrescimoAnual: int = 0
-        idadeMesesCliente: float = 0
-        # mesAtual: int = self.dibAtual.month
-        # mesNascCliente: int = strToDatetime(self.cliente.dataNascimento).month
-
-        # Ginática matemática para caclular a qtd de meses até o aniversário do(a) cliente
-        # if mesAtual - mesNascCliente > 0:
-        #     if mesAtual - mesNascCliente < 6:
-        #         idadeMesesCliente = 0
-        #     else:
-        #         idadeMesesCliente = 0.5
-        # else:
-        #     if 12 + (mesAtual - mesNascCliente) < 6:
-        #         idadeMesesCliente = 0
-        #     else:
-        #         idadeMesesCliente = 0.5
-        #
-        # if mesAtual < 6:
-        #     acrescimoMensal = 0
-        # elif 6 <= mesAtual < 12:
-        #     acrescimoMensal = 0.5
-        # elif mesAtual == 12:
-        #     acrescimoMensal = 1
-        # dataNascimento: datetime = strToDatetime(self.cliente.dataNascimento)
 
         idadeCliente: relativedelta = self.idadeCalculada
 
         acrescimoAnual: int = self.dibAtual.year - self.dataReforma2019.year
-        totalAcrescimo = acrescimoAnual * (1 + acrescimoMensal)
+        totalAcrescimo = acrescimoAnual * 0.5
 
         if self.cliente.genero == 'M':
             if totalAcrescimo > 4:
                 totalAcrescimo = 4
 
-            # return self.tempoContribCalculado[2] >= 15 and idadeCliente[2] + idadeCliente[1] >= 61 + totalAcrescimo
-            return self.tempoContribCalculado[2] >= 15 and idadeCliente.years + idadeCliente.months >= 61 + totalAcrescimo
+            return self.tempoContribCalculado[2] >= 35 and idadeCliente.years + idadeCliente.months/12 >= 61 + totalAcrescimo
         else:
             if totalAcrescimo > 6:
                 totalAcrescimo = 6
 
-            # return self.tempoContribCalculado[2] >= 30 and idadeCliente[2] + idadeCliente[1] >= 56 + totalAcrescimo
-            return self.tempoContribCalculado[2] >= 30 and idadeCliente.years + idadeCliente.months >= 56 + totalAcrescimo
+            return self.tempoContribCalculado[2] >= 30 and idadeCliente.years + idadeCliente.months/12 >= 56 + totalAcrescimo
 
     def regraPedagio50(self) -> bool:
         listaCabecalhosPedagio = []

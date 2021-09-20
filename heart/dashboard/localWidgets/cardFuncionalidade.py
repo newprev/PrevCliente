@@ -31,14 +31,16 @@ class CardFuncionalidade(QWidget, Ui_wdgFuncionalidade):
             self.pbFuncionalidade.setText('Entrevista')
         elif tipo.upper() == 'CALCULOS':
             self.pbFuncionalidade.setText('Calculos')
+        elif tipo.upper() == 'RESUMO':
+            self.pbFuncionalidade.setText('Resumo CNIS')
         else:
             self.pbFuncionalidade.setText('Func')
 
     def emitirSinal(self):
         if self.tipo.upper() == 'CLIENTE':
             self.sinais.sTrocaWidgetCentral.emit(TelaPosicao.Cliente)
-        elif self.tipo.upper() == 'CALCULOS':
-            self.sinais.sTrocaWidgetCentral.emit(TelaPosicao.Calculos)
+        elif self.tipo.upper() == 'RESUMO':
+            self.sinais.sTrocaWidgetCentral.emit(TelaPosicao.Resumo)
         elif self.tipo.upper() == 'ENTREVISTA':
             self.sinais.sTrocaWidgetCentral.emit(TelaPosicao.Entrevista)
 

@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QMessageBox, QVBoxLayout
-from Design.pyUi.tabCalculos import Ui_wdgTabCalculos
+from Design.pyUi.tabResumoCNIS import Ui_wdgTabResumoCNIS
 from typing import List
 
 from Daos.daoCalculos import DaoCalculos
@@ -19,10 +19,10 @@ from modelos.cabecalhoORM import CnisCabecalhos
 from util.enums.newPrevEnums import TipoContribuicao
 
 
-class TabCalculos(QWidget, Ui_wdgTabCalculos):
+class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
 
     def __init__(self, parent=None, db=None, origemEntrevista: bool = False):
-        super(TabCalculos, self).__init__(parent=parent)
+        super(TabResumoCNIS, self).__init__(parent=parent)
         self.setupUi(self)
         self.db = db
         self.cliente = Cliente()

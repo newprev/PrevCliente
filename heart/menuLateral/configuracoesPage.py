@@ -14,6 +14,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
     def __init__(self, parent=None):
         super(ConfiguracoesPage, self).__init__(parent=parent)
         self.setupUi(self)
+        self.lbInicioAutomatico.setToolTip('Caso tenha marcado para lembrar senha na tela de login e esse parâmetro esteja ativado.\nO programa iniciará sem passar pela tela de login.')
 
         self.carregaConfiguracoes()
 
@@ -43,9 +44,6 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
 
     def desabilitarTudo(self):
         self.cbIniciaAutomatico.setDisabled(True)
-
-
-
 
     def popUpSimCancela(self, mensagem, titulo: str = 'Atenção!', funcao=None):
         pop = QMessageBox()

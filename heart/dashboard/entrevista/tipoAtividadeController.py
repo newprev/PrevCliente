@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QFrame, QCheckBox
 from PyQt5.QtCore import Qt
 from Design.pyUi.pgQuizAposentadoria import Ui_wdgQuizAposentadoria
-from heart.dashboard.tabs.tabCalculos import TabCalculos
+from heart.dashboard.tabs.tabResumoCNIS import TabResumoCNIS
 from heart.sinaisCustomizados import Sinais
 from modelos.clienteORM import Cliente
 from Daos.daoCliente import DaoCliente
@@ -117,7 +117,7 @@ class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):
 
     def apresentarTela(self, cbClicada: AtivApos):
         if cbClicada == AtivApos.editarCnisB:
-            telaCalculo = TabCalculos(parent=self, db=self.db, origemEntrevista=True)
+            telaCalculo = TabResumoCNIS(parent=self, db=self.db, origemEntrevista=True)
             telaCalculo.carregarInfoCliente(clienteModel=self.clienteAtual)
             telaCalculo.setWindowFlags(Qt.Tool | Qt.Dialog)
             telaCalculo.show()

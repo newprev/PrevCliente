@@ -111,10 +111,11 @@ class DireitoAdquirido(Enum):
     ec1032019 = 2
 
 class RegraTransicao(Enum):
-    pontos = 0
-    reducaoIdadeMinima = 1
-    pedagio50 = 2
-    reducaoTempoContribuicao = 3
+    todas = 0
+    pontos = 1
+    reducaoIdadeMinima = 2
+    pedagio50 = 3
+    reducaoTempoContribuicao = 4
 
 class GeneroCliente(Enum):
     masculino = 'M'
@@ -128,3 +129,8 @@ class ComparaData(Enum):
 class TipoIcone(Enum):
     beneficio = 0
     remuneracao = 1
+
+class TipoItemContribuicao(Enum):
+    beneficio = 'B'
+    contribuicao = 'C'
+    remuneracao = 'D'

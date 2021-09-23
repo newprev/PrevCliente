@@ -6,7 +6,13 @@ from typing import List
 from PyPDF3 import PdfFileReader
 from PyQt5.QtWidgets import QFileDialog
 
-from util.helpers import strToFloat, dictIndicadores
+from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.contribuicoesORM import CnisContribuicoes
+from modelos.itemContribuicao import ItemContribuicao
+from modelos.remuneracaoORM import CnisRemuneracoes
+from modelos.clienteORM import Cliente
+from util.enums.newPrevEnums import TipoItemContribuicao
+from util.helpers import strToFloat, dictIndicadores, strToDate, verificaIndicadorProibitivo
 
 
 class CNISModelo:
@@ -516,11 +522,72 @@ class CNISModelo:
         else:
             return self.dictDadosPessoais
 
+    def buscaContribPelo(self, listaDasContribuicoes: List[CnisContribuicoes], seq: int = 0):
+        listaResultado: List[CnisContribuicoes] = []
+
+        for contribuicao in listaDasContribuicoes:
+            if contribuicao.seq == seq:
+                listaResultado.append(contribuicao)
+            elif contribuicao.seq > seq:
+                break
+
+        return listaResultado
+
+    def buscaRemuPelo(self, listaDasRemuneracoes: List[CnisRemuneracoes], seq: int = 0):
+        listaResultado: List[CnisRemuneracoes] = []
+
+        for remuneracao in listaDasRemuneracoes:
+            if remuneracao.seq == seq:
+                listaResultado.append(remuneracao)
+            elif remuneracao.seq > seq:
+                break
+
+        return listaResultado
+
     def isIndicador(self, info: str) -> bool:
         if ',' in info:
             return info[:info.find(',')] in self.dictIndicadores.keys()
         else:
             return info in self.dictIndicadores.keys()
+
+    def insereItensContribuicao(self, cliente: Cliente):
+        listaItensContrib: List[dict] = []
+        listaCabecalhos = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId)
+        listaRemuneracoes = CnisRemuneracoes.select().where(CnisRemuneracoes.clienteId == cliente.clienteId)
+        listaContribuicoes = CnisContribuicoes.select().where(CnisContribuicoes.clienteId == cliente.clienteId)
+
+        dataPrimeiroTrabalho = strToDate(listaCabecalhos[0].dataInicio)
+
+        for cabecalho in listaCabecalhos:
+            impedidoPorIndicadores: bool = verificaIndicadorProibitivo(cabecalho.indicadores)
+            listaContrib: List[CnisContribuicoes] = self.buscaContribPelo(listaContribuicoes, seq=cabecalho.seq)
+            listaRemu: List[CnisRemuneracoes] = self.buscaRemuPelo(listaRemuneracoes, seq=cabecalho.seq)
+
+            for remuneracao in listaRemu:
+                listaItensContrib.append({
+                    "clienteId": cliente,
+                    "itemId": remuneracao.remuneracoesId,
+                    "seq": cabecalho.seq,
+                    "tipo": TipoItemContribuicao.remuneracao.value,
+                    "competencia": remuneracao.competencia,
+                    "contribuicao": remuneracao.remuneracao,
+                    "indicadores": remuneracao.indicadores,
+                    "valido": not impedidoPorIndicadores
+                })
+
+            for contribuicao in listaContrib:
+                listaItensContrib.append({
+                    "clienteId": cliente,
+                    "itemId": contribuicao.contribuicoesId,
+                    "seq": cabecalho.seq,
+                    "tipo": TipoItemContribuicao.contribuicao.value,
+                    "competencia": contribuicao.competencia,
+                    "contribuicao": contribuicao.contribuicao,
+                    "indicadores": contribuicao.indicadores,
+                    "valido": not impedidoPorIndicadores
+                })
+
+        response = ItemContribuicao.insert_many(listaItensContrib).on_conflict('replace').execute()
 
     def getAllDict(self, toInsert: bool = False, clienteId: int = 0) -> dict:
         if toInsert:

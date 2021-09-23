@@ -156,6 +156,25 @@ meses = {
 
 situacaoBeneficio = ['Indeferido', 'Cessado', 'Ativo']
 
+tipoItemContribuicao = [
+    ('C', 'CONTRIBUICAO'),
+    ('B', 'BENEFICIO'),
+    ('R', 'REMUNERACAO')
+]
+
+tipoItemOrigem = [
+    ('C', 'CNIS'),
+    ('N', 'NEWPREV')
+]
+
+
+def getItemOrigem():
+    return tipoItemOrigem
+
+
+def getTipoItem():
+    return tipoItemContribuicao
+
 
 def getEscolaridade():
     return {
@@ -319,6 +338,25 @@ def mascaraFormaPagamento(pagamento: str):
 
 def mascaraMeses(data: datetime.date):
     return f'{data.day} de {meses[data.month]} de {data.year}'
+
+
+def verificaIndicadorProibitivo(indicadores: str) -> bool:
+    indicadoresImpeditivos = ['PDT-NASC-FIL-INV', 'IREC-LC123', 'PREC-MENOR-MIN']
+
+    if indicadores == '' or indicadores is None:
+        return False
+    elif indicadores != '' and ',' in indicadores:
+        listaIndicadores = indicadores.split(',')
+    elif len(indicadores) > 0 and ',' not in indicadores:
+        listaIndicadores = [indicadores]
+    else:
+        return False
+
+    for ind in listaIndicadores:
+        if ind in indicadoresImpeditivos:
+            return True
+
+    return False
 
 
 def dataUSAtoBR(dataUSA: str, comDias: bool = False) -> str:

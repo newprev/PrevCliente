@@ -25,6 +25,7 @@ from modelos.telefonesORM import Telefones
 from util.helpers import *
 
 from repositorios.integracaoRepositorio import IntegracaoRepository
+from util.popUps import popUpOkAlerta
 
 
 class TabCliente(Ui_wdgTabCliente, QWidget):
@@ -46,7 +47,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.cbClienteAntigo = NewCheckBox(width=44)
         self.lbClienteAntigo = QLabel('Cliente antigo')
 
-        # self.tblClientes.resizeColumnsToContents()
         self.tblClientes.doubleClicked.connect(self.editarCliente)
         self.tblClientes.hideColumn(0)
 
@@ -273,12 +273,14 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                             return False
 
                 self.limpaTudo()
+                self.cnisClienteAtual.insereItensContribuicao(self.cliente)
                 self.carregaClienteNaTela(cliente=self.cliente)
                 if self.cliente.numero is None:
                     self.cliente.numero = 0
 
-            except Exception as erro:
-                print(f'carregaCnis - erro: ({type(erro)}) {erro}')
+            except Exception as err:
+                popUpOkAlerta('Não foi possível salvar o cliente. Tente novamente.', erro=str(err))
+                print(f'carregaCnis - erro: ({type(err)}) {err}')
 
     def avaliaDadosFaltantesNoCNIS(self, cabecalhos: List[dict]) -> List[dict]:
         listaReturn: List[dict] = []

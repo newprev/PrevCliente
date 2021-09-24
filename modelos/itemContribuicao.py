@@ -18,14 +18,15 @@ class ItemContribuicao(BaseModel, Model):
 
     contribuicaoItemId = AutoField(column_name='contribuicaoItemId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
-    itemId = IntegerField(null=False)
+    itemId = IntegerField(null=True)
     seq = IntegerField(null=False)
     tipo = CharField(choices=TIPO, default='C')
     competencia = DateField(null=False, formats=DATEFORMATS)
     contribuicao = FloatField(null=True)
     dadoOrigem = CharField(column_name='dadoOrigem', choices=ORIGEM, default='C')
-    indicadores = CharField(default=None)
-    valido = BooleanField(default=True)
+    indicadores = CharField(default=None, null=True)
+    validoTempoContrib = BooleanField(default=True)
+    validoSalContrib = BooleanField(default=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 
@@ -43,7 +44,8 @@ class ItemContribuicao(BaseModel, Model):
             'contribuicao': self.contribuicao,
             'dadoOrigem': self.dadoOrigem,
             'indicadores': self.indicadores,
-            'valido': self.valido,
+            'validoTempoContrib': self.validoTempoContrib,
+            'validoSalContrib': self.validoSalContrib,
             'dataCadastro': self.dataCadastro,
             'dataUltAlt': self.dataUltAlt
         }
@@ -59,7 +61,8 @@ class ItemContribuicao(BaseModel, Model):
         self.contribuicao = dictContribuicoes['contribuicao']
         self.dadoOrigem = dictContribuicoes['dadoOrigem']
         self.indicadores = dictContribuicoes['indicadores']
-        self.valido = dictContribuicoes['valido']
+        self.validoTempoContrib = dictContribuicoes['validoTempoContrib']
+        self.validoSalContrib = dictContribuicoes['validoSalContrib']
         self.dataCadastro = dictContribuicoes['dataCadastro']
         self.dataUltAlt = dictContribuicoes['dataUltAlt']
 
@@ -75,7 +78,8 @@ class ItemContribuicao(BaseModel, Model):
             contribuicao: {self.contribuicao},
             dadoOrigem: {self.dadoOrigem},
             indicadores: {self.indicadores},
-            valido: {self.valido},
+            validoTempoContrib: {self.validoTempoContrib},
+            validoSalContrib: {self.validoSalContrib},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}
         )""")

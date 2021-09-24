@@ -133,4 +133,4 @@ class TipoIcone(Enum):
 class TipoItemContribuicao(Enum):
     beneficio = 'B'
     contribuicao = 'C'
-    remuneracao = 'D'
+    remuneracao = 'R'

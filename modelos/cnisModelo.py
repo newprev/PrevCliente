@@ -1,7 +1,9 @@
+import datetime
 import re
 import pandas as pd
 from pathlib import Path
 from typing import List
+from math import floor
 
 from PyPDF3 import PdfFileReader
 from PyQt5.QtWidgets import QFileDialog
@@ -150,8 +152,33 @@ class CNISModelo:
 
                 pos += 1
 
+    def criaItensAntesDoReal(self, cabecalho: CnisCabecalhos, cliente: Cliente) -> List[dict]:
+        dataInicio = strToDate(cabecalho.dataInicio)
+        dataFim = strToDate(cabecalho.dataFim)
+        qtdItens: int = floor((dataFim - dataInicio).days/30) + 1
+        listaItens: List[dict] = []
+
+        for i in range(0, qtdItens):
+            if i + 1 == qtdItens:
+                competencia = dataFim
+            else:
+                competencia = dataInicio + datetime.timedelta(days=30 * i)
+
+            listaItens.append({
+                "clienteId": cliente,
+                "itemId": None,
+                "seq": cabecalho.seq,
+                "tipo": TipoItemContribuicao.remuneracao.value,
+                "competencia": competencia,
+                "contribuicao": 0,
+                "validoTempoContrib": True,
+                "validoSalContrib": False
+            })
+
+        return listaItens
+
     def trataExtrairCabecalhos(self, documentoLinhas, posInicio):
-        if any(filter(lambda item: re.fullmatch(self.expRegNB, item), documentoLinhas[posInicio:posInicio+16])):
+        if any(filter(lambda item: re.fullmatch(self.expRegNB, item), documentoLinhas[posInicio:posInicio + 16])):
             return self.extrairCabecalhosBeneficio(documentoLinhas, posInicio), True
         else:
             return self.extrairCabecalhosPadrao(documentoLinhas, posInicio), False
@@ -273,8 +300,8 @@ class CNISModelo:
                     self.dictCabecalhoBeneficio['seq'].append(int(documentoLinhas[j]))
                     seq = True
                 elif re.match(self.expRegEspecie, documentoLinhas[j]) is not None and documentoLinhas[j] not in self.situacoesPossiveis:
-                    if re.match(self.expRegNomeEmp, documentoLinhas[j+1]) and documentoLinhas[j+1] not in self.situacoesPossiveis:
-                        self.dictCabecalhoBeneficio['especie'].append(documentoLinhas[j] + ' ' + documentoLinhas[j+1])
+                    if re.match(self.expRegNomeEmp, documentoLinhas[j + 1]) and documentoLinhas[j + 1] not in self.situacoesPossiveis:
+                        self.dictCabecalhoBeneficio['especie'].append(documentoLinhas[j] + ' ' + documentoLinhas[j + 1])
                         pos += 1
                     else:
                         self.dictCabecalhoBeneficio['especie'].append(documentoLinhas[j])
@@ -327,30 +354,30 @@ class CNISModelo:
                 elif self.verificaSalario(documentoLinhas[pos]):
                     if ehContribuicao:
                         self.dictContribuicoes['contribuicao'].append(strToFloat(documentoLinhas[pos]))
-                        if not self.verificaSalario(documentoLinhas[pos+1]):
+                        if not self.verificaSalario(documentoLinhas[pos + 1]):
                             ehContribuicao = False
-                            if documentoLinhas[pos+1].replace(',', '') not in self.dictIndicadores.keys():
-                                if re.fullmatch(self.expRegDataMenor, documentoLinhas[pos+1]) is None:
+                            if documentoLinhas[pos + 1].replace(',', '') not in self.dictIndicadores.keys():
+                                if re.fullmatch(self.expRegDataMenor, documentoLinhas[pos + 1]) is None:
                                     blocoContribuicoes = False
                     else:
                         self.dictContribuicoes['salContribuicao'].append(strToFloat(documentoLinhas[pos]))
                         if documentoLinhas[pos + 1].replace(',', '') not in self.dictIndicadores.keys():
                             self.dictContribuicoes['indicadores'].append('')
-                        if self.verificaSalario(documentoLinhas[pos+1]):
+                        if self.verificaSalario(documentoLinhas[pos + 1]):
                             ehContribuicao = True
                 elif documentoLinhas[pos].replace(',', '') in self.dictIndicadores.keys():
-                    if documentoLinhas[pos+1] in self.dictIndicadores.keys():
-                        self.dictContribuicoes['indicadores'].append(documentoLinhas[pos] + ' ' + documentoLinhas[pos+1])
+                    if documentoLinhas[pos + 1] in self.dictIndicadores.keys():
+                        self.dictContribuicoes['indicadores'].append(documentoLinhas[pos] + ' ' + documentoLinhas[pos + 1])
                         pos += 1
-                        if self.verificaSalario(documentoLinhas[pos+1]):
+                        if self.verificaSalario(documentoLinhas[pos + 1]):
                             ehContribuicao = True
-                        elif re.fullmatch(self.expRegDataMenor, documentoLinhas[pos+1]) is None:
+                        elif re.fullmatch(self.expRegDataMenor, documentoLinhas[pos + 1]) is None:
                             blocoContribuicoes = False
                     else:
                         self.dictContribuicoes['indicadores'].append(documentoLinhas[pos])
-                        if self.verificaSalario(documentoLinhas[pos+1]):
+                        if self.verificaSalario(documentoLinhas[pos + 1]):
                             ehContribuicao = True
-                        elif re.fullmatch(self.expRegDataMenor, documentoLinhas[pos+1]) is None:
+                        elif re.fullmatch(self.expRegDataMenor, documentoLinhas[pos + 1]) is None:
                             blocoContribuicoes = False
 
             pos += 1
@@ -555,15 +582,22 @@ class CNISModelo:
         listaCabecalhos = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId)
         listaRemuneracoes = CnisRemuneracoes.select().where(CnisRemuneracoes.clienteId == cliente.clienteId)
         listaContribuicoes = CnisContribuicoes.select().where(CnisContribuicoes.clienteId == cliente.clienteId)
+        dataTrocaMoeda: datetime.date = datetime.date(1994, 7, 1)
 
-        dataPrimeiroTrabalho = strToDate(listaCabecalhos[0].dataInicio)
+        dataPrimeiroTrdabalho = strToDate(listaCabecalhos[0].dataInicio)
 
         for cabecalho in listaCabecalhos:
             impedidoPorIndicadores: bool = verificaIndicadorProibitivo(cabecalho.indicadores)
             listaContrib: List[CnisContribuicoes] = self.buscaContribPelo(listaContribuicoes, seq=cabecalho.seq)
             listaRemu: List[CnisRemuneracoes] = self.buscaRemuPelo(listaRemuneracoes, seq=cabecalho.seq)
 
+            # Caso o contribuinte tenha remunerações ou contribuições sem discriminação unitária
+            if len(listaContrib) == 0 and len(listaRemu) == 0 and not cabecalho.dadoFaltante:
+                listaItensContrib += self.criaItensAntesDoReal(cabecalho, cliente)
+
             for remuneracao in listaRemu:
+                impedidoPelaData: bool = strToDate(remuneracao.competencia) < dataTrocaMoeda
+
                 listaItensContrib.append({
                     "clienteId": cliente,
                     "itemId": remuneracao.remuneracoesId,
@@ -572,10 +606,13 @@ class CNISModelo:
                     "competencia": remuneracao.competencia,
                     "contribuicao": remuneracao.remuneracao,
                     "indicadores": remuneracao.indicadores,
-                    "valido": not impedidoPorIndicadores
+                    "validoTempoContrib": not impedidoPorIndicadores,
+                    "validoSalContrib": not impedidoPorIndicadores and not impedidoPelaData
                 })
 
             for contribuicao in listaContrib:
+                impedidoPelaData: bool = strToDate(contribuicao.competencia) < dataTrocaMoeda
+
                 listaItensContrib.append({
                     "clienteId": cliente,
                     "itemId": contribuicao.contribuicoesId,
@@ -584,7 +621,8 @@ class CNISModelo:
                     "competencia": contribuicao.competencia,
                     "contribuicao": contribuicao.contribuicao,
                     "indicadores": contribuicao.indicadores,
-                    "valido": not impedidoPorIndicadores
+                    "validoTempoContrib": not impedidoPorIndicadores,
+                    "validoSalContrib": not impedidoPorIndicadores and not impedidoPelaData
                 })
 
         response = ItemContribuicao.insert_many(listaItensContrib).on_conflict('replace').execute()

@@ -37,7 +37,6 @@ class CalculosAposentadoria:
         self.processo = processo
         self.cliente = cliente
         self.daoCalculos = DaoCalculos(db)
-        self.carregaInfoCliente()
 
         # Datas importantes
         self.dataReforma2019: datetime.date = datetime.date(2019, 11, 13)
@@ -144,6 +143,7 @@ class CalculosAposentadoria:
 
     def dibRegraDosPontos(self, generoCliente: GeneroCliente) -> datetime.date:
         tempoContribuicao: datetime.timedelta = datetime.timedelta()
+        listaItensContribuicao: List[ItemContribuicao] = ItemContribuicao.select().where()
 
         for cabecalho in self.listaCabecalhos:
             dataFimContrib: datetime.date = datetime.date.min

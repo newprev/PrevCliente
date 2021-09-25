@@ -1,9 +1,26 @@
 # -*- coding: utf-8 -*-
 from typing import List
-
 from dateutil.relativedelta import relativedelta
-# from modelos.cabecalhoORM import CnisCabecalhos
+from peewee import fn
+
 import datetime
+
+
+def atividadesConcorrentes(dataIniAtivA: datetime.date = datetime.date.min, dataFimAtvA: datetime.date = datetime.date.min, dataIniAtivB: datetime.date = datetime.date.min, dataFimAtivB: datetime.date = datetime.date.min) -> bool:
+    conflitoInicio: bool = dataIniAtivA <= dataIniAtivB <= dataFimAtvA
+    conflitoFim: bool = dataIniAtivA <= dataFimAtivB <= dataFimAtvA
+
+    return conflitoInicio or conflitoFim
+
+
+def atividadeSecundaria(atividadeA, atividadeB) -> int:
+    tempoContribA: int = (strToDate(atividadeA.dataFim) - strToDate(atividadeA.dataInicio)).days
+    tempoContribB: int = (strToDate(atividadeB.dataFim) - strToDate(atividadeB.dataInicio)).days
+
+    if tempoContribA > tempoContribB or tempoContribA == tempoContribB:
+        return atividadeB.seq
+    else:
+        return atividadeA.seq
 
 
 def calculaIdade(dtNascimento, dtLimite) -> relativedelta:
@@ -25,6 +42,21 @@ def calculaIdade(dtNascimento, dtLimite) -> relativedelta:
     return idadeRelativa
 
 
+def dataConflitante(competencia: datetime.date, seqAtual: int, clienteId: int) -> bool:
+    from modelos.itemContribuicao import ItemContribuicao
+
+    itensEncontrados: List[ItemContribuicao] = ItemContribuicao.select().where(
+        ItemContribuicao.clienteId == clienteId,
+        ItemContribuicao.seq << [seqAtual-1, seqAtual+1],
+        ItemContribuicao.competencia.year == competencia.year,
+        ItemContribuicao.competencia.month == competencia.month
+    )
+
+    return len(itensEncontrados) > 1
+
+
+
+
 def mascaraDataPequena(data: datetime.date, onlyYear=False):
     if isinstance(data, str):
         if len(data) <= 16:
@@ -38,33 +70,18 @@ def mascaraDataPequena(data: datetime.date, onlyYear=False):
         return f'{data.month}/{data.year}'
 
 
-def atividadesConcorrentes(dataIniAtivA: datetime.date = datetime.date.min, dataFimAtvA: datetime.date = datetime.date.min, dataIniAtivB: datetime.date = datetime.date.min, dataFimAtivB: datetime.date = datetime.date.min) -> bool:
-    conflitoInicio: bool = dataIniAtivA <= dataIniAtivB <= dataFimAtvA
-    conflitoFim: bool = dataIniAtivA <= dataFimAtivB <= dataFimAtvA
-
-    return conflitoInicio or conflitoFim
-
-
-def atividadeSecundaria(atividadeA, atividadeB) -> int:
-    tempoContribA: int = (strToDate(atividadeA.dataFim) - strToDate(atividadeA.dataInicio)).days
-    tempoContribB: int = (strToDate(atividadeB.dataFim) - strToDate(atividadeB.dataInicio)).days
-
-    if tempoContribA > tempoContribB or tempoContribA == tempoContribB:
-        return atividadeB.seq
-    else:
-        return atividadeA.seq
-
-
 def strAnoToDate(data: str) -> datetime.date:
     return datetime.date(year=int(data), month=1, day=1)
 
 
 def strToDate(dataAvaliar: str):
-    dateFormats: List[str] = ['%d/%m/%Y', '%m/%Y', '%Y-%m-%d']
+    dateFormats: List[str] = ['%d/%m/%Y', '%m/%Y', '%Y-%m-%d', '%Y-%m-%d %H:%M:%S']
 
-    if isinstance(dataAvaliar, type(datetime.datetime)):
+    # if isinstance(dataAvaliar, type(datetime.datetime)):
+    if isinstance(dataAvaliar, datetime.datetime):
         return dataAvaliar.date()
-    elif isinstance(dataAvaliar, type(datetime.date)):
+    # elif isinstance(dataAvaliar, type(datetime.date)):
+    elif isinstance(dataAvaliar, datetime.date):
         return dataAvaliar
     else:
         for formato in dateFormats:

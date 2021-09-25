@@ -7,7 +7,7 @@ from peewee import fn
 
 from Daos.daoCalculos import DaoCalculos
 from util.helpers import comparaMesAno, calculaDiaMesAno, verificaIndicadorProibitivo
-from util.dateHelper import calculaIdade, strToDate
+from util.dateHelper import calculaIdade, strToDate, dataConflitante
 from util.ferramentas.tools import prettyPrintDict
 
 from modelos.cabecalhoORM import CnisCabecalhos
@@ -42,7 +42,7 @@ class CalculosAposentadoria:
 
         # Datas importantes
         self.dataReforma2019: datetime.date = datetime.date(2019, 11, 13)
-        self.dataTrocaMoeda = datetime.date = datetime.date(1994, 7, 1)
+        self.dataTrocaMoeda: datetime.date = datetime.date(1994, 7, 1)
 
         self.fatorPrevidenciario: int = 1
 
@@ -139,35 +139,46 @@ class CalculosAposentadoria:
         else:
             genero = GeneroCliente.feminino
 
-        dib: datetime.date = self.dibRegraDosPontos(genero)
+        dib = self.dibRegraDosPontos(genero)
 
         print(dib)
 
     def dibRegraDosPontos(self, generoCliente: GeneroCliente) -> datetime.date:
         tempoContribuicao: datetime.timedelta = datetime.timedelta(days=0)
-        listaItensContribuicao: List[ItemContribuicao] = ItemContribuicao.select().where(ItemContribuicao.clienteId == self.cliente.clienteId).order_by(ItemContribuicao.seq, ItemContribuicao.competencia)
-        # ultimoSeq: int = ItemContribuicao.select(fn.Max(ItemContribuicao.seq)).where(ItemContribuicao.clienteId == self.cliente.clienteId).scalar()
+        competenciaAtual: datetime.date = datetime.date.min
+        listaItensContribuicao: List[ItemContribuicao] = \
+            ItemContribuicao.select().where(ItemContribuicao.clienteId == self.cliente.clienteId).order_by(ItemContribuicao.seq, ItemContribuicao.competencia)
         seqAtual: int = 0
+        encontrouDib: bool = False
+        contador: int = 0
 
         for index, item in enumerate(listaItensContribuicao):
             mudouSeq = seqAtual != item.seq and seqAtual != 0
 
             if index == 0 or mudouSeq:
                 seqAtual = item.seq
-                print(f"index: {index}")
-                print(f"mudouSeq: {mudouSeq}")
                 continue
 
-            if strToDate(item.competencia) <= self.dataReforma2019:
-                # TODO: Calcula datas diariamente
-                tempoContribuicao += strToDate(listaItensContribuicao[index].competencia) - strToDate(listaItensContribuicao[index-1].competencia)
+            competenciaAnterior = strToDate(listaItensContribuicao[index-1].competencia)
+            competenciaAtual = strToDate(item.competencia)
+
+            # No caso de atividades concomitantes, não calcular duas vezes tempo de contribuiçao
+            if not item.ativPrimaria:
+                if dataConflitante(competenciaAtual, seqAtual, self.cliente.clienteId):
+                    continue
+
             else:
-                # TODO: Calcula datas mensalmente
-                pass
+                contador += 1
 
-            # mudouSeq = seqAtual != item.seq
+                if competenciaAtual < self.dataReforma2019:
+                    tempoContribuicao += competenciaAtual - competenciaAnterior
+                else:
+                    tempoContribuicao += datetime.timedelta(days=30)
 
-        print(f"tempoContribuicao: {tempoContribuicao}")
+            print(f"tempoContribuicao: {tempoContribuicao}")
+            if self.calculaPontosRegraPontos(generoCliente, competenciaAtual, calculaDiaMesAno(tempoContribuicao.days)):
+                encontrouDib = True
+                return competenciaAtual
 
         # for cabecalho in self.listaCabecalhos:
         #     dataFimContrib: datetime.date = datetime.date.min

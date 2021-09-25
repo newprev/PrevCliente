@@ -2,7 +2,7 @@ import datetime
 import re
 import pandas as pd
 from pathlib import Path
-from typing import List
+from typing import List, Union
 from math import floor
 
 from PyPDF3 import PdfFileReader
@@ -12,6 +12,7 @@ from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.remuneracaoORM import CnisRemuneracoes
+from modelos.beneficiosORM import CnisBeneficios
 from modelos.clienteORM import Cliente
 from util.dateHelper import strToDate
 from util.enums.newPrevEnums import TipoItemContribuicao
@@ -159,6 +160,13 @@ class CNISModelo:
         qtdItens: int = floor((dataFim - dataInicio).days/30) + 1
         listaItens: List[dict] = []
 
+        if cabecalho.nb is not None:
+            tipoItem = TipoItemContribuicao.beneficio.value
+        elif cabecalho.cdEmp is None:
+            tipoItem = TipoItemContribuicao.contribuicao.value
+        else:
+            tipoItem = TipoItemContribuicao.remuneracao.value
+
         for i in range(0, qtdItens):
             if i + 1 == qtdItens:
                 competencia = dataFim
@@ -169,7 +177,7 @@ class CNISModelo:
                 "clienteId": cliente,
                 "itemId": None,
                 "seq": cabecalho.seq,
-                "tipo": TipoItemContribuicao.remuneracao.value,
+                "tipo": tipoItem,
                 "competencia": competencia,
                 "contribuicao": 0,
                 "validoTempoContrib": True,
@@ -550,24 +558,35 @@ class CNISModelo:
         else:
             return self.dictDadosPessoais
 
-    def buscaContribPelo(self, listaDasContribuicoes: List[CnisContribuicoes], seq: int = 0):
-        listaResultado: List[CnisContribuicoes] = []
+    # def buscaContribPelo(self, listaDasContribuicoes: List[CnisContribuicoes], seq: int = 0):
+    #     listaResultado: List[CnisContribuicoes] = []
+    #
+    #     for contribuicao in listaDasContribuicoes:
+    #         if contribuicao.seq == seq:
+    #             listaResultado.append(contribuicao)
+    #         elif contribuicao.seq > seq:
+    #             break
+    #
+    #     return listaResultado
+    #
+    # def buscaRemuPelo(self, listaDasRemuneracoes: List[CnisRemuneracoes], seq: int = 0):
+    #     listaResultado: List[CnisRemuneracoes] = []
+    #
+    #     for remuneracao in listaDasRemuneracoes:
+    #         if remuneracao.seq == seq:
+    #             listaResultado.append(remuneracao)
+    #         elif remuneracao.seq > seq:
+    #             break
+    #
+    #     return listaResultado
 
-        for contribuicao in listaDasContribuicoes:
+    def buscaPeloSeq(self, lista: List[Union[CnisRemuneracoes, CnisContribuicoes, CnisBeneficios]], seq: int = 0):
+        listaResultado: List[CnisRemuneracoes] = []
+
+        for contribuicao in lista:
             if contribuicao.seq == seq:
                 listaResultado.append(contribuicao)
             elif contribuicao.seq > seq:
-                break
-
-        return listaResultado
-
-    def buscaRemuPelo(self, listaDasRemuneracoes: List[CnisRemuneracoes], seq: int = 0):
-        listaResultado: List[CnisRemuneracoes] = []
-
-        for remuneracao in listaDasRemuneracoes:
-            if remuneracao.seq == seq:
-                listaResultado.append(remuneracao)
-            elif remuneracao.seq > seq:
                 break
 
         return listaResultado
@@ -584,16 +603,19 @@ class CNISModelo:
         listaCabecalhos = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId)
         listaRemuneracoes = CnisRemuneracoes.select().where(CnisRemuneracoes.clienteId == cliente.clienteId)
         listaContribuicoes = CnisContribuicoes.select().where(CnisContribuicoes.clienteId == cliente.clienteId)
+        listaBeneficios = CnisBeneficios.select().where(CnisBeneficios.clienteId == cliente.clienteId)
         dataTrocaMoeda: datetime.date = datetime.date(1994, 7, 1)
 
         for cabecalho in listaCabecalhos:
             impedidoPorIndicadores: bool = verificaIndicadorProibitivo(cabecalho.indicadores)
-            listaContrib: List[CnisContribuicoes] = self.buscaContribPelo(listaContribuicoes, seq=cabecalho.seq)
-            listaRemu: List[CnisRemuneracoes] = self.buscaRemuPelo(listaRemuneracoes, seq=cabecalho.seq)
+            listaContrib: List[CnisContribuicoes] = self.buscaPeloSeq(listaContribuicoes, seq=cabecalho.seq)
+            listaRemu: List[CnisRemuneracoes] = self.buscaPeloSeq(listaRemuneracoes, seq=cabecalho.seq)
+            listaBene: List[CnisBeneficios] = self.buscaPeloSeq(listaBeneficios, seq=cabecalho.seq)
 
             # Caso o contribuinte tenha remunerações ou contribuições sem discriminação unitária
-            if len(listaContrib) == 0 and len(listaRemu) == 0 and not cabecalho.dadoFaltante:
+            if len(listaContrib) == 0 and len(listaRemu) == 0 and len(listaBene) == 0 and not cabecalho.dadoFaltante:
                 listaItensContrib += self.criaItensAntesDoReal(cabecalho, cliente)
+                continue
 
             for remuneracao in listaRemu:
                 impedidoPelaData: bool = strToDate(remuneracao.competencia) < dataTrocaMoeda
@@ -621,6 +643,21 @@ class CNISModelo:
                     "competencia": contribuicao.competencia,
                     "contribuicao": contribuicao.contribuicao,
                     "indicadores": contribuicao.indicadores,
+                    "validoTempoContrib": not impedidoPorIndicadores,
+                    "validoSalContrib": not impedidoPorIndicadores and not impedidoPelaData
+                })
+
+            for beneficio in listaBene:
+                impedidoPelaData: bool = strToDate(beneficio.competencia) < dataTrocaMoeda
+
+                listaItensContrib.append({
+                    "clienteId": cliente,
+                    "itemId": beneficio.beneficiosId,
+                    "seq": beneficio.seq,
+                    "tipo": TipoItemContribuicao.beneficio.value,
+                    "competencia": strToDate(beneficio.competencia),
+                    "contribuicao": beneficio.remuneracao,
+                    "indicadores": beneficio.indicadores,
                     "validoTempoContrib": not impedidoPorIndicadores,
                     "validoSalContrib": not impedidoPorIndicadores and not impedidoPelaData
                 })

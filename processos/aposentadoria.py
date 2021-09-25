@@ -6,8 +6,8 @@ from collections import defaultdict
 from peewee import fn
 
 from Daos.daoCalculos import DaoCalculos
-from util.helpers import comparaMesAno, calculaDiaMesAno, strToDatetime, strToDate, verificaIndicadorProibitivo
-from util.dateHelper import calculaIdade
+from util.helpers import comparaMesAno, calculaDiaMesAno, verificaIndicadorProibitivo
+from util.dateHelper import calculaIdade, strToDate
 from util.ferramentas.tools import prettyPrintDict
 
 from modelos.cabecalhoORM import CnisCabecalhos
@@ -146,12 +146,8 @@ class CalculosAposentadoria:
     def dibRegraDosPontos(self, generoCliente: GeneroCliente) -> datetime.date:
         tempoContribuicao: datetime.timedelta = datetime.timedelta(days=0)
         listaItensContribuicao: List[ItemContribuicao] = ItemContribuicao.select().where(ItemContribuicao.clienteId == self.cliente.clienteId).order_by(ItemContribuicao.seq, ItemContribuicao.competencia)
-        ultimoSeq: int = ItemContribuicao.select(fn.Max(ItemContribuicao.seq)).where(ItemContribuicao.clienteId == self.cliente.clienteId).scalar()
-        mudouSeq: bool = False
+        # ultimoSeq: int = ItemContribuicao.select(fn.Max(ItemContribuicao.seq)).where(ItemContribuicao.clienteId == self.cliente.clienteId).scalar()
         seqAtual: int = 0
-
-        print(f"\n\nultimoSeq: {ultimoSeq}")
-        print(f"len(listaItensContribuicao): {len(listaItensContribuicao)}\n\n")
 
         for index, item in enumerate(listaItensContribuicao):
             mudouSeq = seqAtual != item.seq and seqAtual != 0

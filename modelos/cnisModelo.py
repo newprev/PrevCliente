@@ -13,8 +13,9 @@ from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.remuneracaoORM import CnisRemuneracoes
 from modelos.clienteORM import Cliente
+from util.dateHelper import strToDate
 from util.enums.newPrevEnums import TipoItemContribuicao
-from util.helpers import strToFloat, dictIndicadores, strToDate, verificaIndicadorProibitivo
+from util.helpers import strToFloat, dictIndicadores, verificaIndicadorProibitivo
 
 
 class CNISModelo:
@@ -578,13 +579,12 @@ class CNISModelo:
             return info in self.dictIndicadores.keys()
 
     def insereItensContribuicao(self, cliente: Cliente):
+        # TODO: Pensar em como identificar atividades primárias...
         listaItensContrib: List[dict] = []
         listaCabecalhos = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId)
         listaRemuneracoes = CnisRemuneracoes.select().where(CnisRemuneracoes.clienteId == cliente.clienteId)
         listaContribuicoes = CnisContribuicoes.select().where(CnisContribuicoes.clienteId == cliente.clienteId)
         dataTrocaMoeda: datetime.date = datetime.date(1994, 7, 1)
-
-        dataPrimeiroTrdabalho = strToDate(listaCabecalhos[0].dataInicio)
 
         for cabecalho in listaCabecalhos:
             impedidoPorIndicadores: bool = verificaIndicadorProibitivo(cabecalho.indicadores)

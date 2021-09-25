@@ -23,6 +23,7 @@ class ItemContribuicao(BaseModel, Model):
     tipo = CharField(choices=TIPO, default='C')
     competencia = DateField(null=False, formats=DATEFORMATS)
     contribuicao = FloatField(null=True)
+    ativPrimaria = BooleanField(null=False, default=True)
     dadoOrigem = CharField(column_name='dadoOrigem', choices=ORIGEM, default='C')
     indicadores = CharField(default=None, null=True)
     validoTempoContrib = BooleanField(default=True)
@@ -42,6 +43,7 @@ class ItemContribuicao(BaseModel, Model):
             'tipo': self.tipo,
             'competencia': self.competencia,
             'contribuicao': self.contribuicao,
+            'ativPrimaria': self.ativPrimaria,
             'dadoOrigem': self.dadoOrigem,
             'indicadores': self.indicadores,
             'validoTempoContrib': self.validoTempoContrib,
@@ -59,6 +61,7 @@ class ItemContribuicao(BaseModel, Model):
         self.tipo = dictContribuicoes['tipo']
         self.competencia = dictContribuicoes['competencia']
         self.contribuicao = dictContribuicoes['contribuicao']
+        self.ativPrimaria = dictContribuicoes['ativPrimaria']
         self.dadoOrigem = dictContribuicoes['dadoOrigem']
         self.indicadores = dictContribuicoes['indicadores']
         self.validoTempoContrib = dictContribuicoes['validoTempoContrib']
@@ -76,6 +79,7 @@ class ItemContribuicao(BaseModel, Model):
             tipo: {self.tipo},
             competencia: {self.competencia},
             contribuicao: {self.contribuicao},
+            ativPrimaria: {self.ativPrimaria},
             dadoOrigem: {self.dadoOrigem},
             indicadores: {self.indicadores},
             validoTempoContrib: {self.validoTempoContrib},

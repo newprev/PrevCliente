@@ -1,9 +1,9 @@
-from util.helpers import strToDatetime
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
 from modelos.escritoriosORM import Escritorios
-from util.enums.newPrevEnums import TipoEdicao, Prioridade, TamanhoData
+from util.dateHelper import strToDate
+from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import AutoField, CharField, ForeignKeyField, DeferredForeignKey, DateField, IntegerField, DateTimeField
 from datetime import datetime
@@ -102,7 +102,7 @@ class Cliente(BaseModel, Model):
         self.sobrenomeCliente = dictCliente['sobrenomeCliente']
         self.genero = dictCliente['genero']
         self.idade = dictCliente['idade']
-        self.dataNascimento = strToDatetime(dictCliente['dataNascimento'])
+        self.dataNascimento = strToDate(dictCliente['dataNascimento'])
         self.email = dictCliente['email']
         self.rgCliente = dictCliente['rgCliente']
         self.cpfCliente = dictCliente['cpfCliente']

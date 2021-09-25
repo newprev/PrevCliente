@@ -2,7 +2,8 @@ import datetime
 
 from PyQt5.QtWidgets import QWidget, QMessageBox
 from Design.pyUi.wdgCabecalhoBeneficio import Ui_wdgCabecalhoBeneficio
-from util.helpers import strToDate, situacaoBeneficio, dictEspecies
+from util.dateHelper import strToDate
+from util.helpers import situacaoBeneficio, dictEspecies
 
 from modelos.cabecalhoORM import CnisCabecalhos
 

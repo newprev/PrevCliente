@@ -6,7 +6,8 @@ from typing import List
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
-from util.helpers import dictEspecies, mascaraNit, strToFloat, situacaoBeneficio, strToDatetime, floatToDinheiro
+from util.dateHelper import strToDatetime
+from util.helpers import dictEspecies, mascaraNit, strToFloat, situacaoBeneficio, floatToDinheiro
 from util.popUps import popUpOkAlerta
 
 from Design.pyUi.insereContrib import Ui_mwInsereContrib

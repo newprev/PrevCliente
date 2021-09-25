@@ -18,9 +18,12 @@ from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.remuneracaoORM import CnisRemuneracoes
 from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.beneficiosORM import CnisBeneficios
+from modelos.itemContribuicao import ItemContribuicao
 from modelos.escritoriosORM import Escritorios
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
+
+from util.dateHelper import atividadesConcorrentes, strToDate, atividadeSecundaria
 
 from util.helpers import *
 
@@ -213,7 +216,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.entrevistaPg.atualizaCliente(self.cliente)
 
     def carregaCnis(self):
-        # TODO: Alterar o nome do banco de um texto puro, para uma variável global ou carregá-la de algum arquivo
+        cnisInseridoComSucesso: bool = False
 
         if self.cliente is None:
             self.cliente = Cliente()
@@ -261,6 +264,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
                             self.cliente.telefoneId = Telefones.get_by_id(self.cliente)
                             transaction.commit()
+                            cnisInseridoComSucesso = True
                         except Cliente.DoesNotExist:
                             self.showPopupAlerta('Erro ao inserir cliente.')
                             transaction.rollback()
@@ -268,6 +272,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                         except Telefones.DoesNotExist:
                             self.cliente.telefoneId = Telefones()
                             transaction.commit()
+                            cnisInseridoComSucesso = True
                         except Exception as err:
                             erro = f"carregaCnis: ({type(err)}) {err}"
                             transaction.rollback()
@@ -285,6 +290,9 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                 popUpOkAlerta('Não foi possível salvar o cliente. Tente novamente.', erro=str(err))
                 print(f'carregaCnis - erro: ({type(err)}) {err}')
 
+        if cnisInseridoComSucesso:
+            self.avaliaAtividadesPrincipais()
+
     def avaliaDadosFaltantesNoCNIS(self, cabecalhos: List[dict]) -> List[dict]:
         listaReturn: List[dict] = []
 
@@ -296,6 +304,25 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             listaReturn.append(cabecalho)
 
         return listaReturn
+
+    def avaliaAtividadesPrincipais(self):
+        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == self.cliente.clienteId)
+
+        for index, cabecalho in enumerate(listaCabecalhos):
+            if index == 0 or listaCabecalhos[index-1].dadoFaltante or listaCabecalhos[index].dadoFaltante:
+                continue
+
+            conflitoAtividades = atividadesConcorrentes(
+                dataIniAtivA=strToDate(listaCabecalhos[index-1].dataInicio),
+                dataFimAtvA=strToDate(listaCabecalhos[index-1].dataFim),
+                dataIniAtivB=strToDate(listaCabecalhos[index].dataInicio),
+                dataFimAtivB=strToDate(listaCabecalhos[index].dataFim),
+            )
+
+            if conflitoAtividades:
+                seqSecundarioCalculado = atividadeSecundaria(listaCabecalhos[index-1], listaCabecalhos[index])
+                query = ItemContribuicao.update({ItemContribuicao.ativPrimaria: False}).where(ItemContribuicao.clienteId == self.cliente.clienteId, ItemContribuicao.seq == seqSecundarioCalculado)
+                query.execute()
 
     def buscaClienteJaCadastrado(self) -> bool:
         cliente: Cliente = Cliente.select().where(Cliente.nit == self.cliente.nit).get()

@@ -23,13 +23,14 @@ from modelos.configGeraisORM import ConfigGerais
 from Design.pyUi.loginPage import Ui_mwLogin
 from heart.login.wdgAdvController import WdgAdvController
 from heart.dashboard.dashboardController import DashboardController
+from util.dateHelper import strToDatetime
 from util.enums.newPrevEnums import *
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 import os
 import json
 
 from util.ferramentas.tools import divideListaEmPartes
-from util.helpers import datetimeToSql, strToDatetime
+from util.helpers import datetimeToSql
 
 from repositorios.informacoesRepositorio import ApiInformacoes
 

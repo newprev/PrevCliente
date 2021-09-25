@@ -5,8 +5,8 @@ from typing import List
 
 from Design.pyUi.pgTetosPrevidenciarios import Ui_mwTetosPrev
 from modelos.tetosPrevORM import TetosPrev
-from util.dateHelper import mascaraDataPequena
-from util.helpers import mascaraDinheiro, strToDate, dinheiroToFloat
+from util.dateHelper import mascaraDataPequena, strToDate
+from util.helpers import mascaraDinheiro, dinheiroToFloat
 from Design.CustomWidgets.newCheckBox import NewCheckBox
 from Design.DesignSystem.colors import NewColors
 

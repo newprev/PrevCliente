@@ -478,38 +478,6 @@ def dateToSql(data: datetime.date) -> str:
     return data.strftime('%Y-%m-%d')
 
 
-def strToDatetime(data: str) -> datetime.datetime:
-    if not isinstance(data, str):
-        data = data.strftime('%Y-%m-%d %H:%M')
-
-    dateFormats: List[str] = ['%Y-%m-%d %H:%M', '%d/%m/%Y', '%m/%Y', '%Y-%m-%d', '%Y-%m-%d %H:%M:%S']
-    for formato in dateFormats:
-        try:
-            dataRetorno = datetime.datetime.strptime(data, formato)
-            return dataRetorno
-        except ValueError as err:
-            pass
-
-
-def strToDate(dataAvaliar: str):
-    dateFormats: List[str] = ['%d/%m/%Y', '%m/%Y', '%Y-%m-%d']
-
-    if isinstance(dataAvaliar, type(datetime.datetime)):
-        return dataAvaliar.date()
-    elif isinstance(dataAvaliar, type(datetime.date)):
-        return dataAvaliar
-    else:
-        for formato in dateFormats:
-            try:
-                dataRetorno = datetime.datetime.strptime(dataAvaliar, formato).date()
-                return dataRetorno
-            except ValueError:
-                pass
-            except Exception as err:
-                print(f'strToDate: ({type(dataAvaliar)}) {dataAvaliar} - ({type(err)}) {err}')
-                raise
-
-
 def strToFloat(valor: str) -> float:
     try:
         retorno = valor.replace('.', '').replace(',', '.')

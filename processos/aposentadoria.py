@@ -3,6 +3,7 @@ from dateutil.relativedelta import relativedelta
 from typing import List, Generator, Union
 import pandas as pd
 from collections import defaultdict
+from peewee import fn
 
 from Daos.daoCalculos import DaoCalculos
 from util.helpers import comparaMesAno, calculaDiaMesAno, strToDatetime, strToDate, verificaIndicadorProibitivo
@@ -27,6 +28,7 @@ from util.enums.newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData, 
 
 class CalculosAposentadoria:
     listaCabecalhos: List[CnisCabecalhos] = []
+    listaItensContrib: List[ItemContribuicao] = []
     listaRemuneracoes: List[CnisRemuneracoes] = []
     listaContribuicoes: List[CnisContribuicoes] = []
     mediaSalarial: float
@@ -142,49 +144,75 @@ class CalculosAposentadoria:
         print(dib)
 
     def dibRegraDosPontos(self, generoCliente: GeneroCliente) -> datetime.date:
-        tempoContribuicao: datetime.timedelta = datetime.timedelta()
-        listaItensContribuicao: List[ItemContribuicao] = ItemContribuicao.select().where()
+        tempoContribuicao: datetime.timedelta = datetime.timedelta(days=0)
+        listaItensContribuicao: List[ItemContribuicao] = ItemContribuicao.select().where(ItemContribuicao.clienteId == self.cliente.clienteId).order_by(ItemContribuicao.seq, ItemContribuicao.competencia)
+        ultimoSeq: int = ItemContribuicao.select(fn.Max(ItemContribuicao.seq)).where(ItemContribuicao.clienteId == self.cliente.clienteId).scalar()
+        mudouSeq: bool = False
+        seqAtual: int = 0
 
-        for cabecalho in self.listaCabecalhos:
-            dataFimContrib: datetime.date = datetime.date.min
-            dataFimRemu: datetime.date = datetime.date.min
-            listaContrib: List[CnisContribuicoes] = self.buscaContribPelo(seq=cabecalho.seq)
-            listaRemu: List[CnisRemuneracoes] = self.buscaRemuPelo(seq=cabecalho.seq)
+        print(f"\n\nultimoSeq: {ultimoSeq}")
+        print(f"len(listaItensContribuicao): {len(listaItensContribuicao)}\n\n")
 
-            for contrib in listaContrib:
-                tempoContribuicao += datetime.timedelta(days=30)
-                # tempoContribuicao += datetime.timedelta(days=len(listaRemu) * 30)
+        for index, item in enumerate(listaItensContribuicao):
+            mudouSeq = seqAtual != item.seq and seqAtual != 0
 
-                dataFimContrib = strToDate(contrib.dataPagamento)
+            if index == 0 or mudouSeq:
+                seqAtual = item.seq
+                print(f"index: {index}")
+                print(f"mudouSeq: {mudouSeq}")
+                continue
 
-                if dataFimContrib == datetime.date.min and dataFimRemu != datetime.date.min:
-                    dibAtual = dataFimRemu
-                elif dataFimContrib != datetime.date.min and dataFimRemu == datetime.date.min:
-                    dibAtual = dataFimContrib
-                elif dataFimContrib > dataFimRemu:
-                    dibAtual = dataFimContrib
-                else:
-                    dibAtual = dataFimRemu
+            if strToDate(item.competencia) <= self.dataReforma2019:
+                # TODO: Calcula datas diariamente
+                tempoContribuicao += strToDate(listaItensContribuicao[index].competencia) - strToDate(listaItensContribuicao[index-1].competencia)
+            else:
+                # TODO: Calcula datas mensalmente
+                pass
 
-                if self.calculaPontosRegraPontos(generoCliente, dibAtual, calculaDiaMesAno(tempoContribuicao.days)):
-                    return dibAtual
+            # mudouSeq = seqAtual != item.seq
 
-            for remuneracao in listaRemu:
-                tempoContribuicao += datetime.timedelta(days=30)
+        print(f"tempoContribuicao: {tempoContribuicao}")
 
-                dataFimRemu = strToDate(remuneracao.competencia)
-
-                if dataFimContrib == datetime.date.min and dataFimRemu != datetime.date.min:
-                    dibAtual = dataFimRemu
-                elif dataFimContrib != datetime.date.min and dataFimRemu == datetime.date.min:
-                    dibAtual = dataFimContrib
-                elif dataFimContrib > dataFimRemu:
-                    dibAtual = dataFimContrib
-                else:
-                    dibAtual = dataFimRemu
-
-                if self.calculaPontosRegraPontos(generoCliente, dibAtual, calculaDiaMesAno(tempoContribuicao.days)):
-                    return dibAtual
+        # for cabecalho in self.listaCabecalhos:
+        #     dataFimContrib: datetime.date = datetime.date.min
+        #     dataFimRemu: datetime.date = datetime.date.min
+        #     # listaContrib: List[CnisContribuicoes] = self.buscaContribPelo(seq=cabecalho.seq)
+        #     # listaRemu: List[CnisRemuneracoes] = self.buscaRemuPelo(seq=cabecalho.seq)
+        #
+        #     # for contrib in listaContrib:
+        #     #     tempoContribuicao += datetime.timedelta(days=30)
+        #     #     # tempoContribuicao += datetime.timedelta(days=len(listaRemu) * 30)
+        #     #
+        #     #     dataFimContrib = strToDate(contrib.dataPagamento)
+        #     #
+        #     #     if dataFimContrib == datetime.date.min and dataFimRemu != datetime.date.min:
+        #     #         dibAtual = dataFimRemu
+        #     #     elif dataFimContrib != datetime.date.min and dataFimRemu == datetime.date.min:
+        #     #         dibAtual = dataFimContrib
+        #     #     elif dataFimContrib > dataFimRemu:
+        #     #         dibAtual = dataFimContrib
+        #     #     else:
+        #     #         dibAtual = dataFimRemu
+        #     #
+        #     #     if self.calculaPontosRegraPontos(generoCliente, dibAtual, calculaDiaMesAno(tempoContribuicao.days)):
+        #     #         return dibAtual
+        #     #
+        #     # for remuneracao in listaRemu:
+        #     #     tempoContribuicao += datetime.timedelta(days=30)
+        #     #
+        #     #     dataFimRemu = strToDate(remuneracao.competencia)
+        #     #
+        #     #     if dataFimContrib == datetime.date.min and dataFimRemu != datetime.date.min:
+        #     #         dibAtual = dataFimRemu
+        #     #     elif dataFimContrib != datetime.date.min and dataFimRemu == datetime.date.min:
+        #     #         dibAtual = dataFimContrib
+        #     #     elif dataFimContrib > dataFimRemu:
+        #     #         dibAtual = dataFimContrib
+        #     #     else:
+        #     #         dibAtual = dataFimRemu
+        #     #
+        #     #     if self.calculaPontosRegraPontos(generoCliente, dibAtual, calculaDiaMesAno(tempoContribuicao.days)):
+        #     #         return dibAtual
 
     def calculaPontosRegraPontos(self, generoCliente: GeneroCliente, dib: datetime.date, tempoContribuicao: List[int]) -> bool:
         """

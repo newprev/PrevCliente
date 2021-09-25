@@ -86,7 +86,7 @@ class TelAfinsController(QMainWindow, Ui_wdgTelAfins):
         self.popUpSimCancela(f"Você deseja excluir permanentemente o telefone selecionado? \n{self.telefoneAtual.numero}", funcao=self.confirmaExclusao)
 
     def confirmaExclusao(self):
-        self.daoTelAfins.excluirTelefone(self.telefoneAtual)
+        self.telefoneAtual.delete()
         self.habilitaEdicao(False)
         self.atualizaTabela()
 

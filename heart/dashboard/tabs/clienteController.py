@@ -83,7 +83,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leCep.editingFinished.connect(lambda: self.leCep.setText(mascaraCep(self.leCep.text())))
 
         self.sbCdCliente.editingFinished.connect(self.buscaCliente)
-        self.sbCdCliente.valueChanged.connect(lambda: self.carregaInfoTela('sbCliente'))
+        # self.sbCdCliente.valueChanged.connect(lambda: self.carregaInfoTela('sbCliente'))
 
         self.leCep.editingFinished.connect(lambda: self.carregaInfoTela('cep'))
         self.leEndereco.textEdited.connect(lambda: self.carregaInfoTela('endereco'))
@@ -215,6 +215,9 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
     def carregaCnis(self):
         # TODO: Alterar o nome do banco de um texto puro, para uma variável global ou carregá-la de algum arquivo
 
+        if self.cliente is None:
+            self.cliente = Cliente()
+
         self.cnisClienteAtual: CNISModelo = CNISModelo()
         self.cliente.pathCnis = self.cnisClienteAtual.buscaPath()
         db: SqliteDatabase = Cliente._meta.database
@@ -230,7 +233,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                     clienteAInserir = Cliente()
 
                     clienteAInserir.cpfCliente = unmaskAll(infoPessoais['cpf'])
-                    clienteAInserir.dataNascimento = strToDatetime(infoPessoais['dataNascimento'])
+                    clienteAInserir.dataNascimento = strToDate(infoPessoais['dataNascimento'])
                     clienteAInserir.idade = calculaIdadeFromString(infoPessoais['dataNascimento'])
                     clienteAInserir.nit = unmaskAll(infoPessoais['nit'])
                     clienteAInserir.nomeMae = infoPessoais['nomeMae'].title()
@@ -445,7 +448,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.rgCliente = self.leRg.text()
 
         elif info == 'dataNascimento':
-            self.cliente.dataNascimento = self.dtNascimento.date().toPyDate().strftime('%Y-%m-%d %H:%M')
+            # self.cliente.dataNascimento = self.dtNascimento.date().toPyDate().strftime('%Y-%m-%d %H:%M')
+            self.cliente.dataNascimento = self.dtNascimento.date().toPyDate().strftime('%Y-%m-%d')
 
         elif info == 'idade':
             self.cliente.idade = self.leIdade.text()
@@ -593,14 +597,19 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.modoEdicao(False)
 
     def avaliaTelefone(self):
-        if len(self.leTelefone.text()) >= 8:
-            telefone: Telefones = Telefones()
-            telefone.clienteId = self.cliente.clienteId
-            telefone.tipoTelefone = 'W'
-            telefone.pessoalRecado = 'P'
-            telefone.numero = unmaskAll(self.leTelefone.text())
+        numeroTelefone = unmaskAll(self.leTelefone.text())
 
-            Telefones.insert(**telefone.toDict()).on_conflict_replace().execute()
+        if len(self.leTelefone.text()) >= 8:
+            try:
+                telefone: Telefones = Telefones.select().where(Telefones.numero == numeroTelefone).get()
+            except Telefones.DoesNotExist:
+                telefone: Telefones = Telefones()
+                telefone.clienteId = self.cliente.clienteId
+                telefone.tipoTelefone = 'W'
+                telefone.pessoalRecado = 'P'
+                telefone.numero = numeroTelefone
+
+                Telefones.insert(**telefone.toDict()).on_conflict_replace().execute()
             self.cliente.telefoneId = telefone
 
     def verificaCodCliente(self) -> bool:
@@ -662,7 +671,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leNumero.clear()
         self.lePix.clear()
         self.sbCdCliente.clear()
-        self.sbCdCliente.setValue(0)
+        # self.sbCdCliente.setValue(0)
         self.modoEdicao(False)
 
         self.cbxEstado.setCurrentIndex(24)

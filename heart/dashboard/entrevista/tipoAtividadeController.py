@@ -1,3 +1,5 @@
+import datetime
+
 from PyQt5.QtWidgets import QWidget, QFrame, QCheckBox
 from PyQt5.QtCore import Qt
 from Design.pyUi.pgQuizAposentadoria import Ui_wdgQuizAposentadoria
@@ -33,6 +35,7 @@ class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):
         self.avisos = [
             self.frAtiv1,
             self.frAtiv4,
+            self.frAtiv6,
             self.frAtiv7,
             self.frAtiv8,
             self.frAtiv9,
@@ -40,6 +43,7 @@ class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):
         ]
 
         self.cbAtiv11.clicked.connect(lambda: self.apresentarTela(AtivApos(11)))
+        self.cbAtiv6.clicked.connect(self.atualizaProfessor)
 
         self.escondeInfos()
         self.abilitandoEfeitoClique()
@@ -88,6 +92,16 @@ class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):
             else:
                 self.frAtiv10.setToolTip('Existem indicativos no CNIS')
             self.frAtiv10.show()
+
+        if self.clienteAtual.professor:
+            self.atividadeSelecionada(self.frInfo6, self.cbAtiv6)
+            self.frAtiv6.setToolTip('O(A) cliente trabalhou como professor(a)')
+            self.frAtiv6.show()
+
+    def atualizaProfessor(self):
+        self.clienteAtual.professor = self.cbAtiv6.isChecked()
+        self.clienteAtual.dataUltAlt = datetime.datetime.now()
+        self.clienteAtual.save()
 
     def atividadeSelecionada(self, frame: QFrame, checkBox: QCheckBox):
         self.efeitos.shadowCards([frame])

@@ -5,7 +5,7 @@ from modelos.escritoriosORM import Escritorios
 from util.dateHelper import strToDate
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
-from peewee import AutoField, CharField, ForeignKeyField, DeferredForeignKey, DateField, IntegerField, DateTimeField
+from peewee import AutoField, CharField, ForeignKeyField, DeferredForeignKey, DateField, IntegerField, DateTimeField, BooleanField
 from datetime import datetime
 
 TABLENAME = 'cliente'
@@ -51,6 +51,7 @@ class Cliente(BaseModel, Model):
     numeroConta = CharField(column_name='numeroConta', null=True)
     pixCliente = CharField(column_name='pixCliente', null=True)
     profissao = CharField(null=True)
+    professor = BooleanField(default=False)
     quaCarteiraProf = CharField(column_name='quaCarteiraProf', null=True)
     rgCliente = CharField(column_name='rgCliente', null=True)
     senhaINSS = CharField(column_name='senhaINSS', null=True)
@@ -80,6 +81,7 @@ class Cliente(BaseModel, Model):
             'pixCliente': self.pixCliente,
             'grauEscolaridade': self.grauEscolaridade,
             'senhaINSS': self.senhaINSS,
+            'professor': self.professor,
             'numCartProf': self.numCartProf,
             'nit': self.nit,
             'nomeMae': self.nomeMae,
@@ -112,6 +114,7 @@ class Cliente(BaseModel, Model):
         self.pixCliente = dictCliente['pixCliente']
         self.grauEscolaridade = dictCliente['grauEscolaridade']
         self.senhaINSS = dictCliente['senhaINSS']
+        self.professor = dictCliente['professor']
         self.numCartProf = dictCliente['numCartProf']
         self.nit = dictCliente['nit']
         self.nomeMae = dictCliente['nomeMae']
@@ -155,6 +158,7 @@ class Cliente(BaseModel, Model):
             pixCliente: {self.pixCliente},
             grauEscolaridade: {self.grauEscolaridade},
             senhaINSS: {self.senhaINSS},
+            professor: {self.professor},
             nit: {self.nit},
             nomeMae: {self.nomeMae},
             estadoCivil: {self.estadoCivil},

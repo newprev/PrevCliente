@@ -67,7 +67,8 @@
 }
 
 #frAtiv1, #frAtiv4, #frAtiv7, 
-#frAtiv8, #frAtiv9, #frAtiv10  {
+#frAtiv6, #frAtiv8, #frAtiv9, 
+#frAtiv10  {
 	background-image: url(:/info/information.png);
 	background-repeat: no-repeat;
 	background-position: center;
@@ -220,7 +221,7 @@
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>0</y>
+           <y>-150</y>
            <width>875</width>
            <height>1388</height>
           </rect>
@@ -473,6 +474,34 @@
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
+               <widget class="QFrame" name="frAtiv4_2">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>36</width>
+                  <height>36</height>
+                 </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>36</width>
+                  <height>36</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>36</width>
+                  <height>36</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+               </widget>
               </widget>
              </item>
             </layout>
@@ -561,7 +590,7 @@
               <number>4</number>
              </property>
              <property name="rightMargin">
-              <number>4</number>
+              <number>32</number>
              </property>
              <property name="bottomMargin">
               <number>4</number>
@@ -577,6 +606,28 @@
                <property name="text">
                 <string>    Possui tempo como professor do ensino fundamental 
     e médio?</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="frAtiv6">
+               <property name="minimumSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
                </property>
               </widget>
              </item>

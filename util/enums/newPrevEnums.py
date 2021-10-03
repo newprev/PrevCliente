@@ -116,6 +116,7 @@ class RegraTransicao(Enum):
     reducaoIdadeMinima = 2
     pedagio50 = 3
     reducaoTempoContribuicao = 4
+    pedagio100 = 5
 
 class GeneroCliente(Enum):
     masculino = 'M'

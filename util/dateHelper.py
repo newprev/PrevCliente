@@ -25,17 +25,17 @@ def atividadeSecundaria(atividadeA, atividadeB) -> int:
 
 def calculaIdade(dtNascimento, dtLimite) -> relativedelta:
     """
-    Solução do @[Tomasz Zielinski] e @Williams
+    Parte da solução do @[Tomasz Zielinski] e @Williams
     :param dtNascimento:
     :param dtLimite:
-    :return: List[dias, meses, anos]
+    :return: relativedelta
     """
 
     if not (isinstance(dtNascimento, type(datetime.datetime)) or isinstance(dtNascimento, type(datetime.date))):
-        dtNascimento = strToDatetime(dtNascimento)
+        dtNascimento = strToDate(dtNascimento)
 
     if not (isinstance(dtLimite, datetime.datetime) or isinstance(dtLimite, datetime.date)):
-        dtLimite = strToDatetime(dtLimite)
+        dtLimite = strToDate(dtLimite)
 
     idadeRelativa = relativedelta(dtLimite, dtNascimento)
 
@@ -53,8 +53,6 @@ def dataConflitante(competencia: datetime.date, seqAtual: int, clienteId: int) -
     )
 
     return len(itensEncontrados) > 1
-
-
 
 
 def mascaraDataPequena(data: datetime.date, onlyYear=False):

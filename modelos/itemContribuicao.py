@@ -25,6 +25,7 @@ class ItemContribuicao(BaseModel, Model):
     contribuicao = FloatField(null=True)
     ativPrimaria = BooleanField(null=False, default=True)
     dadoOrigem = CharField(column_name='dadoOrigem', choices=ORIGEM, default='C')
+    geradoAutomaticamente = BooleanField(null=False, default=True)
     indicadores = CharField(default=None, null=True)
     validoTempoContrib = BooleanField(default=True)
     validoSalContrib = BooleanField(default=True)

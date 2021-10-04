@@ -4,6 +4,7 @@ import pandas as pd
 from pathlib import Path
 from typing import List, Union
 from math import floor
+from dateutil.relativedelta import relativedelta
 
 from PyPDF3 import PdfFileReader
 from PyQt5.QtWidgets import QFileDialog
@@ -154,7 +155,7 @@ class CNISModelo:
 
                 pos += 1
 
-    def criaItensAntesDoReal(self, cabecalho: CnisCabecalhos, cliente: Cliente) -> List[dict]:
+    def criaItensNaoDiscriminados(self, cabecalho: CnisCabecalhos, cliente: Cliente) -> List[dict]:
         dataInicio = strToDate(cabecalho.dataInicio)
         dataFim = strToDate(cabecalho.dataFim)
         qtdItens: int = floor((dataFim - dataInicio).days/30) + 1
@@ -171,7 +172,7 @@ class CNISModelo:
             if i + 1 == qtdItens:
                 competencia = dataFim
             else:
-                competencia = dataInicio + datetime.timedelta(days=30 * i)
+                competencia = dataInicio + relativedelta(months=i)
 
             listaItens.append({
                 "clienteId": cliente,
@@ -614,7 +615,7 @@ class CNISModelo:
 
             # Caso o contribuinte tenha remunerações ou contribuições sem discriminação unitária
             if len(listaContrib) == 0 and len(listaRemu) == 0 and len(listaBene) == 0 and not cabecalho.dadoFaltante:
-                listaItensContrib += self.criaItensAntesDoReal(cabecalho, cliente)
+                listaItensContrib += self.criaItensNaoDiscriminados(cabecalho, cliente)
                 continue
 
             for remuneracao in listaRemu:
@@ -655,7 +656,7 @@ class CNISModelo:
                     "itemId": beneficio.beneficiosId,
                     "seq": beneficio.seq,
                     "tipo": TipoItemContribuicao.beneficio.value,
-                    "competencia": strToDate(beneficio.competencia),
+                    "competencia": beneficio.competencia,
                     "contribuicao": beneficio.remuneracao,
                     "indicadores": beneficio.indicadores,
                     "validoTempoContrib": not impedidoPorIndicadores,

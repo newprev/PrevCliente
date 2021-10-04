@@ -1,6 +1,7 @@
 import datetime
 from dateutil.relativedelta import relativedelta
-from typing import List, Generator, Union
+from typing import List
+from calendar import monthrange
 from math import floor
 import pandas as pd
 from collections import defaultdict
@@ -35,6 +36,7 @@ class CalculosAposentadoria:
     mediaSalarial: float
     idadeCalculada: relativedelta
     dataPrimeiroTrabalho: datetime.date
+    enumGeneroCliente: GeneroCliente
 
     def __init__(self, processo: Processos, cliente: Cliente, db=None):
         self.processo = processo
@@ -46,6 +48,11 @@ class CalculosAposentadoria:
         self.dataTrocaMoeda: datetime.date = datetime.date(1994, 7, 1)
 
         self.fatorPrevidenciario: int = 1
+
+        if self.cliente.genero == 'M':
+            self.enumGeneroCliente = GeneroCliente.masculino
+        else:
+            self.enumGeneroCliente = GeneroCliente.feminino
 
         # if dib is None:
         #     self.dibAtual: datetime = datetime.datetime.today()
@@ -71,24 +78,45 @@ class CalculosAposentadoria:
             RegraTransicao.pontos: None,
             RegraTransicao.reducaoIdadeMinima: None,
             RegraTransicao.pedagio50: None,
-            RegraTransicao.reducaoTempoContribuicao: None
+            RegraTransicao.reducaoTempoContribuicao: None,
+            RegraTransicao.pedagio100: None
         }
 
         self.valorBeneficios = {
             RegraTransicao.pontos: 0,
             RegraTransicao.reducaoIdadeMinima: 0,
-            # TODO: Para calcular o valor do benefício, preciso saber qual o fator previdenciário
-            RegraTransicao.pedagio50: 0
+            RegraTransicao.pedagio50: 0,
+            RegraTransicao.pedagio100: 0
         }
 
         self.dibs = {
             RegraTransicao.pontos: None,
             RegraTransicao.reducaoIdadeMinima: None,
             RegraTransicao.pedagio50: None,
-            RegraTransicao.reducaoTempoContribuicao: None
+            RegraTransicao.reducaoTempoContribuicao: None,
+            RegraTransicao.pedagio100: None
         }
 
-        self.calculaRegrasTransicao()
+        self.qtdContrib = {
+            RegraTransicao.pontos: 0,
+            RegraTransicao.pedagio50: 0,
+            RegraTransicao.reducaoIdadeMinima: 0,
+            RegraTransicao.reducaoTempoContribuicao: 0,
+            RegraTransicao.pedagio100: 0
+        }
+
+        self.tmpContribPorRegra = {
+            RegraTransicao.pontos: None,
+            RegraTransicao.pedagio50: None,
+            RegraTransicao.reducaoIdadeMinima: None,
+            RegraTransicao.reducaoTempoContribuicao: None,
+            RegraTransicao.pedagio100: None
+        }
+
+        self.calculaDibsRegrasTransicao()
+        print('Regra ------------------     DIB  -- QtdContrib ---------- tmpContribPorRegra')
+        for chave, valor in self.dibs.items():
+            print(f"{chave}    {valor}    {self.qtdContrib[chave]}    {self.tmpContribPorRegra[chave]}")
 
         # self.direitosAdquiridos = {
         #     DireitoAdquirido.lei821391: {
@@ -119,50 +147,22 @@ class CalculosAposentadoria:
         # # prettyPrintDict(self.aposentadorias)
         # print('------------------------------------------------------------------\n\n')
 
-    # def defineDIB(self, data: datetime):
-    #     self.processo.dib = data
-
-    def calculaRegrasTransicao(self, tipo: RegraTransicao = RegraTransicao.todas):
-        if tipo == RegraTransicao.pontos:
-            self.calculaRegraDosPontos()
-        elif tipo == RegraTransicao.reducaoIdadeMinima:
-            self.calculaReducaoIdadeMinima()
-        elif tipo == RegraTransicao.pedagio50:
-            pass
-        elif tipo == RegraTransicao.reducaoTempoContribuicao:
-            pass
-        elif tipo == RegraTransicao.todas:
-            self.calculaRegraDosPontos()
-            self.calculaReducaoIdadeMinima()
-
-    def calculaRegraDosPontos(self):
-        if self.cliente.genero == 'M':
-            genero = GeneroCliente.masculino
-        else:
-            genero = GeneroCliente.feminino
-
-        dib = self.dibRegraDosPontos(genero)
-
-        print(f"calculaRegraDosPontos - dib: {dib}")
-
-    def calculaReducaoIdadeMinima(self):
-        if self.cliente.genero == 'M':
-            genero = GeneroCliente.masculino
-        else:
-            genero = GeneroCliente.feminino
-
-        dib = self.dibReducaoIdadeMinima(genero)
-
-        print(f"calculaReducaoIdadeMinima - dib: {dib}")
-
-    def dibReducaoIdadeMinima(self, generoCliente: GeneroCliente) -> datetime.date:
-        tempoContribuicao: datetime.timedelta = datetime.timedelta(days=0)
+    def calculaDibsRegrasTransicao(self):
+        tempoContribuicao: relativedelta = relativedelta(days=0)
         competenciaAtual: datetime.date = datetime.date.min
-        listaItensContribuicao: List[ItemContribuicao] = \
-            ItemContribuicao.select().where(ItemContribuicao.clienteId == self.cliente.clienteId).order_by(ItemContribuicao.seq, ItemContribuicao.competencia)
         seqAtual: int = 0
-        encontrouDib: bool = False
         contador: int = 0
+        regrasACalcular: List[RegraTransicao] = [
+            RegraTransicao.pontos,
+            RegraTransicao.reducaoIdadeMinima,
+            RegraTransicao.pedagio50,
+            RegraTransicao.reducaoTempoContribuicao,
+            RegraTransicao.pedagio100,
+        ]
+        listaItensContribuicao: List[ItemContribuicao] = ItemContribuicao.select().where(ItemContribuicao.clienteId == self.cliente.clienteId).order_by(
+            ItemContribuicao.seq,
+            ItemContribuicao.competencia
+        )
 
         for index, item in enumerate(listaItensContribuicao):
             mudouSeq = seqAtual != item.seq and seqAtual != 0
@@ -171,158 +171,250 @@ class CalculosAposentadoria:
                 seqAtual = item.seq
                 continue
 
-            competenciaAnterior = strToDate(listaItensContribuicao[index-1].competencia)
+            competenciaAnterior = strToDate(listaItensContribuicao[index - 1].competencia)
             competenciaAtual = strToDate(item.competencia)
+            ultimoDiaMes: int = monthrange(competenciaAtual.year, competenciaAtual.month)[1]
+            competenciaParaEstaRegra = datetime.date(competenciaAtual.year, competenciaAtual.month, ultimoDiaMes)
 
             # No caso de atividades concomitantes, não calcular duas vezes tempo de contribuiçao
-            if not item.ativPrimaria:
-                if dataConflitante(competenciaAtual, seqAtual, self.cliente.clienteId):
-                    continue
-
-            else:
-                contador += 1
-
-                if competenciaAtual < self.dataReforma2019:
-                    tempoContribuicao += competenciaAtual - competenciaAnterior
-                else:
-                    tempoContribuicao += relativedelta(months=1)
-
-            if self.calculaValidadeIdadeMinima(generoCliente, competenciaAtual, calculaDiaMesAno(tempoContribuicao.days)):
-                return competenciaAtual
-
-        if not encontrouDib:
-            mesesAMais = 0
-
-            while not encontrouDib:
-                contador += 1
-                mesesAMais += 1
-                competenciaAnterior = competenciaAtual
-                competenciaAtual += relativedelta(months=1)
-
-                tempoContribuicao += competenciaAtual - competenciaAnterior
-
-                if self.calculaValidadeIdadeMinima(generoCliente, competenciaAtual, calculaDiaMesAno(tempoContribuicao.days)):
-                    encontrouDib = True
-
-            return competenciaAtual
-
-    def dibRegraDosPontos(self, generoCliente: GeneroCliente) -> datetime.date:
-        tempoContribuicao: datetime.timedelta = datetime.timedelta(days=0)
-        competenciaAtual: datetime.date = datetime.date.min
-        listaItensContribuicao: List[ItemContribuicao] = \
-            ItemContribuicao.select().where(ItemContribuicao.clienteId == self.cliente.clienteId).order_by(ItemContribuicao.seq, ItemContribuicao.competencia)
-        seqAtual: int = 0
-        encontrouDib: bool = False
-        contador: int = 0
-
-        for index, item in enumerate(listaItensContribuicao):
-            mudouSeq = seqAtual != item.seq and seqAtual != 0
-
-            if index == 0 or mudouSeq:
-                seqAtual = item.seq
+            if not item.ativPrimaria and dataConflitante(competenciaAtual, seqAtual, self.cliente.clienteId):
                 continue
-
-            competenciaAnterior = strToDate(listaItensContribuicao[index-1].competencia)
-            competenciaAtual = strToDate(item.competencia)
-
-            # No caso de atividades concomitantes, não calcular duas vezes tempo de contribuiçao
-            if not item.ativPrimaria:
-                if dataConflitante(competenciaAtual, seqAtual, self.cliente.clienteId):
-                    continue
-
             else:
                 contador += 1
 
+                # Um indicador deve estar impedindo a soma dessa competência
+                if not item.validoTempoContrib:
+                    continue
+
                 if competenciaAtual < self.dataReforma2019:
-                    tempoContribuicao += competenciaAtual - competenciaAnterior
+                    tempoContribuicao += relativedelta(competenciaAtual, competenciaAnterior)
                 else:
                     tempoContribuicao += relativedelta(months=1)
 
-            if self.calculaPontosRegraPontos(generoCliente, competenciaAtual, calculaDiaMesAno(tempoContribuicao.days)):
-                encontrouDib = True
-                return competenciaAtual
+            if RegraTransicao.reducaoTempoContribuicao in regrasACalcular and self.atingiuRedTmpContribuicao(competenciaAtual, tempoContribuicao):
+                self.setRedTmpContribuicao(competenciaParaEstaRegra, contador, tempoContribuicao)
+                regrasACalcular.remove(RegraTransicao.reducaoTempoContribuicao)
 
-        if not encontrouDib:
+            if RegraTransicao.reducaoIdadeMinima in regrasACalcular and self.atingiuRegraIdadeMinima(competenciaAtual, tempoContribuicao):
+                self.setReducaoIdadeMinima(competenciaParaEstaRegra, contador, tempoContribuicao)
+                regrasACalcular.remove(RegraTransicao.reducaoIdadeMinima)
+
+            if RegraTransicao.pontos in regrasACalcular and self.atingiuRegraPontos(competenciaAtual, tempoContribuicao):
+                self.setPontos(competenciaParaEstaRegra, contador, tempoContribuicao)
+                regrasACalcular.remove(RegraTransicao.pontos)
+
+            if competenciaAtual.year == self.dataReforma2019.year and RegraTransicao.pedagio50 in regrasACalcular:
+                dataRelReferencia = relativedelta(self.dataReforma2019, competenciaAtual)
+                months = dataRelReferencia.months
+                days = dataRelReferencia.days
+
+                if not (months == 0 and 0 <= days < 30):
+                    continue
+
+                regrasACalcular.remove(RegraTransicao.pedagio50)
+
+                dictResposta = self.atingiuRegraPedagio50(competenciaAtual, tempoContribuicao)
+
+                if dictResposta['status']:
+                    self.efetivaDibPedagio50(competenciaAtual, tempoContribuicao, dictResposta['ultrapassou'])
+                    self.setPedagio50(contador, tempoContribuicao)
+                else:
+                    self.setPedagio50(contador, tempoContribuicao, dataMinima=True)
+            elif competenciaAtual.year > self.dataReforma2019.year and RegraTransicao.pedagio50 in regrasACalcular:
+                self.setPedagio50(contador, tempoContribuicao, dataMinima=True)
+                regrasACalcular.remove(RegraTransicao.pedagio50)
+
+            if competenciaAtual.year == self.dataReforma2019.year and RegraTransicao.pedagio100 in regrasACalcular:
+                dataRelReferencia = relativedelta(self.dataReforma2019, competenciaAtual)
+                months = dataRelReferencia.months
+                days = dataRelReferencia.days
+
+                if not (months == 0 and 0 <= days < 30):
+                    continue
+
+                regrasACalcular.remove(RegraTransicao.pedagio100)
+
+                if self.atingiuPedagio100(competenciaAtual):
+                    self.setPedagio100(competenciaAtual, contador, tempoContribuicao)
+                else:
+                    self.setPedagio100(competenciaAtual, contador, tempoContribuicao, naoAtingiu=True)
+            elif competenciaAtual.year > self.dataReforma2019.year and RegraTransicao.pedagio100 in regrasACalcular:
+                self.setPedagio100(competenciaAtual, contador, tempoContribuicao, naoAtingiu=True)
+                regrasACalcular.remove(RegraTransicao.pedagio100)
+
+        if len(regrasACalcular) != 0:
             mesesAMais = 0
+            itemARepetir = listaItensContribuicao[-1]
+            listaItensAMais = []
 
-            while not encontrouDib:
+            while len(regrasACalcular) != 0:
                 contador += 1
                 mesesAMais += 1
-                competenciaAnterior = competenciaAtual
                 competenciaAtual += relativedelta(months=1)
+                tempoContribuicao += relativedelta(months=1)
+                ultimoDiaMes = monthrange(competenciaAtual.year, competenciaAtual.month)[1]
+                competenciaParaEstaRegra = datetime.date(competenciaAtual.year, competenciaAtual.month, ultimoDiaMes)
+                listaItensAMais.append({
+                    'clienteId': itemARepetir.clienteId,
+                    'seq': itemARepetir.seq + 1,
+                    'tipo': TipoItemContribuicao.remuneracao.value,
+                    'competencia': competenciaAtual,
+                    'contribuicao': itemARepetir.contribuicao,
+                    'ativPrimaria': True,
+                    'dadoOrigem': 'N',
+                    'geradoAutomaticamente': True,
+                    'validoTempoContrib': True,
+                    'validoSalContrib': True
+                })
 
-                tempoContribuicao += competenciaAtual - competenciaAnterior
+                if RegraTransicao.reducaoTempoContribuicao in regrasACalcular and self.atingiuRedTmpContribuicao(competenciaAtual, tempoContribuicao):
+                    self.setRedTmpContribuicao(competenciaParaEstaRegra, contador, tempoContribuicao)
+                    regrasACalcular.remove(RegraTransicao.reducaoTempoContribuicao)
 
-                if self.calculaPontosRegraPontos(generoCliente, competenciaAtual, calculaDiaMesAno(tempoContribuicao.days), anosAMais=floor(mesesAMais/12)):
-                    encontrouDib = True
+                if RegraTransicao.reducaoIdadeMinima in regrasACalcular and self.atingiuRegraIdadeMinima(competenciaAtual, tempoContribuicao):
+                    self.setReducaoIdadeMinima(competenciaParaEstaRegra, contador, tempoContribuicao)
+                    regrasACalcular.remove(RegraTransicao.reducaoIdadeMinima)
 
-            return competenciaAtual
+                if RegraTransicao.pontos in regrasACalcular and self.atingiuRegraPontos(competenciaAtual, tempoContribuicao):
+                    self.setPontos(competenciaParaEstaRegra, contador, tempoContribuicao)
+                    regrasACalcular.remove(RegraTransicao.pontos)
 
-        # for cabecalho in self.listaCabecalhos:
-        #     dataFimContrib: datetime.date = datetime.date.min
-        #     dataFimRemu: datetime.date = datetime.date.min
-        #     # listaContrib: List[CnisContribuicoes] = self.buscaContribPelo(seq=cabecalho.seq)
-        #     # listaRemu: List[CnisRemuneracoes] = self.buscaRemuPelo(seq=cabecalho.seq)
-        #
-        #     # for contrib in listaContrib:
-        #     #     tempoContribuicao += datetime.timedelta(days=30)
-        #     #     # tempoContribuicao += datetime.timedelta(days=len(listaRemu) * 30)
-        #     #
-        #     #     dataFimContrib = strToDate(contrib.dataPagamento)
-        #     #
-        #     #     if dataFimContrib == datetime.date.min and dataFimRemu != datetime.date.min:
-        #     #         dibAtual = dataFimRemu
-        #     #     elif dataFimContrib != datetime.date.min and dataFimRemu == datetime.date.min:
-        #     #         dibAtual = dataFimContrib
-        #     #     elif dataFimContrib > dataFimRemu:
-        #     #         dibAtual = dataFimContrib
-        #     #     else:
-        #     #         dibAtual = dataFimRemu
-        #     #
-        #     #     if self.calculaPontosRegraPontos(generoCliente, dibAtual, calculaDiaMesAno(tempoContribuicao.days)):
-        #     #         return dibAtual
-        #     #
-        #     # for remuneracao in listaRemu:
-        #     #     tempoContribuicao += datetime.timedelta(days=30)
-        #     #
-        #     #     dataFimRemu = strToDate(remuneracao.competencia)
-        #     #
-        #     #     if dataFimContrib == datetime.date.min and dataFimRemu != datetime.date.min:
-        #     #         dibAtual = dataFimRemu
-        #     #     elif dataFimContrib != datetime.date.min and dataFimRemu == datetime.date.min:
-        #     #         dibAtual = dataFimContrib
-        #     #     elif dataFimContrib > dataFimRemu:
-        #     #         dibAtual = dataFimContrib
-        #     #     else:
-        #     #         dibAtual = dataFimRemu
-        #     #
-        #     #     if self.calculaPontosRegraPontos(generoCliente, dibAtual, calculaDiaMesAno(tempoContribuicao.days)):
-        #     #         return dibAtual
+                if competenciaAtual.year == self.dataReforma2019.year and RegraTransicao.pedagio50 in regrasACalcular:
+                    dataRelReferencia = relativedelta(self.dataReforma2019, competenciaAtual)
+                    months = dataRelReferencia.months
+                    days = dataRelReferencia.days
 
-    def calculaPontosRegraPontos(self, generoCliente: GeneroCliente, dib: datetime.date, tempoContribuicao: List[int], anosAMais: int = 0) -> bool:
+                    if not (months == 0 and 0 <= days < 30):
+                        continue
+
+                    regrasACalcular.remove(RegraTransicao.pedagio50)
+
+                    dictResposta = self.atingiuRegraPedagio50(competenciaAtual, tempoContribuicao)
+
+                    if dictResposta['status']:
+                        self.efetivaDibPedagio50(competenciaAtual, tempoContribuicao, dictResposta['ultrapassou'])
+                        self.setPedagio50(contador, tempoContribuicao)
+                    else:
+                        self.setPedagio50(contador, tempoContribuicao, dataMinima=True)
+
+                elif competenciaAtual.year > self.dataReforma2019.year and RegraTransicao.pedagio50 in regrasACalcular:
+                    self.setPedagio50(contador, tempoContribuicao, dataMinima=True)
+                    regrasACalcular.remove(RegraTransicao.pedagio50)
+
+                if competenciaAtual.year == self.dataReforma2019.year and RegraTransicao.pedagio100 in regrasACalcular:
+                    dataRelReferencia = relativedelta(self.dataReforma2019, competenciaAtual)
+                    months = dataRelReferencia.months
+                    days = dataRelReferencia.days
+
+                    if not (months == 0 and 0 <= days < 30):
+                        continue
+
+                    regrasACalcular.remove(RegraTransicao.pedagio100)
+
+                    if self.atingiuPedagio100(competenciaAtual):
+                        self.setPedagio100(competenciaAtual, contador, tempoContribuicao)
+                    else:
+                        self.setPedagio100(competenciaAtual, contador, tempoContribuicao, naoAtingiu=True)
+                elif competenciaAtual.year > self.dataReforma2019.year and RegraTransicao.pedagio100 in regrasACalcular:
+                    self.setPedagio100(competenciaAtual, contador, tempoContribuicao, naoAtingiu=True)
+                    regrasACalcular.remove(RegraTransicao.pedagio100)
+
+            if mesesAMais > 0:
+                self.salvarItensNVezes(listaItensAMais)
+
+            return True
+
+    def setPedagio50(self, contador, tempoContribuicao, dataMinima: bool = False):
+        if dataMinima:
+            self.dibs[RegraTransicao.pedagio50] = datetime.date.min
+
+        self.qtdContrib[RegraTransicao.pedagio50] = contador
+        self.tmpContribPorRegra[RegraTransicao.pedagio50] = tempoContribuicao
+
+    def setPedagio100(self, competenciaAtual: datetime.date, contador: int, tempoContribuicao: relativedelta, naoAtingiu: bool = False):
+        if naoAtingiu:
+            self.dibs[RegraTransicao.pedagio100] = datetime.date.min
+            self.qtdContrib[RegraTransicao.pedagio100] = contador
+            self.tmpContribPorRegra[RegraTransicao.pedagio100] = datetime.date.min
+            return True
+
+        acrescimoProfessor = 0
+        if self.cliente.professor:
+            acrescimoProfessor = 5
+
+        if self.enumGeneroCliente == GeneroCliente.masculino:
+            tmpMinimoContribuicao: relativedelta = relativedelta(years=35 - acrescimoProfessor)
+            tempoRestante = tmpMinimoContribuicao - tempoContribuicao
+        else:
+            tmpMinimoContribuicao: relativedelta = relativedelta(years=30 - acrescimoProfessor)
+            tempoRestante = tmpMinimoContribuicao - tempoContribuicao
+
+        self.dibs[RegraTransicao.pedagio100] = competenciaAtual + tempoRestante + tempoRestante
+        self.qtdContrib[RegraTransicao.pedagio100] = contador + 2 * tempoRestante.months
+        self.tmpContribPorRegra[RegraTransicao.pedagio100] = tempoContribuicao + tempoRestante + tempoRestante
+
+    def setPontos(self, competenciaAtual, contador, tempoContribuicao):
+        self.dibs[RegraTransicao.pontos] = competenciaAtual
+        self.qtdContrib[RegraTransicao.pontos] = contador
+        self.tmpContribPorRegra[RegraTransicao.pontos] = tempoContribuicao
+
+    def setReducaoIdadeMinima(self, competenciaAtual, contador, tempoContribuicao):
+        self.dibs[RegraTransicao.reducaoIdadeMinima] = competenciaAtual
+        self.qtdContrib[RegraTransicao.reducaoIdadeMinima] = contador
+        self.tmpContribPorRegra[RegraTransicao.reducaoIdadeMinima] = tempoContribuicao
+
+    def setRedTmpContribuicao(self, competenciaAtual, contador, tempoContribuicao):
+        self.dibs[RegraTransicao.reducaoTempoContribuicao] = competenciaAtual
+        self.qtdContrib[RegraTransicao.reducaoTempoContribuicao] = contador
+        self.tmpContribPorRegra[RegraTransicao.reducaoTempoContribuicao] = tempoContribuicao
+
+    def efetivaDibPedagio50(self, competenciaAtual: datetime.date, tempoContribuicao: relativedelta, ultrapassouMinimo: bool):
+        if ultrapassouMinimo:
+            self.dibs[RegraTransicao.pedagio50] = competenciaAtual
+            return True
+
+        tempContribRelativo: relativedelta = tempoContribuicao
+        if self.enumGeneroCliente == GeneroCliente.masculino:
+            pedagio50: relativedelta = relativedelta(years=35) - tempContribRelativo
+        else:
+            pedagio50: relativedelta = relativedelta(years=30) - tempContribRelativo
+
+        if pedagio50.years <= 0 and pedagio50.months <= 0:
+            self.dibs[RegraTransicao.pedagio50] = competenciaAtual
+        else:
+            self.dibs[RegraTransicao.pedagio50] = competenciaAtual + pedagio50
+
+    def atingiuRegraPontos(self, dib: datetime.date, tempoContribuicao: relativedelta) -> bool:
         """
         Avalia a pontuação mínima e o tempo mínimo de contribuição (20 anos Homens / 15 anos Mulheres)
         :return bool
         """
         acrescimoAnual = dib.year - 2019
         tmpContribuicao = tempoContribuicao
-        pontuacao = sum(tempoContribuicao) + self.cliente.idade + anosAMais
+        ultimoDiaMes = monthrange(dib.year, dib.month)[1]
+        dataRelativa: datetime.date = datetime.date(dib.year, dib.month, ultimoDiaMes)
+        idadeAteFinalMes: relativedelta = calculaIdade(self.cliente.dataNascimento, dataRelativa)
+        pontuacao = tempoContribuicao + idadeAteFinalMes
 
         if dib < self.dataReforma2019:
             return False
 
-        if generoCliente == GeneroCliente.masculino:
+        descontoProfessor: int = 0
+        if self.cliente.professor:
+            descontoProfessor = 5
+
+        if self.enumGeneroCliente == GeneroCliente.masculino:
             if acrescimoAnual >= 9:
                 acrescimoAnual = 9
 
-            return pontuacao >= 96 + acrescimoAnual and tmpContribuicao[2] >= 35
+            return pontuacao.years >= 96 + acrescimoAnual - descontoProfessor and tmpContribuicao.years >= 35 - descontoProfessor
         else:
             if acrescimoAnual >= 14:
                 acrescimoAnual = 14
 
-            return pontuacao >= 86 + acrescimoAnual and tmpContribuicao[2] >= 30
+            return pontuacao.years >= 86 + acrescimoAnual - descontoProfessor and tmpContribuicao.years >= 30 - descontoProfessor
 
-    def calculaValidadeIdadeMinima(self, generoCliente: GeneroCliente, dib: datetime.date, tempoContribuicao: List[int]) -> bool:
+    def atingiuRegraIdadeMinima(self, dib: datetime.date, tempoContribuicao: relativedelta) -> bool:
         """
         Avalia a idade mínima e o tempo mínimo de contribuição
         - Tempo mínimo de contribuição: 35 anos Homens / 30 anos Mulheres
@@ -331,18 +423,20 @@ class CalculosAposentadoria:
         :return bool
         """
         tmpContribuicao = tempoContribuicao
-        idadeCliente = calculaIdade(self.cliente.dataNascimento, dib)
+        ultimoDiaMes = monthrange(dib.year, dib.month)[1]
+        finalDoMes = datetime.date(dib.year, dib.month, ultimoDiaMes)
+        idadeCliente = calculaIdade(self.cliente.dataNascimento, finalDoMes)
 
         if dib < self.dataReforma2019:
             return False
 
-        if generoCliente == GeneroCliente.masculino and tmpContribuicao[2] >= 35:
+        if self.enumGeneroCliente == GeneroCliente.masculino and tmpContribuicao.years >= 35:
             acrescimoIdade: relativedelta = relativedelta(years=61, months=(dib.year - 2019) * 6)
 
             if acrescimoIdade.years >= 65:
                 acrescimoIdade = relativedelta(years=65)
 
-        elif generoCliente == GeneroCliente.feminino and tmpContribuicao[2] >= 30:
+        elif self.enumGeneroCliente == GeneroCliente.feminino and tmpContribuicao.years >= 30:
             acrescimoIdade: relativedelta = relativedelta(years=56, months=(dib.year - 2019) * 6)
 
             if acrescimoIdade.years >= 62:
@@ -357,6 +451,91 @@ class CalculosAposentadoria:
             return True
         else:
             return False
+
+    def atingiuRegraPedagio50(self, dib: datetime.date, tempoContribuicao: relativedelta) -> dict:
+        """
+        Avalia se até a data da reforma, o indivíduo tinha, no máximo, 2 anos para requerer a aposentadoria
+        - Mínimo 35 anos homens / 30 anos mulheres
+        :return bool
+        """
+
+        if dib > self.dataReforma2019:
+            return {'status': False}
+
+        tmpContribuicao = tempoContribuicao
+
+        acrescimoProfessor = 0
+        if self.cliente.professor:
+            acrescimoProfessor = 5
+
+        if self.enumGeneroCliente == GeneroCliente.masculino:
+            resposta: dict = {
+                'status': 33 <= tmpContribuicao.years + acrescimoProfessor,
+                'ultrapassou': tmpContribuicao.years + acrescimoProfessor > 35
+            }
+        else:
+            resposta: dict = {
+                'status': 28 <= tmpContribuicao.years + acrescimoProfessor,
+                'ultrapassou': tmpContribuicao.years + acrescimoProfessor > 30
+            }
+        
+        return resposta
+
+    def atingiuRedTmpContribuicao(self, dib: datetime.date, tempoContribuicao: relativedelta) -> bool:
+        """
+        Avalia se:
+        - Homens -- Tempo de contribuição >= 15 e Idade >= 65
+        - Mulheres -- Tempo de contribuição >= 15 e Idade >= 60 (acréscimo de 6 meses por ano)
+        :return bool:
+        """
+        if dib < self.dataReforma2019:
+            return False
+
+        anosAposReforma: int = self.dataReforma2019.year - dib.year
+        acrescimoMensal = relativedelta(months=6*anosAposReforma).normalized()
+        ultimoDiaMes: int = monthrange(dib.year, dib.month)[1]
+        finalMes: datetime.date = datetime.date(dib.year, dib.month, ultimoDiaMes)
+        idadeClienteAteFinalMes: relativedelta = calculaIdade(self.cliente.dataNascimento, finalMes)
+
+        if tempoContribuicao.years < 15:
+            return False
+        else:
+            if self.enumGeneroCliente == GeneroCliente.masculino:
+                return idadeClienteAteFinalMes.years >= 65
+            else:
+                if idadeClienteAteFinalMes.years == 60 + acrescimoMensal.years:
+                    return idadeClienteAteFinalMes.months >= acrescimoMensal.months
+                elif idadeClienteAteFinalMes.years >= 60:
+                    return True
+
+    def atingiuPedagio100(self, dib: datetime.date) -> bool:
+        """
+        Na data da reforma o segurado deverá cumprir:
+        - idade mínima de 60H/57M
+        - Tempo de contribuição 35H/30M
+        :param dib:
+        :return:
+        """
+
+        if dib > self.dataReforma2019:
+            return False
+
+        acrescimoProfessor = 0
+        if self.cliente.professor:
+            acrescimoProfessor = 5
+
+        ultimoDiaMes: int = monthrange(dib.year, dib.month)[1]
+        competenciaFinalMes = datetime.date(dib.year, dib.month, ultimoDiaMes)
+        idadeFimMes: relativedelta = calculaIdade(strToDate(self.cliente.dataNascimento), competenciaFinalMes)
+
+        if self.enumGeneroCliente == GeneroCliente.masculino:
+            return idadeFimMes.years + acrescimoProfessor >= 60
+        else:
+            return idadeFimMes.years + acrescimoProfessor >= 57
+
+    def salvarItensNVezes(self, itemReferente: List[dict]):
+        ItemContribuicao.insert_many(itemReferente).execute()
+
 
     #
     # def calculaDireitoAdquirido(self, lei: DireitoAdquirido, subTipo: SubTipoAposentadoria = None):

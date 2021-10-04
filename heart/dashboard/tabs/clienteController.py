@@ -12,6 +12,8 @@ from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFil
 from heart.sinaisCustomizados import Sinais
 from heart.telAfinsController import TelAfinsController
 
+from util.popUps import popUpOkAlerta
+
 from modelos.cnisModelo import CNISModelo
 from modelos.clienteORM import Cliente
 from modelos.contribuicoesORM import CnisContribuicoes
@@ -24,11 +26,10 @@ from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
 
 from util.dateHelper import atividadesConcorrentes, strToDate, atividadeSecundaria
-
+from util.popUps import popUpOkAlerta
 from util.helpers import *
 
 from repositorios.integracaoRepositorio import IntegracaoRepository
-from util.popUps import popUpOkAlerta
 
 
 class TabCliente(Ui_wdgTabCliente, QWidget):
@@ -276,7 +277,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                         except Exception as err:
                             erro = f"carregaCnis: ({type(err)}) {err}"
                             transaction.rollback()
-                            self.showPopupAlerta('Erro ao inserir cliente.', erro=erro)
+                            popUpOkAlerta('Erro ao inserir cliente.', erro=erro)
                             self.limpaTudo()
                             return False
 

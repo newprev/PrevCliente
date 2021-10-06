@@ -523,18 +523,33 @@ class CalculosAposentadoria:
 
     def calculaValorBeneficios(self):
         self.valorBeneficios[RegraTransicao.pedagio50] = self.rbiPedagio50()
-        self.valorBeneficios[RegraTransicao.pedagio100] = self.rbiPedagio100()
+        self.valorBeneficios[RegraTransicao.pontos] = self.rbiPontos()
 
     def rbiPedagio50(self) -> float:
         """
         Calcula Renda Básica Inicial, caso cliente tenha optado pela regra de transição Pedágio 50%
-        :return: bool
+        :return: float
         """
         if self.dibs[RegraTransicao.pedagio50] != datetime.date.min and self.tmpContribPorRegra[RegraTransicao.pedagio50] is not None:
             fatorPrev = self.calculaFatorPrevidenciario(self.dibs[RegraTransicao.pedagio50], self.tmpContribPorRegra[RegraTransicao.pedagio50])
             mediaSalarios = self.calculaMediaSalarial(self.dibs[RegraTransicao.pedagio50])
 
         return round(mediaSalarios * fatorPrev, ndigits=2)
+
+    def rbiPontos(self) -> float:
+        """
+        Calcula Renda Básica Inicial, caso cliente tenha optado pela regra de pontos
+        :return: float
+        """
+        mediaSalarios: float = self.calculaMediaSalarial(self.dibs[RegraTransicao.pontos])
+        tempoContribuicao: relativedelta = self.tmpContribPorRegra[RegraTransicao.pontos]
+
+        if self.enumGeneroCliente == GeneroCliente.masculino:
+            desconto = (tempoContribuicao.years - 20) * 2 + 60
+        else:
+            desconto = (tempoContribuicao.years - 15) * 2 + 60
+
+        return round(mediaSalarios * (desconto/100), ndigits=2)
 
     def efetivaDibPedagio50(self, competenciaAtual: datetime.date, tempoContribuicao: relativedelta, ultrapassouMinimo: bool):
         if ultrapassouMinimo:

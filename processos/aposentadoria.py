@@ -524,6 +524,7 @@ class CalculosAposentadoria:
     def calculaValorBeneficios(self):
         self.valorBeneficios[RegraTransicao.pedagio50] = self.rbiPedagio50()
         self.valorBeneficios[RegraTransicao.pontos] = self.rbiPontos()
+        self.valorBeneficios[RegraTransicao.pedagio100] = self.rbiPedagio100()
 
     def rbiPedagio50(self) -> float:
         """
@@ -534,7 +535,15 @@ class CalculosAposentadoria:
             fatorPrev = self.calculaFatorPrevidenciario(self.dibs[RegraTransicao.pedagio50], self.tmpContribPorRegra[RegraTransicao.pedagio50])
             mediaSalarios = self.calculaMediaSalarial(self.dibs[RegraTransicao.pedagio50])
 
-        return round(mediaSalarios * fatorPrev, ndigits=2)
+            return round(mediaSalarios * fatorPrev, ndigits=2)
+        else:
+            return 0.0
+
+    def rbiPedagio100(self) -> float:
+        if self.dibs[RegraTransicao.pedagio100] != datetime.date.min:
+            return round(self.calculaMediaSalarial(self.dibs[RegraTransicao.pedagio100]), ndigits=2)
+        else:
+            return 0.0
 
     def rbiPontos(self) -> float:
         """

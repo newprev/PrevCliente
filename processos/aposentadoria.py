@@ -5,7 +5,8 @@ from calendar import monthrange
 from math import floor
 import pandas as pd
 from collections import defaultdict
-from peewee import fn
+from peewee import fn, SqliteDatabase
+from SQLs.itensContribuicao import selectItensDados
 
 from Daos.daoCalculos import DaoCalculos
 from util.helpers import comparaMesAno, calculaDiaMesAno, verificaIndicadorProibitivo
@@ -33,6 +34,7 @@ class CalculosAposentadoria:
     listaItensContrib: List[ItemContribuicao] = []
     listaRemuneracoes: List[CnisRemuneracoes] = []
     listaContribuicoes: List[CnisContribuicoes] = []
+    dfTotalContribuicoes: pd.DataFrame
     mediaSalarial: float
     idadeCalculada: relativedelta
     dataPrimeiroTrabalho: datetime.date
@@ -83,10 +85,11 @@ class CalculosAposentadoria:
         }
 
         self.valorBeneficios = {
-            RegraTransicao.pontos: 0,
-            RegraTransicao.reducaoIdadeMinima: 0,
-            RegraTransicao.pedagio50: 0,
-            RegraTransicao.pedagio100: 0
+            RegraTransicao.pontos: 0.0,
+            RegraTransicao.reducaoIdadeMinima: 0.0,
+            RegraTransicao.pedagio50: 0.0,
+            RegraTransicao.pedagio100: 0.0,
+            RegraTransicao.reducaoTempoContribuicao: 0.0
         }
 
         self.dibs = {
@@ -114,9 +117,12 @@ class CalculosAposentadoria:
         }
 
         self.calculaDibsRegrasTransicao()
+        self.atualizaDataFrameContribuicoes()
+        self.calculaValorBeneficios()
+
         print('Regra ------------------     DIB  -- QtdContrib ---------- tmpContribPorRegra')
         for chave, valor in self.dibs.items():
-            print(f"{chave}    {valor}    {self.qtdContrib[chave]}    {self.tmpContribPorRegra[chave]}")
+            print(f"{chave}    {valor}    {self.qtdContrib[chave]}    {self.tmpContribPorRegra[chave]}    R$ {self.valorBeneficios[chave]}")
 
         # self.direitosAdquiridos = {
         #     DireitoAdquirido.lei821391: {
@@ -146,6 +152,155 @@ class CalculosAposentadoria:
         # print(f'self.fatorPrevidenciario: {self.fatorPrevidenciario}')
         # # prettyPrintDict(self.aposentadorias)
         # print('------------------------------------------------------------------\n\n')
+
+    def atingiuRegraPontos(self, dib: datetime.date, tempoContribuicao: relativedelta) -> bool:
+        """
+        Avalia a pontuação mínima e o tempo mínimo de contribuição (20 anos Homens / 15 anos Mulheres)
+        :return bool
+        """
+        acrescimoAnual = dib.year - 2019
+        tmpContribuicao = tempoContribuicao
+        ultimoDiaMes = monthrange(dib.year, dib.month)[1]
+        dataRelativa: datetime.date = datetime.date(dib.year, dib.month, ultimoDiaMes)
+        idadeAteFinalMes: relativedelta = calculaIdade(self.cliente.dataNascimento, dataRelativa)
+        pontuacao = tempoContribuicao + idadeAteFinalMes
+
+        if dib < self.dataReforma2019:
+            return False
+
+        descontoProfessor: int = 0
+        if self.cliente.professor:
+            descontoProfessor = 5
+
+        if self.enumGeneroCliente == GeneroCliente.masculino:
+            if acrescimoAnual >= 9:
+                acrescimoAnual = 9
+
+            return pontuacao.years >= 96 + acrescimoAnual - descontoProfessor and tmpContribuicao.years >= 35 - descontoProfessor
+        else:
+            if acrescimoAnual >= 14:
+                acrescimoAnual = 14
+
+            return pontuacao.years >= 86 + acrescimoAnual - descontoProfessor and tmpContribuicao.years >= 30 - descontoProfessor
+
+    def atingiuRegraIdadeMinima(self, dib: datetime.date, tempoContribuicao: relativedelta) -> bool:
+        """
+        Avalia a idade mínima e o tempo mínimo de contribuição
+        - Tempo mínimo de contribuição: 35 anos Homens / 30 anos Mulheres
+        - Idade mínima em 2019 (data da reforma): 61 anos Homens / 56 anos Mulheres
+        - Idade mínima padrão: 65 anos Homens / 62 anos Mulheres
+        :return bool
+        """
+        tmpContribuicao = tempoContribuicao
+        ultimoDiaMes = monthrange(dib.year, dib.month)[1]
+        finalDoMes = datetime.date(dib.year, dib.month, ultimoDiaMes)
+        idadeCliente = calculaIdade(self.cliente.dataNascimento, finalDoMes)
+
+        if dib < self.dataReforma2019:
+            return False
+
+        if self.enumGeneroCliente == GeneroCliente.masculino and tmpContribuicao.years >= 35:
+            acrescimoIdade: relativedelta = relativedelta(years=61, months=(dib.year - 2019) * 6)
+
+            if acrescimoIdade.years >= 65:
+                acrescimoIdade = relativedelta(years=65)
+
+        elif self.enumGeneroCliente == GeneroCliente.feminino and tmpContribuicao.years >= 30:
+            acrescimoIdade: relativedelta = relativedelta(years=56, months=(dib.year - 2019) * 6)
+
+            if acrescimoIdade.years >= 62:
+                acrescimoIdade = relativedelta(years=62)
+
+        else:
+            return False
+
+        if idadeCliente.years > acrescimoIdade.years:
+            return True
+        elif idadeCliente.years == acrescimoIdade.years and idadeCliente.months >= acrescimoIdade.months:
+            return True
+        else:
+            return False
+
+    def atingiuRegraPedagio50(self, dib: datetime.date, tempoContribuicao: relativedelta) -> dict:
+        """
+        Avalia se até a data da reforma, o indivíduo tinha, no máximo, 2 anos para requerer a aposentadoria
+        - Mínimo 35 anos homens / 30 anos mulheres
+        :return bool
+        """
+
+        if dib > self.dataReforma2019:
+            return {'status': False}
+
+        tmpContribuicao = tempoContribuicao
+
+        acrescimoProfessor = 0
+        if self.cliente.professor:
+            acrescimoProfessor = 5
+
+        if self.enumGeneroCliente == GeneroCliente.masculino:
+            resposta: dict = {
+                'status': 33 <= tmpContribuicao.years + acrescimoProfessor,
+                'ultrapassou': tmpContribuicao.years + acrescimoProfessor > 35
+            }
+        else:
+            resposta: dict = {
+                'status': 28 <= tmpContribuicao.years + acrescimoProfessor,
+                'ultrapassou': tmpContribuicao.years + acrescimoProfessor > 30
+            }
+        
+        return resposta
+
+    def atingiuRedTmpContribuicao(self, dib: datetime.date, tempoContribuicao: relativedelta) -> bool:
+        """
+        Avalia se:
+        - Homens -- Tempo de contribuição >= 15 e Idade >= 65
+        - Mulheres -- Tempo de contribuição >= 15 e Idade >= 60 (acréscimo de 6 meses por ano)
+        :return bool:
+        """
+        if dib < self.dataReforma2019:
+            return False
+
+        anosAposReforma: int = self.dataReforma2019.year - dib.year
+        acrescimoMensal = relativedelta(months=6*anosAposReforma).normalized()
+        ultimoDiaMes: int = monthrange(dib.year, dib.month)[1]
+        finalMes: datetime.date = datetime.date(dib.year, dib.month, ultimoDiaMes)
+        idadeClienteAteFinalMes: relativedelta = calculaIdade(self.cliente.dataNascimento, finalMes)
+
+        if tempoContribuicao.years < 15:
+            return False
+        else:
+            if self.enumGeneroCliente == GeneroCliente.masculino:
+                return idadeClienteAteFinalMes.years >= 65
+            else:
+                if idadeClienteAteFinalMes.years == 60 + acrescimoMensal.years:
+                    return idadeClienteAteFinalMes.months >= acrescimoMensal.months
+                elif idadeClienteAteFinalMes.years >= 60:
+                    return True
+
+    def atingiuPedagio100(self, dib: datetime.date) -> bool:
+        """
+        Na data da reforma o segurado deverá cumprir:
+        - idade mínima de 60H/57M
+        - Tempo de contribuição 35H/30M
+        :param dib:
+        :return:
+        """
+
+        if dib > self.dataReforma2019:
+            return False
+
+        acrescimoProfessor = 0
+        if self.cliente.professor:
+            acrescimoProfessor = 5
+
+        ultimoDiaMes: int = monthrange(dib.year, dib.month)[1]
+        competenciaFinalMes = datetime.date(dib.year, dib.month, ultimoDiaMes)
+        idadeFimMes: relativedelta = calculaIdade(strToDate(self.cliente.dataNascimento), competenciaFinalMes)
+
+        if self.enumGeneroCliente == GeneroCliente.masculino:
+            return idadeFimMes.years + acrescimoProfessor >= 60
+        else:
+            return idadeFimMes.years + acrescimoProfessor >= 57
 
     def calculaDibsRegrasTransicao(self):
         tempoContribuicao: relativedelta = relativedelta(days=0)
@@ -324,6 +479,82 @@ class CalculosAposentadoria:
 
             return True
 
+    def calculaFatorPrevidenciario(self, dibAtual: datetime.date, tempoContribCalculado: relativedelta):
+        """
+        Cálculo do fator previdenciário
+
+        :var<float>: tempCont - Tempo de contribuição até o momento da aposentadoria
+        :var<float>: aliq - Alíquota de contribuição
+        :var<float>: expSobrevida - Expectativa de sobrevida após a data do início do benefício (dib)
+        :var<float>: idade - Idade do cliente na data do início do benefício
+
+        :return<float>: fatorPrev  = ((tempCont * aliq) / expSobrevida) * (1 + (idade + (tempCont * aliq)) / 100)
+        """
+
+        tempCont: float = tempoContribCalculado.years + ((tempoContribCalculado.days / 30) + tempoContribCalculado.months / 12)
+        aliq: float = 0.31
+        intIdade: relativedelta = calculaIdade(strToDate(self.cliente.dataNascimento), dibAtual)
+        floatIdade: float = (intIdade.days/30 + intIdade.months)/12 + intIdade.years  # Para a fórmula é importante que a idade seja completa com dias e meses transformados em anos
+
+        try:
+            expSobrevidaModelo: ExpSobrevida = ExpSobrevida.select().where(
+                ExpSobrevida.dataReferente.year == dibAtual.year,
+                ExpSobrevida.idade == intIdade.years
+            ).get()
+        except ExpSobrevida.DoesNotExist:
+            expSobrevidaModelo: ExpSobrevida = ExpSobrevida.select().where(
+                ExpSobrevida.dataReferente.year == dibAtual.year - 1,
+                ExpSobrevida.idade == intIdade.years
+            ).get()
+
+        expSobrevida: int = expSobrevidaModelo.expectativaSobrevida
+
+        fatorPrev = ((tempCont * aliq) / expSobrevida) * (1 + (floatIdade + (tempCont * aliq)) / 100)
+
+        # print('\n\n------------------------------------ calculaFatorPrevidenciario')
+        # print(f"tempCont: {tempCont}")
+        # print(f"aliq: {aliq}")
+        # print(f"idade: {idade}")
+        # print(f"expSobrevida: {expSobrevida}")
+        # print(f"fatorPrev: {fatorPrev}")
+        # print(f"Possível dib: {expSobrevidaModelo.dataReferente}")
+        # print('------------------------------------ calculaFatorPrevidenciario\n\n')
+        return fatorPrev
+
+    def calculaValorBeneficios(self):
+        self.valorBeneficios[RegraTransicao.pedagio50] = self.rbiPedagio50()
+        self.valorBeneficios[RegraTransicao.pedagio100] = self.rbiPedagio100()
+
+    def rbiPedagio50(self) -> float:
+        """
+        Calcula Renda Básica Inicial, caso cliente tenha optado pela regra de transição Pedágio 50%
+        :return: bool
+        """
+        if self.dibs[RegraTransicao.pedagio50] != datetime.date.min and self.tmpContribPorRegra[RegraTransicao.pedagio50] is not None:
+            fatorPrev = self.calculaFatorPrevidenciario(self.dibs[RegraTransicao.pedagio50], self.tmpContribPorRegra[RegraTransicao.pedagio50])
+            mediaSalarios = self.calculaMediaSalarial(self.dibs[RegraTransicao.pedagio50])
+
+        return round(mediaSalarios * fatorPrev, ndigits=2)
+
+    def efetivaDibPedagio50(self, competenciaAtual: datetime.date, tempoContribuicao: relativedelta, ultrapassouMinimo: bool):
+        if ultrapassouMinimo:
+            self.dibs[RegraTransicao.pedagio50] = competenciaAtual
+            return True
+
+        tempContribRelativo: relativedelta = tempoContribuicao
+        if self.enumGeneroCliente == GeneroCliente.masculino:
+            pedagio50: relativedelta = relativedelta(years=35) - tempContribRelativo
+        else:
+            pedagio50: relativedelta = relativedelta(years=30) - tempContribRelativo
+
+        if pedagio50.years <= 0 and pedagio50.months <= 0:
+            self.dibs[RegraTransicao.pedagio50] = competenciaAtual
+        else:
+            self.dibs[RegraTransicao.pedagio50] = competenciaAtual + pedagio50
+
+    def salvarItensNVezes(self, itemReferente: List[dict]):
+        ItemContribuicao.insert_many(itemReferente).execute()
+
     def setPedagio50(self, contador, tempoContribuicao, dataMinima: bool = False):
         if dataMinima:
             self.dibs[RegraTransicao.pedagio50] = datetime.date.min
@@ -368,174 +599,25 @@ class CalculosAposentadoria:
         self.qtdContrib[RegraTransicao.reducaoTempoContribuicao] = contador
         self.tmpContribPorRegra[RegraTransicao.reducaoTempoContribuicao] = tempoContribuicao
 
-    def efetivaDibPedagio50(self, competenciaAtual: datetime.date, tempoContribuicao: relativedelta, ultrapassouMinimo: bool):
-        if ultrapassouMinimo:
-            self.dibs[RegraTransicao.pedagio50] = competenciaAtual
-            return True
+    def calculaMediaSalarial(self, dibReferente: datetime.date) -> float:
+        selecaoDataInicio: bool = self.dfTotalContribuicoes['competencia'] > self.dataTrocaMoeda.strftime('%Y-%m-%d')
+        selecaoDataFim: bool = self.dfTotalContribuicoes['competencia'] <= dibReferente.strftime('%Y-%m-%d')
+        dfEmQuestao: pd.DataFrame = self.dfTotalContribuicoes[selecaoDataInicio & selecaoDataFim]
+        return dfEmQuestao['salAtualizado'].mean()
 
-        tempContribRelativo: relativedelta = tempoContribuicao
-        if self.enumGeneroCliente == GeneroCliente.masculino:
-            pedagio50: relativedelta = relativedelta(years=35) - tempContribRelativo
-        else:
-            pedagio50: relativedelta = relativedelta(years=30) - tempContribRelativo
+    def atualizaDataFrameContribuicoes(self):
+        lambAvaliaSalario = lambda df: df['salContribuicao'] if df['salContribuicao'] <= df['teto'] else df['teto']
+        dbInst: SqliteDatabase = ItemContribuicao._meta.database
+        query: str = selectItensDados(self.cliente.clienteId)
+        listaContribuicoes = dbInst.execute_sql(query)
 
-        if pedagio50.years <= 0 and pedagio50.months <= 0:
-            self.dibs[RegraTransicao.pedagio50] = competenciaAtual
-        else:
-            self.dibs[RegraTransicao.pedagio50] = competenciaAtual + pedagio50
+        colunas: list = ['competencia', 'salContribuicao', 'fator', 'teto']
+        dfContribuicoes = pd.DataFrame(listaContribuicoes.fetchall(), columns=colunas)
 
-    def atingiuRegraPontos(self, dib: datetime.date, tempoContribuicao: relativedelta) -> bool:
-        """
-        Avalia a pontuação mínima e o tempo mínimo de contribuição (20 anos Homens / 15 anos Mulheres)
-        :return bool
-        """
-        acrescimoAnual = dib.year - 2019
-        tmpContribuicao = tempoContribuicao
-        ultimoDiaMes = monthrange(dib.year, dib.month)[1]
-        dataRelativa: datetime.date = datetime.date(dib.year, dib.month, ultimoDiaMes)
-        idadeAteFinalMes: relativedelta = calculaIdade(self.cliente.dataNascimento, dataRelativa)
-        pontuacao = tempoContribuicao + idadeAteFinalMes
-
-        if dib < self.dataReforma2019:
-            return False
-
-        descontoProfessor: int = 0
-        if self.cliente.professor:
-            descontoProfessor = 5
-
-        if self.enumGeneroCliente == GeneroCliente.masculino:
-            if acrescimoAnual >= 9:
-                acrescimoAnual = 9
-
-            return pontuacao.years >= 96 + acrescimoAnual - descontoProfessor and tmpContribuicao.years >= 35 - descontoProfessor
-        else:
-            if acrescimoAnual >= 14:
-                acrescimoAnual = 14
-
-            return pontuacao.years >= 86 + acrescimoAnual - descontoProfessor and tmpContribuicao.years >= 30 - descontoProfessor
-
-    def atingiuRegraIdadeMinima(self, dib: datetime.date, tempoContribuicao: relativedelta) -> bool:
-        """
-        Avalia a idade mínima e o tempo mínimo de contribuição
-        - Tempo mínimo de contribuição: 35 anos Homens / 30 anos Mulheres
-        - Idade mínima em 2019 (data da reforma): 61 anos Homens / 56 anos Mulheres
-        - Idade mínima padrão: 65 anos Homens / 62 anos Mulheres
-        :return bool
-        """
-        tmpContribuicao = tempoContribuicao
-        ultimoDiaMes = monthrange(dib.year, dib.month)[1]
-        finalDoMes = datetime.date(dib.year, dib.month, ultimoDiaMes)
-        idadeCliente = calculaIdade(self.cliente.dataNascimento, finalDoMes)
-
-        if dib < self.dataReforma2019:
-            return False
-
-        if self.enumGeneroCliente == GeneroCliente.masculino and tmpContribuicao.years >= 35:
-            acrescimoIdade: relativedelta = relativedelta(years=61, months=(dib.year - 2019) * 6)
-
-            if acrescimoIdade.years >= 65:
-                acrescimoIdade = relativedelta(years=65)
-
-        elif self.enumGeneroCliente == GeneroCliente.feminino and tmpContribuicao.years >= 30:
-            acrescimoIdade: relativedelta = relativedelta(years=56, months=(dib.year - 2019) * 6)
-
-            if acrescimoIdade.years >= 62:
-                acrescimoIdade = relativedelta(years=62)
-
-        else:
-            return False
-
-        if idadeCliente.years > acrescimoIdade.years:
-            return True
-        elif idadeCliente.years == acrescimoIdade.years and idadeCliente.months >= acrescimoIdade.months:
-            return True
-        else:
-            return False
-
-    def atingiuRegraPedagio50(self, dib: datetime.date, tempoContribuicao: relativedelta) -> dict:
-        """
-        Avalia se até a data da reforma, o indivíduo tinha, no máximo, 2 anos para requerer a aposentadoria
-        - Mínimo 35 anos homens / 30 anos mulheres
-        :return bool
-        """
-
-        if dib > self.dataReforma2019:
-            return {'status': False}
-
-        tmpContribuicao = tempoContribuicao
-
-        acrescimoProfessor = 0
-        if self.cliente.professor:
-            acrescimoProfessor = 5
-
-        if self.enumGeneroCliente == GeneroCliente.masculino:
-            resposta: dict = {
-                'status': 33 <= tmpContribuicao.years + acrescimoProfessor,
-                'ultrapassou': tmpContribuicao.years + acrescimoProfessor > 35
-            }
-        else:
-            resposta: dict = {
-                'status': 28 <= tmpContribuicao.years + acrescimoProfessor,
-                'ultrapassou': tmpContribuicao.years + acrescimoProfessor > 30
-            }
-        
-        return resposta
-
-    def atingiuRedTmpContribuicao(self, dib: datetime.date, tempoContribuicao: relativedelta) -> bool:
-        """
-        Avalia se:
-        - Homens -- Tempo de contribuição >= 15 e Idade >= 65
-        - Mulheres -- Tempo de contribuição >= 15 e Idade >= 60 (acréscimo de 6 meses por ano)
-        :return bool:
-        """
-        if dib < self.dataReforma2019:
-            return False
-
-        anosAposReforma: int = self.dataReforma2019.year - dib.year
-        acrescimoMensal = relativedelta(months=6*anosAposReforma).normalized()
-        ultimoDiaMes: int = monthrange(dib.year, dib.month)[1]
-        finalMes: datetime.date = datetime.date(dib.year, dib.month, ultimoDiaMes)
-        idadeClienteAteFinalMes: relativedelta = calculaIdade(self.cliente.dataNascimento, finalMes)
-
-        if tempoContribuicao.years < 15:
-            return False
-        else:
-            if self.enumGeneroCliente == GeneroCliente.masculino:
-                return idadeClienteAteFinalMes.years >= 65
-            else:
-                if idadeClienteAteFinalMes.years == 60 + acrescimoMensal.years:
-                    return idadeClienteAteFinalMes.months >= acrescimoMensal.months
-                elif idadeClienteAteFinalMes.years >= 60:
-                    return True
-
-    def atingiuPedagio100(self, dib: datetime.date) -> bool:
-        """
-        Na data da reforma o segurado deverá cumprir:
-        - idade mínima de 60H/57M
-        - Tempo de contribuição 35H/30M
-        :param dib:
-        :return:
-        """
-
-        if dib > self.dataReforma2019:
-            return False
-
-        acrescimoProfessor = 0
-        if self.cliente.professor:
-            acrescimoProfessor = 5
-
-        ultimoDiaMes: int = monthrange(dib.year, dib.month)[1]
-        competenciaFinalMes = datetime.date(dib.year, dib.month, ultimoDiaMes)
-        idadeFimMes: relativedelta = calculaIdade(strToDate(self.cliente.dataNascimento), competenciaFinalMes)
-
-        if self.enumGeneroCliente == GeneroCliente.masculino:
-            return idadeFimMes.years + acrescimoProfessor >= 60
-        else:
-            return idadeFimMes.years + acrescimoProfessor >= 57
-
-    def salvarItensNVezes(self, itemReferente: List[dict]):
-        ItemContribuicao.insert_many(itemReferente).execute()
-
+        dfContribuicoes['salContribuicaoAux'] = dfContribuicoes.apply(lambAvaliaSalario, axis=1)
+        salAtualizado = dfContribuicoes['salContribuicaoAux'] * dfContribuicoes['fator']
+        dfContribuicoes['salAtualizado'] = salAtualizado
+        self.dfTotalContribuicoes = dfContribuicoes
 
     #
     # def calculaDireitoAdquirido(self, lei: DireitoAdquirido, subTipo: SubTipoAposentadoria = None):
@@ -620,55 +702,7 @@ class CalculosAposentadoria:
     #         else:
     #             return anosContribuicao >= 30
     #
-    # def calculaFatorPrevidenciario(self):
-    #     """
-    #     Cálculo do fator previdenciário
     #
-    #     :var<float>: tempCont - Tempo de contribuição até o momento da aposentadoria
-    #     :var<float>: aliq - Alíquota de contribuição
-    #     :var<float>: expSobrevida - Expectativa de sobrevida após a data do início do benefício (dib)
-    #     :var<float>: idade - Idade do cliente na data do início do benefício
-    #
-    #     :return<float>: fatorPrev  = ((tempCont * aliq) / expSobrevida) * (1 + (idade + (tempCont * aliq)) / 100)
-    #     """
-    #     tempCont: float = self.tempoContribCalculado[2] + ((self.tempoContribCalculado[0] / 30) + self.tempoContribCalculado[1] / 12)
-    #     aliq: float = 0.31
-    #     intIdade: relativedelta = self.idadeCalculada
-    #     floatIdade: float = (intIdade.days/30 + intIdade.months)/12 + intIdade.years  # Para a fórmula é importante que a idade seja completa com dias e meses transformados em anos
-    #
-    #     try:
-    #         expSobrevidaModelo: ExpSobrevida = ExpSobrevida.select().where(
-    #             ExpSobrevida.dataReferente.year == self.dibAtual.year,
-    #             ExpSobrevida.idade == intIdade.years
-    #         ).get()
-    #     except ExpSobrevida.DoesNotExist:
-    #         expSobrevidaModelo: ExpSobrevida = ExpSobrevida.select().where(
-    #             ExpSobrevida.dataReferente.year == self.dibAtual.year - 1,
-    #             ExpSobrevida.idade == intIdade.years
-    #         ).get()
-    #
-    #     expSobrevida: int = expSobrevidaModelo.expectativaSobrevida
-    #
-    #     fatorPrev = ((tempCont * aliq) / expSobrevida) * (1 + (floatIdade + (tempCont * aliq)) / 100)
-    #
-    #     # print('\n\n------------------------------------ calculaFatorPrevidenciario')
-    #     # print(f"tempCont: {tempCont}")
-    #     # print(f"aliq: {aliq}")
-    #     # print(f"idade: {idade}")
-    #     # print(f"expSobrevida: {expSobrevida}")
-    #     # print(f"fatorPrev: {fatorPrev}")
-    #     # print(f"Possível dib: {expSobrevidaModelo.dataReferente}")
-    #     # print('------------------------------------ calculaFatorPrevidenciario\n\n')
-    #     return fatorPrev
-    #
-    # def calculaMediaSalarial(self) -> float:
-    #     avaliaSalario = lambda df: df['salContribuicao'] if df['salContribuicao'] <= df['teto'] else df['teto']
-    #
-    #     dfContribuicoes: pd.DataFrame = self.daoCalculos.buscaRemContPorData(self.cliente.clienteId, self.dataTrocaMoeda.strftime('%Y-%m-%d'), self.dibAtual.strftime('%Y-%m-%d'))
-    #     dfContribuicoes['salContribuicao1'] = dfContribuicoes.apply(avaliaSalario, axis=1)
-    #     salAtualizado = dfContribuicoes['salContribuicao1']*dfContribuicoes['fator']
-    #     dfContribuicoes['salAtualizado'] = salAtualizado
-    #     return dfContribuicoes['salAtualizado'].mean()
     #
     # def calculaTempoContribuicao(self, cabecalhos: Union[list, Generator] = None, dataLimitante: datetime = None) -> List[int]:
     #     listTimedeltas: list = []

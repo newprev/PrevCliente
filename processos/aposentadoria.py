@@ -30,6 +30,11 @@ from util.enums.newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData, 
 
 
 class CalculosAposentadoria:
+    """
+    Legendas:
+    - RMI: Renda mensal inicial
+    - DIB: Data do início do benefício
+    """
     listaCabecalhos: List[CnisCabecalhos] = []
     listaItensContrib: List[ItemContribuicao] = []
     listaRemuneracoes: List[CnisRemuneracoes] = []
@@ -120,9 +125,10 @@ class CalculosAposentadoria:
         self.atualizaDataFrameContribuicoes()
         self.calculaValorBeneficios()
 
-        print('Regra ------------------     DIB  -- QtdContrib ---------- tmpContribPorRegra')
+        print('Regra -------------------------------------   DIB    -- QtdContrib -- Valor Beneficio ---------- tmpContribPorRegra')
         for chave, valor in self.dibs.items():
-            print(f"{chave}    {valor}    {self.qtdContrib[chave]}    {self.tmpContribPorRegra[chave]}    R$ {self.valorBeneficios[chave]}")
+            tamanhoStr: int = len(chave.name) + 14
+            print(f"{chave}{' '*(42 - tamanhoStr)}{valor}       {self.qtdContrib[chave]}       R$ {self.valorBeneficios[chave]}    {self.tmpContribPorRegra[chave]}")
 
         # self.direitosAdquiridos = {
         #     DireitoAdquirido.lei821391: {
@@ -522,11 +528,12 @@ class CalculosAposentadoria:
         return fatorPrev
 
     def calculaValorBeneficios(self):
-        self.valorBeneficios[RegraTransicao.pedagio50] = self.rbiPedagio50()
-        self.valorBeneficios[RegraTransicao.pontos] = self.rbiPontos()
-        self.valorBeneficios[RegraTransicao.pedagio100] = self.rbiPedagio100()
+        self.valorBeneficios[RegraTransicao.pedagio50] = self.rmiPedagio50()
+        self.valorBeneficios[RegraTransicao.pontos] = self.rmiPontos()
+        self.valorBeneficios[RegraTransicao.pedagio100] = self.rmiPedagio100()
+        self.valorBeneficios[RegraTransicao.reducaoTempoContribuicao] = self.rmiRedTmpContribuicao()
 
-    def rbiPedagio50(self) -> float:
+    def rmiPedagio50(self) -> float:
         """
         Calcula Renda Básica Inicial, caso cliente tenha optado pela regra de transição Pedágio 50%
         :return: float
@@ -539,13 +546,13 @@ class CalculosAposentadoria:
         else:
             return 0.0
 
-    def rbiPedagio100(self) -> float:
+    def rmiPedagio100(self) -> float:
         if self.dibs[RegraTransicao.pedagio100] != datetime.date.min:
             return round(self.calculaMediaSalarial(self.dibs[RegraTransicao.pedagio100]), ndigits=2)
         else:
             return 0.0
 
-    def rbiPontos(self) -> float:
+    def rmiPontos(self) -> float:
         """
         Calcula Renda Básica Inicial, caso cliente tenha optado pela regra de pontos
         :return: float
@@ -559,6 +566,27 @@ class CalculosAposentadoria:
             desconto = (tempoContribuicao.years - 15) * 2 + 60
 
         return round(mediaSalarios * (desconto/100), ndigits=2)
+
+    def rmiRedTmpContribuicao(self) -> float:
+        """
+        Calcula Renda Básica Inicial, caso cliente tenha optado pela Redução do tempo de contribuição
+        :return: float
+        """
+        mediaSalarios: float = self.calculaMediaSalarial(self.dibs[RegraTransicao.reducaoTempoContribuicao])
+        tempoContribuicao: relativedelta = self.tmpContribPorRegra[RegraTransicao.reducaoTempoContribuicao]
+
+        if self.enumGeneroCliente == GeneroCliente.masculino:
+            porcentagemAcrescimo = tempoContribuicao.years - 20
+            if porcentagemAcrescimo < 0:
+                porcentagemAcrescimo = 0
+
+            desconto = porcentagemAcrescimo * 2 + 60
+        else:
+            porcentagemAcrescimo: int = tempoContribuicao.years - 15
+            desconto = porcentagemAcrescimo * 2 + 60
+
+        return round(mediaSalarios * (desconto / 100), ndigits=2)
+
 
     def efetivaDibPedagio50(self, competenciaAtual: datetime.date, tempoContribuicao: relativedelta, ultrapassouMinimo: bool):
         if ultrapassouMinimo:

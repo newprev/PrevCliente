@@ -532,6 +532,7 @@ class CalculosAposentadoria:
         self.valorBeneficios[RegraTransicao.pontos] = self.rmiPontos()
         self.valorBeneficios[RegraTransicao.pedagio100] = self.rmiPedagio100()
         self.valorBeneficios[RegraTransicao.reducaoTempoContribuicao] = self.rmiRedTmpContribuicao()
+        self.valorBeneficios[RegraTransicao.reducaoIdadeMinima] = self.rmiRedIdadeMinima()
 
     def rmiPedagio50(self) -> float:
         """
@@ -567,6 +568,26 @@ class CalculosAposentadoria:
 
         return round(mediaSalarios * (desconto/100), ndigits=2)
 
+    def rmiRedIdadeMinima(self) -> float:
+        """
+        Calcula Renda Básica Inicial, caso cliente tenha optado pela Redução do tempo de contribuição
+        :return: float
+        """
+        mediaSalarios: float = self.calculaMediaSalarial(self.dibs[RegraTransicao.reducaoIdadeMinima])
+        tempoContribuicao: relativedelta = self.tmpContribPorRegra[RegraTransicao.reducaoIdadeMinima]
+
+        if self.enumGeneroCliente == GeneroCliente.masculino:
+            porcentagemAcrescimo = tempoContribuicao.years - 20
+            if porcentagemAcrescimo < 0:
+                porcentagemAcrescimo = 0
+
+            desconto = porcentagemAcrescimo * 2 + 60
+        else:
+            porcentagemAcrescimo: int = tempoContribuicao.years - 15
+            desconto = porcentagemAcrescimo * 2 + 60
+
+        return round(mediaSalarios * (desconto / 100), ndigits=2)
+
     def rmiRedTmpContribuicao(self) -> float:
         """
         Calcula Renda Básica Inicial, caso cliente tenha optado pela Redução do tempo de contribuição
@@ -586,7 +607,6 @@ class CalculosAposentadoria:
             desconto = porcentagemAcrescimo * 2 + 60
 
         return round(mediaSalarios * (desconto / 100), ndigits=2)
-
 
     def efetivaDibPedagio50(self, competenciaAtual: datetime.date, tempoContribuicao: relativedelta, ultrapassouMinimo: bool):
         if ultrapassouMinimo:

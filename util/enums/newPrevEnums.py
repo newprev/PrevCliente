@@ -118,6 +118,10 @@ class RegraTransicao(Enum):
     reducaoTempoContribuicao = 4
     pedagio100 = 5
 
+class RegraGeral(Enum):
+    Fator85_95 = 0
+    Lei2019 = 1
+
 class GeneroCliente(Enum):
     masculino = 'M'
     feminino = 'F'

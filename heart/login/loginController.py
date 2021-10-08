@@ -5,7 +5,6 @@ from typing import List
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
-from Daos.daoConfiguracoes import DaoConfiguracoes
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 from repositorios.clienteRepositorio import UsuarioRepository
@@ -20,6 +19,7 @@ from modelos.expSobrevidaORM import ExpSobrevida
 from modelos.carenciasLei91 import CarenciaLei91
 from modelos.indiceAtuMonetariaORM import IndiceAtuMonetaria
 from modelos.configGeraisORM import ConfigGerais
+from modelos.salarioMinimoORM import SalarioMinimo
 from Design.pyUi.loginPage import Ui_mwLogin
 from heart.login.wdgAdvController import WdgAdvController
 from heart.dashboard.dashboardController import DashboardController
@@ -221,7 +221,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         if self.infoNaoNulo:
             if ApiFerramentas().conexaoOnline():
                 self.loading(10)
-                self.verificaRotinaDiaria()
+                self.verificaRotinaAtualizacao()
                 self.loading(20)
             else:
                 self.showPopupAlerta('Sem conexão com o servidor.')
@@ -305,7 +305,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         escritorio: Escritorios = self.escritorioRepositorio.buscaEscritorio(escritorioId)
         return escritorio
 
-    def verificaRotinaDiaria(self):
+    def verificaRotinaAtualizacao(self):
 
         pathFile = os.path.join(os.getcwd(), '.sync', '.syncFile')
         syncJson = {
@@ -315,6 +315,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             'syncExpSobrevida': datetimeToSql(datetime.datetime.now()),
             'syncCarenciasLei91': datetimeToSql(datetime.datetime.now()),
             'syncAtuMonetaria': datetimeToSql(datetime.datetime.now()),
+            'syncSalarioMinimo': datetimeToSql(datetime.datetime.now()),
         }
         loop = aio.get_event_loop()
 
@@ -322,7 +323,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             with open(pathFile, encoding='utf-8', mode='r') as syncFile:
                 if len(syncFile.readlines()) == 0:
                     os.remove(pathFile)
-                    self.verificaRotinaDiaria()
+                    self.verificaRotinaAtualizacao()
                     return True
                 else:
                     infoToUpdate = {}
@@ -335,6 +336,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     dateSyncExpSobrevida = strToDatetime(syncDict['syncExpSobrevida'])
                     dateSyncCarenciasLei91 = strToDatetime(syncDict['syncCarenciasLei91'])
                     dateSyncAtuMonetaria = strToDatetime(syncDict['syncAtuMonetaria'])
+                    dateSyncSalarioMinimo = strToDatetime(syncDict['syncSalarioMinimo'])
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
                         infoToUpdate[FerramentasEInfo.convMon] = True
@@ -366,6 +368,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     else:
                         syncJson['syncAtuMonetaria'] = syncDict['syncAtuMonetaria']
 
+                    if (datetime.datetime.now() - dateSyncSalarioMinimo).days != 0:
+                        infoToUpdate[FerramentasEInfo.salarioMinimo] = True
+                    else:
+                        syncJson['syncSalarioMinimo'] = syncDict['syncSalarioMinimo']
+
                     loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
 
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
@@ -377,7 +384,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 FerramentasEInfo.indicadores: True,
                 FerramentasEInfo.expSobrevida: True,
                 FerramentasEInfo.carenciasLei91: True,
-                FerramentasEInfo.atuMonetaria: True
+                FerramentasEInfo.atuMonetaria: True,
+                FerramentasEInfo.salarioMinimo: True,
             }
             loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
 
@@ -391,6 +399,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         qtdConvMon = ConvMon.select().count()
         qtdCarenciasLei91 = CarenciaLei91.select().count()
         qtdAtuMonetarias = IndiceAtuMonetaria.select().count()
+        qtdSalariosMinimos = SalarioMinimo.select().count()
 
         asyncTasks = []
         for tipoInfo, sync in infoToUpdate.items():
@@ -407,6 +416,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.carenciasLei91)))
                 elif tipoInfo == FerramentasEInfo.atuMonetaria:
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.atuMonetaria)))
+                elif tipoInfo == FerramentasEInfo.salarioMinimo:
+                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.salarioMinimo)))
 
         gather = await aio.gather(*asyncTasks)
 
@@ -447,6 +458,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                         listasAAdicionar = divideListaEmPartes(indicesAtuMonetaria, 400)
                         for listaIndice in listasAAdicionar:
                             IndiceAtuMonetaria.insert_many(listaIndice).on_conflict('replace').execute()
+
+            elif aioTask == FerramentasEInfo.salarioMinimo:
+                listaSalarios: List[dict] = infoApi
+                if qtdSalariosMinimos < len(listaSalarios):
+                    SalarioMinimo.insert_many(listaSalarios).on_conflict('replace').execute()
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

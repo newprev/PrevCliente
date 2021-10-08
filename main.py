@@ -26,6 +26,7 @@ from modelos.remuneracaoORM import CnisRemuneracoes
 from modelos.carenciasLei91 import CarenciaLei91
 from modelos.configGeraisORM import ConfigGerais
 from modelos.itemContribuicao import ItemContribuicao
+from modelos.salarioMinimoORM import SalarioMinimo
 from util.enums.newPrevEnums import TiposConexoes
 from cache.cachingLogin import CacheLogin
 
@@ -88,6 +89,7 @@ class Main(Ui_MainWindow, QMainWindow):
             CarenciaLei91: 'CRIANDO TABELA DE CARÊNCIAS LEI 8.213/91...',
             ConfigGerais: 'CRIANDO TABELA DE CONFIGURAÇÕES GERAIS...',
             ItemContribuicao: 'CRIANDO TABELA DE ITENS DE CONTRIBUIÇÃO...',
+            SalarioMinimo: 'CRIANDO TABELA DE SALÁRIOS MÍNIMOS...'
         }
 
         # percentLoading = ceil(100 / len(listaLoading))
@@ -113,7 +115,7 @@ class Main(Ui_MainWindow, QMainWindow):
                 configGeral: ConfigGerais = ConfigGerais().get(ConfigGerais.advogadoId == advogado.advogadoId)
 
                 if configGeral.iniciaAuto:
-                    self.loginPage.verificaRotinaDiaria()
+                    self.loginPage.verificaRotinaAtualizacao()
                     self.loginPage.iniciaDashboard()
                     self.close()
                 else:

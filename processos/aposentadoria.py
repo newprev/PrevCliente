@@ -653,6 +653,8 @@ class CalculosAposentadoria:
         """
         mediaSalarios: float = self.calculaMediaSalarial(self.dibs[RegraGeralAR.idade])
         tempoContribuicao: relativedelta = self.tmpContribPorRegra[RegraGeralAR.idade]
+        fator: float = self.calculaFatorPrevidenciario(self.dibs[RegraGeralAR.tempoContribuicao], self.tmpContribPorRegra[RegraGeralAR.tempoContribuicao])
+
         try:
             salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraGeralAR.idade].year).get()
         except SalarioMinimo.DoesNotExist as err:
@@ -661,7 +663,7 @@ class CalculosAposentadoria:
         desconto: float = (70 + tempoContribuicao.years) / 100
 
         valorInicial = mediaSalarios * desconto
-        valorBeneficio = max(valorInicial, salarioMinimo.valor)
+        valorBeneficio = max(valorInicial, valorInicial*fator, salarioMinimo.valor)
 
         return valorBeneficio
 

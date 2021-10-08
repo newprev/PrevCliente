@@ -2,16 +2,12 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from typing import List
 from calendar import monthrange
-from math import floor
 import pandas as pd
-from collections import defaultdict
-from peewee import fn, SqliteDatabase
+from peewee import SqliteDatabase
 from SQLs.itensContribuicao import selectItensDados
 
 from Daos.daoCalculos import DaoCalculos
-from util.helpers import comparaMesAno, calculaDiaMesAno, verificaIndicadorProibitivo
 from util.dateHelper import calculaIdade, strToDate, dataConflitante
-from util.ferramentas.tools import prettyPrintDict
 
 from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.remuneracaoORM import CnisRemuneracoes
@@ -20,7 +16,7 @@ from modelos.itemContribuicao import ItemContribuicao
 from modelos.expSobrevidaORM import ExpSobrevida
 from modelos.processosORM import Processos
 from modelos.clienteORM import Cliente
-from modelos.carenciasLei91 import CarenciaLei91
+from modelos.salarioMinimoORM import SalarioMinimo
 from util.enums.newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData, ComparaData, DireitoAdquirido, SubTipoAposentadoria, TipoItemContribuicao
 
 
@@ -539,17 +535,34 @@ class CalculosAposentadoria:
         Calcula Renda Básica Inicial, caso cliente tenha optado pela regra de transição Pedágio 50%
         :return: float
         """
+        salarioMinimo: SalarioMinimo
         if self.dibs[RegraTransicao.pedagio50] != datetime.date.min and self.tmpContribPorRegra[RegraTransicao.pedagio50] is not None:
             fatorPrev = self.calculaFatorPrevidenciario(self.dibs[RegraTransicao.pedagio50], self.tmpContribPorRegra[RegraTransicao.pedagio50])
             mediaSalarios = self.calculaMediaSalarial(self.dibs[RegraTransicao.pedagio50])
 
-            return round(mediaSalarios * fatorPrev, ndigits=2)
+            try:
+                salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.pedagio50].year).get()
+            except SalarioMinimo.DoesNotExist as err:
+                salarioMinimo = SalarioMinimo.select().order_by(SalarioMinimo.vigencia.desc()).get()
+
+            valorInicial = round(mediaSalarios * fatorPrev, ndigits=2)
+            valorBeneficio = max(valorInicial, salarioMinimo.valor)
+
+            return valorBeneficio
         else:
             return 0.0
 
     def rmiPedagio100(self) -> float:
         if self.dibs[RegraTransicao.pedagio100] != datetime.date.min:
-            return round(self.calculaMediaSalarial(self.dibs[RegraTransicao.pedagio100]), ndigits=2)
+            try:
+                salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.pedagio50].year).get()
+            except SalarioMinimo.DoesNotExist as err:
+                salarioMinimo = SalarioMinimo.select().order_by(SalarioMinimo.vigencia.desc()).get()
+
+            valorInicial = round(self.calculaMediaSalarial(self.dibs[RegraTransicao.pedagio100]), ndigits=2)
+            valorBeneficio = max(valorInicial, salarioMinimo.valor)
+
+            return valorBeneficio
         else:
             return 0.0
 
@@ -560,13 +573,20 @@ class CalculosAposentadoria:
         """
         mediaSalarios: float = self.calculaMediaSalarial(self.dibs[RegraTransicao.pontos])
         tempoContribuicao: relativedelta = self.tmpContribPorRegra[RegraTransicao.pontos]
+        try:
+            salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.pedagio50].year).get()
+        except SalarioMinimo.DoesNotExist as err:
+            salarioMinimo = SalarioMinimo.select().order_by(SalarioMinimo.vigencia.desc()).get()
 
         if self.enumGeneroCliente == GeneroCliente.masculino:
             desconto = (tempoContribuicao.years - 20) * 2 + 60
         else:
             desconto = (tempoContribuicao.years - 15) * 2 + 60
 
-        return round(mediaSalarios * (desconto/100), ndigits=2)
+        valorInicial = round(mediaSalarios * (desconto/100), ndigits=2)
+        valorBenefício = max(valorInicial, salarioMinimo.valor)
+
+        return valorBenefício
 
     def rmiRedIdadeMinima(self) -> float:
         """
@@ -575,6 +595,10 @@ class CalculosAposentadoria:
         """
         mediaSalarios: float = self.calculaMediaSalarial(self.dibs[RegraTransicao.reducaoIdadeMinima])
         tempoContribuicao: relativedelta = self.tmpContribPorRegra[RegraTransicao.reducaoIdadeMinima]
+        try:
+            salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.pedagio50].year).get()
+        except SalarioMinimo.DoesNotExist as err:
+            salarioMinimo = SalarioMinimo.select().order_by(SalarioMinimo.vigencia.desc()).get()
 
         if self.enumGeneroCliente == GeneroCliente.masculino:
             porcentagemAcrescimo = tempoContribuicao.years - 20
@@ -586,7 +610,10 @@ class CalculosAposentadoria:
             porcentagemAcrescimo: int = tempoContribuicao.years - 15
             desconto = porcentagemAcrescimo * 2 + 60
 
-        return round(mediaSalarios * (desconto / 100), ndigits=2)
+        valorInicial = round(mediaSalarios * (desconto / 100), ndigits=2)
+        valorBeneficio = max(valorInicial, salarioMinimo.valor)
+
+        return valorBeneficio
 
     def rmiRedTmpContribuicao(self) -> float:
         """
@@ -595,6 +622,10 @@ class CalculosAposentadoria:
         """
         mediaSalarios: float = self.calculaMediaSalarial(self.dibs[RegraTransicao.reducaoTempoContribuicao])
         tempoContribuicao: relativedelta = self.tmpContribPorRegra[RegraTransicao.reducaoTempoContribuicao]
+        try:
+            salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.pedagio50].year).get()
+        except SalarioMinimo.DoesNotExist as err:
+            salarioMinimo = SalarioMinimo.select().order_by(SalarioMinimo.vigencia.desc()).get()
 
         if self.enumGeneroCliente == GeneroCliente.masculino:
             porcentagemAcrescimo = tempoContribuicao.years - 20
@@ -606,7 +637,10 @@ class CalculosAposentadoria:
             porcentagemAcrescimo: int = tempoContribuicao.years - 15
             desconto = porcentagemAcrescimo * 2 + 60
 
-        return round(mediaSalarios * (desconto / 100), ndigits=2)
+        valorInicial = round(mediaSalarios * (desconto / 100), ndigits=2)
+        valorBeneficio = max(valorInicial, salarioMinimo.valor)
+
+        return valorBeneficio
 
     def efetivaDibPedagio50(self, competenciaAtual: datetime.date, tempoContribuicao: relativedelta, ultrapassouMinimo: bool):
         if ultrapassouMinimo:

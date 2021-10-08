@@ -31,19 +31,19 @@ class SalarioMinimo(BaseModel, Model):
         }
         return dictSalario
 
-    def fromDict(self, dictIndicador):
-        self.salarioId = dictIndicador['indicadorId']
-        self.vigencia = dictIndicador['vigencia']
-        self.baseLegal = dictIndicador['baseLegal']
-        self.valor = dictIndicador['valor']
-        self.dataUltAlt = dictIndicador['dataUltAlt']
-        self.dataCadastro = dictIndicador['dataCadastro']
+    def fromDict(self, dictSalario):
+        self.salarioId = dictSalario['indicadorId']
+        self.vigencia = dictSalario['vigencia']
+        self.baseLegal = dictSalario['baseLegal']
+        self.valor = dictSalario['valor']
+        self.dataUltAlt = dictSalario['dataUltAlt']
+        self.dataCadastro = dictSalario['dataCadastro']
         return self
 
     def prettyPrint(self, backRef: bool = False):
         print(f"""
         IndicadorModelo(
-            indicadorId: {self.indicadorId},
+            salarioId: {self.salarioId},
             vigencia: {self.vigencia},
             baseLegal: {self.baseLegal},
             valor: {self.valor},

@@ -24,7 +24,11 @@ from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.remuneracaoORM import CnisRemuneracoes
 from modelos.carenciasLei91 import CarenciaLei91
+from modelos.configGeraisORM import ConfigGerais
+from modelos.itemContribuicao import ItemContribuicao
+from modelos.salarioMinimoORM import SalarioMinimo
 from util.enums.newPrevEnums import TiposConexoes
+from cache.cachingLogin import CacheLogin
 
 
 class Main(Ui_MainWindow, QMainWindow):
@@ -82,7 +86,10 @@ class Main(Ui_MainWindow, QMainWindow):
             Processos: 'CRIANDO TABELA DOS PROCESSOS...',
             Telefones: 'CRIANDO TABELA DE TELEFONES...',
             TetosPrev: 'CRIANDO TABELA DE TETOS PREVIDENCIÁRIOS...',
-            CarenciaLei91: 'CRIANDO TABELA DE CARÊNCIAS LEI 8.213/91...'
+            CarenciaLei91: 'CRIANDO TABELA DE CARÊNCIAS LEI 8.213/91...',
+            ConfigGerais: 'CRIANDO TABELA DE CONFIGURAÇÕES GERAIS...',
+            ItemContribuicao: 'CRIANDO TABELA DE ITENS DE CONTRIBUIÇÃO...',
+            SalarioMinimo: 'CRIANDO TABELA DE SALÁRIOS MÍNIMOS...'
         }
 
         # percentLoading = ceil(100 / len(listaLoading))
@@ -94,10 +101,31 @@ class Main(Ui_MainWindow, QMainWindow):
             self.progresso(add=percentLoading)
 
         self.lbInfo.setText('CRIANDO TELA DE LOGIN...')
-        self.loginPage = LoginController(db=self.db)
         self.progresso(add=percentLoading)
 
-        self.iniciaNewPrev()
+        # self.iniciaNewPrev()
+        self.avaliaAbrirTelaLogin()
+
+    def avaliaAbrirTelaLogin(self):
+        advogado = CacheLogin().carregarCache()
+        self.loginPage = LoginController(db=self.db)
+
+        if advogado:
+            try:
+                configGeral: ConfigGerais = ConfigGerais().get(ConfigGerais.advogadoId == advogado.advogadoId)
+
+                if configGeral.iniciaAuto:
+                    self.loginPage.verificaRotinaAtualizacao()
+                    self.loginPage.iniciaDashboard()
+                    self.close()
+                else:
+                    self.iniciaNewPrev()
+
+            except ConfigGerais.DoesNotExist:
+                print('Não encontrou configurações')
+                self.iniciaNewPrev()
+        else:
+            self.iniciaNewPrev()
 
     def iniciaNewPrev(self):
         self.loginPage.show()

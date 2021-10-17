@@ -1,12 +1,15 @@
 from PyQt5.QtWidgets import QMessageBox
 
 
-def popUpOkAlerta(mensagem, titulo: str = 'Atenção!'):
+def popUpOkAlerta(mensagem, titulo: str = 'Atenção!', erro: str = None):
     pop = QMessageBox()
     pop.setWindowTitle(titulo)
     pop.setText(mensagem)
     pop.setIcon(QMessageBox.Warning)
     pop.setStandardButtons(QMessageBox.Ok)
+
+    if erro is not None:
+        pop.setDetailedText(erro)
 
     x = pop.exec_()
 

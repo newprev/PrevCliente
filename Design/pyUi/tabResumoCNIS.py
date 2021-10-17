@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'tabCalculos.ui'
+# Form implementation generated from reading ui file 'tabResumoCNIS.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -11,12 +11,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_wdgTabCalculos(object):
-    def setupUi(self, wdgTabCalculos):
-        wdgTabCalculos.setObjectName("wdgTabCalculos")
-        wdgTabCalculos.resize(1167, 764)
-        wdgTabCalculos.setMinimumSize(QtCore.QSize(945, 611))
-        wdgTabCalculos.setStyleSheet("#tabContribuicoes,\n"
+class Ui_wdgTabResumoCNIS(object):
+    def setupUi(self, wdgTabResumoCNIS):
+        wdgTabResumoCNIS.setObjectName("wdgTabResumoCNIS")
+        wdgTabResumoCNIS.resize(1167, 764)
+        wdgTabResumoCNIS.setMinimumSize(QtCore.QSize(945, 611))
+        wdgTabResumoCNIS.setStyleSheet("#tabContribuicoes,\n"
 "#tabMain, \n"
 "#tabCalculos,\n"
 "#tabBeneficios,\n"
@@ -85,11 +85,11 @@ class Ui_wdgTabCalculos(object):
 "QTabBar::tab:!selected {\n"
 "    margin-top: 2px;\n"
 "}")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(wdgTabCalculos)
+        self.horizontalLayout = QtWidgets.QHBoxLayout(wdgTabResumoCNIS)
         self.horizontalLayout.setContentsMargins(9, 4, 0, 0)
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.tabMain = QtWidgets.QTabWidget(wdgTabCalculos)
+        self.tabMain = QtWidgets.QTabWidget(wdgTabResumoCNIS)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -960,83 +960,83 @@ class Ui_wdgTabCalculos(object):
         self.tabMain.addTab(self.tabBeneficios, "")
         self.horizontalLayout.addWidget(self.tabMain)
 
-        self.retranslateUi(wdgTabCalculos)
+        self.retranslateUi(wdgTabResumoCNIS)
         self.tabMain.setCurrentIndex(0)
-        QtCore.QMetaObject.connectSlotsByName(wdgTabCalculos)
+        QtCore.QMetaObject.connectSlotsByName(wdgTabResumoCNIS)
 
-    def retranslateUi(self, wdgTabCalculos):
+    def retranslateUi(self, wdgTabResumoCNIS):
         _translate = QtCore.QCoreApplication.translate
-        wdgTabCalculos.setWindowTitle(_translate("wdgTabCalculos", "Form"))
-        self.lbTituloClientesResumo.setText(_translate("wdgTabCalculos", "Resumo do CNIS"))
-        self.lbInfoClientesResumo.setText(_translate("wdgTabCalculos", "Resumo das contribuições e benefícios"))
-        self.bpInfoPessoaisResumo.setTitle(_translate("wdgTabCalculos", "Informações pessoais"))
-        self.lbInfoNomeResumo.setText(_translate("wdgTabCalculos", "Nome cliente:"))
-        self.lbInfoDocumentoResumo.setText(_translate("wdgTabCalculos", "Documento:"))
-        self.pbBuscarClienteResumo.setText(_translate("wdgTabCalculos", "Buscar \n"
+        wdgTabResumoCNIS.setWindowTitle(_translate("wdgTabResumoCNIS", "Form"))
+        self.lbTituloClientesResumo.setText(_translate("wdgTabResumoCNIS", "Resumo do CNIS"))
+        self.lbInfoClientesResumo.setText(_translate("wdgTabResumoCNIS", "Resumo das contribuições e benefícios"))
+        self.bpInfoPessoaisResumo.setTitle(_translate("wdgTabResumoCNIS", "Informações pessoais"))
+        self.lbInfoNomeResumo.setText(_translate("wdgTabResumoCNIS", "Nome cliente:"))
+        self.lbInfoDocumentoResumo.setText(_translate("wdgTabResumoCNIS", "Documento:"))
+        self.pbBuscarClienteResumo.setText(_translate("wdgTabResumoCNIS", "Buscar \n"
 "cliente"))
-        self.pbInserirResumo.setText(_translate("wdgTabCalculos", "Inserir"))
-        self.tabMain.setTabText(self.tabMain.indexOf(self.tabResumo), _translate("wdgTabCalculos", "Resumo"))
-        self.bpInfoPessoaisContrib.setTitle(_translate("wdgTabCalculos", "Informações pessoais"))
-        self.lbInfoNomeContrib.setText(_translate("wdgTabCalculos", "Nome cliente:"))
-        self.lbInfoDocumentoContrib.setText(_translate("wdgTabCalculos", "Documento:"))
-        self.pbBuscarCliente.setText(_translate("wdgTabCalculos", "Buscar \n"
+        self.pbInserirResumo.setText(_translate("wdgTabResumoCNIS", "Inserir"))
+        self.tabMain.setTabText(self.tabMain.indexOf(self.tabResumo), _translate("wdgTabResumoCNIS", "Resumo"))
+        self.bpInfoPessoaisContrib.setTitle(_translate("wdgTabResumoCNIS", "Informações pessoais"))
+        self.lbInfoNomeContrib.setText(_translate("wdgTabResumoCNIS", "Nome cliente:"))
+        self.lbInfoDocumentoContrib.setText(_translate("wdgTabResumoCNIS", "Documento:"))
+        self.pbBuscarCliente.setText(_translate("wdgTabResumoCNIS", "Buscar \n"
 "cliente"))
-        self.pbInserir.setText(_translate("wdgTabCalculos", "Inserir"))
-        self.pbExcluir.setText(_translate("wdgTabCalculos", "Excluir"))
-        self.pbEditar.setText(_translate("wdgTabCalculos", "Editar"))
+        self.pbInserir.setText(_translate("wdgTabResumoCNIS", "Inserir"))
+        self.pbExcluir.setText(_translate("wdgTabResumoCNIS", "Excluir"))
+        self.pbEditar.setText(_translate("wdgTabResumoCNIS", "Editar"))
         item = self.tblCalculos.verticalHeaderItem(0)
-        item.setText(_translate("wdgTabCalculos", "New Row"))
+        item.setText(_translate("wdgTabResumoCNIS", "New Row"))
         item = self.tblCalculos.horizontalHeaderItem(0)
-        item.setText(_translate("wdgTabCalculos", "infoId"))
+        item.setText(_translate("wdgTabResumoCNIS", "infoId"))
         item = self.tblCalculos.horizontalHeaderItem(1)
-        item.setText(_translate("wdgTabCalculos", "Nº"))
+        item.setText(_translate("wdgTabResumoCNIS", "Nº"))
         item = self.tblCalculos.horizontalHeaderItem(2)
-        item.setText(_translate("wdgTabCalculos", "Data"))
+        item.setText(_translate("wdgTabResumoCNIS", "Data"))
         item = self.tblCalculos.horizontalHeaderItem(3)
-        item.setText(_translate("wdgTabCalculos", "Salário de \n"
+        item.setText(_translate("wdgTabResumoCNIS", "Salário de \n"
 "Contribuição"))
         item = self.tblCalculos.horizontalHeaderItem(4)
-        item.setText(_translate("wdgTabCalculos", "Tetos \n"
+        item.setText(_translate("wdgTabResumoCNIS", "Tetos \n"
 "Previdenciários"))
         item = self.tblCalculos.horizontalHeaderItem(5)
-        item.setText(_translate("wdgTabCalculos", "Natureza"))
+        item.setText(_translate("wdgTabResumoCNIS", "Natureza"))
         item = self.tblCalculos.horizontalHeaderItem(6)
-        item.setText(_translate("wdgTabCalculos", "Indicadores"))
+        item.setText(_translate("wdgTabResumoCNIS", "Indicadores"))
         __sortingEnabled = self.tblCalculos.isSortingEnabled()
         self.tblCalculos.setSortingEnabled(False)
         self.tblCalculos.setSortingEnabled(__sortingEnabled)
-        self.lbTituloClientes.setText(_translate("wdgTabCalculos", "Tabela de Remunerações"))
-        self.lbInfoClientes.setText(_translate("wdgTabCalculos", "Pesquise por toda a sua base de clientes"))
-        self.tabMain.setTabText(self.tabMain.indexOf(self.tabContribuicoes), _translate("wdgTabCalculos", "Contribuições"))
+        self.lbTituloClientes.setText(_translate("wdgTabResumoCNIS", "Tabela de Remunerações"))
+        self.lbInfoClientes.setText(_translate("wdgTabResumoCNIS", "Pesquise por toda a sua base de clientes"))
+        self.tabMain.setTabText(self.tabMain.indexOf(self.tabContribuicoes), _translate("wdgTabResumoCNIS", "Contribuições"))
         item = self.tblBeneficios.horizontalHeaderItem(0)
-        item.setText(_translate("wdgTabCalculos", "infoId"))
+        item.setText(_translate("wdgTabResumoCNIS", "infoId"))
         item = self.tblBeneficios.horizontalHeaderItem(1)
-        item.setText(_translate("wdgTabCalculos", "Nº"))
+        item.setText(_translate("wdgTabResumoCNIS", "Nº"))
         item = self.tblBeneficios.horizontalHeaderItem(2)
-        item.setText(_translate("wdgTabCalculos", "Número do\n"
+        item.setText(_translate("wdgTabResumoCNIS", "Número do\n"
 "benefício"))
         item = self.tblBeneficios.horizontalHeaderItem(3)
-        item.setText(_translate("wdgTabCalculos", "Competência"))
+        item.setText(_translate("wdgTabResumoCNIS", "Competência"))
         item = self.tblBeneficios.horizontalHeaderItem(4)
-        item.setText(_translate("wdgTabCalculos", "Valor do benefício"))
-        self.lbTituloClientesBen.setText(_translate("wdgTabCalculos", "Tabela de Benefícios"))
-        self.lbInfoClientesBen.setText(_translate("wdgTabCalculos", "Pesquise por toda a sua base de clientes"))
-        self.bpInfoPessoaisBene.setTitle(_translate("wdgTabCalculos", "Informações pessoais"))
-        self.lbInfoNomeBen.setText(_translate("wdgTabCalculos", "Nome cliente:"))
-        self.lbInfoDocumentoBen.setText(_translate("wdgTabCalculos", "Documento:"))
-        self.pbBuscarClienteBen.setText(_translate("wdgTabCalculos", "Buscar \n"
+        item.setText(_translate("wdgTabResumoCNIS", "Valor do benefício"))
+        self.lbTituloClientesBen.setText(_translate("wdgTabResumoCNIS", "Tabela de Benefícios"))
+        self.lbInfoClientesBen.setText(_translate("wdgTabResumoCNIS", "Pesquise por toda a sua base de clientes"))
+        self.bpInfoPessoaisBene.setTitle(_translate("wdgTabResumoCNIS", "Informações pessoais"))
+        self.lbInfoNomeBen.setText(_translate("wdgTabResumoCNIS", "Nome cliente:"))
+        self.lbInfoDocumentoBen.setText(_translate("wdgTabResumoCNIS", "Documento:"))
+        self.pbBuscarClienteBen.setText(_translate("wdgTabResumoCNIS", "Buscar \n"
 "cliente"))
-        self.pbInserirBen.setText(_translate("wdgTabCalculos", "Inserir"))
-        self.pbExcluirBen.setText(_translate("wdgTabCalculos", "Excluir"))
-        self.pbEditarBen.setText(_translate("wdgTabCalculos", "Editar"))
-        self.tabMain.setTabText(self.tabMain.indexOf(self.tabBeneficios), _translate("wdgTabCalculos", "Benefícios"))
+        self.pbInserirBen.setText(_translate("wdgTabResumoCNIS", "Inserir"))
+        self.pbExcluirBen.setText(_translate("wdgTabResumoCNIS", "Excluir"))
+        self.pbEditarBen.setText(_translate("wdgTabResumoCNIS", "Editar"))
+        self.tabMain.setTabText(self.tabMain.indexOf(self.tabBeneficios), _translate("wdgTabResumoCNIS", "Benefícios"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    wdgTabCalculos = QtWidgets.QWidget()
-    ui = Ui_wdgTabCalculos()
-    ui.setupUi(wdgTabCalculos)
-    wdgTabCalculos.show()
+    wdgTabResumoCNIS = QtWidgets.QWidget()
+    ui = Ui_wdgTabResumoCNIS()
+    ui.setupUi(wdgTabResumoCNIS)
+    wdgTabResumoCNIS.show()
     sys.exit(app.exec_())

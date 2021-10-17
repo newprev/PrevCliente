@@ -1,7 +1,7 @@
 from modelos.baseModelORM import BaseModel, DATEFORMATS
-from util.helpers import strToDatetime
 from playhouse.signals import Model, post_save, pre_delete
 from logs import logPrioridade
+from util.dateHelper import strToDate
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from datetime import datetime
@@ -36,7 +36,7 @@ class ExpSobrevida(BaseModel, Model):
     def fromDict(self, dictExpectativaSobrevida: dict):
 
         self.infoId = dictExpectativaSobrevida['infoId']
-        self.dataReferente = strToDatetime(dictExpectativaSobrevida['dataReferente'])
+        self.dataReferente = strToDate(dictExpectativaSobrevida['dataReferente'])
         self.idade = dictExpectativaSobrevida['idade']
         self.expectativaSobrevida = dictExpectativaSobrevida['expectativaSobrevida']
 

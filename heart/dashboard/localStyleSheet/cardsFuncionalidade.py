@@ -8,6 +8,8 @@ def inicializaCard(tipo: str):
         backgroundImg = "background-image: url(:/entrevista/entrevista.png);"
     elif tipo.upper() == 'CALCULOS':
         backgroundImg = "background-image: url(:/calculos/calculos.png);"
+    elif tipo.upper() == 'RESUMO':
+        backgroundImg = "background-image: url(:/resumo/resumo.png);"
     else:
         backgroundImg = "background-image: url(:/cliente/customer.png);"
 

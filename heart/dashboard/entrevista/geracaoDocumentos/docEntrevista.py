@@ -10,7 +10,8 @@ from modelos.clienteORM import Cliente
 from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
 from modelos.processosORM import Processos
-from util.helpers import mascaraCep, mascaraTelCel, strTipoBeneficio, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG, strToDatetime, calculaDiaMesAno
+from util.dateHelper import strToDatetime
+from util.helpers import mascaraCep, mascaraTelCel, strTipoBeneficio, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG, calculaDiaMesAno
 
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio

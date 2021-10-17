@@ -5,7 +5,7 @@ from Design.pyUi.dashboard import Ui_mwDashBoard
 from heart.menuLateral.configuracoesPage import ConfiguracoesPage
 from heart.dashboard.localWidgets.cardFuncionalidade import CardFuncionalidade
 from heart.dashboard.tabs.clienteController import TabCliente
-from heart.dashboard.tabs.tabCalculos import TabCalculos
+from heart.dashboard.tabs.tabResumoCNIS import TabResumoCNIS
 from heart.informacoesTelas.informacoesGerais import InformacoesGerais
 from heart.menuLateral.ferramentasPage import FerramentasPage
 from heart.dashboard.entrevista.entrevistaController import EntrevistaController
@@ -30,7 +30,7 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
 
         self.funcCliente = CardFuncionalidade(tipo='cliente', parent=self)
         self.funcEntrevista = CardFuncionalidade(tipo='Entrevista', parent=self)
-        self.funcCalculos = CardFuncionalidade(tipo='Calculos', parent=self)
+        self.funcResumo = CardFuncionalidade(tipo='Resumo', parent=self)
 
         self.pbConfig.setToolTip('Configurações')
         self.pbFerramentas.setToolTip('Ferramentas')
@@ -43,13 +43,13 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.pbInfoGerais.clicked.connect(lambda: self.trocarParaPagina(TelaPosicao.InformacoesGerais))
 
         self.tabCliente = TabCliente(parent=self, db=db)
-        self.tabCalculos = TabCalculos(parent=self, db=db)
-        self.configuracoesPage = ConfiguracoesPage(parent=self, db=db)
+        self.tabResumo = TabResumoCNIS(parent=self, db=db)
+        self.configuracoesPage = ConfiguracoesPage(parent=self)
         self.ferramentasPage = FerramentasPage(parent=self, db=db)
         self.informacoePage = InformacoesGerais(parent=self)
 
         self.stkMainDashBoard.addWidget(self.tabCliente)
-        self.stkMainDashBoard.addWidget(self.tabCalculos)
+        self.stkMainDashBoard.addWidget(self.tabResumo)
         self.stkMainDashBoard.addWidget(self.configuracoesPage)
         self.stkMainDashBoard.addWidget(self.ferramentasPage)
         self.stkMainDashBoard.addWidget(self.informacoePage)
@@ -63,7 +63,7 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
 
         self.boxLayout.addWidget(self.funcCliente)
         self.boxLayout.addWidget(self.funcEntrevista)
-        self.boxLayout.addWidget(self.funcCalculos)
+        self.boxLayout.addWidget(self.funcResumo)
         self.boxLayout.addWidget(self.funcOutra2)
         self.boxLayout.addWidget(self.funcOutra3)
         self.boxLayout.addWidget(self.funcOutra4)
@@ -74,8 +74,8 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
     def trocarParaPagina(self, telaAlvo: TelaPosicao):
         if telaAlvo == TelaPosicao.Entrevista:
             EntrevistaController(parent=self, db=self.db).show()
-        elif telaAlvo == TelaPosicao.Calculos:
-            self.tabCalculos.limpaTudo()
+        elif telaAlvo == TelaPosicao.Resumo:
+            self.tabResumo.limpaTudo()
             self.stkMainDashBoard.setCurrentIndex(telaAlvo.value)
         elif telaAlvo == TelaPosicao.InformacoesGerais:
             self.stkMainDashBoard.setCurrentIndex(telaAlvo.value - 1)

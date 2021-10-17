@@ -12,16 +12,21 @@ from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFil
 from heart.sinaisCustomizados import Sinais
 from heart.telAfinsController import TelAfinsController
 
+from util.popUps import popUpOkAlerta
+
 from modelos.cnisModelo import CNISModelo
 from modelos.clienteORM import Cliente
 from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.remuneracaoORM import CnisRemuneracoes
 from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.beneficiosORM import CnisBeneficios
+from modelos.itemContribuicao import ItemContribuicao
 from modelos.escritoriosORM import Escritorios
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
 
+from util.dateHelper import atividadesConcorrentes, strToDate, atividadeSecundaria
+from util.popUps import popUpOkAlerta
 from util.helpers import *
 
 from repositorios.integracaoRepositorio import IntegracaoRepository
@@ -43,13 +48,9 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.cnisClienteAtual = None
         self.cacheEscritorio = CacheEscritorio()
         self.escritorio: Escritorios = self.cacheEscritorio.carregarCache()
-        self.cbClienteAntigo = NewCheckBox(
-            width=44,
-            height=20
-        )
+        self.cbClienteAntigo = NewCheckBox(width=44)
         self.lbClienteAntigo = QLabel('Cliente antigo')
 
-        # self.tblClientes.resizeColumnsToContents()
         self.tblClientes.doubleClicked.connect(self.editarCliente)
         self.tblClientes.hideColumn(0)
 
@@ -86,7 +87,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leCep.editingFinished.connect(lambda: self.leCep.setText(mascaraCep(self.leCep.text())))
 
         self.sbCdCliente.editingFinished.connect(self.buscaCliente)
-        self.sbCdCliente.valueChanged.connect(lambda: self.carregaInfoTela('sbCliente'))
+        # self.sbCdCliente.valueChanged.connect(lambda: self.carregaInfoTela('sbCliente'))
 
         self.leCep.editingFinished.connect(lambda: self.carregaInfoTela('cep'))
         self.leEndereco.textEdited.connect(lambda: self.carregaInfoTela('endereco'))
@@ -216,7 +217,10 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.entrevistaPg.atualizaCliente(self.cliente)
 
     def carregaCnis(self):
-        # TODO: Alterar o nome do banco de um texto puro, para uma variável global ou carregá-la de algum arquivo
+        cnisInseridoComSucesso: bool = False
+
+        if self.cliente is None:
+            self.cliente = Cliente()
 
         self.cnisClienteAtual: CNISModelo = CNISModelo()
         self.cliente.pathCnis = self.cnisClienteAtual.buscaPath()
@@ -233,7 +237,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                     clienteAInserir = Cliente()
 
                     clienteAInserir.cpfCliente = unmaskAll(infoPessoais['cpf'])
-                    clienteAInserir.dataNascimento = strToDatetime(infoPessoais['dataNascimento'])
+                    clienteAInserir.dataNascimento = strToDate(infoPessoais['dataNascimento'])
                     clienteAInserir.idade = calculaIdadeFromString(infoPessoais['dataNascimento'])
                     clienteAInserir.nit = unmaskAll(infoPessoais['nit'])
                     clienteAInserir.nomeMae = infoPessoais['nomeMae'].title()
@@ -261,6 +265,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
                             self.cliente.telefoneId = Telefones.get_by_id(self.cliente)
                             transaction.commit()
+                            cnisInseridoComSucesso = True
                         except Cliente.DoesNotExist:
                             self.showPopupAlerta('Erro ao inserir cliente.')
                             transaction.rollback()
@@ -268,20 +273,26 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                         except Telefones.DoesNotExist:
                             self.cliente.telefoneId = Telefones()
                             transaction.commit()
+                            cnisInseridoComSucesso = True
                         except Exception as err:
                             erro = f"carregaCnis: ({type(err)}) {err}"
                             transaction.rollback()
-                            self.showPopupAlerta('Erro ao inserir cliente.', erro=erro)
+                            popUpOkAlerta('Erro ao inserir cliente.', erro=erro)
                             self.limpaTudo()
                             return False
 
                 self.limpaTudo()
+                self.cnisClienteAtual.insereItensContribuicao(self.cliente)
                 self.carregaClienteNaTela(cliente=self.cliente)
                 if self.cliente.numero is None:
                     self.cliente.numero = 0
 
-            except Exception as erro:
-                print(f'carregaCnis - erro: ({type(erro)}) {erro}')
+            except Exception as err:
+                popUpOkAlerta('Não foi possível salvar o cliente. Tente novamente.', erro=str(err))
+                print(f'carregaCnis - erro: ({type(err)}) {err}')
+
+        if cnisInseridoComSucesso:
+            self.avaliaAtividadesPrincipais()
 
     def avaliaDadosFaltantesNoCNIS(self, cabecalhos: List[dict]) -> List[dict]:
         listaReturn: List[dict] = []
@@ -294,6 +305,25 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             listaReturn.append(cabecalho)
 
         return listaReturn
+
+    def avaliaAtividadesPrincipais(self):
+        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == self.cliente.clienteId)
+
+        for index, cabecalho in enumerate(listaCabecalhos):
+            if index == 0 or listaCabecalhos[index-1].dadoFaltante or listaCabecalhos[index].dadoFaltante:
+                continue
+
+            conflitoAtividades = atividadesConcorrentes(
+                dataIniAtivA=strToDate(listaCabecalhos[index-1].dataInicio),
+                dataFimAtvA=strToDate(listaCabecalhos[index-1].dataFim),
+                dataIniAtivB=strToDate(listaCabecalhos[index].dataInicio),
+                dataFimAtivB=strToDate(listaCabecalhos[index].dataFim),
+            )
+
+            if conflitoAtividades:
+                seqSecundarioCalculado = atividadeSecundaria(listaCabecalhos[index-1], listaCabecalhos[index])
+                query = ItemContribuicao.update({ItemContribuicao.ativPrimaria: False}).where(ItemContribuicao.clienteId == self.cliente.clienteId, ItemContribuicao.seq == seqSecundarioCalculado)
+                query.execute()
 
     def buscaClienteJaCadastrado(self) -> bool:
         cliente: Cliente = Cliente.select().where(Cliente.nit == self.cliente.nit).get()
@@ -446,7 +476,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.cliente.rgCliente = self.leRg.text()
 
         elif info == 'dataNascimento':
-            self.cliente.dataNascimento = self.dtNascimento.date().toPyDate().strftime('%Y-%m-%d %H:%M')
+            # self.cliente.dataNascimento = self.dtNascimento.date().toPyDate().strftime('%Y-%m-%d %H:%M')
+            self.cliente.dataNascimento = self.dtNascimento.date().toPyDate().strftime('%Y-%m-%d')
 
         elif info == 'idade':
             self.cliente.idade = self.leIdade.text()
@@ -594,14 +625,19 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.modoEdicao(False)
 
     def avaliaTelefone(self):
-        if len(self.leTelefone.text()) >= 8:
-            telefone: Telefones = Telefones()
-            telefone.clienteId = self.cliente.clienteId
-            telefone.tipoTelefone = 'W'
-            telefone.pessoalRecado = 'P'
-            telefone.numero = unmaskAll(self.leTelefone.text())
+        numeroTelefone = unmaskAll(self.leTelefone.text())
 
-            Telefones.insert(**telefone.toDict()).on_conflict_replace().execute()
+        if len(self.leTelefone.text()) >= 8:
+            try:
+                telefone: Telefones = Telefones.select().where(Telefones.numero == numeroTelefone).get()
+            except Telefones.DoesNotExist:
+                telefone: Telefones = Telefones()
+                telefone.clienteId = self.cliente.clienteId
+                telefone.tipoTelefone = 'W'
+                telefone.pessoalRecado = 'P'
+                telefone.numero = numeroTelefone
+
+                Telefones.insert(**telefone.toDict()).on_conflict_replace().execute()
             self.cliente.telefoneId = telefone
 
     def verificaCodCliente(self) -> bool:
@@ -663,7 +699,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leNumero.clear()
         self.lePix.clear()
         self.sbCdCliente.clear()
-        self.sbCdCliente.setValue(0)
+        # self.sbCdCliente.setValue(0)
         self.modoEdicao(False)
 
         self.cbxEstado.setCurrentIndex(24)

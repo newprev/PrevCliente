@@ -27,7 +27,7 @@ class CnisContribuicoes(BaseModel, Model):
         table_name = 'cnisContribuicoes'
 
     def toDict(self):
-        dictUsuario = {
+        dictContribuicao = {
             'contribuicoesId': self.contribuicoesId,
             'clienteId': self.clienteId,
             'seq': self.seq,
@@ -40,7 +40,7 @@ class CnisContribuicoes(BaseModel, Model):
             'dataCadastro': self.dataCadastro,
             'dataUltAlt': self.dataUltAlt
         }
-        return dictUsuario
+        return dictContribuicao
 
     def fromDict(self, dictContribuicoes):
         self.contribuicoesId = dictContribuicoes['contribuicoesId']

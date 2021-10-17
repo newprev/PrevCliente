@@ -8,4 +8,7 @@
   <qresource prefix="calculos">
     <file>calculos.png</file>
   </qresource>
+  <qresource prefix="resumo">
+    <file>resumo.png</file>
+  </qresource>
 </RCC>

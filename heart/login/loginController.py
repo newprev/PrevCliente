@@ -5,7 +5,6 @@ from typing import List
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
-from Daos.daoConfiguracoes import DaoConfiguracoes
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 from repositorios.clienteRepositorio import UsuarioRepository
@@ -19,16 +18,19 @@ from modelos.indicadoresORM import Indicadores
 from modelos.expSobrevidaORM import ExpSobrevida
 from modelos.carenciasLei91 import CarenciaLei91
 from modelos.indiceAtuMonetariaORM import IndiceAtuMonetaria
+from modelos.configGeraisORM import ConfigGerais
+from modelos.salarioMinimoORM import SalarioMinimo
 from Design.pyUi.loginPage import Ui_mwLogin
 from heart.login.wdgAdvController import WdgAdvController
 from heart.dashboard.dashboardController import DashboardController
+from util.dateHelper import strToDatetime
 from util.enums.newPrevEnums import *
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 import os
 import json
 
 from util.ferramentas.tools import divideListaEmPartes
-from util.helpers import datetimeToSql, strToDatetime
+from util.helpers import datetimeToSql
 
 from repositorios.informacoesRepositorio import ApiInformacoes
 
@@ -54,10 +56,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.escondeLoading)
 
-        self.daoConfigs = DaoConfiguracoes(self.db)
-        # self.daoEscritorio = DaoEscritorio(self.db)
-        # self.daoAdvogado = DaoAdvogado(self.db)
-        # self.daoInformacoes = DaoInformacoes(self.db)
+        self.configGerais = ConfigGerais()
 
         self.daoEscritorio = Escritorios()
         self.daoAdvogado = Advogados(self.db)
@@ -71,10 +70,12 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.pbCadastrar.clicked.connect(self.avaliaConfirmacaoCadastro)
         self.pbFechar.clicked.connect(self.close)
         self.pbEntrar.clicked.connect(self.entrar)
-        # self.leSenha.editingFinished.connect(self.resolveBugEntrar)
 
         self.iniciaCampos()
         self.carregaCacheLogin()
+
+        if self.advogado:
+            self.iniciarAutomaticamente()
 
         self.center()
 
@@ -85,14 +86,12 @@ class LoginController(QMainWindow, Ui_mwLogin):
         frameGm.moveCenter(centerPoint)
         self.move(frameGm.topLeft())
 
-    def resolveBugEntrar(self):
-        if self.edittingFinished:
-            self.edittingFinished = not self.edittingFinished
-            self.entrar()
-
     def iniciarPrimeiroAcesso(self):
         self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.buscaEscritorio.value)
         self.leCdEscritorio.setFocus()
+
+    def iniciarAutomaticamente(self):
+        pass
 
     def carregaCacheLogin(self):
         self.advogado = self.cacheLogin.carregarCache()
@@ -222,7 +221,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         if self.infoNaoNulo:
             if ApiFerramentas().conexaoOnline():
                 self.loading(10)
-                self.verificaRotinaDiaria()
+                self.verificaRotinaAtualizacao()
                 self.loading(20)
             else:
                 self.showPopupAlerta('Sem conexão com o servidor.')
@@ -252,10 +251,14 @@ class LoginController(QMainWindow, Ui_mwLogin):
                         self.cacheLogin.salvarCacheTemporario(self.advogado)
                         self.cacheEscritorio.salvarCacheTemporario(self.escritorio)
 
+                    # Busca e define configurações
+                    try:
+                        ConfigGerais.get(ConfigGerais.advogadoId == self.advogado.advogadoId)
+                    except ConfigGerais.DoesNotExist:
+                        ConfigGerais(advogadoId=self.advogado).save()
+
                     # Inicia programa
-                    self.dashboard = DashboardController(db=self.db)
-                    self.dashboard.showMaximized()
-                    self.close()
+                    self.iniciaDashboard()
 
                 else:
                     self.showPopupAlerta("Houve um problema ao encontrar o escritório no banco de dados. Entre em contato com o suporte.")
@@ -277,6 +280,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         self.edittingFinished = True
 
+    def iniciaDashboard(self):
+        self.dashboard = DashboardController(db=self.db)
+        self.dashboard.showMaximized()
+        self.close()
+
     def infoNaoNulo(self):
         login: bool = self.leLogin.text() != ''
         senha: bool = self.leSenha.text() != ''
@@ -297,7 +305,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         escritorio: Escritorios = self.escritorioRepositorio.buscaEscritorio(escritorioId)
         return escritorio
 
-    def verificaRotinaDiaria(self):
+    def verificaRotinaAtualizacao(self):
 
         pathFile = os.path.join(os.getcwd(), '.sync', '.syncFile')
         syncJson = {
@@ -307,6 +315,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             'syncExpSobrevida': datetimeToSql(datetime.datetime.now()),
             'syncCarenciasLei91': datetimeToSql(datetime.datetime.now()),
             'syncAtuMonetaria': datetimeToSql(datetime.datetime.now()),
+            'syncSalarioMinimo': datetimeToSql(datetime.datetime.now()),
         }
         loop = aio.get_event_loop()
 
@@ -314,7 +323,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             with open(pathFile, encoding='utf-8', mode='r') as syncFile:
                 if len(syncFile.readlines()) == 0:
                     os.remove(pathFile)
-                    self.verificaRotinaDiaria()
+                    self.verificaRotinaAtualizacao()
                     return True
                 else:
                     infoToUpdate = {}
@@ -327,6 +336,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     dateSyncExpSobrevida = strToDatetime(syncDict['syncExpSobrevida'])
                     dateSyncCarenciasLei91 = strToDatetime(syncDict['syncCarenciasLei91'])
                     dateSyncAtuMonetaria = strToDatetime(syncDict['syncAtuMonetaria'])
+                    dateSyncSalarioMinimo = strToDatetime(syncDict['syncSalarioMinimo'])
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
                         infoToUpdate[FerramentasEInfo.convMon] = True
@@ -358,6 +368,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     else:
                         syncJson['syncAtuMonetaria'] = syncDict['syncAtuMonetaria']
 
+                    if (datetime.datetime.now() - dateSyncSalarioMinimo).days != 0:
+                        infoToUpdate[FerramentasEInfo.salarioMinimo] = True
+                    else:
+                        syncJson['syncSalarioMinimo'] = syncDict['syncSalarioMinimo']
+
                     loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
 
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
@@ -369,7 +384,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 FerramentasEInfo.indicadores: True,
                 FerramentasEInfo.expSobrevida: True,
                 FerramentasEInfo.carenciasLei91: True,
-                FerramentasEInfo.atuMonetaria: True
+                FerramentasEInfo.atuMonetaria: True,
+                FerramentasEInfo.salarioMinimo: True,
             }
             loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
 
@@ -383,6 +399,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         qtdConvMon = ConvMon.select().count()
         qtdCarenciasLei91 = CarenciaLei91.select().count()
         qtdAtuMonetarias = IndiceAtuMonetaria.select().count()
+        qtdSalariosMinimos = SalarioMinimo.select().count()
 
         asyncTasks = []
         for tipoInfo, sync in infoToUpdate.items():
@@ -399,6 +416,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.carenciasLei91)))
                 elif tipoInfo == FerramentasEInfo.atuMonetaria:
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.atuMonetaria)))
+                elif tipoInfo == FerramentasEInfo.salarioMinimo:
+                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.salarioMinimo)))
 
         gather = await aio.gather(*asyncTasks)
 
@@ -439,6 +458,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                         listasAAdicionar = divideListaEmPartes(indicesAtuMonetaria, 400)
                         for listaIndice in listasAAdicionar:
                             IndiceAtuMonetaria.insert_many(listaIndice).on_conflict('replace').execute()
+
+            elif aioTask == FerramentasEInfo.salarioMinimo:
+                listaSalarios: List[dict] = infoApi
+                if qtdSalariosMinimos < len(listaSalarios):
+                    SalarioMinimo.insert_many(listaSalarios).on_conflict('replace').execute()
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

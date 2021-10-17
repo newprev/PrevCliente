@@ -1,5 +1,9 @@
 import requests as http
 
+from logs import logPrioridade
+from util.enums.logEnums import TipoLog
+from util.enums.newPrevEnums import *
+
 
 class IntegracaoRepository:
 
@@ -9,6 +13,7 @@ class IntegracaoRepository:
     def getCep(self, numCep):
         url = self.urlBase + f'viacep.com.br/ws/{numCep}/json/'
         try:
+            logPrioridade(f"API(CEP)<getCep>____________________GET<viacep.com.br/ws/<numCep>/json/>::::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.sync, tipoLog=TipoLog.Rest)
             response: http.Response = http.get(url)
 
             if response.status_code == 200:

@@ -4,8 +4,6 @@ from connections import ConfigConnection
 from Daos.tabelas import TabelasConfig
 from util.helpers import datetimeToSql
 from logs import TipoEdicao, Prioridade, logPrioridade
-# from modelos.convMonModelo import ConvMonModelo
-# from modelos.tetosPrevModelo import TetosPrevModelo
 from datetime import datetime
 
 

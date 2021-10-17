@@ -156,6 +156,25 @@ meses = {
 
 situacaoBeneficio = ['Indeferido', 'Cessado', 'Ativo']
 
+tipoItemContribuicao = [
+    ('C', 'CONTRIBUICAO'),
+    ('B', 'BENEFICIO'),
+    ('R', 'REMUNERACAO')
+]
+
+tipoItemOrigem = [
+    ('C', 'CNIS'),
+    ('N', 'NEWPREV')
+]
+
+
+def getItemOrigem():
+    return tipoItemOrigem
+
+
+def getTipoItem():
+    return tipoItemContribuicao
+
 
 def getEscolaridade():
     return {
@@ -321,6 +340,25 @@ def mascaraMeses(data: datetime.date):
     return f'{data.day} de {meses[data.month]} de {data.year}'
 
 
+def verificaIndicadorProibitivo(indicadores: str) -> bool:
+    indicadoresImpeditivos = ['PDT-NASC-FIL-INV', 'IREC-LC123', 'PREC-MENOR-MIN']
+
+    if indicadores == '' or indicadores is None:
+        return False
+    elif indicadores != '' and ',' in indicadores:
+        listaIndicadores = indicadores.split(',')
+    elif len(indicadores) > 0 and ',' not in indicadores:
+        listaIndicadores = [indicadores]
+    else:
+        return False
+
+    for ind in listaIndicadores:
+        if ind in indicadoresImpeditivos:
+            return True
+
+    return False
+
+
 def dataUSAtoBR(dataUSA: str, comDias: bool = False) -> str:
     if not isinstance(dataUSA, str):
         if comDias:
@@ -438,38 +476,6 @@ def datetimeToSql(data: datetime.datetime) -> str:
 
 def dateToSql(data: datetime.date) -> str:
     return data.strftime('%Y-%m-%d')
-
-
-def strToDatetime(data: str) -> datetime.datetime:
-    if not isinstance(data, str):
-        data = data.strftime('%Y-%m-%d %H:%M')
-
-    dateFormats: List[str] = ['%Y-%m-%d %H:%M', '%d/%m/%Y', '%m/%Y', '%Y-%m-%d', '%Y-%m-%d %H:%M:%S']
-    for formato in dateFormats:
-        try:
-            dataRetorno = datetime.datetime.strptime(data, formato)
-            return dataRetorno
-        except ValueError as err:
-            pass
-
-
-def strToDate(dataAvaliar: str):
-    dateFormats: List[str] = ['%d/%m/%Y', '%m/%Y', '%Y-%m-%d']
-
-    if isinstance(dataAvaliar, type(datetime.datetime)):
-        return dataAvaliar.date()
-    elif isinstance(dataAvaliar, type(datetime.date)):
-        return dataAvaliar
-    else:
-        for formato in dateFormats:
-            try:
-                dataRetorno = datetime.datetime.strptime(dataAvaliar, formato).date()
-                return dataRetorno
-            except ValueError:
-                pass
-            except Exception as err:
-                print(f'strToDate: ({type(dataAvaliar)}) {dataAvaliar} - ({type(err)}) {err}')
-                raise
 
 
 def strToFloat(valor: str) -> float:

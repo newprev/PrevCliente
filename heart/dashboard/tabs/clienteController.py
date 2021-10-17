@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar
+from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar, QHBoxLayout
 from peewee import SqliteDatabase
 
 from cache.cacheEscritorio import CacheEscritorio
@@ -9,10 +9,9 @@ from Design.pyUi.tabCliente import Ui_wdgTabCliente
 from Design.CustomWidgets.newCheckBox import NewCheckBox
 
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
+from heart.dashboard.tabs.tabInfoGeralCliente import TabInfoGeralCliente
 from heart.sinaisCustomizados import Sinais
 from heart.telAfinsController import TelAfinsController
-
-from util.popUps import popUpOkAlerta
 
 from modelos.cnisModelo import CNISModelo
 from modelos.clienteORM import Cliente
@@ -51,12 +50,17 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.cbClienteAntigo = NewCheckBox(width=44)
         self.lbClienteAntigo = QLabel('Cliente antigo')
 
-        self.tblClientes.doubleClicked.connect(self.editarCliente)
+        self.tblClientes.doubleClicked.connect(self.navegaInfoCliente)
         self.tblClientes.hideColumn(0)
 
         self.tabMain.currentChanged.connect(self.trocaDeAba)
         self.hlCheckBox.addWidget(self.cbClienteAntigo, Qt.AlignTop, Qt.AlignTop)
         self.hlCheckBox.addWidget(self.lbClienteAntigo, Qt.AlignTop, Qt.AlignTop)
+
+        self.hlTabInfo = QHBoxLayout()
+        self.tabInformacoesController = TabInfoGeralCliente(parent=self.tabInformacoes)
+        self.hlTabInfo.addWidget(self.tabInformacoesController)
+        self.tabInformacoes.setDisabled(True)
 
         self.frBuscaNome.hide()
         self.frBuscaEmail.hide()
@@ -86,8 +90,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leTelefone.editingFinished.connect(lambda: self.leTelefone.setText(mascaraTelCel(self.leTelefone.text())))
         self.leCep.editingFinished.connect(lambda: self.leCep.setText(mascaraCep(self.leCep.text())))
 
-        self.sbCdCliente.editingFinished.connect(self.buscaCliente)
-        # self.sbCdCliente.valueChanged.connect(lambda: self.carregaInfoTela('sbCliente'))
+        # self.sbCdCliente.editingFinished.connect(self.buscaCliente)
+        self.sbCdCliente.valueChanged.connect(self.avaliaBuscaCliente)
 
         self.leCep.editingFinished.connect(lambda: self.carregaInfoTela('cep'))
         self.leEndereco.textEdited.connect(lambda: self.carregaInfoTela('endereco'))
@@ -122,12 +126,18 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
         if entrevista:
             self.entrevistaPg = parent
-            self.tabMain.setCurrentIndex(1)
+            self.tabMain.setCurrentIndex(2)
             self.findChild(QTabBar).hide()
             self.sinais.sTrocaInfoLateral.connect(self.atualizaEntrevista)
             self.sinais.sEnviaCliente.connect(self.enviaClienteParaEntrevista)
         else:
             self.atualizaTblClientes()
+
+    def avaliaBuscaCliente(self):
+        if self.cbClienteAntigo.isChecked():
+            # print(f"avaliaBuscaCliente: {self.sbCdCliente.text()}")
+            clienteId: int = int(self.sbCdCliente.text())
+            self.buscaProxCliente(clienteId)
 
     def atualizaStatusCliente(self):
         if self.cbClienteAntigo.isChecked():
@@ -293,6 +303,9 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
         if cnisInseridoComSucesso:
             self.avaliaAtividadesPrincipais()
+
+        if self.entrevista:
+            self.sinais.sEnviaCliente.emit()
 
     def avaliaDadosFaltantesNoCNIS(self, cabecalhos: List[dict]) -> List[dict]:
         listaReturn: List[dict] = []
@@ -621,6 +634,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
     def trataAtualizaCliente(self):
         if self.verificaCodCliente():
             self.avaliaTelefone()
+            self.cliente.dataUltAlt = datetime.datetime.now()
             self.cliente.save()
             self.modoEdicao(False)
 
@@ -704,14 +718,14 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
         self.cbxEstado.setCurrentIndex(24)
 
-    def editarCliente(self, *args):
+    def navegaInfoCliente(self, *args):
         self.editandoCliente = True
         numLinha: int = args[0].row()
         clienteId = int(self.tblClientes.item(numLinha, 0).text())
-        self.sbCdCliente.setValue(clienteId)
 
-        self.buscaCliente()
+        self.tabInformacoesController.buscaCliente(clienteId)
         self.tabMain.setCurrentIndex(1)
+        self.tabInformacoes.setDisabled(False)
         self.cbClienteAntigo.setChecked(True)
 
     def trocaDeAba(self, aba):
@@ -721,6 +735,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.atualizaTblClientes()
             self.limpaTudo()
             if self.cliente is not None and self.cliente.nit is not None:
+                self.cliente.dataUltAlt = datetime.datetime.now()
                 self.cliente.save()
             self.cliente = None
         else:

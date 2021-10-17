@@ -57,6 +57,7 @@ class Cliente(BaseModel, Model):
     senhaINSS = CharField(column_name='senhaINSS', null=True)
     serieCarteiraProf = CharField(column_name='serieCarteiraProf', null=True)
     pathCnis = CharField(column_name='pathCnis', null=True)
+    observacoes = CharField(column_name='observacoes', max_length=4000, null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
 

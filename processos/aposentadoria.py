@@ -488,6 +488,9 @@ class CalculosAposentadoria:
             listaItensAMais = []
 
             while len(self.regrasACalcular) != 0:
+                if competenciaAtual > self.dataReforma2019:
+                    self.regrasACalcular = [regra for regra in self.regrasACalcular if not isinstance(regra, RegraGeralAR)]
+
                 qtdContribuicoes += 1
                 mesesAMais += 1
                 competenciaAtual += relativedelta(months=1)
@@ -705,7 +708,7 @@ class CalculosAposentadoria:
         Calcular regras para aposentadoria por tempo de contribuição AR
         :return:
         """
-        if self.dibs[RegraGeralAR.tempoContribuicao] == datetime.date.min:
+        if self.dibs[RegraGeralAR.tempoContribuicao] == datetime.date.min or self.dibs[RegraGeralAR.tempoContribuicao] is None:
             return 0.0
 
         mediaSalarios: float = self.calculaSomaSalarial(self.dibs[RegraGeralAR.tempoContribuicao])
@@ -804,6 +807,9 @@ class CalculosAposentadoria:
         return dfEmQuestao['salAtualizado'].mean()
 
     def calculaSomaSalarial(self, dibReferente: datetime.date) -> float:
+        if dibReferente is None:
+            return 0.0
+
         selecaoDataInicio: bool = self.dfTotalContribuicoes['competencia'] > self.dataTrocaMoeda.strftime('%Y-%m-%d')
         selecaoDataFim: bool = self.dfTotalContribuicoes['competencia'] <= dibReferente.strftime('%Y-%m-%d')
         dfEmQuestao: pd.DataFrame = self.dfTotalContribuicoes[selecaoDataInicio & selecaoDataFim]

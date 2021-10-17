@@ -1,3 +1,5 @@
+import datetime
+
 from PyQt5.QtWidgets import QWidget, QMessageBox
 from Design.pyUi.itemResumoCNIS import Ui_WdgItemRes
 from util.helpers import dataUSAtoBR, mascaraCNPJ, mascaraNB
@@ -73,6 +75,7 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
 
         if self.cabecalho.dadoFaltante != possuiDadoFaltante:
             self.cabecalho.dadoFaltante = possuiDadoFaltante
+            self.cabecalho.dataUltAlt = datetime.datetime.now()
             self.cabecalho.save()
 
     def popUpSimCancela(self, mensagem, titulo: str = 'Atenção!', funcao=None):

@@ -18,7 +18,7 @@ class NewCheckBox(QCheckBox):
         self.setFixedSize(width, width/2)
         self.setCursor(Qt.PointingHandCursor)
         self.widthCircle = 2 * self.height() / 3
-        self.heightCircle = 2 * self.height() / 3
+        self.heightCircle = 6 * self.height() / 10
         self.posYCircle = self.height()/2 - self.heightCircle/2
 
 

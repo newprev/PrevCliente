@@ -234,6 +234,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
                     self.loading(20)
                     self.beneficio.seq = 0
                     self.loading(20)
+                    self.beneficio.dataUltAlt = datetime.now()
                     self.beneficio.save()
                     # self.daoCalculos.insereBeneficio(self.beneficio)
                     self.mensagemSistema('Benefício inserido com sucesso!')
@@ -257,6 +258,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
                     else:
                         if self.tipo == TipoContribuicao.remuneracao:
                             self.remuneracao.indicadores = self.retornaStrIndicadores()
+                            self.remuneracao.dataUltAlt = datetime.now()
                             self.remuneracao.save()
 
                         elif self.contribuicao.contribuicoesId is not None:
@@ -264,6 +266,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
                                 self.contribuicao.dataPagamento = self.contribuicao.competencia
 
                             self.contribuicao.indicadores = self.retornaStrIndicadores()
+                            self.contribuicao.dataUltAlt = datetime.now()
                             self.contribuicao.save()
 
                         elif self.contribuicao.contribuicoesId is None:

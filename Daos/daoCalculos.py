@@ -334,7 +334,6 @@ class DaoCalculos:
                     ORDER BY competencia DESC  """
 
         try:
-            print(strComando)
             cursor.execute(strComando)
             logPrioridade(f'SELECT<getRemECon>___________________{self.config.tblCnisRemuneracoes}', TipoEdicao.select, Prioridade.saidaComun)
             return cursor.fetchall()

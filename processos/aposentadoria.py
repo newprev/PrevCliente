@@ -18,6 +18,7 @@ from modelos.expSobrevidaORM import ExpSobrevida
 from modelos.processosORM import Processos
 from modelos.clienteORM import Cliente
 from modelos.salarioMinimoORM import SalarioMinimo
+from modelos.aposentadoriaORM import Aposentadoria
 from util.enums.newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData, ComparaData, DireitoAdquirido, SubTipoAposentadoria, TipoItemContribuicao, RegraGeralAR
 
 
@@ -44,6 +45,7 @@ class CalculosAposentadoria:
 
     def __init__(self, processo: Processos, cliente: Cliente, db=None):
         self.processo = processo
+        self.processo.save()
         self.cliente = cliente
         self.daoCalculos = DaoCalculos(db)
 
@@ -89,14 +91,14 @@ class CalculosAposentadoria:
         ]
 
         self.regrasAposentadoria = {
-            RegraTransicao.pontos: None,
-            RegraTransicao.reducaoIdadeMinima: None,
-            RegraTransicao.pedagio50: None,
-            RegraTransicao.reducaoTempoContribuicao: None,
-            RegraTransicao.pedagio100: None,
-            RegraGeralAR.fator85_95: None,
-            RegraGeralAR.idade: None,
-            RegraGeralAR.tempoContribuicao: None
+            RegraTransicao.pontos: False,
+            RegraTransicao.reducaoIdadeMinima: False,
+            RegraTransicao.pedagio50: False,
+            RegraTransicao.reducaoTempoContribuicao: False,
+            RegraTransicao.pedagio100: False,
+            RegraGeralAR.fator85_95: False,
+            RegraGeralAR.idade: False,
+            RegraGeralAR.tempoContribuicao: False
         }
 
         self.valorBeneficios = {
@@ -744,6 +746,8 @@ class CalculosAposentadoria:
     def setIdadeAR(self, qtdContribuicoes, tempoContribuicao, dataMinima: bool = False):
         if dataMinima:
             self.dibs[RegraGeralAR.idade] = datetime.date.min
+        else:
+            self.regrasAposentadoria[RegraGeralAR.idade] = True
 
         self.qtdContrib[RegraGeralAR.idade] = qtdContribuicoes
         self.tmpContribPorRegra[RegraGeralAR.idade] = tempoContribuicao
@@ -751,6 +755,8 @@ class CalculosAposentadoria:
     def setPedagio50(self, qtdContribuicoes, tempoContribuicao, dataMinima: bool = False):
         if dataMinima:
             self.dibs[RegraTransicao.pedagio50] = datetime.date.min
+        else:
+            self.regrasAposentadoria[RegraTransicao.pedagio50] = True
 
         self.qtdContrib[RegraTransicao.pedagio50] = qtdContribuicoes
         self.tmpContribPorRegra[RegraTransicao.pedagio50] = tempoContribuicao
@@ -761,6 +767,8 @@ class CalculosAposentadoria:
             self.qtdContrib[RegraTransicao.pedagio100] = qtdContribuicoes
             self.tmpContribPorRegra[RegraTransicao.pedagio100] = datetime.date.min
             return True
+        else:
+            self.regrasAposentadoria[RegraTransicao.pedagio100]
 
         acrescimoProfessor = 0
         if self.cliente.professor:
@@ -778,16 +786,25 @@ class CalculosAposentadoria:
         self.tmpContribPorRegra[RegraTransicao.pedagio100] = tempoContribuicao + tempoRestante + tempoRestante
 
     def setPontos(self, competenciaAtual, qtdContribuicoes, tempoContribuicao):
+        if competenciaAtual != datetime.date.min:
+            self.regrasAposentadoria[RegraTransicao.pontos] = True
+            
         self.dibs[RegraTransicao.pontos] = competenciaAtual
         self.qtdContrib[RegraTransicao.pontos] = qtdContribuicoes
         self.tmpContribPorRegra[RegraTransicao.pontos] = tempoContribuicao
 
     def setReducaoIdadeMinima(self, competenciaAtual, qtdContribuicoes, tempoContribuicao):
+        if competenciaAtual != datetime.date.min:
+            self.regrasAposentadoria[RegraTransicao.reducaoIdadeMinima] = True
+        
         self.dibs[RegraTransicao.reducaoIdadeMinima] = competenciaAtual
         self.qtdContrib[RegraTransicao.reducaoIdadeMinima] = qtdContribuicoes
         self.tmpContribPorRegra[RegraTransicao.reducaoIdadeMinima] = tempoContribuicao
 
     def setRedTmpContribuicao(self, competenciaAtual, qtdContribuicoes, tempoContribuicao):
+        if competenciaAtual != datetime.date.min:
+            self.regrasAposentadoria[RegraTransicao.reducaoTempoContribuicao] = True
+        
         self.dibs[RegraTransicao.reducaoTempoContribuicao] = competenciaAtual
         self.qtdContrib[RegraTransicao.reducaoTempoContribuicao] = qtdContribuicoes
         self.tmpContribPorRegra[RegraTransicao.reducaoTempoContribuicao] = tempoContribuicao
@@ -795,6 +812,8 @@ class CalculosAposentadoria:
     def setTmpContribuicaoAR(self, competenciaAtual, qtdContribuicoes, tempoContribuicao, dataMinima: bool = False):
         if dataMinima:
             self.dibs[RegraGeralAR.tempoContribuicao] = datetime.date.min
+        else:
+            self.regrasAposentadoria[RegraGeralAR.tempoContribuicao] = True
 
         self.dibs[RegraGeralAR.tempoContribuicao] = competenciaAtual
         self.qtdContrib[RegraGeralAR.tempoContribuicao] = qtdContribuicoes
@@ -830,6 +849,41 @@ class CalculosAposentadoria:
         salAtualizado = dfContribuicoes['salContribuicaoAux'] * dfContribuicoes['fator']
         dfContribuicoes['salAtualizado'] = salAtualizado
         self.dfTotalContribuicoes = dfContribuicoes
+        
+    def salvaAposentadorias(self):
+        seq: int = 0
+        for chave, atingiu in self.regrasAposentadoria.items():
+            if atingiu:
+                seq += 1
+                if chave == RegraTransicao.pontos:
+                    tipo = "POTR"
+                elif chave == RegraTransicao.pedagio50:
+                    tipo = "PD50"
+                elif chave == RegraGeralAR.tempoContribuicao:
+                    tipo = "TCAR"
+                elif chave == RegraGeralAR.idade:
+                    tipo = "IDAR"
+                elif chave == RegraTransicao.reducaoIdadeMinima:
+                    tipo = "RIDM"
+                elif chave == RegraTransicao.reducaoTempoContribuicao:
+                    tipo = "RETC"
+                elif chave == RegraTransicao.pedagio100:
+                    tipo = "P100"
+                else:
+                    tipo = ''
+                    
+                Aposentadoria(
+                    clienteId=self.cliente.clienteId,
+                    processoId=self.processo.processoId,
+                    seq=seq,
+                    tipo=tipo,
+                    contribMeses=self.tmpContribPorRegra[chave].months,
+                    contribAnos=self.tmpContribPorRegra[chave].years,
+                    valorBeneficio=self.valorBeneficios[chave],
+                    dib=self.dibs[chave],
+                    der=datetime.date.min,
+                ).save()
+        return True
 
     #
     # def calculaDireitoAdquirido(self, lei: DireitoAdquirido, subTipo: SubTipoAposentadoria = None):

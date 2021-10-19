@@ -28,6 +28,7 @@ from util.enums.newPrevEnums import *
 
 
 class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
+    aposentadoriaModelo: CalculosAposentadoria = None
 
     def __init__(self, parent=None, db=None):
         super(EntrevistaController, self).__init__(parent)
@@ -270,7 +271,10 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             self.pbProxEtapa.setText('Gerar documentos')
             self.stackedWidget.setCurrentIndex(5)
 
+            self.processoModelo.dataUltAlt = datetime.now()
+            self.processoModelo.save()
             calculaAposentadoria = CalculosAposentadoria(self.processoModelo, self.clienteAtual, db=self.db)
+            calculaAposentadoria.salvaAposentadorias()
         else:
             if wdgFuturo == MomentoEntrevista.cadastro:
                 self.telaAtual = MomentoEntrevista.cadastro

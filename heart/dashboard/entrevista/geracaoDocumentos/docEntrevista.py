@@ -17,6 +17,7 @@ from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 
 from util.enums.newPrevEnums import TipoBeneficio, SubTipoAposentadoria, TamanhoData
+from dateutil.relativedelta import relativedelta
 
 
 class DocEntrevista:
@@ -199,14 +200,16 @@ class DocEntrevista:
         self.dictInfo['estadoEscritorio'] = self.escritorio.estado
 
     def geraDosFatos(self):
-        listaTempoContribuicao = calculaDiaMesAno(self.processo.tempoContribuicao)
+        # listaTempoContribuicao = calculaDiaMesAno(self.processo.tempoContribuicao)
+        # TODO: Data usada para teste
+        tempoContrib = relativedelta(years=25, months=10)
 
         self.dictInfo['idadeCliente'] = self.cliente.idade
-        self.dictInfo['pontosCliente'] = sum(listaTempoContribuicao) + self.cliente.idade
+        self.dictInfo['pontosCliente'] = tempoContrib.years + self.cliente.idade
 
-        self.dictInfo['diasContribuicao'] = f"e {listaTempoContribuicao[0]} dias"
-        self.dictInfo['mesesContribuicao'] = f"{listaTempoContribuicao[1]} meses"
-        self.dictInfo['anosContribuicao'] = f"{listaTempoContribuicao[2]} anos"
+        self.dictInfo['diasContribuicao'] = f"e 0 dias"
+        self.dictInfo['mesesContribuicao'] = f"{tempoContrib.months} meses"
+        self.dictInfo['anosContribuicao'] = f"{tempoContrib.years} anos"
 
     def geraDosFundJurid(self):
         pass

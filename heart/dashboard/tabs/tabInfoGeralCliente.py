@@ -10,6 +10,7 @@ from heart.dashboard.tabs.localWidgets.wdgTelefone import WdgTelefone
 
 from util.helpers import mascaraRG, mascaraCPF, mascaraCep
 from util.enums.newPrevEnums import GeneroCliente
+from util.ferramentas.layout import limpaLayout
 
 
 class TabInfoGeralCliente(Ui_wdgInfoGeralCliente, QWidget):
@@ -23,11 +24,14 @@ class TabInfoGeralCliente(Ui_wdgInfoGeralCliente, QWidget):
         self.ncbProfessor = NewCheckBox()
         self.hlProfessor.addWidget(self.ncbProfessor)
 
-    def buscaCliente(self, clienteId: int):
-        self.clienteModel = Cliente.get_by_id(clienteId)
-        if self.clienteModel is not None:
-            self.listaTelefones = Telefones.select().where(Telefones.clienteId == clienteId).order_by(Telefones.ativo.desc())
-            self.carregaClienteNaTela()
+    def buscaCliente(self, clienteId: int = 0, modeloCliente: Cliente = None):
+        if modeloCliente is not None:
+            self.clienteModel = modeloCliente
+        else:
+            self.clienteModel = Cliente.get_by_id(clienteId)
+
+        self.listaTelefones = Telefones.select().where(Telefones.clienteId == clienteId).order_by(Telefones.ativo.desc())
+        self.carregaClienteNaTela()
 
     def carregaClienteNaTela(self):
         # Cabeçalho
@@ -83,3 +87,41 @@ class TabInfoGeralCliente(Ui_wdgInfoGeralCliente, QWidget):
             else:
                 coluna += 1
             self.grdTelefones.addItem(tel, linha, coluna)
+
+    def limpaTudo(self):
+        # Cabeçalho
+        self.lbCdCliente.setText('')
+        self.lbNomeCliente.setText('')
+
+        # Informações pessoais
+        self.lbNome.setText('')
+        self.lbSobrenome.setText('')
+        self.lbRg.setText('')
+        self.lbCpf.setText('')
+        self.lbNomeMae.setText('')
+        self.lbSexo.setText('')
+        self.lbDtNascimento.setText('')
+        self.lbIdade.setText('')
+        self.lbEmail.setText('')
+        self.lbEstadoCivil.setText('')
+        self.lbEscolaridade.setText('')
+
+        # Informações residenciais
+        self.lbCep.setText('')
+        self.lbNumero.setText('')
+        self.lbEndereco.setText('')
+        self.lbCidade.setText('')
+        self.lbBairro.setText('')
+        self.lbEstado.setText('')
+        self.lbComplemento.setText('')
+
+        # Informações profissionais
+        self.lbNit.setText('')
+        self.lbCarteira.setText('')
+        self.lbProfissao.setText('')
+        self.ncbProfessor.setDisabled(False)
+        self.ncbProfessor.setChecked(False)
+
+        limpaLayout(self.grdTelefones)
+
+        self.tabInfoCliente.setCurrentIndex(0)

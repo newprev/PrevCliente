@@ -166,6 +166,9 @@ QScrollArea {
               <property name="text">
                <string>Nome cliente</string>
               </property>
+              <property name="textInteractionFlags">
+               <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+              </property>
              </widget>
             </item>
             <item>
@@ -208,7 +211,10 @@ QScrollArea {
                <item>
                 <widget class="QLabel" name="lbCdCliente">
                  <property name="text">
-                  <string>cdCliente</string>
+                  <string/>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -292,7 +298,7 @@ QScrollArea {
             <number>0</number>
            </property>
            <property name="elideMode">
-            <enum>Qt::ElideMiddle</enum>
+            <enum>Qt::ElideNone</enum>
            </property>
            <property name="usesScrollButtons">
             <bool>false</bool>
@@ -420,7 +426,10 @@ QScrollArea {
                     <item>
                      <widget class="QLabel" name="lbNome">
                       <property name="text">
-                       <string>PRIMEIRONOMECLIENTE</string>
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                       </property>
                      </widget>
                     </item>
@@ -480,7 +489,10 @@ QScrollArea {
                     <item>
                      <widget class="QLabel" name="lbRg">
                       <property name="text">
-                       <string>RGCLIENTE</string>
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                       </property>
                      </widget>
                     </item>
@@ -491,7 +503,7 @@ QScrollArea {
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>361</width>
+                        <width>452</width>
                         <height>20</height>
                        </size>
                       </property>
@@ -540,7 +552,10 @@ QScrollArea {
                     <item>
                      <widget class="QLabel" name="lbEstadoCivil">
                       <property name="text">
-                       <string>ESTADOCIVILCLIENTE</string>
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                       </property>
                      </widget>
                     </item>
@@ -551,7 +566,7 @@ QScrollArea {
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>219</width>
+                        <width>370</width>
                         <height>20</height>
                        </size>
                       </property>
@@ -600,7 +615,10 @@ QScrollArea {
                     <item>
                      <widget class="QLabel" name="lbEmail">
                       <property name="text">
-                       <string>EMAILCLIENTE</string>
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                       </property>
                      </widget>
                     </item>
@@ -611,7 +629,7 @@ QScrollArea {
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>315</width>
+                        <width>428</width>
                         <height>20</height>
                        </size>
                       </property>
@@ -660,7 +678,10 @@ QScrollArea {
                     <item>
                      <widget class="QLabel" name="lbSobrenome">
                       <property name="text">
-                       <string>SOBRENOMECLIENTE</string>
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                       </property>
                      </widget>
                     </item>
@@ -671,7 +692,7 @@ QScrollArea {
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>224</width>
+                        <width>376</width>
                         <height>20</height>
                        </size>
                       </property>
@@ -720,7 +741,10 @@ QScrollArea {
                     <item>
                      <widget class="QLabel" name="lbSexo">
                       <property name="text">
-                       <string>SEXOCLIENTE</string>
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                       </property>
                      </widget>
                     </item>
@@ -731,7 +755,7 @@ QScrollArea {
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>342</width>
+                        <width>435</width>
                         <height>20</height>
                        </size>
                       </property>
@@ -780,7 +804,10 @@ QScrollArea {
                     <item>
                      <widget class="QLabel" name="lbIdade">
                       <property name="text">
-                       <string>SOBRENOMECLIENTE</string>
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                       </property>
                      </widget>
                     </item>
@@ -791,7 +818,7 @@ QScrollArea {
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>275</width>
+                        <width>427</width>
                         <height>20</height>
                        </size>
                       </property>
@@ -840,7 +867,10 @@ QScrollArea {
                     <item>
                      <widget class="QLabel" name="lbDtNascimento">
                       <property name="text">
-                       <string>SOBRENOMECLIENTE</string>
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                       </property>
                      </widget>
                     </item>
@@ -851,7 +881,7 @@ QScrollArea {
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>136</width>
+                        <width>302</width>
                         <height>20</height>
                        </size>
                       </property>
@@ -894,7 +924,10 @@ QScrollArea {
                     <item>
                      <widget class="QLabel" name="lbCpf">
                       <property name="text">
-                       <string>CPFCLIENTE</string>
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                       </property>
                      </widget>
                     </item>
@@ -905,7 +938,7 @@ QScrollArea {
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>361</width>
+                        <width>444</width>
                         <height>20</height>
                        </size>
                       </property>
@@ -954,7 +987,10 @@ QScrollArea {
                     <item>
                      <widget class="QLabel" name="lbNomeMae">
                       <property name="text">
-                       <string>SNOMEDAMAECLIENTE</string>
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                       </property>
                      </widget>
                     </item>
@@ -965,7 +1001,7 @@ QScrollArea {
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>177</width>
+                        <width>359</width>
                         <height>20</height>
                        </size>
                       </property>
@@ -1014,7 +1050,10 @@ QScrollArea {
                     <item>
                      <widget class="QLabel" name="lbEscolaridade">
                       <property name="text">
-                       <string>GRAUESCOLARIDADECLIENTE</string>
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                       </property>
                      </widget>
                     </item>
@@ -1025,7 +1064,7 @@ QScrollArea {
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>47</width>
+                        <width>280</width>
                         <height>20</height>
                        </size>
                       </property>
@@ -1183,7 +1222,10 @@ QScrollArea {
                        <item>
                         <widget class="QLabel" name="lbCidade">
                          <property name="text">
-                          <string>PRIMEIRONOMECLIENTE</string>
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                          </property>
                         </widget>
                        </item>
@@ -1194,7 +1236,7 @@ QScrollArea {
                          </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>233</width>
+                           <width>420</width>
                            <height>15</height>
                           </size>
                          </property>
@@ -1228,7 +1270,10 @@ QScrollArea {
                        <item>
                         <widget class="QLabel" name="lbEndereco">
                          <property name="text">
-                          <string>PRIMEIRONOMECLIENTE</string>
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                          </property>
                         </widget>
                        </item>
@@ -1239,7 +1284,7 @@ QScrollArea {
                          </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>216</width>
+                           <width>395</width>
                            <height>15</height>
                           </size>
                          </property>
@@ -1273,7 +1318,10 @@ QScrollArea {
                        <item>
                         <widget class="QLabel" name="lbNumero">
                          <property name="text">
-                          <string>NÚMEROCLIENTE</string>
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                          </property>
                         </widget>
                        </item>
@@ -1284,7 +1332,7 @@ QScrollArea {
                          </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>278</width>
+                           <width>411</width>
                            <height>15</height>
                           </size>
                          </property>
@@ -1318,7 +1366,10 @@ QScrollArea {
                        <item>
                         <widget class="QLabel" name="lbBairro">
                          <property name="text">
-                          <string>PRIMEIRONOMECLIENTE</string>
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                          </property>
                         </widget>
                        </item>
@@ -1329,7 +1380,7 @@ QScrollArea {
                          </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>245</width>
+                           <width>424</width>
                            <height>15</height>
                           </size>
                          </property>
@@ -1363,7 +1414,10 @@ QScrollArea {
                        <item>
                         <widget class="QLabel" name="lbEstado">
                          <property name="text">
-                          <string>PRIMEIRONOMECLIENTE</string>
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                          </property>
                         </widget>
                        </item>
@@ -1374,7 +1428,7 @@ QScrollArea {
                          </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>234</width>
+                           <width>421</width>
                            <height>15</height>
                           </size>
                          </property>
@@ -1408,7 +1462,10 @@ QScrollArea {
                        <item>
                         <widget class="QLabel" name="lbCep">
                          <property name="text">
-                          <string>CEPCLIENTE</string>
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                          </property>
                         </widget>
                        </item>
@@ -1419,7 +1476,7 @@ QScrollArea {
                          </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>362</width>
+                           <width>449</width>
                            <height>15</height>
                           </size>
                          </property>
@@ -1453,7 +1510,10 @@ QScrollArea {
                        <item>
                         <widget class="QLabel" name="lbComplemento">
                          <property name="text">
-                          <string>COMPLEMENTO</string>
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                          </property>
                         </widget>
                        </item>
@@ -1595,7 +1655,10 @@ QScrollArea {
                        <item>
                         <widget class="QLabel" name="lbNit">
                          <property name="text">
-                          <string>CEPCLIENTE</string>
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                          </property>
                         </widget>
                        </item>
@@ -1606,7 +1669,7 @@ QScrollArea {
                          </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>314</width>
+                           <width>405</width>
                            <height>15</height>
                           </size>
                          </property>
@@ -1640,7 +1703,10 @@ QScrollArea {
                        <item>
                         <widget class="QLabel" name="lbProfissao">
                          <property name="text">
-                          <string>CEPCLIENTE</string>
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                          </property>
                         </widget>
                        </item>
@@ -1651,7 +1717,7 @@ QScrollArea {
                          </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>251</width>
+                           <width>342</width>
                            <height>15</height>
                           </size>
                          </property>
@@ -1685,7 +1751,10 @@ QScrollArea {
                        <item>
                         <widget class="QLabel" name="lbCarteira">
                          <property name="text">
-                          <string>CEPCLIENTE</string>
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                          </property>
                         </widget>
                        </item>
@@ -1696,7 +1765,7 @@ QScrollArea {
                          </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>254</width>
+                           <width>345</width>
                            <height>15</height>
                           </size>
                          </property>
@@ -1958,7 +2027,10 @@ QScrollArea {
                        <item>
                         <widget class="QLabel" name="lbDtCadastro">
                          <property name="text">
-                          <string>CEPCLIENTE</string>
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                          </property>
                         </widget>
                        </item>
@@ -1969,7 +2041,7 @@ QScrollArea {
                          </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>254</width>
+                           <width>359</width>
                            <height>15</height>
                           </size>
                          </property>
@@ -2003,7 +2075,10 @@ QScrollArea {
                        <item>
                         <widget class="QLabel" name="lbUltAlt">
                          <property name="text">
-                          <string>CEPCLIENTE</string>
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                          </property>
                         </widget>
                        </item>
@@ -2014,7 +2089,7 @@ QScrollArea {
                          </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>243</width>
+                           <width>320</width>
                            <height>15</height>
                           </size>
                          </property>

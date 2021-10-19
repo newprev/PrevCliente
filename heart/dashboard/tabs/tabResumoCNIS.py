@@ -279,7 +279,7 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
             self.vlResumos.takeAt(index).widget().setParent(None)
 
     def abreBuscaClientePage(self):
-        self.buscaClientePage = BuscaClientePage(parent=self, db=self.db)
+        self.buscaClientePage = BuscaClientePage(parent=self)
         self.buscaClientePage.show()
 
     def abreInsereContribuicoes(self, contribuicaoId: int, tipo: TipoContribuicao = None):

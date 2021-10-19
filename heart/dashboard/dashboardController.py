@@ -73,7 +73,7 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
 
     def trocarParaPagina(self, telaAlvo: TelaPosicao):
         if telaAlvo == TelaPosicao.Entrevista:
-            EntrevistaController(parent=self, db=self.db).show()
+            EntrevistaController(parent=self, db=self.db).showMaximized()
         elif telaAlvo == TelaPosicao.Resumo:
             self.tabResumo.limpaTudo()
             self.stkMainDashBoard.setCurrentIndex(telaAlvo.value)

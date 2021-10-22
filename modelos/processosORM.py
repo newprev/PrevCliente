@@ -23,14 +23,14 @@ class Processos(BaseModel, Model):
     estado = CharField(null=True)
     incidenteProcessual = IntegerField(column_name='incidenteProcessual', null=True)
     mediaSalarial = FloatField(column_name='mediaSalarial', null=True)
-    natureza = IntegerField()
+    natureza = IntegerField(default=0)
     numeroProcesso = CharField(column_name='numeroProcesso', null=True)
     pontuacao = IntegerField(null=True)
     situacaoId = IntegerField(column_name='situacaoId', default=1)
-    subTipoApos = IntegerField(column_name='subTipoApos')
+    subTipoApos = IntegerField(column_name='subTipoApos', null=True)
     tempoContribuicao = IntegerField(column_name='tempoContribuicao', null=True)
-    tipoBeneficio = IntegerField(column_name='tipoBeneficio')
-    tipoProcesso = IntegerField(column_name='tipoProcesso')
+    tipoBeneficio = IntegerField(column_name='tipoBeneficio', null=True)
+    tipoProcesso = IntegerField(column_name='tipoProcesso', null=True)
     valorCausa = FloatField(column_name='valorCausa', null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
@@ -42,7 +42,7 @@ class Processos(BaseModel, Model):
         dictUsuario = {
             'processoId': self.processoId,
             'clienteId': self.clienteId,
-            'advogadoId': self.advogadoId,
+            'advogadoId': self.advogadoId.advogadoId,
             'numeroProcesso': self.numeroProcesso,
             'natureza': self.natureza,
             'tipoProcesso': self.tipoProcesso,

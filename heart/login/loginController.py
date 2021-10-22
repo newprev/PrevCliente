@@ -206,6 +206,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.cacheEscritorio.salvarCache(self.escritorio)
                 self.loading(10)
                 # self.daoEscritorio.insereEscritorio(self.escritorio)
+                self.escritorio.dataUltAlt = datetime.datetime.now()
                 self.escritorio.save()
                 self.loading(10)
             else:

@@ -7,11 +7,13 @@ from heart.sinaisCustomizados import Sinais
 
 from modelos.clienteORM import Cliente
 from modelos.processosORM import Processos
+from modelos.aposentadoriaORM import Aposentadoria
 
 from util.enums.newPrevEnums import TipoBeneficio
 
 
 class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):
+    aposentadoriaAtual: Aposentadoria
 
     def __init__(self,  cliente: Cliente, processo: Processos, parent=None, db=None):
         super(GerarDocsPage, self).__init__(parent)
@@ -53,8 +55,13 @@ class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):
                 self.efeitos.shadowCards([self.frProcuracao])
 
     def atualizaInformacoes(self, processo: Processos, cliente: Cliente):
+        # if processo.processoId is None:
+        #     processo.save()
         self.processo = processo
         self.cliente = cliente
+
+        # self.aposentadoriaAtual = Aposentadoria.select().where(
+        #     Aposentadoria.clienteId == self.cliente.clienteId).get()
 
         self.doc = DocEntrevista(processo, cliente)
 

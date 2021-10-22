@@ -308,7 +308,7 @@ class DaoCalculos:
                         JOIN {self.config.tblConvMon} cm 
                             ON con.competencia >= cm.dataInicial
                                 AND con.competencia <= cm.dataFinal
-                        JOIN {self.config.tblTetosPrev} tp
+                        LEFT JOIN {self.config.tblTetosPrev} tp
                             ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', con.competencia)
                     WHERE clienteId = {clienteId}
                 
@@ -328,7 +328,7 @@ class DaoCalculos:
                         JOIN {self.config.tblConvMon} cm 
                             ON rem.competencia >= cm.dataInicial
                                 AND rem.competencia <= cm.dataFinal
-                        JOIN {self.config.tblTetosPrev} tp
+                        LEFT JOIN {self.config.tblTetosPrev} tp
                             ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', rem.competencia) 
                         WHERE clienteId = {clienteId}
                     ORDER BY competencia DESC  """

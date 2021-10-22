@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="pessoal">
+    <file>personal.png</file>
+    <file>recado.png</file>
+  </qresource>
+  <qresource prefix="tipo">
+    <file>celular.png</file>
+    <file>whatsapp.png</file>
+    <file>telefone.png</file>
+  </qresource>
+</RCC>

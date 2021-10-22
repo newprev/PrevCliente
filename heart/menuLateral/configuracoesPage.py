@@ -1,3 +1,5 @@
+import datetime
+
 from PyQt5.QtWidgets import QWidget, QMessageBox
 
 from Design.pyUi.configuracoesPage import Ui_wdgTabConfiguracoes
@@ -28,6 +30,7 @@ class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
     def atualizaIniciaAuto(self):
         if self.configGerais is not None:
             self.configGerais.iniciaAuto = self.cbIniciaAutomatico.isChecked()
+            self.configGerais.dataUltAlt = datetime.datetime.now()
             self.configGerais.save()
 
     def atualizaTela(self):

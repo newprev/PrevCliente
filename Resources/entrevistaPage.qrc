@@ -3,6 +3,10 @@
     <file>n1-blue.png</file>
     <file>n1-grey.png</file>
   </qresource>
+  <qresource prefix="Guia">
+    <file>entrevista-check.png</file>
+    <file>entrevista.png</file>
+  </qresource>
   <qresource prefix="check">
     <file>check.png</file>
   </qresource>

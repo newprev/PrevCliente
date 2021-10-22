@@ -1,0 +1,2169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>wdgInfoGeralCliente</class>
+ <widget class="QWidget" name="wdgInfoGeralCliente">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1115</width>
+    <height>622</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/*------------------------------------ Frames ------------------------------------*/
+#frTabInfo {
+	background-color: transparent;
+}
+
+/*------------------------------------ Scroll Area ------------------------------------*/
+QScrollArea {
+	background-color: transparent;
+}
+
+/*---------------------------------------- Grid ----------------------------------------
+#scaPessoais, #scaResidencial, #scaProfissional {
+	background-color: rgb(233, 241, 247);
+	border-radius: 10px;
+}*/
+
+/*------------------------------------ Labels ------------------------------------*/
+#lbCdCliente {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+}
+
+#lbNomeCliente {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+}
+
+/*------------------------------------ Tab ------------------------------------*/
+#tabInfoCliente::pane {
+	border-top: 2px solid lightgrey;
+	margin-top: -5px;
+}
+
+#tabInfoCliente::tab-bar {
+	alignment: center;
+}
+
+#tabInfoCliente &gt; QTabBar::tab {
+	background-color: transparent	;
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+	padding: 10px 20px 10px 20px;
+	min-width: 101px;
+	min-height: 18px;
+}
+
+#tabInfoCliente &gt; QTabBar::tab:selected {
+	background-color: transparent	;
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 17px;
+	color: rgb(82, 111, 139);
+	padding: 8px;
+	margin: 2px;
+	min-width: 100px;
+
+	border-style: groove;
+	border-width: 3px;
+	border-color: transparent transparent rgb(82, 111, 139) transparent;
+}
+/*
+#tabInfoCliente &gt; QTabBar::tab:last{
+	background-color: transparent	;
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	padding: 8px;
+	min-height: 18px;
+}
+
+#tabInfoCliente &gt; QTabBar::tab:last:selected {
+	background-color: transparent	;
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 13px;
+	color: rgb(82, 111, 139);
+	padding: 8px;
+	margin: 2px;
+
+	border-style: groove;
+	border-width: 3px;
+	border-color: transparent transparent rgb(82, 111, 139) transparent;
+}*/</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QFrame" name="frMain">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QFrame" name="frCabecalho">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>90</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#lbCdCliente {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+}
+
+#lbInfoCdCliente {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+	color: rgb(159, 159, 159);
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QFrame" name="frame_3">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLabel" name="lbNomeCliente">
+              <property name="text">
+               <string>Nome cliente</string>
+              </property>
+              <property name="textInteractionFlags">
+               <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFrame" name="frame_7">
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_32">
+               <property name="spacing">
+                <number>16</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lbInfoCdCliente">
+                 <property name="maximumSize">
+                  <size>
+                   <width>160</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Código do cliente: </string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="lbCdCliente">
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="frame_4">
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QLabel" name="lbInfoNotaCliente">
+              <property name="text">
+               <string>Nota do cliente</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lbNotaCliente">
+              <property name="text">
+               <string>nota</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="frTabInfo">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
+         <item>
+          <widget class="QTabWidget" name="tabInfoCliente">
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="tabPosition">
+            <enum>QTabWidget::North</enum>
+           </property>
+           <property name="tabShape">
+            <enum>QTabWidget::Rounded</enum>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <property name="elideMode">
+            <enum>Qt::ElideRight</enum>
+           </property>
+           <property name="usesScrollButtons">
+            <bool>false</bool>
+           </property>
+           <property name="movable">
+            <bool>true</bool>
+           </property>
+           <property name="tabBarAutoHide">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="tabInfoPessoais">
+            <property name="styleSheet">
+             <string notr="true">/*---------------------------------------- Frames ----------------------------------------*/
+#scaPessoais &gt; QFrame {
+	border-width: 2px;
+    border-style: solid;
+    border-color: transparent transparent rgb(227, 227, 227) transparent;
+}
+
+/*---------------------------------------- Labels ----------------------------------------*/
+#lbNome, #lbSobrenome, #lbEscolaridade,
+#lbSexo, #lbRg, #lbNomeMae,
+#lbDtNascimento, #lbIdade, #lbEmail,
+#lbEstadoCivil, #lbCpf {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+}
+
+#lbInfoNome, #lbInfoSobrenome, #lbInfoEscolaridade,
+#lbInfoSexo, #lbInfoRg, #lbInfoNomeMae,
+#lbInfoDtNascimento, #lbInfoIdade, #lbInfoEmail,
+#lbInfoEstadoCivil, #lbInfoCpf {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+	color: rgb(159, 159, 159);
+}
+</string>
+            </property>
+            <attribute name="title">
+             <string>Pessoal</string>
+            </attribute>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>32</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QScrollArea" name="scrollArea">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="widgetResizable">
+                <bool>true</bool>
+               </property>
+               <widget class="QWidget" name="scaPessoais">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>1093</width>
+                  <height>437</height>
+                 </rect>
+                </property>
+                <layout class="QGridLayout" name="gridLayout">
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>8</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>8</number>
+                 </property>
+                 <property name="horizontalSpacing">
+                  <number>24</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>8</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QFrame" name="frNome">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_4">
+                    <property name="spacing">
+                     <number>16</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lbInfoNome">
+                      <property name="text">
+                       <string>NOME</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbNome">
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QFrame" name="frRg">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_6">
+                    <property name="spacing">
+                     <number>16</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lbInfoRg">
+                      <property name="text">
+                       <string>RG</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbRg">
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_3">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>452</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QFrame" name="frEstadoCivil">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_11">
+                    <property name="spacing">
+                     <number>16</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lbInfoEstadoCivil">
+                      <property name="text">
+                       <string>ESTADO CIVIL</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbEstadoCivil">
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_8">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>370</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QFrame" name="frEmail">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_10">
+                    <property name="spacing">
+                     <number>16</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lbInfoEmail">
+                      <property name="text">
+                       <string>EMAIL</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbEmail">
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_7">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>428</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QFrame" name="frSobrenome">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_5">
+                    <property name="spacing">
+                     <number>16</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lbInfoSobrenome">
+                      <property name="text">
+                       <string>SOBRENOME</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbSobrenome">
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_2">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>376</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QFrame" name="frSexo">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_13">
+                    <property name="spacing">
+                     <number>16</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lbInfoSexo">
+                      <property name="text">
+                       <string>SEXO</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbSexo">
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_10">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>435</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QFrame" name="frIdade">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_8">
+                    <property name="spacing">
+                     <number>16</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lbInfoIdade">
+                      <property name="text">
+                       <string>IDADE</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbIdade">
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_5">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>427</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QFrame" name="frDtNascimento">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_7">
+                    <property name="spacing">
+                     <number>16</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lbInfoDtNascimento">
+                      <property name="text">
+                       <string>DATA DE NASCIMENTO</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbDtNascimento">
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_4">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>302</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QFrame" name="frCpf">
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_31">
+                    <property name="spacing">
+                     <number>16</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lbInfoCpf">
+                      <property name="text">
+                       <string>CPF</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbCpf">
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_22">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>444</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QFrame" name="frNomeMae">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_9">
+                    <property name="spacing">
+                     <number>16</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lbInfoNomeMae">
+                      <property name="text">
+                       <string>NOME DA MÃE</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbNomeMae">
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_6">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>359</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="6" column="0">
+                  <widget class="QFrame" name="frEscolaridade">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_12">
+                    <property name="spacing">
+                     <number>16</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lbInfoEscolaridade">
+                      <property name="text">
+                       <string>GRAU DE ESCOLARIDADE</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbEscolaridade">
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_9">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>280</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="7" column="0">
+                  <spacer name="verticalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabInfoResidencial">
+            <property name="styleSheet">
+             <string notr="true">/*---------------------------------------- Frames ----------------------------------------*/
+#scaResidencial &gt; QFrame {
+	border-width: 2px;
+    border-style: solid;
+    border-color: transparent transparent rgb(227, 227, 227) transparent;
+}
+
+/*---------------------------------------- Labels ----------------------------------------*/
+#lbCep, #lbNumero, #lbEndereco,
+#lbCidade, #lbBairro, #lbEstado,
+#lbComplemento {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+}
+
+#lbInfoCep, #lbInfoNumero, #lbInfoEndereco,
+#lbInfoCidade, #lbInfoBairro, #lbInfoEstado,
+#lbInfoComplemento {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+	color: rgb(159, 159, 159);
+}
+</string>
+            </property>
+            <attribute name="title">
+             <string>Residencial</string>
+            </attribute>
+            <layout class="QHBoxLayout" name="horizontalLayout_14">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>32</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QFrame" name="frame">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_5">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QScrollArea" name="scrollArea_2">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="widgetResizable">
+                   <bool>true</bool>
+                  </property>
+                  <widget class="QWidget" name="scaResidencial">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>1093</width>
+                     <height>437</height>
+                    </rect>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_2">
+                    <property name="leftMargin">
+                     <number>16</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>8</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>16</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>8</number>
+                    </property>
+                    <property name="horizontalSpacing">
+                     <number>24</number>
+                    </property>
+                    <property name="verticalSpacing">
+                     <number>8</number>
+                    </property>
+                    <item row="1" column="1">
+                     <widget class="QFrame" name="frCidade">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_18">
+                       <item>
+                        <widget class="QLabel" name="lbInfoCidade">
+                         <property name="text">
+                          <string>CIDADE</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lbCidade">
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_14">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>420</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QFrame" name="frEndereco">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_17">
+                       <item>
+                        <widget class="QLabel" name="lbInfoEndereco">
+                         <property name="text">
+                          <string>ENDEREÇO</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lbEndereco">
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_13">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>395</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QFrame" name="frNumero">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_16">
+                       <item>
+                        <widget class="QLabel" name="lbInfoNumero">
+                         <property name="text">
+                          <string>NÚMERO</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lbNumero">
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_12">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>411</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QFrame" name="frBairro">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_19">
+                       <item>
+                        <widget class="QLabel" name="lbInfoBairro">
+                         <property name="text">
+                          <string>BAIRRO</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lbBairro">
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_15">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>424</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QFrame" name="frEstado">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_20">
+                       <item>
+                        <widget class="QLabel" name="lbInfoEstado">
+                         <property name="text">
+                          <string>ESTADO</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lbEstado">
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_16">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>421</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QFrame" name="frCep">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_15">
+                       <item>
+                        <widget class="QLabel" name="lbInfoCep">
+                         <property name="text">
+                          <string>CEP</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lbCep">
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_11">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>449</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="3" column="0" colspan="2">
+                     <widget class="QFrame" name="frComplemento">
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_6">
+                       <item>
+                        <widget class="QLabel" name="lbInfoComplemento">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>24</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>COMPLEMENTO</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lbComplemento">
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabProfissional">
+            <property name="styleSheet">
+             <string notr="true">/*---------------------------------------- Frames ----------------------------------------*/
+#scaProfissional &gt; QFrame {
+	border-width: 2px;
+    border-style: solid;
+    border-color: transparent transparent rgb(227, 227, 227) transparent;
+}
+
+/*---------------------------------------- Labels ----------------------------------------*/
+#lbNit, #lbCarteira, #lbProfissao {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+}
+
+#lbInfoNit, #lbInfoCarteira, #lbInfoProfissao, #lbProfessor {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+	color: rgb(159, 159, 159);
+}
+</string>
+            </property>
+            <attribute name="title">
+             <string>Profissional</string>
+            </attribute>
+            <layout class="QHBoxLayout" name="horizontalLayout_21">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>32</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QFrame" name="frame_2">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_7">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QScrollArea" name="scrollArea_3">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="widgetResizable">
+                   <bool>true</bool>
+                  </property>
+                  <widget class="QWidget" name="scaProfissional">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>1093</width>
+                     <height>437</height>
+                    </rect>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_3">
+                    <property name="leftMargin">
+                     <number>16</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>8</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>16</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>8</number>
+                    </property>
+                    <property name="horizontalSpacing">
+                     <number>24</number>
+                    </property>
+                    <property name="verticalSpacing">
+                     <number>8</number>
+                    </property>
+                    <item row="0" column="0">
+                     <widget class="QFrame" name="frNit">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_23">
+                       <item>
+                        <widget class="QLabel" name="lbInfoNit">
+                         <property name="text">
+                          <string>NIT</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lbNit">
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_17">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>405</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QFrame" name="frProfissao">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_24">
+                       <item>
+                        <widget class="QLabel" name="lbInfoProfissao">
+                         <property name="text">
+                          <string>PROFISSÃO</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lbProfissao">
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_19">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>342</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QFrame" name="frCarteira">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_22">
+                       <item>
+                        <widget class="QLabel" name="lbInfoCarteira">
+                         <property name="text">
+                          <string>CARTEIRA PROFISSIONAL</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lbCarteira">
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_18">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>345</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <spacer name="verticalSpacer_2">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QFrame" name="frProfessor">
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_33">
+                       <item>
+                        <widget class="QLabel" name="lbProfessor">
+                         <property name="text">
+                          <string>PROFESSOR(A)</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="hlProfessor"/>
+                       </item>
+                       <item>
+                        <spacer name="spacer">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>421</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabContatos">
+            <attribute name="title">
+             <string>Contatos</string>
+            </attribute>
+            <layout class="QHBoxLayout" name="horizontalLayout_29">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>32</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QFrame" name="frame_6">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_30">
+                <item>
+                 <widget class="QScrollArea" name="scrollArea_5">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="widgetResizable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <widget class="QWidget" name="scaInfoContatos">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>1075</width>
+                     <height>419</height>
+                    </rect>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_8">
+                    <property name="spacing">
+                     <number>8</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <layout class="QGridLayout" name="grdTelefones"/>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabProcessos">
+            <attribute name="title">
+             <string>Processos</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="tabInfoCadastrais">
+            <property name="styleSheet">
+             <string notr="true">/*---------------------------------------- Frames ----------------------------------------*/
+#scaInfoCadastrais &gt; QFrame {
+	border-width: 2px;
+    border-style: solid;
+    border-color: transparent transparent rgb(227, 227, 227) transparent;
+}
+
+/*---------------------------------------- Labels ----------------------------------------*/
+#lbDtCadastro, #lbUltAlt {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+}
+
+#lbInfoDtCadastro, #lbInfoUltAlt {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 16px;
+	color: rgb(159, 159, 159);
+}
+</string>
+            </property>
+            <attribute name="title">
+             <string>              Informações cadastrais              </string>
+            </attribute>
+            <layout class="QHBoxLayout" name="horizontalLayout_25">
+             <property name="topMargin">
+              <number>32</number>
+             </property>
+             <item>
+              <widget class="QFrame" name="frame_5">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_26">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QScrollArea" name="scrollArea_4">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="widgetResizable">
+                   <bool>true</bool>
+                  </property>
+                  <widget class="QWidget" name="scaInfoCadastrais">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>1075</width>
+                     <height>428</height>
+                    </rect>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_4">
+                    <property name="leftMargin">
+                     <number>16</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>8</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>16</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>8</number>
+                    </property>
+                    <property name="horizontalSpacing">
+                     <number>24</number>
+                    </property>
+                    <property name="verticalSpacing">
+                     <number>8</number>
+                    </property>
+                    <item row="0" column="0">
+                     <widget class="QFrame" name="frDtCadastro">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::NoFrame</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_27">
+                       <item>
+                        <widget class="QLabel" name="lbInfoDtCadastro">
+                         <property name="text">
+                          <string>CLIENTE DESDE</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lbDtCadastro">
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_20">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>359</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QFrame" name="frUltAlt">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::NoFrame</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_28">
+                       <item>
+                        <widget class="QLabel" name="lbInfoUltAlt">
+                         <property name="text">
+                          <string>ÚLTIMA ALTERAÇÃO</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lbUltAlt">
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_21">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>320</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <spacer name="verticalSpacer_3">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -42,6 +42,20 @@ def calculaIdade(dtNascimento, dtLimite) -> relativedelta:
     return idadeRelativa
 
 
+def calculaIdadeAutomatica(dataNascimento) -> str:
+    if isinstance(dataNascimento, str):
+        dataAUsar = strToDate(dataNascimento)
+    elif isinstance(dataNascimento, datetime.date):
+        dataAUsar = dataNascimento
+    else:
+        return ''
+
+    idade: relativedelta = relativedelta(datetime.date.today(), dataAUsar)
+
+    return f"{idade.years} anos {idade.months} meses e {idade.days} dias"
+
+
+
 def dataConflitante(competencia: datetime.date, seqAtual: int, clienteId: int) -> bool:
     from modelos.itemContribuicao import ItemContribuicao
 
@@ -66,6 +80,16 @@ def mascaraDataPequena(data: datetime.date, onlyYear=False):
         return f'{data.year}'
     else:
         return f'{data.month}/{data.year}'
+
+
+def mascaraData(data):
+    if isinstance(data, str):
+        if len(data) <= 16:
+            data = strToDatetime(data)
+        else:
+            data = strToDatetime(data)
+
+    return f'{data.day}/{data.month}/{data.year}'
 
 
 def strAnoToDate(data: str) -> datetime.date:

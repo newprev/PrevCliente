@@ -13,14 +13,14 @@ from modelos.telefonesORM import Telefones
 
 class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
 
-    def __init__(self, parent=None, db=None):
+    def __init__(self, parent=None):
         super(BuscaClientePage, self).__init__(parent=parent)
         self.setupUi(self)
 
-        self.db = db
+        # self.db = db
         self.parent = parent
 
-        self.daoCliente = DaoCliente(db=db)
+        # self.daoCliente = DaoCliente(db=db)
         self.clientes: list = None
         self.clienteSelecionadoId = 0
         self.efeito = Efeitos()

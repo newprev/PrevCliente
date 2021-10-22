@@ -61,6 +61,7 @@ class WdgContribuicao(QWidget, Ui_wdgCabecalhoContribuicao):
             self.cabecalho.dataFim = self.dtDataFim.date().toPyDate()
 
     def salvaAlteracoesESai(self):
+        self.cabecalho.dataUltAlt = datetime.datetime.now()
         self.cabecalho.save()
         self.sinais.sAtualizaCabecalho.emit()
         self.close()

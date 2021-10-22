@@ -57,6 +57,7 @@ class WdgBeneficio(QWidget, Ui_wdgCabecalhoBeneficio):
         self.frMain.resize(parentWidth, parentHeight)
 
     def salvaAlteracoesESai(self):
+        self.cabecalho.dataUltAlt = datetime.datetime.now()
         self.cabecalho.save()
         self.close()
 

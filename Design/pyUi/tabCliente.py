@@ -13,13 +13,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgTabCliente(object):
     def setupUi(self, wdgTabCliente):
         wdgTabCliente.setObjectName("wdgTabCliente")
-        wdgTabCliente.resize(1119, 625)
+        wdgTabCliente.resize(901, 625)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(wdgTabCliente.sizePolicy().hasHeightForWidth())
         wdgTabCliente.setSizePolicy(sizePolicy)
-        wdgTabCliente.setMinimumSize(QtCore.QSize(1048, 610))
+        wdgTabCliente.setMinimumSize(QtCore.QSize(760, 560))
         wdgTabCliente.setMaximumSize(QtCore.QSize(4514434, 16777215))
         wdgTabCliente.setStyleSheet("#wdgTabCliCadastro, \n"
 "#tabClientes,\n"
@@ -49,14 +49,16 @@ class Ui_wdgTabCliente(object):
 "    font-size: 16px;\n"
 "    padding: 8px;\n"
 "    min-width: 100px;\n"
+"    min-height: 20px;\n"
 "}\n"
 "\n"
 "#tabMain > QTabBar::tab:selected {\n"
 "    background-color: transparent    ;\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 18px;\n"
+"    font-size: 20px;\n"
 "    padding: 8px;\n"
 "    margin: 2px;\n"
+"    color:    rgb(82, 111, 139);\n"
 "\n"
 "    border-style: solid;\n"
 "    border-width: 3px;\n"
@@ -618,7 +620,7 @@ class Ui_wdgTabCliente(object):
         self.gridLayout.setSpacing(4)
         self.gridLayout.setObjectName("gridLayout")
         self.frame = QtWidgets.QFrame(self.tabCadastro)
-        self.frame.setMinimumSize(QtCore.QSize(1000, 520))
+        self.frame.setMinimumSize(QtCore.QSize(740, 0))
         self.frame.setMaximumSize(QtCore.QSize(1085, 540))
         self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -645,12 +647,12 @@ class Ui_wdgTabCliente(object):
         self.verticalLayout_6.addWidget(self.lbDescricaoTela)
         self.gridLayout_6.addWidget(self.frame_6, 0, 0, 1, 3)
         self.gbInfoPessoais = QtWidgets.QGroupBox(self.frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.gbInfoPessoais.sizePolicy().hasHeightForWidth())
         self.gbInfoPessoais.setSizePolicy(sizePolicy)
-        self.gbInfoPessoais.setMinimumSize(QtCore.QSize(446, 410))
+        self.gbInfoPessoais.setMinimumSize(QtCore.QSize(320, 350))
         self.gbInfoPessoais.setMaximumSize(QtCore.QSize(16777215, 500))
         self.gbInfoPessoais.setCheckable(False)
         self.gbInfoPessoais.setObjectName("gbInfoPessoais")
@@ -858,7 +860,7 @@ class Ui_wdgTabCliente(object):
         self.gridLayout_2.addWidget(self.groupBox_15, 7, 0, 1, 2)
         self.gridLayout_6.addWidget(self.gbInfoPessoais, 1, 0, 2, 1)
         self.gbInfoResidenciais = QtWidgets.QGroupBox(self.frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.gbInfoResidenciais.sizePolicy().hasHeightForWidth())
@@ -964,12 +966,12 @@ class Ui_wdgTabCliente(object):
         self.gridLayout_3.addWidget(self.frame_11, 0, 0, 1, 1)
         self.gridLayout_6.addWidget(self.gbInfoResidenciais, 1, 1, 1, 1)
         self.gbInfoBancarias = QtWidgets.QGroupBox(self.frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.gbInfoBancarias.sizePolicy().hasHeightForWidth())
         self.gbInfoBancarias.setSizePolicy(sizePolicy)
-        self.gbInfoBancarias.setMinimumSize(QtCore.QSize(30, 0))
+        self.gbInfoBancarias.setMinimumSize(QtCore.QSize(195, 0))
         self.gbInfoBancarias.setMaximumSize(QtCore.QSize(300, 16777215))
         self.gbInfoBancarias.setObjectName("gbInfoBancarias")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.gbInfoBancarias)
@@ -1176,7 +1178,7 @@ class Ui_wdgTabCliente(object):
         item = self.tblClientes.horizontalHeaderItem(5)
         item.setText(_translate("wdgTabCliente", "Tipo de Processo"))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabClientes), _translate("wdgTabCliente", "    Clientes    "))
-        self.tabMain.setTabText(self.tabMain.indexOf(self.tabInformacoes), _translate("wdgTabCliente", "    Informações    "))
+        self.tabMain.setTabText(self.tabMain.indexOf(self.tabInformacoes), _translate("wdgTabCliente", "     Informações     "))
         self.lbTitulo.setText(_translate("wdgTabCliente", "<html><head/><body><p>Cadastro de clientes</p></body></html>"))
         self.lbDescricaoTela.setText(_translate("wdgTabCliente", "Para conseguir gerar documentos e gerenciar seus clientes, é importante manter seus dados atualizados."))
         self.gbInfoPessoais.setTitle(_translate("wdgTabCliente", "Informações pessoais"))

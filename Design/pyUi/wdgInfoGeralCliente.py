@@ -52,25 +52,53 @@ class Ui_wdgInfoGeralCliente(object):
 "    margin-top: -5px;\n"
 "}\n"
 "\n"
+"#tabInfoCliente::tab-bar {\n"
+"    alignment: center;\n"
+"}\n"
+"\n"
 "#tabInfoCliente > QTabBar::tab {\n"
 "    background-color: transparent    ;\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 14px;\n"
-"    padding: 8px;\n"
-"    min-width: 100px;\n"
+"    padding: 10px 20px 10px 20px;\n"
+"    min-width: 101px;\n"
+"    min-height: 18px;\n"
 "}\n"
 "\n"
 "#tabInfoCliente > QTabBar::tab:selected {\n"
 "    background-color: transparent    ;\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
+"    font-size: 17px;\n"
+"    color: rgb(82, 111, 139);\n"
+"    padding: 8px;\n"
+"    margin: 2px;\n"
+"    min-width: 100px;\n"
+"\n"
+"    border-style: groove;\n"
+"    border-width: 3px;\n"
+"    border-color: transparent transparent rgb(82, 111, 139) transparent;\n"
+"}\n"
+"/*\n"
+"#tabInfoCliente > QTabBar::tab:last{\n"
+"    background-color: transparent    ;\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"    padding: 8px;\n"
+"    min-height: 18px;\n"
+"}\n"
+"\n"
+"#tabInfoCliente > QTabBar::tab:last:selected {\n"
+"    background-color: transparent    ;\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 13px;\n"
+"    color: rgb(82, 111, 139);\n"
 "    padding: 8px;\n"
 "    margin: 2px;\n"
 "\n"
 "    border-style: groove;\n"
 "    border-width: 3px;\n"
 "    border-color: transparent transparent rgb(82, 111, 139) transparent;\n"
-"}")
+"}*/")
         self.verticalLayout = QtWidgets.QVBoxLayout(wdgInfoGeralCliente)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frMain = QtWidgets.QFrame(wdgInfoGeralCliente)
@@ -162,8 +190,10 @@ class Ui_wdgInfoGeralCliente(object):
         self.tabInfoCliente.setStyleSheet("")
         self.tabInfoCliente.setTabPosition(QtWidgets.QTabWidget.North)
         self.tabInfoCliente.setTabShape(QtWidgets.QTabWidget.Rounded)
-        self.tabInfoCliente.setElideMode(QtCore.Qt.ElideNone)
+        self.tabInfoCliente.setElideMode(QtCore.Qt.ElideRight)
         self.tabInfoCliente.setUsesScrollButtons(False)
+        self.tabInfoCliente.setMovable(True)
+        self.tabInfoCliente.setTabBarAutoHide(True)
         self.tabInfoCliente.setObjectName("tabInfoCliente")
         self.tabInfoPessoais = QtWidgets.QWidget()
         self.tabInfoPessoais.setStyleSheet("/*---------------------------------------- Frames ----------------------------------------*/\n"
@@ -201,7 +231,7 @@ class Ui_wdgInfoGeralCliente(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scaPessoais = QtWidgets.QWidget()
-        self.scaPessoais.setGeometry(QtCore.QRect(0, 0, 1093, 439))
+        self.scaPessoais.setGeometry(QtCore.QRect(0, 0, 1093, 437))
         self.scaPessoais.setObjectName("scaPessoais")
         self.gridLayout = QtWidgets.QGridLayout(self.scaPessoais)
         self.gridLayout.setContentsMargins(16, 8, 16, 8)
@@ -474,7 +504,7 @@ class Ui_wdgInfoGeralCliente(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollArea_2.setObjectName("scrollArea_2")
         self.scaResidencial = QtWidgets.QWidget()
-        self.scaResidencial.setGeometry(QtCore.QRect(0, 0, 1093, 439))
+        self.scaResidencial.setGeometry(QtCore.QRect(0, 0, 1093, 437))
         self.scaResidencial.setObjectName("scaResidencial")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.scaResidencial)
         self.gridLayout_2.setContentsMargins(16, 8, 16, 8)
@@ -647,7 +677,7 @@ class Ui_wdgInfoGeralCliente(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollArea_3.setObjectName("scrollArea_3")
         self.scaProfissional = QtWidgets.QWidget()
-        self.scaProfissional.setGeometry(QtCore.QRect(0, 0, 1093, 439))
+        self.scaProfissional.setGeometry(QtCore.QRect(0, 0, 1093, 437))
         self.scaProfissional.setObjectName("scaProfissional")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.scaProfissional)
         self.gridLayout_3.setContentsMargins(16, 8, 16, 8)
@@ -747,7 +777,7 @@ class Ui_wdgInfoGeralCliente(object):
         self.scrollArea_5.setAlignment(QtCore.Qt.AlignCenter)
         self.scrollArea_5.setObjectName("scrollArea_5")
         self.scaInfoContatos = QtWidgets.QWidget()
-        self.scaInfoContatos.setGeometry(QtCore.QRect(0, 0, 1075, 421))
+        self.scaInfoContatos.setGeometry(QtCore.QRect(0, 0, 1075, 419))
         self.scaInfoContatos.setObjectName("scaInfoContatos")
         self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.scaInfoContatos)
         self.verticalLayout_8.setContentsMargins(0, 0, 0, 0)
@@ -800,7 +830,7 @@ class Ui_wdgInfoGeralCliente(object):
         self.scrollArea_4.setWidgetResizable(True)
         self.scrollArea_4.setObjectName("scrollArea_4")
         self.scaInfoCadastrais = QtWidgets.QWidget()
-        self.scaInfoCadastrais.setGeometry(QtCore.QRect(0, 0, 1075, 430))
+        self.scaInfoCadastrais.setGeometry(QtCore.QRect(0, 0, 1075, 428))
         self.scaInfoCadastrais.setObjectName("scaInfoCadastrais")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.scaInfoCadastrais)
         self.gridLayout_4.setContentsMargins(16, 8, 16, 8)
@@ -893,7 +923,7 @@ class Ui_wdgInfoGeralCliente(object):
         self.tabInfoCliente.setTabText(self.tabInfoCliente.indexOf(self.tabProcessos), _translate("wdgInfoGeralCliente", "Processos"))
         self.lbInfoDtCadastro.setText(_translate("wdgInfoGeralCliente", "CLIENTE DESDE"))
         self.lbInfoUltAlt.setText(_translate("wdgInfoGeralCliente", "ÚLTIMA ALTERAÇÃO"))
-        self.tabInfoCliente.setTabText(self.tabInfoCliente.indexOf(self.tabInfoCadastrais), _translate("wdgInfoGeralCliente", "       Informações cadastrais       "))
+        self.tabInfoCliente.setTabText(self.tabInfoCliente.indexOf(self.tabInfoCadastrais), _translate("wdgInfoGeralCliente", "              Informações cadastrais              "))
 
 
 if __name__ == "__main__":

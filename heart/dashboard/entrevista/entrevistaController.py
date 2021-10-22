@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from cache.cachingLogin import CacheLogin
 from connections import ConfigConnection
 
 from PyQt5 import QtWidgets, QtCore, QtGui
@@ -16,19 +18,26 @@ from heart.dashboard.gerarDocsPage import GerarDocsPage
 from heart.dashboard.entrevista.localStyleSheet.cabecalho import *
 from heart.sinaisCustomizados import Sinais
 
-# from Daos.daoProcessos import DaoProcessos
-# from Daos.daoCliente import DaoCliente
-
 from modelos.processosORM import Processos
 from modelos.clienteORM import Cliente
+from modelos.advogadoORM import Advogados
+
+from Design.CustomWidgets.infoGuiaEntrevista import InfoGuia
 
 from processos.aposentadoria import CalculosAposentadoria
 
 from util.enums.newPrevEnums import *
+from util.popUps import popUpOkAlerta
 
 
 class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
     aposentadoriaModelo: CalculosAposentadoria = None
+    processoModelo: Processos
+    advogadoAtual: Advogados
+    infoNatureza: InfoGuia
+    infoTipo: InfoGuia
+    infoBeneficio: InfoGuia
+    infoQuestionario: InfoGuia
 
     def __init__(self, parent=None, db=None):
         super(EntrevistaController, self).__init__(parent)
@@ -40,7 +49,6 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.sinais = Sinais()
         self.telaAtual = MomentoEntrevista.cadastro
         self.clienteAtual = Cliente()
-        self.processoModelo = Processos()
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.escondeLoading)
 
@@ -68,6 +76,9 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.pbarProgresso.hide()
         self.frame.show()
 
+        self.buscaAdvogadoAtual()
+        self.iniciaInfoGuia()
+
         self.atualizaEtapa(EtapaEntrevista.infoPessoais, False)
         self.atualizaEtapa(EtapaEntrevista.infoProcessual, False)
         self.atualizaEtapa(EtapaEntrevista.detalhamento, False)
@@ -94,7 +105,12 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             if self.telaAtual == MomentoEntrevista.cadastro:
 
                 self.loading(20)
-                self.processoModelo.clienteId = self.clienteAtual.clienteId
+                self.processoModelo = Processos(
+                    clienteId=self.clienteAtual.clienteId,
+                    advogadoId=self.advogadoAtual.advogadoId,
+                    natureza=0,
+                )
+                self.processoModelo.save()
 
                 self.loading(20)
                 self.clienteController.verificaDados()
@@ -167,6 +183,33 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.sinais.sTrocaTelaEntrevista.emit([None, None])
                 self.telaAtual = MomentoEntrevista.tipoAtividade
 
+    def buscaAdvogadoAtual(self):
+        cacheAdv = CacheLogin()
+
+        self.advogadoAtual = cacheAdv.carregarCache()
+        if self.advogadoAtual is None:
+            self.advogadoAtual = cacheAdv.carregarCacheTemporario()
+            if self.advogadoAtual is None:
+                popUpOkAlerta('O cadastro do advogado atual não pode ser carregado. Informe a equipe técnica.')
+                self.close()
+
+    def iniciaInfoGuia(self):
+        # Natureza
+        self.infoNatureza = InfoGuia('A escolher', False, parent=self.frGuia)
+        self.vlNatureza.addWidget(self.infoNatureza)
+
+        # Tipo processo
+        self.infoTipo = InfoGuia('A escolher', False, parent=self.frGuia)
+        self.vlTipo.addWidget(self.infoTipo)
+
+        # Tipo benefício
+        self.infoBeneficio = InfoGuia('A escolher', False, parent=self.frGuia)
+        self.vlBeneficio.addWidget(self.infoBeneficio)
+
+        # Tipo benefício
+        self.infoQuestionario = InfoGuia('-', False, parent=self.frGuia)
+        self.vlQuestionario.addWidget(self.infoQuestionario)
+
     def trocaTelaCentral(self, *args):
         wdgAtual: MomentoEntrevista = args[0][0]
         wdgFuturo = args[0][1]
@@ -185,6 +228,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         # O usuário está na wdgAtual sobre a natureza do processo
         elif wdgAtual == MomentoEntrevista.naturezaProcesso:
             self.telaAtual = MomentoEntrevista.naturezaProcesso
+            self.infoNatureza.atualizaInfo(wdgFuturo.name, True)
             if wdgFuturo == NaturezaProcesso.administrativo:
                 self.processoModelo.natureza = NaturezaProcesso.administrativo.value
                 self.stackedWidget.setCurrentIndex(2)
@@ -202,16 +246,20 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             if wdgFuturo == TipoProcesso.Concessao:
                 self.processoModelo.tipoProcesso = TipoProcesso.Concessao.value
                 self.stackedWidget.setCurrentIndex(3)
+                self.infoTipo.atualizaInfo("Concessão", True)
             elif wdgFuturo == TipoProcesso.Revisao:
                 self.processoModelo.tipoProcesso = TipoProcesso.Revisao.value
+                self.infoTipo.atualizaInfo("Revisão", True)
                 # TODO: Tela dos tipos de benefícios de revisão
                 pass
             elif wdgFuturo == TipoProcesso.RecOrdinario:
                 self.processoModelo.tipoProcesso = TipoProcesso.RecOrdinario.value
+                self.infoTipo.atualizaInfo("Recurso ordinário", True)
                 # TODO: Tela dos tipos de benefícios de recurso ordinário
                 pass
             elif wdgFuturo == TipoProcesso.RecEspecial:
                 self.processoModelo.tipoProcesso = TipoProcesso.RecEspecial.value
+                self.infoTipo.atualizaInfo("Recurso especial", True)
                 # TODO: Tela dos tipos de benefícios de recurso especial
                 pass
             else:
@@ -222,6 +270,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
             self.telaAtual = MomentoEntrevista.tipoBeneficio
             self.pbProxEtapa.setText('Concluir')
+            self.infoBeneficio.atualizaInfo(wdgFuturo.name, True)
 
             if wdgFuturo == TipoBeneficio.Aposentadoria:
                 self.telaAtual = MomentoEntrevista.tipoAtividade
@@ -271,9 +320,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             self.pbProxEtapa.setText('Gerar documentos')
             self.stackedWidget.setCurrentIndex(5)
 
-            self.processoModelo.dataUltAlt = datetime.now()
-            self.processoModelo.save()
-            calculaAposentadoria = CalculosAposentadoria(self.processoModelo, self.clienteAtual, db=self.db)
+            calculaAposentadoria = CalculosAposentadoria(self.processoModelo, self.clienteAtual)
             calculaAposentadoria.salvaAposentadorias()
         else:
             if wdgFuturo == MomentoEntrevista.cadastro:
@@ -308,10 +355,10 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
     def atualizaCliente(self, *args):
         self.clienteAtual: Cliente = args[0]
 
-    def calculaDer(self) -> datetime:
+    def calculaDer(self) -> datetime.date:
         if self.processoModelo.natureza == NaturezaProcesso.administrativo.value:
             if self.processoModelo.tipoProcesso == TipoProcesso.Concessao.value:
-                return datetime.now()
+                return datetime.today()
 
     def calculaDib(self) -> datetime:
         pass

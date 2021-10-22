@@ -53,25 +53,53 @@ QScrollArea {
 	margin-top: -5px;
 }
 
+#tabInfoCliente::tab-bar {
+	alignment: center;
+}
+
 #tabInfoCliente &gt; QTabBar::tab {
 	background-color: transparent	;
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 14px;
-	padding: 8px;
-	min-width: 100px;
+	padding: 10px 20px 10px 20px;
+	min-width: 101px;
+	min-height: 18px;
 }
 
 #tabInfoCliente &gt; QTabBar::tab:selected {
 	background-color: transparent	;
 	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 14px;
+	font-size: 17px;
+	color: rgb(82, 111, 139);
+	padding: 8px;
+	margin: 2px;
+	min-width: 100px;
+
+	border-style: groove;
+	border-width: 3px;
+	border-color: transparent transparent rgb(82, 111, 139) transparent;
+}
+/*
+#tabInfoCliente &gt; QTabBar::tab:last{
+	background-color: transparent	;
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+	padding: 8px;
+	min-height: 18px;
+}
+
+#tabInfoCliente &gt; QTabBar::tab:last:selected {
+	background-color: transparent	;
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 13px;
+	color: rgb(82, 111, 139);
 	padding: 8px;
 	margin: 2px;
 
 	border-style: groove;
 	border-width: 3px;
 	border-color: transparent transparent rgb(82, 111, 139) transparent;
-}</string>
+}*/</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -298,10 +326,16 @@ QScrollArea {
             <number>0</number>
            </property>
            <property name="elideMode">
-            <enum>Qt::ElideNone</enum>
+            <enum>Qt::ElideRight</enum>
            </property>
            <property name="usesScrollButtons">
             <bool>false</bool>
+           </property>
+           <property name="movable">
+            <bool>true</bool>
+           </property>
+           <property name="tabBarAutoHide">
+            <bool>true</bool>
            </property>
            <widget class="QWidget" name="tabInfoPessoais">
             <property name="styleSheet">
@@ -364,7 +398,7 @@ QScrollArea {
                   <x>0</x>
                   <y>0</y>
                   <width>1093</width>
-                  <height>439</height>
+                  <height>437</height>
                  </rect>
                 </property>
                 <layout class="QGridLayout" name="gridLayout">
@@ -1175,7 +1209,7 @@ QScrollArea {
                      <x>0</x>
                      <y>0</y>
                      <width>1093</width>
-                     <height>439</height>
+                     <height>437</height>
                     </rect>
                    </property>
                    <layout class="QGridLayout" name="gridLayout_2">
@@ -1608,7 +1642,7 @@ QScrollArea {
                      <x>0</x>
                      <y>0</y>
                      <width>1093</width>
-                     <height>439</height>
+                     <height>437</height>
                     </rect>
                    </property>
                    <layout class="QGridLayout" name="gridLayout_3">
@@ -1877,7 +1911,7 @@ QScrollArea {
                      <x>0</x>
                      <y>0</y>
                      <width>1075</width>
-                     <height>421</height>
+                     <height>419</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1936,7 +1970,7 @@ QScrollArea {
 </string>
             </property>
             <attribute name="title">
-             <string>       Informações cadastrais       </string>
+             <string>              Informações cadastrais              </string>
             </attribute>
             <layout class="QHBoxLayout" name="horizontalLayout_25">
              <property name="topMargin">
@@ -1980,7 +2014,7 @@ QScrollArea {
                      <x>0</x>
                      <y>0</y>
                      <width>1075</width>
-                     <height>430</height>
+                     <height>428</height>
                     </rect>
                    </property>
                    <layout class="QGridLayout" name="gridLayout_4">

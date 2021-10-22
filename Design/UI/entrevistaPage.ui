@@ -25,17 +25,11 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">/*-------------------------------------- Frames --------------------------------------*/
+  <property name="styleSheet">
+   <string notr="true">/*-------------------------------------- Frames --------------------------------------*/
 #frTopBackground{
-	background-color: qlineargradient(spread:pad, x1:1, y1:0.483, x2:0, y2:0.539773, stop:0 rgba(39, 86, 135, 255), stop:1 rgba(62, 141, 225, 204));
+	/*background-color: qlineargradient(spread:pad, x1:1, y1:0.483, x2:0, y2:0.539773, stop:0 rgba(39, 86, 135, 255), stop:1 rgba(62, 141, 225, 204));*/
+	background-color: #048ba8;
 }
 
 #frBottomBackground{
@@ -103,6 +97,13 @@
 	background-image: url(:/dots/d3-white.png);
 	background-repeat: no-repeat;
 	background-position: center;
+}
+
+#frGuia{
+	background-color: #3a405a;
+	border-style: groove;
+	border-width: 0px 1px 0px 0px;
+	border-color: lightgrey;
 }
 
 /*-------------------------------------- Labels --------------------------------------*/
@@ -189,11 +190,18 @@
 
 	color: white;
 }</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <property name="spacing">
-     <number>0</number>
-    </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -206,7 +214,257 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item row="0" column="0" rowspan="2">
+     <widget class="QFrame" name="frGuia">
+      <property name="minimumSize">
+       <size>
+        <width>210</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">/*----------------------------------------------- Labels -----------------------------------------------*/
+#lbTituloGuia{
+	font-family: &quot;Ubuntu&quot;;
+	font-size: 16px;
+
+	color: white;
+}
+
+/*----------------------------------------------- Frames -----------------------------------------------*/
+#frEntrevistaIcone{
+	background-image: url(:/Guia/entrevista.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+/*----------------------------------------------- Group Box -----------------------------------------------*/
+#gbNatureza::title, #gbBeneficio::title, 
+#gbTipo::title, #gbQuestionario::title {
+	border-width: 0px 0px 1px 0px;
+	border-color: white;
+	border-style: solid;	
+	subcontrol-position: top left;
+	subcontrol-origin: margin;
+}
+
+QGroupBox{
+	font-family: &quot;Ubuntu&quot;;
+	font-size: 14px;
+	border: 0px solid transparent;
+	background-color: transparent;
+	margin-top: 3ex;
+
+	color: white;	
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>36</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="frame_2">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_20">
+          <property name="spacing">
+           <number>4</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QFrame" name="frEntrevistaIcone">
+            <property name="minimumSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lbTituloGuia">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>ETAPAS ENTREVISTA</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbNatureza">
+         <property name="title">
+          <string>NATUREZA DO PROCESSO</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_11">
+          <property name="spacing">
+           <number>4</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout" name="vlNatureza"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbTipo">
+         <property name="title">
+          <string>TIPO DO PROCESSO</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout" name="vlTipo"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbBeneficio">
+         <property name="title">
+          <string>TIPO DO BENEFÍCIO</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout" name="vlBeneficio"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbQuestionario">
+         <property name="title">
+          <string>QUESTIONÁRIO</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout" name="vlQuestionario"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="1">
      <widget class="QFrame" name="frTopBackground">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -868,7 +1126,7 @@ Finalização</string>
       </layout>
      </widget>
     </item>
-    <item alignment="Qt::AlignTop">
+    <item row="1" column="1">
      <widget class="QFrame" name="frBottomBackground">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -885,7 +1143,7 @@ Finalização</string>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>800</height>
+        <height>16777215</height>
        </size>
       </property>
       <property name="frameShape">
@@ -924,7 +1182,7 @@ Finalização</string>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>600</height>
+           <height>16755515</height>
           </size>
          </property>
         </widget>
@@ -946,7 +1204,7 @@ Finalização</string>
          <property name="maximumSize">
           <size>
            <width>260</width>
-           <height>600</height>
+           <height>16777215</height>
           </size>
          </property>
          <property name="frameShape">
@@ -1477,6 +1735,7 @@ Atividades</string>
    </layout>
    <zorder>frBottomBackground</zorder>
    <zorder>frTopBackground</zorder>
+   <zorder>frGuia</zorder>
   </widget>
  </widget>
  <resources>

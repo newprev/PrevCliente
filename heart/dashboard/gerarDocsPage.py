@@ -55,13 +55,13 @@ class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):
                 self.efeitos.shadowCards([self.frProcuracao])
 
     def atualizaInformacoes(self, processo: Processos, cliente: Cliente):
-        if processo.processoId is None:
-            processo.save()
+        # if processo.processoId is None:
+        #     processo.save()
         self.processo = processo
         self.cliente = cliente
 
-        self.aposentadoriaAtual = Aposentadoria.select().where(
-            Aposentadoria.clienteId == self.cliente.clienteId).get()
+        # self.aposentadoriaAtual = Aposentadoria.select().where(
+        #     Aposentadoria.clienteId == self.cliente.clienteId).get()
 
         self.doc = DocEntrevista(processo, cliente)
 

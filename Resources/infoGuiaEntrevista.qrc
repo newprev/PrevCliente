@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="escolha">
+    <file>entrevista-check.png</file>
+    <file>entrevista-uncheck.png</file>
+  </qresource>
+</RCC>

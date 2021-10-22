@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1119</width>
+    <width>901</width>
     <height>625</height>
    </rect>
   </property>
@@ -18,8 +18,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>1048</width>
-    <height>610</height>
+    <width>760</width>
+    <height>560</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -60,14 +60,16 @@
 	font-size: 16px;
 	padding: 8px;
 	min-width: 100px;
+	min-height: 20px;
 }
 
 #tabMain &gt; QTabBar::tab:selected {
 	background-color: transparent	;
 	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 18px;
+	font-size: 20px;
 	padding: 8px;
 	margin: 2px;
+	color:	rgb(82, 111, 139);
 
 	border-style: solid;
 	border-width: 3px;
@@ -858,7 +860,7 @@ QHeaderView::section {
      </widget>
      <widget class="QWidget" name="tabInformacoes">
       <attribute name="title">
-       <string>    Informações    </string>
+       <string>     Informações     </string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <property name="spacing">
@@ -1107,8 +1109,8 @@ QFrame &gt; QLabel {
         <widget class="QFrame" name="frame">
          <property name="minimumSize">
           <size>
-           <width>1000</width>
-           <height>520</height>
+           <width>740</width>
+           <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -1177,15 +1179,15 @@ QFrame &gt; QLabel {
           <item row="1" column="0" rowspan="2">
            <widget class="QGroupBox" name="gbInfoPessoais">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
             <property name="minimumSize">
              <size>
-              <width>446</width>
-              <height>410</height>
+              <width>320</width>
+              <height>350</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -1860,7 +1862,7 @@ QFrame &gt; QLabel {
           <item row="1" column="1">
            <widget class="QGroupBox" name="gbInfoResidenciais">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -2190,14 +2192,14 @@ QFrame &gt; QLabel {
           <item row="1" column="2">
            <widget class="QGroupBox" name="gbInfoBancarias">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
             <property name="minimumSize">
              <size>
-              <width>30</width>
+              <width>195</width>
               <height>0</height>
              </size>
             </property>

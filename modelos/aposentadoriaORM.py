@@ -20,6 +20,7 @@ class Aposentadoria(BaseModel, Model):
         ('PD50', 'PEDAGIO 50'),
         ('P100', 'PEDAGIO 100'),
         ('POTR', 'TRANSICAO PONTOS'),
+        ('8595', 'REGRA 8595')
     )
     
     aposentadoriaId = AutoField(column_name='aposentadoriaId', null=True)

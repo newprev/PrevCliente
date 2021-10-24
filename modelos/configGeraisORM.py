@@ -12,8 +12,8 @@ class ConfigGerais(BaseModel, Model):
     configId = AutoField(column_name='configId', null=True)
     advogadoId = ForeignKeyField(column_name='advogadoId', field='advogadoId', model=Advogados, backref='advogados')
     iniciaAuto = BooleanField(default=True)
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = TABLENAME

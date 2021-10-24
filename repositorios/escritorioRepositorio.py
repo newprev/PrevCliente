@@ -9,7 +9,11 @@ from modelos.escritoriosORM import Escritorios
 class EscritorioRepositorio:
 
     def __init__(self):
+        # url para desenvolvimento
         self.baseUrl = 'http://localhost:8000/api/'
+
+        # url para produção
+        # self.baseUrl = 'https://newprev.dev.br/api/'
 
     def buscaEscritorio(self, escritorioId) -> Escritorios:
         url: str = self.baseUrl + f'escritorio/{escritorioId}/'
@@ -25,5 +29,6 @@ class EscritorioRepositorio:
             else:
                 logPrioridade(f"API____________________GET<escritorio/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
                 return Escritorios()
-        except ConnectionError:
+        except ConnectionError as err:
+            print(f'buscaEscritorio ({type(err)}): {err}')
             return ErroConexao.ConnectionError

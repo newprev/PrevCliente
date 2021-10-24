@@ -18,8 +18,8 @@ class CnisRemuneracoes(BaseModel, Model):
     dadoOrigem = CharField(column_name='dadoOrigem', default='CNIS')
     remuneracao = FloatField()
     indicadores = CharField()
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'cnisRemuneracoes'

@@ -1,6 +1,8 @@
 from datetime import datetime
 
+import util.popUps
 from cache.cachingLogin import CacheLogin
+from cache.cacheEscritorio import CacheEscritorio
 from connections import ConfigConnection
 
 from PyQt5 import QtWidgets, QtCore, QtGui
@@ -8,7 +10,6 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 from Design.pyUi.entrevistaPage import Ui_mwEntrevistaPage
 
-from heart.dashboard.entrevista.localStyleSheet.lateral import estadoInfoFinalizado
 from heart.dashboard.entrevista.naturezaController import NaturezaController
 from heart.dashboard.entrevista.tipoProcessoAdmController import TipoProcessoAdmController
 from heart.dashboard.entrevista.tipoBeneficioController import TipoBeneficioConcController
@@ -21,6 +22,7 @@ from heart.sinaisCustomizados import Sinais
 from modelos.processosORM import Processos
 from modelos.clienteORM import Cliente
 from modelos.advogadoORM import Advogados
+from modelos.escritoriosORM import Escritorios
 
 from Design.CustomWidgets.infoGuiaEntrevista import InfoGuia
 
@@ -34,32 +36,34 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
     aposentadoriaModelo: CalculosAposentadoria = None
     processoModelo: Processos
     advogadoAtual: Advogados
+    clienteAtual: Cliente
     infoNatureza: InfoGuia
     infoTipo: InfoGuia
     infoBeneficio: InfoGuia
     infoQuestionario: InfoGuia
+    clienteController: TabCliente
+    naturezaPg: NaturezaController
+    tipoProcessoAdmPg: TipoProcessoAdmController
+    tipoBeneficioConcPg: TipoBeneficioConcController
+    tipoAtividadePg: TipoAtividadeController
+    impressaoDocsPg: GerarDocsPage
+    escritorioAtual: Escritorios
 
-    def __init__(self, parent=None, db=None):
+    def __init__(self, parent=None):
         super(EntrevistaController, self).__init__(parent)
         self.setupUi(self)
         self.tipoConexao = TiposConexoes.nuvem
         self.dbConnection = ConfigConnection(instanciaBanco=self.tipoConexao)
-        self.db = db
         self.parent = parent
         self.sinais = Sinais()
         self.telaAtual = MomentoEntrevista.cadastro
-        self.clienteAtual = Cliente()
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.escondeLoading)
 
         self.setWindowTitle("Entrevista - [entrevistaController]")
 
-        self.clienteController = TabCliente(parent=self, db=self.db, entrevista=True)
-        self.naturezaPg = NaturezaController(parent=self, db=self.db)
-        self.tipoProcessoAdmPg = TipoProcessoAdmController(parent=self, db=self.db)
-        self.tipoBeneficioConcPg = TipoBeneficioConcController(parent=self, db=self.db)
-        self.tipoAtividadePg = TipoAtividadeController(parent=self, db=self.db)
-        self.impressaoDocsPg = GerarDocsPage(None, None, parent=self, db=self.db)
+        self.iniciaInfoEntrevista()
+
         self.sinais.sTrocaTelaEntrevista.connect(self.trocaTelaCentral)
         self.sinais.sAtualizaListaClientes.connect(self.atualizaClientes)
 
@@ -84,12 +88,41 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.atualizaEtapa(EtapaEntrevista.detalhamento, False)
         self.atualizaEtapa(EtapaEntrevista.documentacao, False)
 
-        self.lbInfo1.setText('Informações \npessoais')
-        self.lbInfo2.setText('Informações \nresidenciais')
-        self.lbInfo3.setText('Informações \nprofissionais')
-        self.lbInfo4.setText('Informações \nbancárias')
+        # self.lbInfo1.setText('Informações \npessoais')
+        # self.lbInfo2.setText('Informações \nresidenciais')
+        # self.lbInfo3.setText('Informações \nprofissionais')
+        # self.lbInfo4.setText('Informações \nbancárias')
 
         self.stackedWidget.setCurrentIndex(self.telaAtual.value)
+
+    def iniciaInfoEntrevista(self):
+        cacheAdv = CacheLogin()
+        cacheEscritorio = CacheEscritorio()
+        self.clienteAtual = Cliente()
+        self.processoModelo = Processos()
+
+        self.advogadoAtual = cacheAdv.carregarCache()
+        if self.advogadoAtual is None:
+            self.advogadoAtual = cacheAdv.carregarCacheTemporario()
+
+        if self.advogadoAtual is None:
+            util.popUps.popUpOkAlerta('Erro ao carregar informações do advogado atual', erro='[entrevistaController] - iniciaInfoEntrevista')
+            return False
+
+        self.escritorioAtual = cacheEscritorio.carregarCache()
+        if self.escritorioAtual is None:
+            self.escritorioAtual = cacheEscritorio.carregarCacheTemporario()
+
+        if self.advogadoAtual is None:
+            util.popUps.popUpOkAlerta('Erro ao carregar informações do advogado atual', erro='[entrevistaController] - iniciaInfoEntrevista')
+            return False
+
+        self.clienteController = TabCliente(parent=self, entrevista=True)
+        self.naturezaPg = NaturezaController(self.advogadoAtual, self.processoModelo, parent=self)
+        self.tipoProcessoAdmPg = TipoProcessoAdmController(parent=self)
+        self.tipoBeneficioConcPg = TipoBeneficioConcController(parent=self)
+        self.tipoAtividadePg = TipoAtividadeController(parent=self)
+        self.impressaoDocsPg = GerarDocsPage(None, None, parent=self)
 
     def avaliaTrocaTela(self, proxima=True):
         """
@@ -105,12 +138,8 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             if self.telaAtual == MomentoEntrevista.cadastro:
 
                 self.loading(20)
-                self.processoModelo = Processos(
-                    clienteId=self.clienteAtual.clienteId,
-                    advogadoId=self.advogadoAtual.advogadoId,
-                    natureza=0,
-                )
-                self.processoModelo.save()
+                self.naturezaPg.atualizaClienteAtual(self.clienteAtual)
+                self.processoModelo.advogadoId = self.advogadoAtual
 
                 self.loading(20)
                 self.clienteController.verificaDados()
@@ -123,6 +152,12 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.telaAtual = MomentoEntrevista.naturezaProcesso
                 self.atualizaEtapa(EtapaEntrevista.infoPessoais, completo=True)
                 self.loading(20)
+
+            elif self.telaAtual == MomentoEntrevista.naturezaProcesso:
+                self.telaAtual = MomentoEntrevista.tipoProcesso
+                self.infoNatureza.atualizaInfo(NaturezaProcesso(self.processoModelo.natureza).name, True)
+                self.tipoProcessoAdmPg.atualizaProcesso(self.processoModelo)
+                self.sinais.sTrocaTelaEntrevista.emit([MomentoEntrevista.naturezaProcesso, MomentoEntrevista.tipoProcesso])
 
             elif self.telaAtual == MomentoEntrevista.tipoBeneficio:
                 self.telaAtual = MomentoEntrevista.naturezaProcesso
@@ -210,6 +245,11 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.infoQuestionario = InfoGuia('-', False, parent=self.frGuia)
         self.vlQuestionario.addWidget(self.infoQuestionario)
 
+        # Rodapé
+        self.lbNomeAdv.setText(self.advogadoAtual.nomeUsuario + self.advogadoAtual.sobrenomeUsuario)
+        self.lbNumOab.setText(str(self.advogadoAtual.numeroOAB))
+        self.lbNomeEscritorio.setText(self.escritorioAtual.nomeFantasia)
+
     def trocaTelaCentral(self, *args):
         wdgAtual: MomentoEntrevista = args[0][0]
         wdgFuturo = args[0][1]
@@ -228,9 +268,8 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         # O usuário está na wdgAtual sobre a natureza do processo
         elif wdgAtual == MomentoEntrevista.naturezaProcesso:
             self.telaAtual = MomentoEntrevista.naturezaProcesso
-            self.infoNatureza.atualizaInfo(wdgFuturo.name, True)
-            if wdgFuturo == NaturezaProcesso.administrativo:
-                self.processoModelo.natureza = NaturezaProcesso.administrativo.value
+
+            if wdgFuturo == MomentoEntrevista.tipoProcesso:
                 self.stackedWidget.setCurrentIndex(2)
             elif wdgFuturo == NaturezaProcesso.judicial:
                 self.processoModelo.natureza = NaturezaProcesso.judicial.value
@@ -243,6 +282,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         elif wdgAtual == MomentoEntrevista.tipoProcesso:
 
             self.telaAtual = MomentoEntrevista.tipoProcesso
+            self.tipoBeneficioConcPg.atualizaProcesso(self.processoModelo)
             if wdgFuturo == TipoProcesso.Concessao:
                 self.processoModelo.tipoProcesso = TipoProcesso.Concessao.value
                 self.stackedWidget.setCurrentIndex(3)
@@ -277,15 +317,15 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.processoModelo.tipoBeneficio = TipoBeneficio.Aposentadoria.value
                 self.tipoAtividadePg.pegaClienteAtual(self.clienteAtual)
                 self.stackedWidget.setCurrentIndex(4)
-            elif wdgFuturo == TipoBeneficio.AposTempoContr:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.AposTempoContr.value
-                # TODO: wdgAtual dos tipos de atividades aposentadoria por tempo de contribuição
-                pass
             elif wdgFuturo == TipoBeneficio.AuxDoenca:
                 self.telaAtual = MomentoEntrevista.tipoAtividade
                 self.processoModelo.tipoBeneficio = TipoBeneficio.AuxDoenca.value
                 # TODO: wdgAtual dos tipos de atividades auxílio doença
+                pass
+            elif wdgFuturo == TipoBeneficio.AuxAcidente:
+                self.telaAtual = MomentoEntrevista.tipoAtividade
+                self.processoModelo.tipoBeneficio = TipoBeneficio.AposTempoContr.value
+                # TODO: wdgAtual dos tipos de atividades aposentadoria por tempo de contribuição
                 pass
             elif wdgFuturo == TipoBeneficio.AuxReclusao:
                 self.telaAtual = MomentoEntrevista.tipoAtividade
@@ -345,15 +385,12 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             self.lbInfoFinalizacao.setStyleSheet(infoLabelCabecalho(etapa, completo=completo))
             self.frEtapa4.setStyleSheet(infoIconeCabecalho(etapa, completo=completo))
 
-    def atualizaInfoLateral(self, *args, **kwargs):
-        estadoEntrevista: dict = args[0]
-        self.frInfo1Icon.setStyleSheet(estadoInfoFinalizado('pessoais', estadoEntrevista['pessoais']))
-        self.frInfo2Icon.setStyleSheet(estadoInfoFinalizado('residenciais', estadoEntrevista['residenciais']))
-        self.frInfo3Icon.setStyleSheet(estadoInfoFinalizado('profissionais', estadoEntrevista['profissionais']))
-        self.frInfo4Icon.setStyleSheet(estadoInfoFinalizado('bancarias', estadoEntrevista['bancarias']))
-
     def atualizaCliente(self, *args):
         self.clienteAtual: Cliente = args[0]
+        if self.clienteAtual is not None:
+            self.processoModelo.clienteId = self.clienteAtual
+            self.processoModelo.dataUltAlt = datetime.now()
+            self.processoModelo.save()
 
     def calculaDer(self) -> datetime.date:
         if self.processoModelo.natureza == NaturezaProcesso.administrativo.value:

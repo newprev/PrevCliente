@@ -13,8 +13,8 @@ class TetosPrev(BaseModel, Model):
     tetosPrevId = AutoField(column_name='tetosPrevId', null=True)
     dataValidade = DateField(column_name='dataValidade', formats=DATEFORMATS)
     valor = FloatField()
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'tetosPrev'

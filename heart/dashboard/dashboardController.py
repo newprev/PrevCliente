@@ -42,7 +42,7 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.pbHome.clicked.connect(lambda: self.trocarParaPagina(TelaPosicao.Cliente))
         self.pbInfoGerais.clicked.connect(lambda: self.trocarParaPagina(TelaPosicao.InformacoesGerais))
 
-        self.tabCliente = TabCliente(parent=self, db=db)
+        self.tabCliente = TabCliente(parent=self)
         self.tabResumo = TabResumoCNIS(parent=self, db=db)
         self.configuracoesPage = ConfiguracoesPage(parent=self)
         self.ferramentasPage = FerramentasPage(parent=self, db=db)
@@ -73,7 +73,7 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
 
     def trocarParaPagina(self, telaAlvo: TelaPosicao):
         if telaAlvo == TelaPosicao.Entrevista:
-            EntrevistaController(parent=self, db=self.db).showMaximized()
+            EntrevistaController(parent=self).showMaximized()
         elif telaAlvo == TelaPosicao.Resumo:
             self.tabResumo.limpaTudo()
             self.stkMainDashBoard.setCurrentIndex(telaAlvo.value)

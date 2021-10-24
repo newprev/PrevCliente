@@ -18,8 +18,8 @@ class Telefones(BaseModel, Model):
     numero = CharField(null=False)
     pessoalRecado = CharField(column_name='pessoalRecado')
     tipoTelefone = CharField(column_name='tipoTelefone')
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'telefones'

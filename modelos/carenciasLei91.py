@@ -13,8 +13,8 @@ class CarenciaLei91(BaseModel, Model):
     carenciaId = AutoField(column_name='indiceId', null=True)
     dataImplemento = DateField(column_name='dataReferente', formats=DATEFORMATS)
     tempoContribuicao = BigIntegerField()
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'carenciaLei91'

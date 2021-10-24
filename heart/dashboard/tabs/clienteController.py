@@ -34,11 +34,10 @@ from repositorios.integracaoRepositorio import IntegracaoRepository
 
 class TabCliente(Ui_wdgTabCliente, QWidget):
 
-    def __init__(self, db=None, parent=None, entrevista=False):
+    def __init__(self, parent=None, entrevista=False):
         super(TabCliente, self).__init__(parent)
         self.setupUi(self)
         self.cliente = Cliente()
-        self.db = db
         self.sinais = Sinais()
         self.entrevistaPg = parent
         self.entrevista = entrevista
@@ -129,7 +128,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.entrevistaPg = parent
             self.tabMain.setCurrentIndex(2)
             self.findChild(QTabBar).hide()
-            self.sinais.sTrocaInfoLateral.connect(self.atualizaEntrevista)
+            # self.sinais.sTrocaInfoLateral.connect(self.atualizaEntrevista)
             self.sinais.sEnviaCliente.connect(self.enviaClienteParaEntrevista)
         else:
             self.atualizaTblClientes()
@@ -215,7 +214,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.tblClientes.resizeColumnsToContents()
 
     def abrirPgMaisTelefones(self):
-        pgMaisTelefones = TelAfinsController(self.cliente, db=self.db, parent=self)
+        pgMaisTelefones = TelAfinsController(self.cliente, parent=self)
         pgMaisTelefones.show()
 
     def buscaCliente(self):
@@ -790,9 +789,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             dialogPopup.setInformativeText(erro)
 
         close = dialogPopup.exec_()
-
-    def atualizaEntrevista(self, *args, **kwargs):
-        self.entrevistaPg.atualizaInfoLateral(args[0])
 
     def efetivarFiltro(self):
         if self.leBuscaNome.text() != '':

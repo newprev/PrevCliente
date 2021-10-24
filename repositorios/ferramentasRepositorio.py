@@ -8,7 +8,11 @@ from logs import logPrioridade, TipoEdicao, Prioridade
 class ApiFerramentas:
 
     def __init__(self):
+        # url para desenvolvimento
         self.baseUrl = 'http://localhost:8000/api/'
+
+        # url para produção
+        # self.baseUrl = 'https://newprev.dev.br/api/'
 
     async def getAllFerramentas(self, tipo: FerramentasEInfo):
         if tipo == FerramentasEInfo.atuMonetaria:

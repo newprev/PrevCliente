@@ -20,8 +20,8 @@ class CnisBeneficios(BaseModel, Model):
     competencia = DateTimeField(column_name='competencia', default=datetime.min, formats=DATEFORMATS)
     remuneracao = FloatField(column_name='remuneracao')
     indicadores = CharField(default=None)
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'cnisBeneficios'

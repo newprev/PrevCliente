@@ -10,6 +10,6 @@ class InfoGuia(Ui_frEtapaEntrevista, QFrame):
         self.setupUi(self)
         self.atualizaInfo(infoTexto, infoEscolhida)
 
-    def atualizaInfo(self, infoTexto, infoEscolhida):
+    def atualizaInfo(self, infoTexto: str, infoEscolhida: bool):
         self.lbInfo.setText(infoTexto.title())
         self.frIcone.setStyleSheet(iconeEscolhido(infoEscolhida))

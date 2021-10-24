@@ -34,7 +34,7 @@ class Cliente(BaseModel, Model):
     cidade = CharField(null=True)
     complemento = CharField(null=True)
     cpfCliente = CharField(column_name='cpfCliente', unique=True)
-    dataNascimento = DateField(column_name='dataNascimento', default=datetime.now, formats=DATEFORMATS)
+    dataNascimento = DateField(column_name='dataNascimento', default=datetime.now(), formats=DATEFORMATS)
     email = CharField(null=True)
     endereco = CharField(null=True)
     estado = CharField(null=True)
@@ -58,8 +58,8 @@ class Cliente(BaseModel, Model):
     serieCarteiraProf = CharField(column_name='serieCarteiraProf', null=True)
     pathCnis = CharField(column_name='pathCnis', null=True)
     observacoes = CharField(column_name='observacoes', max_length=4000, null=True)
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'cliente'

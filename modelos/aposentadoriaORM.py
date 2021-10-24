@@ -33,8 +33,8 @@ class Aposentadoria(BaseModel, Model):
     valorBeneficio = FloatField()
     dib = DateField(default=datetime.min)
     der = DateField(default=datetime.min)
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'aposentadoria'

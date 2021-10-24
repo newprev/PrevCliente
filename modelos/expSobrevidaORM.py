@@ -16,8 +16,8 @@ class ExpSobrevida(BaseModel, Model):
     expectativaSobrevida = IntegerField(column_name='expectativaSobrevida')
     idade = IntegerField(null=False)
     genero = CharField(null=False, max_length=1)
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'expSobrevida'

@@ -1,3 +1,6 @@
+from logs import logPrioridade
+from util.enums.newPrevEnums import TipoEdicao, Prioridade
+
 
 def selectItensDados(clienteId: int):
     strComando = f"""
@@ -15,4 +18,53 @@ def selectItensDados(clienteId: int):
     WHERE icon.clienteId = {clienteId}
     ORDER BY competencia
     """
+    return strComando
+
+
+def buscaIndicesByClienteId(clienteId: int, indices: list = []) -> str:
+    if len(indices) == 0:
+        indices.append('')
+
+    if 0 <= len(indices) <= 1:
+
+        strComando = f"""
+        SELECT indicadores FROM cnisCabecalhos
+            WHERE clienteId = {clienteId}
+                AND indicadores LIKE '%{indices[0]}%'
+
+        UNION ALL
+
+        SELECT indicadores FROM cnisContribuicoes
+            WHERE clienteId = {clienteId}
+                AND indicadores LIKE '%{indices[0]}%'
+
+        UNION ALL
+
+        SELECT indicadores FROM cnisRemuneracoes
+            WHERE clienteId = {clienteId}
+                AND indicadores LIKE '%{indices[0]}%';"""
+    else:
+        strOr: str = ''
+        for condicao in indices:
+            strOr += f"""
+            indicadores LIKE '%{condicao}%' OR"""
+        strOr = strOr.removesuffix(' OR')
+
+        strComando = f"""
+        SELECT indicadores FROM cnisCabecalhos
+            WHERE clienteId = {clienteId}
+                AND ({strOr})
+
+        UNION ALL
+
+        SELECT indicadores FROM cnisContribuicoes
+            WHERE clienteId = {clienteId}
+                AND ({strOr})
+
+        UNION ALL
+
+        SELECT indicadores FROM cnisRemuneracoes
+            WHERE clienteId = {clienteId}
+                AND ({strOr})"""
+
     return strComando

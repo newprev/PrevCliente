@@ -9,7 +9,11 @@ from util.enums.logEnums import TipoLog
 class ApiInformacoes:
 
     def __init__(self):
+        # url para desenvolvimento
         self.baseUrl = 'http://localhost:8000/api/'
+
+        # url para produção
+        # self.baseUrl = 'https://newprev.dev.br/api/'
 
     async def getAllInformacoes(self, tipo: FerramentasEInfo):
 

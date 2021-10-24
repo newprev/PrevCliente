@@ -1,17 +1,21 @@
+import datetime
+
 from PyQt5.QtWidgets import QWidget
 from Design.pyUi.pgTipoBeneficioConc import Ui_wdgTipoBeneficioConc
 from heart.sinaisCustomizados import Sinais
+from modelos.processosORM import Processos
 from util.enums.newPrevEnums import MomentoEntrevista, TipoBeneficio
 
 
 class TipoBeneficioConcController(QWidget, Ui_wdgTipoBeneficioConc):
+    processoAtivo: Processos
 
-    def __init__(self, parent=None, db=None):
+    def __init__(self, parent=None):
         super(TipoBeneficioConcController, self).__init__(parent)
 
         self.setupUi(self)
         self.entrevistaPage = parent
-        self.db = db
+        # self.db = db
         self.sinais = Sinais()
 
         self.sinais.sTrocaTelaEntrevista.connect(self.trocaTela)
@@ -30,7 +34,13 @@ class TipoBeneficioConcController(QWidget, Ui_wdgTipoBeneficioConc):
         QtCore.pyqtSignal([MomentoEntrevista, TipoBeneficio] name='tela')
         :cvar
         """
+        self.processoAtivo.tipoBeneficio = tipoBeneficio.value
+        self.processoAtivo.dataUltAlt = datetime.datetime.now()
+        self.processoAtivo.save()
         self.sinais.sTrocaTelaEntrevista.emit([momento, tipoBeneficio])
+
+    def atualizaProcesso(self, processoAtual: Processos):
+        self.processoAtivo = processoAtual
 
     def trocaTela(self, *args):
         self.entrevistaPage.trocaTelaCentral(args[0])

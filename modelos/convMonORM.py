@@ -18,8 +18,8 @@ class ConvMon(BaseModel, Model):
     moedaCorrente = BooleanField(column_name='moedaCorrente')
     nomeMoeda = CharField(column_name='nomeMoeda')
     sinal = CharField(null=False)
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'convMon'

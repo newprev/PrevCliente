@@ -20,8 +20,8 @@ class CnisContribuicoes(BaseModel, Model):
     dataPagamento = DateField(column_name='dataPagamento', formats=DATEFORMATS)
     indicadores = CharField(default=None)
     salContribuicao = FloatField(column_name='salContribuicao')
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'cnisContribuicoes'

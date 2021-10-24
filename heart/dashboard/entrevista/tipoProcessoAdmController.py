@@ -1,18 +1,21 @@
+import datetime
+
 from PyQt5.QtWidgets import QWidget
 from Design.pyUi.pgTipoProcessoAdm import Ui_wdgTipoProcessoAdm
 from heart.sinaisCustomizados import Sinais
+from modelos.processosORM import Processos
 from util.enums.newPrevEnums import MomentoEntrevista, TipoProcesso
 from Design.pyUi.efeitos import Efeitos
 
 
 class TipoProcessoAdmController(QWidget, Ui_wdgTipoProcessoAdm):
+    processoAtivo: Processos
 
-    def __init__(self, parent=None, db=None):
+    def __init__(self, parent=None):
         super(TipoProcessoAdmController, self).__init__(parent)
 
         self.setupUi(self)
         self.entrevistaPage = parent
-        self.db = db
         self.sinais = Sinais()
         self.efeitos = Efeitos()
 
@@ -29,7 +32,13 @@ class TipoProcessoAdmController(QWidget, Ui_wdgTipoProcessoAdm):
         QtCore.pyqtSignal([MomentoEntrevista, TipoProcesso] name='tela')
         :cvar
         """
+        self.processoAtivo.dataUltAlt = datetime.datetime.now()
+        self.processoAtivo.tipoProcesso = tipoProcesso.value
+        self.processoAtivo.save()
         self.sinais.sTrocaTelaEntrevista.emit([momento, tipoProcesso])
+
+    def atualizaProcesso(self, processoAtual: Processos):
+        self.processoAtivo = processoAtual
 
     def trocaTela(self, *args):
         self.entrevistaPage.trocaTelaCentral(args[0])

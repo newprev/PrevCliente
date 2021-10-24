@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMessageBox
 
 
-def popUpOkAlerta(mensagem, titulo: str = 'Atenção!', erro: str = None):
+def popUpOkAlerta(mensagem, titulo: str = 'Atenção!', erro: str = None, funcao=None):
     pop = QMessageBox()
     pop.setWindowTitle(titulo)
     pop.setText(mensagem)
@@ -11,7 +11,11 @@ def popUpOkAlerta(mensagem, titulo: str = 'Atenção!', erro: str = None):
     if erro is not None:
         pop.setDetailedText(erro)
 
-    x = pop.exec_()
+    if funcao is not None:
+        x = pop.exec_()
+        funcao()
+    else:
+        x = pop.exec_()
 
 
 def popUpSimCancela(mensagem, titulo: str = 'Atenção!', funcao=None):

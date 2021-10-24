@@ -200,7 +200,7 @@
         </layout>
        </widget>
       </item>
-      <item row="1" column="0" alignment="Qt::AlignHCenter|Qt::AlignTop">
+      <item row="1" column="0">
        <widget class="QScrollArea" name="scrollArea">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -237,7 +237,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>800</width>
+           <width>877</width>
            <height>1400</height>
           </rect>
          </property>
@@ -263,7 +263,7 @@
           <property name="bottomMargin">
            <number>0</number>
           </property>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo1">
             <property name="minimumSize">
              <size>
@@ -337,7 +337,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
            <widget class="QFrame" name="frInfo2">
             <property name="minimumSize">
              <size>
@@ -389,7 +389,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo3">
             <property name="minimumSize">
              <size>
@@ -441,7 +441,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo4">
             <property name="minimumSize">
              <size>
@@ -543,7 +543,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo5">
             <property name="minimumSize">
              <size>
@@ -595,7 +595,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo6">
             <property name="minimumSize">
              <size>
@@ -670,7 +670,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo7">
             <property name="minimumSize">
              <size>
@@ -744,7 +744,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo8">
             <property name="minimumSize">
              <size>
@@ -819,7 +819,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo9">
             <property name="minimumSize">
              <size>
@@ -894,7 +894,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo10">
             <property name="minimumSize">
              <size>
@@ -968,7 +968,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo11">
             <property name="minimumSize">
              <size>
@@ -1021,7 +1021,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo12">
             <property name="minimumSize">
              <size>
@@ -1074,7 +1074,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo13">
             <property name="minimumSize">
              <size>
@@ -1111,7 +1111,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo14">
             <property name="minimumSize">
              <size>
@@ -1148,7 +1148,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo15">
             <property name="minimumSize">
              <size>
@@ -1186,7 +1186,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frInfo16">
             <property name="minimumSize">
              <size>

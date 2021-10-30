@@ -8,7 +8,6 @@ from SQLs.itensContribuicao import buscaIndicesByClienteId
 from heart.dashboard.tabs.tabResumoCNIS import TabResumoCNIS
 from heart.sinaisCustomizados import Sinais
 from modelos.clienteORM import Cliente
-from Daos.daoCliente import DaoCliente
 from util.enums.newPrevEnums import AtivApos
 from Design.pyUi.efeitos import Efeitos
 
@@ -23,7 +22,6 @@ class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):
         # self.db = db
         self.db: SqliteDatabase = Cliente._meta.database
         self.clienteAtual: Cliente = Cliente()
-        # self.daoCliente = DaoCliente(db=db)
 
         self.sinais = Sinais()
         self.efeitos = Efeitos()
@@ -63,13 +61,6 @@ class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):
         listaImei_Irec: list = self.db.execute_sql(buscaIndicesByClienteId(self.clienteAtual.clienteId, indices=['IMEI', 'IREC-FBR'])).fetchall()
         listaIle_Irec: list = self.db.execute_sql(buscaIndicesByClienteId(self.clienteAtual.clienteId, indices=['ILEI', 'IREC-LC'])).fetchall()
         listaAny: list = self.db.execute_sql(buscaIndicesByClienteId(self.clienteAtual.clienteId, indices=[])).fetchall()
-
-        # listaIean: list = self.daoCliente.buscaIndicesByClienteId(self.clienteAtual.clienteId, indices=['IEAN'])
-        # listaPrpps: list = self.daoCliente.buscaIndicesByClienteId(self.clienteAtual.clienteId, indices=['PRPPS'])
-        # listaSalMin: list = self.daoCliente.buscaIndicesByClienteId(self.clienteAtual.clienteId, indices=['PREC-MENOR-MIN'])
-        # listaImei_Irec: list = self.daoCliente.buscaIndicesByClienteId(self.clienteAtual.clienteId, indices=['IMEI', 'IREC-FBR'])
-        # listaIle_Irec: list = self.daoCliente.buscaIndicesByClienteId(self.clienteAtual.clienteId, indices=['ILEI', 'IREC-LC'])
-        # listaAny: list = self.daoCliente.buscaIndicesByClienteId(self.clienteAtual.clienteId, indices=[])
 
         if not len(listaIean) == 0:
             self.frAtiv1.setToolTip('Existe indicativo de trabalho insalubre no CNIS')

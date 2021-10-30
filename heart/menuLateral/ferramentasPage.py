@@ -1,6 +1,5 @@
 from PyQt5.QtWidgets import QWidget
 
-from Daos.daoFerramentas import DaoFerramentas
 from Design.pyUi.ferramentasPage import Ui_wdgFerramentas
 from modelos.convMonORM import ConvMon
 
@@ -16,7 +15,6 @@ class FerramentasPage(QWidget, Ui_wdgFerramentas):
 
         self.db = db
         self.dashboard = parent
-        self.daoFerramentas = DaoFerramentas(db=db)
         self.convMonModelo = ConvMon()
         self.convMonDe = ConvMon()
         self.convMonPara = ConvMon()
@@ -44,7 +42,7 @@ class FerramentasPage(QWidget, Ui_wdgFerramentas):
         self.pbInserir.clicked.connect(self.trataInserir)
 
     def carregaComboBoxes(self):
-        convMon: list = self.daoFerramentas.getAllMoedas()
+        convMon: list = []
 
         apenasNome = []
         for moeda in convMon:
@@ -85,21 +83,23 @@ class FerramentasPage(QWidget, Ui_wdgFerramentas):
                 if self.convMonModelo.dataInicial is None:
                     self.convMonModelo.dataInicial = self.dtDataInicio.date().toPyDate().strftime('%Y-%m-%d %H:%M')
                 self.convMonModelo.dataFinal = datetimeToSql(datetime.now())
-            self.daoFerramentas.insereConvMon(self.convMonModelo)
+            # self.daoFerramentas.insereConvMon(self.convMonModelo)
             self.carregaComboBoxes()
             self.limpaTudo()
 
     def carregaConvMonIniciais(self):
         if self.cbxDe.currentText() != '' and self.cbxDe.currentText() is not None:
-            self.convMonDe = ConvMon().fromList(self.daoFerramentas.getConvMonByNomeMoeda(self.cbxDe.currentText()), retornaInst=True)
-            self.convMonPara = ConvMon().fromList(self.daoFerramentas.getConvMonByNomeMoeda(self.cbxPara.currentText()), retornaInst=True)
+            pass
+            # self.convMonDe = ConvMon().fromList(self.daoFerramentas.getConvMonByNomeMoeda(self.cbxDe.currentText()), retornaInst=True)
+            # self.convMonPara = ConvMon().fromList(self.daoFerramentas.getConvMonByNomeMoeda(self.cbxPara.currentText()), retornaInst=True)
 
     def atualizaConvMon(self, info):
         if self.cbxDe.currentText() != '' and self.cbxDe.currentText() is not None:
             if info == 'cbxDe':
-                self.convMonDe = ConvMon().fromList(self.daoFerramentas.getConvMonByNomeMoeda(self.cbxDe.currentText()), retornaInst=True)
+                pass
+                # self.convMonDe = ConvMon().fromList(self.daoFerramentas.getConvMonByNomeMoeda(self.cbxDe.currentText()), retornaInst=True)
             else:
-                self.convMonPara = ConvMon().fromList(self.daoFerramentas.getConvMonByNomeMoeda(self.cbxPara.currentText()), retornaInst=True)
+                # self.convMonPara = ConvMon().fromList(self.daoFerramentas.getConvMonByNomeMoeda(self.cbxPara.currentText()), retornaInst=True)
                 self.lbValorPara.setText(f'{self.convMonPara.sinal} 0,00')
 
     def atualizaValor(self):

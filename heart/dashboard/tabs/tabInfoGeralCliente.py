@@ -36,7 +36,7 @@ class TabInfoGeralCliente(Ui_wdgInfoGeralCliente, QWidget):
     def carregaClienteNaTela(self):
         # Cabeçalho
         self.lbCdCliente.setText(str(self.clienteModel.clienteId))
-        self.lbNomeCliente.setText(self.clienteModel.nomeCliente + self.clienteModel.sobrenomeCliente)
+        self.lbNomeCliente.setText(self.clienteModel.nomeCliente + ' ' + self.clienteModel.sobrenomeCliente)
 
         # Informações pessoais
         self.lbNome.setText(self.clienteModel.nomeCliente)

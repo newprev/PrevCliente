@@ -1,6 +1,7 @@
 import requests
 import aiohttp
 
+from Configs.systemConfig import buscaSystemConfigs
 from logs import logPrioridade, TipoEdicao, Prioridade
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 from util.enums.logEnums import TipoLog
@@ -9,11 +10,14 @@ from util.enums.logEnums import TipoLog
 class ApiInformacoes:
 
     def __init__(self):
-        # url para desenvolvimento
-        self.baseUrl = 'http://localhost:8000/api/'
+        configs: dict = buscaSystemConfigs()
 
-        # url para produção
-        # self.baseUrl = 'https://newprev.dev.br/api/'
+        if configs['tipoConexao'] == 'dev':
+            # url para desenvolvimento
+            self.baseUrl = 'http://localhost:8000/api/'
+        else:
+            # url para produção
+            self.baseUrl = 'http://newprev.dev.br/api/'
 
     async def getAllInformacoes(self, tipo: FerramentasEInfo):
 

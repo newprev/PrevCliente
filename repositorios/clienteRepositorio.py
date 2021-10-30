@@ -5,6 +5,7 @@ from playhouse.shortcuts import dict_to_model, model_to_dict
 
 from util.enums.newPrevEnums import *
 from util.enums.logEnums import TipoLog
+from Configs.systemConfig import buscaSystemConfigs
 
 from modelos.advogadoORM import Advogados
 from modelos.escritoriosORM import Escritorios
@@ -15,11 +16,14 @@ from repositorios.escritorioRepositorio import EscritorioRepositorio
 class UsuarioRepository:
 
     def __init__(self):
-        # url para desenvolvimento
-        self.baseUrl = 'http://localhost:8000/api/'
+        configs: dict = buscaSystemConfigs()
 
-        # url para produção
-        # self.baseUrl = 'https://newprev.dev.br/api/'
+        if configs['tipoConexao'] == 'dev':
+            # url para desenvolvimento
+            self.baseUrl = 'http://localhost:8000/api/'
+        else:
+            # url para produção
+            self.baseUrl = 'http://newprev.dev.br/api/'
 
     def buscaEscritorioPrimeiroAcesso(self, nomeEscritorio) -> Escritorios:
         url: str = self.baseUrl + 'escritorio/'

@@ -28,8 +28,8 @@ class CnisCabecalhos(BaseModel, Model):
     situacao = CharField(null=True)
     tipoVinculo = CharField(column_name='tipoVinculo', null=True)
     ultRem = DateField(column_name='ultRem', null=True, formats=DATEFORMATS)
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'cnisCabecalhos'

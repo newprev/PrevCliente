@@ -10,10 +10,9 @@ from modelos.telefonesORM import Telefones
 
 class TelAfinsController(QMainWindow, Ui_wdgTelAfins):
 
-    def __init__(self, cliente: Cliente, db=None, parent=None):
+    def __init__(self, cliente: Cliente, parent=None):
         super(TelAfinsController, self).__init__(parent)
         self.setupUi(self)
-        self.db = db
         self.clienteAtivo = cliente
         self.telefoneAtual = Telefones()
 

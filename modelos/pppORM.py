@@ -35,8 +35,8 @@ class Ppp(BaseModel, Model):
     profissiografiaData = DateField(column_name='profissiografiaData', null=True, formats=DATEFORMATS)
     profissiografiaDesc = CharField(column_name='profissiografiaDesc', null=True)
     sitEmpregado = CharField(column_name='sitEmpregado', null=True)
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'ppp'

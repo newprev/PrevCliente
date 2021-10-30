@@ -14,7 +14,7 @@ class Indicadores(BaseModel, Model):
     descricao = CharField()
     fonte = CharField()
     resumo = CharField()
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'indicadores'

@@ -22,8 +22,15 @@
 
 /* ------------------------------ Frames ------------------------------ */
 #frMain{
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(255, 255, 246, 255), stop:1 rgba(255, 255, 255, 255));
+	background-color: lightgrey;
 	border-radius: 8px;
+}
+
+#frTitulo, #frGroupBox {
+	border-radius: 8px;
+	padding: 0px 8px 0px 8px;
+
+	background-color: white;
 }
 
 /* ------------------------------ Labels ------------------------------ */
@@ -31,7 +38,18 @@
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 24px;
 
+	border-color: lightgrey; 
+	border-width: 0px 0px 3px 0px;
+	border-style: groove;
+	
 	color: grey;
+}
+
+#lbDescAdm, #lbDescJud {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+
+	color: black;
 }
 
 /* ------------------------------ Push Buttons ------------------------------ */
@@ -69,7 +87,51 @@
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 24px;
 	color: white;	
-}</string>
+}
+
+/*----------------------------------------------- Group Box -----------------------------------------------*/
+QGroupBox {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 24px;
+
+	background-color: white;
+}
+
+#gbAdmnistrativo::title, #gbJudicial::title {
+	subcontrol-position: top left;
+	background-color: #3A405A;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	color: white;
+	padding: 4px;
+}
+
+/*QGroupBox:checked::title {
+	subcontrol-position: top left;
+	background-color: #3A405A;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	color: white;
+	padding: 4px;
+}
+
+QGroupBox:unchecked::title {
+	subcontrol-position: top left;
+	background-color: lightgrey;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	color: white;
+	padding: 4px;
+}
+
+QGroupBox::title {
+	subcontrol-position: top left;
+	background-color: #3A405A;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	color: white;
+	padding: 4px;
+}*/</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -95,58 +157,104 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QLabel" name="lbTituloNatureza">
-      <property name="geometry">
-       <rect>
-        <x>40</x>
-        <y>20</y>
-        <width>451</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Escolha a natureza do processo</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pbAdministrativo">
-      <property name="geometry">
-       <rect>
-        <x>110</x>
-        <y>260</y>
-        <width>221</width>
-        <height>201</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Administrativo</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pbJudicial">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
-        <y>260</y>
-        <width>221</width>
-        <height>201</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Judicial</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbOu">
-      <property name="geometry">
-       <rect>
-        <x>390</x>
-        <y>340</y>
-        <width>61</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>ou</string>
-      </property>
-     </widget>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QFrame" name="frTitulo">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="lbTituloNatureza">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Escolha a natureza do processo</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="frGroupBox">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QGroupBox" name="gbAdmnistrativo">
+           <property name="title">
+            <string>Administrativo</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QLabel" name="lbDescAdm">
+              <property name="text">
+               <string>O processo administrativo é a forma de atuação do Estado. Ele consiste na sequência de atividades realizadas pela Administração Pública com o objetivo final de dar efeito a algo previsto em lei.
+O processo administrativo é regulado pela Lei nº 9.784/99, chamada de Lei de Processo Administrativo (LPA).
+O processo administrativo é a forma como o Poder Público opera e toma as decisões necessárias para continuar funcionando.
+Já que os atos do Estado não são aleatórios e arbitrários, o processo administrativo é a forma de organizar esses atos para que eles cheguem na decisão final de forma padronizada, coerente e homogênea, fazendo, teoricamente, que trâmites de situações similares sempre sejam iguais.</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="gbJudicial">
+           <property name="title">
+            <string>Judicial</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QLabel" name="lbDescJud">
+              <property name="text">
+               <string>O processo judicial é o instrumento pelo qual se opera a jurisdição, cujos objetivos são eliminar conflitos e fazer justiça por meio da aplicação da Lei ao caso concreto. Pode ser entendido, portanto, como o instrumento, criado e regulamentado pelo direito, para exercício de uma das funções próprias do Estado, no caso a jurisdicional. São pressupostos gerais para a constituição da relação processual uma demanda regularmente formulada, capacidade de quem a formula, e presença de um juiz devidamente investido de poderes pelo Estado . Se presentes tais pressupostos, a relação processual será devidamente instaurada, independentemente da validade do direito substancial em questão. Isto caracteriza a autonomia da relação processual em relação ao direito material controvertido.</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>

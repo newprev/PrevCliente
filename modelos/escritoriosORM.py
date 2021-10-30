@@ -25,8 +25,8 @@ class Escritorios(BaseModel, Model):
     nomeFantasia = CharField(column_name='nomeFantasia')
     numero = IntegerField(null=True)
     telefone = CharField(null=True)
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = TABLENAME
@@ -83,8 +83,8 @@ class Escritorios(BaseModel, Model):
         self.bairro = dictEscritorio['bairro']
         self.cep = dictEscritorio['cep']
         self.complemento = dictEscritorio['complemento']
-        self.dataCadastro = dictEscritorio['dataCadastro']
-        self.dataUltAlt = dictEscritorio['dataUltAlt']
+        self.dataCadastro = datetime.now()
+        self.dataUltAlt = datetime.now()
 
         return self
 

@@ -4,19 +4,20 @@ from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QMessageBox, QVBoxLayout
 from Design.pyUi.tabResumoCNIS import Ui_wdgTabResumoCNIS
 from typing import List
 
-from Daos.daoCalculos import DaoCalculos
-from Daos.daoCliente import DaoCliente
 from heart.dashboard.tabs.localWidgets.itemResumoCNIS import ItemResumoCnis
 from heart.buscaClientePage import BuscaClientePage
 from heart.insereContribuicaoPage import InsereContribuicaoPage
 from Design.pyUi.efeitos import Efeitos
 
 from util.helpers import mascaraDinheiro, mascaraCPF, dataUSAtoBR
+from util.enums.newPrevEnums import TipoContribuicao
 
 from modelos.clienteORM import Cliente
 from modelos.beneficiosORM import CnisBeneficios
+from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.cabecalhoORM import CnisCabecalhos
-from util.enums.newPrevEnums import TipoContribuicao
+from modelos.remuneracaoORM import CnisRemuneracoes
+from Daos.daoCalculos import DaoCalculos
 
 
 class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
@@ -26,10 +27,9 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
         self.setupUi(self)
         self.db = db
         self.cliente = Cliente()
-        self.daoCalculos = DaoCalculos(db=db)
-        self.daoCliente = DaoCliente(db=db)
         self.efeito = Efeitos()
         self.vlResumos = QVBoxLayout()
+        self.daoCalculos = DaoCalculos(db=self.db)
 
         self.buscaClientePage = None
         self.inserirContribuicao = None
@@ -108,11 +108,11 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
 
     def excluir(self, tipo: TipoContribuicao, contribuicaoId: int):
         if tipo == TipoContribuicao.contribuicao:
-            self.daoCalculos.delete(tipo, contribuicaoId)
+            CnisContribuicoes.delete_by_id(contribuicaoId)
         elif tipo == TipoContribuicao.remuneracao:
-            self.daoCalculos.delete(tipo, contribuicaoId)
+            CnisRemuneracoes.delete_by_id(contribuicaoId)
         elif tipo == TipoContribuicao.beneficio:
-            self.daoCalculos.delete(tipo, contribuicaoId)
+            CnisBeneficios.delete_by_id(contribuicaoId)
 
         self.carregarTblContribuicoes(self.cliente.clienteId)
         self.carregarTblBeneficios(self.cliente.clienteId)

@@ -23,7 +23,7 @@ class Processos(BaseModel, Model):
     estado = CharField(null=True)
     incidenteProcessual = IntegerField(column_name='incidenteProcessual', null=True)
     mediaSalarial = FloatField(column_name='mediaSalarial', null=True)
-    natureza = IntegerField(default=0)
+    natureza = IntegerField(default=0, null=True)
     numeroProcesso = CharField(column_name='numeroProcesso', null=True)
     pontuacao = IntegerField(null=True)
     situacaoId = IntegerField(column_name='situacaoId', default=1)
@@ -32,8 +32,8 @@ class Processos(BaseModel, Model):
     tipoBeneficio = IntegerField(column_name='tipoBeneficio', null=True)
     tipoProcesso = IntegerField(column_name='tipoProcesso', null=True)
     valorCausa = FloatField(column_name='valorCausa', null=True)
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'processos'

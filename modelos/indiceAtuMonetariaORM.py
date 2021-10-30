@@ -14,8 +14,8 @@ class IndiceAtuMonetaria(BaseModel, Model):
     dataReferente = DateField(column_name='dataReferente', formats=DATEFORMATS)
     dib = BigIntegerField()
     fator = FloatField()
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
         table_name = 'indiceAtuMonetaria'

@@ -3,7 +3,6 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from typing import List
 
-from Daos.daoCliente import DaoCliente
 from Design.pyUi.buscaCliente import Ui_mwBuscaCliente
 from Design.pyUi.efeitos import Efeitos
 from util.helpers import mascaraTelCel, mascaraNit

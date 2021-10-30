@@ -559,28 +559,6 @@ class CNISModelo:
         else:
             return self.dictDadosPessoais
 
-    # def buscaContribPelo(self, listaDasContribuicoes: List[CnisContribuicoes], seq: int = 0):
-    #     listaResultado: List[CnisContribuicoes] = []
-    #
-    #     for contribuicao in listaDasContribuicoes:
-    #         if contribuicao.seq == seq:
-    #             listaResultado.append(contribuicao)
-    #         elif contribuicao.seq > seq:
-    #             break
-    #
-    #     return listaResultado
-    #
-    # def buscaRemuPelo(self, listaDasRemuneracoes: List[CnisRemuneracoes], seq: int = 0):
-    #     listaResultado: List[CnisRemuneracoes] = []
-    #
-    #     for remuneracao in listaDasRemuneracoes:
-    #         if remuneracao.seq == seq:
-    #             listaResultado.append(remuneracao)
-    #         elif remuneracao.seq > seq:
-    #             break
-    #
-    #     return listaResultado
-
     def buscaPeloSeq(self, lista: List[Union[CnisRemuneracoes, CnisContribuicoes, CnisBeneficios]], seq: int = 0):
         listaResultado: List[CnisRemuneracoes] = []
 

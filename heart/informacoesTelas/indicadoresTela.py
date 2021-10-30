@@ -3,7 +3,6 @@ from typing import List
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout
 
-from Daos.daoInformacoes import DaoInformacoes
 from Design.pyUi.pgInfoIndicadores import Ui_mwInfoIndicadores
 from heart.sinaisCustomizados import Sinais
 from modelos.indicadoresORM import Indicadores
@@ -17,7 +16,6 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
         self.setupUi(self)
         self.db = db
         self.parent = parent
-        self.daoInformacoes = DaoInformacoes(db=db)
         self.indicadores = []
         self.indicadoresNoProcesso: List[str] = []
         self.indicadoresVLayout = QVBoxLayout()

@@ -5,6 +5,7 @@ from playhouse.shortcuts import dict_to_model, model_to_dict
 
 from util.enums.newPrevEnums import *
 from util.enums.logEnums import TipoLog
+from Configs.systemConfig import buscaSystemConfigs
 
 from modelos.advogadoORM import Advogados
 from modelos.escritoriosORM import Escritorios
@@ -15,7 +16,14 @@ from repositorios.escritorioRepositorio import EscritorioRepositorio
 class UsuarioRepository:
 
     def __init__(self):
-        self.baseUrl = 'http://localhost:8000/api/'
+        configs: dict = buscaSystemConfigs()
+
+        if configs['tipoConexao'] == 'dev':
+            # url para desenvolvimento
+            self.baseUrl = 'http://localhost:8000/api/'
+        else:
+            # url para produção
+            self.baseUrl = 'http://newprev.dev.br/api/'
 
     def buscaEscritorioPrimeiroAcesso(self, nomeEscritorio) -> Escritorios:
         url: str = self.baseUrl + 'escritorio/'
@@ -27,6 +35,8 @@ class UsuarioRepository:
             escritorioJson = response.json()
             if len(escritorioJson) == 1:
                 escritorioAux = dict_to_model(Escritorios, escritorioJson[0], ignore_unknown=True)
+                # CnisContribuicoes.insert(**self.contribuicao.toDict()).on_conflict_replace().execute()
+                Escritorios.insert(escritorioJson).on_conflict_replace().execute()
                 escritorio, created = Escritorios.get_or_create(**model_to_dict(escritorioAux, recurse=False))
 
                 logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<escritorio/>:::{url+busca}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComun)

@@ -23,8 +23,15 @@ class Ui_wdgNatureza(object):
 "\n"
 "/* ------------------------------ Frames ------------------------------ */\n"
 "#frMain{\n"
-"    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(255, 255, 246, 255), stop:1 rgba(255, 255, 255, 255));\n"
+"    background-color: lightgrey;\n"
 "    border-radius: 8px;\n"
+"}\n"
+"\n"
+"#frTitulo, #frGroupBox {\n"
+"    border-radius: 8px;\n"
+"    padding: 0px 8px 0px 8px;\n"
+"\n"
+"    background-color: white;\n"
 "}\n"
 "\n"
 "/* ------------------------------ Labels ------------------------------ */\n"
@@ -32,7 +39,18 @@ class Ui_wdgNatureza(object):
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 24px;\n"
 "\n"
+"    border-color: lightgrey; \n"
+"    border-width: 0px 0px 3px 0px;\n"
+"    border-style: groove;\n"
+"    \n"
 "    color: grey;\n"
+"}\n"
+"\n"
+"#lbDescAdm, #lbDescJud {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"\n"
+"    color: black;\n"
 "}\n"
 "\n"
 "/* ------------------------------ Push Buttons ------------------------------ */\n"
@@ -70,7 +88,51 @@ class Ui_wdgNatureza(object):
 "    font-family: \"TeX Gyre Adventor\";\n"
 "    font-size: 24px;\n"
 "    color: white;    \n"
-"}")
+"}\n"
+"\n"
+"/*----------------------------------------------- Group Box -----------------------------------------------*/\n"
+"QGroupBox {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 24px;\n"
+"\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"#gbAdmnistrativo::title, #gbJudicial::title {\n"
+"    subcontrol-position: top left;\n"
+"    background-color: #3A405A;\n"
+"    border-top-left-radius: 8px;\n"
+"    border-top-right-radius: 8px;\n"
+"    color: white;\n"
+"    padding: 4px;\n"
+"}\n"
+"\n"
+"/*QGroupBox:checked::title {\n"
+"    subcontrol-position: top left;\n"
+"    background-color: #3A405A;\n"
+"    border-top-left-radius: 8px;\n"
+"    border-top-right-radius: 8px;\n"
+"    color: white;\n"
+"    padding: 4px;\n"
+"}\n"
+"\n"
+"QGroupBox:unchecked::title {\n"
+"    subcontrol-position: top left;\n"
+"    background-color: lightgrey;\n"
+"    border-top-left-radius: 8px;\n"
+"    border-top-right-radius: 8px;\n"
+"    color: white;\n"
+"    padding: 4px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    subcontrol-position: top left;\n"
+"    background-color: #3A405A;\n"
+"    border-top-left-radius: 8px;\n"
+"    border-top-right-radius: 8px;\n"
+"    color: white;\n"
+"    padding: 4px;\n"
+"}*/")
         self.verticalLayout = QtWidgets.QVBoxLayout(wdgNatureza)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
@@ -79,18 +141,49 @@ class Ui_wdgNatureza(object):
         self.frMain.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frMain.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frMain.setObjectName("frMain")
-        self.lbTituloNatureza = QtWidgets.QLabel(self.frMain)
-        self.lbTituloNatureza.setGeometry(QtCore.QRect(40, 20, 451, 41))
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frMain)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.frTitulo = QtWidgets.QFrame(self.frMain)
+        self.frTitulo.setMaximumSize(QtCore.QSize(16777215, 50))
+        self.frTitulo.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTitulo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTitulo.setObjectName("frTitulo")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frTitulo)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.lbTituloNatureza = QtWidgets.QLabel(self.frTitulo)
+        self.lbTituloNatureza.setMaximumSize(QtCore.QSize(16777215, 50))
         self.lbTituloNatureza.setObjectName("lbTituloNatureza")
-        self.pbAdministrativo = QtWidgets.QPushButton(self.frMain)
-        self.pbAdministrativo.setGeometry(QtCore.QRect(110, 260, 221, 201))
-        self.pbAdministrativo.setObjectName("pbAdministrativo")
-        self.pbJudicial = QtWidgets.QPushButton(self.frMain)
-        self.pbJudicial.setGeometry(QtCore.QRect(510, 260, 221, 201))
-        self.pbJudicial.setObjectName("pbJudicial")
-        self.lbOu = QtWidgets.QLabel(self.frMain)
-        self.lbOu.setGeometry(QtCore.QRect(390, 340, 61, 41))
-        self.lbOu.setObjectName("lbOu")
+        self.horizontalLayout_3.addWidget(self.lbTituloNatureza)
+        self.verticalLayout_2.addWidget(self.frTitulo)
+        self.frGroupBox = QtWidgets.QFrame(self.frMain)
+        self.frGroupBox.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frGroupBox.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frGroupBox.setObjectName("frGroupBox")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frGroupBox)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.gbAdmnistrativo = QtWidgets.QGroupBox(self.frGroupBox)
+        self.gbAdmnistrativo.setCheckable(True)
+        self.gbAdmnistrativo.setObjectName("gbAdmnistrativo")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.gbAdmnistrativo)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.lbDescAdm = QtWidgets.QLabel(self.gbAdmnistrativo)
+        self.lbDescAdm.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.lbDescAdm.setWordWrap(True)
+        self.lbDescAdm.setObjectName("lbDescAdm")
+        self.horizontalLayout.addWidget(self.lbDescAdm)
+        self.verticalLayout_3.addWidget(self.gbAdmnistrativo)
+        self.gbJudicial = QtWidgets.QGroupBox(self.frGroupBox)
+        self.gbJudicial.setCheckable(True)
+        self.gbJudicial.setObjectName("gbJudicial")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.gbJudicial)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.lbDescJud = QtWidgets.QLabel(self.gbJudicial)
+        self.lbDescJud.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.lbDescJud.setWordWrap(True)
+        self.lbDescJud.setObjectName("lbDescJud")
+        self.horizontalLayout_2.addWidget(self.lbDescJud)
+        self.verticalLayout_3.addWidget(self.gbJudicial)
+        self.verticalLayout_2.addWidget(self.frGroupBox)
         self.verticalLayout.addWidget(self.frMain)
 
         self.retranslateUi(wdgNatureza)
@@ -100,9 +193,13 @@ class Ui_wdgNatureza(object):
         _translate = QtCore.QCoreApplication.translate
         wdgNatureza.setWindowTitle(_translate("wdgNatureza", "Form"))
         self.lbTituloNatureza.setText(_translate("wdgNatureza", "Escolha a natureza do processo"))
-        self.pbAdministrativo.setText(_translate("wdgNatureza", "Administrativo"))
-        self.pbJudicial.setText(_translate("wdgNatureza", "Judicial"))
-        self.lbOu.setText(_translate("wdgNatureza", "ou"))
+        self.gbAdmnistrativo.setTitle(_translate("wdgNatureza", "Administrativo"))
+        self.lbDescAdm.setText(_translate("wdgNatureza", "O processo administrativo é a forma de atuação do Estado. Ele consiste na sequência de atividades realizadas pela Administração Pública com o objetivo final de dar efeito a algo previsto em lei.\n"
+"O processo administrativo é regulado pela Lei nº 9.784/99, chamada de Lei de Processo Administrativo (LPA).\n"
+"O processo administrativo é a forma como o Poder Público opera e toma as decisões necessárias para continuar funcionando.\n"
+"Já que os atos do Estado não são aleatórios e arbitrários, o processo administrativo é a forma de organizar esses atos para que eles cheguem na decisão final de forma padronizada, coerente e homogênea, fazendo, teoricamente, que trâmites de situações similares sempre sejam iguais."))
+        self.gbJudicial.setTitle(_translate("wdgNatureza", "Judicial"))
+        self.lbDescJud.setText(_translate("wdgNatureza", "O processo judicial é o instrumento pelo qual se opera a jurisdição, cujos objetivos são eliminar conflitos e fazer justiça por meio da aplicação da Lei ao caso concreto. Pode ser entendido, portanto, como o instrumento, criado e regulamentado pelo direito, para exercício de uma das funções próprias do Estado, no caso a jurisdicional. São pressupostos gerais para a constituição da relação processual uma demanda regularmente formulada, capacidade de quem a formula, e presença de um juiz devidamente investido de poderes pelo Estado . Se presentes tais pressupostos, a relação processual será devidamente instaurada, independentemente da validade do direito substancial em questão. Isto caracteriza a autonomia da relação processual em relação ao direito material controvertido."))
 
 
 if __name__ == "__main__":

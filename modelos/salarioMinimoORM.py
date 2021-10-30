@@ -14,8 +14,8 @@ class SalarioMinimo(BaseModel, Model):
     vigencia = DateField(null=False, formats=DATEFORMATS)
     baseLegal = CharField(null=False)
     valor = FloatField(null=False)
-    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now)
-    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now)
+    dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
+    dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
 
     class Meta:
         table_name = 'salarioMinimo'

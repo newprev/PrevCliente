@@ -133,13 +133,13 @@ QTabBar::tab:!selected {
     <number>0</number>
    </property>
    <property name="leftMargin">
-    <number>9</number>
+    <number>16</number>
    </property>
    <property name="topMargin">
     <number>4</number>
    </property>
    <property name="rightMargin">
-    <number>0</number>
+    <number>16</number>
    </property>
    <property name="bottomMargin">
     <number>0</number>
@@ -628,7 +628,7 @@ QGroupBox {
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>1052</width>
+                  <width>1029</width>
                   <height>629</height>
                  </rect>
                 </property>
@@ -888,7 +888,7 @@ QGroupBox {
 </string>
       </property>
       <attribute name="title">
-       <string>Contribuições</string>
+       <string>       Contribuições       </string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <property name="leftMargin">
@@ -1503,7 +1503,7 @@ QGroupBox {
 }</string>
       </property>
       <attribute name="title">
-       <string>Benefícios</string>
+       <string>    Benefícios    </string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <property name="leftMargin">

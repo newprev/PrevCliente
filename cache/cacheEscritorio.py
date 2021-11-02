@@ -2,7 +2,7 @@ import datetime
 import os
 import json
 
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from playhouse.shortcuts import model_to_dict
 
 from util.enums.newPrevEnums import *

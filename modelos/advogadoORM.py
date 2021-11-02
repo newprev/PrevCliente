@@ -1,8 +1,6 @@
-import json
-
 from modelos.baseModelORM import BaseModel
 from modelos.escritoriosORM import Escritorios
-from logs import *
+from systemLog.logs import *
 
 from peewee import AutoField, ForeignKeyField, BooleanField, CharField, DateTimeField
 from playhouse.signals import Model, post_save, pre_delete

@@ -2,13 +2,14 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar, QHBoxLayout
 from peewee import SqliteDatabase
+from typing import List
 
 from cache.cacheEscritorio import CacheEscritorio
 
 from Design.pyUi.tabCliente import Ui_wdgTabCliente
 from Design.CustomWidgets.newCheckBox import NewCheckBox
-from heart.buscaClientePage import BuscaClientePage
 
+from heart.buscaClientePage import BuscaClientePage
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
 from heart.dashboard.tabs.tabInfoGeralCliente import TabInfoGeralCliente
 from heart.sinaisCustomizados import Sinais

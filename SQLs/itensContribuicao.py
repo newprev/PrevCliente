@@ -1,7 +1,3 @@
-from logs import logPrioridade
-from util.enums.newPrevEnums import TipoEdicao, Prioridade
-
-
 def selectItensDados(clienteId: int):
     strComando = f"""
     SELECT

@@ -1,7 +1,7 @@
 import datetime
 from math import floor
 from peewee import ModelSelect
-from typing import List, Union
+from typing import Union, Tuple, Generator
 
 from util.enums.newPrevEnums import *
 
@@ -264,6 +264,28 @@ def getPessoalRecadoBySigla(sigla: str):
 
 def getConversoesMonetarias():
     return ['Valorizou', 'Desvalorizou']
+
+
+def getRegrasApos():
+    return (
+        ('TCAR', 'TEMPO CONTRIBUICAO AR'),
+        ('IDAR', 'IDADE AR'),
+        ('RIDM', 'REDUCAO IDADE MINIMA'),
+        ('RETC', 'REDUCAO TEMPO CONTRIBUICAO'),
+        ('PD50', 'PEDAGIO 50'),
+        ('P100', 'PEDAGIO 100'),
+        ('POTR', 'TRANSICAO PONTOS'),
+        ('8595', 'REGRA 8595')
+    )
+
+
+def getTipoSimulacao():
+    return (
+        ('TETO', 'TETO PREVIDENCIÁRIO'),
+        ('SMIN', 'SALÁRIO MÍNIMO'),
+        ('ULTI', 'REPETE O ÚLTIMO SALÁRIO'),
+        ('MANU', 'VALOR DEFINIDO MANUALMENTE'),
+    )
 
 
 def escritorioIdAtual() -> int:

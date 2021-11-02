@@ -9,7 +9,7 @@
 
 Daos/producao.db
 
-Daos/historicoLogs/*
+systemLog/historicoLogs/*
 /envCliente/
 
 .idea/

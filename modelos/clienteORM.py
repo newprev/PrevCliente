@@ -1,6 +1,6 @@
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from modelos.escritoriosORM import Escritorios
 from util.dateHelper import strToDate
 from util.enums.newPrevEnums import TipoEdicao, Prioridade

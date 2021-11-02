@@ -1,6 +1,6 @@
 import requests as http
 
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import *
 

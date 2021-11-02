@@ -1,5 +1,5 @@
 from modelos.baseModelORM import BaseModel, DATEFORMATS
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
 

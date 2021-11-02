@@ -2,9 +2,10 @@ import requests as http
 from requests.exceptions import *
 
 from Configs.systemConfig import buscaSystemConfigs
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import *
 from util.enums.logEnums import TipoLog
+from util.enums.configEnums import TipoConexao
 from modelos.escritoriosORM import Escritorios
 
 
@@ -13,7 +14,7 @@ class EscritorioRepositorio:
     def __init__(self):
         configs: dict = buscaSystemConfigs()
 
-        if configs['tipoConexao'] == 'dev':
+        if TipoConexao.desenvolvimento.name == configs['tipoConexao']:
             # url para desenvolvimento
             self.baseUrl = 'http://localhost:8000/api/'
         else:

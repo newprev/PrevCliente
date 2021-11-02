@@ -6,7 +6,7 @@ import pandas as pd
 
 from util.enums.newPrevEnums import TipoContribuicao
 
-from logs import logPrioridade, TipoEdicao, Prioridade
+from systemLog.logs import logPrioridade, TipoEdicao, Prioridade
 
 
 class DaoCalculos:

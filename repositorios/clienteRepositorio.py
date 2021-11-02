@@ -1,10 +1,11 @@
 import requests as http
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from typing import List
 from playhouse.shortcuts import dict_to_model, model_to_dict
 
 from util.enums.newPrevEnums import *
 from util.enums.logEnums import TipoLog
+from util.enums.configEnums import TipoConexao
 from Configs.systemConfig import buscaSystemConfigs
 
 from modelos.advogadoORM import Advogados
@@ -18,7 +19,7 @@ class UsuarioRepository:
     def __init__(self):
         configs: dict = buscaSystemConfigs()
 
-        if configs['tipoConexao'] == 'dev':
+        if TipoConexao.desenvolvimento == configs['tipoConexao']:
             # url para desenvolvimento
             self.baseUrl = 'http://localhost:8000/api/'
         else:

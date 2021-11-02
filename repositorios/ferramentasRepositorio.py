@@ -3,8 +3,9 @@ import aiohttp
 
 from Configs.systemConfig import buscaSystemConfigs
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
+from util.enums.configEnums import TipoConexao
 from util.enums.logEnums import TipoLog
-from logs import logPrioridade, TipoEdicao, Prioridade
+from systemLog.logs import logPrioridade, TipoEdicao, Prioridade
 
 
 class ApiFerramentas:
@@ -12,7 +13,7 @@ class ApiFerramentas:
     def __init__(self):
         configs: dict = buscaSystemConfigs()
 
-        if configs['tipoConexao'] == 'dev':
+        if TipoConexao.desenvolvimento.name == configs['tipoConexao']:
             # url para desenvolvimento
             self.baseUrl = 'http://localhost:8000/api/'
         else:

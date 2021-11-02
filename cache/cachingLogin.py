@@ -1,7 +1,7 @@
 import os
 import json
 
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 from util.helpers import pyToDefault

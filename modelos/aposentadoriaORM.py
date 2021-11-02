@@ -1,38 +1,33 @@
-from modelos.baseModelORM import BaseModel, DATEFORMATS
+from modelos.baseModelORM import BaseModel
 from modelos.clienteORM import Cliente
 from modelos.processosORM import Processos
 from playhouse.signals import Model, post_save, pre_delete
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
+from util.helpers import getRegrasApos, getTipoSimulacao
 
-from peewee import AutoField, CharField, ForeignKeyField, BooleanField, BigIntegerField, DateField, IntegerField, DateTimeField, FloatField
+from peewee import AutoField, CharField, ForeignKeyField, DateField, IntegerField, DateTimeField, FloatField
 from datetime import datetime
 
 TABLENAME = 'aposentadoria'
 
 
 class Aposentadoria(BaseModel, Model):
-    TIPOS = (
-        ('TCAR', 'TEMPO CONTRIBUICAO AR'),
-        ('IDAR', 'IDADE AR'),
-        ('RIDM', 'REDUCAO IDADE MINIMA'),
-        ('RETC', 'REDUCAO TEMPO CONTRIBUICAO'),
-        ('PD50', 'PEDAGIO 50'),
-        ('P100', 'PEDAGIO 100'),
-        ('POTR', 'TRANSICAO PONTOS'),
-        ('8595', 'REGRA 8595')
-    )
+    REGRAS_APOSENTADORIA = getRegrasApos()
+    TIPO_SIMULACAO = getTipoSimulacao()
     
     aposentadoriaId = AutoField(column_name='aposentadoriaId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente)
     processoId = ForeignKeyField(column_name='processoId', field='processoId', model=Processos)
     seq = IntegerField(null=False)
-    tipo = CharField(choices=TIPOS)
+    tipo = CharField(choices=REGRAS_APOSENTADORIA)
     contribMeses = IntegerField()
     contribAnos = IntegerField()
     valorBeneficio = FloatField()
     dib = DateField(default=datetime.min)
     der = DateField(default=datetime.min)
+    tipoSimulacao = CharField(choices=TIPO_SIMULACAO)
+    valorSimulacao = FloatField(null=True, default=0.0)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 

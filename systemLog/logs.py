@@ -12,11 +12,11 @@ def logPrioridade(mensagem: str, tipoEdicao: TipoEdicao = TipoEdicao.select, tip
     init(autoreset=True)
 
     if tipoLog == TipoLog.DataBase:
-        path = os.path.join(os.getcwd(), 'Daos', 'historicoLogs', f'{datetime.now().date()}-DataBaseLog.txt')
+        path = os.path.join(os.getcwd(), 'systemLog', 'historicoLogs', f'{datetime.now().date()}-DataBaseLog.txt')
     elif tipoLog == TipoLog.Cache:
-        path = os.path.join(os.getcwd(), 'Daos', 'historicoLogs', f'{datetime.now().date()}-CacheLog.txt')
+        path = os.path.join(os.getcwd(), 'systemLog', 'historicoLogs', f'{datetime.now().date()}-CacheLog.txt')
     else:
-        path = os.path.join(os.getcwd(), 'Daos', 'historicoLogs', f'{datetime.now().date()}-RestLog.txt')
+        path = os.path.join(os.getcwd(), 'systemLog', 'historicoLogs', f'{datetime.now().date()}-RestLog.txt')
 
     if tipoEdicao == tipoEdicao.insert or tipoEdicao == TipoEdicao.update:
         corDaFonte = Fore.YELLOW

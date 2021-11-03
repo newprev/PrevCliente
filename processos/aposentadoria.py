@@ -7,7 +7,6 @@ from peewee import SqliteDatabase
 from SQLs.itensContribuicao import selectItensDados
 from math import floor
 
-from Daos.daoCalculos import DaoCalculos
 from util.dateHelper import calculaIdade, strToDate, dataConflitante
 
 from modelos.cabecalhoORM import CnisCabecalhos
@@ -19,7 +18,9 @@ from modelos.processosORM import Processos
 from modelos.clienteORM import Cliente
 from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.aposentadoriaORM import Aposentadoria
-from util.enums.newPrevEnums import RegraTransicao, GeneroCliente, TamanhoData, ComparaData, DireitoAdquirido, SubTipoAposentadoria, TipoItemContribuicao, RegraGeralAR
+from modelos.tetosPrevORM import TetosPrev
+from util.enums.newPrevEnums import RegraTransicao, GeneroCliente, TipoItemContribuicao, RegraGeralAR
+from util.enums.aposentadoriaEnums import TipoSimulacao
 
 
 # Reforma 13/11/2019
@@ -37,13 +38,15 @@ class CalculosAposentadoria:
     listaItensContrib: List[ItemContribuicao] = []
     listaRemuneracoes: List[CnisRemuneracoes] = []
     listaContribuicoes: List[CnisContribuicoes] = []
+    tipoSimulacao: TipoSimulacao
+    valorSimulacao: float
     dfTotalContribuicoes: pd.DataFrame
     mediaSalarial: float
     idadeCalculada: relativedelta
     dataPrimeiroTrabalho: datetime.date
     enumGeneroCliente: GeneroCliente
 
-    def __init__(self, processo: Processos, cliente: Cliente):
+    def __init__(self, processo: Processos, cliente: Cliente, entrevistaParams: dict):
         self.processo = processo
         self.cliente = cliente
 
@@ -58,26 +61,8 @@ class CalculosAposentadoria:
         else:
             self.enumGeneroCliente = GeneroCliente.feminino
 
-        # if dib is None:
-        #     self.dibAtual: datetime = datetime.datetime.today()
-        # else:
-        #     self.dibAtual: datetime = dib
-
-        # self.dibAtual = datetime.datetime(year=2020, month=6, day=15)
-
-        # self.idadeCalculada = calculaIdade(self.cliente.dataNascimento, self.dibAtual)
-
-        # self.mediaSalarial: float = self.calculaMediaSalarial()
-        # self.tempoContribCalculado: list = self.calculaTempoContribuicao()
-        # self.pontuacao: int = sum(self.tempoContribCalculado) + self.cliente.idade
-
-        # self.regrasTransicao = {
-        #     RegraTransicao.pontos: self.regraTransPontos(),
-        #     RegraTransicao.reducaoIdadeMinima: self.regraRedIdadeMinima(),
-        #     RegraTransicao.pedagio50: self.regraPedagio50(),
-        #     RegraTransicao.reducaoTempoContribuicao: self.regraRedTempoContrib()
-        # }
-
+        self.tipoSimulacao = entrevistaParams['tipoSimulacao']
+        self.valorSimulacao = entrevistaParams['valorSimulacao']
         self.regrasACalcular: List[Union[RegraTransicao, RegraGeralAR]] = [
             RegraTransicao.pontos,
             RegraTransicao.reducaoIdadeMinima,
@@ -153,35 +138,6 @@ class CalculosAposentadoria:
             tamanhoStr: int = len(chave.name) + 14
             tamanhoStr -= 2 if isinstance(chave, RegraGeralAR) else 0
             print(f"{chave}{' '*(42 - tamanhoStr)}{valor}       {self.qtdContrib[chave]}       R$ {self.valorBeneficios[chave]}    {self.tmpContribPorRegra[chave]}")
-
-        # self.direitosAdquiridos = {
-        #     DireitoAdquirido.lei821391: {
-        #         SubTipoAposentadoria.Idade: self.calculaDireitoAdquirido(DireitoAdquirido.lei821391, subTipo=SubTipoAposentadoria.Idade),
-        #         SubTipoAposentadoria.TempoContrib: self.calculaDireitoAdquirido(DireitoAdquirido.lei821391, subTipo=SubTipoAposentadoria.TempoContrib)
-        #     },
-        #     DireitoAdquirido.lei987699: {
-        #         SubTipoAposentadoria.Idade: self.calculaDireitoAdquirido(DireitoAdquirido.lei987699, subTipo=SubTipoAposentadoria.Idade),
-        #         SubTipoAposentadoria.TempoContrib: False,
-        #     },
-        #     DireitoAdquirido.ec1032019: self.calculaDireitoAdquirido(DireitoAdquirido.ec1032019)
-        # }
-
-        # self.aposentadorias = {
-        #     'direitoAdq': self.direitosAdquiridos,
-        #     'regrasTransicao': self.regrasTransicao
-        # }
-
-        # self.calculaBeneficios()
-
-        # print('\n\n------------------------------------------------------------------ ')
-        # print(f'len(self.listaRemuneracoes): {len(self.listaRemuneracoes)}')
-        # print(f'len(self.listaContribuicoes): {len(self.listaContribuicoes)}')
-        # print(f'self.processo.tempoContribuicao: {self.processo.tempoContribuicao}')
-        # print(f'self.valorBeneficios: {self.valorBeneficios}')
-        # # print(f'self.tempoContribCalculado: {self.tempoContribCalculado}')
-        # print(f'self.fatorPrevidenciario: {self.fatorPrevidenciario}')
-        # # prettyPrintDict(self.aposentadorias)
-        # print('------------------------------------------------------------------\n\n')
 
     def atingiuIdadeAR(self, dib: datetime.date, qtdContribuicoes: int) -> bool:
         """
@@ -521,6 +477,21 @@ class CalculosAposentadoria:
             mesesAMais = 0
             itemARepetir = listaItensContribuicao[-1]
             listaItensAMais = []
+            contribuicaoSimulacao: float
+
+            if self.tipoSimulacao == TipoSimulacao.TETO:
+                contribuicaoSimulacao = TetosPrev().select(TetosPrev.valor).where(TetosPrev.dataValidade.year == competenciaAtual.year).get().value()
+                itemARepetir.contribuicao = contribuicaoSimulacao
+            elif self.tipoSimulacao == TipoSimulacao.SMIN:
+                contribuicaoSimulacao = SalarioMinimo().select(TetosPrev.valor).where(TetosPrev.dataValidade.year == competenciaAtual.year).get().value()
+                itemARepetir.contribuicao = contribuicaoSimulacao
+            elif self.tipoSimulacao == TipoSimulacao.MANU:
+                contribuicaoSimulacao = self.valorSimulacao
+                itemARepetir.contribuicao = contribuicaoSimulacao
+            else:
+                contribuicaoSimulacao = itemARepetir.contribuicao
+
+            self.valorSimulacao = contribuicaoSimulacao
 
             while len(self.regrasACalcular) != 0:
                 if competenciaAtual > self.dataReforma2019:
@@ -937,6 +908,9 @@ class CalculosAposentadoria:
                     processoId=self.processo.processoId,
                     seq=seq,
                     tipo=tipo,
+                    tipoSimulacao=self.tipoSimulacao.name,
+                    valorSimulacao=self.valorSimulacao,
+                    idadeCliente=calculaIdade(strToDate(self.cliente.dataNascimento), self.dibs[chave]).years,
                     contribMeses=self.tmpContribPorRegra[chave].months,
                     contribAnos=self.tmpContribPorRegra[chave].years,
                     valorBeneficio=self.valorBeneficios[chave],

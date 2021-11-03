@@ -27,6 +27,7 @@ from modelos.escritoriosORM import Escritorios
 from Design.CustomWidgets.infoGuiaEntrevista import InfoGuia
 
 from processos.aposentadoria import CalculosAposentadoria
+from util.enums.aposentadoriaEnums import TipoSimulacao
 
 from util.enums.newPrevEnums import *
 from util.popUps import popUpOkAlerta
@@ -48,6 +49,10 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
     tipoAtividadePg: TipoAtividadeController
     impressaoDocsPg: GerarDocsPage
     escritorioAtual: Escritorios
+    entrevistaParams: dict = {
+        'tipoSimulacao': TipoSimulacao.ULTI,
+        'valorSimulacao': 0.0
+    }
 
     def __init__(self, parent=None):
         super(EntrevistaController, self).__init__(parent)
@@ -360,7 +365,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             self.pbProxEtapa.setText('Gerar documentos')
             self.stackedWidget.setCurrentIndex(5)
 
-            calculaAposentadoria = CalculosAposentadoria(self.processoModelo, self.clienteAtual)
+            calculaAposentadoria = CalculosAposentadoria(self.processoModelo, self.clienteAtual, self.entrevistaParams)
             calculaAposentadoria.salvaAposentadorias()
         else:
             if wdgFuturo == MomentoEntrevista.cadastro:

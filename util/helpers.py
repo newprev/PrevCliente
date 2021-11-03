@@ -281,9 +281,9 @@ def getRegrasApos():
 
 def getTipoSimulacao():
     return (
+        ('ULTI', 'REPETE O ÚLTIMO SALÁRIO'),
         ('TETO', 'TETO PREVIDENCIÁRIO'),
         ('SMIN', 'SALÁRIO MÍNIMO'),
-        ('ULTI', 'REPETE O ÚLTIMO SALÁRIO'),
         ('MANU', 'VALOR DEFINIDO MANUALMENTE'),
     )
 

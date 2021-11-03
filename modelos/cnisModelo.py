@@ -579,7 +579,7 @@ class CNISModelo:
     def insereItensContribuicao(self, cliente: Cliente):
         # TODO: Pensar em como identificar atividades primárias...
         listaItensContrib: List[dict] = []
-        listaCabecalhos = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId)
+        listaCabecalhos = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId).order_by(CnisCabecalhos.dataInicio.desc())
         listaRemuneracoes = CnisRemuneracoes.select().where(CnisRemuneracoes.clienteId == cliente.clienteId)
         listaContribuicoes = CnisContribuicoes.select().where(CnisContribuicoes.clienteId == cliente.clienteId)
         listaBeneficios = CnisBeneficios.select().where(CnisBeneficios.clienteId == cliente.clienteId)
@@ -620,7 +620,7 @@ class CNISModelo:
                     "seq": cabecalho.seq,
                     "tipo": TipoItemContribuicao.contribuicao.value,
                     "competencia": contribuicao.competencia,
-                    "contribuicao": contribuicao.contribuicao,
+                    "contribuicao": contribuicao.salContribuicao,
                     "indicadores": contribuicao.indicadores,
                     "validoTempoContrib": not impedidoPorIndicadores,
                     "validoSalContrib": not impedidoPorIndicadores and not impedidoPelaData

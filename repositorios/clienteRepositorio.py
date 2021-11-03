@@ -19,7 +19,7 @@ class UsuarioRepository:
     def __init__(self):
         configs: dict = buscaSystemConfigs()
 
-        if TipoConexao.desenvolvimento == configs['tipoConexao']:
+        if TipoConexao.desenvolvimento.name == configs['tipoConexao']:
             # url para desenvolvimento
             self.baseUrl = 'http://localhost:8000/api/'
         else:

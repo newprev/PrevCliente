@@ -10,3 +10,10 @@ class TipoAposentadoria(Enum):
     pedagio100 = 'P100'       # Pedágio de 50%
     pontos = 'POTR'           # Pontos pela regra de transição
     regra8595 = '8595'        # Pontos pela regra 85/95
+
+
+class TipoSimulacao(Enum):
+    ULTI = 'REPETE O ÚLTIMO SALÁRIO'
+    TETO = 'TETO PREVIDENCIÁRIO'
+    SMIN = 'SALÁRIO MÍNIMO'
+    MANU = 'VALOR DEFINIDO MANUALMENTE'

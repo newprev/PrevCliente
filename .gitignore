@@ -14,15 +14,15 @@ systemLog/historicoLogs/*
 
 .idea/
 
-cache/login.txt
+cache/login.json
 
 sync/syncFile/*
 
-cache/.loginOld.txt
+cache/.loginOld.json
 
-cache/.escritorio.txt
+cache/.escritorio.json
 
-cache/.login.txt
+cache/.login.json
 
 DocGerados/*
 

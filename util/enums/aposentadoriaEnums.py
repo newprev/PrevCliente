@@ -12,8 +12,20 @@ class TipoAposentadoria(Enum):
     regra8595 = '8595'        # Pontos pela regra 85/95
 
 
-class TipoSimulacao(Enum):
+class ContribSimulacao(Enum):
     ULTI = 'REPETE O ÚLTIMO SALÁRIO'
     TETO = 'TETO PREVIDENCIÁRIO'
     SMIN = 'SALÁRIO MÍNIMO'
     MANU = 'VALOR DEFINIDO MANUALMENTE'
+
+
+class IndiceReajuste(Enum):
+    Selic = 'Selic'
+    Ipca = 'Ipca'
+    Igpm = 'Igpm'
+    Ibovespa = 'Ibovespa'
+
+
+
+
+

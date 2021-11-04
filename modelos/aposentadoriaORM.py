@@ -4,7 +4,7 @@ from modelos.processosORM import Processos
 from playhouse.signals import Model, post_save, pre_delete
 from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
-from util.helpers import getRegrasApos, getTipoSimulacao
+from util.helpers import getRegrasApos, getContribSimulacao
 
 from peewee import AutoField, CharField, ForeignKeyField, DateField, IntegerField, DateTimeField, FloatField
 from datetime import datetime
@@ -14,7 +14,7 @@ TABLENAME = 'aposentadoria'
 
 class Aposentadoria(BaseModel, Model):
     REGRAS_APOSENTADORIA = getRegrasApos()
-    TIPO_SIMULACAO = getTipoSimulacao()
+    TIPO_SIMULACAO = getContribSimulacao()
     
     aposentadoriaId = AutoField(column_name='aposentadoriaId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente)
@@ -27,7 +27,7 @@ class Aposentadoria(BaseModel, Model):
     idadeCliente = IntegerField(null=True)
     dib = DateField(default=datetime.min)
     der = DateField(default=datetime.min)
-    tipoSimulacao = CharField(choices=TIPO_SIMULACAO, default='ULTI')
+    contribSimulacao = CharField(choices=TIPO_SIMULACAO, default='ULTI')
     valorSimulacao = FloatField(null=True, default=0.0)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())

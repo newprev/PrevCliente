@@ -279,7 +279,7 @@ def getRegrasApos():
     )
 
 
-def getTipoSimulacao():
+def getContribSimulacao():
     return (
         ('ULTI', 'REPETE O ÚLTIMO SALÁRIO'),
         ('TETO', 'TETO PREVIDENCIÁRIO'),

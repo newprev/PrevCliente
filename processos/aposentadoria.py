@@ -20,7 +20,7 @@ from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.aposentadoriaORM import Aposentadoria
 from modelos.tetosPrevORM import TetosPrev
 from util.enums.newPrevEnums import RegraTransicao, GeneroCliente, TipoItemContribuicao, RegraGeralAR
-from util.enums.aposentadoriaEnums import TipoSimulacao
+from util.enums.aposentadoriaEnums import ContribSimulacao
 
 
 # Reforma 13/11/2019
@@ -38,7 +38,7 @@ class CalculosAposentadoria:
     listaItensContrib: List[ItemContribuicao] = []
     listaRemuneracoes: List[CnisRemuneracoes] = []
     listaContribuicoes: List[CnisContribuicoes] = []
-    tipoSimulacao: TipoSimulacao
+    contribSimulacao: ContribSimulacao
     valorSimulacao: float
     dfTotalContribuicoes: pd.DataFrame
     mediaSalarial: float
@@ -61,7 +61,7 @@ class CalculosAposentadoria:
         else:
             self.enumGeneroCliente = GeneroCliente.feminino
 
-        self.tipoSimulacao = entrevistaParams['tipoSimulacao']
+        self.contribSimulacao = entrevistaParams['contribSimulacao']
         self.valorSimulacao = entrevistaParams['valorSimulacao']
         self.regrasACalcular: List[Union[RegraTransicao, RegraGeralAR]] = [
             RegraTransicao.pontos,
@@ -479,13 +479,13 @@ class CalculosAposentadoria:
             listaItensAMais = []
             contribuicaoSimulacao: float
 
-            if self.tipoSimulacao == TipoSimulacao.TETO:
+            if self.contribSimulacao == ContribSimulacao.TETO:
                 contribuicaoSimulacao = TetosPrev().select(TetosPrev.valor).where(TetosPrev.dataValidade.year == competenciaAtual.year).get().value()
                 itemARepetir.contribuicao = contribuicaoSimulacao
-            elif self.tipoSimulacao == TipoSimulacao.SMIN:
+            elif self.contribSimulacao == ContribSimulacao.SMIN:
                 contribuicaoSimulacao = SalarioMinimo().select(TetosPrev.valor).where(TetosPrev.dataValidade.year == competenciaAtual.year).get().value()
                 itemARepetir.contribuicao = contribuicaoSimulacao
-            elif self.tipoSimulacao == TipoSimulacao.MANU:
+            elif self.contribSimulacao == ContribSimulacao.MANU:
                 contribuicaoSimulacao = self.valorSimulacao
                 itemARepetir.contribuicao = contribuicaoSimulacao
             else:
@@ -908,7 +908,7 @@ class CalculosAposentadoria:
                     processoId=self.processo.processoId,
                     seq=seq,
                     tipo=tipo,
-                    tipoSimulacao=self.tipoSimulacao.name,
+                    contribSimulacao=self.contribSimulacao.name,
                     valorSimulacao=self.valorSimulacao,
                     idadeCliente=calculaIdade(strToDate(self.cliente.dataNascimento), self.dibs[chave]).years,
                     contribMeses=self.tmpContribPorRegra[chave].months,

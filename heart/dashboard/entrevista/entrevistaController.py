@@ -15,6 +15,7 @@ from heart.dashboard.entrevista.tipoProcessoAdmController import TipoProcessoAdm
 from heart.dashboard.entrevista.tipoBeneficioController import TipoBeneficioConcController
 from heart.dashboard.entrevista.tipoAtividadeController import TipoAtividadeController
 from heart.dashboard.tabs.clienteController import TabCliente
+from heart.dashboard.entrevista.localWidgets.pgConfigSimulacao import PgConfigSimulacao
 from heart.dashboard.gerarDocsPage import GerarDocsPage
 from heart.dashboard.entrevista.localStyleSheet.cabecalho import *
 from heart.sinaisCustomizados import Sinais
@@ -27,9 +28,10 @@ from modelos.escritoriosORM import Escritorios
 from Design.CustomWidgets.infoGuiaEntrevista import InfoGuia
 
 from processos.aposentadoria import CalculosAposentadoria
-from util.enums.aposentadoriaEnums import TipoSimulacao
+from util.enums.aposentadoriaEnums import ContribSimulacao
 
 from util.enums.newPrevEnums import *
+from util.enums.aposentadoriaEnums import *
 from util.popUps import popUpOkAlerta
 
 
@@ -50,8 +52,10 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
     impressaoDocsPg: GerarDocsPage
     escritorioAtual: Escritorios
     entrevistaParams: dict = {
-        'tipoSimulacao': TipoSimulacao.ULTI,
-        'valorSimulacao': 0.0
+        'contribSimulacao': ContribSimulacao.ULTI,
+        'valorSimulacao': 0.0,
+        'porcentagemCont': 11,
+        'IndiceReajuste': IndiceReajuste.Ipca
     }
 
     def __init__(self, parent=None):
@@ -81,6 +85,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
         self.pbProxEtapa.clicked.connect(lambda: self.avaliaTrocaTela())
         self.pbVoltaEtapa.clicked.connect(lambda: self.avaliaTrocaTela(proxima=False))
+        self.pbConfSimulacao.clicked.connect(self.abreTelaConfiguracoes)
 
         self.pbarProgresso.hide()
         self.frame.show()
@@ -128,6 +133,10 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.tipoBeneficioConcPg = TipoBeneficioConcController(parent=self)
         self.tipoAtividadePg = TipoAtividadeController(parent=self)
         self.impressaoDocsPg = GerarDocsPage(None, None, parent=self)
+
+    def abreTelaConfiguracoes(self):
+        pgConfigSimulacao = PgConfigSimulacao(self.entrevistaParams, parent=self)
+        pgConfigSimulacao.show()
 
     def avaliaTrocaTela(self, proxima=True):
         """

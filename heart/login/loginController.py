@@ -20,6 +20,7 @@ from modelos.carenciasLei91 import CarenciaLei91
 from modelos.indiceAtuMonetariaORM import IndiceAtuMonetaria
 from modelos.configGeraisORM import ConfigGerais
 from modelos.salarioMinimoORM import SalarioMinimo
+from modelos.ipcaMensalORM import IpcaMensal
 from Design.pyUi.loginPage import Ui_mwLogin
 from heart.login.wdgAdvController import WdgAdvController
 from heart.dashboard.dashboardController import DashboardController
@@ -338,6 +339,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     dateSyncCarenciasLei91 = strToDatetime(syncDict['syncCarenciasLei91'])
                     dateSyncAtuMonetaria = strToDatetime(syncDict['syncAtuMonetaria'])
                     dateSyncSalarioMinimo = strToDatetime(syncDict['syncSalarioMinimo'])
+                    dateSyncIpca = strToDatetime(syncDict['syncIpca'])
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
                         infoToUpdate[FerramentasEInfo.convMon] = True
@@ -374,6 +376,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     else:
                         syncJson['syncSalarioMinimo'] = syncDict['syncSalarioMinimo']
 
+                    if (datetime.datetime.now() - dateSyncIpca).days != 0:
+                        infoToUpdate[FerramentasEInfo.ipca] = True
+                    else:
+                        syncJson['syncIpca'] = syncDict['syncIpca']
+
                     loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
 
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
@@ -387,6 +394,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 FerramentasEInfo.carenciasLei91: True,
                 FerramentasEInfo.atuMonetaria: True,
                 FerramentasEInfo.salarioMinimo: True,
+                FerramentasEInfo.ipca: True,
             }
             loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
 
@@ -401,6 +409,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         qtdCarenciasLei91 = CarenciaLei91.select().count()
         qtdAtuMonetarias = IndiceAtuMonetaria.select().count()
         qtdSalariosMinimos = SalarioMinimo.select().count()
+        qtdIpca = IpcaMensal().select().count()
 
         asyncTasks = []
         for tipoInfo, sync in infoToUpdate.items():
@@ -464,6 +473,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 listaSalarios: List[dict] = infoApi
                 if qtdSalariosMinimos < len(listaSalarios):
                     SalarioMinimo.insert_many(listaSalarios).on_conflict('replace').execute()
+
+            elif aioTask == FerramentasEInfo.ipca:
+                listaIpca: List[dict] = infoApi
+                if qtdIpca < len(listaIpca):
+                    IpcaMensal.insert_many(listaIpca).on_conflict('replace').execute()
 
     def showPopupAlerta(self, mensagem, titulo='Atenção!'):
         dialogPopup = QMessageBox()

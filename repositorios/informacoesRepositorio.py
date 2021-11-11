@@ -32,6 +32,8 @@ class ApiInformacoes:
             endpoint = 'indiceAtuMonetaria/'
         elif tipo == FerramentasEInfo.salarioMinimo:
             endpoint = 'salarioMinimo/'
+        elif tipo == FerramentasEInfo.ipca:
+            endpoint = 'ipcaMensal/'
 
         async with aiohttp.ClientSession() as http:
             url = self.baseUrl + endpoint

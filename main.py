@@ -27,6 +27,7 @@ from modelos.configGeraisORM import ConfigGerais
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.aposentadoriaORM import Aposentadoria
+from modelos.ipcaMensalORM import IpcaMensal
 from util.enums.newPrevEnums import TiposConexoes
 from cache.cachingLogin import CacheLogin
 
@@ -89,7 +90,8 @@ class Main(Ui_MainWindow, QMainWindow):
             ConfigGerais: 'CRIANDO TABELA DE CONFIGURAÇÕES GERAIS...',
             ItemContribuicao: 'CRIANDO TABELA DE ITENS DE CONTRIBUIÇÃO...',
             SalarioMinimo: 'CRIANDO TABELA DE SALÁRIOS MÍNIMOS...',
-            Aposentadoria: 'CRIANDO TABELA DE APOSENTADORIAS...'
+            Aposentadoria: 'CRIANDO TABELA DE APOSENTADORIAS...',
+            IpcaMensal: 'CRIANDO TABELA DE IPCA MENSAL'
         }
 
         # percentLoading = ceil(100 / len(listaLoading))

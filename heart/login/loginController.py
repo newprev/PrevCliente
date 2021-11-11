@@ -1,4 +1,5 @@
 import datetime
+from dateutil.relativedelta import relativedelta
 import pymysql
 import asyncio as aio
 from typing import List
@@ -339,7 +340,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     dateSyncCarenciasLei91 = strToDatetime(syncDict['syncCarenciasLei91'])
                     dateSyncAtuMonetaria = strToDatetime(syncDict['syncAtuMonetaria'])
                     dateSyncSalarioMinimo = strToDatetime(syncDict['syncSalarioMinimo'])
-                    dateSyncIpca = strToDatetime(syncDict['syncIpca'])
+                    dateSyncIpca = strToDatetime(syncDict['syncIpca']) if 'syncIpca' in syncDict else datetime.datetime.now() - relativedelta(days=5)
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
                         infoToUpdate[FerramentasEInfo.convMon] = True
@@ -428,6 +429,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.atuMonetaria)))
                 elif tipoInfo == FerramentasEInfo.salarioMinimo:
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.salarioMinimo)))
+                elif tipoInfo == FerramentasEInfo.ipca:
+                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.ipca)))
 
         gather = await aio.gather(*asyncTasks)
 

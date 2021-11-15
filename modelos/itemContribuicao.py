@@ -16,7 +16,7 @@ class ItemContribuicao(BaseModel, Model):
     TIPO = getTipoItem()
     ORIGEM = getItemOrigem()
 
-    contribuicaoItemId = AutoField(column_name='contribuicaoItemId', null=True)
+    itemContribuicaoId = AutoField(column_name='itemContribuicaoId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
     itemId = IntegerField(null=True)
     seq = IntegerField(null=False)
@@ -37,7 +37,7 @@ class ItemContribuicao(BaseModel, Model):
 
     def toDict(self):
         dictUsuario = {
-            'contribuicaoItemId': self.contribuicaoItemId,
+            'itemContribuicaoId': self.itemContribuicaoId,
             'clienteId': self.clienteId,
             'itemId': self.itemId,
             'seq': self.seq,
@@ -55,7 +55,7 @@ class ItemContribuicao(BaseModel, Model):
         return dictUsuario
 
     def fromDict(self, dictContribuicoes):
-        self.contribuicaoItemId = dictContribuicoes['contribuicaoItemId']
+        self.itemContribuicaoId = dictContribuicoes['itemContribuicaoId']
         self.clienteId = dictContribuicoes['clienteId']
         self.itemId = dictContribuicoes['itemId']
         self.seq = dictContribuicoes['seq']
@@ -73,7 +73,7 @@ class ItemContribuicao(BaseModel, Model):
     def prettyPrint(self, backRef: bool = False):
         print(f"""
         ItemContribuicao(
-            contribuicaoItemId: {self.contribuicaoItemId},
+            itemContribuicaoId: {self.itemContribuicaoId},
             clienteId: {self.clienteId},
             itemId: {self.itemId},
             seq: {self.seq},

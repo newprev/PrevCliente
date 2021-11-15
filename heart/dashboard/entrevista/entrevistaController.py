@@ -28,7 +28,7 @@ from modelos.escritoriosORM import Escritorios
 from Design.CustomWidgets.infoGuiaEntrevista import InfoGuia
 
 from processos.aposentadoria import CalculosAposentadoria
-from util.enums.aposentadoriaEnums import ContribSimulacao
+# from compilado.aposentadoria import CalculosAposentadoria
 
 from util.enums.newPrevEnums import *
 from util.enums.aposentadoriaEnums import *

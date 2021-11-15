@@ -319,6 +319,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             'syncCarenciasLei91': datetimeToSql(datetime.datetime.now()),
             'syncAtuMonetaria': datetimeToSql(datetime.datetime.now()),
             'syncSalarioMinimo': datetimeToSql(datetime.datetime.now()),
+            'syncIpca': datetimeToSql(datetime.datetime.now()),
         }
         loop = aio.get_event_loop()
 
@@ -340,7 +341,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     dateSyncCarenciasLei91 = strToDatetime(syncDict['syncCarenciasLei91'])
                     dateSyncAtuMonetaria = strToDatetime(syncDict['syncAtuMonetaria'])
                     dateSyncSalarioMinimo = strToDatetime(syncDict['syncSalarioMinimo'])
-                    dateSyncIpca = strToDatetime(syncDict['syncIpca']) if 'syncIpca' in syncDict else datetime.datetime.now() - relativedelta(days=5)
+                    # dateSyncIpca = strToDatetime(syncDict['syncIpca']) if 'syncIpca' in syncDict else datetime.datetime.now() - relativedelta(days=5)
+                    dateSyncIpca = strToDatetime(syncDict['syncIpca'])
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
                         infoToUpdate[FerramentasEInfo.convMon] = True

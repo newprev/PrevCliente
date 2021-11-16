@@ -60,9 +60,26 @@ class Ui_mwConfigSimulacao(object):
 "    padding: 4px;\n"
 "}\n"
 "\n"
-"/*#gbContFuturas, #gbIndicesReajuste, #gbPorcentagem {\n"
-"    border: 1px dashed grey;\n"
-"}*/\n"
+"/*-------------------------------- Push Buttons --------------------------------*/\n"
+"\n"
+"#pbSalvar {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    background-color: rgb(52, 73, 94);\n"
+"}\n"
+"\n"
+"#pbSalvar:hover {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 4px;\n"
+"    border: 1px solid transparent;\n"
+"    background-color: rgb(72, 93, 114);\n"
+"}\n"
 "")
         self.centralwidget = QtWidgets.QWidget(mwConfigSimulacao)
         self.centralwidget.setObjectName("centralwidget")
@@ -134,6 +151,23 @@ class Ui_mwConfigSimulacao(object):
         self.cbPorcentagem.setObjectName("cbPorcentagem")
         self.horizontalLayout_2.addWidget(self.cbPorcentagem)
         self.gridLayout.addWidget(self.gbPorcentagem, 0, 1, 1, 1)
+        self.frame = QtWidgets.QFrame(self.frBottom)
+        self.frame.setMaximumSize(QtCore.QSize(300, 16777215))
+        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame)
+        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_4.setSpacing(0)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem)
+        self.pbSalvar = QtWidgets.QPushButton(self.frame)
+        self.pbSalvar.setMinimumSize(QtCore.QSize(150, 36))
+        self.pbSalvar.setMaximumSize(QtCore.QSize(150, 60))
+        self.pbSalvar.setObjectName("pbSalvar")
+        self.horizontalLayout_4.addWidget(self.pbSalvar, 0, QtCore.Qt.AlignRight|QtCore.Qt.AlignBottom)
+        self.gridLayout.addWidget(self.frame, 3, 1, 1, 1)
         self.verticalLayout.addWidget(self.frBottom)
         mwConfigSimulacao.setCentralWidget(self.centralwidget)
 
@@ -148,6 +182,7 @@ class Ui_mwConfigSimulacao(object):
         self.gbContFuturas.setTitle(_translate("mwConfigSimulacao", "Padrão de contribuições futuras"))
         self.gbIndicesReajuste.setTitle(_translate("mwConfigSimulacao", "Índice de reajuste anual"))
         self.gbPorcentagem.setTitle(_translate("mwConfigSimulacao", "Porcentagem de contribuição"))
+        self.pbSalvar.setText(_translate("mwConfigSimulacao", "Salvar e fechar"))
 
 
 if __name__ == "__main__":

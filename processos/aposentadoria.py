@@ -22,7 +22,7 @@ from modelos.aposentadoriaORM import Aposentadoria
 from modelos.tetosPrevORM import TetosPrev
 from modelos.ipcaMensalORM import IpcaMensal
 
-from util.enums.newPrevEnums import RegraTransicao, GeneroCliente, TipoItemContribuicao, RegraGeralAR
+from util.enums.newPrevEnums import RegraTransicao, GeneroCliente, TipoItemContribuicao, RegraGeralAR, ItemOrigem
 from util.enums.aposentadoriaEnums import ContribSimulacao, IndiceReajuste
 
 
@@ -66,7 +66,7 @@ class CalculosAposentadoria:
 
         self.contribSimulacao = entrevistaParams['contribSimulacao']
         self.valorSimulacao = entrevistaParams['valorSimulacao']
-        self.indiceReajuste: IndiceReajuste = entrevistaParams['IndiceReajuste']
+        self.indiceReajuste: IndiceReajuste = entrevistaParams['indiceReajuste']
         self.regrasACalcular: List[Union[RegraTransicao, RegraGeralAR]] = [
             RegraTransicao.pontos,
             RegraTransicao.reducaoIdadeMinima,
@@ -311,11 +311,17 @@ class CalculosAposentadoria:
         if dib < self.dataReforma2019:
             return False
 
-        anosAposReforma: int = self.dataReforma2019.year - dib.year
-        acrescimoMensal = relativedelta(months=6*anosAposReforma).normalized()
         ultimoDiaMes: int = monthrange(dib.year, dib.month)[1]
         finalMes: datetime.date = datetime.date(dib.year, dib.month, ultimoDiaMes)
         idadeClienteAteFinalMes: relativedelta = calculaIdade(self.cliente.dataNascimento, finalMes)
+
+        anosAposReforma: int = dib.year - self.dataReforma2019.year
+        if anosAposReforma < 0:
+            anosAposReforma = 0
+
+        acrescimoMensal = relativedelta(months=6 * anosAposReforma).normalized()
+        if acrescimoMensal.years < 1:
+            acrescimoMensal.years = 0
 
         if tempoContribuicao.years < 15:
             return False
@@ -325,8 +331,10 @@ class CalculosAposentadoria:
             else:
                 if idadeClienteAteFinalMes.years == 60 + acrescimoMensal.years:
                     return idadeClienteAteFinalMes.months >= acrescimoMensal.months
-                elif idadeClienteAteFinalMes.years >= 60:
-                    return True
+                else:
+                    return False
+                # elif idadeClienteAteFinalMes.years >= 60:
+                #     return True
 
     def atingiuPedagio100(self, dib: datetime.date) -> bool:
         """
@@ -490,22 +498,19 @@ class CalculosAposentadoria:
         if len(self.regrasACalcular) != 0:
             mesesAMais = 0
             itemARepetir = listaItensContribuicao[indexAux]
-            listaItensAMais = []
+            listaItensAMais: List[dict] = []
             contribuicaoSimulacao: float
             mediaAcrescimo: int = 1
 
             if self.contribSimulacao == ContribSimulacao.TETO:
-                contribuicaoSimulacao = TetosPrev().select(TetosPrev.valor).where(TetosPrev.dataValidade.year == competenciaAtual.year).get().value()
+                contribuicaoSimulacao = TetosPrev().select(TetosPrev.valor).where(TetosPrev.dataValidade.year == competenciaAtual.year).limit(1).scalar()
                 itemARepetir.contribuicao = contribuicaoSimulacao
-                print(f'---> TETO: {contribuicaoSimulacao=}')
             elif self.contribSimulacao == ContribSimulacao.SMIN:
-                contribuicaoSimulacao = SalarioMinimo().select(TetosPrev.valor).where(TetosPrev.dataValidade.year == competenciaAtual.year).get().value()
+                contribuicaoSimulacao = SalarioMinimo().select(SalarioMinimo.valor).where(SalarioMinimo.vigencia.year == competenciaAtual.year).limit(1).scalar()
                 itemARepetir.contribuicao = contribuicaoSimulacao
-                print(f'---> SMIN: {contribuicaoSimulacao=}')
             elif self.contribSimulacao == ContribSimulacao.MANU:
                 contribuicaoSimulacao = self.valorSimulacao
                 itemARepetir.contribuicao = contribuicaoSimulacao
-                print(f'---> MANU: {contribuicaoSimulacao=}')
             else:
                 contribuicaoSimulacao = itemARepetir.contribuicao
                 print(f'---> ULTI: {contribuicaoSimulacao=}')
@@ -531,7 +536,7 @@ class CalculosAposentadoria:
                     'competencia': competenciaAtual,
                     'contribuicao': round(self.valorSimulacao * np.power(mediaAcrescimo, (len(listaItensAMais)+1)/12), 2),
                     'ativPrimaria': True,
-                    'dadoOrigem': 'N',
+                    'dadoOrigem': ItemOrigem.SIMULACAO.value,
                     'geradoAutomaticamente': True,
                     'validoTempoContrib': True,
                     'validoSalContrib': True
@@ -601,6 +606,7 @@ class CalculosAposentadoria:
 
             try:
                 salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.pedagio50].year).get()
+
             except SalarioMinimo.DoesNotExist as err:
                 salarioMinimo = SalarioMinimo.select().order_by(SalarioMinimo.vigencia.desc()).get()
 

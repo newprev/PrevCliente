@@ -55,7 +55,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         'contribSimulacao': ContribSimulacao.ULTI,
         'valorSimulacao': 0.0,
         'porcentagemCont': 11,
-        'IndiceReajuste': IndiceReajuste.Ipca
+        'indiceReajuste': IndiceReajuste.Ipca
     }
 
     def __init__(self, parent=None):
@@ -98,11 +98,6 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.atualizaEtapa(EtapaEntrevista.detalhamento, False)
         self.atualizaEtapa(EtapaEntrevista.documentacao, False)
 
-        # self.lbInfo1.setText('Informações \npessoais')
-        # self.lbInfo2.setText('Informações \nresidenciais')
-        # self.lbInfo3.setText('Informações \nprofissionais')
-        # self.lbInfo4.setText('Informações \nbancárias')
-
         self.stackedWidget.setCurrentIndex(self.telaAtual.value)
 
     def iniciaInfoEntrevista(self):
@@ -137,6 +132,9 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
     def abreTelaConfiguracoes(self):
         pgConfigSimulacao = PgConfigSimulacao(self.entrevistaParams, parent=self)
         pgConfigSimulacao.show()
+
+    # def atualizaParams(self, *args):
+    #     print(f"---> atualizaParams: {args=}")
 
     def avaliaTrocaTela(self, proxima=True):
         """

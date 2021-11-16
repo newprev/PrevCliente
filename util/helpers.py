@@ -3,6 +3,7 @@ from math import floor
 from peewee import ModelSelect
 from typing import Union, Tuple, Generator
 
+from util.dateHelper import strToDate
 from util.enums.newPrevEnums import *
 
 estCivil = ['Solteiro(a)', 'Casado(a)', 'Divorciado(a)', 'Viúvo(a)']
@@ -164,7 +165,8 @@ tipoItemContribuicao = [
 
 tipoItemOrigem = [
     ('C', 'CNIS'),
-    ('N', 'NEWPREV')
+    ('N', 'NEWPREV'),
+    ('S', 'SIMULACAO')
 ]
 
 

@@ -140,3 +140,8 @@ class TipoItemContribuicao(Enum):
     beneficio = 'B'
     contribuicao = 'C'
     remuneracao = 'R'
+
+class ItemOrigem(Enum):
+    CNIS = 'C'
+    NEWPREV = 'N'
+    SIMULACAO = 'S'

@@ -69,6 +69,14 @@
 	background-color: rgb(136, 138, 133);
 }
 
+#frIndicador{
+	background-color: rgb(0, 170, 127);
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
 
 /* --------------------------------- Push Button --------------------------------- */
 #pbEditar {
@@ -146,6 +154,22 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QFrame" name="frIndicador">
+        <property name="maximumSize">
+         <size>
+          <width>10</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QFrame" name="frame_2">
         <property name="frameShape">

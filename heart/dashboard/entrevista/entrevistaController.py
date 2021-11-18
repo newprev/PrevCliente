@@ -133,14 +133,13 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         pgConfigSimulacao = PgConfigSimulacao(self.entrevistaParams, parent=self)
         pgConfigSimulacao.show()
 
-    # def atualizaParams(self, *args):
-    #     print(f"---> atualizaParams: {args=}")
-
     def avaliaTrocaTela(self, proxima=True):
         """
         QtCore.pyqtSignal([MomentoEntrevista, Tipo] name='tela')
         :cvar
         """
+        self.telaAtual = MomentoEntrevista(self.stackedWidget.currentIndex())
+
         if not self.clienteAtual:
             self.loading(20)
             self.showPopupAlerta("Para seguir para a próxima estapa da entrevista, é necessário definir um cliente.")
@@ -152,6 +151,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.loading(20)
                 self.naturezaPg.atualizaClienteAtual(self.clienteAtual)
                 self.processoModelo.advogadoId = self.advogadoAtual
+                self.processoModelo.estado = self.escritorioAtual.estado
 
                 self.loading(20)
                 self.clienteController.verificaDados()
@@ -193,7 +193,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.loading(10)
                 # self.processoModelo.processosId = self.daoProcesso.insereProcesso(self.processoModelo)
                 try:
-                    self.processoModelo.processosId = Processos().insert(**self.processoModelo.toDict()).on_conflict_replace().execute()
+                    self.processoModelo.processosId = Processos(**self.processoModelo.toDict()).save()
                 except Processos.DoesNotExist:
                     print('Fudeu aqui!')
 
@@ -263,7 +263,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.lbNomeEscritorio.setText(self.escritorioAtual.nomeFantasia)
 
     def trocaTelaCentral(self, *args):
-        wdgAtual: MomentoEntrevista = args[0][0]
+        wdgAtual: MomentoEntrevista = MomentoEntrevista(self.stackedWidget.currentIndex())
         wdgFuturo = args[0][1]
         self.pbProxEtapa.setText('Próxima etapa')
 
@@ -319,53 +319,52 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
         # O usuário está na wdgAtual sobre o tipo de benefícios
         elif wdgAtual == MomentoEntrevista.tipoBeneficio:
+            if wdgFuturo is not None:
+                self.pbProxEtapa.setText('Concluir')
+                self.infoBeneficio.atualizaInfo(wdgFuturo.name, True)
 
-            self.telaAtual = MomentoEntrevista.tipoBeneficio
-            self.pbProxEtapa.setText('Concluir')
-            self.infoBeneficio.atualizaInfo(wdgFuturo.name, True)
-
-            if wdgFuturo == TipoBeneficio.Aposentadoria:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.Aposentadoria.value
-                self.tipoAtividadePg.pegaClienteAtual(self.clienteAtual)
-                self.stackedWidget.setCurrentIndex(4)
-            elif wdgFuturo == TipoBeneficio.AuxDoenca:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.AuxDoenca.value
-                # TODO: wdgAtual dos tipos de atividades auxílio doença
-                pass
-            elif wdgFuturo == TipoBeneficio.AuxAcidente:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.AposTempoContr.value
-                # TODO: wdgAtual dos tipos de atividades aposentadoria por tempo de contribuição
-                pass
-            elif wdgFuturo == TipoBeneficio.AuxReclusao:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.AuxReclusao.value
-                # TODO: wdgAtual dos tipos de atividades auxílio reclusão
-                pass
-            elif wdgFuturo == TipoBeneficio.BeneIdoso:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.BeneIdoso.value
-                # TODO: wdgAtual dos tipos de atividades benefício idoso
-                pass
-            elif wdgFuturo == TipoBeneficio.BeneDeficiencia:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.BeneDeficiencia.value
-                # TODO: wdgAtual dos tipos de atividades benefício deficientes
-                pass
-            elif wdgFuturo == TipoBeneficio.PensaoMorte:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.PensaoMorte.value
-                # TODO: wdgAtual dos tipos de atividades pensão por morte
-                pass
-            elif wdgFuturo == TipoBeneficio.SalMaternidade:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.SalMaternidade.value
-                # TODO: wdgAtual dos tipos de atividades salário maternidade
-                pass
-            else:
-                self.stackedWidget.setCurrentIndex(2)
+                if wdgFuturo == TipoBeneficio.Aposentadoria:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.Aposentadoria.value
+                    self.tipoAtividadePg.pegaClienteAtual(self.clienteAtual)
+                    self.stackedWidget.setCurrentIndex(4)
+                elif wdgFuturo == TipoBeneficio.AuxDoenca:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.AuxDoenca.value
+                    # TODO: wdgAtual dos tipos de atividades auxílio doença
+                    pass
+                elif wdgFuturo == TipoBeneficio.AuxAcidente:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.AposTempoContr.value
+                    # TODO: wdgAtual dos tipos de atividades aposentadoria por tempo de contribuição
+                    pass
+                elif wdgFuturo == TipoBeneficio.AuxReclusao:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.AuxReclusao.value
+                    # TODO: wdgAtual dos tipos de atividades auxílio reclusão
+                    pass
+                elif wdgFuturo == TipoBeneficio.BeneIdoso:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.BeneIdoso.value
+                    # TODO: wdgAtual dos tipos de atividades benefício idoso
+                    pass
+                elif wdgFuturo == TipoBeneficio.BeneDeficiencia:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.BeneDeficiencia.value
+                    # TODO: wdgAtual dos tipos de atividades benefício deficientes
+                    pass
+                elif wdgFuturo == TipoBeneficio.PensaoMorte:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.PensaoMorte.value
+                    # TODO: wdgAtual dos tipos de atividades pensão por morte
+                    pass
+                elif wdgFuturo == TipoBeneficio.SalMaternidade:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.SalMaternidade.value
+                    # TODO: wdgAtual dos tipos de atividades salário maternidade
+                    pass
+                else:
+                    self.stackedWidget.setCurrentIndex(2)
 
         elif wdgAtual == MomentoEntrevista.tipoAtividade:
             self.telaAtual = MomentoEntrevista.telaGeraDocs
@@ -400,9 +399,15 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
     def atualizaCliente(self, *args):
         self.clienteAtual: Cliente = args[0]
         if self.clienteAtual is not None:
-            self.processoModelo.clienteId = self.clienteAtual
-            self.processoModelo.dataUltAlt = datetime.now()
-            self.processoModelo.save()
+            if self.processoModelo.processoId is None:
+                self.processoModelo = Processos.create(
+                    clienteId=self.clienteAtual,
+                    dataUltAlt=datetime.now()
+                )
+            else:
+                self.processoModelo.clienteId = self.clienteAtual
+                self.processoModelo.dataUltAlt = datetime.now()
+                self.processoModelo.save()
 
     def calculaDer(self) -> datetime.date:
         if self.processoModelo.natureza == NaturezaProcesso.administrativo.value:

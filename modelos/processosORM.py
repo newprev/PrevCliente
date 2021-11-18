@@ -12,7 +12,7 @@ TABLENAME = 'processos'
 
 
 class Processos(BaseModel, Model):
-    processoId = AutoField(column_name='processoId', null=True)
+    processoId = AutoField(primary_key=True, column_name='processoId', null=True)
     advogadoId = ForeignKeyField(column_name='advogadoId', field='advogadoId', model=Advogados, null=True, backref='advogados')
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, null=True, backref='cliente')
     cidade = CharField(default='São Paulo')
@@ -38,7 +38,7 @@ class Processos(BaseModel, Model):
     class Meta:
         table_name = 'processos'
 
-    def toDict(self):
+    def toDict(self, recursive=False):
         dictUsuario = {
             'processoId': self.processoId,
             'clienteId': self.clienteId,
@@ -62,6 +62,9 @@ class Processos(BaseModel, Model):
             'dataCadastro': self.dataCadastro,
             'dataUltAlt': self.dataUltAlt
         }
+        if recursive:
+            dictUsuario['clienteId'] = dictUsuario['clienteId'].toDict()
+
         return dictUsuario
 
     def fromDict(self, dictProcessos):

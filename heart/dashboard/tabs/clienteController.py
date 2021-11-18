@@ -92,7 +92,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leCep.editingFinished.connect(lambda: self.leCep.setText(mascaraCep(self.leCep.text())))
 
         self.sbCdCliente.editingFinished.connect(self.buscaCliente)
-        # self.sbCdCliente.valueChanged.connect(lambda: self.buscaProxCliente() if self.cbClienteAntigo.isChecked() else None)
 
         self.leCep.editingFinished.connect(lambda: self.carregaInfoTela('cep'))
         self.leEndereco.textEdited.connect(lambda: self.carregaInfoTela('endereco'))
@@ -577,22 +576,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.showPopupAlerta(dictCep['erro'])
 
     def buscaProxCliente(self, idCliente=None):
-        # clienteId: int = 0
-        # if not self.avaliaBuscaCliente(codCliente=idCliente):
-        #     return False
-        #
-        # if idCliente is not None:
-        #     clienteId = idCliente
-        # else:
-        #     clienteId = int(self.sbCdCliente.text())
-        #
-        # try:
-        #     if idCliente is not None:
-        #         clienteId = idCliente
-        #     else:
-        #         clienteId = int(self.sbCdCliente.text())
-        # except Exception as err:
-        #     print(err)
         clienteId = idCliente
         if True:
 

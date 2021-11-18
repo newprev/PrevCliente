@@ -42,9 +42,10 @@ class NaturezaController(QWidget, Ui_wdgNatureza):
         else:
             self.advogadoAtivo = advogadoModelo
             self.processoAtivo = processoModelo
-            self.processoAtivo.advogadoId = advogadoModelo
-            self.processoAtivo.dataUltAlt = datetime.datetime.now()
-            self.processoAtivo.processoId = self.processoAtivo.save()
+            # self.processoAtivo.advogadoId = advogadoModelo
+            # self.processoAtivo.dataUltAlt = datetime.datetime.now()
+            # self.processoAtivo.save()
+            # self.processoAtivo.processoId = self.processoAtivo.save()
             self.ativaNatureza(NaturezaProcesso.administrativo, ativa=True)
 
     def ativaNatureza(self, naturezaEscolhida: NaturezaProcesso, ativa: bool):

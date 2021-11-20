@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar, QHBoxLayout, QLineEdit
 from peewee import SqliteDatabase
 from typing import List
 
@@ -85,6 +85,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.pbBuscarCliente.clicked.connect(self.abreBuscaClientePg)
 
         self.cbClienteAntigo.clicked.connect(self.atualizaStatusCliente)
+        self.cbMostraSenha.clicked.connect(self.atualizaMostraSenhas)
+        self.cbMostraPix.clicked.connect(self.atualizaMostraSenhas)
 
         self.leRg.editingFinished.connect(lambda: self.leRg.setText(mascaraRG(self.leRg.text())))
         self.leCpf.editingFinished.connect(lambda: self.leCpf.setText(mascaraCPF(self.leCpf.text())))
@@ -136,6 +138,17 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
     def abreBuscaClientePg(self):
         pgBuscaCliente = BuscaClientePage(parent=self)
         pgBuscaCliente.show()
+
+    def atualizaMostraSenhas(self):
+        if self.cbMostraSenha.isChecked():
+            self.leSenhaINSS.setEchoMode(QLineEdit.EchoMode(0))
+        else:
+            self.leSenhaINSS.setEchoMode(QLineEdit.EchoMode(2))
+
+        if self.cbMostraPix.isChecked():
+            self.lePix.setEchoMode(QLineEdit.EchoMode(0))
+        else:
+            self.lePix.setEchoMode(QLineEdit.EchoMode(2))
 
     def carregarInfoCliente(self, clientId: int = 0):
         if clientId == 0:

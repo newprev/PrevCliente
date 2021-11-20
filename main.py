@@ -28,6 +28,7 @@ from modelos.itemContribuicao import ItemContribuicao
 from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.aposentadoriaORM import Aposentadoria
 from modelos.ipcaMensalORM import IpcaMensal
+from modelos.tipos.tipoAposentadoriaORM import TipoAposentadoria
 from util.enums.newPrevEnums import TiposConexoes
 from cache.cachingLogin import CacheLogin
 
@@ -91,7 +92,8 @@ class Main(Ui_MainWindow, QMainWindow):
             ItemContribuicao: 'CRIANDO TABELA DE ITENS DE CONTRIBUIÇÃO...',
             SalarioMinimo: 'CRIANDO TABELA DE SALÁRIOS MÍNIMOS...',
             Aposentadoria: 'CRIANDO TABELA DE APOSENTADORIAS...',
-            IpcaMensal: 'CRIANDO TABELA DE IPCA MENSAL'
+            IpcaMensal: 'CRIANDO TABELA DE IPCA MENSAL...',
+            TipoAposentadoria: 'CRIANDO TABELA DE TIPOS DE APOSENTADORIAS...'
         }
 
         # percentLoading = ceil(100 / len(listaLoading))

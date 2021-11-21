@@ -9,3 +9,4 @@ class TelaPosicao(Enum):
     Entrevista = 4
     InformacoesGerais = 5
     Calculos = 6
+    Processo = 7

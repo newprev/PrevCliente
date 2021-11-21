@@ -16,6 +16,7 @@ from heart.dashboard.entrevista.tipoBeneficioController import TipoBeneficioConc
 from heart.dashboard.entrevista.tipoAtividadeController import TipoAtividadeController
 from heart.dashboard.tabs.clienteController import TabCliente
 from heart.dashboard.entrevista.localWidgets.pgConfigSimulacao import PgConfigSimulacao
+from heart.dashboard.processos.processoController import ProcessosController
 from heart.dashboard.gerarDocsPage import GerarDocsPage
 from heart.dashboard.entrevista.localStyleSheet.cabecalho import *
 from heart.sinaisCustomizados import Sinais
@@ -57,6 +58,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         'porcentagemCont': 11,
         'indiceReajuste': IndiceReajuste.Ipca
     }
+    processosController: ProcessosController
 
     def __init__(self, parent=None):
         super(EntrevistaController, self).__init__(parent)
@@ -212,7 +214,6 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             if self.telaAtual == MomentoEntrevista.naturezaProcesso:
                 self.sinais.sTrocaTelaEntrevista.emit([None, None])
                 self.telaAtual = MomentoEntrevista.cadastro
-                self.atualizaEtapa(EtapaEntrevista.infoPessoais, completo=False)
 
             elif self.telaAtual == MomentoEntrevista.tipoProcesso:
                 self.sinais.sTrocaTelaEntrevista.emit([None, None])
@@ -292,7 +293,6 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
         # O usuário está na wdgAtual sobre o tipo de processo
         elif wdgAtual == MomentoEntrevista.tipoProcesso:
-
             self.telaAtual = MomentoEntrevista.tipoProcesso
             self.tipoBeneficioConcPg.atualizaProcesso(self.processoModelo)
             if wdgFuturo == TipoProcesso.Concessao:
@@ -319,6 +319,8 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
         # O usuário está na wdgAtual sobre o tipo de benefícios
         elif wdgAtual == MomentoEntrevista.tipoBeneficio:
+            self.atualizaEtapa(EtapaEntrevista.infoProcessual, completo=True)
+
             if wdgFuturo is not None:
                 self.pbProxEtapa.setText('Concluir')
                 self.infoBeneficio.atualizaInfo(wdgFuturo.name, True)
@@ -366,13 +368,19 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 else:
                     self.stackedWidget.setCurrentIndex(2)
 
+        # O usuário está na wdgAtual sobre o Quiz
         elif wdgAtual == MomentoEntrevista.tipoAtividade:
+            self.atualizaEtapa(EtapaEntrevista.detalhamento, completo=True)
             self.telaAtual = MomentoEntrevista.telaGeraDocs
             self.pbProxEtapa.setText('Gerar documentos')
             self.stackedWidget.setCurrentIndex(5)
 
             calculaAposentadoria = CalculosAposentadoria(self.processoModelo, self.clienteAtual, self.entrevistaParams)
             calculaAposentadoria.salvaAposentadorias()
+
+            ProcessosController(parent=self).showMaximized()
+            self.close()
+
         else:
             if wdgFuturo == MomentoEntrevista.cadastro:
                 self.telaAtual = MomentoEntrevista.cadastro
@@ -384,14 +392,17 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             self.lbInfoPessoais.setStyleSheet(infoLabelCabecalho(etapa, completo=completo))
             self.frEtapa1.setStyleSheet(infoIconeCabecalho(etapa, completo=completo))
             self.frProg1.setStyleSheet(infoPontinhosCabecalho(etapa, completo=completo))
+
         elif etapa == EtapaEntrevista.infoProcessual:
             self.lbInfoProcessuais.setStyleSheet(infoLabelCabecalho(etapa, completo=completo))
             self.frEtapa2.setStyleSheet(infoIconeCabecalho(etapa, completo=completo))
             self.frProg2.setStyleSheet(infoPontinhosCabecalho(etapa, completo=completo))
+
         elif etapa == EtapaEntrevista.detalhamento:
             self.lbInfoDetalhamento.setStyleSheet(infoLabelCabecalho(etapa, completo=completo))
             self.frEtapa3.setStyleSheet(infoIconeCabecalho(etapa, completo=completo))
             self.frProg3.setStyleSheet(infoPontinhosCabecalho(etapa, completo=completo))
+
         elif etapa == EtapaEntrevista.documentacao:
             self.lbInfoFinalizacao.setStyleSheet(infoLabelCabecalho(etapa, completo=completo))
             self.frEtapa4.setStyleSheet(infoIconeCabecalho(etapa, completo=completo))

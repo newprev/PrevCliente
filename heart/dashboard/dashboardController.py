@@ -9,6 +9,7 @@ from heart.dashboard.tabs.tabResumoCNIS import TabResumoCNIS
 from heart.informacoesTelas.informacoesGerais import InformacoesGerais
 from heart.menuLateral.ferramentasPage import FerramentasPage
 from heart.dashboard.entrevista.entrevistaController import EntrevistaController
+from heart.dashboard.processos.processoController import ProcessosController
 from heart.sinaisCustomizados import Sinais
 from cache.cachingLogin import CacheLogin
 
@@ -28,9 +29,10 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
 
         self.setWindowTitle('Dashboard - [dashboardController]')
 
-        self.funcCliente = CardFuncionalidade(tipo='cliente', parent=self)
-        self.funcEntrevista = CardFuncionalidade(tipo='Entrevista', parent=self)
-        self.funcResumo = CardFuncionalidade(tipo='Resumo', parent=self)
+        self.funcCliente = CardFuncionalidade(tipo=TelaPosicao.Cliente, parent=self)
+        self.funcEntrevista = CardFuncionalidade(tipo=TelaPosicao.Entrevista, parent=self)
+        self.funcResumo = CardFuncionalidade(tipo=TelaPosicao.Resumo, parent=self)
+        self.funcProcesso = CardFuncionalidade(tipo=TelaPosicao.Processo, parent=self)
 
         self.pbConfig.setToolTip('Configurações')
         self.pbFerramentas.setToolTip('Ferramentas')
@@ -64,7 +66,7 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.boxLayout.addWidget(self.funcCliente)
         self.boxLayout.addWidget(self.funcEntrevista)
         self.boxLayout.addWidget(self.funcResumo)
-        self.boxLayout.addWidget(self.funcOutra2)
+        self.boxLayout.addWidget(self.funcProcesso)
         self.boxLayout.addWidget(self.funcOutra3)
         self.boxLayout.addWidget(self.funcOutra4)
         self.boxLayout.addWidget(self.funcOutra5)
@@ -74,6 +76,8 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
     def trocarParaPagina(self, telaAlvo: TelaPosicao):
         if telaAlvo == TelaPosicao.Entrevista:
             EntrevistaController(parent=self).showMaximized()
+        elif telaAlvo == TelaPosicao.Processo:
+            ProcessosController(parent=self).showMaximized()
         elif telaAlvo == TelaPosicao.Resumo:
             self.tabResumo.limpaTudo()
             self.stkMainDashBoard.setCurrentIndex(telaAlvo.value)

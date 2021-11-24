@@ -92,7 +92,6 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
                         break
                 self.parent.cliente = clienteSelecionado
 
-            print(self.parent)
             self.parent.carregarInfoCliente(clientId=clienteSelecionado.clienteId)
             self.close()
 

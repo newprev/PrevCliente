@@ -4,8 +4,9 @@ from PyQt5.QtWidgets import QWidget
 from Design.pyUi.pgTipoProcessoAdm import Ui_wdgTipoProcessoAdm
 from heart.sinaisCustomizados import Sinais
 from modelos.processosORM import Processos
-from util.enums.newPrevEnums import MomentoEntrevista, TipoProcesso
+from util.enums.newPrevEnums import MomentoEntrevista
 from Design.pyUi.efeitos import Efeitos
+from util.enums.processoEnums import TipoProcesso
 
 
 class TipoProcessoAdmController(QWidget, Ui_wdgTipoProcessoAdm):

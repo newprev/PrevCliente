@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import QWidget
 from Design.pyUi.pgTipoBeneficioConc import Ui_wdgTipoBeneficioConc
 from heart.sinaisCustomizados import Sinais
 from modelos.processosORM import Processos
-from util.enums.newPrevEnums import MomentoEntrevista, TipoBeneficio
+from util.enums.newPrevEnums import MomentoEntrevista
+from util.enums.processoEnums import TipoBeneficio
 
 
 class TipoBeneficioConcController(QWidget, Ui_wdgTipoBeneficioConc):

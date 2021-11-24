@@ -1,8 +1,6 @@
-
+# Arquivos do python e compilados
 *.pyc
-
 *.pdf
-
 *.pyi
 
 .idea/misc.xml
@@ -14,15 +12,13 @@ systemLog/historicoLogs/*
 
 .idea/
 
-cache/login.json
-
 sync/syncFile/*
 
+# Arquivos de cache
 cache/.loginOld.json
-
 cache/.escritorio.json
-
 cache/.login.json
+cache/login.json
 
 DocGerados/*
 
@@ -31,3 +27,4 @@ prevCliEnv/
 .sync/*
 
 .templates/.~lock.requerimentoAdm.docx#
+/Resources/teste.svg

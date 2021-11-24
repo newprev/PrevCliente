@@ -11,12 +11,13 @@ from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
 from modelos.processosORM import Processos
 from util.dateHelper import strToDatetime
+from util.enums.aposentadoriaEnums import SubTipoAposentadoria
+from util.enums.processoEnums import TipoBeneficio
 from util.helpers import mascaraCep, mascaraTelCel, strTipoBeneficio, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG, calculaDiaMesAno
 
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 
-from util.enums.newPrevEnums import TipoBeneficio, SubTipoAposentadoria, TamanhoData
 from dateutil.relativedelta import relativedelta
 
 

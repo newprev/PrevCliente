@@ -38,23 +38,9 @@
 	border-radius: 8px;
 }
 
-#frFirula {
-	background-color: #048ba8;
-	border-radius: 5px;
-}
-
 #frBottomBackground {
 /*	background-color: rgb(241, 241, 241);*/
 	background-color: lightgrey;
-}
-
-#frInfoCliente {
-	background-color: rgb(255, 255, 255);
-
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 5px;
 }
 
 #frBottom {
@@ -62,53 +48,10 @@
 	border-radius: 10px;
 }
 
-#frEtapa1 {
-	background-image: url(:/Etapa1/n1-blue.png);
-	background-repeat: no-repeat;
-	background-position: center;
-}
-
-#frEtapa2 {
-	background-image: url(:/Etapa2/n1-grey.png);
-	background-repeat: no-repeat;
-	background-position: center;
-}
-
-#frEtapa3 {
-	background-image: url(:/Etapa3/n3-grey.png);
-	background-repeat: no-repeat;
-	background-position: center;
-}
-
-#frEtapa4 {
-	background-image: url(:/Etapa4/n4-grey.png);
-	background-repeat: no-repeat;
-	background-position: center;
-}
-
-#frProg1, #frProg2, #frProg3 {
-	background-image: url(:/dots/d3-grey.png);
-	background-repeat: no-repeat;
-	background-position: top;
-}
-
-#frProg1 {
-	background-image: url(:/dots/d3-blue.png);
-	background-repeat: no-repeat;
-	background-position: top;
-}
-
 #frNaturezaRight, #frTipoBeneRight, 
 #frTipoProcRight, #frTiposAtiv {
 	background-color: qlineargradient(spread:pad, x1:1, y1:0.443182, x2:0, y2:0.5, stop:0 rgba(66, 120, 178, 255), stop:1 rgba(39, 86, 135, 255));
 	border-radius: 6px;
-}
-
-#frInfo1Icon, #frInfo2Icon,
-#frInfo3Icon, #frInfo4Icon  {
-	background-image: url(:/dots/d3-white.png);
-	background-repeat: no-repeat;
-	background-position: center;
 }
 
 /*-------------------------------------- Labels --------------------------------------*/
@@ -132,14 +75,6 @@
 	font-size: 12px;
 
 	color: rgb(32, 74, 135);
-}
-
-#lbNomeCompleto, #lbCPF, #lbEmail,
-#lbInfoCpf, #lbInfoEmail {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 18px;
-
-	color: rgb(52, 52, 52);
 }
 
 /*-------------------------------------- QFrame --------------------------------------*/
@@ -264,7 +199,7 @@
          <property name="minimumSize">
           <size>
            <width>750</width>
-           <height>430</height>
+           <height>300</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -625,6 +560,55 @@
         <height>120</height>
        </size>
       </property>
+      <property name="styleSheet">
+       <string notr="true">/*--------------------------------------- Frames ---------------------------------------*/
+#frFirulaCliente {
+	background-color: #048ba8;
+	border-radius: 5px;
+}
+
+#frFirulaProcesso {
+	background-color: rgb(220, 147, 0);
+	border-radius: 5px;
+}
+
+#frInfoCliente, #frInfoProcesso {
+	background-color: rgb(255, 255, 255);
+
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+/*--------------------------------------- Labels ---------------------------------------*/
+#lbNomeCompleto, #lbCPF, #lbEmail,
+#lbInfoCpf, #lbInfoEmail, #lbInfoNumProc,
+#lbInfoSituacao, #lbTpProcesso, #lbSituacao,
+#lbNumProc {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 18px;
+
+	color: rgb(52, 52, 52);
+}
+
+/*--------------------------------------- Push Button ---------------------------------------*/
+#pbFecharCliente, #pbFecharProcesso {
+	background-color: transparent;
+	background-image: url(:/infoCards/entrevista-uncheck.png);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+#pbFecharCliente:hover, #pbFecharProcesso:hover {
+	background-color: rgba(2, 48, 57, 30);
+	background-image: url(:/infoCards/entrevista-uncheck.png);
+	background-repeat: no-repeat;
+	background-position: center;
+
+	border-radius: 10px;
+}</string>
+      </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
@@ -691,77 +675,230 @@
          </layout>
         </widget>
        </item>
-       <item alignment="Qt::AlignLeft|Qt::AlignTop">
-        <widget class="QFrame" name="frInfoCliente">
+       <item>
+        <widget class="QFrame" name="frOrganizadorTop">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QGridLayout" name="gridLayout_2">
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
           <property name="rightMargin">
-           <number>16</number>
+           <number>0</number>
           </property>
-          <property name="horizontalSpacing">
-           <number>16</number>
+          <property name="bottomMargin">
+           <number>0</number>
           </property>
-          <item row="1" column="3" alignment="Qt::AlignLeft">
-           <widget class="QLabel" name="lbCPF">
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2" colspan="2">
-           <widget class="QLabel" name="lbNomeCompleto">
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3" alignment="Qt::AlignLeft">
-           <widget class="QLabel" name="lbEmail">
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" rowspan="3">
-           <widget class="QFrame" name="frFirula">
-            <property name="minimumSize">
-             <size>
-              <width>10</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>10</width>
-              <height>16777215</height>
-             </size>
-            </property>
+          <item alignment="Qt::AlignLeft">
+           <widget class="QFrame" name="frInfoCliente">
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
             </property>
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
+            <layout class="QGridLayout" name="gridLayout_2">
+             <property name="rightMargin">
+              <number>16</number>
+             </property>
+             <property name="horizontalSpacing">
+              <number>16</number>
+             </property>
+             <item row="1" column="2" alignment="Qt::AlignLeft">
+              <widget class="QLabel" name="lbInfoCpf">
+               <property name="text">
+                <string>CPF:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2" alignment="Qt::AlignLeft">
+              <widget class="QLabel" name="lbInfoEmail">
+               <property name="text">
+                <string>E-mail:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3" alignment="Qt::AlignLeft">
+              <widget class="QLabel" name="lbEmail">
+               <property name="text">
+                <string>-</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3" alignment="Qt::AlignLeft">
+              <widget class="QLabel" name="lbCPF">
+               <property name="text">
+                <string>-</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" rowspan="3">
+              <widget class="QFrame" name="frFirulaCliente">
+               <property name="minimumSize">
+                <size>
+                 <width>10</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>10</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2" colspan="2">
+              <widget class="QLabel" name="lbNomeCompleto">
+               <property name="text">
+                <string>-</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="4" alignment="Qt::AlignRight|Qt::AlignTop">
+              <widget class="QPushButton" name="pbFecharCliente">
+               <property name="minimumSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
-          <item row="1" column="2" alignment="Qt::AlignLeft">
-           <widget class="QLabel" name="lbInfoCpf">
-            <property name="text">
-             <string>CPF:</string>
+          <item alignment="Qt::AlignLeft">
+           <widget class="QFrame" name="frInfoProcesso">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
             </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_3">
+             <property name="rightMargin">
+              <number>16</number>
+             </property>
+             <property name="horizontalSpacing">
+              <number>16</number>
+             </property>
+             <item row="2" column="1">
+              <widget class="QLabel" name="lbInfoSituacao">
+               <property name="text">
+                <string>Situação:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLabel" name="lbNumProc">
+               <property name="text">
+                <string>-</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLabel" name="lbInfoNumProc">
+               <property name="text">
+                <string>Nº do processo:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QLabel" name="lbSituacao">
+               <property name="text">
+                <string>-</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="lbTpProcesso">
+               <property name="text">
+                <string>Tipo do processo</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" rowspan="3">
+              <widget class="QFrame" name="frFirulaProcesso">
+               <property name="minimumSize">
+                <size>
+                 <width>10</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>10</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QPushButton" name="pbFecharProcesso">
+               <property name="minimumSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
-          <item row="2" column="2" alignment="Qt::AlignLeft">
-           <widget class="QLabel" name="lbInfoEmail">
-            <property name="text">
-             <string>E-mail:</string>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
-           </widget>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>

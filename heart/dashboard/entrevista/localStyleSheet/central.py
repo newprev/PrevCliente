@@ -1,4 +1,4 @@
-from util.enums.newPrevEnums import NaturezaProcesso
+from util.enums.processoEnums import NaturezaProcesso
 
 
 def checkNatureza(natureza: NaturezaProcesso, ativar=True):

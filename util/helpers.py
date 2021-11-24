@@ -4,7 +4,9 @@ from peewee import ModelSelect
 from typing import Union, Tuple, Generator
 
 from util.dateHelper import strToDate
+from util.enums.aposentadoriaEnums import SubTipoAposentadoria
 from util.enums.newPrevEnums import *
+from util.enums.processoEnums import TipoBeneficio, TipoProcesso, NaturezaProcesso
 
 estCivil = ['Solteiro(a)', 'Casado(a)', 'Divorciado(a)', 'Viúvo(a)']
 
@@ -384,6 +386,9 @@ def verificaIndicadorProibitivo(indicadores: str) -> bool:
 
 
 def dataUSAtoBR(dataUSA: str, comDias: bool = False) -> str:
+    if dataUSA is None:
+        return '-'
+
     if not isinstance(dataUSA, str):
         if comDias:
             return f"{dataUSA.day}/{dataUSA.month}/{dataUSA.year}"

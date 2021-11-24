@@ -22,8 +22,8 @@ from modelos.aposentadoriaORM import Aposentadoria
 from modelos.tetosPrevORM import TetosPrev
 from modelos.ipcaMensalORM import IpcaMensal
 
-from util.enums.newPrevEnums import RegraTransicao, GeneroCliente, TipoItemContribuicao, RegraGeralAR, ItemOrigem
-from util.enums.aposentadoriaEnums import ContribSimulacao, IndiceReajuste
+from util.enums.newPrevEnums import GeneroCliente, TipoItemContribuicao, ItemOrigem
+from util.enums.aposentadoriaEnums import ContribSimulacao, IndiceReajuste, RegraTransicao, RegraGeralAR
 
 
 # Reforma 13/11/2019
@@ -952,4 +952,6 @@ class CalculosAposentadoria:
                     dib=self.dibs[chave],
                     der=datetime.date.min,
                 ).save()
+            else:
+                print(f"{chave}: {atingiu}")
         return True

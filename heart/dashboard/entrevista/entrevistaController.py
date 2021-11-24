@@ -33,6 +33,7 @@ from processos.aposentadoria import CalculosAposentadoria
 
 from util.enums.newPrevEnums import *
 from util.enums.aposentadoriaEnums import *
+from util.enums.processoEnums import NaturezaProcesso, TipoProcesso, TipoBeneficio
 from util.popUps import popUpOkAlerta
 
 
@@ -378,7 +379,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             calculaAposentadoria = CalculosAposentadoria(self.processoModelo, self.clienteAtual, self.entrevistaParams)
             calculaAposentadoria.salvaAposentadorias()
 
-            ProcessosController(parent=self).showMaximized()
+            ProcessosController(cliente=self.clienteAtual, processo=self.processoModelo, parent=self).showMaximized()
             self.close()
 
         else:

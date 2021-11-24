@@ -44,34 +44,6 @@ class MomentoEntrevista(Enum):
     tipoAtividade = 4
     telaGeraDocs = 5
 
-class NaturezaProcesso(Enum):
-    administrativo = 0
-    judicial = 1
-
-class TipoProcesso(Enum):
-    Concessao = 0
-    Revisao = 1
-    RecOrdinario = 2
-    RecEspecial = 3
-
-class TipoBeneficio(Enum):
-    Aposentadoria = 0
-    AuxDoenca = 1
-    AuxAcidente = 2
-    AuxReclusao = 3
-    BeneIdoso = 4
-    BeneDeficiencia = 5
-    PensaoMorte = 6
-    SalMaternidade = 7
-
-class SubTipoAposentadoria(Enum):
-    Idade = 0
-    Rural = 1
-    Deficiencia = 2
-    Especial = 3
-    TempoContrib = 4
-    Invalidez = 5
-
 class EtapaEntrevista(Enum):
     infoPessoais = 0
     infoProcessual = 1
@@ -86,42 +58,6 @@ class TipoContribuicao(Enum):
     contribuicao = 0
     remuneracao = 1
     beneficio = 2
-
-class AtivApos(Enum):
-    laborInsalubre = 0
-    laborDeficiente = 1
-    tempoMilitar = 2
-    regimeProprio = 3
-    tempoRural = 4
-    professor = 5
-    contribMenorSalMin = 6
-    contribBaixaRenda = 7
-    onzePorCento = 8
-    indicativoCnis = 9
-    editarCnis = 10
-    editarCnisB = 11
-    faltaLaborCnis = 12
-    acaoTrabalhista = 13
-    aprendiz = 14
-    seminarista = 15
-
-class DireitoAdquirido(Enum):
-    lei821391 = 0
-    lei987699 = 1
-    ec1032019 = 2
-
-class RegraTransicao(Enum):
-    todas = 0
-    pontos = 1
-    reducaoIdadeMinima = 2
-    pedagio50 = 3
-    reducaoTempoContribuicao = 4
-    pedagio100 = 5
-
-class RegraGeralAR(Enum):
-    fator85_95 = 0
-    idade = 1
-    tempoContribuicao = 2
 
 class GeneroCliente(Enum):
     masculino = 'M'

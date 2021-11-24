@@ -1,4 +1,4 @@
-from util.enums.telaEnums import TelaPosicao
+from util.enums.dashboardEnums import TelaPosicao
 
 
 def inicializaCard(tipo: TelaPosicao):

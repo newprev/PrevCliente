@@ -13,7 +13,7 @@ from heart.dashboard.processos.processoController import ProcessosController
 from heart.sinaisCustomizados import Sinais
 from cache.cachingLogin import CacheLogin
 
-from util.enums.telaEnums import TelaPosicao
+from util.enums.dashboardEnums import TelaPosicao
 
 
 class DashboardController(QMainWindow, Ui_mwDashBoard):

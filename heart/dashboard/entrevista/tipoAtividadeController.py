@@ -8,8 +8,8 @@ from SQLs.itensContribuicao import buscaIndicesByClienteId
 from heart.dashboard.tabs.tabResumoCNIS import TabResumoCNIS
 from heart.sinaisCustomizados import Sinais
 from modelos.clienteORM import Cliente
-from util.enums.newPrevEnums import AtivApos
 from Design.pyUi.efeitos import Efeitos
+from util.enums.aposentadoriaEnums import AtivApos
 
 
 class TipoAtividadeController(QWidget, Ui_wdgQuizAposentadoria):

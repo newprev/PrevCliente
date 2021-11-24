@@ -2,7 +2,7 @@ from PyQt5.QtCore import QObject
 from PyQt5 import QtCore
 
 from modelos.advogadoORM import Advogados
-from util.enums.telaEnums import TelaPosicao
+from util.enums.dashboardEnums import TelaPosicao
 
 
 class Sinais(QObject):
@@ -17,3 +17,4 @@ class Sinais(QObject):
     sAtualizaListaClientes = QtCore.pyqtSignal(name='atualizaListaClientes')
     sAtualizaCabecalho = QtCore.pyqtSignal(name='AtualizaCabecalho')
     sAtualizaParams = QtCore.pyqtSignal(name='AtualizaParams')
+    sEnviaProcesso = QtCore.pyqtSignal(name='enviaProcesso')

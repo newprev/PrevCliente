@@ -8,7 +8,8 @@ from heart.sinaisCustomizados import Sinais
 from modelos.processosORM import Processos
 from modelos.clienteORM import Cliente
 from modelos.advogadoORM import Advogados
-from util.enums.newPrevEnums import MomentoEntrevista, NaturezaProcesso
+from util.enums.newPrevEnums import MomentoEntrevista
+from util.enums.processoEnums import NaturezaProcesso
 from .localStyleSheet.central import checkNatureza
 from Design.pyUi.efeitos import Efeitos
 

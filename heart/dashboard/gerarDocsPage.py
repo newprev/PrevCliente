@@ -8,8 +8,7 @@ from heart.sinaisCustomizados import Sinais
 from modelos.clienteORM import Cliente
 from modelos.processosORM import Processos
 from modelos.aposentadoriaORM import Aposentadoria
-
-from util.enums.newPrevEnums import TipoBeneficio
+from util.enums.processoEnums import TipoBeneficio
 
 
 class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):

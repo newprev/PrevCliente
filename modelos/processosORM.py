@@ -26,7 +26,7 @@ class Processos(BaseModel, Model):
     natureza = IntegerField(default=0, null=True)
     numeroProcesso = CharField(column_name='numeroProcesso', null=True)
     pontuacao = IntegerField(null=True)
-    situacaoId = IntegerField(column_name='situacaoId', default=1)
+    situacaoId = IntegerField(column_name='situacaoId', default=0)
     subTipoApos = IntegerField(column_name='subTipoApos', null=True)
     tempoContribuicao = IntegerField(column_name='tempoContribuicao', null=True)
     tipoBeneficio = IntegerField(column_name='tipoBeneficio', null=True)

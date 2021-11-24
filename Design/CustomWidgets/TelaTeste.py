@@ -4,6 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
+from Design.CustomWidgets.newMenuButton import NewMenuButton
 from newCheckBox import NewCheckBox
 
 
@@ -17,11 +18,8 @@ class MainWindow(QMainWindow):
         self.container.setStyleSheet('#container { background-color: #222 }')
         self.layout = QVBoxLayout()
 
-        self.toggle = NewCheckBox(
-            width=60,
-            height=20
-        )
-        self.toggle2 = NewCheckBox()
+        self.toggle = NewCheckBox(width=60)
+        self.toggle2 = NewMenuButton(texto='Oooba!', parent=self, iconPath="teste.svg", pbChecked=False)
 
         self.layout.addWidget(self.toggle, Qt.AlignCenter, Qt.AlignCenter)
         self.layout.addWidget(self.toggle2, Qt.AlignCenter, Qt.AlignCenter)

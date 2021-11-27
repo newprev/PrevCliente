@@ -6,7 +6,7 @@ from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 from util.helpers import getRegrasApos, getContribSimulacao
 
-from peewee import AutoField, CharField, ForeignKeyField, DateField, IntegerField, DateTimeField, FloatField
+from peewee import AutoField, CharField, ForeignKeyField, DateField, IntegerField, DateTimeField, FloatField, BooleanField
 from datetime import datetime
 
 TABLENAME = 'aposentadoria'
@@ -21,14 +21,16 @@ class Aposentadoria(BaseModel, Model):
     processoId = ForeignKeyField(column_name='processoId', field='processoId', model=Processos)
     seq = IntegerField(null=False)
     tipo = CharField(choices=REGRAS_APOSENTADORIA)
-    contribMeses = IntegerField()
-    contribAnos = IntegerField()
-    valorBeneficio = FloatField()
+    contribMeses = IntegerField(default=0)
+    contribAnos = IntegerField(default=0)
+    valorBeneficio = FloatField(default=0)
     idadeCliente = IntegerField(null=True)
+    qtdContribuicoes = IntegerField(default=0)
     dib = DateField(default=datetime.min)
     der = DateField(default=datetime.min)
     contribSimulacao = CharField(choices=TIPO_SIMULACAO, default='ULTI')
     valorSimulacao = FloatField(null=True, default=0.0)
+    possuiDireito = BooleanField(column_name='possuiDireito', default=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 

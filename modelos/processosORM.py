@@ -1,5 +1,5 @@
 from datetime import datetime
-from peewee import AutoField, ForeignKeyField, CharField, DateField, IntegerField, FloatField, DateTimeField
+from peewee import AutoField, ForeignKeyField, CharField, DateField, IntegerField, FloatField, DateTimeField, BooleanField
 from playhouse.signals import Model, post_save, pre_delete
 from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade

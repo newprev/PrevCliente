@@ -72,9 +72,14 @@ class Ui_mwProcessoPage(object):
 "    color: rgb(32, 74, 135);\n"
 "}\n"
 "\n"
-"/*-------------------------------------- QFrame --------------------------------------*/\n"
+"/*-------------------------------------- Frame --------------------------------------*/\n"
 "#stkMain, #pgSemCliente {\n"
 "    background-color: white;\n"
+"    border-radius: 10px;\n"
+"}\n"
+"\n"
+"#pgAposentadoria{\n"
+"    background-color: lightgrey;\n"
 "    border-radius: 10px;\n"
 "}\n"
 "\n"
@@ -149,7 +154,7 @@ class Ui_mwProcessoPage(object):
         self.frBottomBackground.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frBottomBackground.setObjectName("frBottomBackground")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frBottomBackground)
-        self.verticalLayout_3.setContentsMargins(0, 8, 0, 8)
+        self.verticalLayout_3.setContentsMargins(0, 8, 0, 0)
         self.verticalLayout_3.setSpacing(8)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.stkMain = QtWidgets.QStackedWidget(self.frBottomBackground)
@@ -295,6 +300,29 @@ class Ui_mwProcessoPage(object):
         self.verticalLayout_8.addWidget(self.frame_5, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         self.verticalLayout_10.addWidget(self.frame_4)
         self.stkMain.addWidget(self.pgSemProcesso)
+        self.pgGeral = QtWidgets.QWidget()
+        self.pgGeral.setObjectName("pgGeral")
+        self.stkMain.addWidget(self.pgGeral)
+        self.pgAposentadoria = QtWidgets.QWidget()
+        self.pgAposentadoria.setStyleSheet("/*-------------------------------------- Frame --------------------------------------*/\n"
+"#frAposentadoria{\n"
+"    background-color: white;\n"
+"    border-radius: 8px;\n"
+"}")
+        self.pgAposentadoria.setObjectName("pgAposentadoria")
+        self.verticalLayout_13 = QtWidgets.QVBoxLayout(self.pgAposentadoria)
+        self.verticalLayout_13.setObjectName("verticalLayout_13")
+        self.frAposentadoria = QtWidgets.QFrame(self.pgAposentadoria)
+        self.frAposentadoria.setObjectName("frAposentadoria")
+        self.vlAposentadoria = QtWidgets.QVBoxLayout(self.frAposentadoria)
+        self.vlAposentadoria.setContentsMargins(2, 2, 2, 2)
+        self.vlAposentadoria.setSpacing(0)
+        self.vlAposentadoria.setObjectName("vlAposentadoria")
+        self.vlAposentadorias = QtWidgets.QVBoxLayout()
+        self.vlAposentadorias.setObjectName("vlAposentadorias")
+        self.vlAposentadoria.addLayout(self.vlAposentadorias)
+        self.verticalLayout_13.addWidget(self.frAposentadoria)
+        self.stkMain.addWidget(self.pgAposentadoria)
         self.verticalLayout_3.addWidget(self.stkMain)
         self.frBottom = QtWidgets.QFrame(self.frBottomBackground)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
@@ -382,7 +410,7 @@ class Ui_mwProcessoPage(object):
         self.frTopBackground.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frTopBackground.setObjectName("frTopBackground")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frTopBackground)
-        self.verticalLayout_2.setContentsMargins(16, 0, 16, 8)
+        self.verticalLayout_2.setContentsMargins(16, 0, 16, 16)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.frTitulos = QtWidgets.QFrame(self.frTopBackground)
         self.frTitulos.setMaximumSize(QtCore.QSize(16777215, 65))
@@ -715,6 +743,7 @@ class Ui_mwProcessoPage(object):
         mwProcessoPage.setCentralWidget(self.wdgCentral)
 
         self.retranslateUi(mwProcessoPage)
+        self.stkMain.setCurrentIndex(3)
         QtCore.QMetaObject.connectSlotsByName(mwProcessoPage)
 
     def retranslateUi(self, mwProcessoPage):

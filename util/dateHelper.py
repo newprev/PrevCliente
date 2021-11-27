@@ -38,6 +38,8 @@ def calculaIdade(dtNascimento, dtLimite) -> relativedelta:
         dtLimite = strToDate(dtLimite)
 
     idadeRelativa = relativedelta(dtLimite, dtNascimento)
+    if idadeRelativa.years < 0:
+        idadeRelativa = relativedelta(dtNascimento, dtNascimento)
 
     return idadeRelativa
 

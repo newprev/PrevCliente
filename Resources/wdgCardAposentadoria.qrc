@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="checkCard">
+    <file>entrevista-check.png</file>
+  </qresource>
+</RCC>

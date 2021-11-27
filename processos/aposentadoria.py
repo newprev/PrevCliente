@@ -23,7 +23,7 @@ from modelos.tetosPrevORM import TetosPrev
 from modelos.ipcaMensalORM import IpcaMensal
 
 from util.enums.newPrevEnums import GeneroCliente, TipoItemContribuicao, ItemOrigem
-from util.enums.aposentadoriaEnums import ContribSimulacao, IndiceReajuste, RegraTransicao, RegraGeralAR
+from util.enums.aposentadoriaEnums import ContribSimulacao, IndiceReajuste, RegraTransicao, RegraGeralAR, TipoAposentadoria
 
 
 # Reforma 13/11/2019
@@ -367,6 +367,11 @@ class CalculosAposentadoria:
             if RegraGeralAR.fator85_95 in self.regrasACalcular:
                 self.setRegra85_95(competenciaAtual, qtdContribuicoes, tempoContribuicao)
                 self.regrasACalcular.remove(RegraGeralAR.fator85_95)
+
+            if RegraGeralAR.tempoContribuicao in self.regrasACalcular:
+                self.setTmpContribuicaoAR(competenciaAtual, qtdContribuicoes, tempoContribuicao, dataMinima=True)
+                self.regrasACalcular.remove(RegraGeralAR.tempoContribuicao)
+
             return True
 
         ultimoDiaMes: int = monthrange(competenciaAtual.year, competenciaAtual.month)[1]
@@ -919,39 +924,39 @@ class CalculosAposentadoria:
         self.processo.save()
 
         for chave, atingiu in self.regrasAposentadoria.items():
-            if atingiu:
-                seq += 1
-                if chave == RegraTransicao.pontos:
-                    tipo = "POTR"
-                elif chave == RegraTransicao.pedagio50:
-                    tipo = "PD50"
-                elif chave == RegraGeralAR.tempoContribuicao:
-                    tipo = "TCAR"
-                elif chave == RegraGeralAR.idade:
-                    tipo = "IDAR"
-                elif chave == RegraTransicao.reducaoIdadeMinima:
-                    tipo = "RIDM"
-                elif chave == RegraTransicao.reducaoTempoContribuicao:
-                    tipo = "RETC"
-                elif chave == RegraTransicao.pedagio100:
-                    tipo = "P100"
-                else:
-                    tipo = ''
+            seq += 1
 
-                Aposentadoria(
-                    clienteId=self.cliente.clienteId,
-                    processoId=self.processo.processoId,
-                    seq=seq,
-                    tipo=tipo,
-                    contribSimulacao=self.contribSimulacao.name,
-                    valorSimulacao=self.valorSimulacao,
-                    idadeCliente=calculaIdade(strToDate(self.cliente.dataNascimento), self.dibs[chave]).years,
-                    contribMeses=self.tmpContribPorRegra[chave].months,
-                    contribAnos=self.tmpContribPorRegra[chave].years,
-                    valorBeneficio=self.valorBeneficios[chave],
-                    dib=self.dibs[chave],
-                    der=datetime.date.min,
-                ).save()
+            if chave == RegraTransicao.pontos:
+                tipo = TipoAposentadoria.pontos.value
+            elif chave == RegraTransicao.pedagio50:
+                tipo = TipoAposentadoria.pedagio50.value
+            elif chave == RegraGeralAR.tempoContribuicao:
+                tipo = TipoAposentadoria.tempoContribAR.value
+            elif chave == RegraGeralAR.idade:
+                tipo = TipoAposentadoria.idadeAR.value
+            elif chave == RegraTransicao.reducaoIdadeMinima:
+                tipo = TipoAposentadoria.redIdadeMinima.value
+            elif chave == RegraTransicao.reducaoTempoContribuicao:
+                tipo = TipoAposentadoria.redTempoContrib.value
+            elif chave == RegraTransicao.pedagio100:
+                tipo = TipoAposentadoria.pedagio100.value
             else:
-                print(f"{chave}: {atingiu}")
+                tipo = TipoAposentadoria.regra8595.value
+
+            Aposentadoria(
+                clienteId=self.cliente.clienteId,
+                processoId=self.processo.processoId,
+                seq=seq,
+                tipo=tipo,
+                contribSimulacao=self.contribSimulacao.name,
+                valorSimulacao=self.valorSimulacao,
+                idadeCliente=calculaIdade(strToDate(self.cliente.dataNascimento), self.dibs[chave]).years,
+                qtdContribuicoes=self.qtdContrib[chave],
+                contribMeses=self.tmpContribPorRegra[chave].months,
+                contribAnos=self.tmpContribPorRegra[chave].years,
+                valorBeneficio=self.valorBeneficios[chave],
+                possuiDireito=atingiu,
+                dib=self.dibs[chave],
+                der=datetime.date.min,
+            ).save()
         return True

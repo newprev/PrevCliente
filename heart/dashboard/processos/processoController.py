@@ -1,19 +1,27 @@
 from PyQt5.QtWidgets import QMainWindow
 from Design.pyUi.processoPg import Ui_mwProcessoPage
+from typing import List
 
 from heart.buscaClientePage import BuscaClientePage
 from heart.buscaProcessoPage import BuscaProcessosPage
+from heart.dashboard.processos.localWidgets.cardAposentadoria import CardAposentadoria
+from heart.dashboard.processos.localWidgets.tabAposentadorias import TabAposentariasController
+
 from modelos.clienteORM import Cliente
 from modelos.processosORM import Processos
 from modelos.advogadoORM import Advogados
 from modelos.escritoriosORM import Escritorios
+from modelos.aposentadoriaORM import Aposentadoria
+
 from cache.cacheEscritorio import CacheEscritorio
 from cache.cachingLogin import CacheLogin
+
 from util.enums.aposentadoriaEnums import TelaAtiva
 from util.enums.processoEnums import TipoBeneficio, TipoProcesso, SituacaoProcesso
 from util.helpers import mascaraCPF
-
 from util.popUps import popUpOkAlerta
+
+from Design.pyUi.efeitos import Efeitos
 
 
 class ProcessosController(QMainWindow, Ui_mwProcessoPage):
@@ -22,6 +30,7 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
     advogadoAtual: Advogados
     escritorioAtual: Escritorios
     telaAtual: TelaAtiva
+    listaAposentadorias: List[Aposentadoria]
 
     def __init__(self, cliente: Cliente = None, processo: Processos = None, parent=None):
         super(ProcessosController, self).__init__(parent=parent)
@@ -29,24 +38,13 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
 
         self.clienteAtual: Cliente = cliente
         self.processoAtual: Processos = processo
+        self.tabAposController = TabAposentariasController()
+        self.vlAposentadoria.addWidget(self.tabAposController)
 
         self.carregaEscritorio()
         self.carregaAdvogado()
         self.telaAtual = TelaAtiva(0)
-
-        if (self.clienteAtual is None and self.processoAtual is None) or (self.clienteAtual is not None and self.processoAtual is not None):
-            self.atualizaInfoNaTela()
-        elif self.clienteAtual is None and self.processoAtual is not None:
-            self.clienteAtual = Cliente.get_by_id(self.processoAtual.clienteId)
-            self.atualizaInfoNaTela()
-        elif self.clienteAtual is not None and self.processoAtual is None:
-            print('Sei lá...')
-        else:
-            popUpOkAlerta(
-                'Algum erro aconteceu ao tentar abrir a tela de processos. Entre em contato com o suporte.',
-                erro='init <ProcessosController>',
-                funcao=self.close,
-            )
+        # Efeitos().shadowCards([self.frInfoProcesso, self.frInfoProcesso, self.frTemDireito])
 
         self.pbBuscaCliente.clicked.connect(self.abreBuscaCliente)
         self.pbBuscaProcesso.clicked.connect(self.abreBuscaProcesso)
@@ -84,6 +82,7 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
             else:
                 self.processoAtual = Processos.select().where(Processos.clienteId == self.clienteAtual.clienteId).get()
                 self.atualizaInfoNaTela()
+                self.trocaCardCentral(None, TelaAtiva.Aposentadoria)
 
     def atualizaInfoNaTela(self):
         # Info cliente
@@ -110,10 +109,13 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
             else:
                 situacaoProcesso = '-'
 
+            self.tabAposController.recebeProcessoId(self.processoAtual.processoId, self.clienteAtual.clienteId)
+
             self.lbNumProc.setText(self.processoAtual.numeroProcesso if self.processoAtual.numeroProcesso is not None else '-')
             self.lbTpProcesso.setText(self.strTipoProcesso())
             self.lbSituacao.setText(situacaoProcesso)
             self.frInfoProcesso.show()
+            # self.atualizaCardsAposentadorias()
         else:
             self.frInfoProcesso.hide()
 
@@ -124,14 +126,20 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
 
     def multiplosProcessos(self) -> bool:
         qtdProcessos: int = Processos.select().where(Processos.clienteId == self.clienteAtual.clienteId).count()
-        print(f"{qtdProcessos=}")
         return qtdProcessos > 1
 
     def iniciaEstados(self):
         if self.processoAtual is not None:
             self.trocaCardCentral(None, TelaAtiva.Geral)
+            self.frInfoProcesso.show()
+            self.trocaCardCentral(None, TelaAtiva.Aposentadoria)
         elif self.clienteAtual is not None:
             self.trocaCardCentral(None, TelaAtiva.BuscaCliente)
+            self.frInfoCliente.show()
+        elif self.clienteAtual is None:
+            self.trocaCardCentral(None, TelaAtiva.BuscaCliente)
+            self.frInfoCliente.hide()
+            self.frInfoProcesso.hide()
         else:
             self.trocaCardCentral(None, TelaAtiva.Geral)
             self.frInfoProcesso.hide()

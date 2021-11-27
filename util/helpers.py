@@ -1,10 +1,10 @@
 import datetime
-from math import floor
+from math import floor, ceil
 from peewee import ModelSelect
-from typing import Union, Tuple, Generator
+from typing import Union, Tuple, List
 
 from util.dateHelper import strToDate
-from util.enums.aposentadoriaEnums import SubTipoAposentadoria
+from util.enums.aposentadoriaEnums import SubTipoAposentadoria, TipoAposentadoria, ContribSimulacao
 from util.enums.newPrevEnums import *
 from util.enums.processoEnums import TipoBeneficio, TipoProcesso, NaturezaProcesso
 
@@ -592,6 +592,36 @@ def strTipoBeneFacilitado(tipoBeneficio: TipoBeneficio) -> str:
         return ''
 
 
+def strTipoAposentadoria(tipoAposentadoria: str) -> str:
+    if tipoAposentadoria == TipoAposentadoria.tempoContribAR.value:
+        return "Aposentadoria por tempo de contribuição antes da reforma"
+    elif tipoAposentadoria == TipoAposentadoria.idadeAR.value:
+        return "Aposentadoria por idade antes da reforma"
+    elif tipoAposentadoria == TipoAposentadoria.redIdadeMinima.value:
+        return "Aposentadoria pela redução da idade mínima"
+    elif tipoAposentadoria == TipoAposentadoria.redTempoContrib.value:
+        return "Aposentadoria pela redução do tempo de contribuição"
+    elif tipoAposentadoria == TipoAposentadoria.pedagio50.value:
+        return "Aposentadoria pela regra de transição: Pedágio 50%"
+    elif tipoAposentadoria == TipoAposentadoria.pedagio100.value:
+        return "Aposentadoria pela regra de transição: Pedágio 100%"
+    elif tipoAposentadoria == TipoAposentadoria.pontos.value:
+        return "Aposentadoria por pontos pela regra de transição"
+    elif tipoAposentadoria == TipoAposentadoria.regra8595.value:
+        return "Aposentadoria por pontos pela regra 85/95"
+
+
+def strTipoSimulacao(tipoSimulacao: str) -> str:
+    if tipoSimulacao == ContribSimulacao.ULTI.name:
+        return "Repetição da última contribuição"
+    elif tipoSimulacao == ContribSimulacao.SMIN.name:
+        return "Repetição do salário mínimo"
+    elif tipoSimulacao == ContribSimulacao.TETO.name:
+        return "Repetição do teto previdenciário"
+    elif tipoSimulacao == ContribSimulacao.MANU.name:
+        return "Repetição do valor definido manualmente"
+
+
 def eliminaHoraDias(data: datetime.datetime):
     try:
         if isinstance(data, type(datetime.datetime)):
@@ -619,3 +649,16 @@ def pyToDefault(dicionario: dict) -> dict:
             dictReturn[chave] = valor
 
     return dictReturn
+
+
+def calculaCoordenadas(qtdItens: int, colunas: int) -> List[Tuple]:
+    coordenadas = []
+    linha: int = 0
+    totalLinhas: int = ceil(qtdItens/colunas)
+
+    for total in range(totalLinhas):
+        linha += 1
+
+        for posColuna in range(0, colunas):
+            coordenadas.append((linha, posColuna))
+    return coordenadas

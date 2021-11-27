@@ -77,9 +77,14 @@
 	color: rgb(32, 74, 135);
 }
 
-/*-------------------------------------- QFrame --------------------------------------*/
+/*-------------------------------------- Frame --------------------------------------*/
 #stkMain, #pgSemCliente {
 	background-color: white;
+	border-radius: 10px;
+}
+
+#pgAposentadoria{
+	background-color: lightgrey;
 	border-radius: 10px;
 }
 
@@ -186,7 +191,7 @@
         <number>0</number>
        </property>
        <property name="bottomMargin">
-        <number>8</number>
+        <number>0</number>
        </property>
        <item>
         <widget class="QStackedWidget" name="stkMain">
@@ -207,6 +212,9 @@
            <width>16777215</width>
            <height>16755515</height>
           </size>
+         </property>
+         <property name="currentIndex">
+          <number>3</number>
          </property>
          <widget class="QWidget" name="pgSemCliente">
           <property name="styleSheet">
@@ -461,6 +469,42 @@
            </item>
           </layout>
          </widget>
+         <widget class="QWidget" name="pgGeral"/>
+         <widget class="QWidget" name="pgAposentadoria">
+          <property name="styleSheet">
+           <string notr="true">/*-------------------------------------- Frame --------------------------------------*/
+#frAposentadoria{
+	background-color: white;
+	border-radius: 8px;
+}</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_13">
+           <item>
+            <widget class="QFrame" name="frAposentadoria">
+             <layout class="QVBoxLayout" name="vlAposentadoria">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>2</number>
+              </property>
+              <property name="topMargin">
+               <number>2</number>
+              </property>
+              <property name="rightMargin">
+               <number>2</number>
+              </property>
+              <property name="bottomMargin">
+               <number>2</number>
+              </property>
+              <item>
+               <layout class="QVBoxLayout" name="vlAposentadorias"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
        <item alignment="Qt::AlignBottom">
@@ -626,7 +670,7 @@
         <number>16</number>
        </property>
        <property name="bottomMargin">
-        <number>8</number>
+        <number>16</number>
        </property>
        <item>
         <widget class="QFrame" name="frTitulos">

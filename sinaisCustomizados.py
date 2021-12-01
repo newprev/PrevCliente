@@ -18,3 +18,4 @@ class Sinais(QObject):
     sAtualizaCabecalho = QtCore.pyqtSignal(name='AtualizaCabecalho')
     sAtualizaParams = QtCore.pyqtSignal(name='AtualizaParams')
     sEnviaProcesso = QtCore.pyqtSignal(name='enviaProcesso')
+    sExcluiFiltro = QtCore.pyqtSignal(name='excluiFiltro')

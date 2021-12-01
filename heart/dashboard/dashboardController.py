@@ -10,7 +10,7 @@ from heart.informacoesTelas.informacoesGerais import InformacoesGerais
 from heart.menuLateral.ferramentasPage import FerramentasPage
 from heart.dashboard.entrevista.entrevistaController import EntrevistaController
 from heart.dashboard.processos.processoController import ProcessosController
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 from cache.cachingLogin import CacheLogin
 
 from util.enums.dashboardEnums import TelaPosicao

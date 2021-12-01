@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 from Design.pyUi.pgQuizAposentadoria import Ui_wdgQuizAposentadoria
 from SQLs.itensContribuicao import buscaIndicesByClienteId
 from heart.dashboard.tabs.tabResumoCNIS import TabResumoCNIS
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 from modelos.clienteORM import Cliente
 from Design.pyUi.efeitos import Efeitos
 from util.enums.aposentadoriaEnums import AtivApos

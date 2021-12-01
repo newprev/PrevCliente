@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget
 
 from Design.pyUi.buttonFuncionalidade import Ui_wdgFuncionalidade
 from heart.dashboard.localStyleSheet.cardsFuncionalidade import inicializaCard
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 from util.enums.dashboardEnums import TelaPosicao
 
 

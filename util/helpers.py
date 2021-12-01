@@ -662,3 +662,22 @@ def calculaCoordenadas(qtdItens: int, colunas: int) -> List[Tuple]:
         for posColuna in range(0, colunas):
             coordenadas.append((linha, posColuna))
     return coordenadas
+
+
+def comparaFiltrosAny(lista1: Union[str, List[str]], lista2: Union[str, List[str]]) -> bool:
+    if isinstance(lista1, str) and isinstance(lista2, str):
+        return lista1 == lista2
+
+    elif isinstance(lista1, str) and isinstance(lista2, list):
+        return any((lista1 == item for item in lista2))
+
+    elif isinstance(lista1, list) and isinstance(lista2, str):
+        return any((lista2 == item for item in lista1))
+
+    else:
+        for itemA in lista1:
+            for itemB in lista2:
+                if itemA == itemB:
+                    return True
+
+        return False

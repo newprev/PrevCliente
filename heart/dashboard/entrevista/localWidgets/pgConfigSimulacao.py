@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QMainWindow
 from typing import List
 
 from Design.pyUi.efeitos import Efeitos
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 from util.enums.aposentadoriaEnums import *
 
 

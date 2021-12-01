@@ -14,13 +14,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgCardAposentadoria(object):
     def setupUi(self, wdgCardAposentadoria):
         wdgCardAposentadoria.setObjectName("wdgCardAposentadoria")
-        wdgCardAposentadoria.resize(374, 432)
+        wdgCardAposentadoria.resize(374, 450)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(wdgCardAposentadoria.sizePolicy().hasHeightForWidth())
         wdgCardAposentadoria.setSizePolicy(sizePolicy)
-        wdgCardAposentadoria.setMaximumSize(QtCore.QSize(380, 450))
+        wdgCardAposentadoria.setMaximumSize(QtCore.QSize(380, 16777215))
         wdgCardAposentadoria.setStyleSheet("/*#wdgCardAposentadoria {\n"
 "    background-color: black;\n"
 "}*/\n"
@@ -58,7 +58,7 @@ class Ui_wdgCardAposentadoria(object):
 "\n"
 "#lbTipoApos {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 22px;\n"
+"    font-size: 20px;\n"
 "\n"
 "    color: grey;\n"
 "}\n"
@@ -176,10 +176,18 @@ class Ui_wdgCardAposentadoria(object):
         self.verticalLayout.addWidget(self.lbInfoQtdContrib, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         self.gridLayout.addWidget(self.frame_2, 5, 0, 1, 1)
         self.lbTipoApos = QtWidgets.QLabel(self.gbMain)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbTipoApos.sizePolicy().hasHeightForWidth())
+        self.lbTipoApos.setSizePolicy(sizePolicy)
+        self.lbTipoApos.setTextFormat(QtCore.Qt.AutoText)
+        self.lbTipoApos.setScaledContents(False)
         self.lbTipoApos.setAlignment(QtCore.Qt.AlignCenter)
         self.lbTipoApos.setWordWrap(True)
+        self.lbTipoApos.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextSelectableByMouse)
         self.lbTipoApos.setObjectName("lbTipoApos")
-        self.gridLayout.addWidget(self.lbTipoApos, 3, 0, 1, 3, QtCore.Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lbTipoApos, 3, 0, 1, 3)
         self.pbarPrincipal = QtWidgets.QProgressBar(self.gbMain)
         self.pbarPrincipal.setProperty("value", 24)
         self.pbarPrincipal.setFormat("")

@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QWidget
 from Design.pyUi.pgNatureza import Ui_wdgNatureza
 
 import util.popUps
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 from modelos.processosORM import Processos
 from modelos.clienteORM import Cliente
 from modelos.advogadoORM import Advogados

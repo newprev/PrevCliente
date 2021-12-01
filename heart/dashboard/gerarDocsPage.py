@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QWidget, QFrame, QCheckBox
 from Design.pyUi.efeitos import Efeitos
 from Design.pyUi.pgImpressaoDocs import Ui_wdgImpressaoDocs
 from heart.dashboard.entrevista.geracaoDocumentos.docEntrevista import DocEntrevista
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 
 from modelos.clienteORM import Cliente
 from modelos.processosORM import Processos

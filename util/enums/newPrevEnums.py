@@ -81,3 +81,7 @@ class ItemOrigem(Enum):
     CNIS = 'C'
     NEWPREV = 'N'
     SIMULACAO = 'S'
+
+class TipoFiltro(Enum):
+    indicador = 0
+    data = 1

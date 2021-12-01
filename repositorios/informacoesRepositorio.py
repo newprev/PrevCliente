@@ -1,6 +1,7 @@
 import requests
 import aiohttp
 
+
 from Configs.systemConfig import buscaSystemConfigs
 from systemLog.logs import logPrioridade, TipoEdicao, Prioridade
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo

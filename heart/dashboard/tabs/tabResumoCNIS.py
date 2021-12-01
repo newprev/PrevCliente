@@ -1,26 +1,36 @@
+import datetime
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QMessageBox, QVBoxLayout
 from Design.pyUi.tabResumoCNIS import Ui_wdgTabResumoCNIS
-from typing import List
+from typing import List, Union
 
 from heart.dashboard.tabs.localWidgets.itemResumoCNIS import ItemResumoCnis
 from heart.buscaClientePage import BuscaClientePage
 from heart.insereContribuicaoPage import InsereContribuicaoPage
-from Design.pyUi.efeitos import Efeitos
 
-from util.helpers import mascaraDinheiro, mascaraCPF, dataUSAtoBR
-from util.enums.newPrevEnums import TipoContribuicao
+from Design.pyUi.efeitos import Efeitos
+from Design.CustomWidgets.newDropMenu import NewSubMenu
+from Design.CustomWidgets.newTagFiltro import NewTagFiltro
+
+from util.dateHelper import strToDate
+from util.helpers import mascaraDinheiro, mascaraCPF, dataUSAtoBR, comparaFiltrosAny
+from util.enums.newPrevEnums import TipoContribuicao, TipoFiltro
+from util.enums.tabsEnums import TabsResumo
+from util.layoutHelpers import limpaLayout
 
 from modelos.clienteORM import Cliente
 from modelos.beneficiosORM import CnisBeneficios
 from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.remuneracaoORM import CnisRemuneracoes
+
 from Daos.daoCalculos import DaoCalculos
 
 
 class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
+    filtros: dict
 
     def __init__(self, parent=None, db=None, origemEntrevista: bool = False):
         super(TabResumoCNIS, self).__init__(parent=parent)
@@ -46,6 +56,15 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
         self.pbEditarBen.clicked.connect(lambda: self.avaliaEdicao('tblBeneficios'))
         self.pbExcluir.clicked.connect(lambda: self.avaliaExclusao('pbExcluir'))
         self.pbExcluirBen.clicked.connect(lambda: self.avaliaExclusao('pbExcluirBen'))
+        self.pbAddFiltro.clicked.connect(self.abreMenuFiltros)
+        self.pbAddFiltroBene.clicked.connect(self.abreMenuFiltros)
+
+        self.filtros = {
+            TipoFiltro.data: [None, None],
+            TipoFiltro.indicador: [],
+        }
+
+        self.tabMain.currentChanged.connect(self.limpaFiltros)
 
         self.pbInserir.clicked.connect(lambda: self.abreInsereContribuicoes(0, TipoContribuicao.contribuicao))
         self.pbInserirBen.clicked.connect(lambda: self.abreInsereContribuicoes(0, TipoContribuicao.beneficio))
@@ -55,6 +74,11 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
             self.pbBuscarCliente.hide()
 
         self.tblCalculos.resizeColumnsToContents()
+
+    def abreMenuFiltros(self):
+        menu = NewSubMenu(self.filtros[TipoFiltro.indicador], parent=self)
+        self.efeito.shadowCards([menu], offset=(0, 0))
+        menu.show()
 
     def avaliaEdicao(self, tabela: str):
         if tabela == 'tblCalculos':
@@ -322,3 +346,60 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
         self.lbDocumento.setText('')
         self.lbDocumentoBen.setText('')
         self.limpaLayoutResumos()
+        self.limpaFiltros()
+
+    def limpaFiltros(self):
+        self.filtros[TipoFiltro.indicador] = []
+        self.filtros[TipoFiltro.data] = [None, None]
+
+        self.atualizaFiltros()
+
+    def atualizaFiltros(self, indicadores: List[str] = None, datas: List[datetime.date] = None):
+        if indicadores:
+            self.filtros[TipoFiltro.indicador] = indicadores
+        if datas:
+            self.filtros[TipoFiltro.data] = datas
+
+        limpaLayout(self.hlFiltros)
+        limpaLayout(self.hlFiltrosBene)
+
+        for indicador in self.filtros[TipoFiltro.indicador]:
+            tagIndicador = NewTagFiltro(indicador, TipoFiltro.indicador, parent=self)
+            self.hlFiltros.addWidget(tagIndicador)
+
+        for pos, dt in enumerate(self.filtros[TipoFiltro.data]):
+            if dt is not None:
+                primeiroRegistro: bool = pos == 0
+                tagData = NewTagFiltro(dt, TipoFiltro.data, dataInicio=primeiroRegistro, parent=self)
+                self.hlFiltros.addWidget(tagData)
+
+        self.avaliaFiltraTabela()
+
+    def avaliaFiltraTabela(self):
+        # index == 1: TabContribuicoes
+        # index == 2: TabBenefícios
+
+        self.filtraTabela(TabsResumo(self.tabMain.currentIndex()))
+
+    def filtraTabela(self, tabAtual: TabsResumo):
+        dtDe = strToDate(self.filtros[TipoFiltro.data][0]) if self.filtros[TipoFiltro.data][0] is not None else datetime.date.min
+        dtAte = strToDate(self.filtros[TipoFiltro.data][1]) if self.filtros[TipoFiltro.data][1] is not None else datetime.date.max
+
+        if tabAtual == TabsResumo.contribuicao:
+            if not self.filtros[TipoFiltro.indicador] and not self.filtros[TipoFiltro.data][0] and not self.filtros[TipoFiltro.data][1]:
+                for index in range(self.tblCalculos.rowCount()):
+                    self.tblCalculos.showRow(index)
+                return True
+
+            for index in range(self.tblCalculos.rowCount()):
+                indicadorLinha: Union[str, List[str]] = self.tblCalculos.item(index, 6).text().replace('- ', '').split('\n')
+                dataLinha: datetime.date = strToDate(self.tblCalculos.item(index, 2).text())
+
+                if not comparaFiltrosAny(indicadorLinha, self.filtros[TipoFiltro.indicador]):
+                    self.tblCalculos.hideRow(index)
+                if not dtDe <= dataLinha <= dtAte:
+                    self.tblCalculos.hideRow(index)
+
+    def excluiuFiltro(self, filtroAExcluir, tipoFiltro: TipoFiltro):
+        self.filtros[tipoFiltro].remove(filtroAExcluir)
+        self.avaliaFiltraTabela()

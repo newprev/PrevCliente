@@ -21,7 +21,6 @@ class NewCheckBox(QCheckBox):
         self.heightCircle = 6 * self.height() / 10
         self.posYCircle = self.height()/2 - self.heightCircle/2
 
-
         # Cores
         self._bg_color = bg_color
         self._circle_color = circle_color

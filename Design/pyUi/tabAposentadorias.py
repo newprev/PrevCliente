@@ -20,7 +20,7 @@ class Ui_wdgTabAposentadorias(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(wdgTabAposentadorias.sizePolicy().hasHeightForWidth())
         wdgTabAposentadorias.setSizePolicy(sizePolicy)
-        wdgTabAposentadorias.setMinimumSize(QtCore.QSize(400, 400))
+        wdgTabAposentadorias.setMinimumSize(QtCore.QSize(400, 0))
         wdgTabAposentadorias.setMaximumSize(QtCore.QSize(4514434, 16777215))
         wdgTabAposentadorias.setStyleSheet("/*#wdgTabAposentadorias {\n"
 "    background-color: grey;\n"
@@ -84,7 +84,7 @@ class Ui_wdgTabAposentadorias(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.tabMain.sizePolicy().hasHeightForWidth())
         self.tabMain.setSizePolicy(sizePolicy)
-        self.tabMain.setMinimumSize(QtCore.QSize(0, 560))
+        self.tabMain.setMinimumSize(QtCore.QSize(0, 0))
         self.tabMain.setStyleSheet("")
         self.tabMain.setIconSize(QtCore.QSize(36, 16))
         self.tabMain.setMovable(True)

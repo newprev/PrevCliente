@@ -105,29 +105,23 @@ class NewMenuButton(QPushButton):
 
         # Renderizando icone
         icon: QPixmap = QPixmap(iconPath)
-        if icon.size().width() > self.minimumWidth or icon.size().height() > self.height():
-            iconeSvg: QSvgGenerator = self.resizeSVG(iconPath)
-            icon = QPixmap(iconeSvg)
+
+        icon = icon.scaled(24, 24)
+
+        print(f"{rect.width()=}")
+        print(f"{rect.height()=}")
 
         painter = QPainter(icon)
         painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
         painter.fillRect(icon.rect(), color)
-        qp.drawPixmap(
+        # qp.drawPixmap(
+        #     (rect.width() - icon.width()) / 2,
+        #     (rect.height() - icon.height()) / 2,
+        #     icon
+        # )
+        qp.drawImage(
             (rect.width() - icon.width()) / 2,
             (rect.height() - icon.height()) / 2,
             icon
         )
         painter.end()
-
-    def resizeSVG(self, svgPath: str):
-        gerador: QSvgGenerator = QSvgGenerator()
-        gerador.setFileName(svgPath)
-        gerador.setSize(QSize(24, 24))
-        gerador.setViewBox(QRect(0, 0, 24, 24))
-
-        return gerador
-
-
-
-
-

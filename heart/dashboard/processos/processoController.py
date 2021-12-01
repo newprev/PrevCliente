@@ -4,7 +4,7 @@ from typing import List
 
 from heart.buscaClientePage import BuscaClientePage
 from heart.buscaProcessoPage import BuscaProcessosPage
-from heart.dashboard.processos.localWidgets.cardAposentadoria import CardAposentadoria
+from heart.dashboard.processos.localStyleSheet.processo import layoutBotaoGuia
 from heart.dashboard.processos.localWidgets.tabAposentadorias import TabAposentariasController
 
 from modelos.clienteORM import Cliente
@@ -20,8 +20,6 @@ from util.enums.aposentadoriaEnums import TelaAtiva
 from util.enums.processoEnums import TipoBeneficio, TipoProcesso, SituacaoProcesso
 from util.helpers import mascaraCPF
 from util.popUps import popUpOkAlerta
-
-from Design.pyUi.efeitos import Efeitos
 
 
 class ProcessosController(QMainWindow, Ui_mwProcessoPage):
@@ -44,14 +42,25 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
         self.carregaEscritorio()
         self.carregaAdvogado()
         self.telaAtual = TelaAtiva(0)
-        # Efeitos().shadowCards([self.frInfoProcesso, self.frInfoProcesso, self.frTemDireito])
 
         self.pbBuscaCliente.clicked.connect(self.abreBuscaCliente)
         self.pbBuscaProcesso.clicked.connect(self.abreBuscaProcesso)
         self.pbFecharCliente.clicked.connect(self.fecharCliente)
         self.pbFecharProcesso.clicked.connect(self.fecharProcesso)
+        self.pbAposentadorias.clicked.connect(self.avaliaNavegacaoProcesso)
 
         self.iniciaEstados()
+
+    def avaliaNavegacaoProcesso(self):
+        if self.processoAtual is None or self.clienteAtual is None:
+            popUpOkAlerta(
+                'Para acessar a tela com informações de aposentadorias, é necessário escolher um cliente e determinar um processo utilizando o botão ao centro da tela.',
+            )
+            self.raise_()
+        else:
+            self.atualizaInfoNaTela()
+            # self.limpaBotoes()
+            # self.pbAposentadorias.setStyleSheet(layoutBotaoGuia("pbAposentadorias", selecionado=True))
 
     def carregaAdvogado(self):
         self.advogadoAtual = CacheLogin().carregarCache()
@@ -115,7 +124,7 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
             self.lbTpProcesso.setText(self.strTipoProcesso())
             self.lbSituacao.setText(situacaoProcesso)
             self.frInfoProcesso.show()
-            # self.atualizaCardsAposentadorias()
+            self.trocaCardCentral(self.telaAtual, TelaAtiva.Aposentadoria)
         else:
             self.frInfoProcesso.hide()
 
@@ -132,6 +141,7 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
         if self.processoAtual is not None:
             self.trocaCardCentral(None, TelaAtiva.Geral)
             self.frInfoProcesso.show()
+            self.atualizaInfoNaTela()
             self.trocaCardCentral(None, TelaAtiva.Aposentadoria)
         elif self.clienteAtual is not None:
             self.trocaCardCentral(None, TelaAtiva.BuscaCliente)
@@ -148,6 +158,12 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
     def trocaCardCentral(self, estadoAtual: TelaAtiva, estadoFuturo: TelaAtiva):
         self.stkMain.setCurrentIndex(estadoFuturo.value)
         self.telaAtual = estadoFuturo
+        self.limpaBotoes()
+
+        if estadoFuturo == TelaAtiva.Aposentadoria:
+            self.pbAposentadorias.setStyleSheet(layoutBotaoGuia('pbAposentadorias', selecionado=True))
+        elif estadoFuturo == TelaAtiva.Geral or estadoFuturo == TelaAtiva.BuscaCliente or estadoFuturo == TelaAtiva.BuscaProcesso:
+            self.pbGeral.setStyleSheet(layoutBotaoGuia('pbGeral', selecionado=True))
 
     def strTipoProcesso(self, prefix: bool = True, sufix: bool = True) -> str:
         strPrefixo: str = ''
@@ -179,3 +195,26 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
         if processoId is not None:
             self.processoAtual = Processos.get_by_id(processoId)
             self.atualizaInfoNaTela()
+
+    def limpaTudo(self):
+        # Cliente
+        self.clienteAtual = None
+        self.lbCPF.setText('-')
+        self.lbNomeCompleto.setText('-')
+        self.lbEmail.setText('-')
+
+        # Processo
+        self.processoAtual = None
+        self.lbNumProc.setText('-')
+        self.lbTpProcesso.setText('-')
+        self.lbSituacao.setText('-')
+
+        # Aposentadoria
+        self.tabAposController.limpaLayout()
+        self.trocaCardCentral(None, TelaAtiva.BuscaCliente)
+
+    def limpaBotoes(self):
+        self.pbAposentadorias.setStyleSheet(layoutBotaoGuia("pbAposentadorias", selecionado=False))
+        self.pbGeral.setStyleSheet(layoutBotaoGuia("pbGeral", selecionado=False))
+        self.pbProcuracao.setStyleSheet(layoutBotaoGuia("pbProcuracao", selecionado=False))
+        self.pbDocsComp.setStyleSheet(layoutBotaoGuia("pbDocsComp", selecionado=False))

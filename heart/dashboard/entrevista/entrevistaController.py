@@ -19,7 +19,7 @@ from heart.dashboard.entrevista.localWidgets.pgConfigSimulacao import PgConfigSi
 from heart.dashboard.processos.processoController import ProcessosController
 from heart.dashboard.gerarDocsPage import GerarDocsPage
 from heart.dashboard.entrevista.localStyleSheet.cabecalho import *
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 
 from modelos.processosORM import Processos
 from modelos.clienteORM import Cliente

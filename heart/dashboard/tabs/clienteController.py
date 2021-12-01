@@ -2,7 +2,6 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar, QHBoxLayout, QLineEdit
 from peewee import SqliteDatabase
-from typing import List
 
 from cache.cacheEscritorio import CacheEscritorio
 
@@ -12,7 +11,7 @@ from Design.CustomWidgets.newCheckBox import NewCheckBox
 from heart.buscaClientePage import BuscaClientePage
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
 from heart.dashboard.tabs.tabInfoGeralCliente import TabInfoGeralCliente
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 from heart.telAfinsController import TelAfinsController
 
 from modelos.cnisModelo import CNISModelo
@@ -26,7 +25,7 @@ from modelos.escritoriosORM import Escritorios
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
 
-from util.dateHelper import atividadesConcorrentes, strToDate, atividadeSecundaria
+from util.dateHelper import atividadesConcorrentes, atividadeSecundaria
 from util.popUps import popUpOkAlerta
 from util.helpers import *
 

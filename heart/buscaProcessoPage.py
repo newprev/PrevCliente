@@ -3,7 +3,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from typing import List
 
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 from Design.pyUi.buscaProcessos import Ui_mwBuscaProcessos
 from Design.pyUi.efeitos import Efeitos
 from util.helpers import mascaraTelCel, strTipoProcesso, strTipoBeneficio, dataUSAtoBR

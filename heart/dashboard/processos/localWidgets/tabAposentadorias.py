@@ -64,13 +64,9 @@ class TabAposentariasController(QWidget, Ui_wdgTabAposentadorias):
             efeitos.shadowCards([card])
             self.glNaoTemDireito.addWidget(card, coordenadas[numItem][0], coordenadas[numItem][1])
 
-
     def limpaLayout(self):
         for index in reversed(range(self.glNaoTemDireito.count())):
             self.glNaoTemDireito.takeAt(index).widget().setParent(None)
 
         for index in reversed(range(self.glTemDireito.count())):
             self.glTemDireito.takeAt(index).widget().setParent(None)
-
-
-

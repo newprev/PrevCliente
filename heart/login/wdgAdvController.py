@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget
 from Design.pyUi.wdgAdvogados import Ui_wdgAdv
 from modelos.advogadoORM import Advogados
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 
 
 class WdgAdvController(QWidget, Ui_wdgAdv):

@@ -1,4 +1,5 @@
 from math import ceil
+from aiohttp import ClientConnectorError
 
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QMainWindow
@@ -6,6 +7,7 @@ from PyQt5.QtWidgets import QMainWindow
 from Design.pyUi.splashScreen import Ui_MainWindow
 from heart.login.loginController import LoginController
 from connections import ConfigConnection
+
 from modelos.convMonORM import ConvMon
 from modelos.especieBenefORM import EspecieBenef
 from modelos.expSobrevidaORM import ExpSobrevida
@@ -29,7 +31,10 @@ from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.aposentadoriaORM import Aposentadoria
 from modelos.ipcaMensalORM import IpcaMensal
 from modelos.tipos.tipoAposentadoriaORM import TipoAposentadoria
+
 from util.enums.newPrevEnums import TiposConexoes
+from util.popUps import popUpOkAlerta
+
 from cache.cachingLogin import CacheLogin
 
 
@@ -128,6 +133,12 @@ class Main(Ui_MainWindow, QMainWindow):
             except ConfigGerais.DoesNotExist:
                 print('Não encontrou configurações')
                 self.iniciaNewPrev()
+            except ClientConnectorError as err:
+                popUpOkAlerta(
+                    'Não foi possível se comunicar com o servidor. \nVerifique sua conexão com internet e tente abrir o programa novamente.',
+                    erro=f"{err=}",
+                    funcao=self.close
+                )
         else:
             self.iniciaNewPrev()
 

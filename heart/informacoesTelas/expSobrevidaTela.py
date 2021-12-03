@@ -5,7 +5,6 @@ from typing import List
 
 from Design.pyUi.pgExpSobrevida import Ui_mwExpSobrevida
 from Design.CustomWidgets.newCheckBox import NewCheckBox
-from Design.DesignSystem.colors import NewColors
 from modelos.expSobrevidaORM import ExpSobrevida
 from util.dateHelper import mascaraDataPequena, strAnoToDate, strToDate
 
@@ -18,7 +17,7 @@ class ExpSobrevidaTela(QMainWindow, Ui_mwExpSobrevida):
         self.setupUi(self)
         self.setWindowTitle('Experiência de sobrevida - [expSobrevidaTela]')
 
-        self.cbFiltro = NewCheckBox(active_color=NewColors.primary.value)
+        self.cbFiltro = NewCheckBox()
 
         self.tblInfo.hideColumn(0)
         self.rbAmbos.setChecked(True)

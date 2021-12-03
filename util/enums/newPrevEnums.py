@@ -55,9 +55,9 @@ class TipoWidget(Enum):
     icone = 1
 
 class TipoContribuicao(Enum):
-    contribuicao = 0
-    remuneracao = 1
-    beneficio = 2
+    contribuicao = 'C'
+    remuneracao = 'R'
+    beneficio = 'B'
 
 class GeneroCliente(Enum):
     masculino = 'M'

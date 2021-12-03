@@ -16,67 +16,11 @@ class Ui_wdgTabResumoCNIS(object):
         wdgTabResumoCNIS.setObjectName("wdgTabResumoCNIS")
         wdgTabResumoCNIS.resize(1167, 764)
         wdgTabResumoCNIS.setMinimumSize(QtCore.QSize(945, 611))
-        wdgTabResumoCNIS.setStyleSheet("/*#tabContribuicoes,\n"
-"#tabMain, \n"
-"#tabCalculos,\n"
-"#tabBeneficios,\n"
-"#tabResumo {\n"
+        wdgTabResumoCNIS.setStyleSheet("/* --------------------------------------------------  Frame -------------------------------------------------- */\n"
+"#frInformativo {\n"
+"    border: 2px solid lightgrey;\n"
 "    border-radius: 8px;\n"
-"    background-color: white;\n"
-"    padding: 4px;\n"
-"    \n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 16px;\n"
 "}\n"
-"\n"
-"#tabMain::pane {\n"
-"    background-color: transparent;\n"
-"    border-radius: 8px;\n"
-"    border: 4px solid transparent;\n"
-"}\n"
-"\n"
-"#tabMain::tab-bar {\n"
-"    alignment: center;\n"
-"    width: 60ex;\n"
-"}\n"
-"\n"
-"QTabBar::tab{\n"
-"    background: grey;\n"
-"    color: white;\n"
-"    border-top-left-radius: 4px;\n"
-"    border-top-right-radius: 4px;\n"
-"    border-bottom-left-radius: 4px;\n"
-"    border-bottom-right-radius: 4px;\n"
-"    border: 2px solid white;\n"
-"    padding: 4px;\n"
-"    \n"
-"    font-size: 14px;\n"
-"}\n"
-"\n"
-"QTabBar::tab:selected {\n"
-"    background: rgb(52, 73, 94);\n"
-"    font-weight: bold;\n"
-"    color: white;\n"
-"    margin-left: 4px;\n"
-"    margin-right: 4px;\n"
-"\n"
-"    font-size: 18px;\n"
-"}\n"
-"\n"
-"QTabBar::tab:hover {\n"
-"    background: rgb(92, 113, 134);\n"
-"    color: white;\n"
-"    margin-left: 1px;\n"
-"    margin-right: 1px;\n"
-"    margin-top: 2px;\n"
-"\n"
-"    font-size: 18px;\n"
-"}\n"
-"\n"
-"QTabBar::tab:!selected {\n"
-"    margin-top: 2px;\n"
-"}*/\n"
-"\n"
 "\n"
 "/* --------------------------------------------------  New -------------------------------------------------- */\n"
 "\n"
@@ -123,10 +67,10 @@ class Ui_wdgTabResumoCNIS(object):
 "    border-width: 3px;\n"
 "    border-color: transparent transparent rgb(82, 111, 139) transparent;\n"
 "}")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(wdgTabResumoCNIS)
-        self.horizontalLayout.setContentsMargins(16, 4, 16, 0)
-        self.horizontalLayout.setSpacing(0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.verticalLayout_11 = QtWidgets.QVBoxLayout(wdgTabResumoCNIS)
+        self.verticalLayout_11.setContentsMargins(16, 4, 16, 8)
+        self.verticalLayout_11.setSpacing(8)
+        self.verticalLayout_11.setObjectName("verticalLayout_11")
         self.tabMain = QtWidgets.QTabWidget(wdgTabResumoCNIS)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
@@ -299,7 +243,7 @@ class Ui_wdgTabResumoCNIS(object):
         self.scrollArea.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scrollArea.setObjectName("scrollArea")
         self.scaResumos = QtWidgets.QWidget()
-        self.scaResumos.setGeometry(QtCore.QRect(0, 0, 800, 625))
+        self.scaResumos.setGeometry(QtCore.QRect(0, 0, 800, 549))
         self.scaResumos.setObjectName("scaResumos")
         self.scrollArea.setWidget(self.scaResumos)
         self.verticalLayout_2.addWidget(self.scrollArea)
@@ -546,54 +490,27 @@ class Ui_wdgTabResumoCNIS(object):
         self.gridLayout_2.setHorizontalSpacing(28)
         self.gridLayout_2.setVerticalSpacing(8)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.bpInfoPessoaisContrib = QtWidgets.QGroupBox(self.tabContribuicoes)
-        self.bpInfoPessoaisContrib.setObjectName("bpInfoPessoaisContrib")
-        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.bpInfoPessoaisContrib)
-        self.verticalLayout_5.setContentsMargins(8, 26, 34, 4)
-        self.verticalLayout_5.setSpacing(2)
-        self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.frame_9 = QtWidgets.QFrame(self.bpInfoPessoaisContrib)
-        self.frame_9.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_9.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_9.setObjectName("frame_9")
-        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frame_9)
-        self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_6.setSpacing(2)
-        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        self.lbInfoNomeContrib = QtWidgets.QLabel(self.frame_9)
-        self.lbInfoNomeContrib.setObjectName("lbInfoNomeContrib")
-        self.horizontalLayout_6.addWidget(self.lbInfoNomeContrib, 0, QtCore.Qt.AlignLeft)
-        self.lbNome = QtWidgets.QLabel(self.frame_9)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lbNome.sizePolicy().hasHeightForWidth())
-        self.lbNome.setSizePolicy(sizePolicy)
-        self.lbNome.setText("")
-        self.lbNome.setObjectName("lbNome")
-        self.horizontalLayout_6.addWidget(self.lbNome, 0, QtCore.Qt.AlignLeft)
+        self.frFiltros = QtWidgets.QFrame(self.tabContribuicoes)
+        self.frFiltros.setMinimumSize(QtCore.QSize(0, 30))
+        self.frFiltros.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frFiltros.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frFiltros.setObjectName("frFiltros")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frFiltros)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setSpacing(16)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.pbAddFiltro = QtWidgets.QPushButton(self.frFiltros)
+        self.pbAddFiltro.setMinimumSize(QtCore.QSize(0, 24))
+        self.pbAddFiltro.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.pbAddFiltro.setObjectName("pbAddFiltro")
+        self.horizontalLayout_2.addWidget(self.pbAddFiltro)
+        self.hlFiltros = QtWidgets.QHBoxLayout()
+        self.hlFiltros.setSpacing(4)
+        self.hlFiltros.setObjectName("hlFiltros")
+        self.horizontalLayout_2.addLayout(self.hlFiltros)
         spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_6.addItem(spacerItem8)
-        self.verticalLayout_5.addWidget(self.frame_9)
-        self.frame_10 = QtWidgets.QFrame(self.bpInfoPessoaisContrib)
-        self.frame_10.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_10.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_10.setObjectName("frame_10")
-        self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.frame_10)
-        self.horizontalLayout_7.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_7.setSpacing(2)
-        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        self.lbInfoDocumentoContrib = QtWidgets.QLabel(self.frame_10)
-        self.lbInfoDocumentoContrib.setObjectName("lbInfoDocumentoContrib")
-        self.horizontalLayout_7.addWidget(self.lbInfoDocumentoContrib, 0, QtCore.Qt.AlignLeft)
-        self.lbDocumento = QtWidgets.QLabel(self.frame_10)
-        self.lbDocumento.setText("")
-        self.lbDocumento.setObjectName("lbDocumento")
-        self.horizontalLayout_7.addWidget(self.lbDocumento, 0, QtCore.Qt.AlignLeft)
-        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem9)
-        self.verticalLayout_5.addWidget(self.frame_10)
-        self.gridLayout_2.addWidget(self.bpInfoPessoaisContrib, 0, 1, 1, 1)
+        self.horizontalLayout_2.addItem(spacerItem8)
+        self.gridLayout_2.addWidget(self.frFiltros, 1, 0, 1, 2)
         self.tblCalculos = QtWidgets.QTableWidget(self.tabContribuicoes)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
@@ -678,8 +595,8 @@ class Ui_wdgTabResumoCNIS(object):
         self.pbBuscarCliente.setMaximumSize(QtCore.QSize(90, 40))
         self.pbBuscarCliente.setObjectName("pbBuscarCliente")
         self.verticalLayout_6.addWidget(self.pbBuscarCliente)
-        spacerItem10 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.verticalLayout_6.addItem(spacerItem10)
+        spacerItem9 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.verticalLayout_6.addItem(spacerItem9)
         self.pbInserir = QtWidgets.QPushButton(self.frame_8)
         self.pbInserir.setMinimumSize(QtCore.QSize(80, 32))
         self.pbInserir.setMaximumSize(QtCore.QSize(90, 32))
@@ -695,8 +612,8 @@ class Ui_wdgTabResumoCNIS(object):
         self.pbEditar.setMaximumSize(QtCore.QSize(90, 32))
         self.pbEditar.setObjectName("pbEditar")
         self.verticalLayout_6.addWidget(self.pbEditar)
-        spacerItem11 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_6.addItem(spacerItem11)
+        spacerItem10 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_6.addItem(spacerItem10)
         self.gridLayout_2.addWidget(self.frame_8, 2, 2, 1, 1)
         self.frame_11 = QtWidgets.QFrame(self.tabContribuicoes)
         self.frame_11.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -711,27 +628,54 @@ class Ui_wdgTabResumoCNIS(object):
         self.lbInfoClientes.setObjectName("lbInfoClientes")
         self.verticalLayout_7.addWidget(self.lbInfoClientes)
         self.gridLayout_2.addWidget(self.frame_11, 0, 0, 1, 1)
-        self.frFiltros = QtWidgets.QFrame(self.tabContribuicoes)
-        self.frFiltros.setMinimumSize(QtCore.QSize(0, 30))
-        self.frFiltros.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frFiltros.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frFiltros.setObjectName("frFiltros")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frFiltros)
-        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_2.setSpacing(16)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.pbAddFiltro = QtWidgets.QPushButton(self.frFiltros)
-        self.pbAddFiltro.setMinimumSize(QtCore.QSize(0, 24))
-        self.pbAddFiltro.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.pbAddFiltro.setObjectName("pbAddFiltro")
-        self.horizontalLayout_2.addWidget(self.pbAddFiltro)
-        self.hlFiltros = QtWidgets.QHBoxLayout()
-        self.hlFiltros.setSpacing(4)
-        self.hlFiltros.setObjectName("hlFiltros")
-        self.horizontalLayout_2.addLayout(self.hlFiltros)
+        self.bpInfoPessoaisContrib = QtWidgets.QGroupBox(self.tabContribuicoes)
+        self.bpInfoPessoaisContrib.setObjectName("bpInfoPessoaisContrib")
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.bpInfoPessoaisContrib)
+        self.verticalLayout_5.setContentsMargins(8, 26, 34, 4)
+        self.verticalLayout_5.setSpacing(2)
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.frame_9 = QtWidgets.QFrame(self.bpInfoPessoaisContrib)
+        self.frame_9.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_9.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_9.setObjectName("frame_9")
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frame_9)
+        self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_6.setSpacing(2)
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.lbInfoNomeContrib = QtWidgets.QLabel(self.frame_9)
+        self.lbInfoNomeContrib.setObjectName("lbInfoNomeContrib")
+        self.horizontalLayout_6.addWidget(self.lbInfoNomeContrib, 0, QtCore.Qt.AlignLeft)
+        self.lbNome = QtWidgets.QLabel(self.frame_9)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbNome.sizePolicy().hasHeightForWidth())
+        self.lbNome.setSizePolicy(sizePolicy)
+        self.lbNome.setText("")
+        self.lbNome.setObjectName("lbNome")
+        self.horizontalLayout_6.addWidget(self.lbNome, 0, QtCore.Qt.AlignLeft)
+        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_6.addItem(spacerItem11)
+        self.verticalLayout_5.addWidget(self.frame_9)
+        self.frame_10 = QtWidgets.QFrame(self.bpInfoPessoaisContrib)
+        self.frame_10.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_10.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_10.setObjectName("frame_10")
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.frame_10)
+        self.horizontalLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_7.setSpacing(2)
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.lbInfoDocumentoContrib = QtWidgets.QLabel(self.frame_10)
+        self.lbInfoDocumentoContrib.setObjectName("lbInfoDocumentoContrib")
+        self.horizontalLayout_7.addWidget(self.lbInfoDocumentoContrib, 0, QtCore.Qt.AlignLeft)
+        self.lbDocumento = QtWidgets.QLabel(self.frame_10)
+        self.lbDocumento.setText("")
+        self.lbDocumento.setObjectName("lbDocumento")
+        self.horizontalLayout_7.addWidget(self.lbDocumento, 0, QtCore.Qt.AlignLeft)
         spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem12)
-        self.gridLayout_2.addWidget(self.frFiltros, 1, 0, 1, 2)
+        self.horizontalLayout_7.addItem(spacerItem12)
+        self.verticalLayout_5.addWidget(self.frame_10)
+        self.gridLayout_2.addWidget(self.bpInfoPessoaisContrib, 0, 1, 1, 1)
         self.tabMain.addTab(self.tabContribuicoes, "")
         self.tabBeneficios = QtWidgets.QWidget()
         self.tabBeneficios.setStyleSheet("/*-------------------------------- Labels -----------------------------------------*/\n"
@@ -1050,7 +994,79 @@ class Ui_wdgTabResumoCNIS(object):
         self.horizontalLayout_11.addItem(spacerItem18)
         self.gridLayout_3.addWidget(self.frFiltrosBene, 1, 0, 1, 3)
         self.tabMain.addTab(self.tabBeneficios, "")
-        self.horizontalLayout.addWidget(self.tabMain)
+        self.verticalLayout_11.addWidget(self.tabMain)
+        self.frInformativo = QtWidgets.QFrame(wdgTabResumoCNIS)
+        self.frInformativo.setMinimumSize(QtCore.QSize(0, 0))
+        self.frInformativo.setMaximumSize(QtCore.QSize(16777215, 60))
+        self.frInformativo.setStyleSheet("")
+        self.frInformativo.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInformativo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInformativo.setObjectName("frInformativo")
+        self.horizontalLayout_12 = QtWidgets.QHBoxLayout(self.frInformativo)
+        self.horizontalLayout_12.setObjectName("horizontalLayout_12")
+        self.frInfo1 = QtWidgets.QFrame(self.frInformativo)
+        self.frInfo1.setStyleSheet("/*----------------------------------------------  Label ----------------------------------------------*/\n"
+"#frIcon1{\n"
+"    background-image: url(:/alerta/atencao.png);\n"
+"    background-repeat: no-repeat;\n"
+"    background-position: center;\n"
+"}\n"
+"\n"
+"")
+        self.frInfo1.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfo1.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfo1.setObjectName("frInfo1")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.frInfo1)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setSpacing(4)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.frIcon1 = QtWidgets.QFrame(self.frInfo1)
+        self.frIcon1.setMinimumSize(QtCore.QSize(24, 24))
+        self.frIcon1.setMaximumSize(QtCore.QSize(24, 24))
+        self.frIcon1.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frIcon1.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frIcon1.setObjectName("frIcon1")
+        self.horizontalLayout.addWidget(self.frIcon1)
+        self.lbInfo1 = QtWidgets.QLabel(self.frInfo1)
+        self.lbInfo1.setStyleSheet("/*----------------------------------------------  Frame ----------------------------------------------*/\n"
+"#lbInfo1{\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"}")
+        self.lbInfo1.setObjectName("lbInfo1")
+        self.horizontalLayout.addWidget(self.lbInfo1)
+        self.horizontalLayout_12.addWidget(self.frInfo1)
+        self.frInfo2 = QtWidgets.QFrame(self.frInformativo)
+        self.frInfo2.setStyleSheet("/*----------------------------------------------  Frame ----------------------------------------------*/\n"
+"#frIcon2{\n"
+"    background-image: url(:/alerta/info.png);\n"
+"    background-repeat: no-repeat;\n"
+"    background-position: center;\n"
+"}")
+        self.frInfo2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfo2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfo2.setObjectName("frInfo2")
+        self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.frInfo2)
+        self.horizontalLayout_10.setObjectName("horizontalLayout_10")
+        self.frIcon2 = QtWidgets.QFrame(self.frInfo2)
+        self.frIcon2.setMinimumSize(QtCore.QSize(24, 24))
+        self.frIcon2.setMaximumSize(QtCore.QSize(24, 24))
+        self.frIcon2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frIcon2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frIcon2.setObjectName("frIcon2")
+        self.horizontalLayout_10.addWidget(self.frIcon2)
+        self.lbInfo2 = QtWidgets.QLabel(self.frInfo2)
+        self.lbInfo2.setStyleSheet("/*----------------------------------------------  Label ----------------------------------------------*/\n"
+"#lbInfo2{\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 12px;\n"
+"}")
+        self.lbInfo2.setObjectName("lbInfo2")
+        self.horizontalLayout_10.addWidget(self.lbInfo2)
+        self.horizontalLayout_12.addWidget(self.frInfo2)
+        spacerItem19 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_12.addItem(spacerItem19)
+        self.verticalLayout_11.addWidget(self.frInformativo)
 
         self.retranslateUi(wdgTabResumoCNIS)
         self.tabMain.setCurrentIndex(0)
@@ -1068,9 +1084,7 @@ class Ui_wdgTabResumoCNIS(object):
         self.lbInfoNomeResumo.setText(_translate("wdgTabResumoCNIS", "Nome cliente:"))
         self.lbInfoDocumentoResumo.setText(_translate("wdgTabResumoCNIS", "Documento:"))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabResumo), _translate("wdgTabResumoCNIS", "Resumo"))
-        self.bpInfoPessoaisContrib.setTitle(_translate("wdgTabResumoCNIS", "Informações pessoais"))
-        self.lbInfoNomeContrib.setText(_translate("wdgTabResumoCNIS", "Nome cliente:"))
-        self.lbInfoDocumentoContrib.setText(_translate("wdgTabResumoCNIS", "Documento:"))
+        self.pbAddFiltro.setText(_translate("wdgTabResumoCNIS", "   + Adicionar Filtro   "))
         item = self.tblCalculos.verticalHeaderItem(0)
         item.setText(_translate("wdgTabResumoCNIS", "New Row"))
         item = self.tblCalculos.horizontalHeaderItem(0)
@@ -1099,7 +1113,9 @@ class Ui_wdgTabResumoCNIS(object):
         self.pbEditar.setText(_translate("wdgTabResumoCNIS", "Editar"))
         self.lbTituloClientes.setText(_translate("wdgTabResumoCNIS", "Tabela de Remunerações"))
         self.lbInfoClientes.setText(_translate("wdgTabResumoCNIS", "Pesquise por toda a sua base de clientes"))
-        self.pbAddFiltro.setText(_translate("wdgTabResumoCNIS", "   + Adicionar Filtro   "))
+        self.bpInfoPessoaisContrib.setTitle(_translate("wdgTabResumoCNIS", "Informações pessoais"))
+        self.lbInfoNomeContrib.setText(_translate("wdgTabResumoCNIS", "Nome cliente:"))
+        self.lbInfoDocumentoContrib.setText(_translate("wdgTabResumoCNIS", "Documento:"))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabContribuicoes), _translate("wdgTabResumoCNIS", "       Contribuições       "))
         self.lbTituloClientesBen.setText(_translate("wdgTabResumoCNIS", "Tabela de Benefícios"))
         self.lbInfoClientesBen.setText(_translate("wdgTabResumoCNIS", "Pesquise por toda a sua base de clientes"))
@@ -1124,6 +1140,9 @@ class Ui_wdgTabResumoCNIS(object):
         self.pbEditarBen.setText(_translate("wdgTabResumoCNIS", "Editar"))
         self.pbAddFiltroBene.setText(_translate("wdgTabResumoCNIS", "   + Adicionar Filtro   "))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabBeneficios), _translate("wdgTabResumoCNIS", "    Benefícios    "))
+        self.lbInfo1.setText(_translate("wdgTabResumoCNIS", "Informação"))
+        self.lbInfo2.setText(_translate("wdgTabResumoCNIS", "Informação"))
+import Resources.tabResumoCNIS
 
 
 if __name__ == "__main__":

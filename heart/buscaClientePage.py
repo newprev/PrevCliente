@@ -36,7 +36,7 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
 
         if clientes is None:
             # clientes = [ClienteModelo().fromList(cliente, retornaInst=True) for cliente in self.daoCliente.buscaTodos()]
-            listaClientes: List[Cliente] = Cliente.select()
+            listaClientes: List[Cliente] = Cliente.select().order_by(Cliente.nomeCliente)
 
             for cliente in listaClientes:
                 # cliente.telefoneId = Telefones.get(Telefones.clienteId == cliente.clienteId)

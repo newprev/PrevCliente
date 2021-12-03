@@ -6,6 +6,7 @@ from typing import List
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
+from modelos.itemContribuicao import ItemContribuicao
 from util.dateHelper import strToDatetime
 from util.helpers import dictEspecies, mascaraNit, strToFloat, situacaoBeneficio, floatToDinheiro
 from util.popUps import popUpOkAlerta
@@ -248,13 +249,12 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
                     self.contribuicao.seq = 0
                     self.loading(20)
                     if self.cbRepetir.isChecked():
-                        listaDatas: list = self.geraContribsRecorrente()
-                        print('\nlistaDatas ----------------')
-                        print(listaDatas)
+                        qtdContribuicoes: int = self.geraContribsRecorrente()
+                        print(f'\nlistaDatas({qtdContribuicoes}) ----------------')
+                        print(qtdContribuicoes)
                         print('listaDatas ----------------\n')
                         # self.daoCalculos.insereListaContribuicoes(listaDatas)
-                        self.daoCalculos.insereListaContribuicoes(listaDatas)
-                        self.mensagemSistema('Contribuições inseridas com sucesso!')
+                        self.mensagemSistema(f'{qtdContribuicoes} de contribuições inseridas com sucesso!')
                     else:
                         if self.tipo == TipoContribuicao.remuneracao:
                             self.remuneracao.indicadores = self.retornaStrIndicadores()
@@ -280,24 +280,33 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
 
             self.loading(20)
 
-    def geraContribsRecorrente(self) -> List[CnisContribuicoes]:
+    def geraContribsRecorrente(self) -> int:
+        if self.leSalContribuicao.text() == '' or not self.leSalContribuicao.text().isdigit():
+            popUpOkAlerta('O salário de contribuição é inválido. Verifique o valor e tente novamente.')
+            self.leSalContribuicao.setFocus()
+            return False
+
         difMeses: int = floor((self.dtRepetir.date().toPyDate() - self.dtCompetencia.date().toPyDate()).days/30)
-        listaContribuicoes: List[CnisContribuicoes] = []
+        qtdContribuicoes: int = 0
+        salContribuicao: float = float(self.leSalContribuicao.text().replace(',', '.'))
 
         for mes in range(0, difMeses+1):
-            novaContrib = CnisContribuicoes()
-            novaContrib.clienteId = self.contribuicao.clienteId
-            novaContrib.contribuicao = self.contribuicao.contribuicao
-            novaContrib.seq = self.contribuicao.seq
-            novaContrib.indicadores = self.retornaStrIndicadores()
-            novaContrib.competencia = relativedelta(months=+mes) + self.dtCompetencia.date().toPyDate()
-            novaContrib.salContribuicao = self.contribuicao.salContribuicao
-            novaContrib.dadoOrigem = self.contribuicao.dadoOrigem
-            novaContrib.dataCadastro = date.today()
-            novaContrib.dataUltAlt = date.today()
-            listaContribuicoes.append(novaContrib)
+            ItemContribuicao(
+                clienteId=self.contribuicao.clienteId,
+                seq=self.contribuicao.seq,
+                tipo=TipoContribuicao.contribuicao.value,
+                competencia=relativedelta(months=+mes) + self.dtCompetencia.date().toPyDate(),
+                contribuicao=salContribuicao*0.2,
+                salContribuicao=self.contribuicao.salContribuicao,
+                dadoOrigem='N',
+                geradoAutomaticamente=True,
+                indicadores=self.retornaStrIndicadores(),
+                dataCadastro=date.today(),
+                dataUltAlt=date.today(),
+            ).save()
+            qtdContribuicoes = mes
 
-        return listaContribuicoes
+        return qtdContribuicoes
 
     def sairAtividade(self):
         remuneracao: bool = self.leSalContribuicao.text() == ''
@@ -330,10 +339,10 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
                 self.leSalContribuicao.setFocus()
                 return False
 
-            elif self.dtCompetencia.date().toPyDate() > date.today():
-                popUpOkAlerta('O campo Competência precisa ter uma data anterior a hoje. Tente novamente.')
-                self.dtCompetencia.setFocus()
-                return False
+            # elif self.dtCompetencia.date().toPyDate() > date.today():
+            #     popUpOkAlerta('O campo Competência precisa ter uma data anterior a hoje. Tente novamente.')
+            #     self.dtCompetencia.setFocus()
+            #     return False
 
         return True
 

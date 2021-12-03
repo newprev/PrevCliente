@@ -596,6 +596,7 @@ class CNISModelo:
                 listaItensContrib += self.criaItensNaoDiscriminados(cabecalho, cliente)
                 continue
 
+            #TODO: Diferenciar "contribuição" e "salário de contribuição"
             for remuneracao in listaRemu:
                 impedidoPelaData: bool = strToDate(remuneracao.competencia) < dataTrocaMoeda
 
@@ -606,6 +607,7 @@ class CNISModelo:
                     "tipo": TipoItemContribuicao.remuneracao.value,
                     "competencia": remuneracao.competencia,
                     "contribuicao": remuneracao.remuneracao,
+                    "salContribuicao": remuneracao.remuneracao,
                     "indicadores": remuneracao.indicadores,
                     "validoTempoContrib": not impedidoPorIndicadores,
                     "validoSalContrib": not impedidoPorIndicadores and not impedidoPelaData
@@ -620,7 +622,8 @@ class CNISModelo:
                     "seq": cabecalho.seq,
                     "tipo": TipoItemContribuicao.contribuicao.value,
                     "competencia": contribuicao.competencia,
-                    "contribuicao": contribuicao.salContribuicao,
+                    "contribuicao": contribuicao.contribuicao,
+                    "salContribuicao": contribuicao.salContribuicao,
                     "indicadores": contribuicao.indicadores,
                     "validoTempoContrib": not impedidoPorIndicadores,
                     "validoSalContrib": not impedidoPorIndicadores and not impedidoPelaData
@@ -636,6 +639,7 @@ class CNISModelo:
                     "tipo": TipoItemContribuicao.beneficio.value,
                     "competencia": beneficio.competencia,
                     "contribuicao": beneficio.remuneracao,
+                    "salContribuicao": beneficio.remuneracao,
                     "indicadores": beneficio.indicadores,
                     "validoTempoContrib": not impedidoPorIndicadores,
                     "validoSalContrib": not impedidoPorIndicadores and not impedidoPelaData

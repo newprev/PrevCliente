@@ -89,9 +89,17 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
             if self.multiplosProcessos():
                 self.trocaCardCentral(TelaAtiva.BuscaCliente, TelaAtiva.BuscaProcesso)
             else:
-                self.processoAtual = Processos.select().where(Processos.clienteId == self.clienteAtual.clienteId).get()
-                self.atualizaInfoNaTela()
-                self.trocaCardCentral(None, TelaAtiva.Aposentadoria)
+                try:
+                    self.processoAtual = Processos.select().where(Processos.clienteId == self.clienteAtual.clienteId).get()
+                    self.atualizaInfoNaTela()
+                    self.trocaCardCentral(None, TelaAtiva.Aposentadoria)
+                except Processos.DoesNotExist as err:
+                    self.processoAtual = None
+                    popUpOkAlerta(
+                        f'O(a) cliente {self.clienteAtual.nomeCliente} ainda não possui nenhum processo registrado',
+                    )
+                    self.atualizaInfoNaTela()
+                    self.raise_()
 
     def atualizaInfoNaTela(self):
         # Info cliente

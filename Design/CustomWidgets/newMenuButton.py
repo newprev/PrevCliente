@@ -4,7 +4,7 @@ from PyQt5.QtGui import QPainter, QPixmap, QColor
 from PyQt5.QtSvg import QSvgGenerator
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtCore import Qt, QRect, QSize
-from ..DesignSystem.colors import NewColors
+from ..DesignSystem.colors import *
 
 
 class NewMenuButton(QPushButton):
@@ -14,12 +14,12 @@ class NewMenuButton(QPushButton):
             height: int = 40,
             minimumWidth: int = 50,
             textPadding: int = 0,
-            textColor: str = '#f8f9fa',
+            textColor: str = NewTextColor.whiteText.value,
             iconPath: str = '',
-            iconColor: str = '#f8f9fa',
-            pbColor: str = NewColors.primary.value,
-            pbColorHover: str = NewColors.secondary.value,
-            pbColorPressed: str = NewColors.bgPrimary.value,
+            iconColor: str = NewColorsWhite.white100.value,
+            pbColor: str = NewColorsPrimary.primary.value,
+            pbColorHover: str = NewColorsPrimary.p200.value,
+            pbColorPressed: str = NewColorsPrimary.p400.value,
             pbChecked: bool = False,
             parent=None
     ):
@@ -51,10 +51,10 @@ class NewMenuButton(QPushButton):
     def defineStyleSheet(
             self,
             textPadding: int = 55,
-            textColor: str = '#f8f9fa',
-            pbColor: str = NewColors.primary.value,
-            pbColorHover: str = NewColors.secondary.value,
-            pbColorPressed: str = NewColors.bgPrimary.value,
+            textColor: str = NewTextColor.whiteText.value,
+            pbColor: str = NewColorsPrimary.primary.value,
+            pbColorHover: str = NewColorsPrimary.p200.value,
+            pbColorPressed: str = NewColorsSuccess.green200.value,
             pbChecked: bool = False,
     ):
         style = f"""

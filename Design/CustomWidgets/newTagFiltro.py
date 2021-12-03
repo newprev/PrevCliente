@@ -29,7 +29,7 @@ class NewTagFiltro(QWidget, Ui_wdgTagFiltro):
 
     def enviaFiltroExcluido(self):
         if self.tipoFiltro == TipoFiltro.data:
-            self.parent.excluiuFiltro(None, TipoFiltro.data)
+            self.parent.excluiuFiltro(self.lbFiltro.text(), TipoFiltro.data)
         else:
             self.parent.excluiuFiltro(self.lbFiltro.text(), TipoFiltro.indicador)
 

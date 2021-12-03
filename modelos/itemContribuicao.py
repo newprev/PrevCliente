@@ -23,6 +23,7 @@ class ItemContribuicao(BaseModel, Model):
     tipo = CharField(choices=TIPO, default='C')
     competencia = DateField(null=False, formats=DATEFORMATS)
     contribuicao = FloatField(null=True)
+    salContribuicao = FloatField(null=True)
     ativPrimaria = BooleanField(null=False, default=True)
     dadoOrigem = CharField(column_name='dadoOrigem', choices=ORIGEM, default='C')
     geradoAutomaticamente = BooleanField(null=False, default=True)

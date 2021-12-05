@@ -10,7 +10,8 @@ class NewCheckBox(QCheckBox):
             self,
             width=60,
             bgColor=NewColorsGrey.grey800.value,
-            circleColorDeactivate=NewColorsGrey.grey200.value,
+            # circleColorDeactivate=NewColorsGrey.grey200.value,
+            circleColorDeactivate=NewColorsWhite.white100.value,
             circleColorActivate=NewColorsWhite.white100.value,
             active_color=NewColorsPrimary.primary.value,
             animation_curve=QEasingCurve.OutBounce

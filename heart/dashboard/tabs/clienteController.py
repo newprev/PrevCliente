@@ -137,9 +137,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
         self.lbTituloClientes.setStyleSheet(FontStyle.titulo.value)
         self.lbInfoClientes.setStyleSheet(FontStyle.subTitulo.value)
-        print(FontStyle.titulo.value)
-        print(FontStyle.subTitulo.value)
-        # self.lbTituloClientes.setText('INFORMAÇÕES DE CLIENTES')
 
     def abreBuscaClientePg(self):
         pgBuscaCliente = BuscaClientePage(parent=self)

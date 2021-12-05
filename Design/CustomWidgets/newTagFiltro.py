@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QWidget
 from typing import Union
 from util.dateHelper import mascaraData
 
-from Design.CustomWidgets.styleSheets.tagStyles import tipoTagFiltro
+from Design.CustomWidgets.styleSheets.tagStyles import tipoTagFiltro, textTagFiltro
 from Design.pyUi.wdgTagFiltro import Ui_wdgTagFiltro
 
 from sinaisCustomizados import Sinais
@@ -26,6 +26,7 @@ class NewTagFiltro(QWidget, Ui_wdgTagFiltro):
         self.defineLabel(filtro, tipoFiltro)
         self.pbExcluir.clicked.connect(self.sinais.sExcluiFiltro.emit)
         self.frMain.setStyleSheet(tipoTagFiltro(tipoFiltro))
+        self.lbFiltro.setStyleSheet(textTagFiltro(tipoFiltro))
 
     def enviaFiltroExcluido(self):
         if self.tipoFiltro == TipoFiltro.data:

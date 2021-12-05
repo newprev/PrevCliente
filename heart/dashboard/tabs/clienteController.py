@@ -26,7 +26,7 @@ from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
 
 from util.dateHelper import atividadesConcorrentes, atividadeSecundaria
-from util.enums.designEnums import FontFamily
+from util.enums.designEnums import FontStyle
 from util.popUps import popUpOkAlerta
 from util.helpers import *
 
@@ -135,9 +135,11 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         else:
             self.atualizaTblClientes()
 
-        print("#lbTituloClientes{ " + FontFamily.avenirStd.value + "}")
-        self.lbTituloClientes.setStyleSheet("#lbTituloClientes{ " + FontFamily.avenirStd.value + "}")
-        self.lbTituloClientes.setText('INFORMAÇÕES DE CLIENTES')
+        self.lbTituloClientes.setStyleSheet(FontStyle.titulo.value)
+        self.lbInfoClientes.setStyleSheet(FontStyle.subTitulo.value)
+        print(FontStyle.titulo.value)
+        print(FontStyle.subTitulo.value)
+        # self.lbTituloClientes.setText('INFORMAÇÕES DE CLIENTES')
 
     def abreBuscaClientePg(self):
         pgBuscaCliente = BuscaClientePage(parent=self)

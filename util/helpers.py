@@ -5,6 +5,7 @@ from typing import Union, Tuple, List
 
 from util.dateHelper import strToDate
 from util.enums.aposentadoriaEnums import SubTipoAposentadoria, TipoAposentadoria, ContribSimulacao
+from util.enums.configEnums import ImportantPaths
 from util.enums.newPrevEnums import *
 from util.enums.processoEnums import TipoBeneficio, TipoProcesso, NaturezaProcesso
 
@@ -681,3 +682,15 @@ def comparaFiltrosAny(lista1: Union[str, List[str]], lista2: Union[str, List[str
                     return True
 
         return False
+
+
+def pathTo(local: ImportantPaths):
+    import os
+
+    projectPath = os.path.normpath(os.path.join(os.curdir))
+    if local == ImportantPaths.design:
+        return os.path.join('Design')
+    elif local == ImportantPaths.fonts:
+        return os.path.join('Design', 'Fonts')
+
+

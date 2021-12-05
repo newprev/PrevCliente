@@ -552,7 +552,11 @@ class CalculosAposentadoria:
                 'validoSalContrib': True
             })
 
-            inserePedagio100 = competenciaAtual <= self.dibs[RegraTransicao.pedagio100]
+            if self.dibs[RegraTransicao.pedagio100] is not None:
+                inserePedagio100 = competenciaAtual <= self.dibs[RegraTransicao.pedagio100]
+            else:
+                inserePedagio100 = False
+
             if len(self.regrasACalcular) != 0:
                 self.calculaDibsRegrasTransicao(competenciaAtual, qtdContribuicoes, tempoContribuicao)
                 self.calculaDibsDireitoAdquirido(competenciaAtual, qtdContribuicoes, tempoContribuicao)
@@ -723,7 +727,7 @@ class CalculosAposentadoria:
         Renda mensal inicial antes da reforma
         :return:
         """
-        if self.dibs[RegraGeralAR.idade] == datetime.date.min:
+        if self.dibs[RegraGeralAR.idade] == datetime.date.min or self.dibs[RegraGeralAR.idade] is None:
             return 0.0
 
         mediaSalarios: float = self.calculaMediaSalarial(self.dibs[RegraGeralAR.idade])
@@ -950,13 +954,13 @@ class CalculosAposentadoria:
                 tipo=tipo,
                 contribSimulacao=self.contribSimulacao.name,
                 valorSimulacao=self.valorSimulacao,
-                idadeCliente=calculaIdade(strToDate(self.cliente.dataNascimento), self.dibs[chave]).years,
+                idadeCliente=calculaIdade(strToDate(self.cliente.dataNascimento), self.dibs[chave]).years if self.dibs[chave] is not None else 0,
                 qtdContribuicoes=self.qtdContrib[chave],
-                contribMeses=self.tmpContribPorRegra[chave].months,
-                contribAnos=self.tmpContribPorRegra[chave].years,
+                contribMeses=self.tmpContribPorRegra[chave].months if self.tmpContribPorRegra[chave] is not None else 0,
+                contribAnos=self.tmpContribPorRegra[chave].years if self.tmpContribPorRegra[chave] is not None else 0,
                 valorBeneficio=self.valorBeneficios[chave],
                 possuiDireito=atingiu,
-                dib=self.dibs[chave],
+                dib=self.dibs[chave] if self.dibs[chave] is not None else '2021-12-04',
                 der=datetime.date.min,
             ).save()
         return True

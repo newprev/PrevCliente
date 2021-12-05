@@ -1,15 +1,13 @@
 from enum import Enum
+from Design.DesignSystem.fonts import Fonts, FontSize
 
 
-class Fonts(Enum):
-    bebasStd = "font-family: 'Bebas Neue';"
-    avenirStd = "font-family: 'Avenir LT Std';"
-
-
-class FontSize(Enum):
-    H1 = "font-size: 24px;"
-    H2 = "font-size: 18px;"
-    H3 = "font-size: 12px;"
+class BorderRadius(Enum):
+    r4 = "border-radius: 4px;"
+    r8 = "border-radius: 8px;"
+    r12 = "border-radius: 12px;"
+    r16 = "border-radius: 16px;"
+    r20 = "border-radius: 20px;"
 
 
 class FontColor(Enum):

@@ -30,7 +30,7 @@ from modelos.itemContribuicao import ItemContribuicao
 from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.aposentadoriaORM import Aposentadoria
 from modelos.ipcaMensalORM import IpcaMensal
-from modelos.tipos.tipoAposentadoriaORM import TipoAposentadoria
+from modelos.tiposESubtipos.tipoAposentadoriaORM import TipoAposentadoria
 
 from util.enums.newPrevEnums import TiposConexoes
 from util.popUps import popUpOkAlerta

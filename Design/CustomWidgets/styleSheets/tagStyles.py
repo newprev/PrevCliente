@@ -1,6 +1,6 @@
 from util.enums.newPrevEnums import TipoFiltro
 from Design.DesignSystem.colors import NewColorsPrimary, NewColorsSuccess, NewColorsGrey, NewColorsWhite
-from util.enums.designEnums import FontStyle
+from Design.DesignSystem.designEnums import FontStyle
 
 
 def tipoTagFiltro(tipo: TipoFiltro) -> str:

@@ -26,7 +26,7 @@ from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
 
 from util.dateHelper import atividadesConcorrentes, atividadeSecundaria
-from util.enums.designEnums import FontStyle
+from Design.DesignSystem.designEnums import FontStyle
 from util.popUps import popUpOkAlerta
 from util.helpers import *
 

@@ -1,7 +1,7 @@
 import datetime
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QIcon, QPixmap
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QMessageBox, QVBoxLayout
 from Design.pyUi.tabResumoCNIS import Ui_wdgTabResumoCNIS
 from typing import List, Union
@@ -12,6 +12,7 @@ from heart.buscaClientePage import BuscaClientePage
 from heart.insereContribuicaoPage import InsereContribuicaoPage
 
 from Design.pyUi.efeitos import Efeitos
+from Design.DesignSystem.botoes import NewButton, NewButtonHover
 from Design.CustomWidgets.newDropMenu import NewSubMenu
 from Design.CustomWidgets.newTagFiltro import NewTagFiltro
 
@@ -48,13 +49,13 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
 
         self.iniciaLayout()
 
-        self.tblCalculos.doubleClicked.connect(lambda: self.avaliaEdicao('tblCalculos'))
+        self.tblContribuicoes.doubleClicked.connect(lambda: self.avaliaEdicao('tblContribuicoes'))
         self.tblBeneficios.doubleClicked.connect(lambda: self.avaliaEdicao('tblBeneficios'))
 
         self.pbBuscarCliente.clicked.connect(self.abreBuscaClientePage)
         self.pbBuscarClienteBen.clicked.connect(self.abreBuscaClientePage)
         self.pbBuscarClienteResumo.clicked.connect(self.abreBuscaClientePage)
-        self.pbEditar.clicked.connect(lambda: self.avaliaEdicao('tblCalculos'))
+        self.pbEditar.clicked.connect(lambda: self.avaliaEdicao('tblContribuicoes'))
         self.pbEditarBen.clicked.connect(lambda: self.avaliaEdicao('tblBeneficios'))
         self.pbExcluir.clicked.connect(lambda: self.avaliaExclusao('pbExcluir'))
         self.pbExcluirBen.clicked.connect(lambda: self.avaliaExclusao('pbExcluirBen'))
@@ -77,13 +78,17 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
             self.pbBuscarClienteBen.hide()
             self.pbBuscarCliente.hide()
 
-        self.tblCalculos.resizeColumnsToContents()
+        self.tblContribuicoes.resizeColumnsToContents()
 
     def iniciaLayout(self):
         # Hide and show
-        self.tblCalculos.hideColumn(0)
+        self.tblContribuicoes.hideColumn(0)
         self.tblBeneficios.hideColumn(0)
         self.frBordaFiltros.hide()
+
+        self.pbBuscarCliente.setStyleSheet(NewButton.padrao.value + NewButtonHover.padrao.value)
+        self.pbBuscarClienteBen.setStyleSheet(NewButton.padrao.value + NewButtonHover.padrao.value)
+        self.pbBuscarClienteResumo.setStyleSheet(NewButton.padrao.value + NewButtonHover.padrao.value)
 
     def abreBuscaClientePage(self):
         self.buscaClientePage = BuscaClientePage(parent=self)
@@ -102,14 +107,14 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
             self.atualizaMenuInfo(info=f'Quantidade de entradas no CNIS: {contEntradas}', status=StatusInfo.info)
 
     def avaliaEdicao(self, tabela: str):
-        if tabela == 'tblCalculos':
-            if len(self.tblCalculos.selectedIndexes()) <= 0:
+        if tabela == 'tblContribuicoes':
+            if len(self.tblContribuicoes.selectedIndexes()) <= 0:
                 self.popUpOkAlerta('Nenhuma remuneração selecionada. Selecione alguma linha e tente novamente')
                 return False
 
-            numLinha: int = self.tblCalculos.selectedIndexes()[0].row()
-            contribuicaoId = int(self.tblCalculos.item(numLinha, 0).text())
-            tipoContribuicao: str = self.tblCalculos.item(numLinha, 5).text()
+            numLinha: int = self.tblContribuicoes.selectedIndexes()[0].row()
+            contribuicaoId = int(self.tblContribuicoes.item(numLinha, 0).text())
+            tipoContribuicao: str = self.tblContribuicoes.item(numLinha, 5).text()
             if tipoContribuicao == 'Contribuição':
                 self.abreInsereContribuicoes(contribuicaoId, TipoContribuicao.contribuicao)
             else:
@@ -128,9 +133,9 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
 
     def avaliaExclusao(self, tipoBotao: str):
         if tipoBotao == 'pbExcluir':
-            numLinha: int = self.tblCalculos.selectedIndexes()[0].row()
-            contribuicaoId = int(self.tblCalculos.item(numLinha, 0).text())
-            tipoContribuicao: str = self.tblCalculos.item(numLinha, 5).text()
+            numLinha: int = self.tblContribuicoes.selectedIndexes()[0].row()
+            contribuicaoId = int(self.tblContribuicoes.item(numLinha, 0).text())
+            tipoContribuicao: str = self.tblContribuicoes.item(numLinha, 5).text()
 
             if tipoContribuicao == 'Contribuição':
                 self.popUpSimCancela(
@@ -182,10 +187,10 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
     def carregarTblContribuicoes(self, clienteId: int):
         dados = self.daoCalculos.getRemECon(clienteId)
 
-        self.tblCalculos.setRowCount(0)
+        self.tblContribuicoes.setRowCount(0)
 
         for contLinha, infoLinha in enumerate(dados):
-            self.tblCalculos.insertRow(contLinha)
+            self.tblContribuicoes.insertRow(contLinha)
 
             for contColuna, info in enumerate(infoLinha):
 
@@ -193,38 +198,46 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
                 if contColuna == 0:
                     strItem = QTableWidgetItem(str(info))
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-                    self.tblCalculos.setItem(contLinha, contColuna, strItem)
+                    self.tblContribuicoes.setItem(contLinha, contColuna, strItem)
 
                 # Seq - Coluna 1 (ativa)
                 elif contColuna == 1:
                     strItem = QTableWidgetItem(str(info))
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-                    self.tblCalculos.setItem(contLinha, contColuna, strItem)
+                    self.tblContribuicoes.setItem(contLinha, contColuna, strItem)
 
                 # Competência - Coluna 2 (ativa)
                 elif contColuna == 2:
                     strItem = QTableWidgetItem(dataUSAtoBR(info))
                     strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-                    self.tblCalculos.setItem(contLinha, contColuna, strItem)
+                    self.tblContribuicoes.setItem(contLinha, contColuna, strItem)
 
                 # Salário de contribuição - Coluna 3 (ativa)
                 elif contColuna == 3:
                     strItem = QTableWidgetItem(mascaraDinheiro(info, simbolo=infoLinha[6]))
                     strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-                    self.tblCalculos.setItem(contLinha, contColuna, strItem)
+                    self.tblContribuicoes.setItem(contLinha, contColuna, strItem)
 
                 # Natureza dos dados (Remuneração/Contribuição) - Coluna 4 (ativa)
                 elif contColuna == 4:
-                    strItem = QTableWidgetItem(info)
-                    strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-                    strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-                    self.tblCalculos.setItem(contLinha, contColuna+1, strItem)
+                    # TODO: PENSAR NO QUE FAZER AQUI 
+                    pass
+                    # strItem = QTableWidgetItem(info)
+                    # strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+                    # strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+                    # self.tblContribuicoes.setItem(contLinha, contColuna+1, strItem)
 
-                # Natureza dos dados (Remuneração/Contribuição) - Coluna 6 (ativa)
+                # Indicadores - Coluna 6 (ativa)
                 elif contColuna == 5:
-                    if ',' in info:
+                    if info is None:
+                        strItem = QTableWidgetItem(QIcon(QPixmap('Resources/atencao.png')), 'aaaaa')
+                        # strItem.setIcon(QIcon('Resources/atencao.png'))
+                        strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter | Qt.AlignCenter)
+                        self.tblContribuicoes.setItem(contLinha, contColuna + 1, strItem)
+
+                    elif ',' in info:
                         indicadores = info.split(', ')
                         strIndicadores = ''
                         for indicador in indicadores:
@@ -240,17 +253,17 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
                     strItem = QTableWidgetItem(strIndicadores)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
                     strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter | Qt.AlignCenter)
-                    self.tblCalculos.setItem(contLinha, contColuna+1, strItem)
+                    self.tblContribuicoes.setItem(contLinha, contColuna+1, strItem)
 
                 # Tetos previdenciários - Coluna 4 (ativa)
                 elif contColuna == 10:
                     strItem = QTableWidgetItem(mascaraDinheiro(info, simbolo=infoLinha[6]))
                     strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-                    self.tblCalculos.setItem(contLinha, 4, strItem)
+                    self.tblContribuicoes.setItem(contLinha, 4, strItem)
 
-        self.tblCalculos.resizeColumnsToContents()
-        self.tblCalculos.resizeRowsToContents()
+        self.tblContribuicoes.resizeColumnsToContents()
+        self.tblContribuicoes.resizeRowsToContents()
 
     def carregarTblBeneficios(self, clienteId: int):
 
@@ -369,7 +382,7 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
         x = pop.exec_()
 
     def limpaTudo(self):
-        self.tblCalculos.setRowCount(0)
+        self.tblContribuicoes.setRowCount(0)
         self.tblBeneficios.setRowCount(0)
         self.lbNomeResumo.setText('')
         self.lbNome.setText('')
@@ -396,8 +409,8 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
 
     def limpaTabelaDeFiltros(self):
         if TabsResumo(self.tabMain.currentIndex()) == TabsResumo.contribuicao:
-            for index in range(self.tblCalculos.rowCount()):
-                self.tblCalculos.showRow(index)
+            for index in range(self.tblContribuicoes.rowCount()):
+                self.tblContribuicoes.showRow(index)
         else:
             for index in range(self.tblBeneficios.rowCount()):
                 self.tblBeneficios.showRow(index)
@@ -453,18 +466,18 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
 
         if tabAtual == TabsResumo.contribuicao:
             if not self.filtros[TipoFiltro.indicador] and not self.filtros[TipoFiltro.data][0] and not self.filtros[TipoFiltro.data][1]:
-                for index in range(self.tblCalculos.rowCount()):
-                    self.tblCalculos.showRow(index)
+                for index in range(self.tblContribuicoes.rowCount()):
+                    self.tblContribuicoes.showRow(index)
                 return True
 
-            for index in range(self.tblCalculos.rowCount()):
-                indicadorLinha: Union[str, List[str]] = self.tblCalculos.item(index, 6).text().replace('- ', '').split('\n')
-                dataLinha: datetime.date = strToDate(self.tblCalculos.item(index, 2).text())
+            for index in range(self.tblContribuicoes.rowCount()):
+                indicadorLinha: Union[str, List[str]] = self.tblContribuicoes.item(index, 6).text().replace('- ', '').split('\n')
+                dataLinha: datetime.date = strToDate(self.tblContribuicoes.item(index, 2).text())
 
                 if len(self.filtros[TipoFiltro.indicador]) > 0 and not comparaFiltrosAny(indicadorLinha, self.filtros[TipoFiltro.indicador]):
-                    self.tblCalculos.hideRow(index)
+                    self.tblContribuicoes.hideRow(index)
                 if not dtDe <= dataLinha <= dtAte:
-                    self.tblCalculos.hideRow(index)
+                    self.tblContribuicoes.hideRow(index)
 
     def excluiuFiltro(self, filtroAExcluir, tipoFiltro: TipoFiltro):
         if tipoFiltro == TipoFiltro.data:

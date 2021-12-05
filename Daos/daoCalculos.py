@@ -97,45 +97,65 @@ class DaoCalculos:
         # self.db.connect()
         cursor = self.db.cursor()
 
-        strComando = f"""
-                    SELECT
-                        --Contribuições
-                        con.contribuicoesId, con.seq, con.competencia, 
-                        con.salContribuicao, 'Contribuição' AS natureza, con.indicadores,
-                        
-                        --Conversão monetária
-                        cm.sinal, cm.convMonId, cm.nomeMoeda,
-                        
-                        --Tetos previdenciários
-                        tp.tetosPrevId, tp.valor
-                    FROM {self.config.tblCnisContribuicoes} con
-                        JOIN {self.config.tblConvMon} cm 
-                            ON con.competencia >= cm.dataInicial
-                                AND con.competencia <= cm.dataFinal
-                        LEFT JOIN {self.config.tblTetosPrev} tp
-                            ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', con.competencia)
-                    WHERE clienteId = {clienteId}
+        strComando = """
+            SELECT
+                --Contribuições
+                con.itemId, con.seq, con.competencia, 
+                IFNULL(con.salContribuicao, 0) AS salContribuicao, 'Contribuição' AS natureza, con.indicadores,
                 
-                UNION
-                    
-                    SELECT 
-                        --Remunerações
-                        rem.remuneracoesId, rem.seq, rem.competencia, 
-                        rem.remuneracao, 'Remuneração' AS natureza, rem.indicadores,
-                        
-                        --Conversão monetária
-                        cm.sinal, cm.convMonId, cm.nomeMoeda,
-                        
-                        --Tetos previdenciários
-                        tp.tetosPrevId, tp.valor
-                    FROM {self.config.tblCnisRemuneracoes} rem
-                        JOIN {self.config.tblConvMon} cm 
-                            ON rem.competencia >= cm.dataInicial
-                                AND rem.competencia <= cm.dataFinal
-                        LEFT JOIN {self.config.tblTetosPrev} tp
-                            ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', rem.competencia) 
-                        WHERE clienteId = {clienteId}
-                    ORDER BY competencia DESC  """
+                --Conversão monetária
+                cm.sinal, cm.convMonId, cm.nomeMoeda,
+                
+                --Tetos previdenciários
+                tp.tetosPrevId, tp.valor
+            FROM itemContribuicao con
+                JOIN convMon cm 
+                    ON con.competencia >= cm.dataInicial
+                        AND con.competencia <= cm.dataFinal
+                LEFT JOIN tetosPrev tp
+                    ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', con.competencia)
+            WHERE clienteId = 2
+        """
+
+        # strComando = f"""
+        #             SELECT
+        #                 --Contribuições
+        #                 con.contribuicoesId, con.seq, con.competencia,
+        #                 con.salContribuicao, 'Contribuição' AS natureza, con.indicadores,
+        #
+        #                 --Conversão monetária
+        #                 cm.sinal, cm.convMonId, cm.nomeMoeda,
+        #
+        #                 --Tetos previdenciários
+        #                 tp.tetosPrevId, tp.valor
+        #             FROM {self.config.tblCnisContribuicoes} con
+        #                 JOIN {self.config.tblConvMon} cm
+        #                     ON con.competencia >= cm.dataInicial
+        #                         AND con.competencia <= cm.dataFinal
+        #                 LEFT JOIN {self.config.tblTetosPrev} tp
+        #                     ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', con.competencia)
+        #             WHERE clienteId = {clienteId}
+        #
+        #         UNION
+        #
+        #             SELECT
+        #                 --Remunerações
+        #                 rem.remuneracoesId, rem.seq, rem.competencia,
+        #                 rem.remuneracao, 'Remuneração' AS natureza, rem.indicadores,
+        #
+        #                 --Conversão monetária
+        #                 cm.sinal, cm.convMonId, cm.nomeMoeda,
+        #
+        #                 --Tetos previdenciários
+        #                 tp.tetosPrevId, tp.valor
+        #             FROM {self.config.tblCnisRemuneracoes} rem
+        #                 JOIN {self.config.tblConvMon} cm
+        #                     ON rem.competencia >= cm.dataInicial
+        #                         AND rem.competencia <= cm.dataFinal
+        #                 LEFT JOIN {self.config.tblTetosPrev} tp
+        #                     ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', rem.competencia)
+        #                 WHERE clienteId = {clienteId}
+        #             ORDER BY competencia DESC  """
 
         try:
             cursor.execute(strComando)

@@ -81,10 +81,10 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
         self.stackedWidget.addWidget(self.clienteController)  # tela: cadastro - 0
         self.stackedWidget.addWidget(self.naturezaPg)  # tela: naturezaProcesso - 1
-        self.stackedWidget.addWidget(self.tipoProcessoAdmPg)  # tela: tipos de processos admnistrativos - 2
-        self.stackedWidget.addWidget(self.tipoBeneficioConcPg)  # tela: tipos de benefícios Concessão -  3
-        self.stackedWidget.addWidget(self.tipoAtividadePg)  # tela: tipos de atividade Aposentadoria - 4
-        self.stackedWidget.addWidget(self.impressaoDocsPg)  # tela: tipos de geração de documentos - 5
+        self.stackedWidget.addWidget(self.tipoProcessoAdmPg)  # tela: tiposESubtipos de processos admnistrativos - 2
+        self.stackedWidget.addWidget(self.tipoBeneficioConcPg)  # tela: tiposESubtipos de benefícios Concessão -  3
+        self.stackedWidget.addWidget(self.tipoAtividadePg)  # tela: tiposESubtipos de atividade Aposentadoria - 4
+        self.stackedWidget.addWidget(self.impressaoDocsPg)  # tela: tiposESubtipos de geração de documentos - 5
 
         self.pbProxEtapa.clicked.connect(lambda: self.avaliaTrocaTela())
         self.pbVoltaEtapa.clicked.connect(lambda: self.avaliaTrocaTela(proxima=False))
@@ -287,7 +287,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.stackedWidget.setCurrentIndex(2)
             elif wdgFuturo == NaturezaProcesso.judicial:
                 self.processoModelo.natureza = NaturezaProcesso.judicial.value
-                # TODO: wdgAtual dos tipos de processos judiciais
+                # TODO: wdgAtual dos tiposESubtipos de processos judiciais
                 pass
             else:
                 self.stackedWidget.setCurrentIndex(0)
@@ -303,17 +303,17 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             elif wdgFuturo == TipoProcesso.Revisao:
                 self.processoModelo.tipoProcesso = TipoProcesso.Revisao.value
                 self.infoTipo.atualizaInfo("Revisão", True)
-                # TODO: Tela dos tipos de benefícios de revisão
+                # TODO: Tela dos tiposESubtipos de benefícios de revisão
                 pass
             elif wdgFuturo == TipoProcesso.RecOrdinario:
                 self.processoModelo.tipoProcesso = TipoProcesso.RecOrdinario.value
                 self.infoTipo.atualizaInfo("Recurso ordinário", True)
-                # TODO: Tela dos tipos de benefícios de recurso ordinário
+                # TODO: Tela dos tiposESubtipos de benefícios de recurso ordinário
                 pass
             elif wdgFuturo == TipoProcesso.RecEspecial:
                 self.processoModelo.tipoProcesso = TipoProcesso.RecEspecial.value
                 self.infoTipo.atualizaInfo("Recurso especial", True)
-                # TODO: Tela dos tipos de benefícios de recurso especial
+                # TODO: Tela dos tiposESubtipos de benefícios de recurso especial
                 pass
             else:
                 self.stackedWidget.setCurrentIndex(1)
@@ -334,37 +334,37 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 elif wdgFuturo == TipoBeneficio.AuxDoenca:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
                     self.processoModelo.tipoBeneficio = TipoBeneficio.AuxDoenca.value
-                    # TODO: wdgAtual dos tipos de atividades auxílio doença
+                    # TODO: wdgAtual dos tiposESubtipos de atividades auxílio doença
                     pass
                 elif wdgFuturo == TipoBeneficio.AuxAcidente:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
                     self.processoModelo.tipoBeneficio = TipoBeneficio.AposTempoContr.value
-                    # TODO: wdgAtual dos tipos de atividades aposentadoria por tempo de contribuição
+                    # TODO: wdgAtual dos tiposESubtipos de atividades aposentadoria por tempo de contribuição
                     pass
                 elif wdgFuturo == TipoBeneficio.AuxReclusao:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
                     self.processoModelo.tipoBeneficio = TipoBeneficio.AuxReclusao.value
-                    # TODO: wdgAtual dos tipos de atividades auxílio reclusão
+                    # TODO: wdgAtual dos tiposESubtipos de atividades auxílio reclusão
                     pass
                 elif wdgFuturo == TipoBeneficio.BeneIdoso:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
                     self.processoModelo.tipoBeneficio = TipoBeneficio.BeneIdoso.value
-                    # TODO: wdgAtual dos tipos de atividades benefício idoso
+                    # TODO: wdgAtual dos tiposESubtipos de atividades benefício idoso
                     pass
                 elif wdgFuturo == TipoBeneficio.BeneDeficiencia:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
                     self.processoModelo.tipoBeneficio = TipoBeneficio.BeneDeficiencia.value
-                    # TODO: wdgAtual dos tipos de atividades benefício deficientes
+                    # TODO: wdgAtual dos tiposESubtipos de atividades benefício deficientes
                     pass
                 elif wdgFuturo == TipoBeneficio.PensaoMorte:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
                     self.processoModelo.tipoBeneficio = TipoBeneficio.PensaoMorte.value
-                    # TODO: wdgAtual dos tipos de atividades pensão por morte
+                    # TODO: wdgAtual dos tiposESubtipos de atividades pensão por morte
                     pass
                 elif wdgFuturo == TipoBeneficio.SalMaternidade:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
                     self.processoModelo.tipoBeneficio = TipoBeneficio.SalMaternidade.value
-                    # TODO: wdgAtual dos tipos de atividades salário maternidade
+                    # TODO: wdgAtual dos tiposESubtipos de atividades salário maternidade
                     pass
                 else:
                     self.stackedWidget.setCurrentIndex(2)

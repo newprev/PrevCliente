@@ -1,19 +1,22 @@
 from util.enums.newPrevEnums import TipoFiltro
 from Design.DesignSystem.colors import NewColorsPrimary, NewColorsSuccess, NewColorsGrey, NewColorsWhite
-from util.enums.designEnums import FontSize
+from util.enums.designEnums import FontStyle
 
 
 def tipoTagFiltro(tipo: TipoFiltro) -> str:
     if tipo == TipoFiltro.indicador:
         backgroundColor = NewColorsPrimary.p200.value
         borderColor = NewColorsPrimary.p300.value
+        pbTextColor = NewColorsWhite.white400.value
 
     elif tipo == TipoFiltro.data:
         backgroundColor = NewColorsSuccess.green200.value
         borderColor = NewColorsSuccess.green100.value
+        pbTextColor = NewColorsGrey.grey200.value
     else:
         backgroundColor = """"""
         borderColor = """"""
+        pbTextColor = """"""
 
     frameStyle = f"""
     #frMain {{
@@ -23,23 +26,25 @@ def tipoTagFiltro(tipo: TipoFiltro) -> str:
         border-style: solid;
         border-width: 2px;
     }}
+    
+    #frLinha {{
+        background-color: {borderColor};
+    }}
+    
+    #pbExcluir {{
+	    border: 0px solid grey;
+	    background-color: {backgroundColor};
+	    color: {pbTextColor};
+    }}
     """
     return frameStyle
 
 
 def textTagFiltro(tipo: TipoFiltro) -> str:
     if tipo == TipoFiltro.indicador:
-        textColor = NewColorsWhite.white400.value
+        return FontStyle.tagWhite.value
 
     elif tipo == TipoFiltro.data:
-        textColor = NewColorsGrey.grey200.value
+        return FontStyle.tagBlack.value
     else:
-        textColor = """"""
-
-    textStyle = f"""
-    QLabel {{
-        {FontSize.H3.value}
-        color: {textColor};
-    }}
-    """
-    return textStyle
+        return FontStyle.tagWhite.value

@@ -397,6 +397,11 @@ class Ui_wdgTabResumoCNIS(object):
 "    background-color: white;\n"
 "}\n"
 "\n"
+"#frBordaFiltros {\n"
+"    border: 2px dashed #3F4E8C;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
 "/*-------------------------------- Tables -----------------------------------------*/\n"
 "#tblCalculos {\n"
 "    background-color: transparent;\n"
@@ -504,10 +509,25 @@ class Ui_wdgTabResumoCNIS(object):
         self.pbAddFiltro.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.pbAddFiltro.setObjectName("pbAddFiltro")
         self.horizontalLayout_2.addWidget(self.pbAddFiltro)
+        self.frBordaFiltros = QtWidgets.QFrame(self.frFiltros)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frBordaFiltros.sizePolicy().hasHeightForWidth())
+        self.frBordaFiltros.setSizePolicy(sizePolicy)
+        self.frBordaFiltros.setMinimumSize(QtCore.QSize(0, 0))
+        self.frBordaFiltros.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frBordaFiltros.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frBordaFiltros.setObjectName("frBordaFiltros")
+        self.horizontalLayout_13 = QtWidgets.QHBoxLayout(self.frBordaFiltros)
+        self.horizontalLayout_13.setContentsMargins(4, 4, 4, 4)
+        self.horizontalLayout_13.setSpacing(0)
+        self.horizontalLayout_13.setObjectName("horizontalLayout_13")
         self.hlFiltros = QtWidgets.QHBoxLayout()
         self.hlFiltros.setSpacing(4)
         self.hlFiltros.setObjectName("hlFiltros")
-        self.horizontalLayout_2.addLayout(self.hlFiltros)
+        self.horizontalLayout_13.addLayout(self.hlFiltros)
+        self.horizontalLayout_2.addWidget(self.frBordaFiltros, 0, QtCore.Qt.AlignLeft)
         spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem8)
         self.gridLayout_2.addWidget(self.frFiltros, 1, 0, 1, 2)
@@ -1007,7 +1027,7 @@ class Ui_wdgTabResumoCNIS(object):
         self.frInfo1 = QtWidgets.QFrame(self.frInformativo)
         self.frInfo1.setStyleSheet("/*----------------------------------------------  Label ----------------------------------------------*/\n"
 "#frIcon1{\n"
-"    background-image: url(:/alerta/atencao.png);\n"
+"    background-image: url(:/alerta/info.png);\n"
 "    background-repeat: no-repeat;\n"
 "    background-position: center;\n"
 "}\n"

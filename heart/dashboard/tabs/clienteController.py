@@ -62,11 +62,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.hlTabInfo.addWidget(self.tabInformacoesController)
         self.tabInformacoes.setDisabled(True)
 
-        self.frBuscaNome.hide()
-        self.frBuscaEmail.hide()
-        self.frBuscaTelefone.hide()
-        self.frBuscaRgcpf.hide()
-        self.sbCdCliente.setDisabled(True)
+        self.iniciaLayout()
 
         self.carregaFiltroAZ()
         self.carregaComboBoxes()
@@ -135,8 +131,20 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         else:
             self.atualizaTblClientes()
 
+    def iniciaLayout(self):
+        # Style
         self.lbTituloClientes.setStyleSheet(FontStyle.titulo.value)
         self.lbInfoClientes.setStyleSheet(FontStyle.subTitulo.value)
+
+        # Hide and show
+        self.frBuscaNome.hide()
+        self.frBuscaEmail.hide()
+        self.frBuscaTelefone.hide()
+        self.frBuscaRgcpf.hide()
+
+        # Enable and disable
+        self.sbCdCliente.setDisabled(True)
+
 
     def abreBuscaClientePg(self):
         pgBuscaCliente = BuscaClientePage(parent=self)

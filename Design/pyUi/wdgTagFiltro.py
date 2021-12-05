@@ -14,12 +14,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgTagFiltro(object):
     def setupUi(self, wdgTagFiltro):
         wdgTagFiltro.setObjectName("wdgTagFiltro")
-        wdgTagFiltro.resize(94, 52)
+        wdgTagFiltro.resize(120, 48)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(wdgTagFiltro.sizePolicy().hasHeightForWidth())
         wdgTagFiltro.setSizePolicy(sizePolicy)
+        wdgTagFiltro.setMaximumSize(QtCore.QSize(120, 16777215))
         wdgTagFiltro.setStyleSheet("/*-------------------------------------- Frame --------------------------------------*/\n"
 "#frMain {\n"
 "    background-color: rgb(207, 242, 220);\n"
@@ -27,6 +28,10 @@ class Ui_wdgTagFiltro(object):
 "    border-radius: 4px;\n"
 "    border-style: solid;\n"
 "    border-width: 2px;\n"
+"}\n"
+"\n"
+"#frLinha {\n"
+"    background-color: rgb(0, 158, 56);\n"
 "}\n"
 "\n"
 "/*-------------------------------------- Label --------------------------------------*/\n"
@@ -38,12 +43,16 @@ class Ui_wdgTagFiltro(object):
 "\n"
 "/*-------------------------------------- Push Button --------------------------------------*/\n"
 "#pbExcluir {\n"
-"    background-color: transparent;\n"
-"    background-image: url(:/fechar/entrevista-uncheck.png);\n"
-"    background-repeat: no-repeat;    \n"
-"    background-position: center;\n"
+"    border: 0px solid grey;\n"
+"}\n"
+"\n"
+"/*-------------------------------------- Line --------------------------------------*/\n"
+"line {\n"
+"    color: rgb(0, 255, 0);\n"
 "}")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(wdgTagFiltro)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.frMain = QtWidgets.QFrame(wdgTagFiltro)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -57,16 +66,29 @@ class Ui_wdgTagFiltro(object):
         self.frMain.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frMain.setObjectName("frMain")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.frMain)
-        self.horizontalLayout.setContentsMargins(4, 0, 0, 0)
-        self.horizontalLayout.setSpacing(8)
+        self.horizontalLayout.setContentsMargins(2, 0, 4, 0)
+        self.horizontalLayout.setSpacing(2)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.lbFiltro = QtWidgets.QLabel(self.frMain)
         self.lbFiltro.setObjectName("lbFiltro")
         self.horizontalLayout.addWidget(self.lbFiltro)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
+        self.frLinha = QtWidgets.QFrame(self.frMain)
+        self.frLinha.setMinimumSize(QtCore.QSize(2, 0))
+        self.frLinha.setMaximumSize(QtCore.QSize(2, 16777215))
+        self.frLinha.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frLinha.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frLinha.setObjectName("frLinha")
+        self.horizontalLayout.addWidget(self.frLinha, 0, QtCore.Qt.AlignRight)
         self.pbExcluir = QtWidgets.QPushButton(self.frMain)
-        self.pbExcluir.setMinimumSize(QtCore.QSize(0, 22))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pbExcluir.sizePolicy().hasHeightForWidth())
+        self.pbExcluir.setSizePolicy(sizePolicy)
+        self.pbExcluir.setMinimumSize(QtCore.QSize(0, 0))
         self.pbExcluir.setMaximumSize(QtCore.QSize(16, 22))
-        self.pbExcluir.setText("")
         self.pbExcluir.setObjectName("pbExcluir")
         self.horizontalLayout.addWidget(self.pbExcluir, 0, QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter)
         self.horizontalLayout_2.addWidget(self.frMain)
@@ -78,6 +100,7 @@ class Ui_wdgTagFiltro(object):
         _translate = QtCore.QCoreApplication.translate
         wdgTagFiltro.setWindowTitle(_translate("wdgTagFiltro", "Form"))
         self.lbFiltro.setText(_translate("wdgTagFiltro", "Filtro"))
+        self.pbExcluir.setText(_translate("wdgTagFiltro", "X"))
 import Resources.wdgTagFiltro
 
 

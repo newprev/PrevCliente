@@ -46,8 +46,8 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
         self.buscaClientePage = None
         self.inserirContribuicao = None
 
-        self.tblCalculos.hideColumn(0)
-        self.tblBeneficios.hideColumn(0)
+        self.iniciaLayout()
+
         self.tblCalculos.doubleClicked.connect(lambda: self.avaliaEdicao('tblCalculos'))
         self.tblBeneficios.doubleClicked.connect(lambda: self.avaliaEdicao('tblBeneficios'))
 
@@ -78,6 +78,12 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
             self.pbBuscarCliente.hide()
 
         self.tblCalculos.resizeColumnsToContents()
+
+    def iniciaLayout(self):
+        # Hide and show
+        self.tblCalculos.hideColumn(0)
+        self.tblBeneficios.hideColumn(0)
+        self.frBordaFiltros.hide()
 
     def abreBuscaClientePage(self):
         self.buscaClientePage = BuscaClientePage(parent=self)
@@ -315,6 +321,7 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
             self.lbDocumentoBen.setText(mascaraCPF(clienteModel.cpfCliente))
             self.lbDocumentoResumo.setText(mascaraCPF(clienteModel.cpfCliente))
 
+        self.atualizaMenuInfo(inicio=True)
         self.avaliaAtualizacaoInfoMenu()
 
     def carregarResumos(self, clienteId: int):
@@ -423,7 +430,14 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
                 tagData = NewTagFiltro(dt, TipoFiltro.data, dataInicio=primeiroRegistro, parent=self)
                 self.hlFiltros.addWidget(tagData)
 
+        self.atualizaBordaFiltros()
         self.avaliaFiltraTabela()
+
+    def atualizaBordaFiltros(self):
+        if self.filtros[TipoFiltro.data][0] is not None or len(self.filtros[TipoFiltro.indicador]) > 0:
+            self.frBordaFiltros.show()
+        else:
+            self.frBordaFiltros.hide()
 
     def avaliaFiltraTabela(self):
         # index == 1: TabContribuicoes
@@ -460,4 +474,6 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
                 self.filtros[tipoFiltro][1] = None
         else:
             self.filtros[tipoFiltro].remove(filtroAExcluir)
+
+        self.atualizaBordaFiltros()
         self.avaliaFiltraTabela()

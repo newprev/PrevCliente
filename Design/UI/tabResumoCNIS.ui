@@ -766,6 +766,11 @@ cliente</string>
 	background-color: white;
 }
 
+#frBordaFiltros {
+	border: 2px dashed #3F4E8C;
+	border-radius: 5px;
+}
+
 /*-------------------------------- Tables -----------------------------------------*/
 #tblCalculos {
 	background-color: transparent;
@@ -925,12 +930,51 @@ QGroupBox {
             </property>
            </widget>
           </item>
-          <item>
-           <layout class="QHBoxLayout" name="hlFiltros">
-            <property name="spacing">
-             <number>4</number>
+          <item alignment="Qt::AlignLeft">
+           <widget class="QFrame" name="frBordaFiltros">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-           </layout>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_13">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>4</number>
+             </property>
+             <property name="topMargin">
+              <number>4</number>
+             </property>
+             <property name="rightMargin">
+              <number>4</number>
+             </property>
+             <property name="bottomMargin">
+              <number>4</number>
+             </property>
+             <item>
+              <layout class="QHBoxLayout" name="hlFiltros">
+               <property name="spacing">
+                <number>4</number>
+               </property>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </item>
           <item>
            <spacer name="horizontalSpacer_12">

@@ -26,24 +26,22 @@ class UsuarioRepository:
             # url para produção
             self.baseUrl = 'http://newprev.dev.br/api/'
 
-    def buscaEscritorioPrimeiroAcesso(self, nomeEscritorio) -> Escritorios:
-        url: str = self.baseUrl + 'escritorio/'
-        busca: str = f"?search={nomeEscritorio}"
+    def buscaEscritorioPrimeiroAcesso(self, escritorioId: int) -> Escritorios:
+        url: str = self.baseUrl + 'escritorio/' + str(escritorioId)
 
-        response = http.get(url+busca)
+        response = http.get(url)
 
         if 199 < response.status_code < 400:
             escritorioJson = response.json()
-            if len(escritorioJson) == 1:
-                escritorioAux = dict_to_model(Escritorios, escritorioJson[0], ignore_unknown=True)
-                # CnisContribuicoes.insert(**self.contribuicao.toDict()).on_conflict_replace().execute()
+            if isinstance(escritorioJson, dict):
+                escritorioAux = dict_to_model(Escritorios, escritorioJson, ignore_unknown=True)
                 Escritorios.insert(escritorioJson).on_conflict_replace().execute()
                 escritorio, created = Escritorios.get_or_create(**model_to_dict(escritorioAux, recurse=False))
 
-                logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<escritorio/>:::{url+busca}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComun)
+                logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<escritorio/>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComun)
                 return escritorio
             else:
-                logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<escritorio/Erro>:::{url+busca}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
+                logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<escritorio/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
                 return None
 
     def buscaEscritorioById(self, escritorioId: int) -> Escritorios:

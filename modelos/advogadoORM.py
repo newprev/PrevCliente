@@ -14,7 +14,7 @@ class Advogados(BaseModel, Model):
     escritorioId = ForeignKeyField(column_name='escritorioId', field='escritorioId', model=Escritorios, backref='escritorios')
     admin = BooleanField(default=False)
     ativo = BooleanField(default=False)
-    confirmado = BooleanField()
+    confirmado = BooleanField(default=False)
     email = CharField()
     estadoCivil = CharField(column_name='estadoCivil')
     login = CharField()

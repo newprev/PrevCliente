@@ -29,9 +29,8 @@ class TipoEdicao(Enum):
     erro = 8
 
 class TelaLogin(Enum):
-    inicio = 1
-    buscaEscritorio = 0
-    cadastro = 2
+    inicio = 0
+    cadastro = 1
 
 class ErroConexao(Enum):
     ConnectionError = 0

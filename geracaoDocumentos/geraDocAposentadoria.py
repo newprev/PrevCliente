@@ -2,6 +2,7 @@ import json
 import os
 import geocoder
 import datetime
+from typing import List
 
 from docx.shared import Pt
 from docxtpl import DocxTemplate, InlineImage
@@ -9,11 +10,14 @@ from docxtpl import DocxTemplate, InlineImage
 from modelos.clienteORM import Cliente
 from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
+from modelos.itemContribuicao import ItemContribuicao
 from modelos.processosORM import Processos
+
 from util.dateHelper import strToDatetime
 from util.enums.aposentadoriaEnums import SubTipoAposentadoria
 from util.enums.processoEnums import TipoBeneficio
-from util.helpers import mascaraCep, mascaraTelCel, strTipoBeneficio, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG, calculaDiaMesAno
+from util.helpers import mascaraCep, mascaraTelCel, strTipoBeneficio, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG
+from util.dateHelper import mascaraDataPequena
 
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
@@ -21,7 +25,7 @@ from cache.cacheEscritorio import CacheEscritorio
 from dateutil.relativedelta import relativedelta
 
 
-class DocEntrevista:
+class GeracaoDocumentos:
 
     def __init__(self, procModel: Processos, clientModel: Cliente):
         self.cacheLogin = CacheLogin()
@@ -45,12 +49,174 @@ class DocEntrevista:
 
         # self.buscaPastaUsuario()
 
+    def ajeitaTblItensContrib(self, itens: List[ItemContribuicao]) -> list:
+        listaItensTbl: list = []
+        for item in itens:
+            listaItensTbl.append([
+                f"{mascaraDataPequena(item.competencia)}",
+                f"R$ {item.contribuicao}",
+            ])
+
+        return listaItensTbl
+
     def buscaPastaUsuario(self):
         listaDiretorios: list = os.listdir()
 
         for d in listaDiretorios:
             print(f"d -> {d}")
+            
+    def criaContratoHonorarios(self):
+        self.nomeArquivoSaida += f" - Contrato de honorários.docx"
+        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'contratoHonorarios.docx')
+        self.documento = DocxTemplate(self.pathTemplateAtual)
 
+        self.geraCabecalho()
+        self.geraCorpoContrato()
+        self.geraRodape()
+        self.finalizaDocumento()
+        self.limparConfiguracoes()
+
+    def criaConteudoEspecifico(self):
+        pathConteudoEspecifico: str = self.getPathConteudo(soConteudo=True)
+
+        tipoBeneEspecifico: list = [
+            TipoBeneficio.BeneIdoso.value,
+            TipoBeneficio.BeneDeficiencia.value
+        ]
+
+        if self.processo.tipoBeneficio in tipoBeneEspecifico:
+            self.dictInfo['conteudoEspecifico'] = []
+        else:
+            pathConteudoEspecifico = os.path.join(pathConteudoEspecifico, 'conteudoEspecifico.json')
+
+            with open(pathConteudoEspecifico, encoding='utf-8', mode='r') as f:
+                conteudoDict: dict = json.load(f)
+
+            if self.processo.tipoBeneficio == TipoBeneficio.Aposentadoria.value:
+                conteudoEspecifico = conteudoDict['Aposentadoria'][SubTipoAposentadoria(self.processo.subTipoApos).name]
+                if len(conteudoEspecifico.splitlines()) == 1:
+                    conteudoEspecifico = [conteudoEspecifico]
+            else:
+                conteudoEspecifico = conteudoDict[TipoBeneficio(self.processo.tipoBeneficio).name].splitlines()
+
+            self.dictInfo['conteudoEspecifico'] = conteudoEspecifico
+
+    def criaDeclaracaoHipo(self):
+        self.nomeArquivoSaida += f" - Declaração de hipossuficiência.docx"
+        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'decHipossuficiencia.docx')
+        self.documento = DocxTemplate(self.pathTemplateAtual)
+
+        self.geraCabecalho()
+        self.geraCorpoDeclaracaoHipo()
+        self.geraRodape()
+        self.finalizaDocumento()
+        self.limparConfiguracoes()
+
+    def criaDecPensao(self):
+        self.nomeArquivoSaida += f" - Declaração recebimento de pensão.docx"
+        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'decPensaoApos.docx')
+        self.documento = DocxTemplate(self.pathTemplateAtual)
+
+        self.geraCabecalho()
+        self.geraCorpoDeclaracaoPensao()
+        self.geraRodape()
+        self.finalizaDocumento()
+        self.limparConfiguracoes()
+
+    def criaDocumentosComprobatorios(self):
+        self.nomeArquivoSaida += f' - Doc comprobatorios.docx'
+        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'documentosNecessarios.docx')
+        self.pathConteudo = self.getPathConteudo()
+        self.documento = DocxTemplate(self.pathTemplateAtual)
+
+        self.geraCabecalho()
+        self.geraSessaoInicialDocComp()
+        self.geraConteudoGeral()
+        self.criaConteudoEspecifico()
+        self.geraRodape()
+        self.finalizaDocumento()
+        self.limparConfiguracoes()
+
+    def criaRequerimentoAdm(self, itens: List[ItemContribuicao]):
+        self.nomeArquivoSaida += f" - Requerimento admnistrativo.docx"
+        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'requerimentoAdm.docx')
+        self.documento = DocxTemplate(self.pathTemplateAtual)
+
+        self.geraCabecalho()
+
+        self.geraCorpoInicio()
+        self.geraDosFatos(itens)
+        self.geraDosFundJurid()
+
+        self.geraRodape()
+        self.finalizaDocumento()
+        self.limparConfiguracoes()
+
+    def criaProcuracao(self):
+        self.nomeArquivoSaida += f' - Procuração.docx'
+        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'procuracao.docx')
+        self.documento = DocxTemplate(self.pathTemplateAtual)
+
+        self.geraCabecalho()
+        self.geraCorpoProcuracao()
+        self.geraRodape()
+        self.finalizaDocumento()
+        self.limparConfiguracoes()
+        
+    def finalizaDocumento(self):
+        self.documento.render(self.dictInfo)
+        self.documento.save(os.path.join(self.pathDocumento, self.nomeArquivoSaida))
+
+    def geraConteudoGeral(self):
+        self.dictInfo['conteudoGeral']: list = []
+
+        with open(self.pathConteudo, 'r') as f:
+            listaConteudo: list = f.readlines()
+
+        for linha in listaConteudo:
+            self.dictInfo['conteudoGeral'].append(linha.lstrip().replace('\n', ''))
+
+    def geraCorpoContrato(self):
+
+        siglaEstadoCliente: str = getEstados()[self.cliente.estado]
+        siglaEstadoEscritorio: str = self.escritorio.estado
+
+        # Conteúdo referente ao contratante (cliente)
+        self.dictInfo['nomeCliente'] = self.cliente.nomeCliente
+        self.dictInfo['sobrenomeCliente'] = self.cliente.sobrenomeCliente
+        self.dictInfo['nacionalidadeCliente'] = 'brasileiro(a)'
+        self.dictInfo['profissaoCliente'] = self.cliente.profissao
+        self.dictInfo['estadoCivilCliente'] = self.cliente.estadoCivil
+        self.dictInfo['rgCliente'] = mascaraRG(self.cliente.rgCliente)
+        self.dictInfo['cpfCliente'] = mascaraCPF(self.cliente.cpfCliente)
+        self.dictInfo['enderecoCliente'] = self.cliente.endereco
+        self.dictInfo['numeroCliente'] = self.cliente.numero
+        self.dictInfo['bairroCliente'] = self.cliente.bairro
+        self.dictInfo['cidadeCliente'] = self.cliente.cidade
+        self.dictInfo['siglaEstadoCliente'] = siglaEstadoCliente
+        self.dictInfo['cepCliente'] = mascaraCep(self.cliente.cep)
+
+        # Conteúdo referente ao contratado (Advogado)
+        self.dictInfo['nomeAdvogado'] = self.advogado.nomeUsuario
+        self.dictInfo['sobrenomeAdvogado'] = self.advogado.sobrenomeUsuario
+        self.dictInfo['nacionalidadeAdvogado'] = 'brasileiro(a)'
+        self.dictInfo['siglaEstadoAdvogado'] = siglaEstadoEscritorio
+        self.dictInfo['numeroOAB'] = self.advogado.numeroOAB
+
+        # Conteúdo referente ao Escritório
+        self.dictInfo['enderecoEscritorio'] = self.escritorio.endereco
+        self.dictInfo['numeroEscritorio'] = self.escritorio.numero
+        self.dictInfo['bairroEscritorio'] = self.escritorio.bairro
+        self.dictInfo['cidadeEscritorio'] = self.escritorio.cidade
+        self.dictInfo['siglaEstadoEscritorio'] = siglaEstadoEscritorio
+        self.dictInfo['telefoneEscritorio'] = mascaraTelCel(self.escritorio.telefone)
+        self.dictInfo['emailEscritorio'] = self.escritorio.email
+        self.dictInfo['cepEscritorio'] = mascaraCep(self.escritorio.cep)
+
+        # Conteúdo referente ao documento
+        self.dictInfo['cidadeAtual'] = self.strCidadeAtual
+        self.dictInfo['dataAtual'] = mascaraMeses(datetime.datetime.now())
+            
     def geraCabecalho(self):
         logo = InlineImage(self.documento, os.path.join(os.getcwd(), 'Resources', 'd3-grey.png'), Pt(24))
 
@@ -111,50 +277,6 @@ class DocEntrevista:
         self.dictInfo['cidadeAtual'] = self.strCidadeAtual
         self.dictInfo['dataAtual'] = mascaraMeses(datetime.datetime.now())
 
-    def finalizaDocumento(self):
-        self.documento.render(self.dictInfo)
-        self.documento.save(os.path.join(self.pathDocumento, self.nomeArquivoSaida))
-
-    def criaDocumentosComprobatorios(self):
-        self.nomeArquivoSaida += f' - Doc comprobatorios.docx'
-        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'documentosNecessarios.docx')
-        self.pathConteudo = self.getPathConteudo()
-        self.documento = DocxTemplate(self.pathTemplateAtual)
-
-        self.geraCabecalho()
-        self.geraSessaoInicialDocComp()
-        self.criaConteudoGeral()
-        self.criaConteudoEspecifico()
-        self.geraRodape()
-        self.finalizaDocumento()
-        self.limparConfiguracoes()
-
-    def criaContratoHonorarios(self):
-        self.nomeArquivoSaida += f" - Contrato de honorários.docx"
-        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'contratoHonorarios.docx')
-        self.documento = DocxTemplate(self.pathTemplateAtual)
-
-        self.geraCabecalho()
-        self.geraCorpoContrato()
-        self.geraRodape()
-        self.finalizaDocumento()
-        self.limparConfiguracoes()
-        
-    def criaRequerimentoAdm(self):
-        self.nomeArquivoSaida += f" - Requerimento admnistrativo.docx"
-        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'requerimentoAdm.docx')
-        self.documento = DocxTemplate(self.pathTemplateAtual)
-
-        self.geraCabecalho()
-
-        self.geraCorpoInicio()
-        self.geraDosFatos()
-        self.geraDosFundJurid()
-
-        self.geraRodape()
-        self.finalizaDocumento()
-        self.limparConfiguracoes()
-
     def geraCorpoInicio(self):
 
         siglaEstadoCliente: str = getEstados()[self.cliente.estado]
@@ -200,7 +322,7 @@ class DocEntrevista:
         self.dictInfo['estadoEscritorio'] = self.escritorio.estado
         self.dictInfo['estadoEscritorio'] = self.escritorio.estado
 
-    def geraDosFatos(self):
+    def geraDosFatos(self, itensContribuicao: List[ItemContribuicao]):
         # listaTempoContribuicao = calculaDiaMesAno(self.processo.tempoContribuicao)
         # TODO: Data usada para teste
         tempoContrib = relativedelta(years=25, months=10)
@@ -212,60 +334,12 @@ class DocEntrevista:
         self.dictInfo['mesesContribuicao'] = f"{tempoContrib.months} meses"
         self.dictInfo['anosContribuicao'] = f"{tempoContrib.years} anos"
 
+        if len(itensContribuicao) > 0:
+            self.dictInfo['tblCabecalho'] = ["Competência", "Contribuição"]
+            self.dictInfo['contribuicoes'] = self.ajeitaTblItensContrib(itensContribuicao)
+
     def geraDosFundJurid(self):
         pass
-
-    def geraCorpoContrato(self):
-
-        siglaEstadoCliente: str = getEstados()[self.cliente.estado]
-        siglaEstadoEscritorio: str = self.escritorio.estado
-
-        # Conteúdo referente ao contratante (cliente)
-        self.dictInfo['nomeCliente'] = self.cliente.nomeCliente
-        self.dictInfo['sobrenomeCliente'] = self.cliente.sobrenomeCliente
-        self.dictInfo['nacionalidadeCliente'] = 'brasileiro(a)'
-        self.dictInfo['profissaoCliente'] = self.cliente.profissao
-        self.dictInfo['estadoCivilCliente'] = self.cliente.estadoCivil
-        self.dictInfo['rgCliente'] = mascaraRG(self.cliente.rgCliente)
-        self.dictInfo['cpfCliente'] = mascaraCPF(self.cliente.cpfCliente)
-        self.dictInfo['enderecoCliente'] = self.cliente.endereco
-        self.dictInfo['numeroCliente'] = self.cliente.numero
-        self.dictInfo['bairroCliente'] = self.cliente.bairro
-        self.dictInfo['cidadeCliente'] = self.cliente.cidade
-        self.dictInfo['siglaEstadoCliente'] = siglaEstadoCliente
-        self.dictInfo['cepCliente'] = mascaraCep(self.cliente.cep)
-
-        # Conteúdo referente ao contratado (Advogado)
-        self.dictInfo['nomeAdvogado'] = self.advogado.nomeUsuario
-        self.dictInfo['sobrenomeAdvogado'] = self.advogado.sobrenomeUsuario
-        self.dictInfo['nacionalidadeAdvogado'] = 'brasileiro(a)'
-        self.dictInfo['siglaEstadoAdvogado'] = siglaEstadoEscritorio
-        self.dictInfo['numeroOAB'] = self.advogado.numeroOAB
-
-        # Conteúdo referente ao Escritório
-        self.dictInfo['enderecoEscritorio'] = self.escritorio.endereco
-        self.dictInfo['numeroEscritorio'] = self.escritorio.numero
-        self.dictInfo['bairroEscritorio'] = self.escritorio.bairro
-        self.dictInfo['cidadeEscritorio'] = self.escritorio.cidade
-        self.dictInfo['siglaEstadoEscritorio'] = siglaEstadoEscritorio
-        self.dictInfo['telefoneEscritorio'] = mascaraTelCel(self.escritorio.telefone)
-        self.dictInfo['emailEscritorio'] = self.escritorio.email
-        self.dictInfo['cepEscritorio'] = mascaraCep(self.escritorio.cep)
-
-        # Conteúdo referente ao documento
-        self.dictInfo['cidadeAtual'] = self.strCidadeAtual
-        self.dictInfo['dataAtual'] = mascaraMeses(datetime.datetime.now())
-
-    def criaDeclaracaoHipo(self):
-        self.nomeArquivoSaida += f" - Declaração de hipossuficiência.docx"
-        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'decHipossuficiencia.docx')
-        self.documento = DocxTemplate(self.pathTemplateAtual)
-
-        self.geraCabecalho()
-        self.geraCorpoDeclaracaoHipo()
-        self.geraRodape()
-        self.finalizaDocumento()
-        self.limparConfiguracoes()
 
     def geraCorpoDeclaracaoHipo(self):
 
@@ -288,17 +362,6 @@ class DocEntrevista:
         self.dictInfo['cidadeAtual'] = self.strCidadeAtual
         self.dictInfo['dataAtual'] = mascaraMeses(datetime.datetime.now())
 
-    def criaDecPensao(self):
-        self.nomeArquivoSaida += f" - Declaração recebimento de pensão.docx"
-        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'decPensaoApos.docx')
-        self.documento = DocxTemplate(self.pathTemplateAtual)
-
-        self.geraCabecalho()
-        self.geraCorpoDeclaracaoPensao()
-        self.geraRodape()
-        self.finalizaDocumento()
-        self.limparConfiguracoes()
-
     def geraCorpoDeclaracaoPensao(self):
 
         # Conteúdo referente ao cliente
@@ -316,11 +379,11 @@ class DocEntrevista:
     def geraRodape(self):
 
         # Conteúdo referente ao escritório
-        self.dictInfo['telefoneEscritorio'] = self.escritorio.telefone
+        self.dictInfo['telefoneEscritorio'] = mascaraTelCel(self.escritorio.telefone)
         self.dictInfo['emailEscritorio'] = self.escritorio.email
         self.dictInfo['enderecoEscritorio'] = self.escritorio.endereco
         self.dictInfo['numeroEscritorio'] = self.escritorio.numero
-        self.dictInfo['cepEscritorio'] = self.escritorio.cep
+        self.dictInfo['cepEscritorio'] = mascaraCep(self.escritorio.cep)
 
     def getPathConteudo(self, soConteudo: bool = False) -> str:
         strPathConteudo: str = os.path.join(self.pathTemplate, 'conteudo')
@@ -339,55 +402,6 @@ class DocEntrevista:
             strPathConteudo = os.path.join(strPathConteudo, 'docDeficiencia.txt')
 
         return strPathConteudo
-
-    def criaConteudoGeral(self):
-        self.dictInfo['conteudoGeral']: list = []
-
-        with open(self.pathConteudo, 'r') as f:
-            listaConteudo: list = f.readlines()
-
-        for linha in listaConteudo:
-            self.dictInfo['conteudoGeral'].append(linha.lstrip().replace('\n', ''))
-
-    def criaConteudoEspecifico(self):
-        pathConteudoEspecifico: str = self.getPathConteudo(soConteudo=True)
-
-        tipoBeneEspecifico: list = [
-            TipoBeneficio.BeneIdoso.value,
-            TipoBeneficio.BeneDeficiencia.value
-        ]
-
-        if self.processo.tipoBeneficio in tipoBeneEspecifico:
-            self.dictInfo['conteudoEspecifico'] = []
-        else:
-            pathConteudoEspecifico = os.path.join(pathConteudoEspecifico, 'conteudoEspecifico.json')
-
-            with open(pathConteudoEspecifico, encoding='utf-8', mode='r') as f:
-                conteudoDict: dict = json.load(f)
-
-            if self.processo.tipoBeneficio == TipoBeneficio.Aposentadoria.value:
-                conteudoEspecifico = conteudoDict['Aposentadoria'][SubTipoAposentadoria(self.processo.subTipoApos).name]
-                if len(conteudoEspecifico.splitlines()) == 1:
-                    conteudoEspecifico = [conteudoEspecifico]
-            else:
-                conteudoEspecifico = conteudoDict[TipoBeneficio(self.processo.tipoBeneficio).name].splitlines()
-
-            self.dictInfo['conteudoEspecifico'] = conteudoEspecifico
-
-    def gerarProcuracao(self):
-        self.nomeArquivoSaida += f' - Procuração.docx'
-        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'procuracao.docx')
-        self.documento = DocxTemplate(self.pathTemplateAtual)
-
-        self.geraCabecalho()
-        self.geraCorpoProcuracao()
-        self.geraRodape()
-        self.finalizaDocumento()
-        self.limparConfiguracoes()
-
-    def limparConfiguracoes(self):
-        self.dictInfo = {}
-        self.nomeArquivoSaida = f'{self.cliente.clienteId}'
 
     def getAdvogado(self) -> Advogados:
         adv = self.cacheLogin.carregarCache()
@@ -408,6 +422,10 @@ class DocEntrevista:
         if not escritorio:
             return self.cacheEscritorio.carregarCacheTemporario()
         return escritorio
+    
+    def limparConfiguracoes(self):
+        self.dictInfo = {}
+        self.nomeArquivoSaida = f'{self.cliente.clienteId}'
 
 
 if __name__ == '__main__':
@@ -440,7 +458,3 @@ if __name__ == '__main__':
     cliente.nomeCliente = 'Fulano'
     cliente.nomeCliente = 'Fulano'
     cliente.nomeCliente = 'Fulano'
-
-    docClass = DocEntrevista(
-        Processos()
-    )

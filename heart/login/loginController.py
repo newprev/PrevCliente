@@ -33,6 +33,7 @@ import json
 
 from util.ferramentas.tools import divideListaEmPartes
 from util.helpers import datetimeToSql
+from util.popUps import popUpOkAlerta
 
 from repositorios.informacoesRepositorio import ApiInformacoes
 
@@ -67,7 +68,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.inicio.value)
         self.pbPrimeiroAcesso.clicked.connect(self.iniciarPrimeiroAcesso)
-        self.pbBuscar.clicked.connect(self.buscaEscritorio)
         self.pbCancelar.clicked.connect(self.cancelaCadastro)
         self.pbCadastrar.clicked.connect(self.avaliaConfirmacaoCadastro)
         self.pbFechar.clicked.connect(self.close)
@@ -89,8 +89,10 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.move(frameGm.topLeft())
 
     def iniciarPrimeiroAcesso(self):
-        self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.buscaEscritorio.value)
-        self.leCdEscritorio.setFocus()
+        self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.cadastro.value)
+        self.trocaPagina(self.advogado)
+        self.leSenhaProvisoria.setText(self.advogado.senha)
+        self.buscaEscritorio(self.advogado.escritorioId.escritorioId)
 
     def iniciarAutomaticamente(self):
         pass
@@ -115,7 +117,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             else:
                 self.cacheLogin.limpaCache()
                 self.cacheEscritorio.limpaCache()
-                self.showPopupAlerta("Erro ao buscar informações do escritório.\nTente novamente mais tarde")
+                popUpOkAlerta("Erro ao buscar informações do escritório.\nTente novamente mais tarde")
                 return False
 
             self.lbNomeDoEscritorio.setText(self.escritorio.nomeFantasia)
@@ -128,13 +130,16 @@ class LoginController(QMainWindow, Ui_mwLogin):
             self.cacheEscritorio.limpaCache()
             self.leLogin.setFocus()
 
-    def trocaPagina(self, *args):
-        advogado: Advogados = args[0]
+    def trocaPagina(self, advogadoModel: Advogados):
+        if advogadoModel is None:
+            print('trocaPagina')
+            return False
+        advogado: Advogados = advogadoModel
         self.advogado = advogado
         senhaProvisoria = self.usuarioRepositorio.buscaSenhaProvisoria(advogado.advogadoId)
 
         if "erro" in senhaProvisoria.keys():
-            self.showPopupAlerta(f"Advogado(a) não encontrado(a). Favor acessar o cadastro do escritório ou o contratante do sistema.")
+            popUpOkAlerta(f"Advogado(a) não encontrado(a). Favor acessar o cadastro do escritório ou o contratante do sistema.")
             return False
         else:
             self.advogado.senha = senhaProvisoria['senha']
@@ -153,45 +158,38 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.limpa()
         self.limpaListaAdv()
 
-    def buscaEscritorio(self):
-        nomeEscritorio = self.leCdEscritorio.text()
-        if nomeEscritorio != '':
-            escritorio: Escritorios = self.usuarioRepositorio.buscaEscritorioPrimeiroAcesso(nomeEscritorio)
+    def buscaEscritorio(self, escritorioId: int):
+        if escritorioId is None:
+            popUpOkAlerta(
+                f'Não foi possível encontrar o escritório na qual o advogado {self.advogado.nomeUsuario} está cadastrado. Entre em contato com o suporte.',
+                erro=f'buscaEscritorio<LoginController> escritorioId: {escritorioId}'
+            )
+            return False
+
+        if escritorioId > 0:
+            escritorio: Escritorios = self.usuarioRepositorio.buscaEscritorioPrimeiroAcesso(escritorioId)
             self.escritorio = escritorio
-            if escritorio and escritorio.nomeEscritorio == nomeEscritorio:
+            if escritorio and escritorio.escritorioId == escritorioId:
                 self.lbNomeDoEscritorio.setText(escritorio.nomeFantasia)
-                self.carregaAdvNaoCadastrados(escritorio.escritorioId)
             else:
-                self.leCdEscritorio.setText('')
                 self.lbNomeDoEscritorio.setText('')
-
-    def carregaAdvNaoCadastrados(self, escritorioId: int):
-        self.limpaListaAdv()
-
-        listaAdvs = self.usuarioRepositorio.buscaAdvNaoCadastrados(escritorioId)
-        listaWdgAdv = [WdgAdvController(adv, parent=self) for adv in listaAdvs]
-
-        for adv in listaWdgAdv:
-            self.vlAdv.addWidget(adv)
 
     def avaliaConfirmacaoCadastro(self):
 
         if self.leSenhaProvisoria.text() != self.advogado.senha:
             self.tentativasSenha -= 1
-            self.showPopupAlerta(f"Senha provisória diferente da cadastrada. Tente novamente. \nTentativas faltantes: {self.tentativasSenha}")
+            popUpOkAlerta(f"Senha provisória diferente da cadastrada. Tente novamente. \nTentativas faltantes: {self.tentativasSenha}")
             if self.tentativasSenha == 0:
                 self.close()
         elif self.lePrimCadSenha.text() != self.leConfirmarSenha.text():
-            self.showPopupAlerta(f"Senhas não coincidem. Tente novamente.")
+            popUpOkAlerta(f"Senhas não coincidem. Tente novamente.")
         else:
             senhaConfirmada = self.usuarioRepositorio.atualizaSenha(self.advogado.advogadoId, self.leConfirmarSenha.text())
             self.loading(10)
             if 'statusCode' not in senhaConfirmada.keys():
                 self.loading(10)
                 self.advogado.senha = senhaConfirmada['senha']
-                self.loading(10)
-                self.advogado.confirmado = True
-                self.loading(10)
+                self.loading(20)
                 self.leLogin.setText(self.advogado.numeroOAB)
                 self.loading(10)
                 self.leSenha.setText(self.advogado.senha)
@@ -200,7 +198,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.cacheLogin.salvarCache(self.advogado)
 
                 try:
-                    self.advogado = Advogados.get_by_id(self.advogado.advogadoId)
+                    self.advogado: Advogados = Advogados.get_by_id(self.advogado.advogadoId)
+                    self.advogado.confirmado = True
+                    self.advogado.dataUltAlt = datetime.datetime.now()
+                    self.advogado.save()
+
                 except Advogados.DoesNotExist:
                     Advogados.create(**self.advogado.toDict())
 
@@ -213,7 +215,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.loading(10)
             else:
                 self.loading(100)
-                self.showPopupAlerta(f"Não foi possível confirmar o cadastro. Tente novamente.")
+                popUpOkAlerta(f"Não foi possível confirmar o cadastro. Tente novamente.")
 
     def entrar(self):
         # TODO: Criar uma verificação se o usuário salvo em cache tem o mesmo login e senha digitado na tela de login
@@ -227,13 +229,16 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.verificaRotinaAtualizacao()
                 self.loading(20)
             else:
-                self.showPopupAlerta('Sem conexão com o servidor.')
+                popUpOkAlerta('Sem conexão com o servidor.')
                 return False
 
             # Autentica advogado
             self.advogado = self.procuraAdvogado()
 
             if self.advogado:
+                if not self.advogado.confirmado:
+                    self.iniciarPrimeiroAcesso()
+                    return True
 
                 # Autentica escritório
                 self.escritorio = self.procuraEscritorio(self.advogado.escritorioId)
@@ -264,21 +269,21 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     self.iniciaDashboard()
 
                 else:
-                    self.showPopupAlerta("Houve um problema ao encontrar o escritório no banco de dados. Entre em contato com o suporte.")
+                    popUpOkAlerta("Houve um problema ao encontrar o escritório no banco de dados. Entre em contato com o suporte.")
                     self.cacheLogin.limpaCache()
                     self.cacheEscritorio.limpaCache()
                     # TODO: Lógica para clicar no botão "Ok" e fechar o programa
             else:
                 self.tentativasSenha -= 1
-                self.showPopupAlerta("Usuário ou senha inválidos. Tente novamente")
+                popUpOkAlerta("Usuário ou senha inválidos. Tente novamente")
                 self.cacheLogin.limpaCache()
                 self.cacheEscritorio.limpaCache()
                 # TODO: Lógica para clicar no botão "Ok" e fechar o programa
                 if self.tentativasSenha == 0:
-                    self.showPopupAlerta("A quantidade de tentativas excedeu o limite e o programa será fechado.")
+                    popUpOkAlerta("A quantidade de tentativas excedeu o limite e o programa será fechado.")
 
         else:
-            self.showPopupAlerta("Campo login e senha precisam ser preenchidos")
+            popUpOkAlerta("Campo login e senha precisam ser preenchidos")
             self.limpa()
 
         self.edittingFinished = True
@@ -483,14 +488,14 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 if qtdIpca < len(listaIpca):
                     IpcaMensal.insert_many(listaIpca).on_conflict('replace').execute()
 
-    def showPopupAlerta(self, mensagem, titulo='Atenção!'):
-        dialogPopup = QMessageBox()
-        dialogPopup.setWindowTitle(titulo)
-        dialogPopup.setText(mensagem)
-        dialogPopup.setIcon(QMessageBox.Warning)
-        dialogPopup.setStandardButtons(QMessageBox.Ok)
-
-        close = dialogPopup.exec_()
+    # def showPopupAlerta(self, mensagem, titulo='Atenção!'):
+    #     dialogPopup = QMessageBox()
+    #     dialogPopup.setWindowTitle(titulo)
+    #     dialogPopup.setText(mensagem)
+    #     dialogPopup.setIcon(QMessageBox.Warning)
+    #     dialogPopup.setStandardButtons(QMessageBox.Ok)
+    #
+    #     close = dialogPopup.exec_()
 
     def iniciaCampos(self):
         self.lePrimCadLogin.setReadOnly(True)
@@ -543,4 +548,4 @@ class LoginController(QMainWindow, Ui_mwLogin):
     def apresentandoErros(self, tipoErro):
         if isinstance(tipoErro, ErroConexao):
             if tipoErro == ErroConexao.ConnectionError:
-                self.showPopupAlerta('Não há conexão com a internet ou com o servidor. \nVerifique se há acesso à internet.')
+                popUpOkAlerta('Não há conexão com a internet ou com o servidor. \nVerifique se há acesso à internet.')

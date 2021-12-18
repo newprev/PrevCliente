@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget
 from Design.pyUi.wdgAdvogados import Ui_wdgAdv
 from modelos.advogadoORM import Advogados
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 
 
 class WdgAdvController(QWidget, Ui_wdgAdv):
@@ -13,7 +13,7 @@ class WdgAdvController(QWidget, Ui_wdgAdv):
         self.loginPage = parent
         self.advogado = advogado
 
-        self.lbNomeAdv.setText(self.advogado.nomeUsuario + self.advogado.sobrenomeUsuario)
+        self.lbNomeAdv.setText(self.advogado.nomeUsuario.strip() + ' ' + self.advogado.sobrenomeUsuario.strip())
         self.lbNumeroOAB.setText(self.advogado.numeroOAB)
 
         self.pbCadastrar.clicked.connect(self.enviaSinal)

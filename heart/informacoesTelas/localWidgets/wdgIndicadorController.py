@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget
 
 from Design.pyUi.efeitos import Efeitos
 from Design.pyUi.wdgIndicador import Ui_wdgIndicador
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 from modelos.indicadoresORM import Indicadores
 
 

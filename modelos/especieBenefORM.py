@@ -1,6 +1,6 @@
 from modelos.baseModelORM import BaseModel
 from playhouse.signals import Model, post_save, pre_delete
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import AutoField, CharField
@@ -32,9 +32,9 @@ class EspecieBenef(BaseModel, Model):
 @post_save(sender=EspecieBenef)
 def inserindoEspecieBenef(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoEspecieBenef>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoEspecieBenef>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoEspecieBenef>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoEspecieBenef>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=EspecieBenef)

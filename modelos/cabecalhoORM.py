@@ -1,7 +1,7 @@
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import AutoField, CharField, ForeignKeyField, BooleanField, BigIntegerField, DateField, IntegerField, DateTimeField
@@ -27,6 +27,7 @@ class CnisCabecalhos(BaseModel, Model):
     orgVinculo = CharField(column_name='orgVinculo', null=True)
     situacao = CharField(null=True)
     tipoVinculo = CharField(column_name='tipoVinculo', null=True)
+    contribFaltante = BooleanField(default=False)
     ultRem = DateField(column_name='ultRem', null=True, formats=DATEFORMATS)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
@@ -46,6 +47,7 @@ class CnisCabecalhos(BaseModel, Model):
             'dataInicio': self.dataInicio,
             'dataFim': self.dataFim,
             'tipoVinculo': self.tipoVinculo,
+            'contribFaltante': self.contribFaltante,
             'orgVinculo': self.orgVinculo,
             'especie': self.especie,
             'indicadores': self.indicadores,
@@ -69,6 +71,7 @@ class CnisCabecalhos(BaseModel, Model):
         self.dataInicio = dictCabecalho['dataInicio']
         self.dataFim = dictCabecalho['dataFim']
         self.tipoVinculo = dictCabecalho['tipoVinculo']
+        self.contribFaltante = dictCabecalho['contribFaltante']
         self.orgVinculo = dictCabecalho['orgVinculo']
         self.especie = dictCabecalho['especie']
         self.indicadores = dictCabecalho['indicadores']
@@ -95,6 +98,7 @@ class CnisCabecalhos(BaseModel, Model):
             dataInicio: {self.dataInicio},
             dataFim: {self.dataFim},
             tipoVinculo: {self.tipoVinculo},
+            contribFaltante: {self.contribFaltante},
             orgVinculo: {self.orgVinculo},
             especie: {self.especie},
             indicadores: {self.indicadores},
@@ -110,9 +114,9 @@ class CnisCabecalhos(BaseModel, Model):
 @post_save(sender=CnisCabecalhos)
 def inserindoCabecalho(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoCabecalho>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoCabecalho>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=CnisCabecalhos)

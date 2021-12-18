@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="Logo">
+    <file>entrevista-check.png</file>
     <file>LogoLogin.png</file>
   </qresource>
 </RCC>

@@ -2,9 +2,10 @@ import requests as http
 from requests.exceptions import *
 
 from Configs.systemConfig import buscaSystemConfigs
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import *
 from util.enums.logEnums import TipoLog
+from util.enums.configEnums import TipoConexao
 from modelos.escritoriosORM import Escritorios
 
 
@@ -13,7 +14,7 @@ class EscritorioRepositorio:
     def __init__(self):
         configs: dict = buscaSystemConfigs()
 
-        if configs['tipoConexao'] == 'dev':
+        if TipoConexao.desenvolvimento.name == configs['tipoConexao']:
             # url para desenvolvimento
             self.baseUrl = 'http://localhost:8000/api/'
         else:
@@ -29,7 +30,7 @@ class EscritorioRepositorio:
             if 199 < response.status_code < 400:
 
                 escritorioModelo = Escritorios().fromDict(response.json())
-                logPrioridade(f"API____________________GET<escritorio/<int:id>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComun)
+                logPrioridade(f"API____________________GET<escritorio/<int:id>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
                 return escritorioModelo
             else:
                 logPrioridade(f"API____________________GET<escritorio/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)

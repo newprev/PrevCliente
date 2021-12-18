@@ -237,7 +237,7 @@
      <widget class="QFrame" name="frGuia">
       <property name="minimumSize">
        <size>
-        <width>210</width>
+        <width>0</width>
         <height>0</height>
        </size>
       </property>
@@ -275,13 +275,42 @@
 }
 
 QGroupBox{
-	font-family: &quot;Ubuntu&quot;;
+	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 14px;
 	border: 0px solid transparent;
 	background-color: transparent;
 	margin-top: 3ex;
 
 	color: white;	
+}
+
+/*----------------------------------------------- Push Buttons -----------------------------------------------*/
+#pbConfSimulacao {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+
+	border-radius: 4px;
+	background-color: rgb(78, 86, 121);
+	
+	background-image: url(:/Simulacao/simulacao.png);
+	background-repeat: no-repeat;
+	background-position: left;
+
+	color: white;
+}
+
+#pbConfSimulacao:hover {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+
+	border-radius: 4px;
+	background-color: rgb(48, 53, 75);
+	
+	background-image: url(:/Simulacao/simulacao.png);
+	background-repeat: no-repeat;
+	background-position: left;
+
+	color: white;
 }</string>
       </property>
       <property name="frameShape">
@@ -483,6 +512,19 @@ QGroupBox{
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbConfSimulacao">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Simulação</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QFrame" name="frInfoAdv">

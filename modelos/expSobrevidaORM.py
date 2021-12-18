@@ -1,6 +1,6 @@
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.dateHelper import strToDate
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
@@ -63,9 +63,9 @@ class ExpSobrevida(BaseModel, Model):
 @post_save(sender=ExpSobrevida)
 def inserindoExpSobrevida(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoExpSobrevida>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoExpSobrevida>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoExpSobrevida>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoExpSobrevida>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=ExpSobrevida)

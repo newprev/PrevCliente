@@ -7,7 +7,7 @@ from util.helpers import dataUSAtoBR, mascaraCNPJ, mascaraNB
 from heart.dashboard.tabs.localWidgets.wdgCabecalhoBeneficio import WdgBeneficio
 from heart.dashboard.tabs.localWidgets.wdgCabecalhoContribuicao import WdgContribuicao
 from modelos.cabecalhoORM import CnisCabecalhos
-from heart.dashboard.tabs.localStyleSheet.iconesResumo import iconeItem
+from heart.dashboard.tabs.localStyleSheet.styleResumo import iconeItem, frInfo
 from util.enums.newPrevEnums import TipoIcone
 
 
@@ -26,6 +26,7 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
 
         self.carregaInformacoes()
         self.avaliaDadoFaltante()
+        self.carregaStyleInfo()
 
     def carregaInformacoes(self):
         if self.cabecalho is not None:
@@ -49,6 +50,16 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
 
             self.lbDataInicio.setText(dataUSAtoBR(self.cabecalho.dataInicio, comDias=True))
             self.lbDataFim.setText(dataUSAtoBR(self.cabecalho.dataFim, comDias=True))
+
+    def carregaStyleInfo(self):
+        tipo: TipoIcone
+
+        if self.cabecalho.nomeEmp is None or self.cabecalho.nomeEmp == '':
+            tipo = TipoIcone.beneficio
+        else:
+            tipo = TipoIcone.remuneracao
+
+        self.frIndicador.setStyleSheet(frInfo(tipo))
 
     def abrirEditarCabecalho(self):
         if self.cabecalho.nb is not None:

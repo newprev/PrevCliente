@@ -1,38 +1,36 @@
-from modelos.baseModelORM import BaseModel, DATEFORMATS
+from modelos.baseModelORM import BaseModel
 from modelos.clienteORM import Cliente
 from modelos.processosORM import Processos
 from playhouse.signals import Model, post_save, pre_delete
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
+from util.helpers import getRegrasApos, getContribSimulacao
 
-from peewee import AutoField, CharField, ForeignKeyField, BooleanField, BigIntegerField, DateField, IntegerField, DateTimeField, FloatField
+from peewee import AutoField, CharField, ForeignKeyField, DateField, IntegerField, DateTimeField, FloatField, BooleanField
 from datetime import datetime
 
 TABLENAME = 'aposentadoria'
 
 
 class Aposentadoria(BaseModel, Model):
-    TIPOS = (
-        ('TCAR', 'TEMPO CONTRIBUICAO AR'),
-        ('IDAR', 'IDADE AR'),
-        ('RIDM', 'REDUCAO IDADE MINIMA'),
-        ('RETC', 'REDUCAO TEMPO CONTRIBUICAO'),
-        ('PD50', 'PEDAGIO 50'),
-        ('P100', 'PEDAGIO 100'),
-        ('POTR', 'TRANSICAO PONTOS'),
-        ('8595', 'REGRA 8595')
-    )
+    REGRAS_APOSENTADORIA = getRegrasApos()
+    TIPO_SIMULACAO = getContribSimulacao()
     
     aposentadoriaId = AutoField(column_name='aposentadoriaId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente)
     processoId = ForeignKeyField(column_name='processoId', field='processoId', model=Processos)
     seq = IntegerField(null=False)
-    tipo = CharField(choices=TIPOS)
-    contribMeses = IntegerField()
-    contribAnos = IntegerField()
-    valorBeneficio = FloatField()
+    tipo = CharField(choices=REGRAS_APOSENTADORIA)
+    contribMeses = IntegerField(default=0)
+    contribAnos = IntegerField(default=0)
+    valorBeneficio = FloatField(default=0)
+    idadeCliente = IntegerField(null=True)
+    qtdContribuicoes = IntegerField(default=0)
     dib = DateField(default=datetime.min)
     der = DateField(default=datetime.min)
+    contribSimulacao = CharField(choices=TIPO_SIMULACAO, default='ULTI')
+    valorSimulacao = FloatField(null=True, default=0.0)
+    possuiDireito = BooleanField(column_name='possuiDireito', default=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
@@ -92,9 +90,9 @@ class Aposentadoria(BaseModel, Model):
 @post_save(sender=Aposentadoria)
 def inserindoAposentadoria(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoAposentadoria>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoAposentadoria>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoAposentadoria>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoAposentadoria>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=Aposentadoria)

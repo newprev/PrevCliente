@@ -1,9 +1,11 @@
 import requests
 import aiohttp
 
+
 from Configs.systemConfig import buscaSystemConfigs
-from logs import logPrioridade, TipoEdicao, Prioridade
+from systemLog.logs import logPrioridade, TipoEdicao, Prioridade
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
+from util.enums.configEnums import TipoConexao
 from util.enums.logEnums import TipoLog
 
 
@@ -12,7 +14,7 @@ class ApiInformacoes:
     def __init__(self):
         configs: dict = buscaSystemConfigs()
 
-        if configs['tipoConexao'] == 'dev':
+        if TipoConexao.desenvolvimento.name == configs['tipoConexao']:
             # url para desenvolvimento
             self.baseUrl = 'http://localhost:8000/api/'
         else:
@@ -31,6 +33,8 @@ class ApiInformacoes:
             endpoint = 'indiceAtuMonetaria/'
         elif tipo == FerramentasEInfo.salarioMinimo:
             endpoint = 'salarioMinimo/'
+        elif tipo == FerramentasEInfo.ipca:
+            endpoint = 'ipcaMensal/'
 
         async with aiohttp.ClientSession() as http:
             url = self.baseUrl + endpoint

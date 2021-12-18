@@ -1,6 +1,6 @@
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import DateField, DateTimeField, AutoField, FloatField
@@ -47,9 +47,9 @@ class TetosPrev(BaseModel, Model):
 @post_save(sender=TetosPrev)
 def inserindoTetosPrev(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoTetosPrev>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoTetosPrev>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoTetosPrev>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoTetosPrev>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=TetosPrev)

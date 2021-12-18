@@ -5,7 +5,10 @@ from typing import List
 
 from Design.pyUi.buscaCliente import Ui_mwBuscaCliente
 from Design.pyUi.efeitos import Efeitos
+
 from util.helpers import mascaraTelCel, mascaraNit
+from util.popUps import popUpOkAlerta
+
 from modelos.clienteORM import Cliente
 from modelos.telefonesORM import Telefones
 
@@ -36,7 +39,7 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
 
         if clientes is None:
             # clientes = [ClienteModelo().fromList(cliente, retornaInst=True) for cliente in self.daoCliente.buscaTodos()]
-            listaClientes: List[Cliente] = Cliente.select()
+            listaClientes: List[Cliente] = Cliente.select().order_by(Cliente.nomeCliente)
 
             for cliente in listaClientes:
                 # cliente.telefoneId = Telefones.get(Telefones.clienteId == cliente.clienteId)
@@ -82,6 +85,13 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
     def enviaCliente(self):
         clienteSelecionado: Cliente = None
 
+        if not self.clienteSelecionado():
+            popUpOkAlerta(
+                "Para selecionar um cliente você pode:\n    - Dar um duplo clique na tabela;\n    -Clicar na tabela apenas uma vez e depois clicar no botão 'Seleciona'",
+                titulo="Nenhum cliente selecionado",
+            )
+            self.raise_()
+
         if self.clienteSelecionadoId != 0:
             if self.lbCdCliente.text() == '':
                 self.parent.cliente = None
@@ -111,6 +121,9 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
         self.lbIdade.setText(str(clienteSelecionado.idade))
         self.lbEmail.setText(clienteSelecionado.email)
         self.lbNomeCompleto.setText(f"{clienteSelecionado.nomeCliente} {clienteSelecionado.sobrenomeCliente}")
+
+    def clienteSelecionado(self) -> bool:
+        return len(self.tblListaClientes.selectedItems()) > 0
 
     def limpaTudo(self):
         self.clienteSelecionadoId = 0

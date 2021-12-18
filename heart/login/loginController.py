@@ -3,13 +3,15 @@ import pymysql
 import asyncio as aio
 from typing import List
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QMainWindow
 
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
+
 from repositorios.clienteRepositorio import UsuarioRepository
 from repositorios.escritorioRepositorio import EscritorioRepositorio
 from repositorios.ferramentasRepositorio import ApiFerramentas
+
 from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
 from modelos.tetosPrevORM import TetosPrev
@@ -20,17 +22,22 @@ from modelos.carenciasLei91 import CarenciaLei91
 from modelos.indiceAtuMonetariaORM import IndiceAtuMonetaria
 from modelos.configGeraisORM import ConfigGerais
 from modelos.salarioMinimoORM import SalarioMinimo
+from modelos.ipcaMensalORM import IpcaMensal
+
 from Design.pyUi.loginPage import Ui_mwLogin
-from heart.login.wdgAdvController import WdgAdvController
+
 from heart.dashboard.dashboardController import DashboardController
+
 from util.dateHelper import strToDatetime
 from util.enums.newPrevEnums import *
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
+
 import os
 import json
 
 from util.ferramentas.tools import divideListaEmPartes
 from util.helpers import datetimeToSql
+from util.popUps import popUpOkAlerta
 
 from repositorios.informacoesRepositorio import ApiInformacoes
 
@@ -52,9 +59,9 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.pbarLoading.hide()
-        self.timer = QtCore.QTimer()
-        self.timer.timeout.connect(self.escondeLoading)
+        # self.pbarLoading.hide()
+        # self.timer = QtCore.QTimer()
+        # self.timer.timeout.connect(self.escondeLoading)
 
         self.configGerais = ConfigGerais()
 
@@ -64,8 +71,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.dashboard: DashboardController = None
 
         self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.inicio.value)
-        self.pbPrimeiroAcesso.clicked.connect(self.iniciarPrimeiroAcesso)
-        self.pbBuscar.clicked.connect(self.buscaEscritorio)
+        # self.pbPrimeiroAcesso.clicked.connect(self.iniciarPrimeiroAcesso)
         self.pbCancelar.clicked.connect(self.cancelaCadastro)
         self.pbCadastrar.clicked.connect(self.avaliaConfirmacaoCadastro)
         self.pbFechar.clicked.connect(self.close)
@@ -87,8 +93,10 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.move(frameGm.topLeft())
 
     def iniciarPrimeiroAcesso(self):
-        self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.buscaEscritorio.value)
-        self.leCdEscritorio.setFocus()
+        self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.cadastro.value)
+        self.trocaPagina(self.advogado)
+        self.leSenhaProvisoria.setText(self.advogado.senha)
+        self.buscaEscritorio(self.advogado.escritorioId.escritorioId)
 
     def iniciarAutomaticamente(self):
         pass
@@ -113,7 +121,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             else:
                 self.cacheLogin.limpaCache()
                 self.cacheEscritorio.limpaCache()
-                self.showPopupAlerta("Erro ao buscar informações do escritório.\nTente novamente mais tarde")
+                popUpOkAlerta("Erro ao buscar informações do escritório.\nTente novamente mais tarde")
                 return False
 
             self.lbNomeDoEscritorio.setText(self.escritorio.nomeFantasia)
@@ -126,13 +134,16 @@ class LoginController(QMainWindow, Ui_mwLogin):
             self.cacheEscritorio.limpaCache()
             self.leLogin.setFocus()
 
-    def trocaPagina(self, *args):
-        advogado: Advogados = args[0]
+    def trocaPagina(self, advogadoModel: Advogados):
+        if advogadoModel is None:
+            print('trocaPagina')
+            return False
+        advogado: Advogados = advogadoModel
         self.advogado = advogado
         senhaProvisoria = self.usuarioRepositorio.buscaSenhaProvisoria(advogado.advogadoId)
 
         if "erro" in senhaProvisoria.keys():
-            self.showPopupAlerta(f"Advogado(a) não encontrado(a). Favor acessar o cadastro do escritório ou o contratante do sistema.")
+            popUpOkAlerta(f"Advogado(a) não encontrado(a). Favor acessar o cadastro do escritório ou o contratante do sistema.")
             return False
         else:
             self.advogado.senha = senhaProvisoria['senha']
@@ -151,45 +162,38 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.limpa()
         self.limpaListaAdv()
 
-    def buscaEscritorio(self):
-        nomeEscritorio = self.leCdEscritorio.text()
-        if nomeEscritorio != '':
-            escritorio: Escritorios = self.usuarioRepositorio.buscaEscritorioPrimeiroAcesso(nomeEscritorio)
+    def buscaEscritorio(self, escritorioId: int):
+        if escritorioId is None:
+            popUpOkAlerta(
+                f'Não foi possível encontrar o escritório na qual o advogado {self.advogado.nomeUsuario} está cadastrado. Entre em contato com o suporte.',
+                erro=f'buscaEscritorio<LoginController> escritorioId: {escritorioId}'
+            )
+            return False
+
+        if escritorioId > 0:
+            escritorio: Escritorios = self.usuarioRepositorio.buscaEscritorioPrimeiroAcesso(escritorioId)
             self.escritorio = escritorio
-            if escritorio and escritorio.nomeEscritorio == nomeEscritorio:
+            if escritorio and escritorio.escritorioId == escritorioId:
                 self.lbNomeDoEscritorio.setText(escritorio.nomeFantasia)
-                self.carregaAdvNaoCadastrados(escritorio.escritorioId)
             else:
-                self.leCdEscritorio.setText('')
                 self.lbNomeDoEscritorio.setText('')
-
-    def carregaAdvNaoCadastrados(self, escritorioId: int):
-        self.limpaListaAdv()
-
-        listaAdvs = self.usuarioRepositorio.buscaAdvNaoCadastrados(escritorioId)
-        listaWdgAdv = [WdgAdvController(adv, parent=self) for adv in listaAdvs]
-
-        for adv in listaWdgAdv:
-            self.vlAdv.addWidget(adv)
 
     def avaliaConfirmacaoCadastro(self):
 
         if self.leSenhaProvisoria.text() != self.advogado.senha:
             self.tentativasSenha -= 1
-            self.showPopupAlerta(f"Senha provisória diferente da cadastrada. Tente novamente. \nTentativas faltantes: {self.tentativasSenha}")
+            popUpOkAlerta(f"Senha provisória diferente da cadastrada. Tente novamente. \nTentativas faltantes: {self.tentativasSenha}")
             if self.tentativasSenha == 0:
                 self.close()
         elif self.lePrimCadSenha.text() != self.leConfirmarSenha.text():
-            self.showPopupAlerta(f"Senhas não coincidem. Tente novamente.")
+            popUpOkAlerta(f"Senhas não coincidem. Tente novamente.")
         else:
             senhaConfirmada = self.usuarioRepositorio.atualizaSenha(self.advogado.advogadoId, self.leConfirmarSenha.text())
             self.loading(10)
             if 'statusCode' not in senhaConfirmada.keys():
                 self.loading(10)
                 self.advogado.senha = senhaConfirmada['senha']
-                self.loading(10)
-                self.advogado.confirmado = True
-                self.loading(10)
+                self.loading(20)
                 self.leLogin.setText(self.advogado.numeroOAB)
                 self.loading(10)
                 self.leSenha.setText(self.advogado.senha)
@@ -198,7 +202,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.cacheLogin.salvarCache(self.advogado)
 
                 try:
-                    self.advogado = Advogados.get_by_id(self.advogado.advogadoId)
+                    self.advogado: Advogados = Advogados.get_by_id(self.advogado.advogadoId)
+                    self.advogado.confirmado = True
+                    self.advogado.dataUltAlt = datetime.datetime.now()
+                    self.advogado.save()
+
                 except Advogados.DoesNotExist:
                     Advogados.create(**self.advogado.toDict())
 
@@ -211,7 +219,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.loading(10)
             else:
                 self.loading(100)
-                self.showPopupAlerta(f"Não foi possível confirmar o cadastro. Tente novamente.")
+                popUpOkAlerta(f"Não foi possível confirmar o cadastro. Tente novamente.")
 
     def entrar(self):
         # TODO: Criar uma verificação se o usuário salvo em cache tem o mesmo login e senha digitado na tela de login
@@ -225,13 +233,16 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.verificaRotinaAtualizacao()
                 self.loading(20)
             else:
-                self.showPopupAlerta('Sem conexão com o servidor.')
+                popUpOkAlerta('Sem conexão com o servidor.')
                 return False
 
             # Autentica advogado
             self.advogado = self.procuraAdvogado()
 
             if self.advogado:
+                if not self.advogado.confirmado:
+                    self.iniciarPrimeiroAcesso()
+                    return True
 
                 # Autentica escritório
                 self.escritorio = self.procuraEscritorio(self.advogado.escritorioId)
@@ -262,21 +273,21 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     self.iniciaDashboard()
 
                 else:
-                    self.showPopupAlerta("Houve um problema ao encontrar o escritório no banco de dados. Entre em contato com o suporte.")
+                    popUpOkAlerta("Houve um problema ao encontrar o escritório no banco de dados. Entre em contato com o suporte.")
                     self.cacheLogin.limpaCache()
                     self.cacheEscritorio.limpaCache()
                     # TODO: Lógica para clicar no botão "Ok" e fechar o programa
             else:
                 self.tentativasSenha -= 1
-                self.showPopupAlerta("Usuário ou senha inválidos. Tente novamente")
+                popUpOkAlerta("Usuário ou senha inválidos. Tente novamente")
                 self.cacheLogin.limpaCache()
                 self.cacheEscritorio.limpaCache()
                 # TODO: Lógica para clicar no botão "Ok" e fechar o programa
                 if self.tentativasSenha == 0:
-                    self.showPopupAlerta("A quantidade de tentativas excedeu o limite e o programa será fechado.")
+                    popUpOkAlerta("A quantidade de tentativas excedeu o limite e o programa será fechado.")
 
         else:
-            self.showPopupAlerta("Campo login e senha precisam ser preenchidos")
+            popUpOkAlerta("Campo login e senha precisam ser preenchidos")
             self.limpa()
 
         self.edittingFinished = True
@@ -317,6 +328,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             'syncCarenciasLei91': datetimeToSql(datetime.datetime.now()),
             'syncAtuMonetaria': datetimeToSql(datetime.datetime.now()),
             'syncSalarioMinimo': datetimeToSql(datetime.datetime.now()),
+            'syncIpca': datetimeToSql(datetime.datetime.now()),
         }
         loop = aio.get_event_loop()
 
@@ -338,6 +350,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     dateSyncCarenciasLei91 = strToDatetime(syncDict['syncCarenciasLei91'])
                     dateSyncAtuMonetaria = strToDatetime(syncDict['syncAtuMonetaria'])
                     dateSyncSalarioMinimo = strToDatetime(syncDict['syncSalarioMinimo'])
+                    dateSyncIpca = strToDatetime(syncDict['syncIpca'])
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
                         infoToUpdate[FerramentasEInfo.convMon] = True
@@ -374,6 +387,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     else:
                         syncJson['syncSalarioMinimo'] = syncDict['syncSalarioMinimo']
 
+                    if (datetime.datetime.now() - dateSyncIpca).days != 0:
+                        infoToUpdate[FerramentasEInfo.ipca] = True
+                    else:
+                        syncJson['syncIpca'] = syncDict['syncIpca']
+
                     loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
 
             with open(pathFile, encoding='utf-8', mode='w') as syncFile:
@@ -387,6 +405,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 FerramentasEInfo.carenciasLei91: True,
                 FerramentasEInfo.atuMonetaria: True,
                 FerramentasEInfo.salarioMinimo: True,
+                FerramentasEInfo.ipca: True,
             }
             loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
 
@@ -401,6 +420,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         qtdCarenciasLei91 = CarenciaLei91.select().count()
         qtdAtuMonetarias = IndiceAtuMonetaria.select().count()
         qtdSalariosMinimos = SalarioMinimo.select().count()
+        qtdIpca = IpcaMensal().select().count()
 
         asyncTasks = []
         for tipoInfo, sync in infoToUpdate.items():
@@ -419,6 +439,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.atuMonetaria)))
                 elif tipoInfo == FerramentasEInfo.salarioMinimo:
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.salarioMinimo)))
+                elif tipoInfo == FerramentasEInfo.ipca:
+                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.ipca)))
 
         gather = await aio.gather(*asyncTasks)
 
@@ -465,14 +487,10 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 if qtdSalariosMinimos < len(listaSalarios):
                     SalarioMinimo.insert_many(listaSalarios).on_conflict('replace').execute()
 
-    def showPopupAlerta(self, mensagem, titulo='Atenção!'):
-        dialogPopup = QMessageBox()
-        dialogPopup.setWindowTitle(titulo)
-        dialogPopup.setText(mensagem)
-        dialogPopup.setIcon(QMessageBox.Warning)
-        dialogPopup.setStandardButtons(QMessageBox.Ok)
-
-        close = dialogPopup.exec_()
+            elif aioTask == FerramentasEInfo.ipca:
+                listaIpca: List[dict] = infoApi
+                if qtdIpca < len(listaIpca):
+                    IpcaMensal.insert_many(listaIpca).on_conflict('replace').execute()
 
     def iniciaCampos(self):
         self.lePrimCadLogin.setReadOnly(True)
@@ -483,17 +501,18 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.leEmail.setReadOnly(True)
 
     def loading(self, value: int):
-        self.pbarLoading.show()
-        valor: int = value + self.pbarLoading.value()
-        self.pbarLoading.setValue(valor)
+        pass
+    #     self.pbarLoading.show()
+    #     valor: int = value + self.pbarLoading.value()
+    #     self.pbarLoading.setValue(valor)
+    #
+    #     if valor >= 100:
+    #         self.timer.start(500)
 
-        if valor >= 100:
-            self.timer.start(500)
-
-    def escondeLoading(self):
-        self.pbarLoading.hide()
-        self.pbarLoading.setValue(0)
-        self.timer.stop()
+    # def escondeLoading(self):
+    #     self.pbarLoading.hide()
+    #     self.pbarLoading.setValue(0)
+    #     self.timer.stop()
 
     def limpa(self):
         self.leNome.clear()
@@ -525,4 +544,4 @@ class LoginController(QMainWindow, Ui_mwLogin):
     def apresentandoErros(self, tipoErro):
         if isinstance(tipoErro, ErroConexao):
             if tipoErro == ErroConexao.ConnectionError:
-                self.showPopupAlerta('Não há conexão com a internet ou com o servidor. \nVerifique se há acesso à internet.')
+                popUpOkAlerta('Não há conexão com a internet ou com o servidor. \nVerifique se há acesso à internet.')

@@ -52,13 +52,14 @@ class TabInfoGeralCliente(Ui_wdgInfoGeralCliente, QWidget):
         self.lbEscolaridade.setText(self.clienteModel.grauEscolaridade)
 
         # Informações residenciais
-        self.lbCep.setText(mascaraCep(self.clienteModel.cep))
-        self.lbNumero.setText(str(self.clienteModel.numero))
-        self.lbEndereco.setText(self.clienteModel.endereco)
-        self.lbCidade.setText(self.clienteModel.cidade)
-        self.lbBairro.setText(self.clienteModel.bairro)
-        self.lbEstado.setText(self.clienteModel.estado)
-        self.lbComplemento.setText(self.clienteModel.complemento)
+        if self.clienteModel.cep is not None:
+            self.lbCep.setText(mascaraCep(self.clienteModel.cep))
+            self.lbNumero.setText(str(self.clienteModel.numero))
+            self.lbEndereco.setText(self.clienteModel.endereco)
+            self.lbCidade.setText(self.clienteModel.cidade)
+            self.lbBairro.setText(self.clienteModel.bairro)
+            self.lbEstado.setText(self.clienteModel.estado)
+            self.lbComplemento.setText(self.clienteModel.complemento)
 
         # Informações profissionais
         self.lbNit.setText(str(self.clienteModel.nit))

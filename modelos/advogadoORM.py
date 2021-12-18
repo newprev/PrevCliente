@@ -1,8 +1,6 @@
-import json
-
 from modelos.baseModelORM import BaseModel
 from modelos.escritoriosORM import Escritorios
-from logs import *
+from systemLog.logs import *
 
 from peewee import AutoField, ForeignKeyField, BooleanField, CharField, DateTimeField
 from playhouse.signals import Model, post_save, pre_delete
@@ -16,7 +14,7 @@ class Advogados(BaseModel, Model):
     escritorioId = ForeignKeyField(column_name='escritorioId', field='escritorioId', model=Escritorios, backref='escritorios')
     admin = BooleanField(default=False)
     ativo = BooleanField(default=False)
-    confirmado = BooleanField()
+    confirmado = BooleanField(default=False)
     email = CharField()
     estadoCivil = CharField(column_name='estadoCivil')
     login = CharField()
@@ -134,9 +132,9 @@ class Advogados(BaseModel, Model):
 @post_save(sender=Advogados)
 def inserindoAdvogados(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoAdvogados>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoAdvogados>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoAdvogados>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoAdvogados>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=Advogados)

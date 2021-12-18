@@ -2,7 +2,7 @@ import datetime
 import os
 import json
 
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from playhouse.shortcuts import model_to_dict
 
 from util.enums.newPrevEnums import *
@@ -13,8 +13,8 @@ from modelos.escritoriosORM import Escritorios
 class CacheEscritorio:
 
     def __init__(self):
-        self.pathEscritorioTxt = os.path.join(os.getcwd(), 'cache', '.escritorio.txt')
-        self.pathEscritorioTempTxt = os.path.join(os.getcwd(), 'cache', '.escritorio.temp.txt')
+        self.pathEscritorioTxt = os.path.join(os.getcwd(), 'cache', '.escritorio.json')
+        self.pathEscritorioTempTxt = os.path.join(os.getcwd(), 'cache', '.escritorio.temp.json')
         self.pathCache = os.path.join(os.getcwd(), 'cache')
 
     def salvarCache(self, escritorio: Escritorios) -> bool:
@@ -23,14 +23,14 @@ class CacheEscritorio:
         try:
             with open(self.pathEscritorioTxt, encoding='utf-8', mode='w') as cacheLogin:
                 cacheLogin.write(jsonEscritorio)
-            logPrioridade(f'CacheEscritorio<salvarCache>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComun, tipoLog=TipoLog.Cache)
+            logPrioridade(f'CacheEscritorio<salvarCache>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComum, tipoLog=TipoLog.Cache)
             return True
         except Exception as erro:
             print(f'salvarCache({type(erro)}) - {erro}')
             logPrioridade(f'CacheEscritorio<salvarCache> ({type(erro)})___________________', tipoEdicao=TipoEdicao.erro, priodiade=Prioridade.saidaImportante)
 
     def carregarCache(self) -> Escritorios:
-        if '.escritorio.txt' in os.listdir(self.pathCache):
+        if '.escritorio.json' in os.listdir(self.pathCache):
             with open(self.pathEscritorioTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
 
@@ -41,7 +41,7 @@ class CacheEscritorio:
             return Escritorios()
 
     def carregarCacheTemporario(self) -> Escritorios:
-        if '.escritorio.temp.txt' in os.listdir(self.pathCache):
+        if '.escritorio.temp.json' in os.listdir(self.pathCache):
             with open(self.pathEscritorioTempTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
                 return Escritorios().fromDict(advJson)
@@ -51,7 +51,7 @@ class CacheEscritorio:
 
     def limpaTemporarios(self):
         for temp in os.listdir(self.pathCache):
-            if temp.endswith('escritorio.temp.txt'):
+            if temp.endswith('escritorio.temp.json'):
                 os.remove(os.path.join(self.pathCache, temp))
 
     def salvarCacheTemporario(self, escritorio: Escritorios) -> bool:
@@ -69,7 +69,7 @@ class CacheEscritorio:
     def limpaCache(self):
         self.limpaTemporarios()
         for f in os.listdir(self.pathCache):
-            if f.endswith('escritorio.txt'):
+            if f.endswith('escritorio.json'):
                 os.remove(os.path.join(self.pathCache, f))
 
 

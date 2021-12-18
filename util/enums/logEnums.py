@@ -6,3 +6,8 @@ class TipoLog(Enum):
     DataBase = 1,
     Cache = 2
 
+
+class StatusInfo(Enum):
+    warning = 0
+    info = 1
+

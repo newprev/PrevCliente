@@ -1,15 +1,17 @@
-def inicializaCard(tipo: str):
-    if tipo is None:
-        tipo = ''
+from util.enums.dashboardEnums import TelaPosicao
 
-    if tipo.upper() == 'CLIENTE':
+
+def inicializaCard(tipo: TelaPosicao):
+    if tipo == TelaPosicao.Cliente:
         backgroundImg = "background-image: url(:/cliente/customer.png);"
-    elif tipo.upper() == 'ENTREVISTA':
+    elif tipo == TelaPosicao.Entrevista:
         backgroundImg = "background-image: url(:/entrevista/entrevista.png);"
-    elif tipo.upper() == 'CALCULOS':
+    elif tipo == TelaPosicao.Calculos:
         backgroundImg = "background-image: url(:/calculos/calculos.png);"
-    elif tipo.upper() == 'RESUMO':
+    elif tipo == TelaPosicao.Resumo:
         backgroundImg = "background-image: url(:/resumo/resumo.png);"
+    elif tipo == TelaPosicao.Processo:
+        backgroundImg = "background-image: url(:/processo/search.png);"
     else:
         backgroundImg = "background-image: url(:/cliente/customer.png);"
 

@@ -1,6 +1,6 @@
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import CharField, DateField, DateTimeField, FloatField, AutoField
@@ -55,9 +55,9 @@ class SalarioMinimo(BaseModel, Model):
 @post_save(sender=SalarioMinimo)
 def inserindoSalarioMinimo(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoSalarioMinimo>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoSalarioMinimo>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoSalarioMinimo>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoSalarioMinimo>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=SalarioMinimo)

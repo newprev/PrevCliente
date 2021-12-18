@@ -20,67 +20,11 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">/*#tabContribuicoes,
-#tabMain, 
-#tabCalculos,
-#tabBeneficios,
-#tabResumo {
+   <string notr="true">/* --------------------------------------------------  Frame -------------------------------------------------- */
+#frInformativo {
+	border: 2px solid lightgrey;
 	border-radius: 8px;
-	background-color: white;
-	padding: 4px;
-	
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 16px;
 }
-
-#tabMain::pane {
-	background-color: transparent;
-	border-radius: 8px;
-	border: 4px solid transparent;
-}
-
-#tabMain::tab-bar {
-	alignment: center;
-	width: 60ex;
-}
-
-QTabBar::tab{
-	background: grey;
-	color: white;
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	border-bottom-left-radius: 4px;
-	border-bottom-right-radius: 4px;
-	border: 2px solid white;
-	padding: 4px;
-	
-	font-size: 14px;
-}
-
-QTabBar::tab:selected {
-	background: rgb(52, 73, 94);
-	font-weight: bold;
-	color: white;
-	margin-left: 4px;
-	margin-right: 4px;
-
-	font-size: 18px;
-}
-
-QTabBar::tab:hover {
-	background: rgb(92, 113, 134);
-	color: white;
-	margin-left: 1px;
-	margin-right: 1px;
-	margin-top: 2px;
-
-	font-size: 18px;
-}
-
-QTabBar::tab:!selected {
-	margin-top: 2px;
-}*/
-
 
 /* --------------------------------------------------  New -------------------------------------------------- */
 
@@ -128,21 +72,21 @@ QTabBar::tab:!selected {
 	border-color: transparent transparent rgb(82, 111, 139) transparent;
 }</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_11">
    <property name="spacing">
-    <number>0</number>
+    <number>8</number>
    </property>
    <property name="leftMargin">
-    <number>9</number>
+    <number>16</number>
    </property>
    <property name="topMargin">
     <number>4</number>
    </property>
    <property name="rightMargin">
-    <number>0</number>
+    <number>16</number>
    </property>
    <property name="bottomMargin">
-    <number>0</number>
+    <number>8</number>
    </property>
    <item>
     <widget class="QTabWidget" name="tabMain">
@@ -261,7 +205,8 @@ QTabBar::tab:!selected {
 
 /*-------------------------------- Scroll Area --------------------------------*/
 #scaResumos {
-	background-color: white;
+	background-color: transparent;
+	
 }
 
 /*-------------------------------- Group Box -----------------------------------------*/
@@ -301,7 +246,7 @@ QGroupBox {
         <number>0</number>
        </property>
        <property name="bottomMargin">
-        <number>0</number>
+        <number>4</number>
        </property>
        <property name="horizontalSpacing">
         <number>28</number>
@@ -309,6 +254,242 @@ QGroupBox {
        <property name="verticalSpacing">
         <number>8</number>
        </property>
+       <item row="1" column="0">
+        <widget class="QFrame" name="frame_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>500</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item row="0" column="4">
+           <spacer name="horizontalSpacer_11">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
+           <spacer name="horizontalSpacer_10">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="2">
+           <widget class="QFrame" name="frame_2">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>4</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QScrollArea" name="scrollArea">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>800</width>
+                 <height>320</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">/*#scrollArea, #scaResumos{
+	background-color: grey;
+}*/</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="widgetResizable">
+                <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+               </property>
+               <widget class="QWidget" name="scaResumos">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>800</width>
+                  <height>549</height>
+                 </rect>
+                </property>
+               </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QFrame" name="frame">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <property name="spacing">
+              <number>8</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>56</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item alignment="Qt::AlignTop">
+              <widget class="QPushButton" name="pbBuscarClienteResumo">
+               <property name="minimumSize">
+                <size>
+                 <width>80</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>90</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Buscar 
+cliente</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item alignment="Qt::AlignTop">
+              <widget class="QPushButton" name="pbInserirResumo">
+               <property name="minimumSize">
+                <size>
+                 <width>80</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>90</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Inserir</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QFrame" name="frame_5">
          <property name="minimumSize">
@@ -535,219 +716,6 @@ QGroupBox {
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QFrame" name="frame_3">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>560</height>
-          </size>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <property name="spacing">
-           <number>16</number>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QFrame" name="frame_2">
-            <property name="frameShape">
-             <enum>QFrame::NoFrame</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_2">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QScrollArea" name="scrollArea">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>800</width>
-                 <height>400</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">/*#scrollArea, #scaResumos{
-	background-color: grey;
-}*/</string>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
-               </property>
-               <property name="widgetResizable">
-                <bool>true</bool>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-               </property>
-               <widget class="QWidget" name="scaResumos">
-                <property name="geometry">
-                 <rect>
-                  <x>0</x>
-                  <y>0</y>
-                  <width>1052</width>
-                  <height>629</height>
-                 </rect>
-                </property>
-               </widget>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="frame">
-            <property name="minimumSize">
-             <size>
-              <width>80</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>90</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::NoFrame</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout">
-             <property name="spacing">
-              <number>8</number>
-             </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>56</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item alignment="Qt::AlignTop">
-              <widget class="QPushButton" name="pbBuscarClienteResumo">
-               <property name="minimumSize">
-                <size>
-                 <width>80</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>90</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Buscar 
-cliente</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer_4">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item alignment="Qt::AlignTop">
-              <widget class="QPushButton" name="pbInserirResumo">
-               <property name="minimumSize">
-                <size>
-                 <width>80</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>90</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Inserir</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabContribuicoes">
@@ -798,8 +766,13 @@ cliente</string>
 	background-color: white;
 }
 
+#frBordaFiltros {
+	border: 2px dashed #3F4E8C;
+	border-radius: 5px;
+}
+
 /*-------------------------------- Tables -----------------------------------------*/
-#tblCalculos {
+#tblContribuicoes {
 	background-color: transparent;
 }
 
@@ -824,7 +797,6 @@ QHeaderView::up-arrow {
 }
 
 /*-------------------------------- Push Buttons --------------------------------*/
-
 #pbBuscarCliente {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 14px;
@@ -844,7 +816,7 @@ QHeaderView::up-arrow {
 	background-color: rgb(72, 93, 114);
 }
 
-#pbInserir, #pbEditar, #pbExcluir {
+#pbInserir, #pbEditar, #pbExcluir, #pbAddFiltro {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
@@ -854,7 +826,7 @@ QHeaderView::up-arrow {
 }
 
 #pbInserir:hover, #pbEditar:hover, 
-#pbExcluir:hover {
+#pbExcluir:hover, #pbAddFiltro:hover {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
@@ -888,7 +860,7 @@ QGroupBox {
 </string>
       </property>
       <attribute name="title">
-       <string>Contribuições</string>
+       <string>       Contribuições       </string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <property name="leftMargin">
@@ -909,145 +881,262 @@ QGroupBox {
        <property name="verticalSpacing">
         <number>8</number>
        </property>
-       <item row="0" column="1">
-        <widget class="QGroupBox" name="bpInfoPessoaisContrib">
-         <property name="title">
-          <string>Informações pessoais</string>
+       <item row="1" column="0" colspan="2">
+        <widget class="QFrame" name="frFiltros">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
           <property name="spacing">
-           <number>2</number>
+           <number>16</number>
           </property>
           <property name="leftMargin">
-           <number>8</number>
+           <number>0</number>
           </property>
           <property name="topMargin">
-           <number>26</number>
+           <number>0</number>
           </property>
           <property name="rightMargin">
-           <number>34</number>
+           <number>0</number>
           </property>
           <property name="bottomMargin">
-           <number>4</number>
+           <number>0</number>
           </property>
           <item>
-           <widget class="QFrame" name="frame_9">
+           <widget class="QPushButton" name="pbAddFiltro">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>   + Adicionar Filtro   </string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignLeft">
+           <widget class="QFrame" name="frBordaFiltros">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
             </property>
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <layout class="QHBoxLayout" name="horizontalLayout_13">
              <property name="spacing">
-              <number>2</number>
+              <number>0</number>
              </property>
              <property name="leftMargin">
-              <number>0</number>
+              <number>4</number>
              </property>
              <property name="topMargin">
-              <number>0</number>
+              <number>4</number>
              </property>
              <property name="rightMargin">
-              <number>0</number>
+              <number>4</number>
              </property>
              <property name="bottomMargin">
-              <number>0</number>
+              <number>4</number>
              </property>
-             <item alignment="Qt::AlignLeft">
-              <widget class="QLabel" name="lbInfoNomeContrib">
-               <property name="text">
-                <string>Nome cliente:</string>
-               </property>
-              </widget>
-             </item>
-             <item alignment="Qt::AlignLeft">
-              <widget class="QLabel" name="lbNome">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
              <item>
-              <spacer name="horizontalSpacer_4">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+              <layout class="QHBoxLayout" name="hlFiltros">
+               <property name="spacing">
+                <number>4</number>
                </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
+              </layout>
              </item>
             </layout>
            </widget>
           </item>
           <item>
-           <widget class="QFrame" name="frame_10">
-            <property name="frameShape">
-             <enum>QFrame::NoFrame</enum>
+           <spacer name="horizontalSpacer_12">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_7">
-             <property name="spacing">
-              <number>2</number>
-             </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item alignment="Qt::AlignLeft">
-              <widget class="QLabel" name="lbInfoDocumentoContrib">
-               <property name="text">
-                <string>Documento:</string>
-               </property>
-              </widget>
-             </item>
-             <item alignment="Qt::AlignLeft">
-              <widget class="QLabel" name="lbDocumento">
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_5">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </widget>
+           </spacer>
           </item>
          </layout>
         </widget>
        </item>
-       <item row="1" column="2">
+       <item row="2" column="0" colspan="2">
+        <widget class="QTableWidget" name="tblContribuicoes">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <property name="showGrid">
+          <bool>false</bool>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
+         <row>
+          <property name="text">
+           <string>New Row</string>
+          </property>
+         </row>
+         <column>
+          <property name="text">
+           <string>infoId</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Nº</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>TeX Gyre Adventor</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Competência</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>TeX Gyre Adventor</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Salário de 
+Contribuição</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>TeX Gyre Adventor</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Tetos 
+Previdenciários</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>TeX Gyre Adventor</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Natureza</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>TeX Gyre Adventor</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Indicadores</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>TeX Gyre Adventor</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
+          </property>
+         </column>
+         <item row="0" column="6">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="2" column="2">
         <widget class="QFrame" name="frame_8">
          <property name="minimumSize">
           <size>
@@ -1192,141 +1281,6 @@ cliente</string>
          </layout>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QTableWidget" name="tblCalculos">
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
-         </property>
-         <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectRows</enum>
-         </property>
-         <property name="showGrid">
-          <bool>false</bool>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-         <attribute name="horizontalHeaderCascadingSectionResizes">
-          <bool>true</bool>
-         </attribute>
-         <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-          <bool>true</bool>
-         </attribute>
-         <attribute name="horizontalHeaderStretchLastSection">
-          <bool>true</bool>
-         </attribute>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <row>
-          <property name="text">
-           <string>New Row</string>
-          </property>
-         </row>
-         <column>
-          <property name="text">
-           <string>infoId</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Nº</string>
-          </property>
-          <property name="font">
-           <font>
-            <family>TeX Gyre Adventor</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="textAlignment">
-           <set>AlignCenter</set>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Data</string>
-          </property>
-          <property name="font">
-           <font>
-            <family>TeX Gyre Adventor</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="textAlignment">
-           <set>AlignCenter</set>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Salário de 
-Contribuição</string>
-          </property>
-          <property name="font">
-           <font>
-            <family>TeX Gyre Adventor</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="textAlignment">
-           <set>AlignCenter</set>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Tetos 
-Previdenciários</string>
-          </property>
-          <property name="font">
-           <font>
-            <family>TeX Gyre Adventor</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="textAlignment">
-           <set>AlignCenter</set>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Natureza</string>
-          </property>
-          <property name="font">
-           <font>
-            <family>TeX Gyre Adventor</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="textAlignment">
-           <set>AlignCenter</set>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Indicadores</string>
-          </property>
-          <property name="font">
-           <font>
-            <family>TeX Gyre Adventor</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="textAlignment">
-           <set>AlignCenter</set>
-          </property>
-         </column>
-         <item row="0" column="6">
-          <property name="textAlignment">
-           <set>AlignCenter</set>
-          </property>
-         </item>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QFrame" name="frame_11">
          <property name="frameShape">
@@ -1348,6 +1302,144 @@ Previdenciários</string>
             <property name="text">
              <string>Pesquise por toda a sua base de clientes</string>
             </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="bpInfoPessoaisContrib">
+         <property name="title">
+          <string>Informações pessoais</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <property name="leftMargin">
+           <number>8</number>
+          </property>
+          <property name="topMargin">
+           <number>26</number>
+          </property>
+          <property name="rightMargin">
+           <number>34</number>
+          </property>
+          <property name="bottomMargin">
+           <number>4</number>
+          </property>
+          <item>
+           <widget class="QFrame" name="frame_9">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item alignment="Qt::AlignLeft">
+              <widget class="QLabel" name="lbInfoNomeContrib">
+               <property name="text">
+                <string>Nome cliente:</string>
+               </property>
+              </widget>
+             </item>
+             <item alignment="Qt::AlignLeft">
+              <widget class="QLabel" name="lbNome">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="frame_10">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item alignment="Qt::AlignLeft">
+              <widget class="QLabel" name="lbInfoDocumentoContrib">
+               <property name="text">
+                <string>Documento:</string>
+               </property>
+              </widget>
+             </item>
+             <item alignment="Qt::AlignLeft">
+              <widget class="QLabel" name="lbDocumento">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
@@ -1460,7 +1552,8 @@ QHeaderView::up-arrow {
 	background-color: rgb(72, 93, 114);
 }
 
-#pbInserirBen, #pbEditarBen, #pbExcluirBen {
+#pbInserirBen, #pbEditarBen, #pbExcluirBen,
+#pbAddFiltroBene {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
@@ -1470,7 +1563,7 @@ QHeaderView::up-arrow {
 }
 
 #pbInserirBen:hover, #pbEditarBen:hover, 
-#pbExcluirBen:hover {
+#pbExcluirBen:hover, #pbAddFiltroBene:hover {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: white;
@@ -1503,7 +1596,7 @@ QGroupBox {
 }</string>
       </property>
       <attribute name="title">
-       <string>Benefícios</string>
+       <string>    Benefícios    </string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <property name="leftMargin">
@@ -1524,102 +1617,6 @@ QGroupBox {
        <property name="verticalSpacing">
         <number>8</number>
        </property>
-       <item row="1" column="0" colspan="3">
-        <widget class="QTableWidget" name="tblBeneficios">
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
-         </property>
-         <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectRows</enum>
-         </property>
-         <property name="showGrid">
-          <bool>false</bool>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-         <attribute name="horizontalHeaderCascadingSectionResizes">
-          <bool>true</bool>
-         </attribute>
-         <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-          <bool>true</bool>
-         </attribute>
-         <attribute name="horizontalHeaderStretchLastSection">
-          <bool>true</bool>
-         </attribute>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <column>
-          <property name="text">
-           <string>infoId</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Nº</string>
-          </property>
-          <property name="font">
-           <font>
-            <family>TeX Gyre Adventor</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="textAlignment">
-           <set>AlignCenter</set>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Número do
-benefício</string>
-          </property>
-          <property name="font">
-           <font>
-            <family>TeX Gyre Adventor</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="textAlignment">
-           <set>AlignCenter</set>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Competência</string>
-          </property>
-          <property name="font">
-           <font>
-            <family>TeX Gyre Adventor</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="textAlignment">
-           <set>AlignCenter</set>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Valor do benefício</string>
-          </property>
-          <property name="font">
-           <font>
-            <family>TeX Gyre Adventor</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="textAlignment">
-           <set>AlignCenter</set>
-          </property>
-         </column>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QFrame" name="frame_13">
          <property name="frameShape">
@@ -1787,7 +1784,125 @@ benefício</string>
          </layout>
         </widget>
        </item>
-       <item row="1" column="3">
+       <item row="2" column="0" colspan="3">
+        <widget class="QTableWidget" name="tblBeneficios">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <property name="showGrid">
+          <bool>false</bool>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>infoId</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Nº</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>TeX Gyre Adventor</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Número do
+benefício</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>TeX Gyre Adventor</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Competência</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>TeX Gyre Adventor</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Valor do benefício</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>TeX Gyre Adventor</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer_9">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="3">
         <widget class="QFrame" name="frame_12">
          <property name="minimumSize">
           <size>
@@ -1932,28 +2047,245 @@ cliente</string>
          </layout>
         </widget>
        </item>
-       <item row="0" column="1">
-        <spacer name="horizontalSpacer_9">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
+       <item row="1" column="0" colspan="3">
+        <widget class="QFrame" name="frFiltrosBene">
+         <property name="minimumSize">
           <size>
-           <width>40</width>
-           <height>20</height>
+           <width>0</width>
+           <height>30</height>
           </size>
          </property>
-        </spacer>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <property name="spacing">
+           <number>16</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="pbAddFiltroBene">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>   + Adicionar Filtro   </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="hlFiltrosBene"/>
+          </item>
+          <item>
+           <spacer name="hSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>876</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
     </widget>
    </item>
+   <item>
+    <widget class="QFrame" name="frInformativo">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>60</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_12">
+      <item>
+       <widget class="QFrame" name="frInfo1">
+        <property name="styleSheet">
+         <string notr="true">/*----------------------------------------------  Label ----------------------------------------------*/
+#frIcon1{
+	background-image: url(:/alerta/info.png);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>4</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QFrame" name="frIcon1">
+           <property name="minimumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lbInfo1">
+           <property name="styleSheet">
+            <string notr="true">/*----------------------------------------------  Frame ----------------------------------------------*/
+#lbInfo1{
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+}</string>
+           </property>
+           <property name="text">
+            <string>Informação</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="frInfo2">
+        <property name="styleSheet">
+         <string notr="true">/*----------------------------------------------  Frame ----------------------------------------------*/
+#frIcon2{
+	background-image: url(:/alerta/info.png);
+	background-repeat: no-repeat;
+	background-position: center;
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <item>
+          <widget class="QFrame" name="frIcon2">
+           <property name="minimumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lbInfo2">
+           <property name="styleSheet">
+            <string notr="true">/*----------------------------------------------  Label ----------------------------------------------*/
+#lbInfo2{
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 12px;
+}</string>
+           </property>
+           <property name="text">
+            <string>Informação</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_13">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../Resources/tabResumoCNIS.qrc"/>
+ </resources>
  <connections/>
 </ui>

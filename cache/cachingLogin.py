@@ -1,7 +1,7 @@
 import os
 import json
 
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 from util.helpers import pyToDefault
@@ -12,8 +12,8 @@ from playhouse.shortcuts import model_to_dict
 class CacheLogin:
 
     def __init__(self):
-        self.pathLoginTxt = os.path.join(os.getcwd(), 'cache', '.login.txt')
-        self.pathLoginTempTxt = os.path.join(os.getcwd(), 'cache', '.login.temp.txt')
+        self.pathLoginTxt = os.path.join(os.getcwd(), 'cache', '.login.json')
+        self.pathLoginTempTxt = os.path.join(os.getcwd(), 'cache', '.login.temp.json')
         self.pathCache = os.path.join(os.getcwd(), 'cache')
 
     def salvarCache(self, advogado: Advogados) -> bool:
@@ -22,7 +22,7 @@ class CacheLogin:
 
         try:
             with open(self.pathLoginTxt, encoding='utf-8', mode='w') as cacheLogin:
-                logPrioridade(f'CacheLogin<salvarCache>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComun, tipoLog=TipoLog.Cache)
+                logPrioridade(f'CacheLogin<salvarCache>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComum, tipoLog=TipoLog.Cache)
                 cacheLogin.write(jsonAdv)
             return True
         except Exception:
@@ -30,7 +30,7 @@ class CacheLogin:
             print('Deu Bosta')
 
     def carregarCache(self) -> Advogados:
-        if '.login.txt' in os.listdir(self.pathCache):
+        if '.login.json' in os.listdir(self.pathCache):
             with open(self.pathLoginTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
                 return Advogados().fromDict(advJson)
@@ -39,7 +39,7 @@ class CacheLogin:
             return Advogados()
 
     def carregarCacheTemporario(self) -> Advogados:
-        if '.login.temp.txt' in os.listdir(self.pathCache):
+        if '.login.temp.json' in os.listdir(self.pathCache):
             with open(self.pathLoginTempTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
                 return Advogados().fromDict(advJson)
@@ -49,7 +49,7 @@ class CacheLogin:
 
     def limpaTemporarios(self):
         for temp in os.listdir(self.pathCache):
-            if temp.endswith('temp.txt'):
+            if temp.endswith('temp.json'):
                 os.remove(os.path.join(self.pathCache, temp))
 
     def salvarCacheTemporario(self, advogado: Advogados) -> bool:
@@ -57,7 +57,7 @@ class CacheLogin:
 
         try:
             with open(self.pathLoginTempTxt, encoding='utf-8', mode='w') as cacheLogin:
-                logPrioridade(f'CacheLogin<salvarCacheTemporario>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComun, tipoLog=TipoLog.Cache)
+                logPrioridade(f'CacheLogin<salvarCacheTemporario>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComum, tipoLog=TipoLog.Cache)
                 cacheLogin.write(jsonAdv)
             return True
         except Exception as erro:
@@ -67,5 +67,5 @@ class CacheLogin:
     def limpaCache(self):
         self.limpaTemporarios()
         for temp in os.listdir(self.pathCache):
-            if temp.endswith('login.txt'):
+            if temp.endswith('login.json'):
                 os.remove(os.path.join(self.pathCache, temp))

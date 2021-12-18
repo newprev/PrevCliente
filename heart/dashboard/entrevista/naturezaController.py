@@ -4,11 +4,12 @@ from PyQt5.QtWidgets import QWidget
 from Design.pyUi.pgNatureza import Ui_wdgNatureza
 
 import util.popUps
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 from modelos.processosORM import Processos
 from modelos.clienteORM import Cliente
 from modelos.advogadoORM import Advogados
-from util.enums.newPrevEnums import MomentoEntrevista, NaturezaProcesso
+from util.enums.newPrevEnums import MomentoEntrevista
+from util.enums.processoEnums import NaturezaProcesso
 from .localStyleSheet.central import checkNatureza
 from Design.pyUi.efeitos import Efeitos
 
@@ -42,9 +43,10 @@ class NaturezaController(QWidget, Ui_wdgNatureza):
         else:
             self.advogadoAtivo = advogadoModelo
             self.processoAtivo = processoModelo
-            self.processoAtivo.advogadoId = advogadoModelo
-            self.processoAtivo.dataUltAlt = datetime.datetime.now()
-            self.processoAtivo.processoId = self.processoAtivo.save()
+            # self.processoAtivo.advogadoId = advogadoModelo
+            # self.processoAtivo.dataUltAlt = datetime.datetime.now()
+            # self.processoAtivo.save()
+            # self.processoAtivo.processoId = self.processoAtivo.save()
             self.ativaNatureza(NaturezaProcesso.administrativo, ativa=True)
 
     def ativaNatureza(self, naturezaEscolhida: NaturezaProcesso, ativa: bool):

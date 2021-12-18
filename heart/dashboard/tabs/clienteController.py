@@ -1,31 +1,29 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar, QHBoxLayout, QLineEdit
 from peewee import SqliteDatabase
 
 from cache.cacheEscritorio import CacheEscritorio
 
 from Design.pyUi.tabCliente import Ui_wdgTabCliente
 from Design.CustomWidgets.newCheckBox import NewCheckBox
-from heart.buscaClientePage import BuscaClientePage
 
+from heart.buscaClientePage import BuscaClientePage
 from heart.dashboard.localStyleSheet.filtros import ativaFiltro, estiloBotoesFiltro, estiloLabelFiltro
 from heart.dashboard.tabs.tabInfoGeralCliente import TabInfoGeralCliente
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 from heart.telAfinsController import TelAfinsController
 
 from modelos.cnisModelo import CNISModelo
 from modelos.clienteORM import Cliente
-from modelos.contribuicoesORM import CnisContribuicoes
-from modelos.remuneracaoORM import CnisRemuneracoes
 from modelos.cabecalhoORM import CnisCabecalhos
-from modelos.beneficiosORM import CnisBeneficios
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.escritoriosORM import Escritorios
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
 
-from util.dateHelper import atividadesConcorrentes, strToDate, atividadeSecundaria
+from util.dateHelper import atividadesConcorrentes, atividadeSecundaria
+from Design.DesignSystem.designEnums import FontStyle
 from util.popUps import popUpOkAlerta
 from util.helpers import *
 
@@ -61,11 +59,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.hlTabInfo.addWidget(self.tabInformacoesController)
         self.tabInformacoes.setDisabled(True)
 
-        self.frBuscaNome.hide()
-        self.frBuscaEmail.hide()
-        self.frBuscaTelefone.hide()
-        self.frBuscaRgcpf.hide()
-        self.sbCdCliente.setDisabled(True)
+        self.iniciaLayout()
 
         self.carregaFiltroAZ()
         self.carregaComboBoxes()
@@ -84,6 +78,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.pbBuscarCliente.clicked.connect(self.abreBuscaClientePg)
 
         self.cbClienteAntigo.clicked.connect(self.atualizaStatusCliente)
+        self.cbMostraSenha.clicked.connect(self.atualizaMostraSenhas)
+        self.cbMostraPix.clicked.connect(self.atualizaMostraSenhas)
 
         self.leRg.editingFinished.connect(lambda: self.leRg.setText(mascaraRG(self.leRg.text())))
         self.leCpf.editingFinished.connect(lambda: self.leCpf.setText(mascaraCPF(self.leCpf.text())))
@@ -91,7 +87,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         self.leCep.editingFinished.connect(lambda: self.leCep.setText(mascaraCep(self.leCep.text())))
 
         self.sbCdCliente.editingFinished.connect(self.buscaCliente)
-        # self.sbCdCliente.valueChanged.connect(lambda: self.buscaProxCliente() if self.cbClienteAntigo.isChecked() else None)
 
         self.leCep.editingFinished.connect(lambda: self.carregaInfoTela('cep'))
         self.leEndereco.textEdited.connect(lambda: self.carregaInfoTela('endereco'))
@@ -133,9 +128,35 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         else:
             self.atualizaTblClientes()
 
+    def iniciaLayout(self):
+        # Style
+        self.lbTituloClientes.setStyleSheet(FontStyle.titulo.value)
+        self.lbInfoClientes.setStyleSheet(FontStyle.subTitulo.value)
+
+        # Hide and show
+        self.frBuscaNome.hide()
+        self.frBuscaEmail.hide()
+        self.frBuscaTelefone.hide()
+        self.frBuscaRgcpf.hide()
+
+        # Enable and disable
+        self.sbCdCliente.setDisabled(True)
+
+
     def abreBuscaClientePg(self):
         pgBuscaCliente = BuscaClientePage(parent=self)
         pgBuscaCliente.show()
+
+    def atualizaMostraSenhas(self):
+        if self.cbMostraSenha.isChecked():
+            self.leSenhaINSS.setEchoMode(QLineEdit.EchoMode(0))
+        else:
+            self.leSenhaINSS.setEchoMode(QLineEdit.EchoMode(2))
+
+        if self.cbMostraPix.isChecked():
+            self.lePix.setEchoMode(QLineEdit.EchoMode(0))
+        else:
+            self.lePix.setEchoMode(QLineEdit.EchoMode(2))
 
     def carregarInfoCliente(self, clientId: int = 0):
         if clientId == 0:
@@ -281,17 +302,17 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                             self.cliente = Cliente.get(Cliente.cpfCliente == clienteAInserir.cpfCliente)
 
                             contribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=self.cliente.clienteId)
-                            listaContribuicoes = contribuicoes['contribuicoes']
-                            listaRemuneracoes = contribuicoes['remuneracoes']
+                            # listaContribuicoes = contribuicoes['contribuicoes']
+                            # listaRemuneracoes = contribuicoes['remuneracoes']
                             cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
                             cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
-                            beneficios = contribuicoes['beneficios']
+                            # beneficios = contribuicoes['beneficios']
 
-                            CnisContribuicoes.insert_many(listaContribuicoes).on_conflict_replace().execute()
-                            CnisRemuneracoes.insert_many(listaRemuneracoes).on_conflict_replace().execute()
+                            # CnisContribuicoes.insert_many(listaContribuicoes).on_conflict_replace().execute()
+                            # CnisRemuneracoes.insert_many(listaRemuneracoes).on_conflict_replace().execute()
                             CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
                             CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
-                            CnisBeneficios.insert_many(beneficios).on_conflict_replace().execute()
+                            # CnisBeneficios.insert_many(beneficios).on_conflict_replace().execute()
 
                             self.cliente.telefoneId = Telefones.get_by_id(self.cliente)
                             transaction.commit()
@@ -576,22 +597,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             self.showPopupAlerta(dictCep['erro'])
 
     def buscaProxCliente(self, idCliente=None):
-        # clienteId: int = 0
-        # if not self.avaliaBuscaCliente(codCliente=idCliente):
-        #     return False
-        #
-        # if idCliente is not None:
-        #     clienteId = idCliente
-        # else:
-        #     clienteId = int(self.sbCdCliente.text())
-        #
-        # try:
-        #     if idCliente is not None:
-        #         clienteId = idCliente
-        #     else:
-        #         clienteId = int(self.sbCdCliente.text())
-        # except Exception as err:
-        #     print(err)
         clienteId = idCliente
         if True:
 

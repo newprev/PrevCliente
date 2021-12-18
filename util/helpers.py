@@ -1,9 +1,13 @@
 import datetime
-from math import floor
+from math import floor, ceil
 from peewee import ModelSelect
-from typing import List, Union
+from typing import Union, Tuple, List
 
+from util.dateHelper import strToDate
+from util.enums.aposentadoriaEnums import SubTipoAposentadoria, TipoAposentadoria, ContribSimulacao
+from util.enums.configEnums import ImportantPaths
 from util.enums.newPrevEnums import *
+from util.enums.processoEnums import TipoBeneficio, TipoProcesso, NaturezaProcesso
 
 estCivil = ['Solteiro(a)', 'Casado(a)', 'Divorciado(a)', 'Viúvo(a)']
 
@@ -164,7 +168,8 @@ tipoItemContribuicao = [
 
 tipoItemOrigem = [
     ('C', 'CNIS'),
-    ('N', 'NEWPREV')
+    ('N', 'NEWPREV'),
+    ('S', 'SIMULACAO')
 ]
 
 
@@ -266,6 +271,28 @@ def getConversoesMonetarias():
     return ['Valorizou', 'Desvalorizou']
 
 
+def getRegrasApos():
+    return (
+        ('TCAR', 'TEMPO CONTRIBUICAO AR'),
+        ('IDAR', 'IDADE AR'),
+        ('RIDM', 'REDUCAO IDADE MINIMA'),
+        ('RETC', 'REDUCAO TEMPO CONTRIBUICAO'),
+        ('PD50', 'PEDAGIO 50'),
+        ('P100', 'PEDAGIO 100'),
+        ('POTR', 'TRANSICAO PONTOS'),
+        ('8595', 'REGRA 8595')
+    )
+
+
+def getContribSimulacao():
+    return (
+        ('ULTI', 'REPETE O ÚLTIMO SALÁRIO'),
+        ('TETO', 'TETO PREVIDENCIÁRIO'),
+        ('SMIN', 'SALÁRIO MÍNIMO'),
+        ('MANU', 'VALOR DEFINIDO MANUALMENTE'),
+    )
+
+
 def escritorioIdAtual() -> int:
     from cache.cacheEscritorio import CacheEscritorio
 
@@ -360,6 +387,9 @@ def verificaIndicadorProibitivo(indicadores: str) -> bool:
 
 
 def dataUSAtoBR(dataUSA: str, comDias: bool = False) -> str:
+    if dataUSA is None:
+        return '-'
+
     if not isinstance(dataUSA, str):
         if comDias:
             return f"{dataUSA.day}/{dataUSA.month}/{dataUSA.year}"
@@ -410,28 +440,6 @@ def mascaraNB(valor: int):
         return f"{strFinal[1:]}"
     else:
         return f"{strFinal}"
-
-
-def comparaMesAno(dataInicio: datetime.datetime, dataFim: datetime.datetime, comparacao: ComparaData) -> int:
-    if isinstance(dataInicio, str):
-        dataInicio = strToDate(dataInicio)
-
-    inicio = eliminaHoraDias(dataInicio)
-    fim = eliminaHoraDias(dataFim)
-
-    if isinstance(inicio, datetime.datetime):
-        inicio = inicio.date()
-    if isinstance(fim, datetime.datetime):
-        fim = fim.date()
-
-    if comparacao == ComparaData.igual:
-        return inicio == fim
-    elif comparacao == ComparaData.posterior:
-        return inicio > fim
-    elif comparacao == ComparaData.anterior:
-        return inicio < fim
-    else:
-        raise Exception()
 
 
 def calculaIdadeFromString(dataNascimento: str) -> int:
@@ -563,16 +571,34 @@ def strTipoBeneFacilitado(tipoBeneficio: TipoBeneficio) -> str:
         return ''
 
 
-def eliminaHoraDias(data: datetime.datetime):
-    try:
-        if isinstance(data, type(datetime.datetime)):
-            return data.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        elif isinstance(data, type(datetime.date)):
-            return data.replace(day=1)
-        elif isinstance(data, str):
-            return datetime.datetime.strptime(data, '%Y-%m-%d').date().replace(day=1)
-    except TypeError as err:
-        print(f'eliminaHoraDias ({type(err)}): {err}')
+def strTipoAposentadoria(tipoAposentadoria: str) -> str:
+    if tipoAposentadoria == TipoAposentadoria.tempoContribAR.value:
+        return "Aposentadoria por tempo de contribuição antes da reforma"
+    elif tipoAposentadoria == TipoAposentadoria.idadeAR.value:
+        return "Aposentadoria por idade antes da reforma"
+    elif tipoAposentadoria == TipoAposentadoria.redIdadeMinima.value:
+        return "Aposentadoria pela redução da idade mínima"
+    elif tipoAposentadoria == TipoAposentadoria.redTempoContrib.value:
+        return "Aposentadoria pela redução do tempo de contribuição"
+    elif tipoAposentadoria == TipoAposentadoria.pedagio50.value:
+        return "Aposentadoria pela regra de transição: Pedágio 50%"
+    elif tipoAposentadoria == TipoAposentadoria.pedagio100.value:
+        return "Aposentadoria pela regra de transição: Pedágio 100%"
+    elif tipoAposentadoria == TipoAposentadoria.pontos.value:
+        return "Aposentadoria por pontos pela regra de transição"
+    elif tipoAposentadoria == TipoAposentadoria.regra8595.value:
+        return "Aposentadoria por pontos pela regra 85/95"
+
+
+def strTipoSimulacao(tipoSimulacao: str) -> str:
+    if tipoSimulacao == ContribSimulacao.ULTI.name:
+        return "Repetição da última contribuição"
+    elif tipoSimulacao == ContribSimulacao.SMIN.name:
+        return "Repetição do salário mínimo"
+    elif tipoSimulacao == ContribSimulacao.TETO.name:
+        return "Repetição do teto previdenciário"
+    elif tipoSimulacao == ContribSimulacao.MANU.name:
+        return "Repetição do valor definido manualmente"
 
 
 def pyToDefault(dicionario: dict) -> dict:
@@ -590,3 +616,47 @@ def pyToDefault(dicionario: dict) -> dict:
             dictReturn[chave] = valor
 
     return dictReturn
+
+
+def calculaCoordenadas(qtdItens: int, colunas: int) -> List[Tuple]:
+    coordenadas = []
+    linha: int = 0
+    totalLinhas: int = ceil(qtdItens/colunas)
+
+    for total in range(totalLinhas):
+        linha += 1
+
+        for posColuna in range(0, colunas):
+            coordenadas.append((linha, posColuna))
+    return coordenadas
+
+
+def comparaFiltrosAny(lista1: Union[str, List[str]], lista2: Union[str, List[str]]) -> bool:
+    if isinstance(lista1, str) and isinstance(lista2, str):
+        return lista1 == lista2
+
+    elif isinstance(lista1, str) and isinstance(lista2, list):
+        return any((lista1 == item for item in lista2))
+
+    elif isinstance(lista1, list) and isinstance(lista2, str):
+        return any((lista2 == item for item in lista1))
+
+    else:
+        for itemA in lista1:
+            for itemB in lista2:
+                if itemA == itemB:
+                    return True
+
+        return False
+
+
+def pathTo(local: ImportantPaths):
+    import os
+
+    projectPath = os.path.normpath(os.path.join(os.curdir))
+    if local == ImportantPaths.design:
+        return os.path.join('Design')
+    elif local == ImportantPaths.fonts:
+        return os.path.join('Design', 'Fonts')
+
+

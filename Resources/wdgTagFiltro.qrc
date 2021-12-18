@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="fechar">
+    <file>entrevista-uncheck.png</file>
+  </qresource>
+</RCC>

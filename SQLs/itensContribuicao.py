@@ -1,7 +1,3 @@
-from logs import logPrioridade
-from util.enums.newPrevEnums import TipoEdicao, Prioridade
-
-
 def selectItensDados(clienteId: int):
     strComando = f"""
     SELECT
@@ -19,7 +15,6 @@ def selectItensDados(clienteId: int):
     ORDER BY competencia
     """
     return strComando
-
 
 def buscaIndicesByClienteId(clienteId: int, indices: list = []) -> str:
     if len(indices) == 0:
@@ -68,3 +63,24 @@ def buscaIndicesByClienteId(clienteId: int, indices: list = []) -> str:
                 AND ({strOr})"""
 
     return strComando
+
+def remuEContrib(clienteId: int) -> str:
+    return f"""
+    SELECT
+        --Contribuições
+        con.itemContribuicaoId, con.seq, con.competencia, 
+        IFNULL(con.salContribuicao, 0) AS salContribuicao, 'Contribuição' AS natureza, con.indicadores,
+        
+        --Conversão monetária
+        cm.sinal, cm.convMonId, cm.nomeMoeda,
+        
+        --Tetos previdenciários
+        tp.tetosPrevId, tp.valor
+    FROM itemContribuicao con
+        JOIN convMon cm 
+            ON con.competencia >= cm.dataInicial
+                AND con.competencia <= cm.dataFinal
+        LEFT JOIN tetosPrev tp
+            ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', con.competencia)
+    WHERE clienteId = {clienteId}
+            """

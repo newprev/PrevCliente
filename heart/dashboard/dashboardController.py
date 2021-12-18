@@ -1,6 +1,7 @@
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import QMainWindow, QHBoxLayout
 
+from Design.CustomWidgets.newToast import QToaster
 from Design.pyUi.dashboard import Ui_mwDashBoard
 from heart.menuLateral.configuracoesPage import ConfiguracoesPage
 from heart.dashboard.localWidgets.cardFuncionalidade import CardFuncionalidade
@@ -9,10 +10,11 @@ from heart.dashboard.tabs.tabResumoCNIS import TabResumoCNIS
 from heart.informacoesTelas.informacoesGerais import InformacoesGerais
 from heart.menuLateral.ferramentasPage import FerramentasPage
 from heart.dashboard.entrevista.entrevistaController import EntrevistaController
-from heart.sinaisCustomizados import Sinais
+from heart.dashboard.processos.processoController import ProcessosController
+from sinaisCustomizados import Sinais
 from cache.cachingLogin import CacheLogin
 
-from util.enums.telaEnums import TelaPosicao
+from util.enums.dashboardEnums import TelaPosicao
 
 
 class DashboardController(QMainWindow, Ui_mwDashBoard):
@@ -25,12 +27,14 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.sinais = Sinais()
         self.parent = parent
         self.cacheLogin = CacheLogin()
+        self.toast = QToaster()
 
         self.setWindowTitle('Dashboard - [dashboardController]')
 
-        self.funcCliente = CardFuncionalidade(tipo='cliente', parent=self)
-        self.funcEntrevista = CardFuncionalidade(tipo='Entrevista', parent=self)
-        self.funcResumo = CardFuncionalidade(tipo='Resumo', parent=self)
+        self.funcCliente = CardFuncionalidade(tipo=TelaPosicao.Cliente, parent=self)
+        self.funcEntrevista = CardFuncionalidade(tipo=TelaPosicao.Entrevista, parent=self)
+        self.funcResumo = CardFuncionalidade(tipo=TelaPosicao.Resumo, parent=self)
+        self.funcProcesso = CardFuncionalidade(tipo=TelaPosicao.Processo, parent=self)
 
         self.pbConfig.setToolTip('Configurações')
         self.pbFerramentas.setToolTip('Ferramentas')
@@ -64,16 +68,20 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.boxLayout.addWidget(self.funcCliente)
         self.boxLayout.addWidget(self.funcEntrevista)
         self.boxLayout.addWidget(self.funcResumo)
-        self.boxLayout.addWidget(self.funcOutra2)
+        self.boxLayout.addWidget(self.funcProcesso)
         self.boxLayout.addWidget(self.funcOutra3)
         self.boxLayout.addWidget(self.funcOutra4)
         self.boxLayout.addWidget(self.funcOutra5)
 
         self.scaTelas.setLayout(self.boxLayout)
 
+        self.toast.showMessage(self, 'Testando toast com uma mensagem razoavelmente longa.', corner=QtCore.Qt.BottomLeftCorner)
+
     def trocarParaPagina(self, telaAlvo: TelaPosicao):
         if telaAlvo == TelaPosicao.Entrevista:
             EntrevistaController(parent=self).showMaximized()
+        elif telaAlvo == TelaPosicao.Processo:
+            ProcessosController(parent=self).showMaximized()
         elif telaAlvo == TelaPosicao.Resumo:
             self.tabResumo.limpaTudo()
             self.stkMainDashBoard.setCurrentIndex(telaAlvo.value)

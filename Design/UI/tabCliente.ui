@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>901</width>
-    <height>625</height>
+    <width>886</width>
+    <height>603</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -732,6 +732,18 @@ QHeaderView::section {
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QLabel" name="lbTituloClientes">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
              <string>Informações de clientes</string>
             </property>
@@ -980,6 +992,18 @@ QFrame &gt; QLabel {
 #cbClienteAntigo {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
+}
+
+#cbMostraPix::indicator:unchecked, #cbMostraSenha::indicator:unchecked{
+	image: url(:/mostraSenha/mostrar.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+#cbMostraPix::indicator:checked, #cbMostraSenha::indicator:checked{
+	image: url(:/mostraSenha/naoMostrar.png);
+	background-position: center;
+	background-repeat: no-repeat;
 }
 
 /*------------------------------- Push Buttons ------------------------------*/
@@ -2213,27 +2237,18 @@ QFrame &gt; QLabel {
              <string>Informações bancárias</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_5">
-             <property name="leftMargin">
-              <number>16</number>
-             </property>
              <property name="topMargin">
-              <number>26</number>
+              <number>24</number>
              </property>
              <property name="rightMargin">
               <number>4</number>
              </property>
-             <property name="bottomMargin">
-              <number>4</number>
-             </property>
-             <property name="spacing">
-              <number>4</number>
-             </property>
-             <item row="0" column="0" colspan="2">
-              <widget class="QGroupBox" name="groupBox_24">
+             <item row="3" column="0" colspan="3">
+              <widget class="QGroupBox" name="groupBox_28">
                <property name="title">
-                <string>Nome do banco</string>
+                <string>Senha Meu INSS</string>
                </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_24">
+               <layout class="QHBoxLayout" name="horizontalLayout_28">
                 <property name="spacing">
                  <number>0</number>
                 </property>
@@ -2249,45 +2264,66 @@ QFrame &gt; QLabel {
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item alignment="Qt::AlignLeft">
-                 <widget class="QLineEdit" name="leNomeBanco">
+                <item>
+                 <widget class="QLineEdit" name="leSenhaINSS">
+                  <property name="maxLength">
+                   <number>60</number>
+                  </property>
+                  <property name="echoMode">
+                   <enum>QLineEdit::Password</enum>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Senha</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="2" column="0" colspan="3">
+              <widget class="QGroupBox" name="groupBox_27">
+               <property name="title">
+                <string>PIX</string>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_27">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>12</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLineEdit" name="lePix">
                   <property name="minimumSize">
                    <size>
                     <width>50</width>
                     <height>0</height>
                    </size>
                   </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>120</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
                   <property name="maxLength">
                    <number>40</number>
                   </property>
+                  <property name="echoMode">
+                   <enum>QLineEdit::Password</enum>
+                  </property>
                   <property name="placeholderText">
-                   <string>Bamerindos</string>
+                   <string>Aa12-#$</string>
                   </property>
                  </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_5">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
                 </item>
                </layout>
               </widget>
              </item>
-             <item row="1" column="0">
+             <item row="1" column="0" alignment="Qt::AlignLeft">
               <widget class="QGroupBox" name="groupBox_25">
                <property name="title">
                 <string>Agência</string>
@@ -2300,7 +2336,7 @@ QFrame &gt; QLabel {
                  <number>0</number>
                 </property>
                 <property name="topMargin">
-                 <number>16</number>
+                 <number>12</number>
                 </property>
                 <property name="rightMargin">
                  <number>0</number>
@@ -2330,23 +2366,10 @@ QFrame &gt; QLabel {
                   </property>
                  </widget>
                 </item>
-                <item>
-                 <spacer name="horizontalSpacer_4">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
                </layout>
               </widget>
              </item>
-             <item row="1" column="1">
+             <item row="1" column="3">
               <widget class="QGroupBox" name="groupBox_26">
                <property name="title">
                 <string>Nº conta</string>
@@ -2359,7 +2382,7 @@ QFrame &gt; QLabel {
                  <number>0</number>
                 </property>
                 <property name="topMargin">
-                 <number>16</number>
+                 <number>12</number>
                 </property>
                 <property name="rightMargin">
                  <number>0</number>
@@ -2392,12 +2415,38 @@ QFrame &gt; QLabel {
                </layout>
               </widget>
              </item>
-             <item row="2" column="0" colspan="2">
-              <widget class="QGroupBox" name="groupBox_27">
-               <property name="title">
-                <string>PIX</string>
+             <item row="3" column="3" alignment="Qt::AlignHCenter|Qt::AlignBottom">
+              <widget class="QCheckBox" name="cbMostraSenha">
+               <property name="text">
+                <string/>
                </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_27">
+              </widget>
+             </item>
+             <item row="2" column="3" alignment="Qt::AlignHCenter|Qt::AlignBottom">
+              <widget class="QCheckBox" name="cbMostraPix">
+               <property name="minimumSize">
+                <size>
+                 <width>26</width>
+                 <height>26</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>30</width>
+                 <height>26</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" colspan="4">
+              <widget class="QGroupBox" name="groupBox_24">
+               <property name="title">
+                <string>Nome do banco</string>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_24">
                 <property name="spacing">
                  <number>0</number>
                 </property>
@@ -2405,7 +2454,7 @@ QFrame &gt; QLabel {
                  <number>0</number>
                 </property>
                 <property name="topMargin">
-                 <number>16</number>
+                 <number>12</number>
                 </property>
                 <property name="rightMargin">
                  <number>0</number>
@@ -2413,81 +2462,27 @@ QFrame &gt; QLabel {
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item>
-                 <widget class="QLineEdit" name="lePix">
+                <item alignment="Qt::AlignLeft">
+                 <widget class="QLineEdit" name="leNomeBanco">
                   <property name="minimumSize">
                    <size>
                     <width>50</width>
                     <height>0</height>
                    </size>
                   </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
                   <property name="maxLength">
                    <number>40</number>
                   </property>
                   <property name="placeholderText">
-                   <string>Aa12-#$</string>
+                   <string>Bamerindos</string>
                   </property>
                  </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_6">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item row="3" column="0" colspan="2">
-              <widget class="QGroupBox" name="groupBox_28">
-               <property name="title">
-                <string>Senha Meu INSS</string>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_28">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>16</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QLineEdit" name="leSenhaINSS">
-                  <property name="maxLength">
-                   <number>60</number>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Senha</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_7">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
                 </item>
                </layout>
               </widget>

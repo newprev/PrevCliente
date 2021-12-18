@@ -1,7 +1,7 @@
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import AutoField, CharField, ForeignKeyField, FloatField, DateTimeField, DateField, IntegerField, BooleanField
@@ -16,13 +16,13 @@ class ItemContribuicao(BaseModel, Model):
     TIPO = getTipoItem()
     ORIGEM = getItemOrigem()
 
-    contribuicaoItemId = AutoField(column_name='contribuicaoItemId', null=True)
+    itemContribuicaoId = AutoField(column_name='itemContribuicaoId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
-    itemId = IntegerField(null=True)
     seq = IntegerField(null=False)
     tipo = CharField(choices=TIPO, default='C')
     competencia = DateField(null=False, formats=DATEFORMATS)
     contribuicao = FloatField(null=True)
+    salContribuicao = FloatField(null=True)
     ativPrimaria = BooleanField(null=False, default=True)
     dadoOrigem = CharField(column_name='dadoOrigem', choices=ORIGEM, default='C')
     geradoAutomaticamente = BooleanField(null=False, default=True)
@@ -37,7 +37,7 @@ class ItemContribuicao(BaseModel, Model):
 
     def toDict(self):
         dictUsuario = {
-            'contribuicaoItemId': self.contribuicaoItemId,
+            'itemContribuicaoId': self.itemContribuicaoId,
             'clienteId': self.clienteId,
             'itemId': self.itemId,
             'seq': self.seq,
@@ -55,7 +55,7 @@ class ItemContribuicao(BaseModel, Model):
         return dictUsuario
 
     def fromDict(self, dictContribuicoes):
-        self.contribuicaoItemId = dictContribuicoes['contribuicaoItemId']
+        self.itemContribuicaoId = dictContribuicoes['itemContribuicaoId']
         self.clienteId = dictContribuicoes['clienteId']
         self.itemId = dictContribuicoes['itemId']
         self.seq = dictContribuicoes['seq']
@@ -73,7 +73,7 @@ class ItemContribuicao(BaseModel, Model):
     def prettyPrint(self, backRef: bool = False):
         print(f"""
         ItemContribuicao(
-            contribuicaoItemId: {self.contribuicaoItemId},
+            itemContribuicaoId: {self.itemContribuicaoId},
             clienteId: {self.clienteId},
             itemId: {self.itemId},
             seq: {self.seq},
@@ -93,9 +93,9 @@ class ItemContribuicao(BaseModel, Model):
 @post_save(sender=ItemContribuicao)
 def inserindoItemContribuicao(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoItemContribuicao>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoItemContribuicao>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoCnisContribuicoes>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoCnisContribuicoes>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=ItemContribuicao)

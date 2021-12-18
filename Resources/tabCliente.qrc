@@ -1,6 +1,11 @@
 <RCC>
   <qresource prefix="arrowUp">
+    <file>BebasNeue-Regular.ttf</file>
     <file>arrowUp.png</file>
+  </qresource>
+  <qresource prefix="mostraSenha">
+    <file>mostrar.png</file>
+    <file>naoMostrar.png</file>
   </qresource>
   <qresource prefix="buscaCep">
     <file>search.png</file>

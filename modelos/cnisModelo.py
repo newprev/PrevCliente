@@ -10,13 +10,10 @@ from PyPDF3 import PdfFileReader
 from PyQt5.QtWidgets import QFileDialog
 
 from modelos.cabecalhoORM import CnisCabecalhos
-from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.itemContribuicao import ItemContribuicao
-from modelos.remuneracaoORM import CnisRemuneracoes
-from modelos.beneficiosORM import CnisBeneficios
 from modelos.clienteORM import Cliente
-from util.dateHelper import strToDate
-from util.enums.newPrevEnums import TipoItemContribuicao
+from util.dateHelper import strToDate, comparaMesAno
+from util.enums.newPrevEnums import TipoItemContribuicao, ComparaData
 from util.helpers import strToFloat, dictIndicadores, verificaIndicadorProibitivo
 
 
@@ -176,11 +173,11 @@ class CNISModelo:
 
             listaItens.append({
                 "clienteId": cliente,
-                "itemId": None,
                 "seq": cabecalho.seq,
                 "tipo": tipoItem,
                 "competencia": competencia,
                 "contribuicao": 0,
+                "salContribuicao": 0,
                 "validoTempoContrib": True,
                 "validoSalContrib": False
             })
@@ -559,13 +556,13 @@ class CNISModelo:
         else:
             return self.dictDadosPessoais
 
-    def buscaPeloSeq(self, lista: List[Union[CnisRemuneracoes, CnisContribuicoes, CnisBeneficios]], seq: int = 0):
-        listaResultado: List[CnisRemuneracoes] = []
+    def buscaPeloSeq(self, lista: List[dict], seq: int = 0) -> List[dict]:
+        listaResultado: List[dict] = []
 
         for contribuicao in lista:
-            if contribuicao.seq == seq:
+            if contribuicao['seq'] == seq:
                 listaResultado.append(contribuicao)
-            elif contribuicao.seq > seq:
+            elif contribuicao['seq'] > seq:
                 break
 
         return listaResultado
@@ -579,64 +576,73 @@ class CNISModelo:
     def insereItensContribuicao(self, cliente: Cliente):
         # TODO: Pensar em como identificar atividades primárias...
         listaItensContrib: List[dict] = []
-        listaCabecalhos = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId)
-        listaRemuneracoes = CnisRemuneracoes.select().where(CnisRemuneracoes.clienteId == cliente.clienteId)
-        listaContribuicoes = CnisContribuicoes.select().where(CnisContribuicoes.clienteId == cliente.clienteId)
-        listaBeneficios = CnisBeneficios.select().where(CnisBeneficios.clienteId == cliente.clienteId)
+        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId).order_by(CnisCabecalhos.dataInicio)
         dataTrocaMoeda: datetime.date = datetime.date(1994, 7, 1)
+
+        listaRemuneracoes = self.organizaParaInserir(self.dictRemuneracoes, cliente.clienteId)
+        listaContribuicoes = self.organizaParaInserir(self.dictContribuicoes, cliente.clienteId)
+        listaBeneficios = self.organizaParaInserir(self.dictBeneficios, cliente.clienteId)
 
         for cabecalho in listaCabecalhos:
             impedidoPorIndicadores: bool = verificaIndicadorProibitivo(cabecalho.indicadores)
-            listaContrib: List[CnisContribuicoes] = self.buscaPeloSeq(listaContribuicoes, seq=cabecalho.seq)
-            listaRemu: List[CnisRemuneracoes] = self.buscaPeloSeq(listaRemuneracoes, seq=cabecalho.seq)
-            listaBene: List[CnisBeneficios] = self.buscaPeloSeq(listaBeneficios, seq=cabecalho.seq)
+            listaContrib: List[dict] = self.buscaPeloSeq(listaContribuicoes, seq=cabecalho.seq)
+            listaRemu: List[dict] = self.buscaPeloSeq(listaRemuneracoes, seq=cabecalho.seq)
+            listaBene: List[dict] = self.buscaPeloSeq(listaBeneficios, seq=cabecalho.seq)
 
             # Caso o contribuinte tenha remunerações ou contribuições sem discriminação unitária
-            if len(listaContrib) == 0 and len(listaRemu) == 0 and len(listaBene) == 0 and not cabecalho.dadoFaltante:
-                listaItensContrib += self.criaItensNaoDiscriminados(cabecalho, cliente)
-                continue
+            # if len(listaContrib) == 0 and len(listaRemu) == 0 and len(listaBene) == 0 and not cabecalho.dadoFaltante:
+            #     listaItensContrib += self.criaItensNaoDiscriminados(cabecalho, cliente)
+            #     continue
 
+            # Caso o cabeçalho tenha a data de início e fim mais apuradas ou não exista o descritivo das competências
+            falhaInicio = self.verificaFalhaDescricao(dataInicio=cabecalho.dataInicio, listaContrib=listaContrib, listaRemu=listaRemu, listaBene=listaBene)
+            falhaFim = self.verificaFalhaDescricao(dataFim=cabecalho.dataFim, listaContrib=listaContrib, listaRemu=listaRemu, listaBene=listaBene)
+
+            cabecalho.contribFaltante = falhaInicio or falhaFim
+            cabecalho.save()
+
+            #TODO: Diferenciar "contribuição" e "salário de contribuição"
             for remuneracao in listaRemu:
-                impedidoPelaData: bool = strToDate(remuneracao.competencia) < dataTrocaMoeda
+                impedidoPelaData: bool = strToDate(remuneracao['competencia']) < dataTrocaMoeda
 
                 listaItensContrib.append({
                     "clienteId": cliente,
-                    "itemId": remuneracao.remuneracoesId,
                     "seq": cabecalho.seq,
                     "tipo": TipoItemContribuicao.remuneracao.value,
-                    "competencia": remuneracao.competencia,
-                    "contribuicao": remuneracao.remuneracao,
-                    "indicadores": remuneracao.indicadores,
+                    "competencia": remuneracao['competencia'],
+                    "contribuicao": remuneracao['remuneracao'] * 0.2 if not impedidoPorIndicadores else None,
+                    "salContribuicao": remuneracao['remuneracao'],
+                    "indicadores": remuneracao['indicadores'],
                     "validoTempoContrib": not impedidoPorIndicadores,
                     "validoSalContrib": not impedidoPorIndicadores and not impedidoPelaData
                 })
 
             for contribuicao in listaContrib:
-                impedidoPelaData: bool = strToDate(contribuicao.competencia) < dataTrocaMoeda
+                impedidoPelaData: bool = strToDate(contribuicao['competencia']) < dataTrocaMoeda
 
                 listaItensContrib.append({
                     "clienteId": cliente,
-                    "itemId": contribuicao.contribuicoesId,
                     "seq": cabecalho.seq,
                     "tipo": TipoItemContribuicao.contribuicao.value,
-                    "competencia": contribuicao.competencia,
-                    "contribuicao": contribuicao.contribuicao,
-                    "indicadores": contribuicao.indicadores,
+                    "competencia": contribuicao['competencia'],
+                    "contribuicao": contribuicao['contribuicao'],
+                    "salContribuicao": contribuicao['salContribuicao'],
+                    "indicadores": contribuicao['indicadores'],
                     "validoTempoContrib": not impedidoPorIndicadores,
                     "validoSalContrib": not impedidoPorIndicadores and not impedidoPelaData
                 })
 
             for beneficio in listaBene:
-                impedidoPelaData: bool = strToDate(beneficio.competencia) < dataTrocaMoeda
+                impedidoPelaData: bool = strToDate(beneficio['competencia']) < dataTrocaMoeda
 
                 listaItensContrib.append({
                     "clienteId": cliente,
-                    "itemId": beneficio.beneficiosId,
-                    "seq": beneficio.seq,
+                    "seq": cabecalho.seq,
                     "tipo": TipoItemContribuicao.beneficio.value,
-                    "competencia": beneficio.competencia,
-                    "contribuicao": beneficio.remuneracao,
-                    "indicadores": beneficio.indicadores,
+                    "competencia": beneficio['competencia'],
+                    "contribuicao": beneficio['remuneracao'],
+                    "salContribuicao": beneficio['remuneracao'] * 0.2,
+                    "indicadores": beneficio['indicadores'],
                     "validoTempoContrib": not impedidoPorIndicadores,
                     "validoSalContrib": not impedidoPorIndicadores and not impedidoPelaData
                 })
@@ -648,18 +654,31 @@ class CNISModelo:
             return {
                 'cabecalho': self.organizaParaInserir(self.dictCabecalho, clienteId),
                 'cabecalhoBeneficio': self.organizaParaInserir(self.dictCabecalhoBeneficio, clienteId),
-                'remuneracoes': self.organizaParaInserir(self.dictRemuneracoes, clienteId),
-                'contribuicoes': self.organizaParaInserir(self.dictContribuicoes, clienteId),
-                'beneficios': self.organizaParaInserir(self.dictBeneficios, clienteId),
             }
         else:
             return {
                 'cabecalho': self.dictCabecalho,
                 'cabecalhoBeneficio': self.dictCabecalhoBeneficio,
-                'remuneracoes': self.dictRemuneracoes,
-                'contribuicoes': self.dictContribuicoes,
-                'beneficios': self.dictBeneficios
             }
+
+    def verificaFalhaDescricao(self, dataInicio = None, dataFim = None, listaContrib = [], listaRemu = [], listaBene = []):
+        if dataInicio is not None:
+            index = 0
+            dataComparacao = strToDate(dataInicio)
+        elif dataFim is not None:
+            index = -1
+            dataComparacao = strToDate(dataFim)
+        else:
+            return True
+
+        if len(listaContrib) > 0 and comparaMesAno(dataComparacao, strToDate(listaContrib[index]['competencia']), ComparaData.igual):
+            return True
+        elif len(listaRemu) > 0 and comparaMesAno(dataComparacao, strToDate(listaRemu[index]['competencia']), ComparaData.igual):
+            return True
+        elif len(listaBene) > 0 and comparaMesAno(dataComparacao, strToDate(listaBene[index]['competencia']), ComparaData.igual):
+            return True
+        else:
+            return False
 
     def verificaSalario(self, salario: str):
         salarioP = re.match(self.expRegSalarioP, salario) is not None

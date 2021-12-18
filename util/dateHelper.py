@@ -5,6 +5,8 @@ from peewee import fn
 
 import datetime
 
+from util.enums.newPrevEnums import ComparaData
+
 
 def atividadesConcorrentes(dataIniAtivA: datetime.date = datetime.date.min, dataFimAtvA: datetime.date = datetime.date.min, dataIniAtivB: datetime.date = datetime.date.min, dataFimAtivB: datetime.date = datetime.date.min) -> bool:
     conflitoInicio: bool = dataIniAtivA <= dataIniAtivB <= dataFimAtvA
@@ -38,6 +40,8 @@ def calculaIdade(dtNascimento, dtLimite) -> relativedelta:
         dtLimite = strToDate(dtLimite)
 
     idadeRelativa = relativedelta(dtLimite, dtNascimento)
+    if idadeRelativa.years < 0:
+        idadeRelativa = relativedelta(dtNascimento, dtNascimento)
 
     return idadeRelativa
 
@@ -53,7 +57,6 @@ def calculaIdadeAutomatica(dataNascimento) -> str:
     idade: relativedelta = relativedelta(datetime.date.today(), dataAUsar)
 
     return f"{idade.years} anos {idade.months} meses e {idade.days} dias"
-
 
 
 def dataConflitante(competencia: datetime.date, seqAtual: int, clienteId: int) -> bool:
@@ -92,11 +95,45 @@ def mascaraData(data):
     return f'{data.day}/{data.month}/{data.year}'
 
 
+def eliminaHoraDias(data: datetime.datetime):
+    try:
+        if isinstance(data, type(datetime.datetime)):
+            return data.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        elif isinstance(data, type(datetime.date)):
+            return data.replace(day=1)
+        elif isinstance(data, str):
+            return datetime.datetime.strptime(data, '%Y-%m-%d').date().replace(day=1)
+    except TypeError as err:
+        print(f'eliminaHoraDias ({type(err)}): {err}')
+
+
+def comparaMesAno(dataInicio: datetime.datetime, dataFim: datetime.datetime, comparacao: ComparaData) -> int:
+    if isinstance(dataInicio, str):
+        dataInicio = strToDate(dataInicio)
+
+    inicio = eliminaHoraDias(dataInicio)
+    fim = eliminaHoraDias(dataFim)
+
+    if isinstance(inicio, datetime.datetime):
+        inicio = inicio.date()
+    if isinstance(fim, datetime.datetime):
+        fim = fim.date()
+
+    if comparacao == ComparaData.igual:
+        return inicio == fim
+    elif comparacao == ComparaData.posterior:
+        return inicio > fim
+    elif comparacao == ComparaData.anterior:
+        return inicio < fim
+    else:
+        raise Exception()
+
+
 def strAnoToDate(data: str) -> datetime.date:
     return datetime.date(year=int(data), month=1, day=1)
 
 
-def strToDate(dataAvaliar: str):
+def strToDate(dataAvaliar: str) -> datetime.date:
     dateFormats: List[str] = ['%d/%m/%Y', '%m/%Y', '%Y-%m-%d', '%Y-%m-%d %H:%M:%S']
 
     # if isinstance(dataAvaliar, type(datetime.datetime)):

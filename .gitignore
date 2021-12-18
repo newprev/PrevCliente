@@ -1,28 +1,24 @@
-
+# Arquivos do python e compilados
 *.pyc
-
 *.pdf
-
 *.pyi
 
 .idea/misc.xml
 
 Daos/producao.db
 
-Daos/historicoLogs/*
+systemLog/historicoLogs/*
 /envCliente/
 
 .idea/
 
-cache/login.txt
-
 sync/syncFile/*
 
-cache/.loginOld.txt
-
-cache/.escritorio.txt
-
-cache/.login.txt
+# Arquivos de cache
+cache/.loginOld.json
+cache/.escritorio.json
+cache/.login.json
+cache/login.json
 
 DocGerados/*
 
@@ -31,3 +27,4 @@ prevCliEnv/
 .sync/*
 
 .templates/.~lock.requerimentoAdm.docx#
+/Resources/teste.svg

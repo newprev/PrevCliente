@@ -1,7 +1,7 @@
 from datetime import datetime
-from peewee import AutoField, ForeignKeyField, CharField, DateField, IntegerField, FloatField, DateTimeField
+from peewee import AutoField, ForeignKeyField, CharField, DateField, IntegerField, FloatField, DateTimeField, BooleanField
 from playhouse.signals import Model, post_save, pre_delete
-from logs import logPrioridade
+from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from modelos.baseModelORM import BaseModel, DATEFORMATS
@@ -12,7 +12,7 @@ TABLENAME = 'processos'
 
 
 class Processos(BaseModel, Model):
-    processoId = AutoField(column_name='processoId', null=True)
+    processoId = AutoField(primary_key=True, column_name='processoId', null=True)
     advogadoId = ForeignKeyField(column_name='advogadoId', field='advogadoId', model=Advogados, null=True, backref='advogados')
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, null=True, backref='cliente')
     cidade = CharField(default='São Paulo')
@@ -26,7 +26,7 @@ class Processos(BaseModel, Model):
     natureza = IntegerField(default=0, null=True)
     numeroProcesso = CharField(column_name='numeroProcesso', null=True)
     pontuacao = IntegerField(null=True)
-    situacaoId = IntegerField(column_name='situacaoId', default=1)
+    situacaoId = IntegerField(column_name='situacaoId', default=0)
     subTipoApos = IntegerField(column_name='subTipoApos', null=True)
     tempoContribuicao = IntegerField(column_name='tempoContribuicao', null=True)
     tipoBeneficio = IntegerField(column_name='tipoBeneficio', null=True)
@@ -38,7 +38,7 @@ class Processos(BaseModel, Model):
     class Meta:
         table_name = 'processos'
 
-    def toDict(self):
+    def toDict(self, recursive=False):
         dictUsuario = {
             'processoId': self.processoId,
             'clienteId': self.clienteId,
@@ -62,6 +62,9 @@ class Processos(BaseModel, Model):
             'dataCadastro': self.dataCadastro,
             'dataUltAlt': self.dataUltAlt
         }
+        if recursive:
+            dictUsuario['clienteId'] = dictUsuario['clienteId'].toDict()
+
         return dictUsuario
 
     def fromDict(self, dictProcessos):
@@ -119,9 +122,9 @@ class Processos(BaseModel, Model):
 @post_save(sender=Processos)
 def inserindoProcessos(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoProcessos>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoProcessos>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoProcessos>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoProcessos>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=Processos)

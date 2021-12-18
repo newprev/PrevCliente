@@ -1,11 +1,13 @@
 from math import ceil
+from aiohttp import ClientConnectorError
 
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow
 
 from Design.pyUi.splashScreen import Ui_MainWindow
 from heart.login.loginController import LoginController
 from connections import ConfigConnection
+
 from modelos.convMonORM import ConvMon
 from modelos.especieBenefORM import EspecieBenef
 from modelos.expSobrevidaORM import ExpSobrevida
@@ -18,16 +20,18 @@ from modelos.tetosPrevORM import TetosPrev
 from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
 from modelos.clienteORM import Cliente
-from modelos.beneficiosORM import CnisBeneficios
 from modelos.cabecalhoORM import CnisCabecalhos
-from modelos.contribuicoesORM import CnisContribuicoes
-from modelos.remuneracaoORM import CnisRemuneracoes
 from modelos.carenciasLei91 import CarenciaLei91
 from modelos.configGeraisORM import ConfigGerais
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.aposentadoriaORM import Aposentadoria
+from modelos.ipcaMensalORM import IpcaMensal
+from modelos.tiposESubtipos.tipoAposentadoriaORM import TipoAposentadoria
+
 from util.enums.newPrevEnums import TiposConexoes
+from util.popUps import popUpOkAlerta
+
 from cache.cachingLogin import CacheLogin
 
 
@@ -72,10 +76,7 @@ class Main(Ui_MainWindow, QMainWindow):
             Escritorios: 'CRIANDO TABELA DOS ESCRITORIOS...',
             Advogados: 'CRIANDO TABELA DOS ADVOGADOS...',
             Cliente: 'CRIANDO TABELA DO CLIENTE...',
-            CnisBeneficios: 'CRIANDO TABELA DE BENEFÍCIOS...',
             CnisCabecalhos: 'CRIANDO TABELA DE CABEÇALHOS...',
-            CnisContribuicoes: 'CRIANDO TABELA DE CONTRIBUIÇÕES...',
-            CnisRemuneracoes: 'CRIANDO TABELA DE REMUNERAÇÕES...',
             ConvMon: 'CRIANDO TABELA DE CONVERSÕES MONETÁRIAS...',
             EspecieBenef: 'CRIANDO TABELA DE ESPÉCIES DE BENEFÍCIOS...',
             ExpSobrevida: 'CRIANDO TABELA DAS EXPECTATIVAS DE SOBREVIDA...',
@@ -89,7 +90,9 @@ class Main(Ui_MainWindow, QMainWindow):
             ConfigGerais: 'CRIANDO TABELA DE CONFIGURAÇÕES GERAIS...',
             ItemContribuicao: 'CRIANDO TABELA DE ITENS DE CONTRIBUIÇÃO...',
             SalarioMinimo: 'CRIANDO TABELA DE SALÁRIOS MÍNIMOS...',
-            Aposentadoria: 'CRIANDO TABELA DE APOSENTADORIAS...'
+            Aposentadoria: 'CRIANDO TABELA DE APOSENTADORIAS...',
+            IpcaMensal: 'CRIANDO TABELA DE IPCA MENSAL...',
+            TipoAposentadoria: 'CRIANDO TABELA DE TIPOS DE APOSENTADORIAS...'
         }
 
         # percentLoading = ceil(100 / len(listaLoading))
@@ -124,6 +127,12 @@ class Main(Ui_MainWindow, QMainWindow):
             except ConfigGerais.DoesNotExist:
                 print('Não encontrou configurações')
                 self.iniciaNewPrev()
+            except ClientConnectorError as err:
+                popUpOkAlerta(
+                    'Não foi possível se comunicar com o servidor. \nVerifique sua conexão com internet e tente abrir o programa novamente.',
+                    erro=f"{err=}",
+                    funcao=self.close
+                )
         else:
             self.iniciaNewPrev()
 
@@ -141,8 +150,21 @@ class Main(Ui_MainWindow, QMainWindow):
 
 if __name__ == '__main__':
     import sys
+    from os.path import join
+    import os
+    from util.helpers import pathTo
+    from util.enums.configEnums import ImportantPaths
+
+    PATH_FONTS = pathTo(ImportantPaths.fonts)
 
     app = QtWidgets.QApplication(sys.argv)
+    # QtCore.QDir(join(PATH_FONTS, "Bebas"))
+    # QtCore.QDir(join(PATH_FONTS, "Avenir"))
+
+    # print(os.listdir(join(PATH_FONTS, 'Bebas')))
+
+    _idAvenir = QtGui.QFontDatabase.addApplicationFont(join(PATH_FONTS, 'Avenir', 'AvenirLTStd-Roman.otf'))
+    _idBebas = QtGui.QFontDatabase.addApplicationFont(join(PATH_FONTS, 'Bebas', 'BebasNeue-Regular.ttf'))
     ui = Main()
     ui.show()
     sys.exit(app.exec_())

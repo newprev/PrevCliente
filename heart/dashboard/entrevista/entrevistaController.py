@@ -15,9 +15,11 @@ from heart.dashboard.entrevista.tipoProcessoAdmController import TipoProcessoAdm
 from heart.dashboard.entrevista.tipoBeneficioController import TipoBeneficioConcController
 from heart.dashboard.entrevista.tipoAtividadeController import TipoAtividadeController
 from heart.dashboard.tabs.clienteController import TabCliente
+from heart.dashboard.entrevista.localWidgets.pgConfigSimulacao import PgConfigSimulacao
+from heart.dashboard.processos.processoController import ProcessosController
 from heart.dashboard.gerarDocsPage import GerarDocsPage
 from heart.dashboard.entrevista.localStyleSheet.cabecalho import *
-from heart.sinaisCustomizados import Sinais
+from sinaisCustomizados import Sinais
 
 from modelos.processosORM import Processos
 from modelos.clienteORM import Cliente
@@ -27,8 +29,11 @@ from modelos.escritoriosORM import Escritorios
 from Design.CustomWidgets.infoGuiaEntrevista import InfoGuia
 
 from processos.aposentadoria import CalculosAposentadoria
+# from compilado.aposentadoria import CalculosAposentadoria
 
 from util.enums.newPrevEnums import *
+from util.enums.aposentadoriaEnums import *
+from util.enums.processoEnums import NaturezaProcesso, TipoProcesso, TipoBeneficio
 from util.popUps import popUpOkAlerta
 
 
@@ -48,6 +53,13 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
     tipoAtividadePg: TipoAtividadeController
     impressaoDocsPg: GerarDocsPage
     escritorioAtual: Escritorios
+    entrevistaParams: dict = {
+        'contribSimulacao': ContribSimulacao.ULTI,
+        'valorSimulacao': 0.0,
+        'porcentagemCont': 11,
+        'indiceReajuste': IndiceReajuste.Ipca
+    }
+    processosController: ProcessosController
 
     def __init__(self, parent=None):
         super(EntrevistaController, self).__init__(parent)
@@ -69,13 +81,14 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
         self.stackedWidget.addWidget(self.clienteController)  # tela: cadastro - 0
         self.stackedWidget.addWidget(self.naturezaPg)  # tela: naturezaProcesso - 1
-        self.stackedWidget.addWidget(self.tipoProcessoAdmPg)  # tela: tipos de processos admnistrativos - 2
-        self.stackedWidget.addWidget(self.tipoBeneficioConcPg)  # tela: tipos de benefícios Concessão -  3
-        self.stackedWidget.addWidget(self.tipoAtividadePg)  # tela: tipos de atividade Aposentadoria - 4
-        self.stackedWidget.addWidget(self.impressaoDocsPg)  # tela: tipos de geração de documentos - 5
+        self.stackedWidget.addWidget(self.tipoProcessoAdmPg)  # tela: tiposESubtipos de processos admnistrativos - 2
+        self.stackedWidget.addWidget(self.tipoBeneficioConcPg)  # tela: tiposESubtipos de benefícios Concessão -  3
+        self.stackedWidget.addWidget(self.tipoAtividadePg)  # tela: tiposESubtipos de atividade Aposentadoria - 4
+        self.stackedWidget.addWidget(self.impressaoDocsPg)  # tela: tiposESubtipos de geração de documentos - 5
 
         self.pbProxEtapa.clicked.connect(lambda: self.avaliaTrocaTela())
         self.pbVoltaEtapa.clicked.connect(lambda: self.avaliaTrocaTela(proxima=False))
+        self.pbConfSimulacao.clicked.connect(self.abreTelaConfiguracoes)
 
         self.pbarProgresso.hide()
         self.frame.show()
@@ -87,11 +100,6 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.atualizaEtapa(EtapaEntrevista.infoProcessual, False)
         self.atualizaEtapa(EtapaEntrevista.detalhamento, False)
         self.atualizaEtapa(EtapaEntrevista.documentacao, False)
-
-        # self.lbInfo1.setText('Informações \npessoais')
-        # self.lbInfo2.setText('Informações \nresidenciais')
-        # self.lbInfo3.setText('Informações \nprofissionais')
-        # self.lbInfo4.setText('Informações \nbancárias')
 
         self.stackedWidget.setCurrentIndex(self.telaAtual.value)
 
@@ -124,11 +132,17 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.tipoAtividadePg = TipoAtividadeController(parent=self)
         self.impressaoDocsPg = GerarDocsPage(None, None, parent=self)
 
+    def abreTelaConfiguracoes(self):
+        pgConfigSimulacao = PgConfigSimulacao(self.entrevistaParams, parent=self)
+        pgConfigSimulacao.show()
+
     def avaliaTrocaTela(self, proxima=True):
         """
         QtCore.pyqtSignal([MomentoEntrevista, Tipo] name='tela')
         :cvar
         """
+        self.telaAtual = MomentoEntrevista(self.stackedWidget.currentIndex())
+
         if not self.clienteAtual:
             self.loading(20)
             self.showPopupAlerta("Para seguir para a próxima estapa da entrevista, é necessário definir um cliente.")
@@ -140,6 +154,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.loading(20)
                 self.naturezaPg.atualizaClienteAtual(self.clienteAtual)
                 self.processoModelo.advogadoId = self.advogadoAtual
+                self.processoModelo.estado = self.escritorioAtual.estado
 
                 self.loading(20)
                 self.clienteController.verificaDados()
@@ -181,7 +196,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.loading(10)
                 # self.processoModelo.processosId = self.daoProcesso.insereProcesso(self.processoModelo)
                 try:
-                    self.processoModelo.processosId = Processos().insert(**self.processoModelo.toDict()).on_conflict_replace().execute()
+                    self.processoModelo.processosId = Processos(**self.processoModelo.toDict()).save()
                 except Processos.DoesNotExist:
                     print('Fudeu aqui!')
 
@@ -200,7 +215,6 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             if self.telaAtual == MomentoEntrevista.naturezaProcesso:
                 self.sinais.sTrocaTelaEntrevista.emit([None, None])
                 self.telaAtual = MomentoEntrevista.cadastro
-                self.atualizaEtapa(EtapaEntrevista.infoPessoais, completo=False)
 
             elif self.telaAtual == MomentoEntrevista.tipoProcesso:
                 self.sinais.sTrocaTelaEntrevista.emit([None, None])
@@ -251,7 +265,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.lbNomeEscritorio.setText(self.escritorioAtual.nomeFantasia)
 
     def trocaTelaCentral(self, *args):
-        wdgAtual: MomentoEntrevista = args[0][0]
+        wdgAtual: MomentoEntrevista = MomentoEntrevista(self.stackedWidget.currentIndex())
         wdgFuturo = args[0][1]
         self.pbProxEtapa.setText('Próxima etapa')
 
@@ -273,14 +287,13 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.stackedWidget.setCurrentIndex(2)
             elif wdgFuturo == NaturezaProcesso.judicial:
                 self.processoModelo.natureza = NaturezaProcesso.judicial.value
-                # TODO: wdgAtual dos tipos de processos judiciais
+                # TODO: wdgAtual dos tiposESubtipos de processos judiciais
                 pass
             else:
                 self.stackedWidget.setCurrentIndex(0)
 
         # O usuário está na wdgAtual sobre o tipo de processo
         elif wdgAtual == MomentoEntrevista.tipoProcesso:
-
             self.telaAtual = MomentoEntrevista.tipoProcesso
             self.tipoBeneficioConcPg.atualizaProcesso(self.processoModelo)
             if wdgFuturo == TipoProcesso.Concessao:
@@ -290,78 +303,85 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             elif wdgFuturo == TipoProcesso.Revisao:
                 self.processoModelo.tipoProcesso = TipoProcesso.Revisao.value
                 self.infoTipo.atualizaInfo("Revisão", True)
-                # TODO: Tela dos tipos de benefícios de revisão
+                # TODO: Tela dos tiposESubtipos de benefícios de revisão
                 pass
             elif wdgFuturo == TipoProcesso.RecOrdinario:
                 self.processoModelo.tipoProcesso = TipoProcesso.RecOrdinario.value
                 self.infoTipo.atualizaInfo("Recurso ordinário", True)
-                # TODO: Tela dos tipos de benefícios de recurso ordinário
+                # TODO: Tela dos tiposESubtipos de benefícios de recurso ordinário
                 pass
             elif wdgFuturo == TipoProcesso.RecEspecial:
                 self.processoModelo.tipoProcesso = TipoProcesso.RecEspecial.value
                 self.infoTipo.atualizaInfo("Recurso especial", True)
-                # TODO: Tela dos tipos de benefícios de recurso especial
+                # TODO: Tela dos tiposESubtipos de benefícios de recurso especial
                 pass
             else:
                 self.stackedWidget.setCurrentIndex(1)
 
         # O usuário está na wdgAtual sobre o tipo de benefícios
         elif wdgAtual == MomentoEntrevista.tipoBeneficio:
+            self.atualizaEtapa(EtapaEntrevista.infoProcessual, completo=True)
 
-            self.telaAtual = MomentoEntrevista.tipoBeneficio
-            self.pbProxEtapa.setText('Concluir')
-            self.infoBeneficio.atualizaInfo(wdgFuturo.name, True)
+            if wdgFuturo is not None:
+                self.pbProxEtapa.setText('Concluir')
+                self.infoBeneficio.atualizaInfo(wdgFuturo.name, True)
 
-            if wdgFuturo == TipoBeneficio.Aposentadoria:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.Aposentadoria.value
-                self.tipoAtividadePg.pegaClienteAtual(self.clienteAtual)
-                self.stackedWidget.setCurrentIndex(4)
-            elif wdgFuturo == TipoBeneficio.AuxDoenca:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.AuxDoenca.value
-                # TODO: wdgAtual dos tipos de atividades auxílio doença
-                pass
-            elif wdgFuturo == TipoBeneficio.AuxAcidente:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.AposTempoContr.value
-                # TODO: wdgAtual dos tipos de atividades aposentadoria por tempo de contribuição
-                pass
-            elif wdgFuturo == TipoBeneficio.AuxReclusao:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.AuxReclusao.value
-                # TODO: wdgAtual dos tipos de atividades auxílio reclusão
-                pass
-            elif wdgFuturo == TipoBeneficio.BeneIdoso:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.BeneIdoso.value
-                # TODO: wdgAtual dos tipos de atividades benefício idoso
-                pass
-            elif wdgFuturo == TipoBeneficio.BeneDeficiencia:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.BeneDeficiencia.value
-                # TODO: wdgAtual dos tipos de atividades benefício deficientes
-                pass
-            elif wdgFuturo == TipoBeneficio.PensaoMorte:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.PensaoMorte.value
-                # TODO: wdgAtual dos tipos de atividades pensão por morte
-                pass
-            elif wdgFuturo == TipoBeneficio.SalMaternidade:
-                self.telaAtual = MomentoEntrevista.tipoAtividade
-                self.processoModelo.tipoBeneficio = TipoBeneficio.SalMaternidade.value
-                # TODO: wdgAtual dos tipos de atividades salário maternidade
-                pass
-            else:
-                self.stackedWidget.setCurrentIndex(2)
+                if wdgFuturo == TipoBeneficio.Aposentadoria:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.Aposentadoria.value
+                    self.tipoAtividadePg.pegaClienteAtual(self.clienteAtual)
+                    self.stackedWidget.setCurrentIndex(4)
+                elif wdgFuturo == TipoBeneficio.AuxDoenca:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.AuxDoenca.value
+                    # TODO: wdgAtual dos tiposESubtipos de atividades auxílio doença
+                    pass
+                elif wdgFuturo == TipoBeneficio.AuxAcidente:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.AposTempoContr.value
+                    # TODO: wdgAtual dos tiposESubtipos de atividades aposentadoria por tempo de contribuição
+                    pass
+                elif wdgFuturo == TipoBeneficio.AuxReclusao:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.AuxReclusao.value
+                    # TODO: wdgAtual dos tiposESubtipos de atividades auxílio reclusão
+                    pass
+                elif wdgFuturo == TipoBeneficio.BeneIdoso:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.BeneIdoso.value
+                    # TODO: wdgAtual dos tiposESubtipos de atividades benefício idoso
+                    pass
+                elif wdgFuturo == TipoBeneficio.BeneDeficiencia:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.BeneDeficiencia.value
+                    # TODO: wdgAtual dos tiposESubtipos de atividades benefício deficientes
+                    pass
+                elif wdgFuturo == TipoBeneficio.PensaoMorte:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.PensaoMorte.value
+                    # TODO: wdgAtual dos tiposESubtipos de atividades pensão por morte
+                    pass
+                elif wdgFuturo == TipoBeneficio.SalMaternidade:
+                    self.telaAtual = MomentoEntrevista.tipoAtividade
+                    self.processoModelo.tipoBeneficio = TipoBeneficio.SalMaternidade.value
+                    # TODO: wdgAtual dos tiposESubtipos de atividades salário maternidade
+                    pass
+                else:
+                    self.stackedWidget.setCurrentIndex(2)
 
+        # O usuário está na wdgAtual sobre o Quiz
         elif wdgAtual == MomentoEntrevista.tipoAtividade:
+            self.atualizaEtapa(EtapaEntrevista.detalhamento, completo=True)
             self.telaAtual = MomentoEntrevista.telaGeraDocs
             self.pbProxEtapa.setText('Gerar documentos')
             self.stackedWidget.setCurrentIndex(5)
 
-            calculaAposentadoria = CalculosAposentadoria(self.processoModelo, self.clienteAtual)
+            calculaAposentadoria = CalculosAposentadoria(self.processoModelo, self.clienteAtual, self.entrevistaParams)
             calculaAposentadoria.salvaAposentadorias()
+
+            ProcessosController(cliente=self.clienteAtual, processo=self.processoModelo, parent=self).showMaximized()
+            self.close()
+
         else:
             if wdgFuturo == MomentoEntrevista.cadastro:
                 self.telaAtual = MomentoEntrevista.cadastro
@@ -373,14 +393,17 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
             self.lbInfoPessoais.setStyleSheet(infoLabelCabecalho(etapa, completo=completo))
             self.frEtapa1.setStyleSheet(infoIconeCabecalho(etapa, completo=completo))
             self.frProg1.setStyleSheet(infoPontinhosCabecalho(etapa, completo=completo))
+
         elif etapa == EtapaEntrevista.infoProcessual:
             self.lbInfoProcessuais.setStyleSheet(infoLabelCabecalho(etapa, completo=completo))
             self.frEtapa2.setStyleSheet(infoIconeCabecalho(etapa, completo=completo))
             self.frProg2.setStyleSheet(infoPontinhosCabecalho(etapa, completo=completo))
+
         elif etapa == EtapaEntrevista.detalhamento:
             self.lbInfoDetalhamento.setStyleSheet(infoLabelCabecalho(etapa, completo=completo))
             self.frEtapa3.setStyleSheet(infoIconeCabecalho(etapa, completo=completo))
             self.frProg3.setStyleSheet(infoPontinhosCabecalho(etapa, completo=completo))
+
         elif etapa == EtapaEntrevista.documentacao:
             self.lbInfoFinalizacao.setStyleSheet(infoLabelCabecalho(etapa, completo=completo))
             self.frEtapa4.setStyleSheet(infoIconeCabecalho(etapa, completo=completo))
@@ -388,9 +411,15 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
     def atualizaCliente(self, *args):
         self.clienteAtual: Cliente = args[0]
         if self.clienteAtual is not None:
-            self.processoModelo.clienteId = self.clienteAtual
-            self.processoModelo.dataUltAlt = datetime.now()
-            self.processoModelo.save()
+            if self.processoModelo.processoId is None:
+                self.processoModelo = Processos.create(
+                    clienteId=self.clienteAtual,
+                    dataUltAlt=datetime.now()
+                )
+            else:
+                self.processoModelo.clienteId = self.clienteAtual
+                self.processoModelo.dataUltAlt = datetime.now()
+                self.processoModelo.save()
 
     def calculaDer(self) -> datetime.date:
         if self.processoModelo.natureza == NaturezaProcesso.administrativo.value:

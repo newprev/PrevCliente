@@ -6,6 +6,7 @@ from typing import List
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
+from modelos.itemContribuicao import ItemContribuicao
 from util.dateHelper import strToDatetime
 from util.helpers import dictEspecies, mascaraNit, strToFloat, situacaoBeneficio, floatToDinheiro
 from util.popUps import popUpOkAlerta
@@ -13,11 +14,8 @@ from util.popUps import popUpOkAlerta
 from Design.pyUi.insereContrib import Ui_mwInsereContrib
 from heart.localStyleSheet.insereContribuicao import habilita, habilitaBotao
 from heart.informacoesTelas.indicadoresTela import IndicadoresController
-from modelos.beneficiosORM import CnisBeneficios
 from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.clienteORM import Cliente
-from modelos.contribuicoesORM import CnisContribuicoes
-from modelos.remuneracaoORM import CnisRemuneracoes
 from modelos.convMonORM import ConvMon
 from util.enums.newPrevEnums import TipoContribuicao
 
@@ -31,9 +29,9 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.indicadoresContrib = []
         self.db = db
         self.cliente = cliente
-        self.remuneracao: CnisRemuneracoes = CnisRemuneracoes()
-        self.contribuicao: CnisContribuicoes = CnisContribuicoes()
-        self.beneficio: CnisBeneficios = CnisBeneficios()
+        # self.remuneracao: CnisRemuneracoes = CnisRemuneracoes()
+        # self.contribuicao: CnisContribuicoes = CnisContribuicoes()
+        # self.beneficio: CnisBeneficios = CnisBeneficios()
         self.listaConvMon: list
         self.indicadoresPg = None
         self.tipo = tipo
@@ -91,17 +89,17 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
     def buscaContribuicao(self, contribuicaoId: int, tipo: TipoContribuicao):
 
         if tipo == TipoContribuicao.contribuicao:
-            contribuicao: CnisContribuicoes = CnisContribuicoes.get_by_id(contribuicaoId)
+            contribuicao: ItemContribuicao = ItemContribuicao.get_by_id(contribuicaoId)
             self.contribuicao = contribuicao
             self.mostraInfoTela(contribuicao, TipoContribuicao.contribuicao)
 
         elif tipo == TipoContribuicao.remuneracao:
-            contribuicao: CnisRemuneracoes = CnisRemuneracoes.get_by_id(contribuicaoId)
+            contribuicao: ItemContribuicao = ItemContribuicao.get_by_id(contribuicaoId)
             self.remuneracao = contribuicao
             self.mostraInfoTela(contribuicao, TipoContribuicao.remuneracao)
 
         elif tipo == TipoContribuicao.beneficio:
-            contribuicao: CnisBeneficios = CnisBeneficios.get_by_id(contribuicaoId)
+            contribuicao: ItemContribuicao = ItemContribuicao.get_by_id(contribuicaoId)
             self.beneficio = contribuicao
             self.mostraInfoTela(contribuicao, TipoContribuicao.beneficio)
 
@@ -129,8 +127,8 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             self.dtInicio.setDate(strToDatetime(cabecalho.dataInicio))
             self.dtFim.setDate(dataFim)
 
-    def defineSinalMonetario(self, contribuicao):
-        if isinstance(contribuicao, CnisContribuicoes) or isinstance(contribuicao, CnisRemuneracoes):
+    def defineSinalMonetario(self, contribuicao: ItemContribuicao):
+        if contribuicao.tipo in (TipoContribuicao.contribuicao.value, TipoContribuicao.remuneracao.value):
             competencia: datetime = strToDatetime(contribuicao.competencia)
 
             for moeda in self.listaConvMon:
@@ -155,7 +153,10 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
         self.cbxSituacao.addItems(sorted(situacaoBeneficio))
 
     def carregaQtdsRemCont(self):
-        qtdRemuneracoes = CnisRemuneracoes.select().count()
+        qtdRemuneracoes = ItemContribuicao.select().where(
+            ItemContribuicao.clienteId == self.cliente.clienteId,
+            ItemContribuicao.tipo == TipoContribuicao.remuneracao.value
+        ).count()
 
         self.lbQtdRem.setText(str(qtdRemuneracoes))
 
@@ -248,13 +249,12 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
                     self.contribuicao.seq = 0
                     self.loading(20)
                     if self.cbRepetir.isChecked():
-                        listaDatas: list = self.geraContribsRecorrente()
-                        print('\nlistaDatas ----------------')
-                        print(listaDatas)
+                        qtdContribuicoes: int = self.geraContribsRecorrente()
+                        print(f'\nlistaDatas({qtdContribuicoes}) ----------------')
+                        print(qtdContribuicoes)
                         print('listaDatas ----------------\n')
                         # self.daoCalculos.insereListaContribuicoes(listaDatas)
-                        self.daoCalculos.insereListaContribuicoes(listaDatas)
-                        self.mensagemSistema('Contribuições inseridas com sucesso!')
+                        self.mensagemSistema(f'{qtdContribuicoes} de contribuições inseridas com sucesso!')
                     else:
                         if self.tipo == TipoContribuicao.remuneracao:
                             self.remuneracao.indicadores = self.retornaStrIndicadores()
@@ -274,30 +274,39 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
                                 self.contribuicao.dataPagamento = self.contribuicao.competencia
 
                             self.contribuicao.indicadores = self.retornaStrIndicadores()
-                            CnisContribuicoes.insert(**self.contribuicao.toDict()).on_conflict_replace().execute()
+                            ItemContribuicao.insert(**self.contribuicao.toDict()).on_conflict_replace().execute()
 
                     self.mensagemSistema('Contribuição inserida com sucesso!')
 
             self.loading(20)
 
-    def geraContribsRecorrente(self) -> List[CnisContribuicoes]:
+    def geraContribsRecorrente(self) -> int:
+        if self.leSalContribuicao.text() == '' or not self.leSalContribuicao.text().isdigit():
+            popUpOkAlerta('O salário de contribuição é inválido. Verifique o valor e tente novamente.')
+            self.leSalContribuicao.setFocus()
+            return False
+
         difMeses: int = floor((self.dtRepetir.date().toPyDate() - self.dtCompetencia.date().toPyDate()).days/30)
-        listaContribuicoes: List[CnisContribuicoes] = []
+        qtdContribuicoes: int = 0
+        salContribuicao: float = float(self.leSalContribuicao.text().replace(',', '.'))
 
         for mes in range(0, difMeses+1):
-            novaContrib = CnisContribuicoes()
-            novaContrib.clienteId = self.contribuicao.clienteId
-            novaContrib.contribuicao = self.contribuicao.contribuicao
-            novaContrib.seq = self.contribuicao.seq
-            novaContrib.indicadores = self.retornaStrIndicadores()
-            novaContrib.competencia = relativedelta(months=+mes) + self.dtCompetencia.date().toPyDate()
-            novaContrib.salContribuicao = self.contribuicao.salContribuicao
-            novaContrib.dadoOrigem = self.contribuicao.dadoOrigem
-            novaContrib.dataCadastro = date.today()
-            novaContrib.dataUltAlt = date.today()
-            listaContribuicoes.append(novaContrib)
+            ItemContribuicao(
+                clienteId=self.contribuicao.clienteId,
+                seq=self.contribuicao.seq,
+                tipo=TipoContribuicao.contribuicao.value,
+                competencia=relativedelta(months=+mes) + self.dtCompetencia.date().toPyDate(),
+                contribuicao=salContribuicao*0.2,
+                salContribuicao=self.contribuicao.salContribuicao,
+                dadoOrigem='N',
+                geradoAutomaticamente=True,
+                indicadores=self.retornaStrIndicadores(),
+                dataCadastro=date.today(),
+                dataUltAlt=date.today(),
+            ).save()
+            qtdContribuicoes = mes
 
-        return listaContribuicoes
+        return qtdContribuicoes
 
     def sairAtividade(self):
         remuneracao: bool = self.leSalContribuicao.text() == ''
@@ -330,10 +339,10 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
                 self.leSalContribuicao.setFocus()
                 return False
 
-            elif self.dtCompetencia.date().toPyDate() > date.today():
-                popUpOkAlerta('O campo Competência precisa ter uma data anterior a hoje. Tente novamente.')
-                self.dtCompetencia.setFocus()
-                return False
+            # elif self.dtCompetencia.date().toPyDate() > date.today():
+            #     popUpOkAlerta('O campo Competência precisa ter uma data anterior a hoje. Tente novamente.')
+            #     self.dtCompetencia.setFocus()
+            #     return False
 
         return True
 

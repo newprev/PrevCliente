@@ -8,7 +8,6 @@ from modelos.tetosPrevORM import TetosPrev
 from util.dateHelper import mascaraDataPequena, strToDate
 from util.helpers import mascaraDinheiro, dinheiroToFloat
 from Design.CustomWidgets.newCheckBox import NewCheckBox
-from Design.DesignSystem.colors import NewColors
 
 
 class TetosPrevidenciarios(QMainWindow, Ui_mwTetosPrev):
@@ -22,7 +21,7 @@ class TetosPrevidenciarios(QMainWindow, Ui_mwTetosPrev):
         self.desativaFiltros(True)
         self.setWindowTitle('Tetos previdenciários - [tetosPrevidenciariosTela]')
 
-        self.cbAtivaFiltros = NewCheckBox(active_color=NewColors.primary.value)
+        self.cbAtivaFiltros = NewCheckBox()
         self.vlCheckBox.addWidget(self.cbAtivaFiltros)
 
         self.cbAtivaFiltros.stateChanged.connect(self.avaliaEstadoFiltros)

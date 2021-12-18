@@ -442,28 +442,6 @@ def mascaraNB(valor: int):
         return f"{strFinal}"
 
 
-def comparaMesAno(dataInicio: datetime.datetime, dataFim: datetime.datetime, comparacao: ComparaData) -> int:
-    if isinstance(dataInicio, str):
-        dataInicio = strToDate(dataInicio)
-
-    inicio = eliminaHoraDias(dataInicio)
-    fim = eliminaHoraDias(dataFim)
-
-    if isinstance(inicio, datetime.datetime):
-        inicio = inicio.date()
-    if isinstance(fim, datetime.datetime):
-        fim = fim.date()
-
-    if comparacao == ComparaData.igual:
-        return inicio == fim
-    elif comparacao == ComparaData.posterior:
-        return inicio > fim
-    elif comparacao == ComparaData.anterior:
-        return inicio < fim
-    else:
-        raise Exception()
-
-
 def calculaIdadeFromString(dataNascimento: str) -> int:
     dataIdade = datetime.datetime.strptime(dataNascimento, '%d/%m/%Y')
     return int((datetime.datetime.now() - dataIdade).days / 365.25)
@@ -621,18 +599,6 @@ def strTipoSimulacao(tipoSimulacao: str) -> str:
         return "Repetição do teto previdenciário"
     elif tipoSimulacao == ContribSimulacao.MANU.name:
         return "Repetição do valor definido manualmente"
-
-
-def eliminaHoraDias(data: datetime.datetime):
-    try:
-        if isinstance(data, type(datetime.datetime)):
-            return data.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        elif isinstance(data, type(datetime.date)):
-            return data.replace(day=1)
-        elif isinstance(data, str):
-            return datetime.datetime.strptime(data, '%Y-%m-%d').date().replace(day=1)
-    except TypeError as err:
-        print(f'eliminaHoraDias ({type(err)}): {err}')
 
 
 def pyToDefault(dicionario: dict) -> dict:

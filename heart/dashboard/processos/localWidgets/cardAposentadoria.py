@@ -8,12 +8,13 @@ from util.helpers import dataUSAtoBR, strTipoAposentadoria, strTipoSimulacao, ma
 class CardAposentadoria(QWidget, Ui_wdgCardAposentadoria):
     aposentadoria: Aposentadoria
 
-    def __init__(self, aposentadoria: Aposentadoria, parent=None):
+    def __init__(self, aposentadoria: Aposentadoria, parent=None, aposSelecionada: bool = False):
         super(CardAposentadoria, self).__init__(parent=parent)
         self.setupUi(self)
         self.aposentadoria: Aposentadoria = aposentadoria
 
         self.carregaInfoNaTela()
+        self.gbMain.setChecked(aposSelecionada)
 
     def carregaInfoNaTela(self):
         self.lbIdade.setText(str(self.aposentadoria.idadeCliente) + " anos")

@@ -659,67 +659,20 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QGridLayout" name="gridLayout_4">
        <property name="leftMargin">
         <number>16</number>
        </property>
        <property name="topMargin">
-        <number>0</number>
+        <number>4</number>
        </property>
        <property name="rightMargin">
         <number>16</number>
        </property>
        <property name="bottomMargin">
-        <number>16</number>
+        <number>8</number>
        </property>
-       <item>
-        <widget class="QFrame" name="frTitulos">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>65</height>
-          </size>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>8</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="lbTopTitulo">
-            <property name="text">
-             <string>Informações processuais</string>
-            </property>
-           </widget>
-          </item>
-          <item alignment="Qt::AlignTop">
-           <widget class="QLabel" name="lbTopSubtitulo">
-            <property name="text">
-             <string>Encontre todas as informações do(s) processo(s) dos seus clientes</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
+       <item row="1" column="0">
         <widget class="QFrame" name="frOrganizadorTop">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
@@ -947,6 +900,53 @@
          </layout>
         </widget>
        </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QFrame" name="frTitulos">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>65</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>8</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="lbTopTitulo">
+            <property name="text">
+             <string>Informações processuais</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignTop">
+           <widget class="QLabel" name="lbTopSubtitulo">
+            <property name="text">
+             <string>Encontre todas as informações do(s) processo(s) dos seus clientes</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -1010,8 +1010,13 @@
 }
 
 /*----------------------------------------------- Push Buttons -----------------------------------------------*/
-#pbGeral, #pbAposentadorias, #pbProcuracao, 
-#pbDocsComp, #pbHipo {
+#pbGeral, #pbAposentadorias, 
+#pbProcuracao, #pbDocsComp, 
+#pbHipo, #pbDecPensionista,  
+#pbRequerimento,  #pbAuxReclusao, 
+#pbBeneIdoso,  #pbBeneDeficiente,
+#pbAuxDoenca,  #pbSalMaternidade,
+#pbPensaoMorte, #pbAuxAcidente {
 	background-color: rgba(0,0,0,0);
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
@@ -1019,8 +1024,13 @@
 	color: lightgrey;
 }
 
-#pbGeral:hover, #pbAposentadorias:hover, #pbProcuracao:hover, 
-#pbDocsComp:hover, #pbHipo:hover {
+#pbGeral:hover, #pbAposentadorias:hover, 
+#pbProcuracao:hover, #pbDocsComp:hover, 
+#pbHipo:hover, #pbDecPensionista:hover, 
+#pbRequerimento:hover, #pbAuxReclusao:hover,
+#pbBeneIdoso:hover, #pbBeneDeficiente:hover,
+#pbAuxDoenca:hover, #pbSalMaternidade:hover,
+#pbPensaoMorte:hover, #pbAuxAcidente:hover {
 	font-family: &quot;TeX Gyre Adventor&quot;;
 	font-size: 12px;
 	color: lightgrey;
@@ -1046,7 +1056,7 @@
         <number>24</number>
        </property>
        <item>
-        <widget class="QFrame" name="frame">
+        <widget class="QFrame" name="frTituloMenu">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -1252,60 +1262,118 @@
        <item>
         <widget class="QLabel" name="lbInfoAposentadoria">
          <property name="text">
-          <string>Aposentadoria</string>
+          <string>Benefícios</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frAposentadorias">
+        <widget class="QPushButton" name="pbAposentadorias">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>28</height>
+           <height>24</height>
           </size>
          </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
+         <property name="text">
+          <string>Aposentadorias</string>
          </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbAuxAcidente">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <property name="spacing">
-           <number>4</number>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QPushButton" name="pbAposentadorias">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Aposentadorias</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <property name="text">
+          <string>Auxílio acidente</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbAuxDoenca">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Auxílio doença</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbAuxReclusao">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Auxílio reclusão</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbBeneDeficiente">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Benefício ao deficiente</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbBeneIdoso">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Benefício ao idoso</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbSalMaternidade">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Salário maternidade</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbPensaoMorte">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Pensão por morte</string>
+         </property>
         </widget>
        </item>
        <item>
@@ -1425,6 +1493,32 @@
          </property>
          <property name="text">
           <string>Dec. Hipossuficiência</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbDecPensionista">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Dec. Pensionista</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbRequerimento">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Requerimento</string>
          </property>
         </widget>
        </item>

@@ -132,9 +132,9 @@ class Advogados(BaseModel, Model):
 @post_save(sender=Advogados)
 def inserindoAdvogados(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoAdvogados>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoAdvogados>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoAdvogados>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoAdvogados>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=Advogados)

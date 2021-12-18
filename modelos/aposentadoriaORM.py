@@ -90,9 +90,9 @@ class Aposentadoria(BaseModel, Model):
 @post_save(sender=Aposentadoria)
 def inserindoAposentadoria(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoAposentadoria>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoAposentadoria>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoAposentadoria>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoAposentadoria>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=Aposentadoria)

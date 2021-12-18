@@ -11,8 +11,6 @@ import numpy as np
 from util.dateHelper import calculaIdade, strToDate, dataConflitante
 
 from modelos.cabecalhoORM import CnisCabecalhos
-from modelos.remuneracaoORM import CnisRemuneracoes
-from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.expSobrevidaORM import ExpSobrevida
 from modelos.processosORM import Processos
@@ -39,8 +37,8 @@ class CalculosAposentadoria:
     """
     listaCabecalhos: List[CnisCabecalhos] = []
     listaItensContrib: List[ItemContribuicao] = []
-    listaRemuneracoes: List[CnisRemuneracoes] = []
-    listaContribuicoes: List[CnisContribuicoes] = []
+    listaRemuneracoes: List[ItemContribuicao] = []
+    listaContribuicoes: List[ItemContribuicao] = []
     contribSimulacao: ContribSimulacao
     valorSimulacao: float
     dfTotalContribuicoes: pd.DataFrame
@@ -48,6 +46,7 @@ class CalculosAposentadoria:
     idadeCalculada: relativedelta
     dataPrimeiroTrabalho: datetime.date
     enumGeneroCliente: GeneroCliente
+    indiceReajuste: float
 
     def __init__(self, processo: Processos, cliente: Cliente, entrevistaParams: dict):
         self.processo = processo
@@ -132,6 +131,8 @@ class CalculosAposentadoria:
             RegraGeralAR.idade: None,
             RegraGeralAR.tempoContribuicao: None
         }
+
+        self.indiceReajuste = self.buscaIndiceReajuste()
 
         self.calculaDibs()
         self.atualizaDataFrameContribuicoes()
@@ -617,6 +618,7 @@ class CalculosAposentadoria:
         if self.dibs[RegraTransicao.pedagio50] != datetime.date.min and self.tmpContribPorRegra[RegraTransicao.pedagio50] is not None:
             fatorPrev = self.calculaFatorPrevidenciario(self.dibs[RegraTransicao.pedagio50], self.tmpContribPorRegra[RegraTransicao.pedagio50])
             mediaSalarios = self.calculaMediaSalarial(self.dibs[RegraTransicao.pedagio50])
+            indiceReajuste = np.power(self.indiceReajuste, (self.dibs[RegraTransicao.pedagio50].year - datetime.date.today().year))
 
             try:
                 salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.pedagio50].year).get()
@@ -625,23 +627,24 @@ class CalculosAposentadoria:
                 salarioMinimo = SalarioMinimo.select().order_by(SalarioMinimo.vigencia.desc()).get()
 
             valorInicial = round(mediaSalarios * fatorPrev, ndigits=2)
-            valorBeneficio = max(valorInicial, salarioMinimo.valor)
+            valorBeneficio = max(valorInicial, salarioMinimo.valor * indiceReajuste)
 
-            return valorBeneficio
+            return np.round(valorBeneficio, decimals=2)
         else:
             return 0.0
 
     def rmiPedagio100(self) -> float:
         if self.dibs[RegraTransicao.pedagio100] != datetime.date.min:
+            indiceReajuste = np.power(self.indiceReajuste, (self.dibs[RegraTransicao.pedagio100].year - datetime.date.today().year))
             try:
-                salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.pedagio50].year).get()
+                salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.pedagio100].year).get()
             except SalarioMinimo.DoesNotExist as err:
                 salarioMinimo = SalarioMinimo.select().order_by(SalarioMinimo.vigencia.desc()).get()
 
             valorInicial = round(self.calculaMediaSalarial(self.dibs[RegraTransicao.pedagio100]), ndigits=2)
-            valorBeneficio = max(valorInicial, salarioMinimo.valor)
+            valorBeneficio = max(valorInicial, salarioMinimo.valor * indiceReajuste)
 
-            return valorBeneficio
+            return np.round(valorBeneficio, decimals=2)
         else:
             return 0.0
 
@@ -652,8 +655,10 @@ class CalculosAposentadoria:
         """
         mediaSalarios: float = self.calculaMediaSalarial(self.dibs[RegraTransicao.pontos])
         tempoContribuicao: relativedelta = self.tmpContribPorRegra[RegraTransicao.pontos]
+        indiceReajuste = np.power(self.indiceReajuste, (self.dibs[RegraTransicao.pontos].year - datetime.date.today().year))
+
         try:
-            salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.pedagio50].year).get()
+            salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.pontos].year).get()
         except SalarioMinimo.DoesNotExist as err:
             salarioMinimo = SalarioMinimo.select().order_by(SalarioMinimo.vigencia.desc()).get()
 
@@ -663,9 +668,9 @@ class CalculosAposentadoria:
             desconto = (tempoContribuicao.years - 15) * 2 + 60
 
         valorInicial = round(mediaSalarios * (desconto / 100), ndigits=2)
-        valorbeneficio = max(valorInicial, salarioMinimo.valor)
+        valorbeneficio = max(valorInicial, salarioMinimo.valor * indiceReajuste)
 
-        return valorbeneficio
+        return np.round(valorbeneficio, decimals=2)
 
     def rmiRedIdadeMinima(self) -> float:
         """
@@ -674,8 +679,10 @@ class CalculosAposentadoria:
         """
         mediaSalarios: float = self.calculaMediaSalarial(self.dibs[RegraTransicao.reducaoIdadeMinima])
         tempoContribuicao: relativedelta = self.tmpContribPorRegra[RegraTransicao.reducaoIdadeMinima]
+        indiceReajuste = np.power(self.indiceReajuste, (self.dibs[RegraTransicao.reducaoIdadeMinima].year - datetime.date.today().year))
+
         try:
-            salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.pedagio50].year).get()
+            salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.reducaoIdadeMinima].year).get()
         except SalarioMinimo.DoesNotExist as err:
             salarioMinimo = SalarioMinimo.select().order_by(SalarioMinimo.vigencia.desc()).get()
 
@@ -690,22 +697,31 @@ class CalculosAposentadoria:
             desconto = porcentagemAcrescimo * 2 + 60
 
         valorInicial = round(mediaSalarios * (desconto / 100), ndigits=2)
-        valorBeneficio = max(valorInicial, salarioMinimo.valor)
+        valorBeneficio = max(valorInicial, salarioMinimo.valor * indiceReajuste)
 
-        return valorBeneficio
+        return np.round(valorBeneficio, decimals=2)
 
     def rmiRedTmpContribuicao(self) -> float:
         """
         Calcula Renda Básica Inicial, caso cliente tenha optado pela Redução do tempo de contribuição
         :return: float
         """
+        qtdContribAnteriorReal = ItemContribuicao.select().where(
+            ItemContribuicao.clienteId == self.cliente.clienteId,
+            ItemContribuicao.competencia <= self.dataTrocaMoeda,
+        ).count()
+        print(f"\n\nqtdContribAnteriorReal: {qtdContribAnteriorReal}\n\n")
+
+        return self.calculoPadrao()
+
+    def calculoPadrao(self):
         mediaSalarios: float = self.calculaMediaSalarial(self.dibs[RegraTransicao.reducaoTempoContribuicao])
         tempoContribuicao: relativedelta = self.tmpContribPorRegra[RegraTransicao.reducaoTempoContribuicao]
+        indiceReajuste = np.power(self.indiceReajuste, (self.dibs[RegraTransicao.reducaoTempoContribuicao].year - datetime.date.today().year))
         try:
-            salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.pedagio50].year).get()
+            salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraTransicao.reducaoTempoContribuicao].year).get()
         except SalarioMinimo.DoesNotExist as err:
             salarioMinimo = SalarioMinimo.select().order_by(SalarioMinimo.vigencia.desc()).get()
-
         if self.enumGeneroCliente == GeneroCliente.masculino:
             porcentagemAcrescimo = tempoContribuicao.years - 20
             if porcentagemAcrescimo < 0:
@@ -715,11 +731,9 @@ class CalculosAposentadoria:
         else:
             porcentagemAcrescimo: int = tempoContribuicao.years - 15
             desconto = porcentagemAcrescimo * 2 + 60
-
         valorInicial = round(mediaSalarios * (desconto / 100), ndigits=2)
-        valorBeneficio = max(valorInicial, salarioMinimo.valor)
-
-        return valorBeneficio
+        valorBeneficio = max(valorInicial, salarioMinimo.valor * indiceReajuste)
+        return np.round(valorBeneficio, decimals=2)
 
     def rmiIdadeAR(self) -> float:
         """
@@ -732,6 +746,7 @@ class CalculosAposentadoria:
         mediaSalarios: float = self.calculaMediaSalarial(self.dibs[RegraGeralAR.idade])
         tempoContribuicao: relativedelta = self.tmpContribPorRegra[RegraGeralAR.idade]
         fator: float = self.calculaFatorPrevidenciario(self.dibs[RegraGeralAR.idade], self.tmpContribPorRegra[RegraGeralAR.idade])
+        indiceReajuste = np.power(self.indiceReajuste, (self.dibs[RegraGeralAR.idade].year - datetime.date.today().year))
 
         try:
             salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraGeralAR.idade].year).get()
@@ -741,9 +756,9 @@ class CalculosAposentadoria:
         desconto: float = (70 + tempoContribuicao.years) / 100
 
         valorInicial = mediaSalarios * desconto
-        valorBeneficio = max(valorInicial, valorInicial * fator, salarioMinimo.valor)
+        valorBeneficio = max(valorInicial, valorInicial * fator, salarioMinimo.valor * indiceReajuste)
 
-        return valorBeneficio
+        return np.round(valorBeneficio, decimals=2)
 
     def rmiRegra85_95(self) -> float:
         """
@@ -754,13 +769,16 @@ class CalculosAposentadoria:
             return 0.0
 
         mediaSalarios: float = self.calculaMediaSalarial(self.dibs[RegraGeralAR.fator85_95])
+        indiceReajuste = np.power(self.indiceReajuste, (self.dibs[RegraGeralAR.fator85_95].year - datetime.date.today().year))
 
         try:
             salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraGeralAR.fator85_95].year).get()
         except SalarioMinimo.DoesNotExist as err:
             salarioMinimo = SalarioMinimo.select().order_by(SalarioMinimo.vigencia.desc()).get()
 
-        return round(max(mediaSalarios, salarioMinimo.valor), ndigits=2)
+        valorInicial = max(mediaSalarios, salarioMinimo.valor * indiceReajuste)
+
+        return round(valorInicial, ndigits=2)
 
     def rmiTmpContribuicaoAR(self) -> float:
         """
@@ -771,14 +789,15 @@ class CalculosAposentadoria:
             return 0.0
 
         mediaSalarios: float = self.calculaSomaSalarial(self.dibs[RegraGeralAR.tempoContribuicao])
-
         fatorPrev: float = self.calculaFatorPrevidenciario(self.dibs[RegraGeralAR.tempoContribuicao], self.tmpContribPorRegra[RegraGeralAR.tempoContribuicao])
+        indiceReajuste = np.power(self.indiceReajuste, (self.dibs[RegraGeralAR.tempoContribuicao].year - datetime.date.today().year))
 
         try:
             salarioMinimo = SalarioMinimo.select().where(SalarioMinimo.vigencia.year == self.dibs[RegraGeralAR.tempoContribuicao].year).get()
         except SalarioMinimo.DoesNotExist as err:
             salarioMinimo = SalarioMinimo.select().order_by(SalarioMinimo.vigencia.desc()).get()
-        valorBeneficio = max(mediaSalarios * fatorPrev, salarioMinimo.valor)
+
+        valorBeneficio = max(mediaSalarios * fatorPrev, salarioMinimo.valor * indiceReajuste)
 
         return round(valorBeneficio, 2)
 
@@ -894,7 +913,7 @@ class CalculosAposentadoria:
         selecaoDataInicio: bool = self.dfTotalContribuicoes['competencia'] > self.dataTrocaMoeda.strftime('%Y-%m-%d')
         selecaoDataFim: bool = self.dfTotalContribuicoes['competencia'] <= dibReferente.strftime('%Y-%m-%d')
         dfEmQuestao: pd.DataFrame = self.dfTotalContribuicoes[selecaoDataInicio & selecaoDataFim]
-        return dfEmQuestao['salAtualizado'].mean()
+        return dfEmQuestao['salFinal'].mean()
 
     def calculaSomaSalarial(self, dibReferente: datetime.date) -> float:
         if dibReferente is None:
@@ -908,18 +927,25 @@ class CalculosAposentadoria:
         return dfFinal['salAtualizado'][:qtdContribuicoes].mean()
 
     def atualizaDataFrameContribuicoes(self):
+        indiceReajusteSalarial: float = self.indiceReajuste
         lambAvaliaSalario = lambda df: df['salContribuicao'] if df['salContribuicao'] <= df['teto'] else df['teto']
+        lambdaAjustaIndice = lambda df: df['salAtualizado'] * indiceReajusteSalarial if strToDate(df['competencia']) >= datetime.date.today() else df['salAtualizado']
+
         dbInst: SqliteDatabase = ItemContribuicao._meta.database
         query: str = selectItensDados(self.cliente.clienteId)
         listaContribuicoes = dbInst.execute_sql(query)
 
         colunas: list = ['competencia', 'salContribuicao', 'fator', 'teto']
-        dfContribuicoes = pd.DataFrame(listaContribuicoes.fetchall(), columns=colunas)
+        dfContribuicoes: pd.DataFrame = pd.DataFrame(listaContribuicoes.fetchall(), columns=colunas)
 
         dfContribuicoes['salContribuicaoAux'] = dfContribuicoes.apply(lambAvaliaSalario, axis=1)
         salAtualizado = dfContribuicoes['salContribuicaoAux'] * dfContribuicoes['fator']
+
         dfContribuicoes['salAtualizado'] = salAtualizado
+        dfContribuicoes['salFinal'] = dfContribuicoes.apply(lambdaAjustaIndice, axis=1)
         self.dfTotalContribuicoes = dfContribuicoes
+
+        return True
 
     def salvaAposentadorias(self):
         seq: int = 0
@@ -963,3 +989,9 @@ class CalculosAposentadoria:
                 der=datetime.date.min,
             ).save()
         return True
+
+    def buscaIndiceReajuste(self) -> float:
+        if self.indiceReajuste == IndiceReajuste.Ipca:
+            lista: List[IpcaMensal] = IpcaMensal.select(IpcaMensal.valor).order_by(IpcaMensal.dataReferente.desc()).limit(12)
+            valoresIpca = [(item.valor / 100) + 1 for item in lista]
+            return np.round(np.mean(valoresIpca), decimals=4)

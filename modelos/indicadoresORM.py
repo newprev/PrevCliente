@@ -51,9 +51,9 @@ class Indicadores(BaseModel, Model):
 @post_save(sender=Indicadores)
 def inserindoIndicadores(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoIndicadores>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoIndicadores>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoIndicadores>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoIndicadores>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=Indicadores)

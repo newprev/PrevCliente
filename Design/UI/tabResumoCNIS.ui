@@ -1056,7 +1056,7 @@ QGroupBox {
          </column>
          <column>
           <property name="text">
-           <string>Data</string>
+           <string>Competência</string>
           </property>
           <property name="font">
            <font>
@@ -1127,6 +1127,9 @@ Previdenciários</string>
           </property>
          </column>
          <item row="0" column="6">
+          <property name="text">
+           <string/>
+          </property>
           <property name="textAlignment">
            <set>AlignCenter</set>
           </property>

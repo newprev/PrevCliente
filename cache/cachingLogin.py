@@ -22,7 +22,7 @@ class CacheLogin:
 
         try:
             with open(self.pathLoginTxt, encoding='utf-8', mode='w') as cacheLogin:
-                logPrioridade(f'CacheLogin<salvarCache>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComun, tipoLog=TipoLog.Cache)
+                logPrioridade(f'CacheLogin<salvarCache>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComum, tipoLog=TipoLog.Cache)
                 cacheLogin.write(jsonAdv)
             return True
         except Exception:
@@ -57,7 +57,7 @@ class CacheLogin:
 
         try:
             with open(self.pathLoginTempTxt, encoding='utf-8', mode='w') as cacheLogin:
-                logPrioridade(f'CacheLogin<salvarCacheTemporario>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComun, tipoLog=TipoLog.Cache)
+                logPrioridade(f'CacheLogin<salvarCacheTemporario>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComum, tipoLog=TipoLog.Cache)
                 cacheLogin.write(jsonAdv)
             return True
         except Exception as erro:

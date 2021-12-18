@@ -80,7 +80,7 @@ class DaoCalculos:
             cursor.execute(strComando)
             colunas: list = ['clienteId', 'infoId', 'competencia', 'salContribuicao', 'indicadores', 'fator', 'teto', 'tipoInfo']
             dfContribuicoes = pd.DataFrame(cursor.fetchall(), columns=colunas)
-            logPrioridade(f'SELECT<buscaRemContPorData>___________________{self.config.tblCnisBeneficios}', TipoEdicao.select, Prioridade.saidaComun)
+            logPrioridade(f'SELECT<buscaRemContPorData>___________________{self.config.tblCnisBeneficios}', TipoEdicao.select, Prioridade.saidaComum)
             return dfContribuicoes
         except Exception as erro:
             print(f'buscaRemContPorData ({type(erro)}) - {erro}')
@@ -97,7 +97,7 @@ class DaoCalculos:
         # self.db.connect()
         cursor = self.db.cursor()
 
-        strComando = """
+        strComando = f"""
             SELECT
                 --Contribuições
                 con.itemId, con.seq, con.competencia, 
@@ -114,7 +114,7 @@ class DaoCalculos:
                         AND con.competencia <= cm.dataFinal
                 LEFT JOIN tetosPrev tp
                     ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', con.competencia)
-            WHERE clienteId = 2
+            WHERE clienteId = {clienteId}
         """
 
         # strComando = f"""
@@ -159,7 +159,7 @@ class DaoCalculos:
 
         try:
             cursor.execute(strComando)
-            logPrioridade(f'SELECT<getRemECon>___________________{self.config.tblCnisRemuneracoes}', TipoEdicao.select, Prioridade.saidaComun)
+            logPrioridade(f'SELECT<getRemECon>___________________{self.config.tblCnisRemuneracoes}', TipoEdicao.select, Prioridade.saidaComum)
             return cursor.fetchall()
         except Exception as err:
             print(f'getRemECon: ({type(err)}) {err}')
@@ -193,7 +193,7 @@ class DaoCalculos:
     #
     #     try:
     #         cursor.execute(strComando)
-    #         logPrioridade(f'SELECT<buscaCabecalhosClienteId>___________________{self.config.tblCnisCabecalhos}', TipoEdicao.select, Prioridade.saidaComun)
+    #         logPrioridade(f'SELECT<buscaCabecalhosClienteId>___________________{self.config.tblCnisCabecalhos}', TipoEdicao.select, Prioridade.saidaComum)
     #         listaCabecalhos = (CabecalhoModelo().fromList(cabecalho) for cabecalho in cursor.fetchall())
     #         return listaCabecalhos
     #     except Exception as erro:
@@ -228,7 +228,7 @@ class DaoCalculos:
     #         for beneficio in beneficiosLista:
     #             beneficiosModels.append(BeneficiosModelo().fromList(beneficio))
     #
-    #         logPrioridade(f'SELECT<getBeneficiosPor>___________________{self.config.tblCnisBeneficios}', TipoEdicao.select, Prioridade.saidaComun)
+    #         logPrioridade(f'SELECT<getBeneficiosPor>___________________{self.config.tblCnisBeneficios}', TipoEdicao.select, Prioridade.saidaComum)
     #         return beneficiosModels
     #
     #     except Exception as erro:
@@ -302,7 +302,7 @@ class DaoCalculos:
 
         try:
             cursor.execute(strComando)
-            logPrioridade(f'SELECT<getCount>___________________{listaTabelas}', TipoEdicao.select, Prioridade.saidaComun)
+            logPrioridade(f'SELECT<getCount>___________________{listaTabelas}', TipoEdicao.select, Prioridade.saidaComum)
             return cursor.fetchone()[0]
         except:
             logPrioridade(f'Erro SQL - getCount({listaTabelas})', TipoEdicao.erro, Prioridade.saidaImportante)
@@ -340,7 +340,7 @@ class DaoCalculos:
 
         try:
             cursor.execute(strComando)
-            logPrioridade(f'SELECT<contaRemuneracoes>___________________{self.config.tblCnisRemuneracoes}', TipoEdicao.select, Prioridade.saidaComun)
+            logPrioridade(f'SELECT<contaRemuneracoes>___________________{self.config.tblCnisRemuneracoes}', TipoEdicao.select, Prioridade.saidaComum)
             return cursor.fetchone()
         except:
             raise Warning(f'Erro SQL - contaRemuneracoes({self.config.tblCnisRemuneracoes}) <SELECT>')
@@ -371,7 +371,7 @@ class DaoCalculos:
     #
     #     try:
     #         cursor.execute(strComando)
-    #         logPrioridade(f'INSERT<insereRemuneracao>___________________{self.config.tblCnisRemuneracoes}', TipoEdicao.insert, Prioridade.saidaComun)
+    #         logPrioridade(f'INSERT<insereRemuneracao>___________________{self.config.tblCnisRemuneracoes}', TipoEdicao.insert, Prioridade.saidaComum)
     #     except:
     #         raise Warning(f'Erro SQL - insereRemuneracao({self.config.tblCnisRemuneracoes}) <INSERT>')
     #     finally:
@@ -403,7 +403,7 @@ class DaoCalculos:
     #
     #     try:
     #         cursor.execute(strComando)
-    #         logPrioridade(f'INSERT<insereContribuicao>___________________{self.config.tblCnisContribuicoes}', TipoEdicao.insert, Prioridade.saidaComun)
+    #         logPrioridade(f'INSERT<insereContribuicao>___________________{self.config.tblCnisContribuicoes}', TipoEdicao.insert, Prioridade.saidaComum)
     #     except:
     #         raise Warning(f'Erro SQL - insereContribuicao({self.config.tblCnisContribuicoes}) <INSERT>')
     #     finally:
@@ -435,7 +435,7 @@ class DaoCalculos:
     #
     #     try:
     #         cursor.execute(strComando)
-    #         logPrioridade(f'INSERT<insereBeneficio>___________________{self.config.tblCnisBeneficios}', TipoEdicao.insert, Prioridade.saidaComun)
+    #         logPrioridade(f'INSERT<insereBeneficio>___________________{self.config.tblCnisBeneficios}', TipoEdicao.insert, Prioridade.saidaComum)
     #     except:
     #         raise Warning(f'Erro SQL - insereBeneficio({self.config.tblCnisBeneficios}) <INSERT>')
     #     finally:
@@ -488,7 +488,7 @@ class DaoCalculos:
     #
     #     try:
     #         cursor.execute(strComando)
-    #         logPrioridade(f'INSERT<insereListaContribuicoes>___________________{self.config.tblCnisContribuicoes}', TipoEdicao.insert, Prioridade.saidaComun)
+    #         logPrioridade(f'INSERT<insereListaContribuicoes>___________________{self.config.tblCnisContribuicoes}', TipoEdicao.insert, Prioridade.saidaComum)
     #     except:
     #         raise Warning(f'Erro SQL - insereListaContribuicoes({self.config.tipoBanco}) <INSERT {self.config.tblCnisContribuicoes}>')
     #     finally:
@@ -518,7 +518,7 @@ class DaoCalculos:
 
         try:
             cursor.execute(strComando)
-            logPrioridade(f'DELETE<delete>___________________{tabela}', TipoEdicao.delete, Prioridade.saidaComun)
+            logPrioridade(f'DELETE<delete>___________________{tabela}', TipoEdicao.delete, Prioridade.saidaComum)
         except:
             logPrioridade(f'DELETE<delete>___________________ERRO {tabela}', TipoEdicao.delete, Prioridade.saidaImportante)
             raise Warning(f'Erro SQL - delete({tabela}) <DELETE>')

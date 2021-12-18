@@ -45,7 +45,8 @@ class Ui_mwLogin(object):
 "\n"
 "/*---------------------------------- Label --------------------------------------*/\n"
 "#lbLogin {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-family: \"Bebas\";\n"
+"    font: 10pt \"Bebas Neue\";\n"
 "    font-size: 36px;\n"
 "}\n"
 "\n"
@@ -60,48 +61,26 @@ class Ui_mwLogin(object):
 "}\n"
 "\n"
 "#lbNLS {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 8px;\n"
+"    font: 10pt \"Avenir LT Std\";\n"
 "}\n"
 "\n"
 "/*------------------------------- Push Button ---------------------------------*/\n"
 "\n"
 "#pbEntrar {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;\n"
+"    font: 12pt \"Avenir LT Std\";\n"
 "    color: white;\n"
 "\n"
-"    border-radius: 4px;\n"
-"    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(58, 171, 140, 255), stop:1 rgba(9, 212, 156, 255));\n"
+"    border-radius: 8px;\n"
+"    background-color: #3F4E8C;\n"
 "}\n"
 "\n"
 "#pbEntrar:hover {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;\n"
+"    font: 12pt \"Avenir LT Std\";\n"
 "    color: white;\n"
 "\n"
-"    border-radius: 4px;\n"
-"    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(68, 181, 150, 255), stop:1 rgba(19, 222, 166, 255));\n"
+"    border-radius: 8px;\n"
+"    background-color: #566BBF;\n"
 "}\n"
-"\n"
-"#pbPrimeiroAcesso {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;\n"
-"    color: white;\n"
-"\n"
-"    border-radius: 4px;\n"
-"    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(61, 83, 180, 255), stop:1 rgba(9, 162, 212, 255));\n"
-"}\n"
-"\n"
-"#pbPrimeiroAcesso:hover {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;\n"
-"    color: white;\n"
-"\n"
-"    border-radius: 4px;\n"
-"    background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(81, 103, 200, 255), stop:1 rgba(29, 182, 232, 255));\n"
-"}\n"
-"\n"
 "\n"
 "#pbFechar {\n"
 "    font-family: \"TeX Gyre Adventor\";\n"
@@ -121,11 +100,27 @@ class Ui_mwLogin(object):
 "    background-color: transparent;\n"
 "}\n"
 "\n"
-"/*---------------------------------- Label --------------------------------------*/\n"
+"/*---------------------------------- Check Box --------------------------------------*/\n"
 "#cbSalvarSenha {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 10px;\n"
-"}")
+"    font-family: \"Avenir LT Std\";\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"#cbSalvarSenha::indicator:checked {\n"
+"    image: url(:/Logo/entrevista-check.png);\n"
+"}\n"
+"\n"
+"/*---------------------------------- Line Edit --------------------------------------*/\n"
+"#leLogin, #leSenha {\n"
+"    font-family: \"Avenir LT Std\";\n"
+"\n"
+"    border: 0px solid gray;\n"
+"    border-radius: 8px;\n"
+"    padding: 0 8px;\n"
+"    background: rgb(230, 230, 230);\n"
+"    selection-background-color: darkgray;\n"
+"}\n"
+"")
         self.frMain.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frMain.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frMain.setObjectName("frMain")
@@ -139,51 +134,59 @@ class Ui_mwLogin(object):
         self.frLeft.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frLeft.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frLeft.setObjectName("frLeft")
+        self.gridLayout = QtWidgets.QGridLayout(self.frLeft)
+        self.gridLayout.setObjectName("gridLayout")
+        spacerItem = QtWidgets.QSpacerItem(20, 60, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout.addItem(spacerItem, 1, 1, 1, 1)
+        self.lbNLS = QtWidgets.QLabel(self.frLeft)
+        self.lbNLS.setObjectName("lbNLS")
+        self.gridLayout.addWidget(self.lbNLS, 6, 1, 1, 1, QtCore.Qt.AlignTop)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout.addItem(spacerItem1, 13, 1, 1, 1)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem2, 4, 0, 1, 1)
         self.lbLogin = QtWidgets.QLabel(self.frLeft)
-        self.lbLogin.setGeometry(QtCore.QRect(140, 90, 101, 51))
         self.lbLogin.setObjectName("lbLogin")
+        self.gridLayout.addWidget(self.lbLogin, 2, 0, 1, 4, QtCore.Qt.AlignHCenter)
+        self.lbInfoAcesso = QtWidgets.QLabel(self.frLeft)
+        self.lbInfoAcesso.setObjectName("lbInfoAcesso")
+        self.gridLayout.addWidget(self.lbInfoAcesso, 3, 0, 1, 4, QtCore.Qt.AlignHCenter)
+        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem3, 4, 2, 1, 1)
         self.leLogin = QtWidgets.QLineEdit(self.frLeft)
-        self.leLogin.setGeometry(QtCore.QRect(100, 170, 181, 25))
+        self.leLogin.setMinimumSize(QtCore.QSize(200, 40))
         self.leLogin.setAlignment(QtCore.Qt.AlignCenter)
         self.leLogin.setObjectName("leLogin")
+        self.gridLayout.addWidget(self.leLogin, 4, 1, 1, 1)
+        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem4, 5, 0, 1, 1)
+        self.cbSalvarSenha = QtWidgets.QCheckBox(self.frLeft)
+        self.cbSalvarSenha.setObjectName("cbSalvarSenha")
+        self.gridLayout.addWidget(self.cbSalvarSenha, 7, 1, 1, 1, QtCore.Qt.AlignTop)
+        self.pbEntrar = QtWidgets.QPushButton(self.frLeft)
+        self.pbEntrar.setMinimumSize(QtCore.QSize(0, 56))
+        self.pbEntrar.setObjectName("pbEntrar")
+        self.gridLayout.addWidget(self.pbEntrar, 12, 1, 1, 1)
+        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem5, 5, 2, 1, 1)
         self.leSenha = QtWidgets.QLineEdit(self.frLeft)
-        self.leSenha.setGeometry(QtCore.QRect(100, 210, 181, 25))
+        self.leSenha.setMinimumSize(QtCore.QSize(0, 40))
         self.leSenha.setEchoMode(QtWidgets.QLineEdit.Password)
         self.leSenha.setAlignment(QtCore.Qt.AlignCenter)
         self.leSenha.setObjectName("leSenha")
+        self.gridLayout.addWidget(self.leSenha, 5, 1, 1, 1)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout.addItem(spacerItem6, 8, 1, 1, 1)
         self.lbEscritorio = QtWidgets.QLabel(self.frLeft)
-        self.lbEscritorio.setGeometry(QtCore.QRect(10, 10, 71, 31))
         self.lbEscritorio.setObjectName("lbEscritorio")
+        self.gridLayout.addWidget(self.lbEscritorio, 0, 0, 1, 1)
         self.lbNomeDoEscritorio = QtWidgets.QLabel(self.frLeft)
-        self.lbNomeDoEscritorio.setGeometry(QtCore.QRect(90, 10, 301, 31))
         self.lbNomeDoEscritorio.setText("")
         self.lbNomeDoEscritorio.setObjectName("lbNomeDoEscritorio")
-        self.pbEntrar = QtWidgets.QPushButton(self.frLeft)
-        self.pbEntrar.setGeometry(QtCore.QRect(102, 300, 181, 25))
-        self.pbEntrar.setObjectName("pbEntrar")
-        self.lbNLS = QtWidgets.QLabel(self.frLeft)
-        self.lbNLS.setGeometry(QtCore.QRect(100, 240, 171, 17))
-        self.lbNLS.setObjectName("lbNLS")
-        self.lbInfoAcesso = QtWidgets.QLabel(self.frLeft)
-        self.lbInfoAcesso.setGeometry(QtCore.QRect(100, 132, 181, 17))
-        self.lbInfoAcesso.setObjectName("lbInfoAcesso")
-        self.pbPrimeiroAcesso = QtWidgets.QPushButton(self.frLeft)
-        self.pbPrimeiroAcesso.setGeometry(QtCore.QRect(100, 340, 181, 25))
-        self.pbPrimeiroAcesso.setObjectName("pbPrimeiroAcesso")
-        self.pbarLoading = QtWidgets.QProgressBar(self.frLeft)
-        self.pbarLoading.setGeometry(QtCore.QRect(80, 480, 311, 10))
-        self.pbarLoading.setMinimumSize(QtCore.QSize(0, 10))
-        self.pbarLoading.setMaximumSize(QtCore.QSize(16777215, 10))
-        self.pbarLoading.setProperty("value", 0)
-        self.pbarLoading.setTextVisible(False)
-        self.pbarLoading.setFormat("")
-        self.pbarLoading.setObjectName("pbarLoading")
-        self.cbSalvarSenha = QtWidgets.QCheckBox(self.frLeft)
-        self.cbSalvarSenha.setGeometry(QtCore.QRect(100, 260, 111, 23))
-        self.cbSalvarSenha.setObjectName("cbSalvarSenha")
+        self.gridLayout.addWidget(self.lbNomeDoEscritorio, 0, 1, 1, 3)
         self.pbFechar = QtWidgets.QPushButton(self.frLeft)
-        self.pbFechar.setGeometry(QtCore.QRect(4, 470, 61, 21))
         self.pbFechar.setObjectName("pbFechar")
+        self.gridLayout.addWidget(self.pbFechar, 15, 0, 1, 1, QtCore.Qt.AlignLeft)
         self.horizontalLayout.addWidget(self.frLeft)
         self.stkPrimeiroAcesso = QtWidgets.QStackedWidget(self.frMain)
         self.stkPrimeiroAcesso.setStyleSheet("/*---------------------------------- Widgets ----------------------------------*/\n"
@@ -426,15 +429,14 @@ class Ui_mwLogin(object):
     def retranslateUi(self, mwLogin):
         _translate = QtCore.QCoreApplication.translate
         mwLogin.setWindowTitle(_translate("mwLogin", "MainWindow"))
+        self.lbNLS.setText(_translate("mwLogin", "Não lembro minha senha"))
         self.lbLogin.setText(_translate("mwLogin", "Login"))
+        self.lbInfoAcesso.setText(_translate("mwLogin", "Acesse a sua conta"))
         self.leLogin.setPlaceholderText(_translate("mwLogin", "Nº OAB ou E-mail"))
+        self.cbSalvarSenha.setText(_translate("mwLogin", "Salvar senha"))
+        self.pbEntrar.setText(_translate("mwLogin", "Entrar"))
         self.leSenha.setPlaceholderText(_translate("mwLogin", "Senha"))
         self.lbEscritorio.setText(_translate("mwLogin", "Escritório:"))
-        self.pbEntrar.setText(_translate("mwLogin", "Entrar"))
-        self.lbNLS.setText(_translate("mwLogin", "Não lembro minha senha"))
-        self.lbInfoAcesso.setText(_translate("mwLogin", "Acesse a sua conta"))
-        self.pbPrimeiroAcesso.setText(_translate("mwLogin", "Primeiro acesso"))
-        self.cbSalvarSenha.setText(_translate("mwLogin", "Salvar senha"))
         self.pbFechar.setText(_translate("mwLogin", "Fechar \n"
 "programa"))
         self.lbTitulo.setText(_translate("mwLogin", "Primeiro acesso"))
@@ -454,7 +456,7 @@ class Ui_mwLogin(object):
         self.pbCancelar.setText(_translate("mwLogin", "Cancelar"))
         self.lbInfoSenhaAtual.setText(_translate("mwLogin", "Senha \n"
 "provisória:"))
-import Resources.loginResources
+import Resources.login
 
 
 if __name__ == "__main__":

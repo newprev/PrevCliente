@@ -13,7 +13,7 @@ class TamanhoData(Enum):
     gg = 4
 
 class Prioridade(Enum):
-    saidaComun = 200
+    saidaComum = 200
     saidaImportante = 300
     sync = 400
 

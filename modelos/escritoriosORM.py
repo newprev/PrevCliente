@@ -116,9 +116,9 @@ class Escritorios(BaseModel, Model):
 @post_save(sender=Escritorios)
 def inserindoEscritorios(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoEscritorios>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoEscritorios>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoEscritorios>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoEscritorios>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=Escritorios)

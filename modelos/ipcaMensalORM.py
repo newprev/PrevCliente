@@ -49,9 +49,9 @@ class IpcaMensal(BaseModel, Model):
 @post_save(sender=IpcaMensal)
 def inserindoIpcaMensal(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoIpcaMensal>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoIpcaMensal>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoIpcaMensal>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoIpcaMensal>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=IpcaMensal)

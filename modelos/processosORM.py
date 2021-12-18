@@ -122,9 +122,9 @@ class Processos(BaseModel, Model):
 @post_save(sender=Processos)
 def inserindoProcessos(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoProcessos>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoProcessos>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoProcessos>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoProcessos>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=Processos)

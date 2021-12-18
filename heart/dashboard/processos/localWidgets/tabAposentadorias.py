@@ -16,6 +16,7 @@ class TabAposentariasController(QWidget, Ui_wdgTabAposentadorias):
     listaTemDireito: List[Aposentadoria]
     listaNaoTemDireito: List[Aposentadoria]
     clienteAtual: Cliente
+    aposentadoriaEscolhida: Aposentadoria
 
     def __init__(self, clienteEnviado: Cliente = None, aposTemDireito: List[Aposentadoria] = None, aposNaoTemDireito: List[Aposentadoria] = None,  parent=None):
         super(TabAposentariasController, self).__init__(parent=parent)
@@ -32,6 +33,9 @@ class TabAposentariasController(QWidget, Ui_wdgTabAposentadorias):
             Aposentadoria.clienteId == clienteId,
             Aposentadoria.processoId == processoId,
             Aposentadoria.possuiDireito == True
+        ).order_by(
+            Aposentadoria.idadeCliente,
+            Aposentadoria.valorBeneficio
         )
 
         self.listaNaoTemDireito = Aposentadoria.select().where(
@@ -53,8 +57,13 @@ class TabAposentariasController(QWidget, Ui_wdgTabAposentadorias):
         coordenadas: List[Tuple] = calculaCoordenadas(len(self.listaTemDireito), 2)
         efeitos = Efeitos()
         for numItem, apos in enumerate(self.listaTemDireito):
-            card = CardAposentadoria(apos, parent=self)
-            efeitos.shadowCards([card])
+            aposentadoriaSelecionada = numItem == 0
+            card = CardAposentadoria(apos, parent=self, aposSelecionada=aposentadoriaSelecionada)
+            if aposentadoriaSelecionada:
+                self.aposentadoriaEscolhida = apos
+                efeitos.shadowCards([card], color=(41, 45, 64, 180), offset=(5, 7))
+            else:
+                efeitos.shadowCards([card], color=(82, 85, 90, 100))
             self.glTemDireito.addWidget(card, coordenadas[numItem][0], coordenadas[numItem][1])
 
         # Atualiza grid do tab "Nao tem direito"

@@ -55,9 +55,9 @@ class IndiceAtuMonetaria(BaseModel, Model):
 @post_save(sender=IndiceAtuMonetaria)
 def inserindoIndiceAtuMonetaria(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoIndiceAtuMonetaria>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoIndiceAtuMonetaria>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoIndiceAtuMonetaria>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoIndiceAtuMonetaria>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=IndiceAtuMonetaria)

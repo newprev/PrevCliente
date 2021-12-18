@@ -10,6 +10,7 @@ class ClientAuthModelo:
         self.numeroOAB: str = None
         self.email: str = None
         self.ativo: bool = True
+        self.confirmado: bool = False
 
     def toDict(self):
         dictAuth = {
@@ -18,7 +19,8 @@ class ClientAuthModelo:
             'senha': self.senha,
             'numeroOAB': self.numeroOAB,
             'email': self.email,
-            'ativo': self.ativo
+            'ativo': self.ativo,
+            'confirmado': self.confirmado
         }
         return dictAuth
 
@@ -28,6 +30,7 @@ class ClientAuthModelo:
         self.numeroOAB = dictAuth['numeroOAB']
         self.email = dictAuth['email']
         self.advogadoId = dictAuth['advogadoId']
+        self.confirmado = ['confirmado']
 
         if 'ativo' not in dictAuth.keys():
             self.ativo = False
@@ -47,6 +50,7 @@ class ClientAuthModelo:
                 self.senha = listUsuario[2]
                 self.numeroOAB = listUsuario[3]
                 self.email = listUsuario[4]
+                self.confirmado = listUsuario[5]
             if retornaInst:
                 return self
 
@@ -58,7 +62,9 @@ class ClientAuthModelo:
             senha: {self.senha},
             numeroOAB: {self.numeroOAB},
             email: {self.email},
-            ativo: {self.ativo}"""
+            ativo: {self.ativo},
+            confirmado: {self.confirmado}
+"""
     
     def __eq__(self, other):
         instVariavel: bool = isinstance(other, Advogados)

@@ -16,10 +16,7 @@ from heart.telAfinsController import TelAfinsController
 
 from modelos.cnisModelo import CNISModelo
 from modelos.clienteORM import Cliente
-from modelos.contribuicoesORM import CnisContribuicoes
-from modelos.remuneracaoORM import CnisRemuneracoes
 from modelos.cabecalhoORM import CnisCabecalhos
-from modelos.beneficiosORM import CnisBeneficios
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.escritoriosORM import Escritorios
 from modelos.processosORM import Processos
@@ -305,17 +302,17 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                             self.cliente = Cliente.get(Cliente.cpfCliente == clienteAInserir.cpfCliente)
 
                             contribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=self.cliente.clienteId)
-                            listaContribuicoes = contribuicoes['contribuicoes']
-                            listaRemuneracoes = contribuicoes['remuneracoes']
+                            # listaContribuicoes = contribuicoes['contribuicoes']
+                            # listaRemuneracoes = contribuicoes['remuneracoes']
                             cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
                             cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
-                            beneficios = contribuicoes['beneficios']
+                            # beneficios = contribuicoes['beneficios']
 
-                            CnisContribuicoes.insert_many(listaContribuicoes).on_conflict_replace().execute()
-                            CnisRemuneracoes.insert_many(listaRemuneracoes).on_conflict_replace().execute()
+                            # CnisContribuicoes.insert_many(listaContribuicoes).on_conflict_replace().execute()
+                            # CnisRemuneracoes.insert_many(listaRemuneracoes).on_conflict_replace().execute()
                             CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
                             CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
-                            CnisBeneficios.insert_many(beneficios).on_conflict_replace().execute()
+                            # CnisBeneficios.insert_many(beneficios).on_conflict_replace().execute()
 
                             self.cliente.telefoneId = Telefones.get_by_id(self.cliente)
                             transaction.commit()

@@ -18,7 +18,6 @@ class ItemContribuicao(BaseModel, Model):
 
     itemContribuicaoId = AutoField(column_name='itemContribuicaoId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
-    itemId = IntegerField(null=True)
     seq = IntegerField(null=False)
     tipo = CharField(choices=TIPO, default='C')
     competencia = DateField(null=False, formats=DATEFORMATS)
@@ -94,9 +93,9 @@ class ItemContribuicao(BaseModel, Model):
 @post_save(sender=ItemContribuicao)
 def inserindoItemContribuicao(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoItemContribuicao>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoItemContribuicao>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoCnisContribuicoes>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoCnisContribuicoes>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=ItemContribuicao)

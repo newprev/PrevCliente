@@ -1112,7 +1112,7 @@ class Ui_wdgTabResumoCNIS(object):
         item = self.tblContribuicoes.horizontalHeaderItem(1)
         item.setText(_translate("wdgTabResumoCNIS", "Nº"))
         item = self.tblContribuicoes.horizontalHeaderItem(2)
-        item.setText(_translate("wdgTabResumoCNIS", "Data"))
+        item.setText(_translate("wdgTabResumoCNIS", "Competência"))
         item = self.tblContribuicoes.horizontalHeaderItem(3)
         item.setText(_translate("wdgTabResumoCNIS", "Salário de \n"
 "Contribuição"))

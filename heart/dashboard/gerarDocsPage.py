@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget, QFrame, QCheckBox
 
 from Design.pyUi.efeitos import Efeitos
 from Design.pyUi.pgImpressaoDocs import Ui_wdgImpressaoDocs
-from heart.dashboard.entrevista.geracaoDocumentos.docEntrevista import DocEntrevista
+from geracaoDocumentos.geraDocAposentadoria import GeracaoDocumentos
 from sinaisCustomizados import Sinais
 
 from modelos.clienteORM import Cliente
@@ -43,7 +43,7 @@ class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):
         self.frDecHipoInfo.hide()
         self.frDecPensaoInfo.hide()
 
-        self.doc: DocEntrevista = None
+        self.doc: GeracaoDocumentos = None
 
         self.avaliaCheckBoxes()
 
@@ -62,7 +62,7 @@ class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):
         # self.aposentadoriaAtual = Aposentadoria.select().where(
         #     Aposentadoria.clienteId == self.cliente.clienteId).get()
 
-        self.doc = DocEntrevista(processo, cliente)
+        self.doc = GeracaoDocumentos(processo, cliente)
 
     def gerarDocumentosSelecionados(self):
         self.doc.criaRequerimentoAdm()

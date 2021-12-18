@@ -8,7 +8,7 @@ from util.enums.newPrevEnums import *
 from util.helpers import datetimeToSql
 
 
-def logPrioridade(mensagem: str, tipoEdicao: TipoEdicao = TipoEdicao.select, tipoLog: TipoLog = TipoLog.DataBase, priodiade: Prioridade = Prioridade.saidaComun):
+def logPrioridade(mensagem: str, tipoEdicao: TipoEdicao = TipoEdicao.select, tipoLog: TipoLog = TipoLog.DataBase, priodiade: Prioridade = Prioridade.saidaComum):
     init(autoreset=True)
 
     if tipoLog == TipoLog.DataBase:
@@ -33,7 +33,7 @@ def logPrioridade(mensagem: str, tipoEdicao: TipoEdicao = TipoEdicao.select, tip
     else:
         corDaFonte = Fore.CYAN
 
-    if priodiade == Prioridade.saidaComun:
+    if priodiade == Prioridade.saidaComum:
         corDoFundo = Back.RESET
     elif priodiade == Prioridade.saidaImportante:
         corDoFundo = Back.YELLOW

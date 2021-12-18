@@ -67,9 +67,9 @@ class Telefones(BaseModel, Model):
 @post_save(sender=Telefones)
 def inserindoTelefones(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoTelefones>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoTelefones>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoTelefones>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoTelefones>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=Telefones)

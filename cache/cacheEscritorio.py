@@ -23,7 +23,7 @@ class CacheEscritorio:
         try:
             with open(self.pathEscritorioTxt, encoding='utf-8', mode='w') as cacheLogin:
                 cacheLogin.write(jsonEscritorio)
-            logPrioridade(f'CacheEscritorio<salvarCache>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComun, tipoLog=TipoLog.Cache)
+            logPrioridade(f'CacheEscritorio<salvarCache>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComum, tipoLog=TipoLog.Cache)
             return True
         except Exception as erro:
             print(f'salvarCache({type(erro)}) - {erro}')

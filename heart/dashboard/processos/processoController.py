@@ -1,3 +1,5 @@
+import datetime
+
 from PyQt5.QtWidgets import QMainWindow
 from Design.pyUi.processoPg import Ui_mwProcessoPage
 from typing import List
@@ -12,12 +14,16 @@ from modelos.processosORM import Processos
 from modelos.advogadoORM import Advogados
 from modelos.escritoriosORM import Escritorios
 from modelos.aposentadoriaORM import Aposentadoria
+from modelos.itemContribuicao import ItemContribuicao
+
+from geracaoDocumentos.geraDocAposentadoria import GeracaoDocumentos
 
 from cache.cacheEscritorio import CacheEscritorio
 from cache.cachingLogin import CacheLogin
+from util.dateHelper import strToDate
 
 from util.enums.aposentadoriaEnums import TelaAtiva
-from util.enums.processoEnums import TipoBeneficio, TipoProcesso, SituacaoProcesso
+from util.enums.processoEnums import TipoBeneficio, TipoProcesso, SituacaoProcesso, NaturezaProcesso
 from util.helpers import mascaraCPF
 from util.popUps import popUpOkAlerta
 
@@ -29,6 +35,8 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
     escritorioAtual: Escritorios
     telaAtual: TelaAtiva
     listaAposentadorias: List[Aposentadoria]
+    geraDocumentos: GeracaoDocumentos
+    dataTrocaMoeda: datetime.date
 
     def __init__(self, cliente: Cliente = None, processo: Processos = None, parent=None):
         super(ProcessosController, self).__init__(parent=parent)
@@ -36,29 +44,110 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
 
         self.clienteAtual: Cliente = cliente
         self.processoAtual: Processos = processo
+        self.tipoBeneficioAtual: TipoBeneficio = TipoBeneficio.Aposentadoria
+        self.aposentadoriaAtual: Aposentadoria = None
         self.tabAposController = TabAposentariasController()
         self.vlAposentadoria.addWidget(self.tabAposController)
+        self.dataTrocaMoeda: datetime.date = datetime.date(1994, 7, 1)
 
         self.carregaEscritorio()
         self.carregaAdvogado()
         self.telaAtual = TelaAtiva(0)
 
+        # Botões centro da tela
         self.pbBuscaCliente.clicked.connect(self.abreBuscaCliente)
         self.pbBuscaProcesso.clicked.connect(self.abreBuscaProcesso)
+
+        # Botões tags
         self.pbFecharCliente.clicked.connect(self.fecharCliente)
         self.pbFecharProcesso.clicked.connect(self.fecharProcesso)
-        self.pbAposentadorias.clicked.connect(self.avaliaNavegacaoProcesso)
+
+        # Botões benefícios
+        self.pbAposentadorias.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.Aposentadoria))
+        self.pbAuxAcidente.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.AuxAcidente))
+        self.pbAuxDoenca.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.AuxDoenca))
+        self.pbAuxReclusao.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.AuxReclusao))
+        self.pbBeneDeficiente.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.BeneDeficiencia))
+        self.pbBeneIdoso.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.BeneIdoso))
+        self.pbSalMaternidade.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.SalMaternidade))
+        self.pbPensaoMorte.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.PensaoMorte))
+
+        # Botões documentos
+        self.pbProcuracao.clicked.connect(self.avaliaCriaProcuracao)
+        self.pbDocsComp.clicked.connect(self.avaliaCriaDocsComp)
+        self.pbHipo.clicked.connect(self.avaliaCriaHipo)
+        self.pbDecPensionista.clicked.connect(self.avaliaCriaDecPensao)
+        self.pbRequerimento.clicked.connect(self.avaliaCriaRequerimento)
+
+        self.geraDocumentos: GeracaoDocumentos
 
         self.iniciaEstados()
+        self.atualizaInfoNaTela()
 
-    def avaliaNavegacaoProcesso(self):
-        if self.processoAtual is None or self.clienteAtual is None:
+    #################### Gerar documentos
+    def avaliaCriaProcuracao(self):
+        if self.geraDocumentos is not None and self.processoAtual is not None:
+            self.geraDocumentos.criaProcuracao()
+
+    def avaliaCriaDocsComp(self):
+        if self.geraDocumentos is not None and self.processoAtual is not None:
+            self.geraDocumentos.criaDocumentosComprobatorios()
+
+    def avaliaCriaHipo(self):
+        if self.geraDocumentos is not None and self.processoAtual is not None:
+            self.geraDocumentos.criaDeclaracaoHipo()
+
+    def avaliaCriaDecPensao(self):
+        if self.geraDocumentos is not None and self.processoAtual is not None:
+            self.geraDocumentos.criaDecPensao()
+
+    def avaliaCriaRequerimento(self):
+        if self.geraDocumentos is not None and self.processoAtual is not None:
+            if self.processoAtual.natureza == NaturezaProcesso.administrativo.value:
+                if self.tipoBeneficioAtual == TipoBeneficio.Aposentadoria:
+                    self.aposentadoriaAtual = self.tabAposController.aposentadoriaEscolhida
+                    try:
+                        listaItens: List[ItemContribuicao] = ItemContribuicao.select(
+                        ).where(
+                            ItemContribuicao.clienteId == self.clienteAtual.clienteId,
+                            ItemContribuicao.competencia <= strToDate(self.aposentadoriaAtual.dib)
+                        ).order_by(
+                            ItemContribuicao.competencia.desc()
+                        )
+                        self.geraDocumentos.criaRequerimentoAdm(listaItens)
+                    except Exception as err:
+                        print(err)
+            elif self.processoAtual.natureza == NaturezaProcesso.judicial.value:
+                print('Cria requerimento judicial')
+            else:
+                popUpOkAlerta('Deu problema')
+
+    #################### Gerar documentos
+    def avaliaNavegacaoProcesso(self, beneficio: TipoBeneficio):
+        self.tipoBeneficioAtual = beneficio
+        funcionaslidadeNaoImplementadas = [
+            TipoBeneficio.BeneIdoso,
+            TipoBeneficio.BeneDeficiencia,
+            TipoBeneficio.AuxDoenca,
+            TipoBeneficio.AuxReclusao,
+            TipoBeneficio.AuxAcidente,
+            TipoBeneficio.PensaoMorte,
+            TipoBeneficio.SalMaternidade
+        ]
+        if beneficio in funcionaslidadeNaoImplementadas:
             popUpOkAlerta(
-                'Para acessar a tela com informações de aposentadorias, é necessário escolher um cliente e determinar um processo utilizando o botão ao centro da tela.',
+                'Essa funcionalidade está em desenvolvimento. Você receberá um e-mail assim que novas funcionalidades forem finalizadas.',
+                titulo='Funcionalidade em desenvolvimento.',
             )
             self.raise_()
         else:
-            self.atualizaInfoNaTela()
+            if self.processoAtual is None or self.clienteAtual is None:
+                popUpOkAlerta(
+                    'Para acessar a tela com informações de aposentadorias, é necessário escolher um cliente e determinar um processo utilizando o botão ao centro da tela.',
+                )
+                self.raise_()
+            else:
+                self.atualizaInfoNaTela()
             # self.limpaBotoes()
             # self.pbAposentadorias.setStyleSheet(layoutBotaoGuia("pbAposentadorias", selecionado=True))
 
@@ -93,11 +182,15 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
                     self.processoAtual = Processos.select().where(Processos.clienteId == self.clienteAtual.clienteId).get()
                     self.atualizaInfoNaTela()
                     self.trocaCardCentral(None, TelaAtiva.Aposentadoria)
+                    self.habilitaBotoesDocs(self.processoAtual is not None)
+                    self.geraDocumentos = GeracaoDocumentos(self.processoAtual, self.clienteAtual)
                 except Processos.DoesNotExist as err:
                     self.processoAtual = None
                     popUpOkAlerta(
                         f'O(a) cliente {self.clienteAtual.nomeCliente} ainda não possui nenhum processo registrado',
                     )
+                    self.clienteAtual = None
+
                     self.atualizaInfoNaTela()
                     self.raise_()
 
@@ -163,6 +256,8 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
             self.frInfoProcesso.hide()
             self.frInfoCliente.hide()
 
+        self.habilitaBotoesDocs(self.processoAtual is not None)
+
     def trocaCardCentral(self, estadoAtual: TelaAtiva, estadoFuturo: TelaAtiva):
         self.stkMain.setCurrentIndex(estadoFuturo.value)
         self.telaAtual = estadoFuturo
@@ -197,12 +292,22 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
     def fecharProcesso(self):
         self.processoAtual = None
         self.atualizaInfoNaTela()
+        self.tabAposController.limpaLayout()
         self.trocaCardCentral(None, TelaAtiva.BuscaProcesso)
+
+    def habilitaBotoesDocs(self, habilita: bool):
+        self.pbHipo.setDisabled(not habilita)
+        self.pbProcuracao.setDisabled(not habilita)
+        self.pbDocsComp.setDisabled(not habilita)
+        self.pbDecPensionista.setDisabled(not habilita)
+        self.pbRequerimento.setDisabled(not habilita)
 
     def recebeProcesso(self, processoId: int):
         if processoId is not None:
             self.processoAtual = Processos.get_by_id(processoId)
             self.atualizaInfoNaTela()
+            self.habilitaBotoesDocs(True)
+            self.geraDocumentos = GeracaoDocumentos(self.processoAtual, self.clienteAtual)
 
     def limpaTudo(self):
         # Cliente
@@ -220,6 +325,9 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
         # Aposentadoria
         self.tabAposController.limpaLayout()
         self.trocaCardCentral(None, TelaAtiva.BuscaCliente)
+
+        # Gera documentos
+        self.geraDocumentos = None
 
     def limpaBotoes(self):
         self.pbAposentadorias.setStyleSheet(layoutBotaoGuia("pbAposentadorias", selecionado=False))

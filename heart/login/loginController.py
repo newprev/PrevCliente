@@ -1,16 +1,17 @@
 import datetime
-from dateutil.relativedelta import relativedelta
 import pymysql
 import asyncio as aio
 from typing import List
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QMainWindow
 
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
+
 from repositorios.clienteRepositorio import UsuarioRepository
 from repositorios.escritorioRepositorio import EscritorioRepositorio
 from repositorios.ferramentasRepositorio import ApiFerramentas
+
 from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
 from modelos.tetosPrevORM import TetosPrev
@@ -22,12 +23,15 @@ from modelos.indiceAtuMonetariaORM import IndiceAtuMonetaria
 from modelos.configGeraisORM import ConfigGerais
 from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.ipcaMensalORM import IpcaMensal
+
 from Design.pyUi.loginPage import Ui_mwLogin
-from heart.login.wdgAdvController import WdgAdvController
+
 from heart.dashboard.dashboardController import DashboardController
+
 from util.dateHelper import strToDatetime
 from util.enums.newPrevEnums import *
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
+
 import os
 import json
 
@@ -55,9 +59,9 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.pbarLoading.hide()
-        self.timer = QtCore.QTimer()
-        self.timer.timeout.connect(self.escondeLoading)
+        # self.pbarLoading.hide()
+        # self.timer = QtCore.QTimer()
+        # self.timer.timeout.connect(self.escondeLoading)
 
         self.configGerais = ConfigGerais()
 
@@ -67,7 +71,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.dashboard: DashboardController = None
 
         self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.inicio.value)
-        self.pbPrimeiroAcesso.clicked.connect(self.iniciarPrimeiroAcesso)
+        # self.pbPrimeiroAcesso.clicked.connect(self.iniciarPrimeiroAcesso)
         self.pbCancelar.clicked.connect(self.cancelaCadastro)
         self.pbCadastrar.clicked.connect(self.avaliaConfirmacaoCadastro)
         self.pbFechar.clicked.connect(self.close)
@@ -488,15 +492,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 if qtdIpca < len(listaIpca):
                     IpcaMensal.insert_many(listaIpca).on_conflict('replace').execute()
 
-    # def showPopupAlerta(self, mensagem, titulo='Atenção!'):
-    #     dialogPopup = QMessageBox()
-    #     dialogPopup.setWindowTitle(titulo)
-    #     dialogPopup.setText(mensagem)
-    #     dialogPopup.setIcon(QMessageBox.Warning)
-    #     dialogPopup.setStandardButtons(QMessageBox.Ok)
-    #
-    #     close = dialogPopup.exec_()
-
     def iniciaCampos(self):
         self.lePrimCadLogin.setReadOnly(True)
         self.leNome.setReadOnly(True)
@@ -506,17 +501,18 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.leEmail.setReadOnly(True)
 
     def loading(self, value: int):
-        self.pbarLoading.show()
-        valor: int = value + self.pbarLoading.value()
-        self.pbarLoading.setValue(valor)
+        pass
+    #     self.pbarLoading.show()
+    #     valor: int = value + self.pbarLoading.value()
+    #     self.pbarLoading.setValue(valor)
+    #
+    #     if valor >= 100:
+    #         self.timer.start(500)
 
-        if valor >= 100:
-            self.timer.start(500)
-
-    def escondeLoading(self):
-        self.pbarLoading.hide()
-        self.pbarLoading.setValue(0)
-        self.timer.stop()
+    # def escondeLoading(self):
+    #     self.pbarLoading.hide()
+    #     self.pbarLoading.setValue(0)
+    #     self.timer.stop()
 
     def limpa(self):
         self.leNome.clear()

@@ -38,7 +38,7 @@ class UsuarioRepository:
                 Escritorios.insert(escritorioJson).on_conflict_replace().execute()
                 escritorio, created = Escritorios.get_or_create(**model_to_dict(escritorioAux, recurse=False))
 
-                logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<escritorio/>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComun)
+                logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<escritorio/>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
                 return escritorio
             else:
                 logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<escritorio/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
@@ -57,7 +57,7 @@ class UsuarioRepository:
             listaAdvogadosJson: list = response.json()
             listaObjAdv: List[Advogados] = [dict_to_model(Advogados, adv, ignore_unknown=True) for adv in listaAdvogadosJson]
 
-            logPrioridade(f"API => buscaAdvNaoCadastrados ____________________GET<escritorio/<escritorioId>/advogado:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComun)
+            logPrioridade(f"API => buscaAdvNaoCadastrados ____________________GET<escritorio/<escritorioId>/advogado:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
             return listaObjAdv
         else:
             logPrioridade(f"API => buscaAdvNaoCadastrados ____________________GET<escritorio/<escritorioId>/advogado/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
@@ -71,7 +71,7 @@ class UsuarioRepository:
         if 199 < response.status_code < 400:
             advogadoSenha: dict = response.json()
 
-            logPrioridade(f"API => buscaSenhaProvisoria ____________________GET<advogado/<int:id>/confirmacao>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComun)
+            logPrioridade(f"API => buscaSenhaProvisoria ____________________GET<advogado/<int:id>/confirmacao>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
             return advogadoSenha
         else:
             logPrioridade(f"API => buscaSenhaProvisoria GET<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
@@ -86,7 +86,7 @@ class UsuarioRepository:
             advogadoSenha: dict = response.json()
 
             if advogadoSenha['confirmado']:
-                logPrioridade(f"API => buscaSenhaDefinitiva ____________________GET<advogado/<int:id>/confirmacao>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComun)
+                logPrioridade(f"API => buscaSenhaDefinitiva ____________________GET<advogado/<int:id>/confirmacao>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
                 return advogadoSenha
             else:
                 logPrioridade(f"API => buscaSenhaDefinitiva GET<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
@@ -107,7 +107,7 @@ class UsuarioRepository:
         if 199 < response.status_code < 400:
             senha = response.json()
 
-            logPrioridade(f"API => atualizaSenha ____________________PATCH<advogado/<int:id>/confirmacao>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComun)
+            logPrioridade(f"API => atualizaSenha ____________________PATCH<advogado/<int:id>/confirmacao>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
             return senha
         else:
             logPrioridade(f"API => atualizaSenha ____________________PATCH<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
@@ -134,7 +134,7 @@ class UsuarioRepository:
                     logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
                     return False
                 else:
-                    logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComun)
+                    logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
                     return advogado
             else:
                 logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
@@ -174,7 +174,7 @@ class UsuarioRepository:
 
                     advogadoALogar.senha = senha
                     if advAuth == advogadoALogar:
-                        logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComun)
+                        logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
                         return advogadoALogar
                     else:
                         logPrioridade(f"API => buscaAdvPor ____________________GET<Autenticação não confere com o advogado em questão>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
@@ -201,7 +201,7 @@ class UsuarioRepository:
                 auth: ClientAuthModelo = ClientAuthModelo().fromDict(response.json())
 
                 if auth is not None and auth == advogado:
-                    logPrioridade(f"API => loginAuthFromCache ____________________GET</advogados/auth/<str:numeroOAB>>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComun)
+                    logPrioridade(f"API => loginAuthFromCache ____________________GET</advogados/auth/<str:numeroOAB>>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
                     return True
                 else:
                     logPrioridade(f"API => loginAuthFromCache ____________________GET</advogados/auth/<str:numeroOAB>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)

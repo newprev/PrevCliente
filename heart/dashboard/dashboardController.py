@@ -1,6 +1,7 @@
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import QMainWindow, QHBoxLayout
 
+from Design.CustomWidgets.newToast import QToaster
 from Design.pyUi.dashboard import Ui_mwDashBoard
 from heart.menuLateral.configuracoesPage import ConfiguracoesPage
 from heart.dashboard.localWidgets.cardFuncionalidade import CardFuncionalidade
@@ -26,6 +27,7 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.sinais = Sinais()
         self.parent = parent
         self.cacheLogin = CacheLogin()
+        self.toast = QToaster()
 
         self.setWindowTitle('Dashboard - [dashboardController]')
 
@@ -72,6 +74,8 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.boxLayout.addWidget(self.funcOutra5)
 
         self.scaTelas.setLayout(self.boxLayout)
+
+        self.toast.showMessage(self, 'Testando toast com uma mensagem razoavelmente longa.', corner=QtCore.Qt.BottomLeftCorner)
 
     def trocarParaPagina(self, telaAlvo: TelaPosicao):
         if telaAlvo == TelaPosicao.Entrevista:

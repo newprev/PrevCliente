@@ -68,7 +68,8 @@
 
 /*---------------------------------- Label --------------------------------------*/
 #lbLogin {
-	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-family: &quot;Bebas&quot;;
+	font: 10pt &quot;Bebas Neue&quot;;
 	font-size: 36px;
 }
 
@@ -83,48 +84,26 @@
 }
 
 #lbNLS {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 8px;
+	font: 10pt &quot;Avenir LT Std&quot;;
 }
 
 /*------------------------------- Push Button ---------------------------------*/
 
 #pbEntrar {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 12px;
+	font: 12pt &quot;Avenir LT Std&quot;;
 	color: white;
 
-	border-radius: 4px;
-	background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(58, 171, 140, 255), stop:1 rgba(9, 212, 156, 255));
+	border-radius: 8px;
+	background-color: #3F4E8C;
 }
 
 #pbEntrar:hover {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 12px;
+	font: 12pt &quot;Avenir LT Std&quot;;
 	color: white;
 
-	border-radius: 4px;
-	background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(68, 181, 150, 255), stop:1 rgba(19, 222, 166, 255));
+	border-radius: 8px;
+	background-color: #566BBF;
 }
-
-#pbPrimeiroAcesso {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 12px;
-	color: white;
-
-	border-radius: 4px;
-	background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(61, 83, 180, 255), stop:1 rgba(9, 162, 212, 255));
-}
-
-#pbPrimeiroAcesso:hover {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 12px;
-	color: white;
-
-	border-radius: 4px;
-	background-color: qlineargradient(spread:pad, x1:0.51, y1:0, x2:0.474, y2:1, stop:0 rgba(81, 103, 200, 255), stop:1 rgba(29, 182, 232, 255));
-}
-
 
 #pbFechar {
 	font-family: &quot;TeX Gyre Adventor&quot;;
@@ -144,11 +123,27 @@
 	background-color: transparent;
 }
 
-/*---------------------------------- Label --------------------------------------*/
+/*---------------------------------- Check Box --------------------------------------*/
 #cbSalvarSenha {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 10px;
-}</string>
+	font-family: &quot;Avenir LT Std&quot;;
+	color: black;
+}
+
+#cbSalvarSenha::indicator:checked {
+	image: url(:/Logo/entrevista-check.png);
+}
+
+/*---------------------------------- Line Edit --------------------------------------*/
+#leLogin, #leSenha {
+	font-family: &quot;Avenir LT Std&quot;;
+
+	border: 0px solid gray;
+    border-radius: 8px;
+    padding: 0 8px;
+    background: rgb(230, 230, 230);
+    selection-background-color: darkgray;
+}
+</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -192,190 +187,200 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <widget class="QLabel" name="lbLogin">
-          <property name="geometry">
-           <rect>
-            <x>140</x>
-            <y>90</y>
-            <width>101</width>
-            <height>51</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Login</string>
-          </property>
-         </widget>
-         <widget class="QLineEdit" name="leLogin">
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>170</y>
-            <width>181</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="placeholderText">
-           <string>Nº OAB ou E-mail</string>
-          </property>
-         </widget>
-         <widget class="QLineEdit" name="leSenha">
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>210</y>
-            <width>181</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="echoMode">
-           <enum>QLineEdit::Password</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="placeholderText">
-           <string>Senha</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="lbEscritorio">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>10</y>
-            <width>71</width>
-            <height>31</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Escritório:</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="lbNomeDoEscritorio">
-          <property name="geometry">
-           <rect>
-            <x>90</x>
-            <y>10</y>
-            <width>301</width>
-            <height>31</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="pbEntrar">
-          <property name="geometry">
-           <rect>
-            <x>102</x>
-            <y>300</y>
-            <width>181</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Entrar</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="lbNLS">
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>240</y>
-            <width>171</width>
-            <height>17</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Não lembro minha senha</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="lbInfoAcesso">
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>132</y>
-            <width>181</width>
-            <height>17</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Acesse a sua conta</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="pbPrimeiroAcesso">
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>340</y>
-            <width>181</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Primeiro acesso</string>
-          </property>
-         </widget>
-         <widget class="QProgressBar" name="pbarLoading">
-          <property name="geometry">
-           <rect>
-            <x>80</x>
-            <y>480</y>
-            <width>311</width>
-            <height>10</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>10</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>10</height>
-           </size>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-          <property name="textVisible">
-           <bool>false</bool>
-          </property>
-          <property name="format">
-           <string/>
-          </property>
-         </widget>
-         <widget class="QCheckBox" name="cbSalvarSenha">
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>260</y>
-            <width>111</width>
-            <height>23</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Salvar senha</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="pbFechar">
-          <property name="geometry">
-           <rect>
-            <x>4</x>
-            <y>470</y>
-            <width>61</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Fechar 
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="1" column="1">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>60</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="6" column="1" alignment="Qt::AlignTop">
+           <widget class="QLabel" name="lbNLS">
+            <property name="text">
+             <string>Não lembro minha senha</string>
+            </property>
+           </widget>
+          </item>
+          <item row="13" column="1">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="4" column="0">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="0" colspan="4" alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="lbLogin">
+            <property name="text">
+             <string>Login</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="4" alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="lbInfoAcesso">
+            <property name="text">
+             <string>Acesse a sua conta</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="leLogin">
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="placeholderText">
+             <string>Nº OAB ou E-mail</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="7" column="1" alignment="Qt::AlignTop">
+           <widget class="QCheckBox" name="cbSalvarSenha">
+            <property name="text">
+             <string>Salvar senha</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="1">
+           <widget class="QPushButton" name="pbEntrar">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>56</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Entrar</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2">
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="leSenha">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="echoMode">
+             <enum>QLineEdit::Password</enum>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="placeholderText">
+             <string>Senha</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="lbEscritorio">
+            <property name="text">
+             <string>Escritório:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="3">
+           <widget class="QLabel" name="lbNomeDoEscritorio">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="15" column="0" alignment="Qt::AlignLeft">
+           <widget class="QPushButton" name="pbFechar">
+            <property name="text">
+             <string>Fechar 
 programa</string>
-          </property>
-         </widget>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>

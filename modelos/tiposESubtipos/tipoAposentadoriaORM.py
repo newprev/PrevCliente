@@ -1,14 +1,14 @@
 from modelos.baseModelORM import BaseModel
 from playhouse.signals import Model
 
-from peewee import CharField, DateTimeField, IntegerField
+from peewee import CharField, DateTimeField
 from datetime import datetime
 
 TABLENAME = 'tipoAposentadoria'
 
 
 class TipoAposentadoria(BaseModel, Model):
-    tipoAposentadoriaId = IntegerField(column_name='tipoAposentadoriaId')
+    tipoAposentadoriaId = CharField(column_name='tipoAposentadoriaId')
     descricao = CharField(column_name='descricao')
     baseLegal = CharField(column_name='baseLegal', null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())

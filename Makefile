@@ -9,7 +9,7 @@ SRC_PATH = Resources
 ## Parâmetros para os builds dos designs
 UI_FILE = arquivo.ui
 SRC_FILE = arquivo.qrc
-
+SQL_FILE = arquivo.sql
 
 ## @ Limpeza
 cleanAll: ## Limpa todo o cache e exclui o banco de dados
@@ -35,3 +35,6 @@ resources: ## Cria o arquivo de recurso do python my_resource.py a partir de um 
 	pyrcc5 -o ${SRC_PATH}/${SRC_FILE}.py ${SRC_PATH}/${SRC_FILE}.qrc
 
 
+## @ Backup
+backupAll: ## Roda todos os scripts de backup dentro da pasta de backup
+	sudo sqlite3 Daos/producao.db < ../backup/cTipoAposentadoria.sql

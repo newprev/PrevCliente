@@ -1,11 +1,13 @@
 import datetime
+from peewee import SqliteDatabase
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont, QIcon, QPixmap
+from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QMessageBox, QVBoxLayout
 from Design.pyUi.tabResumoCNIS import Ui_wdgTabResumoCNIS
-from typing import List, Union
+from typing import List, Union, Generator
 
+from SQLs.itensContribuicao import remuEContrib
 from heart.dashboard.tabs.localStyleSheet.styleResumo import frInfoStatus
 from heart.dashboard.tabs.localWidgets.itemResumoCNIS import ItemResumoCnis
 from heart.buscaClientePage import BuscaClientePage
@@ -24,10 +26,9 @@ from util.enums.tabsEnums import TabsResumo
 from util.layoutHelpers import limpaLayout
 
 from modelos.clienteORM import Cliente
-from modelos.beneficiosORM import CnisBeneficios
-from modelos.contribuicoesORM import CnisContribuicoes
 from modelos.cabecalhoORM import CnisCabecalhos
-from modelos.remuneracaoORM import CnisRemuneracoes
+from modelos.itemContribuicao import ItemContribuicao
+from modelos.Auxiliares.remuEContribs import RemuEContribs
 
 from Daos.daoCalculos import DaoCalculos
 
@@ -94,9 +95,9 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
         self.buscaClientePage = BuscaClientePage(parent=self)
         self.buscaClientePage.show()
 
-    def abreInsereContribuicoes(self, contribuicaoId: int, tipo: TipoContribuicao = None):
+    def abreInsereContribuicoes(self, itemId: int, tipo: TipoContribuicao = None):
         if self.cliente.nomeCliente is not None:
-            self.inserirContribuicao = InsereContribuicaoPage(parent=self, cliente=self.cliente, contribuicaoId=contribuicaoId, tipo=tipo)
+            self.inserirContribuicao = InsereContribuicaoPage(parent=self, cliente=self.cliente, itemId=itemId, tipo=tipo)
             self.inserirContribuicao.show()
 
     def avaliaAtualizacaoInfoMenu(self):
@@ -113,12 +114,12 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
                 return False
 
             numLinha: int = self.tblContribuicoes.selectedIndexes()[0].row()
-            contribuicaoId = int(self.tblContribuicoes.item(numLinha, 0).text())
+            itemId = int(self.tblContribuicoes.item(numLinha, 0).text())
             tipoContribuicao: str = self.tblContribuicoes.item(numLinha, 5).text()
             if tipoContribuicao == 'Contribuição':
-                self.abreInsereContribuicoes(contribuicaoId, TipoContribuicao.contribuicao)
+                self.abreInsereContribuicoes(itemId, TipoContribuicao.contribuicao)
             else:
-                self.abreInsereContribuicoes(contribuicaoId, TipoContribuicao.remuneracao)
+                self.abreInsereContribuicoes(itemId, TipoContribuicao.remuneracao)
 
         elif tabela == 'tblBeneficios':
             if len(self.tblBeneficios.selectedIndexes()) <= 0:
@@ -127,25 +128,25 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
 
             print(self.tblBeneficios.selectedIndexes())
             numLinha: int = self.tblBeneficios.selectedIndexes()[0].row()
-            contribuicaoId = int(self.tblBeneficios.item(numLinha, 0).text())
-            print(f"contribuicaoId: {contribuicaoId}")
-            self.abreInsereContribuicoes(contribuicaoId, TipoContribuicao.beneficio)
+            itemId = int(self.tblBeneficios.item(numLinha, 0).text())
+            print(f"itemId: {itemId}")
+            self.abreInsereContribuicoes(itemId, TipoContribuicao.beneficio)
 
     def avaliaExclusao(self, tipoBotao: str):
         if tipoBotao == 'pbExcluir':
             numLinha: int = self.tblContribuicoes.selectedIndexes()[0].row()
-            contribuicaoId = int(self.tblContribuicoes.item(numLinha, 0).text())
+            itemId = int(self.tblContribuicoes.item(numLinha, 0).text())
             tipoContribuicao: str = self.tblContribuicoes.item(numLinha, 5).text()
 
             if tipoContribuicao == 'Contribuição':
                 self.popUpSimCancela(
-                    f"Você deseja excluir a contribuição {contribuicaoId}",
-                    funcao=lambda: self.excluir(TipoContribuicao.contribuicao, contribuicaoId),
+                    f"Você deseja excluir a contribuição {itemId}",
+                    funcao=lambda: self.excluir(TipoContribuicao.contribuicao, itemId),
                 )
             else:
                 self.popUpSimCancela(
-                    f"Você deseja excluir a remuneração {contribuicaoId}",
-                    funcao=lambda:self.excluir(TipoContribuicao.remuneracao, contribuicaoId),
+                    f"Você deseja excluir a remuneração {itemId}",
+                    funcao=lambda:self.excluir(TipoContribuicao.remuneracao, itemId),
                 )
 
         elif tipoBotao == 'pbExcluirBen':
@@ -173,94 +174,101 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
                 self.frInfo2.setStyleSheet(frInfoStatus(nomeFrame='frIcon2', tipoInfo=status))
                 self.frInfo2.show()
 
-    def excluir(self, tipo: TipoContribuicao, contribuicaoId: int):
+    def excluir(self, tipo: TipoContribuicao, itemId: int):
         if tipo == TipoContribuicao.contribuicao:
-            CnisContribuicoes.delete_by_id(contribuicaoId)
+            ItemContribuicao.delete_by_id(itemId)
         elif tipo == TipoContribuicao.remuneracao:
-            CnisRemuneracoes.delete_by_id(contribuicaoId)
+            ItemContribuicao.delete_by_id(itemId)
         elif tipo == TipoContribuicao.beneficio:
-            CnisBeneficios.delete_by_id(contribuicaoId)
+            ItemContribuicao.delete_by_id(itemId)
 
         self.carregarTblContribuicoes(self.cliente.clienteId)
         self.carregarTblBeneficios(self.cliente.clienteId)
 
     def carregarTblContribuicoes(self, clienteId: int):
-        dados = self.daoCalculos.getRemECon(clienteId)
+        # dados = self.daoCalculos.getRemECon(clienteId)
+        dbInst: SqliteDatabase = CnisCabecalhos._meta.database
+        dados = dbInst.execute_sql(remuEContrib(clienteId))
+        listaItens: Generator[RemuEContribs] = (RemuEContribs(info) for info in dados)
 
         self.tblContribuicoes.setRowCount(0)
 
-        for contLinha, infoLinha in enumerate(dados):
+        for contLinha, item in enumerate(listaItens):
             self.tblContribuicoes.insertRow(contLinha)
 
-            for contColuna, info in enumerate(infoLinha):
+            # RemuneracaoId/ContribuiçãoId - Coluna 0 (escondida)
+            strItem = QTableWidgetItem(str(item.itemContribuicaoId))
+            strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            self.tblContribuicoes.setItem(contLinha, 0, strItem)
 
-                # RemuneracaoId/ContribuiçãoId - Coluna 0 (escondida)
-                if contColuna == 0:
-                    strItem = QTableWidgetItem(str(info))
-                    strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-                    self.tblContribuicoes.setItem(contLinha, contColuna, strItem)
+            # Seq - Coluna 1 (ativa)
+            strItem = QTableWidgetItem(str(item.seq))
+            strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            self.tblContribuicoes.setItem(contLinha, 1, strItem)
 
-                # Seq - Coluna 1 (ativa)
-                elif contColuna == 1:
-                    strItem = QTableWidgetItem(str(info))
-                    strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-                    self.tblContribuicoes.setItem(contLinha, contColuna, strItem)
+            # Competência - Coluna 2 (ativa)
+            # strItem = QTableWidgetItem(dataUSAtoBR(info))
+            strItem = QTableWidgetItem(item.competencia)
+            strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            self.tblContribuicoes.setItem(contLinha, 2, strItem)
 
-                # Competência - Coluna 2 (ativa)
-                elif contColuna == 2:
-                    strItem = QTableWidgetItem(dataUSAtoBR(info))
-                    strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
-                    strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-                    self.tblContribuicoes.setItem(contLinha, contColuna, strItem)
+            # Salário de contribuição - Coluna 3 (ativa)
+            strItem = QTableWidgetItem(mascaraDinheiro(item.salContribuicao, simbolo=item.sinal))
+            strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            self.tblContribuicoes.setItem(contLinha, 3, strItem)
 
-                # Salário de contribuição - Coluna 3 (ativa)
-                elif contColuna == 3:
-                    strItem = QTableWidgetItem(mascaraDinheiro(info, simbolo=infoLinha[6]))
-                    strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
-                    strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-                    self.tblContribuicoes.setItem(contLinha, contColuna, strItem)
+            # Tetos previdenciários - Coluna 4 (ativa)
+            strItem = QTableWidgetItem(str(item.valor))
+            strItem.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            self.tblContribuicoes.setItem(contLinha, 4, strItem)
 
-                # Natureza dos dados (Remuneração/Contribuição) - Coluna 4 (ativa)
-                elif contColuna == 4:
-                    # TODO: PENSAR NO QUE FAZER AQUI 
-                    pass
-                    # strItem = QTableWidgetItem(info)
-                    # strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-                    # strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-                    # self.tblContribuicoes.setItem(contLinha, contColuna+1, strItem)
+            # Natureza dos dados (Remuneração/Contribuição) - Coluna 5 (ativa)
+            strItem = QTableWidgetItem(item.natureza)
+            strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            self.tblContribuicoes.setItem(contLinha, 5, strItem)
 
-                # Indicadores - Coluna 6 (ativa)
-                elif contColuna == 5:
-                    if info is None:
-                        strItem = QTableWidgetItem(QIcon(QPixmap('Resources/atencao.png')), 'aaaaa')
-                        # strItem.setIcon(QIcon('Resources/atencao.png'))
-                        strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter | Qt.AlignCenter)
-                        self.tblContribuicoes.setItem(contLinha, contColuna + 1, strItem)
+            # Indicadores - Coluna 6 (ativa)
+            # if info is None:
+            #     strItem = QTableWidgetItem(QIcon(QPixmap('Resources/atencao.png')), 'aaaaa')
+            #     # strItem.setIcon(QIcon('Resources/atencao.png'))
+            #     strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter | Qt.AlignCenter)
+            #     self.tblContribuicoes.setItem(contLinha, 6, strItem)
+            #     continue
+            #
+            # elif ',' in info:
+            #     indicadores = info.split(', ')
+            #     strIndicadores = ''
+            #     for indicador in indicadores:
+            #         strIndicadores += '- ' + indicador + '\n'
+            # elif info != '':
+            #     strIndicadores = '- ' + info
+            # else:
+            #     strIndicadores = info
+            #
+            # if strIndicadores.endswith('\n'):
+            #     strIndicadores = strIndicadores[:len(strIndicadores)-2]
+            #
+            # strItem = QTableWidgetItem(strIndicadores)
+            # strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            # strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter | Qt.AlignCenter)
+            # self.tblContribuicoes.setItem(contLinha, contColuna+1, strItem)
 
-                    elif ',' in info:
-                        indicadores = info.split(', ')
-                        strIndicadores = ''
-                        for indicador in indicadores:
-                            strIndicadores += '- ' + indicador + '\n'
-                    elif info != '':
-                        strIndicadores = '- ' + info
-                    else:
-                        strIndicadores = info
-
-                    if strIndicadores.endswith('\n'):
-                        strIndicadores = strIndicadores[:len(strIndicadores)-2]
-
-                    strItem = QTableWidgetItem(strIndicadores)
-                    strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-                    strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter | Qt.AlignCenter)
-                    self.tblContribuicoes.setItem(contLinha, contColuna+1, strItem)
-
-                # Tetos previdenciários - Coluna 4 (ativa)
-                elif contColuna == 10:
-                    strItem = QTableWidgetItem(mascaraDinheiro(info, simbolo=infoLinha[6]))
-                    strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-                    strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-                    self.tblContribuicoes.setItem(contLinha, 4, strItem)
+            # elif contColuna == 8:
+            #     strItem = QTableWidgetItem(str(info))
+            #     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            #     strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter | Qt.AlignCenter)
+            #     self.tblContribuicoes.setItem(contLinha, 8, strItem)
+            #
+            # # Tetos previdenciários - Coluna 4 (ativa)
+            # elif contColuna == 10:
+            #     strItem = QTableWidgetItem(mascaraDinheiro(info, simbolo=infoLinha[6]))
+            #     strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            #     strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            #     self.tblContribuicoes.setItem(contLinha, 4, strItem)
 
         self.tblContribuicoes.resizeColumnsToContents()
         self.tblContribuicoes.resizeRowsToContents()
@@ -269,7 +277,10 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
 
         # TODO: ALTERAR FILTRO PARA SELECIONAR APENAS LINHAS QUE TENHAM NB
         # dictCabecalhos: List[dict] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == clienteId & CnisCabecalhos.nb.is_null(False)).dicts()
-        dados: List[CnisBeneficios] = CnisBeneficios.select().where(CnisBeneficios.clienteId == clienteId)
+        dados: List[ItemContribuicao] = ItemContribuicao.select().where(
+            ItemContribuicao.clienteId == clienteId,
+            ItemContribuicao.tipo == TipoContribuicao.beneficio.value,
+        )
 
         self.tblBeneficios.setRowCount(0)
 

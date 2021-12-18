@@ -50,9 +50,9 @@ class CarenciaLei91(BaseModel, Model):
 @post_save(sender=CarenciaLei91)
 def inserindoCarenciaLei91(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoCarenciaLei91>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComun)
+        logPrioridade(f'INSERT<inserindoCarenciaLei91>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'INSERT<inserindoCarenciaLei91>___________________ |Erro| {TABLENAME}', TipoEdicao.erro, Prioridade.saidaImportante)
+        logPrioridade(f'UPDATE<inserindoCarenciaLei91>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=CarenciaLei91)

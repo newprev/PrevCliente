@@ -97,7 +97,7 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
 
     def abreInsereContribuicoes(self, itemId: int, tipo: TipoContribuicao = None):
         if self.cliente.nomeCliente is not None:
-            self.inserirContribuicao = InsereContribuicaoPage(parent=self, cliente=self.cliente, itemId=itemId, tipo=tipo)
+            self.inserirContribuicao = InsereContribuicaoPage(parent=self, cliente=self.cliente, itemConrtibuicaoId=itemId, tipo=tipo)
             self.inserirContribuicao.show()
 
     def avaliaAtualizacaoInfoMenu(self):

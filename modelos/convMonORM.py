@@ -24,20 +24,8 @@ class ConvMon(BaseModel, Model):
     class Meta:
         table_name = 'convMon'
 
-    def toDict(self):
-        dictConvMon = {
-            'convMonId': self.convMonId,
-            'nomeMoeda': self.nomeMoeda,
-            'fator': self.fator,
-            'dataInicial': self.dataInicial,
-            'dataFinal': self.dataFinal,
-            'conversao': self.conversao,
-            'moedaCorrente': self.moedaCorrente,
-            'sinal': self.sinal,
-            'dataUltAlt': self.dataUltAlt,
-            'dataCadastro': self.dataCadastro
-        }
-        return dictConvMon
+    def moedaCorrenteByData(self, dataReferente: datetime.date) -> bool:
+        return self.dataInicial <= dataReferente <= self.dataFinal
 
     def fromDict(self, dictConvMon: dict):
         if 'convMonId' in dictConvMon.keys():
@@ -61,6 +49,21 @@ class ConvMon(BaseModel, Model):
         self.moedaCorrente = dictConvMon['moedaCorrente']
         self.sinal = dictConvMon['sinal']
         return self
+
+    def toDict(self):
+        dictConvMon = {
+            'convMonId': self.convMonId,
+            'nomeMoeda': self.nomeMoeda,
+            'fator': self.fator,
+            'dataInicial': self.dataInicial,
+            'dataFinal': self.dataFinal,
+            'conversao': self.conversao,
+            'moedaCorrente': self.moedaCorrente,
+            'sinal': self.sinal,
+            'dataUltAlt': self.dataUltAlt,
+            'dataCadastro': self.dataCadastro
+        }
+        return dictConvMon
 
     def prettyPrint(self, backRef: bool = False):
         print(f"""

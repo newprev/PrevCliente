@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="upload">
+    <file>enviaArquivo.png</file>
+  </qresource>
+</RCC>

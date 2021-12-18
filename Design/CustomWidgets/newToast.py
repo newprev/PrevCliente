@@ -139,8 +139,7 @@ class QToaster(QtWidgets.QFrame):
 
         if not parent or desktop:
             self = QToaster(None)
-            self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint |
-                QtCore.Qt.BypassWindowManagerHint)
+            self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint | QtCore.Qt.BypassWindowManagerHint)
             # This is a dirty hack!
             # parentless objects are garbage collected, so the widget will be
             # deleted as soon as the function that calls it returns, but if an
@@ -226,7 +225,7 @@ class QToaster(QtWidgets.QFrame):
         self.show()
         self.opacityAni.start()
 
-
+# Widget de apresentação da funcionalidade do Toast
 class W(QtWidgets.QWidget):
     def __init__(self):
         QtWidgets.QWidget.__init__(self)

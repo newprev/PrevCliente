@@ -27,6 +27,7 @@ from modelos.ipcaMensalORM import IpcaMensal
 from Design.pyUi.loginPage import Ui_mwLogin
 
 from heart.dashboard.dashboardController import DashboardController
+from heart.newDashboard.newDashboard import NewDashboard
 
 from util.dateHelper import strToDatetime
 from util.enums.newPrevEnums import *
@@ -293,7 +294,9 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.edittingFinished = True
 
     def iniciaDashboard(self):
-        self.dashboard = DashboardController(db=self.db)
+        self.dashboard = NewDashboard()
+        # self.dashboard = DashboardController()
+        self.dashboard.iniciaDash()
         self.dashboard.showMaximized()
         self.close()
 

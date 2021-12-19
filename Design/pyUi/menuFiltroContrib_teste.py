@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Design/UI/menuFiltroContrib.ui'
+# Form implementation generated from reading ui file 'Design/UI/menuFiltroContrib_teste.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #

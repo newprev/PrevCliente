@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="funcionalidade">
+    <file>cliente.png</file>
+    <file>interview.png</file>
+    <file>resumoCNIS.png</file>
+    <file>processos.png</file>
+  </qresource>
+</RCC>

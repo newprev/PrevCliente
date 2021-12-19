@@ -15,6 +15,7 @@ from heart.insereContribuicaoPage import InsereContribuicaoPage
 
 from Design.pyUi.efeitos import Efeitos
 from Design.DesignSystem.botoes import NewButton, NewButtonHover
+# from Design.CustomWidgets.newDropMenu import NewSubMenu
 from Design.CustomWidgets.newDropMenu import NewSubMenu
 from Design.CustomWidgets.newTagFiltro import NewTagFiltro
 
@@ -408,8 +409,9 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
     ############################## Filtros
 
     def abreMenuFiltros(self):
-        menu = NewSubMenu(self.filtros[TipoFiltro.indicador], parent=self)
+        menu = NewSubMenu()
         self.efeito.shadowCards([menu], offset=(0, 0))
+        menu.setupInicial(parent=self, indicadoresSelecionados=self.filtros[TipoFiltro.indicador])
         menu.show()
 
     def limpaFiltros(self):
@@ -482,10 +484,15 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
                 return True
 
             for index in range(self.tblContribuicoes.rowCount()):
-                indicadorLinha: Union[str, List[str]] = self.tblContribuicoes.item(index, 6).text().replace('- ', '').split('\n')
+                indicadorLinha: Union[str, List[str]] = self.tblContribuicoes.item(index, 6)
+                if indicadorLinha is None:
+                    continue
+
+                indicadorText: str = indicadorLinha.text().replace('- ', '').split('\n')
+
                 dataLinha: datetime.date = strToDate(self.tblContribuicoes.item(index, 2).text())
 
-                if len(self.filtros[TipoFiltro.indicador]) > 0 and not comparaFiltrosAny(indicadorLinha, self.filtros[TipoFiltro.indicador]):
+                if len(self.filtros[TipoFiltro.indicador]) > 0 and not comparaFiltrosAny(indicadorText, self.filtros[TipoFiltro.indicador]):
                     self.tblContribuicoes.hideRow(index)
                 if not dtDe <= dataLinha <= dtAte:
                     self.tblContribuicoes.hideRow(index)

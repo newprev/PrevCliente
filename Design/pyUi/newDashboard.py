@@ -57,6 +57,14 @@ class Ui_newDashboard(object):
 "    background-image: url(:/menuPrincipal/hamburger.png);\n"
 "    background-repeat: no-repeat;\n"
 "    background-position: center;\n"
+"}\n"
+"\n"
+"#pbAvisos {\n"
+"    background-color: transparent;\n"
+"\n"
+"    background-image: url(:/menuPrincipal/avisos.png);\n"
+"    background-repeat: no-repeat;\n"
+"    background-position: center;\n"
 "}")
         self.frMain.setObjectName("frMain")
         self.gridLayout = QtWidgets.QGridLayout(self.frMain)
@@ -111,9 +119,14 @@ class Ui_newDashboard(object):
         self.horizontalLayout.addWidget(self.lbNomeEscritorio, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
+        self.pbAvisos = QtWidgets.QPushButton(self.frCabecalho)
+        self.pbAvisos.setText("")
+        self.pbAvisos.setObjectName("pbAvisos")
+        self.horizontalLayout.addWidget(self.pbAvisos)
         self.pbMenuPrincipal = QtWidgets.QPushButton(self.frCabecalho)
         self.pbMenuPrincipal.setMinimumSize(QtCore.QSize(42, 42))
         self.pbMenuPrincipal.setMaximumSize(QtCore.QSize(42, 42))
+        self.pbMenuPrincipal.setText("")
         self.pbMenuPrincipal.setObjectName("pbMenuPrincipal")
         self.horizontalLayout.addWidget(self.pbMenuPrincipal)
         self.verticalLayout.addWidget(self.frCabecalho)
@@ -127,12 +140,6 @@ class Ui_newDashboard(object):
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.stkPrincipal = QtWidgets.QStackedWidget(self.frConteudo)
         self.stkPrincipal.setObjectName("stkPrincipal")
-        self.page = QtWidgets.QWidget()
-        self.page.setObjectName("page")
-        self.stkPrincipal.addWidget(self.page)
-        self.page_2 = QtWidgets.QWidget()
-        self.page_2.setObjectName("page_2")
-        self.stkPrincipal.addWidget(self.page_2)
         self.gridLayout_3.addWidget(self.stkPrincipal, 0, 0, 1, 1)
         self.verticalLayout.addWidget(self.frConteudo)
         self.frBottom = QtWidgets.QFrame(self.frCenter)
@@ -154,8 +161,7 @@ class Ui_newDashboard(object):
         self.lbNomeAdvogado.setText(_translate("newDashboard", "Nome do Advogado"))
         self.lbOAB.setText(_translate("newDashboard", "OAB: 99999/SP"))
         self.lbNomeEscritorio.setText(_translate("newDashboard", "Dominária e associados"))
-        self.pbMenuPrincipal.setText(_translate("newDashboard", "M"))
-import newDashboard_rc
+import Resources.newDashboard
 
 
 if __name__ == "__main__":

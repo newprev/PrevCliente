@@ -56,6 +56,14 @@ QLabel {
 	background-image: url(:/menuPrincipal/hamburger.png);
 	background-repeat: no-repeat;
 	background-position: center;
+}
+
+#pbAvisos {
+	background-color: transparent;
+
+	background-image: url(:/menuPrincipal/avisos.png);
+	background-repeat: no-repeat;
+	background-position: center;
 }</string>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -213,6 +221,13 @@ QLabel {
            </spacer>
           </item>
           <item>
+           <widget class="QPushButton" name="pbAvisos">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="pbMenuPrincipal">
             <property name="minimumSize">
              <size>
@@ -227,7 +242,7 @@ QLabel {
              </size>
             </property>
             <property name="text">
-             <string>M</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -259,10 +274,7 @@ QLabel {
            <number>0</number>
           </property>
           <item row="0" column="0">
-           <widget class="QStackedWidget" name="stkPrincipal">
-            <widget class="QWidget" name="page"/>
-            <widget class="QWidget" name="page_2"/>
-           </widget>
+           <widget class="QStackedWidget" name="stkPrincipal"/>
           </item>
          </layout>
         </widget>

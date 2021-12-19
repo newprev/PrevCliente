@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="menuPrincipal">
+    <file>avisos.png</file>
     <file>hamburger.png</file>
   </qresource>
 </RCC>

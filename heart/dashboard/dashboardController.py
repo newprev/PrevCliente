@@ -19,11 +19,11 @@ from util.enums.dashboardEnums import TelaPosicao
 
 class DashboardController(QMainWindow, Ui_mwDashBoard):
 
-    def __init__(self, parent=None, db=None):
+    def __init__(self, parent=None):
         super(DashboardController, self).__init__(parent=parent)
         self.setupUi(self)
         self.boxLayout = QHBoxLayout()
-        self.db = db
+        # self.db = db
         self.sinais = Sinais()
         self.parent = parent
         self.cacheLogin = CacheLogin()
@@ -47,9 +47,9 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.pbInfoGerais.clicked.connect(lambda: self.trocarParaPagina(TelaPosicao.InformacoesGerais))
 
         self.tabCliente = TabCliente(parent=self)
-        self.tabResumo = TabResumoCNIS(parent=self, db=db)
+        self.tabResumo = TabResumoCNIS(parent=self)
         self.configuracoesPage = ConfiguracoesPage(parent=self)
-        self.ferramentasPage = FerramentasPage(parent=self, db=db)
+        self.ferramentasPage = FerramentasPage(parent=self)
         self.informacoePage = InformacoesGerais(parent=self)
 
         self.stkMainDashBoard.addWidget(self.tabCliente)

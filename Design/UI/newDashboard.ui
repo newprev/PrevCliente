@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="dockNestingEnabled">
+   <bool>true</bool>
+  </property>
   <widget class="QWidget" name="frMain">
    <property name="styleSheet">
     <string notr="true">/*-------------------------------------------------- Frames --------------------------------------------------*/
@@ -64,6 +67,11 @@ QLabel {
 	background-image: url(:/menuPrincipal/avisos.png);
 	background-repeat: no-repeat;
 	background-position: center;
+}
+
+/*-------------------------------------------------- Stacked Eidget --------------------------------------------------*/
+#stkPrincipal {
+	background-color: white;
 }</string>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -92,7 +100,7 @@ QLabel {
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="spacing">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="leftMargin">
         <number>0</number>

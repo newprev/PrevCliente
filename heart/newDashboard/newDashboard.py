@@ -1,7 +1,13 @@
+from PyQt5.QtGui import QFont
+
 from Design.pyUi.newDashboard import Ui_newDashboard
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from PyQt5 import QtGui
 
+from modelos.clienteORM import Cliente
+from modelos.processosORM import Processos
+from modelos.telefonesORM import Telefones
+from util.helpers import mascaraTelCel, strTipoBeneficio
 from util.popUps import popUpOkAlerta
 
 from Design.pyUi.efeitos import Efeitos
@@ -14,12 +20,12 @@ from util.enums.dashboardEnums import TelaPosicao
 from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
 
-from heart.dashboard.tabs.clienteController import TabCliente
 from heart.newDashboard.localWidgets.newMenuPrincipal import NewMenuPrincipal
+from heart.newDashboard.localWidgets.newListaClientes import NewListaClientes
 
 
 class NewDashboard(QMainWindow, Ui_newDashboard):
-    clienteController: TabCliente
+    clienteController: NewListaClientes
     escritorioAtual: Escritorios
     advogadoAtual: Advogados
 
@@ -67,7 +73,7 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
         return True
 
     def iniciaDash(self):
-        self.clienteController = TabCliente(parent=self)
+        self.clienteController = NewListaClientes()
 
         self.stkPrincipal.addWidget(self.clienteController)
         self.stkPrincipal.setCurrentIndex(0)
@@ -83,6 +89,7 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         self.cacheLogin.limpaTemporarios()
+        self.cacheEscritorio.limpaTemporarios()
 
 
 if __name__ == '__main__':

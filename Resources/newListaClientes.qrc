@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="cabecalho">
+    <file>checkSuccess.png</file>
+    <file>busca.png</file>
+    <file>filtros.png</file>
+  </qresource>
+</RCC>

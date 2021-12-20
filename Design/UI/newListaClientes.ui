@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>wdgListaClientes</class>
+ <widget class="QWidget" name="wdgListaClientes">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1254</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/*#wdgListaClientes {
+	background-color: white;
+}*/</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QFrame" name="frPrincipal">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>4</number>
+      </property>
+      <property name="leftMargin">
+       <number>24</number>
+      </property>
+      <property name="topMargin">
+       <number>12</number>
+      </property>
+      <property name="rightMargin">
+       <number>24</number>
+      </property>
+      <item>
+       <widget class="QFrame" name="frCabecalhoLista">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">/*------------------------------------------ Frames ------------------------------------------*/
+#frBusca {
+	background-color: rgb(244, 244, 244);
+	border-radius: 8px;
+}
+
+#frCabecalhoLista {
+	background-color: white;
+}
+
+/*------------------------------------------ Line Edit ------------------------------------------*/
+#leBusca {
+	border: 0px solid gray;
+    border-radius: 0px;
+    padding: 0 8px;
+    background: rgb(244, 244, 244);
+    selection-background-color: darkgray;
+}
+
+/*------------------------------------------ Push Buttons ------------------------------------------*/
+#pbNovoCliente {
+	background-color: #3F4E8C;
+	border-radius: 8px;
+
+	font: 14pt &quot;Avenir LT Std&quot;;
+	color: white;
+	
+	padding: 8px;
+}
+
+#pbFiltro {
+	background-image: url(:/cabecalho/filtros.png);
+	background-position: center;
+	background-repeat: no-repeat;
+
+	background-color: rgb(239, 239, 239);
+	border-radius: 8px;
+}
+
+#pbBusca {
+	background-image: url(:/cabecalho/busca.png);
+	background-position: center;
+	background-repeat: no-repeat;
+
+	background-color: rgb(244, 244, 244);
+	border-radius: 8px;
+}
+
+
+/*------------------------------------------ Labels ------------------------------------------*/
+#lbInfoCliente {
+	font: 18pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	font-weight: 750;
+}
+
+#lbInfoBusca {
+	font: 10pt &quot;Avenir LT Std&quot;;
+	color: #6F757B;
+}
+
+#frInfoIconeBusca {
+	background-image: url(:/cabecalho/checkSuccess.png);
+	background-position: center;
+	background-repeat: no-repeat;
+
+	background-color: transparent;
+	border-radius: 0px;
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>8</number>
+         </property>
+         <item>
+          <widget class="QFrame" name="frame_2">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>4</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item alignment="Qt::AlignTop">
+             <widget class="QLabel" name="lbInfoCliente">
+              <property name="text">
+               <string>Clientes</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="frAreaBusca">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item row="0" column="0" colspan="2" alignment="Qt::AlignVCenter">
+             <widget class="QFrame" name="frBusca">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>4</number>
+               </property>
+               <property name="topMargin">
+                <number>4</number>
+               </property>
+               <property name="rightMargin">
+                <number>4</number>
+               </property>
+               <property name="bottomMargin">
+                <number>4</number>
+               </property>
+               <item>
+                <widget class="QLineEdit" name="leBusca">
+                 <property name="placeholderText">
+                  <string>Pesquise por cliente ou processo</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pbBusca">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2" alignment="Qt::AlignTop">
+             <widget class="QFrame" name="frame_3">
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QFrame" name="frInfoIconeBusca">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::NoFrame</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Raised</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="lbInfoBusca">
+                 <property name="text">
+                  <string>6 clientes encontrados</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="frame">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item alignment="Qt::AlignTop">
+             <widget class="QPushButton" name="pbFiltro">
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>614</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pbNovoCliente">
+           <property name="minimumSize">
+            <size>
+             <width>165</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Novo cliente</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="frTabela">
+        <property name="styleSheet">
+         <string notr="true">/*------------------------------------------- Table Widget -------------------------------------------*/
+#tblClientes {
+	gridline-color: white;
+	border: 0px solid transparent;
+}
+
+QHeaderView {
+    background-color: white;
+}
+
+QHeaderView::section {
+    background-color: white;
+    padding-left: 4px;
+    border: 0px solid white;
+	min-height: 45px;
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QTableWidget" name="tblClientes">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::NoSelection</enum>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectColumns</enum>
+           </property>
+           <property name="showGrid">
+            <bool>false</bool>
+           </property>
+           <property name="gridStyle">
+            <enum>Qt::NoPen</enum>
+           </property>
+           <property name="sortingEnabled">
+            <bool>true</bool>
+           </property>
+           <property name="cornerButtonEnabled">
+            <bool>true</bool>
+           </property>
+           <attribute name="horizontalHeaderCascadingSectionResizes">
+            <bool>true</bool>
+           </attribute>
+           <attribute name="horizontalHeaderMinimumSectionSize">
+            <number>70</number>
+           </attribute>
+           <attribute name="horizontalHeaderStretchLastSection">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="verticalHeaderHighlightSections">
+            <bool>false</bool>
+           </attribute>
+           <row>
+            <property name="text">
+             <string>Teste</string>
+            </property>
+           </row>
+           <column>
+            <property name="text">
+             <string>clienteId</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Nome</string>
+            </property>
+            <property name="font">
+             <font>
+              <family>Avenir LT Std</family>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="textAlignment">
+             <set>AlignCenter</set>
+            </property>
+            <property name="background">
+             <color>
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </property>
+            <property name="foreground">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>40</red>
+               <green>90</green>
+               <blue>165</blue>
+              </color>
+             </brush>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>E-mail</string>
+            </property>
+            <property name="font">
+             <font>
+              <family>Avenir LT Std</family>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="textAlignment">
+             <set>AlignCenter</set>
+            </property>
+            <property name="background">
+             <color>
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </property>
+            <property name="foreground">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>63</red>
+               <green>78</green>
+               <blue>140</blue>
+              </color>
+             </brush>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Contato</string>
+            </property>
+            <property name="font">
+             <font>
+              <family>Avenir LT Std</family>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="textAlignment">
+             <set>AlignCenter</set>
+            </property>
+            <property name="background">
+             <color>
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </property>
+            <property name="foreground">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>63</red>
+               <green>78</green>
+               <blue>140</blue>
+              </color>
+             </brush>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Cidade</string>
+            </property>
+            <property name="font">
+             <font>
+              <family>Avenir LT Std</family>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="textAlignment">
+             <set>AlignCenter</set>
+            </property>
+            <property name="background">
+             <color>
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </property>
+            <property name="foreground">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>63</red>
+               <green>78</green>
+               <blue>140</blue>
+              </color>
+             </brush>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Documentos</string>
+            </property>
+            <property name="font">
+             <font>
+              <family>Avenir LT Std</family>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="textAlignment">
+             <set>AlignCenter</set>
+            </property>
+            <property name="background">
+             <color>
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </property>
+            <property name="foreground">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>63</red>
+               <green>78</green>
+               <blue>140</blue>
+              </color>
+             </brush>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string> </string>
+            </property>
+            <property name="background">
+             <color>
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </property>
+           </column>
+           <item row="0" column="0">
+            <property name="text">
+             <string>1</string>
+            </property>
+           </item>
+           <item row="0" column="1">
+            <property name="text">
+             <string>Israel</string>
+            </property>
+           </item>
+           <item row="0" column="2">
+            <property name="text">
+             <string>israel.gomes@gmail.com</string>
+            </property>
+           </item>
+           <item row="0" column="3">
+            <property name="text">
+             <string>(11) 9.7275-7721</string>
+            </property>
+           </item>
+           <item row="0" column="4">
+            <property name="text">
+             <string>São Paulo - SP</string>
+            </property>
+           </item>
+           <item row="0" column="5">
+            <property name="text">
+             <string>4/5</string>
+            </property>
+           </item>
+           <item row="0" column="6">
+            <property name="text">
+             <string>:</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../Resources/newListaClientes.qrc"/>
+ </resources>
+ <connections/>
+</ui>

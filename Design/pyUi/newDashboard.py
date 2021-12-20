@@ -15,6 +15,7 @@ class Ui_newDashboard(object):
     def setupUi(self, newDashboard):
         newDashboard.setObjectName("newDashboard")
         newDashboard.resize(1259, 576)
+        newDashboard.setDockNestingEnabled(True)
         self.frMain = QtWidgets.QWidget(newDashboard)
         self.frMain.setStyleSheet("/*-------------------------------------------------- Frames --------------------------------------------------*/\n"
 "#frCabecalho {\n"
@@ -65,6 +66,11 @@ class Ui_newDashboard(object):
 "    background-image: url(:/menuPrincipal/avisos.png);\n"
 "    background-repeat: no-repeat;\n"
 "    background-position: center;\n"
+"}\n"
+"\n"
+"/*-------------------------------------------------- Stacked Eidget --------------------------------------------------*/\n"
+"#stkPrincipal {\n"
+"    background-color: white;\n"
 "}")
         self.frMain.setObjectName("frMain")
         self.gridLayout = QtWidgets.QGridLayout(self.frMain)
@@ -77,7 +83,7 @@ class Ui_newDashboard(object):
         self.frCenter.setObjectName("frCenter")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.frCenter)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setSpacing(1)
+        self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frCabecalho = QtWidgets.QFrame(self.frCenter)
         self.frCabecalho.setFrameShape(QtWidgets.QFrame.NoFrame)

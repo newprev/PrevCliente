@@ -73,16 +73,15 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
         return True
 
     def iniciaDash(self):
-        self.clienteController = NewListaClientes()
-
-        self.stkPrincipal.addWidget(self.clienteController)
-        self.stkPrincipal.setCurrentIndex(0)
-
         if self.buscaEscritorio():
             self.lbNomeEscritorio.setText(self.escritorioAtual.nomeEscritorio)
         if self.buscaAdvogado():
             self.lbNomeAdvogado.setText(self.advogadoAtual.nomeUsuario + ' ' + self.advogadoAtual.sobrenomeUsuario)
             self.lbOAB.setText('OAB: ' + self.advogadoAtual.numeroOAB + '/' + self.escritorioAtual.estado)
+
+        self.clienteController = NewListaClientes(self.escritorioAtual, self.advogadoAtual, parent=self)
+        self.stkPrincipal.addWidget(self.clienteController)
+        self.stkPrincipal.setCurrentIndex(0)
 
     def trocaTela(self, tela: TelaPosicao):
         pass

@@ -7,6 +7,7 @@ from util.enums.dashboardEnums import TelaPosicao
 
 class Sinais(QObject):
     sTrocaWidgetCentral = QtCore.pyqtSignal(TelaPosicao, name='pagina')
+    sEnviaPath = QtCore.pyqtSignal(str, name='path')
     # sTrocaPrimeiroAcesso = QtCore.pyqtSignal(AdvogadoModelo, name='advogado')
     sTrocaPrimeiroAcesso = QtCore.pyqtSignal(Advogados, name='advogado')
     sTrocaTelaEntrevista = QtCore.pyqtSignal(list, name='tela')

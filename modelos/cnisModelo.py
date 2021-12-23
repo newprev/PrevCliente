@@ -152,6 +152,10 @@ class CNISModelo:
 
                 pos += 1
 
+    def iniciaAvaliacaoCnis(self):
+        self.carregaDoc(self.pathCnis)
+        self.carregaDados()
+
     def trataExtrairCabecalhos(self, documentoLinhas, posInicio):
         if any(filter(lambda item: re.fullmatch(self.expRegNB, item), documentoLinhas[posInicio:posInicio + 16])):
             return self.extrairCabecalhosBeneficio(documentoLinhas, posInicio), True

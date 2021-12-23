@@ -47,6 +47,7 @@ class QToaster(QtWidgets.QFrame):
             # the window manager supports it; if it doesn't, this won'd do
             # anything (besides making the hiding a bit longer by half a second)
             self.opacityAni = QtCore.QPropertyAnimation(self, b'windowOpacity')
+
         self.opacityAni.setStartValue(0.)
         self.opacityAni.setEndValue(1.)
         self.opacityAni.setDuration(100)

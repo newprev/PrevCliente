@@ -14,9 +14,9 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#wdgEnviaCNIS {
+   <string notr="true">/*#wdgEnviaCNIS {
 	background-color: lightgrey;
-}
+}*/
 
 /*---------------------------------------- Frame ----------------------------------------*/
 #frPrincipal, #frTop, #frBottom{
@@ -45,11 +45,26 @@
 #lbSubtitulo, #lbInfoBottom {
 	font: 12pt &quot;Avenir LT Std&quot;;
 	color: #52555A;
+}
+
+/*---------------------------------------- Push button ----------------------------------------*/
+#pbBuscaCNIS {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #52555A;
+
+	background-color: white;
+	border: 0px solid white;
 }</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QFrame" name="frPrincipal">
+     <property name="contextMenuPolicy">
+      <enum>Qt::DefaultContextMenu</enum>
+     </property>
+     <property name="acceptDrops">
+      <bool>true</bool>
+     </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -221,7 +236,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="lbInfoBottom">
+          <widget class="QPushButton" name="pbBuscaCNIS">
            <property name="text">
             <string>Arraste ou clique aqui para buscar o CNIS</string>
            </property>

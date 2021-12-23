@@ -15,9 +15,9 @@ class Ui_wdgEnviaCNIS(object):
     def setupUi(self, wdgEnviaCNIS):
         wdgEnviaCNIS.setObjectName("wdgEnviaCNIS")
         wdgEnviaCNIS.resize(587, 300)
-        wdgEnviaCNIS.setStyleSheet("#wdgEnviaCNIS {\n"
+        wdgEnviaCNIS.setStyleSheet("/*#wdgEnviaCNIS {\n"
 "    background-color: lightgrey;\n"
-"}\n"
+"}*/\n"
 "\n"
 "/*---------------------------------------- Frame ----------------------------------------*/\n"
 "#frPrincipal, #frTop, #frBottom{\n"
@@ -46,10 +46,21 @@ class Ui_wdgEnviaCNIS(object):
 "#lbSubtitulo, #lbInfoBottom {\n"
 "    font: 12pt \"Avenir LT Std\";\n"
 "    color: #52555A;\n"
+"}\n"
+"\n"
+"/*---------------------------------------- Push button ----------------------------------------*/\n"
+"#pbBuscaCNIS {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #52555A;\n"
+"\n"
+"    background-color: white;\n"
+"    border: 0px solid white;\n"
 "}")
         self.gridLayout = QtWidgets.QGridLayout(wdgEnviaCNIS)
         self.gridLayout.setObjectName("gridLayout")
         self.frPrincipal = QtWidgets.QFrame(wdgEnviaCNIS)
+        self.frPrincipal.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
+        self.frPrincipal.setAcceptDrops(True)
         self.frPrincipal.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frPrincipal.setObjectName("frPrincipal")
@@ -113,9 +124,9 @@ class Ui_wdgEnviaCNIS(object):
         self.frIcone.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frIcone.setObjectName("frIcone")
         self.horizontalLayout.addWidget(self.frIcone)
-        self.lbInfoBottom = QtWidgets.QLabel(self.frBottom)
-        self.lbInfoBottom.setObjectName("lbInfoBottom")
-        self.horizontalLayout.addWidget(self.lbInfoBottom)
+        self.pbBuscaCNIS = QtWidgets.QPushButton(self.frBottom)
+        self.pbBuscaCNIS.setObjectName("pbBuscaCNIS")
+        self.horizontalLayout.addWidget(self.pbBuscaCNIS)
         spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem3)
         self.verticalLayout.addWidget(self.frBottom)
@@ -129,8 +140,8 @@ class Ui_wdgEnviaCNIS(object):
         wdgEnviaCNIS.setWindowTitle(_translate("wdgEnviaCNIS", "Form"))
         self.lbTitulo.setText(_translate("wdgEnviaCNIS", "PREENCHIMENTO AUTOMÁTICO"))
         self.lbSubtitulo.setText(_translate("wdgEnviaCNIS", "Cadastro a partir do CNIS"))
-        self.lbInfoBottom.setText(_translate("wdgEnviaCNIS", "Arraste ou clique aqui para buscar o CNIS"))
-import wdgEnviaCNIS_rc
+        self.pbBuscaCNIS.setText(_translate("wdgEnviaCNIS", "Arraste ou clique aqui para buscar o CNIS"))
+import Resources.wdgEnviaCNIS
 
 
 if __name__ == "__main__":

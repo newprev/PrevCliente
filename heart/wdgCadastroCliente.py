@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QStyle
+from PyQt5.QtWidgets import QWidget, QLineEdit
 from PyQt5.QtCore import Qt
 
 from Design.pyUi.wdgCadastroCliente import Ui_wdgCadastroCliente
@@ -63,6 +63,8 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.pbVoltar.clicked.connect(lambda: self.avaliaNavegacao(Navegacao.anterior))
         self.pbSalvarDados.clicked.connect(self.avaliaSalvaDados)
         self.pbBuscaCep.clicked.connect(self.buscaCep)
+        self.cbMostraPix.stateChanged.connect(lambda: self.avaliaMostraSenhas('pix'))
+        self.cbMostraMeuInss.stateChanged.connect(lambda: self.avaliaMostraSenhas('meuInss'))
 
         self.trocaEtapa(EtapaCadastraCliente.pessoal)
 
@@ -96,6 +98,19 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.clienteAtual.save()
         self.editando = False
         return True
+
+    def avaliaMostraSenhas(self, info: str):
+        if info == 'pix':
+            if self.cbMostraPix.isChecked():
+                self.lePix.setEchoMode(QLineEdit.EchoMode.Normal)
+            else:
+                self.lePix.setEchoMode(QLineEdit.EchoMode.Password)
+        else:
+            if self.cbMostraMeuInss.isChecked():
+                self.leSenhaInss.setEchoMode(QLineEdit.EchoMode.Normal)
+            else:
+                self.leSenhaInss.setEchoMode(QLineEdit.EchoMode.Password)
+
 
     def buscaCep(self):
         integracaoRepository = IntegracaoRepository()

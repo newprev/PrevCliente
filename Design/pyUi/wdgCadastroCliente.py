@@ -295,6 +295,11 @@ class Ui_wdgCadastroCliente(object):
 "    padding: 0px 8px 0px 0px;\n"
 "}\n"
 "\n"
+"#frMeuInss, #frPix {\n"
+"    background-color: #F9F9F9;\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
 "/*---------------------------- Push Button ----------------------------------*/\n"
 "#pbBuscaCep{\n"
 "    background-image: url(:/busca/localizacao.png);\n"
@@ -337,6 +342,16 @@ class Ui_wdgCadastroCliente(object):
 "#rbMasculino::indicator::checked, \n"
 "#rbFeminino::indicator::checked {\n"
 "    image: url(:/radioButton/rbChecked.png);\n"
+"}\n"
+"\n"
+"/*------------------------------ Check Box -------------------------------------*/\n"
+"#cbMostraMeuInss::indicator:unchecked, #cbMostraPix::indicator:unchecked {\n"
+"    image: url(:/show/hide.png);\n"
+"}\n"
+"\n"
+"#cbMostraMeuInss::indicator:checked, \n"
+"#cbMostraPix::indicator:checked {\n"
+"    image: url(:/show/show.png);\n"
 "}\n"
 "\n"
 "\n"
@@ -682,22 +697,6 @@ class Ui_wdgCadastroCliente(object):
         self.gridLayout_9.setHorizontalSpacing(18)
         self.gridLayout_9.setVerticalSpacing(16)
         self.gridLayout_9.setObjectName("gridLayout_9")
-        self.leNumeroAgencia = QtWidgets.QLineEdit(self.frame_11)
-        self.leNumeroAgencia.setMinimumSize(QtCore.QSize(0, 40))
-        self.leNumeroAgencia.setObjectName("leNumeroAgencia")
-        self.gridLayout_9.addWidget(self.leNumeroAgencia, 2, 0, 1, 1)
-        self.leConta = QtWidgets.QLineEdit(self.frame_11)
-        self.leConta.setMinimumSize(QtCore.QSize(0, 40))
-        self.leConta.setObjectName("leConta")
-        self.gridLayout_9.addWidget(self.leConta, 2, 1, 1, 1)
-        self.leNomeBanco = QtWidgets.QLineEdit(self.frame_11)
-        self.leNomeBanco.setMinimumSize(QtCore.QSize(0, 40))
-        self.leNomeBanco.setObjectName("leNomeBanco")
-        self.gridLayout_9.addWidget(self.leNomeBanco, 1, 0, 1, 2)
-        self.leSenhaInss = QtWidgets.QLineEdit(self.frame_11)
-        self.leSenhaInss.setMinimumSize(QtCore.QSize(0, 40))
-        self.leSenhaInss.setObjectName("leSenhaInss")
-        self.gridLayout_9.addWidget(self.leSenhaInss, 4, 0, 1, 2)
         self.frInfoCamposBancarias = QtWidgets.QFrame(self.frame_11)
         self.frInfoCamposBancarias.setMinimumSize(QtCore.QSize(0, 0))
         self.frInfoCamposBancarias.setMaximumSize(QtCore.QSize(16777215, 45))
@@ -711,12 +710,54 @@ class Ui_wdgCadastroCliente(object):
         self.lbInfoCamposBancarias.setObjectName("lbInfoCamposBancarias")
         self.horizontalLayout_8.addWidget(self.lbInfoCamposBancarias)
         self.gridLayout_9.addWidget(self.frInfoCamposBancarias, 0, 0, 1, 2)
-        self.lePix = QtWidgets.QLineEdit(self.frame_11)
-        self.lePix.setMinimumSize(QtCore.QSize(0, 40))
-        self.lePix.setObjectName("lePix")
-        self.gridLayout_9.addWidget(self.lePix, 3, 0, 1, 2)
+        self.leNumeroAgencia = QtWidgets.QLineEdit(self.frame_11)
+        self.leNumeroAgencia.setMinimumSize(QtCore.QSize(0, 40))
+        self.leNumeroAgencia.setObjectName("leNumeroAgencia")
+        self.gridLayout_9.addWidget(self.leNumeroAgencia, 2, 0, 1, 1)
+        self.leConta = QtWidgets.QLineEdit(self.frame_11)
+        self.leConta.setMinimumSize(QtCore.QSize(0, 40))
+        self.leConta.setObjectName("leConta")
+        self.gridLayout_9.addWidget(self.leConta, 2, 1, 1, 1)
         spacerItem10 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout_9.addItem(spacerItem10, 5, 0, 1, 2)
+        self.leNomeBanco = QtWidgets.QLineEdit(self.frame_11)
+        self.leNomeBanco.setMinimumSize(QtCore.QSize(0, 40))
+        self.leNomeBanco.setObjectName("leNomeBanco")
+        self.gridLayout_9.addWidget(self.leNomeBanco, 1, 0, 1, 2)
+        self.frPix = QtWidgets.QFrame(self.frame_11)
+        self.frPix.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frPix.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frPix.setObjectName("frPix")
+        self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.frPix)
+        self.horizontalLayout_10.setObjectName("horizontalLayout_10")
+        self.lePix = QtWidgets.QLineEdit(self.frPix)
+        self.lePix.setMinimumSize(QtCore.QSize(0, 40))
+        self.lePix.setMaxLength(60)
+        self.lePix.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.lePix.setObjectName("lePix")
+        self.horizontalLayout_10.addWidget(self.lePix)
+        self.cbMostraPix = QtWidgets.QCheckBox(self.frPix)
+        self.cbMostraPix.setText("")
+        self.cbMostraPix.setObjectName("cbMostraPix")
+        self.horizontalLayout_10.addWidget(self.cbMostraPix)
+        self.gridLayout_9.addWidget(self.frPix, 3, 0, 1, 2)
+        self.frMeuInss = QtWidgets.QFrame(self.frame_11)
+        self.frMeuInss.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frMeuInss.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frMeuInss.setObjectName("frMeuInss")
+        self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.frMeuInss)
+        self.horizontalLayout_11.setObjectName("horizontalLayout_11")
+        self.leSenhaInss = QtWidgets.QLineEdit(self.frMeuInss)
+        self.leSenhaInss.setMinimumSize(QtCore.QSize(0, 40))
+        self.leSenhaInss.setMaxLength(60)
+        self.leSenhaInss.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.leSenhaInss.setObjectName("leSenhaInss")
+        self.horizontalLayout_11.addWidget(self.leSenhaInss)
+        self.cbMostraMeuInss = QtWidgets.QCheckBox(self.frMeuInss)
+        self.cbMostraMeuInss.setText("")
+        self.cbMostraMeuInss.setObjectName("cbMostraMeuInss")
+        self.horizontalLayout_11.addWidget(self.cbMostraMeuInss)
+        self.gridLayout_9.addWidget(self.frMeuInss, 4, 0, 1, 2)
         self.gridLayout_8.addWidget(self.frame_11, 0, 0, 1, 1)
         self.frame_13 = QtWidgets.QFrame(self.pgBancarias)
         self.frame_13.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -789,12 +830,12 @@ class Ui_wdgCadastroCliente(object):
         self.lbInfoCamposProf.setText(_translate("wdgCadastroCliente", "Informações profissionais"))
         self.leNit.setPlaceholderText(_translate("wdgCadastroCliente", "NIT"))
         self.leProfissao.setPlaceholderText(_translate("wdgCadastroCliente", "Profissão"))
+        self.lbInfoCamposBancarias.setText(_translate("wdgCadastroCliente", "Informações bancárias"))
         self.leNumeroAgencia.setPlaceholderText(_translate("wdgCadastroCliente", "Agência"))
         self.leConta.setPlaceholderText(_translate("wdgCadastroCliente", "Conta"))
         self.leNomeBanco.setPlaceholderText(_translate("wdgCadastroCliente", "Nome do banco"))
-        self.leSenhaInss.setPlaceholderText(_translate("wdgCadastroCliente", "Senha \"Meu INSS\""))
-        self.lbInfoCamposBancarias.setText(_translate("wdgCadastroCliente", "Informações bancárias"))
         self.lePix.setPlaceholderText(_translate("wdgCadastroCliente", "Chave PIX"))
+        self.leSenhaInss.setPlaceholderText(_translate("wdgCadastroCliente", "Senha \"Meu INSS\""))
         self.pbSalvarDados.setText(_translate("wdgCadastroCliente", "Salvar dados"))
 import Resources.wdgCadastroCliente
 

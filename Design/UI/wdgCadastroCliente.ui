@@ -678,6 +678,11 @@
 	padding: 0px 8px 0px 0px;
 }
 
+#frMeuInss, #frPix {
+	background-color: #F9F9F9;
+	border-radius: 8px;
+}
+
 /*---------------------------- Push Button ----------------------------------*/
 #pbBuscaCep{
 	background-image: url(:/busca/localizacao.png);
@@ -720,6 +725,16 @@ QLineEdit {
 #rbMasculino::indicator::checked, 
 #rbFeminino::indicator::checked {
 	image: url(:/radioButton/rbChecked.png);
+}
+
+/*------------------------------ Check Box -------------------------------------*/
+#cbMostraMeuInss::indicator:unchecked, #cbMostraPix::indicator:unchecked {
+	image: url(:/show/hide.png);
+}
+
+#cbMostraMeuInss::indicator:checked, 
+#cbMostraPix::indicator:checked {
+	image: url(:/show/show.png);
 }
 
 
@@ -1571,58 +1586,6 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                 <property name="verticalSpacing">
                  <number>16</number>
                 </property>
-                <item row="2" column="0">
-                 <widget class="QLineEdit" name="leNumeroAgencia">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Agência</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QLineEdit" name="leConta">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Conta</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0" colspan="2">
-                 <widget class="QLineEdit" name="leNomeBanco">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Nome do banco</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0" colspan="2">
-                 <widget class="QLineEdit" name="leSenhaInss">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Senha &quot;Meu INSS&quot;</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="0" column="0" colspan="2">
                  <widget class="QFrame" name="frInfoCamposBancarias">
                   <property name="minimumSize">
@@ -1657,8 +1620,8 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                   </layout>
                  </widget>
                 </item>
-                <item row="3" column="0" colspan="2">
-                 <widget class="QLineEdit" name="lePix">
+                <item row="2" column="0">
+                 <widget class="QLineEdit" name="leNumeroAgencia">
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -1666,7 +1629,20 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                    </size>
                   </property>
                   <property name="placeholderText">
-                   <string>Chave PIX</string>
+                   <string>Agência</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLineEdit" name="leConta">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Conta</string>
                   </property>
                  </widget>
                 </item>
@@ -1682,6 +1658,95 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item row="1" column="0" colspan="2">
+                 <widget class="QLineEdit" name="leNomeBanco">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Nome do banco</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0" colspan="2">
+                 <widget class="QFrame" name="frPix">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_10">
+                   <item>
+                    <widget class="QLineEdit" name="lePix">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="maxLength">
+                      <number>60</number>
+                     </property>
+                     <property name="echoMode">
+                      <enum>QLineEdit::Password</enum>
+                     </property>
+                     <property name="placeholderText">
+                      <string>Chave PIX</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="cbMostraPix">
+                     <property name="text">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="4" column="0" colspan="2">
+                 <widget class="QFrame" name="frMeuInss">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_11">
+                   <item>
+                    <widget class="QLineEdit" name="leSenhaInss">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="maxLength">
+                      <number>60</number>
+                     </property>
+                     <property name="echoMode">
+                      <enum>QLineEdit::Password</enum>
+                     </property>
+                     <property name="placeholderText">
+                      <string>Senha &quot;Meu INSS&quot;</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="cbMostraMeuInss">
+                     <property name="text">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
                 </item>
                </layout>
               </widget>

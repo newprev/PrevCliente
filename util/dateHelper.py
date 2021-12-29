@@ -92,7 +92,7 @@ def mascaraData(data):
         else:
             data = strToDatetime(data)
 
-    return f'{data.day}/{data.month}/{data.year}'
+    return f'{data.day:02}/{data.month:02}/{data.year}'
 
 
 def eliminaHoraDias(data: datetime.datetime):

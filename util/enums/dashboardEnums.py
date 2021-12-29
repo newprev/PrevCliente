@@ -24,6 +24,7 @@ class TelaPosicao(Enum):
 class TelaAtual(Enum):
     Cliente = 0
     CadastroCliente = 1
+    InfoCliente = 2
 
 class Icone(Enum):
     cliente = 'url(:/funcionalidade/cliente.png)'

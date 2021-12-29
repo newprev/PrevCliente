@@ -42,12 +42,14 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.advogadoAtual = advogado
         self.sinais = Sinais()
         self.sinais.sEnviaClienteParam.connect(self.enviaClienteDashboard)
+        self.sinais.sEnviaInfoCliente.connect(self.enviaInfoClienteDashboard)
         self.toast = QToaster(parent=self)
 
         self.tblClientes.hideColumn(0)
         self.installEventFilter(self)
 
         self.pbNovoCliente.clicked.connect(self.abrirPopupCNIS)
+        self.tblClientes.doubleClicked.connect(self.selecionaCliente)
 
         self.atualizaTblClientes()
 
@@ -173,7 +175,8 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 with db.atomic() as transaction:
                     try:
                         Cliente.insert(**clienteAInserir.toDict()).on_conflict_replace().execute()
-                        clienteAtual = Cliente.get(Cliente.cpfCliente == clienteAInserir.cpfCliente)
+                        clienteAtual: Cliente = Cliente.get(Cliente.cpfCliente == clienteAInserir.cpfCliente)
+                        clienteAtual.pathCnis = pathCnis
 
                         contribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=clienteAtual.clienteId)
                         cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
@@ -219,6 +222,17 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
     def enviaClienteDashboard(self, cliente: Cliente):
         self.dashboard.recebeCliente(cliente)
+
+    def enviaInfoClienteDashboard(self, cliente: Cliente):
+        self.dashboard.navegaInfoCliente(cliente)
+
+    def selecionaCliente(self, *args, **kwargs):
+        linhaSelecionada = args[0].row()
+
+        clienteId = self.tblClientes.item(linhaSelecionada, 0).text()
+        clienteSelecionado: Cliente = Cliente.get_by_id(clienteId)
+
+        self.sinais.sEnviaInfoCliente.emit(clienteSelecionado)
 
     def recebePathCnis(self, path: str):
         if os.path.isfile(path):

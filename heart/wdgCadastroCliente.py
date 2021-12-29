@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QWidget, QLineEdit
 from PyQt5.QtCore import Qt
 
+from datetime import datetime
+
 from Design.pyUi.wdgCadastroCliente import Ui_wdgCadastroCliente
 from Design.CustomWidgets.newToast import QToaster
 from heart.localStyleSheet.cadastroCliente import etapaCadatro
@@ -111,7 +113,6 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             else:
                 self.leSenhaInss.setEchoMode(QLineEdit.EchoMode.Password)
 
-
     def buscaCep(self):
         integracaoRepository = IntegracaoRepository()
         dictCep: dict = integracaoRepository.getCep(self.leCep.text().replace('-', ''))
@@ -214,9 +215,18 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             self.clienteAtual.email = self.leEmail.text()
 
         elif info == 'telefone1':
-            if self.clienteAtual.telefoneId is None:
-                self.clienteAtual.telefoneId = Telefones()
+            if self.clienteAtual.telefoneId is None or self.clienteAtual.telefoneId.telefoneId is None:
+                telefone = Telefones(
+                    clienteId=self.clienteAtual.clienteId,
+                    numero=self.leTelefone1.text(),
+                    pessoalRecado='P',
+                    tipoTelefone='W'
+                ).save()
+                self.clienteAtual.telefoneId = telefone
+
             self.clienteAtual.telefoneId.numero = self.leTelefone1.text()
+            self.clienteAtual.telefoneId.dataUltAlt = datetime.now()
+            self.clienteAtual.telefoneId.save()
 
         elif info == 'telefone2':
             if self.clienteAtual.telefoneId is None:

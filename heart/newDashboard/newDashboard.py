@@ -1,13 +1,10 @@
 from PyQt5.QtGui import QFont
 
 from Design.pyUi.newDashboard import Ui_newDashboard
-from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
+from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import QtGui
 
 from modelos.clienteORM import Cliente
-from modelos.processosORM import Processos
-from modelos.telefonesORM import Telefones
-from util.helpers import mascaraTelCel, strTipoBeneficio
 from util.popUps import popUpOkAlerta
 
 from Design.pyUi.efeitos import Efeitos
@@ -15,7 +12,7 @@ from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 from sinaisCustomizados import Sinais
 
-from util.enums.dashboardEnums import TelaPosicao, TelaAtual
+from util.enums.dashboardEnums import TelaAtual
 
 from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
@@ -23,6 +20,7 @@ from modelos.advogadoORM import Advogados
 from heart.newDashboard.localWidgets.newMenuPrincipal import NewMenuPrincipal
 from heart.newDashboard.localWidgets.newListaClientes import NewListaClientes
 from heart.wdgCadastroCliente import NewCadastraCliente
+from heart.newDashboard.localWidgets.newInfoCliente import NewInfoCliente
 
 
 class NewDashboard(QMainWindow, Ui_newDashboard):
@@ -30,6 +28,7 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
     escritorioAtual: Escritorios
     advogadoAtual: Advogados
     wdgCadastroCliente: NewCadastraCliente
+    wdgInfoCliente: NewInfoCliente
 
     def __init__(self, parent=None):
         super(NewDashboard, self).__init__(parent=parent)
@@ -83,11 +82,17 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
 
         self.clienteController = NewListaClientes(self.escritorioAtual, self.advogadoAtual, parent=self)
         self.wdgCadastroCliente = NewCadastraCliente(parent=self)
+        self.wdgInfoCliente = NewInfoCliente(parent=self)
 
         self.stkPrincipal.addWidget(self.clienteController)
         self.stkPrincipal.addWidget(self.wdgCadastroCliente)
+        self.stkPrincipal.addWidget(self.wdgInfoCliente)
 
         self.stkPrincipal.setCurrentIndex(TelaAtual.Cliente.value)
+
+    def navegaInfoCliente(self, cliente: Cliente):
+        self.wdgInfoCliente.carregaClienteNaTela(cliente)
+        self.trocaTela(TelaAtual.InfoCliente)
 
     def recebeCliente(self, cliente: Cliente):
         if cliente is not None and cliente.clienteId is not None:

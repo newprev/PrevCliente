@@ -19,6 +19,8 @@ class FontColor(Enum):
 class FontStyle(Enum):
     titulo = "QLabel{ " + Fonts.bebasStd.value + FontSize.H1.value + "}"
     subTitulo = "QLabel{ " + Fonts.bebasStd.value + FontSize.H3.value + "}"
-    toast = "QLabel{ " + Fonts.avenirStd.value + FontSize.H2.value + FontColor.white.value + "}"
+    gToast = "QLabel{ " + Fonts.avenirStd.value + FontSize.H1.value + FontColor.white.value + "}"
+    mToast = "QLabel{ " + Fonts.avenirStd.value + FontSize.H2.value + FontColor.white.value + "}"
+    pToast = "QLabel{ " + Fonts.avenirStd.value + FontSize.H3.value + FontColor.white.value + "}"
     tagWhite = "QLabel{ " + Fonts.avenirStd.value + FontSize.H3.value + FontColor.white.value + "}"
     tagBlack = "QLabel{ " + Fonts.avenirStd.value + FontSize.H3.value + FontColor.black.value + "}"

@@ -10,9 +10,11 @@ from modelos.escritoriosORM import Escritorios
 
 
 class EscritorioRepositorio:
+    header: dict
 
     def __init__(self):
         configs: dict = buscaSystemConfigs()
+        self.header = {"Content-Type": "application/json"}
 
         if TipoConexao.desenvolvimento.name == configs['tipoConexao']:
             # url para desenvolvimento

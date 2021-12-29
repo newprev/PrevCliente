@@ -529,9 +529,9 @@ QHeaderView::section {
             <property name="foreground">
              <brush brushstyle="SolidPattern">
               <color alpha="255">
-               <red>40</red>
-               <green>90</green>
-               <blue>165</blue>
+               <red>63</red>
+               <green>78</green>
+               <blue>140</blue>
               </color>
              </brush>
             </property>
@@ -658,7 +658,7 @@ QHeaderView::section {
            </column>
            <column>
             <property name="text">
-             <string> </string>
+             <string/>
             </property>
             <property name="background">
              <color>

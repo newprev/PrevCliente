@@ -15,19 +15,21 @@ from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 from sinaisCustomizados import Sinais
 
-from util.enums.dashboardEnums import TelaPosicao
+from util.enums.dashboardEnums import TelaPosicao, TelaAtual
 
 from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
 
 from heart.newDashboard.localWidgets.newMenuPrincipal import NewMenuPrincipal
 from heart.newDashboard.localWidgets.newListaClientes import NewListaClientes
+from heart.wdgCadastroCliente import NewCadastraCliente
 
 
 class NewDashboard(QMainWindow, Ui_newDashboard):
     clienteController: NewListaClientes
     escritorioAtual: Escritorios
     advogadoAtual: Advogados
+    wdgCadastroCliente: NewCadastraCliente
 
     def __init__(self, parent=None):
         super(NewDashboard, self).__init__(parent=parent)
@@ -80,11 +82,24 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
             self.lbOAB.setText('OAB: ' + self.advogadoAtual.numeroOAB + '/' + self.escritorioAtual.estado)
 
         self.clienteController = NewListaClientes(self.escritorioAtual, self.advogadoAtual, parent=self)
-        self.stkPrincipal.addWidget(self.clienteController)
-        self.stkPrincipal.setCurrentIndex(0)
+        self.wdgCadastroCliente = NewCadastraCliente(parent=self)
 
-    def trocaTela(self, tela: TelaPosicao):
-        pass
+        self.stkPrincipal.addWidget(self.clienteController)
+        self.stkPrincipal.addWidget(self.wdgCadastroCliente)
+
+        self.stkPrincipal.setCurrentIndex(TelaAtual.Cliente.value)
+
+    def recebeCliente(self, cliente: Cliente):
+        if cliente is not None and cliente.clienteId is not None:
+            self.wdgCadastroCliente.iniciaTela()
+            self.wdgCadastroCliente.carregaClienteNaTela(cliente)
+            self.trocaTela(TelaAtual.CadastroCliente)
+
+    def recarregaListaClientes(self):
+        self.clienteController.atualizaTblClientes()
+
+    def trocaTela(self, tela: TelaAtual):
+        self.stkPrincipal.setCurrentIndex(tela.value)
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         self.cacheLogin.limpaTemporarios()

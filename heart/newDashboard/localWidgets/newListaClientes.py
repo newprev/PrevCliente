@@ -1,15 +1,18 @@
 import os
+from timeit import Timer
+
 from peewee import SqliteDatabase
 from typing import List
 
-from PyQt5.QtCore import QObject, QEvent
+from PyQt5.QtCore import QObject, QEvent, Qt
 from PyQt5.QtGui import QFont, QKeyEvent
 from PyQt5.QtWidgets import QFrame, QTableWidgetItem
 
 from Design.pyUi.newListaClientes import Ui_wdgListaClientes
-
 from Design.CustomWidgets.newPopupCNIS import NewPopupCNIS
+from Design.CustomWidgets.newToast import QToaster
 from Design.pyUi.efeitos import Efeitos
+
 from modelos.cabecalhoORM import CnisCabecalhos
 
 from modelos.clienteORM import Cliente
@@ -19,6 +22,7 @@ from modelos.itemContribuicao import ItemContribuicao
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
 from modelos.advogadoORM import Advogados
+from sinaisCustomizados import Sinais
 from util.dateHelper import strToDate, atividadesConcorrentes, atividadeSecundaria
 
 from util.helpers import mascaraTelCel, strTipoBeneficio, unmaskAll, calculaIdadeFromString
@@ -27,14 +31,18 @@ from util.popUps import popUpOkAlerta
 
 class NewListaClientes(QFrame, Ui_wdgListaClientes):
     popupCNIS: NewPopupCNIS
+    toast: QToaster
 
     def __init__(self, escritorio: Escritorios, advogado: Advogados, parent=None):
         super(NewListaClientes, self).__init__(parent=parent)
         self.setupUi(self)
-        self.parent = parent
+        self.dashboard = parent
         self.popupCNIS = None
         self.escritorioAtual = escritorio
         self.advogadoAtual = advogado
+        self.sinais = Sinais()
+        self.sinais.sEnviaClienteParam.connect(self.enviaClienteDashboard)
+        self.toast = QToaster(parent=self)
 
         self.tblClientes.hideColumn(0)
         self.installEventFilter(self)
@@ -97,7 +105,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             self.popupCNIS.close()
             self.popupCNIS.setParent(None)
 
-        self.popupCNIS = NewPopupCNIS(parent=self, dashboard=self.parent)
+        self.popupCNIS = NewPopupCNIS(parent=self, dashboard=self.dashboard)
         Efeitos().shadowCards([self.popupCNIS])
         self.popupCNIS.raise_()
         self.popupCNIS.show()
@@ -200,6 +208,8 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         if cnisInseridoComSucesso:
             self.avaliaAtividadesPrincipais(clienteAtual.clienteId)
 
+        self.sinais.sEnviaClienteParam.emit(clienteAtual)
+
     def eventFilter(self, a0: QObject, tecla: QEvent) -> bool:
         if isinstance(tecla, QKeyEvent):
             if self.popupCNIS.isVisible():
@@ -207,9 +217,16 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
         return super(NewListaClientes, self).eventFilter(a0, tecla)
 
+    def enviaClienteDashboard(self, cliente: Cliente):
+        self.dashboard.recebeCliente(cliente)
+
     def recebePathCnis(self, path: str):
         if os.path.isfile(path):
             self.carregaCnis(path)
+            return True
+
+    def toastCarregaCnis(self):
+        self.toast.showMessage(self, "Analisando informações do CNIS...", corner=Qt.BottomLeftCorner)
 
 
 if __name__ == '__main__':

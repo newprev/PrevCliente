@@ -2,17 +2,20 @@ from PyQt5.QtCore import QObject
 from PyQt5 import QtCore
 
 from modelos.advogadoORM import Advogados
+from modelos.clienteORM import Cliente
 from util.enums.dashboardEnums import TelaPosicao
 
 
 class Sinais(QObject):
     sTrocaWidgetCentral = QtCore.pyqtSignal(TelaPosicao, name='pagina')
     sEnviaPath = QtCore.pyqtSignal(str, name='path')
+    sAbreToast = QtCore.pyqtSignal(name='toast')
     # sTrocaPrimeiroAcesso = QtCore.pyqtSignal(AdvogadoModelo, name='advogado')
     sTrocaPrimeiroAcesso = QtCore.pyqtSignal(Advogados, name='advogado')
     sTrocaTelaEntrevista = QtCore.pyqtSignal(list, name='tela')
     sTrocaInfoLateral = QtCore.pyqtSignal(dict, name='infoLateral')
     sEnviaCliente = QtCore.pyqtSignal(name='enviaCliente')
+    sEnviaClienteParam = QtCore.pyqtSignal(Cliente, name='enviaClienteParam')
     sBuscaCliente = QtCore.pyqtSignal(name='buscaCliente')
     sEnviaIndicadores = QtCore.pyqtSignal(list, name='enviaIndicador')
     sAtualizaListaClientes = QtCore.pyqtSignal(name='atualizaListaClientes')

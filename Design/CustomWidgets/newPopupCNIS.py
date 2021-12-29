@@ -5,6 +5,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget, QFileDialog, QMainWindow
 from PyQt5.QtCore import QPropertyAnimation, QRect, pyqtProperty, Qt, QEasingCurve, QUrl
 
+from Design.CustomWidgets.newToast import QToaster
 from Design.pyUi.wdgEnviaCNIS import Ui_wdgEnviaCNIS
 
 from sinaisCustomizados import Sinais
@@ -14,19 +15,22 @@ from util.popUps import popUpOkAlerta
 class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
     foraDaTela: bool = False
     dashboard: QMainWindow
+    toast: QToaster
 
     def __init__(self, dashboard=None, parent=None):
         super(NewPopupCNIS, self).__init__(parent=parent)
         self.setupUi(self)
         self.center()
-        self.parent = parent
+        self.wdgListaCliente = parent
         self.dashboard = dashboard
         self.sinais = Sinais()
         self.sinais.sEnviaPath.connect(self.enviaPath)
+        self.sinais.sAbreToast.connect(self.mostraToast)
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setAcceptDrops(True)
+        self.toast = QToaster()
 
         self.pbBuscaCNIS.clicked.connect(self.abreBuscaCNIS)
 
@@ -73,11 +77,9 @@ class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
         frameGm.moveCenter(centerPoint)
         self.move(frameGm.topLeft())
 
-    def showEvent(self, a0: QtGui.QShowEvent) -> None:
-        self.animacaoEntrada()
-
     def dragEnterEvent(self, evento: QtGui.QDragEnterEvent) -> None:
         if evento.mimeData().hasUrls():
+            self.sinais.sAbreToast.emit()
             evento.accept()
         else:
             evento.ignore()
@@ -101,11 +103,17 @@ class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
 
     def enviaPath(self, pathCnis: str):
         self.close()
-        self.parent.recebePathCnis(pathCnis)
+        self.wdgListaCliente.recebePathCnis(pathCnis)
+        
+    def mostraToast(self):
+        self.wdgListaCliente.toastCarregaCnis()
 
     def processaCnis(self, path: str):
         if os.path.isfile(path):
             self.sinais.sEnviaPath.emit(path)
+            
+    def showEvent(self, a0: QtGui.QShowEvent) -> None:
+        self.animacaoEntrada()
 
     def windowOpacity(self):
         return super().windowOpacity()

@@ -3,4 +3,11 @@
     <file>entrevista-check.png</file>
     <file>LogoLogin.png</file>
   </qresource>
+  <qresource prefix="mostrar">
+    <file>hide.png</file>
+    <file>show.png</file>
+  </qresource>
+  <qresource prefix="Voltar">
+    <file>back.png</file>
+  </qresource>
 </RCC>

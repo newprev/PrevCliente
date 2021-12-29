@@ -6,9 +6,11 @@ from util.enums.newPrevEnums import *
 
 
 class IntegracaoRepository:
+    header: dict
 
     def __init__(self):
         self.urlBase = 'https://'
+        self.header = {"Content-Type": "application/json"}
 
     def getCep(self, numCep):
         url = self.urlBase + f'viacep.com.br/ws/{numCep}/json/'

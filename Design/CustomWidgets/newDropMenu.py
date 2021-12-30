@@ -1,22 +1,24 @@
 import datetime
 
-from PyQt5 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QCursor
-from PyQt5.QtWidgets import QMainWindow, QCheckBox
+from PyQt5.QtWidgets import QFrame, QCheckBox
 
-from Design.pyUi.menuFiltroContrib import Ui_mwFiltrosContribuicoes
+from Design.DesignSystem.designEnums import FontStyle
+from Design.pyUi.menuFiltroContrib_teste import Ui_wdgNewMenu
 from util.helpers import dictIndicadores
 
 from sinaisCustomizados import Sinais
 
 
-class NewSubMenu(QMainWindow, Ui_mwFiltrosContribuicoes):
+class NewSubMenu(QFrame, Ui_wdgNewMenu):
+    closed = QtCore.pyqtSignal()
     menuAberto = False
+    tabResumos = None
 
-    def __init__(self, indicadores: str, parent=None):
+    def __init__(self, parent=None):
         super(NewSubMenu, self).__init__(parent=parent)
         self.setupUi(self)
-        self.parent = parent
         self.menuAberto = False
         self.indicadores: dict = dictIndicadores
         self.sinais = Sinais()
@@ -26,17 +28,11 @@ class NewSubMenu(QMainWindow, Ui_mwFiltrosContribuicoes):
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
-        self.indicadoresSelecionados = indicadores
-
-        self.sinais.sAtualizaParams.connect(self.enviaParametros)
         self.dtDe.setDate(datetime.date.today())
         self.dtAte.setDate(datetime.date.today())
 
         self.dtDe.dateChanged.connect(lambda: self.alterouData('De'))
         self.dtAte.dateChanged.connect(lambda: self.alterouData('Ate'))
-
-        self.carregaIndicadores()
-        self.atualizaSelecao()
 
         self.leBusca.textChanged.connect(self.avaliaBusca)
         self.leBusca.setFocus()
@@ -74,12 +70,12 @@ class NewSubMenu(QMainWindow, Ui_mwFiltrosContribuicoes):
             if cbIndicador.isChecked():
                 indicadoresAEnviar.append(cbIndicador.text())
 
-        self.parent.atualizaFiltros(indicadores=indicadoresAEnviar, datas=datas)
+        self.tabResumos.atualizaFiltros(indicadores=indicadoresAEnviar, datas=datas)
 
-    def atualizaSelecao(self):
+    def atualizaSelecao(self, indicadoresSelecionados):
         for index in range(self.vlIndicadores.count()):
             cbIndicador: QCheckBox = self.vlIndicadores.itemAt(index).widget()
-            selecionado = cbIndicador.text() in self.indicadoresSelecionados
+            selecionado = cbIndicador.text() in indicadoresSelecionados
             cbIndicador.setChecked(selecionado)
 
     def avaliaBusca(self, *args):
@@ -91,6 +87,12 @@ class NewSubMenu(QMainWindow, Ui_mwFiltrosContribuicoes):
                 cb.show()
             else:
                 cb.hide()
+
+    def setupInicial(self, **kwargs) -> None:
+        self.tabResumos = kwargs['parent']
+        self.sinais.sAtualizaParams.connect(self.enviaParametros)
+        self.carregaIndicadores()
+        self.atualizaSelecao(kwargs['indicadoresSelecionados'])
 
     def showEvent(self, a0: QtGui.QShowEvent) -> None:
         position = self.mapToGlobal(QCursor.pos())

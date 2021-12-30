@@ -1,3 +1,5 @@
+import json
+
 import requests as http
 from systemLog.logs import logPrioridade
 from typing import List
@@ -15,9 +17,11 @@ from repositorios.escritorioRepositorio import EscritorioRepositorio
 
 
 class UsuarioRepository:
+    header: dict
 
     def __init__(self):
         configs: dict = buscaSystemConfigs()
+        self.header = {"Content-Type": "application/json"}
 
         if TipoConexao.desenvolvimento.name == configs['tipoConexao']:
             # url para desenvolvimento
@@ -26,23 +30,66 @@ class UsuarioRepository:
             # url para produção
             self.baseUrl = 'http://newprev.dev.br/api/'
 
-    def buscaEscritorioPrimeiroAcesso(self, escritorioId: int) -> Escritorios:
-        url: str = self.baseUrl + 'escritorio/' + str(escritorioId)
+    def confirmaAlteraSenha(self, senha: str, advogadoId: int) -> bool:
+        url: str = self.baseUrl + 'advogados/'
+        testeJson = json.dumps({
+            "senhaEnviada": senha,
+            "advogadoId": advogadoId
+        })
 
-        response = http.get(url)
+        response = http.patch(url, data=testeJson, headers=self.header)
 
         if 199 < response.status_code < 400:
-            escritorioJson = response.json()
-            if isinstance(escritorioJson, dict):
-                escritorioAux = dict_to_model(Escritorios, escritorioJson, ignore_unknown=True)
-                Escritorios.insert(escritorioJson).on_conflict_replace().execute()
-                escritorio, created = Escritorios.get_or_create(**model_to_dict(escritorioAux, recurse=False))
+            logPrioridade(
+                f"API => confirmaAlteraSenha ____________________PATCH<advogados/>:::{url}",
+                tipoEdicao=TipoEdicao.api,
+                tipoLog=TipoLog.Rest,
+                priodiade=Prioridade.saidaComum,
+            )
+            return True
+        else:
+            logPrioridade(
+                f"API [{response.status_code}]=> confirmaAlteraSenha ____________________PATCH<advogados/>:::{url}",
+                tipoEdicao=TipoEdicao.api,
+                tipoLog=TipoLog.Rest,
+                priodiade=Prioridade.saidaComum,
+            )
+            return False
 
-                logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<escritorio/>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
-                return escritorio
-            else:
-                logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<escritorio/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
-                return None
+    def buscaCpfEmailPrimeiroAcesso(self, cpfEmail: int) -> int:
+        url: str = self.baseUrl + 'advogados/auth/primeiroAcesso/' + str(cpfEmail)
+
+        logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<advogados/auth/primeiroAcesso/>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
+        response = http.post(url)
+
+        if 199 < response.status_code < 400:
+            clienteId: int = response.json()['advogadoId']
+            return clienteId
+        else:
+            logPrioridade(f"API [{response.status_code}]=> buscaEscritorioPrimeiroAcesso ____________________GET<advogados/auth/primeiroAcesso/>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest,
+                          priodiade=Prioridade.saidaComum)
+            return -1
+
+    def verificaCodAcesso(self, codAcesso: int) -> bool:
+        url: str = self.baseUrl + 'advogados/auth/autenticaCodAcesso/' + str(codAcesso)
+
+        response = http.patch(url)
+
+        if 199 < response.status_code < 400:
+            logPrioridade(
+                f"API => buscaEscritorioPrimeiroAcesso ____________________GET<api/advogados/primeirosAcessos/<int:cdAcesso>>:::{url}",
+                tipoEdicao=TipoEdicao.api,
+                tipoLog=TipoLog.Rest,
+                priodiade=Prioridade.saidaComum,
+            )
+            return True
+        else:
+            logPrioridade(
+                f"API [{response.status_code}]=> buscaEscritorioPrimeiroAcesso ____________________GET<advogados/auth/primeiroAcesso/>:::{url}",
+                tipoEdicao=TipoEdicao.api,
+                tipoLog=TipoLog.Rest,
+                priodiade=Prioridade.saidaComum,
+            )
 
     def buscaEscritorioById(self, escritorioId: int) -> Escritorios:
         # TODO: Criar função que faz um GET buscando o escritório pelo Id
@@ -127,6 +174,8 @@ class UsuarioRepository:
 
                 if senhaInserida is not None:
                     advogado.senha = senhaInserida
+                else:
+                    advogado.senha = 'senhaProvisoria'
 
                 Advogados.insert(advogado.toDict()).on_conflict_replace().execute()
 

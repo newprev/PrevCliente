@@ -9,9 +9,11 @@ from systemLog.logs import logPrioridade, TipoEdicao, Prioridade
 
 
 class ApiFerramentas:
+    header: dict
 
     def __init__(self):
         configs: dict = buscaSystemConfigs()
+        self.header = {"Content-Type": "application/json"}
 
         if TipoConexao.desenvolvimento.name == configs['tipoConexao']:
             # url para desenvolvimento

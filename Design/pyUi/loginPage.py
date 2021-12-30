@@ -46,8 +46,7 @@ class Ui_mwLogin(object):
 "/*---------------------------------- Label --------------------------------------*/\n"
 "#lbLogin {\n"
 "    font-family: \"Bebas\";\n"
-"    font: 10pt \"Bebas Neue\";\n"
-"    font-size: 36px;\n"
+"    font: 28pt \"Bebas Neue\";\n"
 "}\n"
 "\n"
 "#lbNomeDoEscritorio, #lbInfoAcesso{\n"
@@ -80,6 +79,24 @@ class Ui_mwLogin(object):
 "\n"
 "    border-radius: 8px;\n"
 "    background-color: #566BBF;\n"
+"}\n"
+"\n"
+"#pbPrimeiroAcesso {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: black;\n"
+"\n"
+"    border-radius: 8px;\n"
+"    background-color: white;\n"
+"    border: 3px inset #3F4E8C;\n"
+"}\n"
+"\n"
+"#pbPrimeiroAcesso:hover {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: black;\n"
+"\n"
+"    border-radius: 8px;\n"
+"    background-color: white;\n"
+"    border: 3px solid #292D40;\n"
 "}\n"
 "\n"
 "#pbFechar {\n"
@@ -128,68 +145,595 @@ class Ui_mwLogin(object):
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.frLeft = QtWidgets.QFrame(self.frMain)
-        self.frLeft.setMinimumSize(QtCore.QSize(400, 0))
-        self.frLeft.setMaximumSize(QtCore.QSize(488, 16777215))
-        self.frLeft.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frLeft.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frLeft.setObjectName("frLeft")
-        self.gridLayout = QtWidgets.QGridLayout(self.frLeft)
+        self.stkPrincipal = QtWidgets.QStackedWidget(self.frMain)
+        self.stkPrincipal.setMinimumSize(QtCore.QSize(400, 0))
+        self.stkPrincipal.setMaximumSize(QtCore.QSize(488, 16777215))
+        self.stkPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.stkPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.stkPrincipal.setObjectName("stkPrincipal")
+        self.frLogin = QtWidgets.QWidget()
+        self.frLogin.setStyleSheet("/*----------------------------------- Frame -----------------------------------*/\n"
+"#frLogin {\n"
+"    background-color: white;\n"
+"}")
+        self.frLogin.setObjectName("frLogin")
+        self.gridLayout = QtWidgets.QGridLayout(self.frLogin)
         self.gridLayout.setObjectName("gridLayout")
-        spacerItem = QtWidgets.QSpacerItem(20, 60, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout.addItem(spacerItem, 1, 1, 1, 1)
-        self.lbNLS = QtWidgets.QLabel(self.frLeft)
-        self.lbNLS.setObjectName("lbNLS")
-        self.gridLayout.addWidget(self.lbNLS, 6, 1, 1, 1, QtCore.Qt.AlignTop)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacerItem1, 13, 1, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem2, 4, 0, 1, 1)
-        self.lbLogin = QtWidgets.QLabel(self.frLeft)
-        self.lbLogin.setObjectName("lbLogin")
-        self.gridLayout.addWidget(self.lbLogin, 2, 0, 1, 4, QtCore.Qt.AlignHCenter)
-        self.lbInfoAcesso = QtWidgets.QLabel(self.frLeft)
-        self.lbInfoAcesso.setObjectName("lbInfoAcesso")
-        self.gridLayout.addWidget(self.lbInfoAcesso, 3, 0, 1, 4, QtCore.Qt.AlignHCenter)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem3, 4, 2, 1, 1)
-        self.leLogin = QtWidgets.QLineEdit(self.frLeft)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem, 5, 2, 1, 1)
+        self.lbNomeDoEscritorio = QtWidgets.QLabel(self.frLogin)
+        self.lbNomeDoEscritorio.setText("")
+        self.lbNomeDoEscritorio.setObjectName("lbNomeDoEscritorio")
+        self.gridLayout.addWidget(self.lbNomeDoEscritorio, 0, 1, 1, 3)
+        self.leLogin = QtWidgets.QLineEdit(self.frLogin)
         self.leLogin.setMinimumSize(QtCore.QSize(200, 40))
         self.leLogin.setAlignment(QtCore.Qt.AlignCenter)
         self.leLogin.setObjectName("leLogin")
         self.gridLayout.addWidget(self.leLogin, 4, 1, 1, 1)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem4, 5, 0, 1, 1)
-        self.cbSalvarSenha = QtWidgets.QCheckBox(self.frLeft)
+        self.cbSalvarSenha = QtWidgets.QCheckBox(self.frLogin)
         self.cbSalvarSenha.setObjectName("cbSalvarSenha")
         self.gridLayout.addWidget(self.cbSalvarSenha, 7, 1, 1, 1, QtCore.Qt.AlignTop)
-        self.pbEntrar = QtWidgets.QPushButton(self.frLeft)
+        self.pbEntrar = QtWidgets.QPushButton(self.frLogin)
         self.pbEntrar.setMinimumSize(QtCore.QSize(0, 56))
         self.pbEntrar.setObjectName("pbEntrar")
         self.gridLayout.addWidget(self.pbEntrar, 12, 1, 1, 1)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem5, 5, 2, 1, 1)
-        self.leSenha = QtWidgets.QLineEdit(self.frLeft)
+        self.lbInfoAcesso = QtWidgets.QLabel(self.frLogin)
+        self.lbInfoAcesso.setObjectName("lbInfoAcesso")
+        self.gridLayout.addWidget(self.lbInfoAcesso, 3, 0, 1, 4, QtCore.Qt.AlignHCenter)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem1, 4, 2, 1, 1)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem2, 5, 0, 1, 1)
+        self.pbFechar = QtWidgets.QPushButton(self.frLogin)
+        self.pbFechar.setObjectName("pbFechar")
+        self.gridLayout.addWidget(self.pbFechar, 16, 0, 1, 1, QtCore.Qt.AlignLeft)
+        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem3, 4, 0, 1, 1)
+        self.leSenha = QtWidgets.QLineEdit(self.frLogin)
         self.leSenha.setMinimumSize(QtCore.QSize(0, 40))
         self.leSenha.setEchoMode(QtWidgets.QLineEdit.Password)
         self.leSenha.setAlignment(QtCore.Qt.AlignCenter)
         self.leSenha.setObjectName("leSenha")
         self.gridLayout.addWidget(self.leSenha, 5, 1, 1, 1)
-        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacerItem6, 8, 1, 1, 1)
-        self.lbEscritorio = QtWidgets.QLabel(self.frLeft)
+        self.lbLogin = QtWidgets.QLabel(self.frLogin)
+        self.lbLogin.setObjectName("lbLogin")
+        self.gridLayout.addWidget(self.lbLogin, 2, 0, 1, 4, QtCore.Qt.AlignHCenter)
+        self.lbEscritorio = QtWidgets.QLabel(self.frLogin)
         self.lbEscritorio.setObjectName("lbEscritorio")
         self.gridLayout.addWidget(self.lbEscritorio, 0, 0, 1, 1)
-        self.lbNomeDoEscritorio = QtWidgets.QLabel(self.frLeft)
-        self.lbNomeDoEscritorio.setText("")
-        self.lbNomeDoEscritorio.setObjectName("lbNomeDoEscritorio")
-        self.gridLayout.addWidget(self.lbNomeDoEscritorio, 0, 1, 1, 3)
-        self.pbFechar = QtWidgets.QPushButton(self.frLeft)
-        self.pbFechar.setObjectName("pbFechar")
-        self.gridLayout.addWidget(self.pbFechar, 15, 0, 1, 1, QtCore.Qt.AlignLeft)
-        self.horizontalLayout.addWidget(self.frLeft)
-        self.stkPrimeiroAcesso = QtWidgets.QStackedWidget(self.frMain)
-        self.stkPrimeiroAcesso.setStyleSheet("/*---------------------------------- Widgets ----------------------------------*/\n"
+        spacerItem4 = QtWidgets.QSpacerItem(20, 60, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout.addItem(spacerItem4, 1, 1, 1, 1)
+        self.lbNLS = QtWidgets.QLabel(self.frLogin)
+        self.lbNLS.setObjectName("lbNLS")
+        self.gridLayout.addWidget(self.lbNLS, 6, 1, 1, 1, QtCore.Qt.AlignTop)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout.addItem(spacerItem5, 14, 1, 1, 1)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout.addItem(spacerItem6, 8, 1, 1, 1)
+        self.pbPrimeiroAcesso = QtWidgets.QPushButton(self.frLogin)
+        self.pbPrimeiroAcesso.setMinimumSize(QtCore.QSize(0, 30))
+        self.pbPrimeiroAcesso.setObjectName("pbPrimeiroAcesso")
+        self.gridLayout.addWidget(self.pbPrimeiroAcesso, 13, 1, 1, 1)
+        self.stkPrincipal.addWidget(self.frLogin)
+        self.frPrimAcesso = QtWidgets.QWidget()
+        self.frPrimAcesso.setStyleSheet("/*----------------------------------------- Frame ------------------------------------------*/\n"
+"#frPrimAcesso {\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"/*----------------------------------------- Line Edit ------------------------------------------*/\n"
+"#lePACpfEmail {\n"
+"    font: 10pt \"Avenir LT Std\";\n"
+"    border: 0px solid gray;\n"
+"    border-radius: 8px;\n"
+"       padding: 0 8px;\n"
+"    background: #F9F9F9;\n"
+"    selection-background-color: darkgray;\n"
+"}\n"
+"\n"
+"/*----------------------------------------- Label ------------------------------------------*/\n"
+"#lbPALogin {\n"
+"    font: 28pt \"Bebas Neue\";\n"
+"}\n"
+"\n"
+"#lbInfoPrimeiroAcesso {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"}\n"
+"\n"
+"#lbNew {\n"
+"    font: 24pt \"Bebas Neue\";\n"
+"    color: #3F4E8C;\n"
+"    padding: 0px 0px 0px 24px;\n"
+"}\n"
+"\n"
+"#lbPrev {\n"
+"    font: 20pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"}\n"
+"\n"
+"/*---------------------------- Push Button ----------------------------------*/\n"
+"#pbEnviarCodigo {\n"
+"    \n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"\n"
+"    background-color: #3F4E8C;\n"
+"    border-radius: 8px;\n"
+"\n"
+"    padding: 16px;\n"
+"}\n"
+"\n"
+"#pbVoltar {\n"
+"    background-image: url(:/Voltar/back.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"\n"
+"    background-color: #F4F5F8;\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
+"#pbVoltar:hover {\n"
+"    background-image: url(:/Voltar/back.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"\n"
+"    background-color: rgb(228, 233, 248);\n"
+"    border-radius: 8px;\n"
+"}")
+        self.frPrimAcesso.setObjectName("frPrimAcesso")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.frPrimAcesso)
+        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_2.setSpacing(0)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.frPrimeiroAcesso = QtWidgets.QFrame(self.frPrimAcesso)
+        self.frPrimeiroAcesso.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frPrimeiroAcesso.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frPrimeiroAcesso.setObjectName("frPrimeiroAcesso")
+        self.gridLayout_5 = QtWidgets.QGridLayout(self.frPrimeiroAcesso)
+        self.gridLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_5.setHorizontalSpacing(0)
+        self.gridLayout_5.setVerticalSpacing(20)
+        self.gridLayout_5.setObjectName("gridLayout_5")
+        spacerItem7 = QtWidgets.QSpacerItem(198, 146, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_5.addItem(spacerItem7, 6, 1, 1, 2)
+        self.lePACpfEmail = QtWidgets.QLineEdit(self.frPrimeiroAcesso)
+        self.lePACpfEmail.setMinimumSize(QtCore.QSize(200, 40))
+        self.lePACpfEmail.setAlignment(QtCore.Qt.AlignCenter)
+        self.lePACpfEmail.setObjectName("lePACpfEmail")
+        self.gridLayout_5.addWidget(self.lePACpfEmail, 4, 1, 1, 2)
+        self.frCab = QtWidgets.QFrame(self.frPrimeiroAcesso)
+        self.frCab.setMinimumSize(QtCore.QSize(0, 50))
+        self.frCab.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frCab.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frCab.setObjectName("frCab")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frCab)
+        self.horizontalLayout_3.setContentsMargins(64, 0, 0, 0)
+        self.horizontalLayout_3.setSpacing(12)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.pbVoltar = QtWidgets.QPushButton(self.frCab)
+        self.pbVoltar.setMinimumSize(QtCore.QSize(40, 40))
+        self.pbVoltar.setMaximumSize(QtCore.QSize(40, 40))
+        self.pbVoltar.setText("")
+        self.pbVoltar.setObjectName("pbVoltar")
+        self.horizontalLayout_3.addWidget(self.pbVoltar)
+        self.lbNew = QtWidgets.QLabel(self.frCab)
+        self.lbNew.setObjectName("lbNew")
+        self.horizontalLayout_3.addWidget(self.lbNew, 0, QtCore.Qt.AlignRight)
+        self.lbPrev = QtWidgets.QLabel(self.frCab)
+        self.lbPrev.setObjectName("lbPrev")
+        self.horizontalLayout_3.addWidget(self.lbPrev, 0, QtCore.Qt.AlignLeft)
+        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem8)
+        self.gridLayout_5.addWidget(self.frCab, 1, 0, 1, 4)
+        self.pbEnviarCodigo = QtWidgets.QPushButton(self.frPrimeiroAcesso)
+        self.pbEnviarCodigo.setMinimumSize(QtCore.QSize(0, 56))
+        self.pbEnviarCodigo.setObjectName("pbEnviarCodigo")
+        self.gridLayout_5.addWidget(self.pbEnviarCodigo, 5, 1, 1, 2)
+        self.lbInfoPrimeiroAcesso = QtWidgets.QLabel(self.frPrimeiroAcesso)
+        self.lbInfoPrimeiroAcesso.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbInfoPrimeiroAcesso.setWordWrap(True)
+        self.lbInfoPrimeiroAcesso.setObjectName("lbInfoPrimeiroAcesso")
+        self.gridLayout_5.addWidget(self.lbInfoPrimeiroAcesso, 3, 0, 1, 4)
+        spacerItem9 = QtWidgets.QSpacerItem(134, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_5.addItem(spacerItem9, 4, 0, 1, 1)
+        spacerItem10 = QtWidgets.QSpacerItem(133, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_5.addItem(spacerItem10, 4, 3, 1, 1)
+        spacerItem11 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_5.addItem(spacerItem11, 0, 2, 1, 1)
+        self.lbPALogin = QtWidgets.QLabel(self.frPrimeiroAcesso)
+        self.lbPALogin.setObjectName("lbPALogin")
+        self.gridLayout_5.addWidget(self.lbPALogin, 2, 0, 1, 4, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.gridLayout_2.addWidget(self.frPrimeiroAcesso, 0, 0, 1, 1)
+        self.stkPrincipal.addWidget(self.frPrimAcesso)
+        self.frPrimAcessoKey = QtWidgets.QWidget()
+        self.frPrimAcessoKey.setStyleSheet("/*------------------------------------------ Frame ---------------------------------------*/\n"
+"#frPrimAcessoKey {\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"/*----------------------------------------- Line Edit ------------------------------------------*/\n"
+"#lePrimeiro, #leSegundo, #leTerceiro, \n"
+"#leQuarto, #leQuinto {\n"
+"    font: 10pt \"Avenir LT Std\";\n"
+"    border: 0px solid gray;\n"
+"    border-radius: 8px;\n"
+"       padding: 0 8px;\n"
+"    background: #F9F9F9;\n"
+"    selection-background-color: darkgray;\n"
+"}\n"
+"\n"
+"#lePrimeiro:focus, #leSegundo:focus, #leTerceiro:focus, \n"
+"#leQuarto:focus, #leQuinto:focus {\n"
+"    font: 10pt \"Avenir LT Std\";\n"
+"    border: 2px ridge blue;\n"
+"    border-radius: 8px;\n"
+"       padding: 0 8px;\n"
+"    background: #F9F9F9;\n"
+"    selection-background-color: darkgray;\n"
+"}\n"
+"\n"
+"/*----------------------------------------- Label ------------------------------------------*/\n"
+"#lbPALogin_2 {\n"
+"    font: 28pt \"Bebas Neue\";\n"
+"}\n"
+"\n"
+"#lbInfoPrimeiroAcesso_2 {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    padding: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"#lbInfoAdicional, #lbInfoTempoValid {\n"
+"    font: 8pt \"Avenir LT Std\";\n"
+"    padding: 4px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"#lbTempoValid {\n"
+"    font: 12pt \"Bebas Neue\";\n"
+"    padding: 4px 0px 0px 0px;\n"
+"    color: #566BBF;\n"
+"}\n"
+"\n"
+"#lbNew_2 {\n"
+"    font: 24pt \"Bebas Neue\";\n"
+"    color: #3F4E8C;\n"
+"    padding: 0px 0px 0px 24px;\n"
+"}\n"
+"\n"
+"#lbPrev_2 {\n"
+"    font: 20pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"}\n"
+"\n"
+"/*---------------------------- Push Button ----------------------------------*/\n"
+"#pbEnviarCodigo_2 {\n"
+"    \n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"\n"
+"    background-color: #3F4E8C;\n"
+"    border-radius: 8px;\n"
+"\n"
+"    padding: 16px;\n"
+"}\n"
+"\n"
+"#pbVoltar2 {\n"
+"    background-image: url(:/Voltar/back.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"\n"
+"    background-color: #F4F5F8;\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
+"#pbVoltar2:hover {\n"
+"    background-image: url(:/Voltar/back.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"\n"
+"    background-color: rgb(228, 233, 248);\n"
+"    border-radius: 8px;\n"
+"}")
+        self.frPrimAcessoKey.setObjectName("frPrimAcessoKey")
+        self.gridLayout_6 = QtWidgets.QGridLayout(self.frPrimAcessoKey)
+        self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_6.setSpacing(0)
+        self.gridLayout_6.setObjectName("gridLayout_6")
+        self.frPAKey = QtWidgets.QFrame(self.frPrimAcessoKey)
+        self.frPAKey.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frPAKey.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frPAKey.setObjectName("frPAKey")
+        self.gridLayout_7 = QtWidgets.QGridLayout(self.frPAKey)
+        self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_7.setHorizontalSpacing(0)
+        self.gridLayout_7.setVerticalSpacing(20)
+        self.gridLayout_7.setObjectName("gridLayout_7")
+        spacerItem12 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_7.addItem(spacerItem12, 6, 1, 1, 2)
+        self.frCab_2 = QtWidgets.QFrame(self.frPAKey)
+        self.frCab_2.setMinimumSize(QtCore.QSize(0, 50))
+        self.frCab_2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frCab_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frCab_2.setObjectName("frCab_2")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frCab_2)
+        self.horizontalLayout_4.setContentsMargins(64, 0, 0, 0)
+        self.horizontalLayout_4.setSpacing(12)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.pbVoltar2 = QtWidgets.QPushButton(self.frCab_2)
+        self.pbVoltar2.setMinimumSize(QtCore.QSize(40, 40))
+        self.pbVoltar2.setMaximumSize(QtCore.QSize(40, 40))
+        self.pbVoltar2.setText("")
+        self.pbVoltar2.setObjectName("pbVoltar2")
+        self.horizontalLayout_4.addWidget(self.pbVoltar2)
+        self.lbNew_2 = QtWidgets.QLabel(self.frCab_2)
+        self.lbNew_2.setObjectName("lbNew_2")
+        self.horizontalLayout_4.addWidget(self.lbNew_2, 0, QtCore.Qt.AlignRight)
+        self.lbPrev_2 = QtWidgets.QLabel(self.frCab_2)
+        self.lbPrev_2.setObjectName("lbPrev_2")
+        self.horizontalLayout_4.addWidget(self.lbPrev_2, 0, QtCore.Qt.AlignLeft)
+        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem13)
+        self.gridLayout_7.addWidget(self.frCab_2, 1, 0, 1, 4)
+        self.frame = QtWidgets.QFrame(self.frPAKey)
+        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.frame)
+        self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_5.setSpacing(16)
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.lePrimeiro = QtWidgets.QLineEdit(self.frame)
+        self.lePrimeiro.setMinimumSize(QtCore.QSize(40, 48))
+        self.lePrimeiro.setMaximumSize(QtCore.QSize(40, 48))
+        self.lePrimeiro.setMaxLength(1)
+        self.lePrimeiro.setAlignment(QtCore.Qt.AlignCenter)
+        self.lePrimeiro.setPlaceholderText("")
+        self.lePrimeiro.setObjectName("lePrimeiro")
+        self.horizontalLayout_5.addWidget(self.lePrimeiro)
+        self.leSegundo = QtWidgets.QLineEdit(self.frame)
+        self.leSegundo.setMinimumSize(QtCore.QSize(40, 48))
+        self.leSegundo.setMaximumSize(QtCore.QSize(40, 48))
+        self.leSegundo.setMaxLength(1)
+        self.leSegundo.setAlignment(QtCore.Qt.AlignCenter)
+        self.leSegundo.setObjectName("leSegundo")
+        self.horizontalLayout_5.addWidget(self.leSegundo)
+        self.leTerceiro = QtWidgets.QLineEdit(self.frame)
+        self.leTerceiro.setMinimumSize(QtCore.QSize(40, 48))
+        self.leTerceiro.setMaximumSize(QtCore.QSize(40, 48))
+        self.leTerceiro.setMaxLength(1)
+        self.leTerceiro.setAlignment(QtCore.Qt.AlignCenter)
+        self.leTerceiro.setObjectName("leTerceiro")
+        self.horizontalLayout_5.addWidget(self.leTerceiro)
+        self.leQuarto = QtWidgets.QLineEdit(self.frame)
+        self.leQuarto.setMinimumSize(QtCore.QSize(40, 48))
+        self.leQuarto.setMaximumSize(QtCore.QSize(40, 48))
+        self.leQuarto.setMaxLength(1)
+        self.leQuarto.setAlignment(QtCore.Qt.AlignCenter)
+        self.leQuarto.setObjectName("leQuarto")
+        self.horizontalLayout_5.addWidget(self.leQuarto)
+        self.leQuinto = QtWidgets.QLineEdit(self.frame)
+        self.leQuinto.setMinimumSize(QtCore.QSize(40, 48))
+        self.leQuinto.setMaximumSize(QtCore.QSize(40, 48))
+        self.leQuinto.setMaxLength(1)
+        self.leQuinto.setAlignment(QtCore.Qt.AlignCenter)
+        self.leQuinto.setObjectName("leQuinto")
+        self.horizontalLayout_5.addWidget(self.leQuinto)
+        self.gridLayout_7.addWidget(self.frame, 4, 1, 1, 2)
+        spacerItem14 = QtWidgets.QSpacerItem(471, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_7.addItem(spacerItem14, 0, 0, 1, 4)
+        self.lbPALogin_2 = QtWidgets.QLabel(self.frPAKey)
+        self.lbPALogin_2.setObjectName("lbPALogin_2")
+        self.gridLayout_7.addWidget(self.lbPALogin_2, 2, 0, 1, 4, QtCore.Qt.AlignHCenter)
+        self.frame_2 = QtWidgets.QFrame(self.frPAKey)
+        self.frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_2.setObjectName("frame_2")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.frame_2)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setSpacing(2)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.lbInfoPrimeiroAcesso_2 = QtWidgets.QLabel(self.frame_2)
+        self.lbInfoPrimeiroAcesso_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbInfoPrimeiroAcesso_2.setWordWrap(True)
+        self.lbInfoPrimeiroAcesso_2.setObjectName("lbInfoPrimeiroAcesso_2")
+        self.verticalLayout.addWidget(self.lbInfoPrimeiroAcesso_2)
+        self.lbInfoAdicional = QtWidgets.QLabel(self.frame_2)
+        self.lbInfoAdicional.setObjectName("lbInfoAdicional")
+        self.verticalLayout.addWidget(self.lbInfoAdicional, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
+        self.gridLayout_7.addWidget(self.frame_2, 3, 0, 1, 4)
+        spacerItem15 = QtWidgets.QSpacerItem(288, 92, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_7.addItem(spacerItem15, 8, 1, 1, 2)
+        self.pbEnviarCodigo_2 = QtWidgets.QPushButton(self.frPAKey)
+        self.pbEnviarCodigo_2.setMinimumSize(QtCore.QSize(0, 56))
+        self.pbEnviarCodigo_2.setObjectName("pbEnviarCodigo_2")
+        self.gridLayout_7.addWidget(self.pbEnviarCodigo_2, 7, 1, 1, 2)
+        self.lbInfoTempoValid = QtWidgets.QLabel(self.frPAKey)
+        self.lbInfoTempoValid.setObjectName("lbInfoTempoValid")
+        self.gridLayout_7.addWidget(self.lbInfoTempoValid, 5, 1, 1, 1)
+        self.lbTempoValid = QtWidgets.QLabel(self.frPAKey)
+        self.lbTempoValid.setObjectName("lbTempoValid")
+        self.gridLayout_7.addWidget(self.lbTempoValid, 5, 2, 1, 1)
+        self.gridLayout_6.addWidget(self.frPAKey, 0, 0, 1, 1)
+        self.stkPrincipal.addWidget(self.frPrimAcessoKey)
+        self.frPrimAcessoSenha = QtWidgets.QWidget()
+        self.frPrimAcessoSenha.setStyleSheet("/*------------------------------------------ Frame ---------------------------------------*/\n"
+"#frPASenha {\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"#frPASenhaPrincipal, #frPAConfirmaSenha {\n"
+"    border-radius: 8px;\n"
+"    background-color: #F9F9F9;\n"
+"}\n"
+"\n"
+"/*----------------------------------------- Line Edit ------------------------------------------*/\n"
+"#lePASenha, #leConfirmaSenha {\n"
+"    font: 10pt \"Avenir LT Std\";\n"
+"    border: 0px solid gray;\n"
+"    border-radius: 8px;\n"
+"       padding: 0 8px;\n"
+"    background: #F9F9F9;\n"
+"    selection-background-color: darkgray;\n"
+"}\n"
+"\n"
+"/*----------------------------------------- Label ------------------------------------------*/\n"
+"#lbPALogin_3 {\n"
+"    font: 28pt \"Bebas Neue\";\n"
+"}\n"
+"\n"
+"#lbInfoPrimeiroAcesso_3 {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    padding: 0px 0px 16px 0px;\n"
+"}\n"
+"\n"
+"#lbNew_3 {\n"
+"    font: 24pt \"Bebas Neue\";\n"
+"    color: #3F4E8C;\n"
+"    padding: 0px 0px 0px 24px;\n"
+"}\n"
+"\n"
+"#lbPrev_3 {\n"
+"    font: 20pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"}\n"
+"\n"
+"/*---------------------------- Push Button ----------------------------------*/\n"
+"#pbCriaSenha {\n"
+"    \n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"\n"
+"    background-color: #3F4E8C;\n"
+"    border-radius: 8px;\n"
+"\n"
+"    padding: 16px;\n"
+"}\n"
+"\n"
+"#pbVoltar3 {\n"
+"    background-image: url(:/Voltar/back.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"\n"
+"    background-color: #F4F5F8;\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
+"#pbVoltar3:hover {\n"
+"    background-image: url(:/Voltar/back.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"\n"
+"    background-color: rgb(228, 233, 248);\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
+"/*---------------------------- Check Box ----------------------------------*/\n"
+"#cbPAConfirmaSenha::indicator:checked, \n"
+"#cbPASenha::indicator:checked {\n"
+"    image: url(:/mostrar/hide.png);\n"
+"}\n"
+"\n"
+"#cbPAConfirmaSenha::indicator:unchecked, #cbPASenha::indicator:unchecked {\n"
+"    image: url(:/mostrar/show.png);\n"
+"}")
+        self.frPrimAcessoSenha.setObjectName("frPrimAcessoSenha")
+        self.gridLayout_8 = QtWidgets.QGridLayout(self.frPrimAcessoSenha)
+        self.gridLayout_8.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_8.setSpacing(0)
+        self.gridLayout_8.setObjectName("gridLayout_8")
+        self.frPASenha = QtWidgets.QFrame(self.frPrimAcessoSenha)
+        self.frPASenha.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frPASenha.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frPASenha.setObjectName("frPASenha")
+        self.gridLayout_9 = QtWidgets.QGridLayout(self.frPASenha)
+        self.gridLayout_9.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_9.setHorizontalSpacing(0)
+        self.gridLayout_9.setVerticalSpacing(20)
+        self.gridLayout_9.setObjectName("gridLayout_9")
+        spacerItem16 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_9.addItem(spacerItem16, 0, 1, 1, 2)
+        self.frPASenhaPrincipal = QtWidgets.QFrame(self.frPASenha)
+        self.frPASenhaPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frPASenhaPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frPASenhaPrincipal.setObjectName("frPASenhaPrincipal")
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frPASenhaPrincipal)
+        self.horizontalLayout_6.setContentsMargins(4, 0, 8, 0)
+        self.horizontalLayout_6.setSpacing(0)
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.leConfirmaSenha = QtWidgets.QLineEdit(self.frPASenhaPrincipal)
+        self.leConfirmaSenha.setMinimumSize(QtCore.QSize(200, 40))
+        self.leConfirmaSenha.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.leConfirmaSenha.setObjectName("leConfirmaSenha")
+        self.horizontalLayout_6.addWidget(self.leConfirmaSenha)
+        self.cbPASenha = QtWidgets.QCheckBox(self.frPASenhaPrincipal)
+        self.cbPASenha.setText("")
+        self.cbPASenha.setObjectName("cbPASenha")
+        self.horizontalLayout_6.addWidget(self.cbPASenha)
+        self.gridLayout_9.addWidget(self.frPASenhaPrincipal, 5, 1, 1, 1)
+        self.frPAConfirmaSenha = QtWidgets.QFrame(self.frPASenha)
+        self.frPAConfirmaSenha.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frPAConfirmaSenha.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frPAConfirmaSenha.setObjectName("frPAConfirmaSenha")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.frPAConfirmaSenha)
+        self.horizontalLayout_8.setContentsMargins(4, 0, 8, 0)
+        self.horizontalLayout_8.setSpacing(0)
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.lePASenha = QtWidgets.QLineEdit(self.frPAConfirmaSenha)
+        self.lePASenha.setMinimumSize(QtCore.QSize(200, 40))
+        self.lePASenha.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.lePASenha.setObjectName("lePASenha")
+        self.horizontalLayout_8.addWidget(self.lePASenha)
+        self.cbPAConfirmaSenha = QtWidgets.QCheckBox(self.frPAConfirmaSenha)
+        self.cbPAConfirmaSenha.setText("")
+        self.cbPAConfirmaSenha.setObjectName("cbPAConfirmaSenha")
+        self.horizontalLayout_8.addWidget(self.cbPAConfirmaSenha)
+        self.gridLayout_9.addWidget(self.frPAConfirmaSenha, 6, 1, 1, 1)
+        spacerItem17 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_9.addItem(spacerItem17, 5, 0, 2, 1)
+        spacerItem18 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_9.addItem(spacerItem18, 5, 2, 2, 1)
+        self.frCab_3 = QtWidgets.QFrame(self.frPASenha)
+        self.frCab_3.setMinimumSize(QtCore.QSize(0, 50))
+        self.frCab_3.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frCab_3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frCab_3.setObjectName("frCab_3")
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.frCab_3)
+        self.horizontalLayout_7.setContentsMargins(64, 0, 0, 0)
+        self.horizontalLayout_7.setSpacing(12)
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.pbVoltar3 = QtWidgets.QPushButton(self.frCab_3)
+        self.pbVoltar3.setMinimumSize(QtCore.QSize(40, 40))
+        self.pbVoltar3.setMaximumSize(QtCore.QSize(40, 40))
+        self.pbVoltar3.setText("")
+        self.pbVoltar3.setObjectName("pbVoltar3")
+        self.horizontalLayout_7.addWidget(self.pbVoltar3)
+        self.lbNew_3 = QtWidgets.QLabel(self.frCab_3)
+        self.lbNew_3.setObjectName("lbNew_3")
+        self.horizontalLayout_7.addWidget(self.lbNew_3, 0, QtCore.Qt.AlignRight)
+        self.lbPrev_3 = QtWidgets.QLabel(self.frCab_3)
+        self.lbPrev_3.setObjectName("lbPrev_3")
+        self.horizontalLayout_7.addWidget(self.lbPrev_3, 0, QtCore.Qt.AlignLeft)
+        spacerItem19 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem19)
+        self.gridLayout_9.addWidget(self.frCab_3, 1, 0, 1, 3)
+        self.lbPALogin_3 = QtWidgets.QLabel(self.frPASenha)
+        self.lbPALogin_3.setObjectName("lbPALogin_3")
+        self.gridLayout_9.addWidget(self.lbPALogin_3, 2, 0, 1, 3, QtCore.Qt.AlignHCenter)
+        self.lbInfoPrimeiroAcesso_3 = QtWidgets.QLabel(self.frPASenha)
+        self.lbInfoPrimeiroAcesso_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbInfoPrimeiroAcesso_3.setWordWrap(True)
+        self.lbInfoPrimeiroAcesso_3.setObjectName("lbInfoPrimeiroAcesso_3")
+        self.gridLayout_9.addWidget(self.lbInfoPrimeiroAcesso_3, 4, 0, 1, 3)
+        self.pbCriaSenha = QtWidgets.QPushButton(self.frPASenha)
+        self.pbCriaSenha.setMinimumSize(QtCore.QSize(0, 56))
+        self.pbCriaSenha.setObjectName("pbCriaSenha")
+        self.gridLayout_9.addWidget(self.pbCriaSenha, 13, 1, 1, 1)
+        spacerItem20 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_9.addItem(spacerItem20, 14, 0, 1, 3)
+        self.gridLayout_8.addWidget(self.frPASenha, 0, 0, 1, 1)
+        self.stkPrincipal.addWidget(self.frPrimAcessoSenha)
+        self.horizontalLayout.addWidget(self.stkPrincipal)
+        self.widgetStack = QtWidgets.QStackedWidget(self.frMain)
+        self.widgetStack.setStyleSheet("/*---------------------------------- Widgets ----------------------------------*/\n"
 "\n"
 "#wdgVinculado, #wdgCadastrar{\n"
 "    border-top.left-radius: 0px;\n"
@@ -290,172 +834,54 @@ class Ui_mwLogin(object):
 "    border-radius: 4px;\n"
 "    background-color: rgba(255, 255, 255, 245);\n"
 "}")
-        self.stkPrimeiroAcesso.setObjectName("stkPrimeiroAcesso")
+        self.widgetStack.setObjectName("widgetStack")
         self.wdgDesvinculado = QtWidgets.QWidget()
         self.wdgDesvinculado.setObjectName("wdgDesvinculado")
-        self.stkPrimeiroAcesso.addWidget(self.wdgDesvinculado)
-        self.wdgCadastrar = QtWidgets.QWidget()
-        self.wdgCadastrar.setObjectName("wdgCadastrar")
-        self.lbTitulo = QtWidgets.QLabel(self.wdgCadastrar)
-        self.lbTitulo.setGeometry(QtCore.QRect(40, 20, 231, 31))
-        self.lbTitulo.setObjectName("lbTitulo")
-        self.lbInfoTitulo = QtWidgets.QLabel(self.wdgCadastrar)
-        self.lbInfoTitulo.setGeometry(QtCore.QRect(40, 40, 271, 31))
-        self.lbInfoTitulo.setObjectName("lbInfoTitulo")
-        self.lbInfoNome = QtWidgets.QLabel(self.wdgCadastrar)
-        self.lbInfoNome.setGeometry(QtCore.QRect(30, 155, 64, 17))
-        self.lbInfoNome.setObjectName("lbInfoNome")
-        self.lbInfoSobrenome = QtWidgets.QLabel(self.wdgCadastrar)
-        self.lbInfoSobrenome.setGeometry(QtCore.QRect(30, 215, 81, 17))
-        self.lbInfoSobrenome.setObjectName("lbInfoSobrenome")
-        self.lbInfoNacionalidade = QtWidgets.QLabel(self.wdgCadastrar)
-        self.lbInfoNacionalidade.setGeometry(QtCore.QRect(30, 275, 111, 17))
-        self.lbInfoNacionalidade.setObjectName("lbInfoNacionalidade")
-        self.leNome = QtWidgets.QLineEdit(self.wdgCadastrar)
-        self.leNome.setGeometry(QtCore.QRect(30, 170, 201, 25))
-        self.leNome.setAlignment(QtCore.Qt.AlignCenter)
-        self.leNome.setObjectName("leNome")
-        self.leSobrenome = QtWidgets.QLineEdit(self.wdgCadastrar)
-        self.leSobrenome.setGeometry(QtCore.QRect(30, 230, 201, 25))
-        self.leSobrenome.setAlignment(QtCore.Qt.AlignCenter)
-        self.leSobrenome.setObjectName("leSobrenome")
-        self.leNacionalidade = QtWidgets.QLineEdit(self.wdgCadastrar)
-        self.leNacionalidade.setGeometry(QtCore.QRect(30, 290, 201, 25))
-        self.leNacionalidade.setAlignment(QtCore.Qt.AlignCenter)
-        self.leNacionalidade.setObjectName("leNacionalidade")
-        self.lbInfoNumDaOAB = QtWidgets.QLabel(self.wdgCadastrar)
-        self.lbInfoNumDaOAB.setGeometry(QtCore.QRect(360, 26, 121, 21))
-        self.lbInfoNumDaOAB.setObjectName("lbInfoNumDaOAB")
-        self.lbNumeroDaOAB = QtWidgets.QLabel(self.wdgCadastrar)
-        self.lbNumeroDaOAB.setGeometry(QtCore.QRect(400, 46, 111, 31))
-        self.lbNumeroDaOAB.setObjectName("lbNumeroDaOAB")
-        self.lePrimCadLogin = QtWidgets.QLineEdit(self.wdgCadastrar)
-        self.lePrimCadLogin.setGeometry(QtCore.QRect(30, 110, 201, 25))
-        self.lePrimCadLogin.setText("")
-        self.lePrimCadLogin.setAlignment(QtCore.Qt.AlignCenter)
-        self.lePrimCadLogin.setObjectName("lePrimCadLogin")
-        self.lbInfoLogin = QtWidgets.QLabel(self.wdgCadastrar)
-        self.lbInfoLogin.setGeometry(QtCore.QRect(30, 90, 64, 17))
-        self.lbInfoLogin.setObjectName("lbInfoLogin")
-        self.lbInfoEstCivil = QtWidgets.QLabel(self.wdgCadastrar)
-        self.lbInfoEstCivil.setGeometry(QtCore.QRect(30, 340, 81, 17))
-        self.lbInfoEstCivil.setObjectName("lbInfoEstCivil")
-        self.leEstadoCivil = QtWidgets.QLineEdit(self.wdgCadastrar)
-        self.leEstadoCivil.setGeometry(QtCore.QRect(30, 355, 201, 25))
-        self.leEstadoCivil.setAlignment(QtCore.Qt.AlignCenter)
-        self.leEstadoCivil.setObjectName("leEstadoCivil")
-        self.lePrimCadSenha = QtWidgets.QLineEdit(self.wdgCadastrar)
-        self.lePrimCadSenha.setGeometry(QtCore.QRect(410, 190, 113, 25))
-        self.lePrimCadSenha.setMaxLength(30)
-        self.lePrimCadSenha.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.lePrimCadSenha.setAlignment(QtCore.Qt.AlignCenter)
-        self.lePrimCadSenha.setObjectName("lePrimCadSenha")
-        self.lbInfoSenha = QtWidgets.QLabel(self.wdgCadastrar)
-        self.lbInfoSenha.setGeometry(QtCore.QRect(460, 171, 64, 17))
-        self.lbInfoSenha.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.lbInfoSenha.setObjectName("lbInfoSenha")
-        self.lbInfoEmail = QtWidgets.QLabel(self.wdgCadastrar)
-        self.lbInfoEmail.setGeometry(QtCore.QRect(30, 400, 81, 17))
-        self.lbInfoEmail.setObjectName("lbInfoEmail")
-        self.leEmail = QtWidgets.QLineEdit(self.wdgCadastrar)
-        self.leEmail.setGeometry(QtCore.QRect(30, 416, 201, 25))
-        self.leEmail.setAlignment(QtCore.Qt.AlignCenter)
-        self.leEmail.setObjectName("leEmail")
-        self.leConfirmarSenha = QtWidgets.QLineEdit(self.wdgCadastrar)
-        self.leConfirmarSenha.setGeometry(QtCore.QRect(410, 270, 113, 25))
-        self.leConfirmarSenha.setMaxLength(30)
-        self.leConfirmarSenha.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.leConfirmarSenha.setAlignment(QtCore.Qt.AlignCenter)
-        self.leConfirmarSenha.setObjectName("leConfirmarSenha")
-        self.lbInfoConfirmarSenha = QtWidgets.QLabel(self.wdgCadastrar)
-        self.lbInfoConfirmarSenha.setGeometry(QtCore.QRect(440, 234, 81, 41))
-        self.lbInfoConfirmarSenha.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.lbInfoConfirmarSenha.setObjectName("lbInfoConfirmarSenha")
-        self.pbCadastrar = QtWidgets.QPushButton(self.wdgCadastrar)
-        self.pbCadastrar.setGeometry(QtCore.QRect(440, 374, 83, 25))
-        self.pbCadastrar.setObjectName("pbCadastrar")
-        self.pbCancelar = QtWidgets.QPushButton(self.wdgCadastrar)
-        self.pbCancelar.setGeometry(QtCore.QRect(440, 424, 83, 25))
-        self.pbCancelar.setObjectName("pbCancelar")
-        self.leSenhaProvisoria = QtWidgets.QLineEdit(self.wdgCadastrar)
-        self.leSenhaProvisoria.setGeometry(QtCore.QRect(410, 130, 113, 25))
-        self.leSenhaProvisoria.setMaxLength(30)
-        self.leSenhaProvisoria.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.leSenhaProvisoria.setAlignment(QtCore.Qt.AlignCenter)
-        self.leSenhaProvisoria.setObjectName("leSenhaProvisoria")
-        self.lbInfoSenhaAtual = QtWidgets.QLabel(self.wdgCadastrar)
-        self.lbInfoSenhaAtual.setGeometry(QtCore.QRect(440, 100, 81, 31))
-        self.lbInfoSenhaAtual.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.lbInfoSenhaAtual.setObjectName("lbInfoSenhaAtual")
-        self.frInfo = QtWidgets.QFrame(self.wdgCadastrar)
-        self.frInfo.setGeometry(QtCore.QRect(29, 10, 491, 71))
-        self.frInfo.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frInfo.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frInfo.setObjectName("frInfo")
-        self.frInfo.raise_()
-        self.lbTitulo.raise_()
-        self.lbInfoTitulo.raise_()
-        self.lbInfoNome.raise_()
-        self.lbInfoSobrenome.raise_()
-        self.lbInfoNacionalidade.raise_()
-        self.leNome.raise_()
-        self.leSobrenome.raise_()
-        self.leNacionalidade.raise_()
-        self.lbInfoNumDaOAB.raise_()
-        self.lbNumeroDaOAB.raise_()
-        self.lePrimCadLogin.raise_()
-        self.lbInfoLogin.raise_()
-        self.lbInfoEstCivil.raise_()
-        self.leEstadoCivil.raise_()
-        self.lePrimCadSenha.raise_()
-        self.lbInfoSenha.raise_()
-        self.lbInfoEmail.raise_()
-        self.leEmail.raise_()
-        self.leConfirmarSenha.raise_()
-        self.lbInfoConfirmarSenha.raise_()
-        self.pbCadastrar.raise_()
-        self.pbCancelar.raise_()
-        self.leSenhaProvisoria.raise_()
-        self.lbInfoSenhaAtual.raise_()
-        self.stkPrimeiroAcesso.addWidget(self.wdgCadastrar)
-        self.horizontalLayout.addWidget(self.stkPrimeiroAcesso)
+        self.widgetStack.addWidget(self.wdgDesvinculado)
+        self.horizontalLayout.addWidget(self.widgetStack)
         self.horizontalLayout_2.addWidget(self.frMain)
         mwLogin.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(mwLogin)
-        self.stkPrimeiroAcesso.setCurrentIndex(0)
+        self.stkPrincipal.setCurrentIndex(0)
+        self.widgetStack.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(mwLogin)
 
     def retranslateUi(self, mwLogin):
         _translate = QtCore.QCoreApplication.translate
         mwLogin.setWindowTitle(_translate("mwLogin", "MainWindow"))
-        self.lbNLS.setText(_translate("mwLogin", "Não lembro minha senha"))
-        self.lbLogin.setText(_translate("mwLogin", "Login"))
-        self.lbInfoAcesso.setText(_translate("mwLogin", "Acesse a sua conta"))
         self.leLogin.setPlaceholderText(_translate("mwLogin", "Nº OAB ou E-mail"))
         self.cbSalvarSenha.setText(_translate("mwLogin", "Salvar senha"))
         self.pbEntrar.setText(_translate("mwLogin", "Entrar"))
-        self.leSenha.setPlaceholderText(_translate("mwLogin", "Senha"))
-        self.lbEscritorio.setText(_translate("mwLogin", "Escritório:"))
+        self.lbInfoAcesso.setText(_translate("mwLogin", "Acesse a sua conta"))
         self.pbFechar.setText(_translate("mwLogin", "Fechar \n"
 "programa"))
-        self.lbTitulo.setText(_translate("mwLogin", "Primeiro acesso"))
-        self.lbInfoTitulo.setText(_translate("mwLogin", "Cadastre sua senha"))
-        self.lbInfoNome.setText(_translate("mwLogin", "Nome:"))
-        self.lbInfoSobrenome.setText(_translate("mwLogin", "Sobrenome:"))
-        self.lbInfoNacionalidade.setText(_translate("mwLogin", "Nacionalidade:"))
-        self.lbInfoNumDaOAB.setText(_translate("mwLogin", "Número da OAB:"))
-        self.lbNumeroDaOAB.setText(_translate("mwLogin", "TextLabel"))
-        self.lbInfoLogin.setText(_translate("mwLogin", "Login:"))
-        self.lbInfoEstCivil.setText(_translate("mwLogin", "Estado civil:"))
-        self.lbInfoSenha.setText(_translate("mwLogin", "Senha:"))
-        self.lbInfoEmail.setText(_translate("mwLogin", "E-mail:"))
-        self.lbInfoConfirmarSenha.setText(_translate("mwLogin", "Confirmar \n"
-"senha:"))
-        self.pbCadastrar.setText(_translate("mwLogin", "Cadastrar"))
-        self.pbCancelar.setText(_translate("mwLogin", "Cancelar"))
-        self.lbInfoSenhaAtual.setText(_translate("mwLogin", "Senha \n"
-"provisória:"))
+        self.leSenha.setPlaceholderText(_translate("mwLogin", "Senha"))
+        self.lbLogin.setText(_translate("mwLogin", "Login"))
+        self.lbEscritorio.setText(_translate("mwLogin", "Escritório:"))
+        self.lbNLS.setText(_translate("mwLogin", "Não lembro minha senha"))
+        self.pbPrimeiroAcesso.setText(_translate("mwLogin", "Primeiro acesso"))
+        self.lePACpfEmail.setPlaceholderText(_translate("mwLogin", "Entre com CPF ou OAB"))
+        self.lbNew.setText(_translate("mwLogin", "NEW"))
+        self.lbPrev.setText(_translate("mwLogin", "PREV"))
+        self.pbEnviarCodigo.setText(_translate("mwLogin", "Receber código"))
+        self.lbInfoPrimeiroAcesso.setText(_translate("mwLogin", "Digite o CPF ou o seu e-mail cadastrado"))
+        self.lbPALogin.setText(_translate("mwLogin", "Primeiro Acesso"))
+        self.lbNew_2.setText(_translate("mwLogin", "NEW"))
+        self.lbPrev_2.setText(_translate("mwLogin", "PREV"))
+        self.lbPALogin_2.setText(_translate("mwLogin", "Primeiro Acesso"))
+        self.lbInfoPrimeiroAcesso_2.setText(_translate("mwLogin", "Digite o código enviado para o seu e-mail"))
+        self.lbInfoAdicional.setText(_translate("mwLogin", "Em instantes você receberá um um e-mail com o código de acesso."))
+        self.pbEnviarCodigo_2.setText(_translate("mwLogin", "Enviar código"))
+        self.lbInfoTempoValid.setText(_translate("mwLogin", "Tempo de validade do código de acesso: "))
+        self.lbTempoValid.setText(_translate("mwLogin", "10:00"))
+        self.leConfirmaSenha.setPlaceholderText(_translate("mwLogin", "Digite sua senha"))
+        self.lePASenha.setPlaceholderText(_translate("mwLogin", "Confirme a senha"))
+        self.lbNew_3.setText(_translate("mwLogin", "NEW"))
+        self.lbPrev_3.setText(_translate("mwLogin", "PREV"))
+        self.lbPALogin_3.setText(_translate("mwLogin", "Primeiro Acesso"))
+        self.lbInfoPrimeiroAcesso_3.setText(_translate("mwLogin", "Crie sua senha de acesso"))
+        self.pbCriaSenha.setText(_translate("mwLogin", "Criar senha"))
 import Resources.login
 
 

@@ -10,6 +10,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Design.DesignSystem.colors import NewColorsPrimary
 from Design.DesignSystem.designEnums import FontStyle
+from Design.DesignSystem.fonts import FontSize
 
 
 class QToaster(QtWidgets.QFrame):
@@ -47,6 +48,7 @@ class QToaster(QtWidgets.QFrame):
             # the window manager supports it; if it doesn't, this won'd do
             # anything (besides making the hiding a bit longer by half a second)
             self.opacityAni = QtCore.QPropertyAnimation(self, b'windowOpacity')
+
         self.opacityAni.setStartValue(0.)
         self.opacityAni.setEndValue(1.)
         self.opacityAni.setDuration(100)
@@ -127,20 +129,22 @@ class QToaster(QtWidgets.QFrame):
             parent,
             message,
             icon=QtWidgets.QStyle.SP_MessageBoxInformation,
-            corner=QtCore.Qt.TopLeftCorner,
+            corner=QtCore.Qt.BottomLeftCorner,
             margin=10,
             closable=True,
             timeout=5000,
             desktop=False,
-            parentWindow=True):
+            parentWindow=True,
+            fontSize: FontSize=FontSize.H2
+
+    ):
 
         if parent and parentWindow:
             parent = parent.window()
 
         if not parent or desktop:
             self = QToaster(None)
-            self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint |
-                QtCore.Qt.BypassWindowManagerHint)
+            self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint | QtCore.Qt.BypassWindowManagerHint)
             # This is a dirty hack!
             # parentless objects are garbage collected, so the widget will be
             # deleted as soon as the function that calls it returns, but if an
@@ -187,7 +191,14 @@ class QToaster(QtWidgets.QFrame):
 
         self.label = QtWidgets.QLabel(message)
         self.layout().addWidget(self.label)
-        self.label.setStyleSheet(FontStyle.toast.value)
+
+        # Tamanho da fonte da mensagem
+        if fontSize == FontSize.H1:
+            self.label.setStyleSheet(FontStyle.gToast.value)
+        elif fontSize == FontSize.H3:
+            self.label.setStyleSheet(FontStyle.pToast.value)
+        else:
+            self.label.setStyleSheet(FontStyle.mToast.value)
 
         if closable:
             self.closeButton = QtWidgets.QToolButton()
@@ -226,7 +237,7 @@ class QToaster(QtWidgets.QFrame):
         self.show()
         self.opacityAni.start()
 
-
+# Widget de apresentação da funcionalidade do Toast
 class W(QtWidgets.QWidget):
     def __init__(self):
         QtWidgets.QWidget.__init__(self)

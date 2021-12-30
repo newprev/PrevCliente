@@ -1,0 +1,16 @@
+<RCC>
+  <qresource prefix="opcoes">
+    <file>opcoes.png</file>
+  </qresource>
+  <qresource prefix="cliente">
+    <file>cliente.png</file>
+  </qresource>
+  <qresource prefix="voltar">
+    <file>back.png</file>
+  </qresource>
+  <qresource prefix="file">
+    <file>rbChecked.png</file>
+    <file>rbUnchecked.png</file>
+    <file>file.png</file>
+  </qresource>
+</RCC>

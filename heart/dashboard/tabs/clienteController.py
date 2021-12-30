@@ -1,3 +1,4 @@
+from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar, QHBoxLayout, QLineEdit
@@ -141,7 +142,6 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
 
         # Enable and disable
         self.sbCdCliente.setDisabled(True)
-
 
     def abreBuscaClientePg(self):
         pgBuscaCliente = BuscaClientePage(parent=self)
@@ -302,17 +302,11 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                             self.cliente = Cliente.get(Cliente.cpfCliente == clienteAInserir.cpfCliente)
 
                             contribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=self.cliente.clienteId)
-                            # listaContribuicoes = contribuicoes['contribuicoes']
-                            # listaRemuneracoes = contribuicoes['remuneracoes']
                             cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
                             cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
-                            # beneficios = contribuicoes['beneficios']
 
-                            # CnisContribuicoes.insert_many(listaContribuicoes).on_conflict_replace().execute()
-                            # CnisRemuneracoes.insert_many(listaRemuneracoes).on_conflict_replace().execute()
                             CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
                             CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
-                            # CnisBeneficios.insert_many(beneficios).on_conflict_replace().execute()
 
                             self.cliente.telefoneId = Telefones.get_by_id(self.cliente)
                             transaction.commit()

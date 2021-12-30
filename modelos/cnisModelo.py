@@ -152,37 +152,9 @@ class CNISModelo:
 
                 pos += 1
 
-    def criaItensNaoDiscriminados(self, cabecalho: CnisCabecalhos, cliente: Cliente) -> List[dict]:
-        dataInicio = strToDate(cabecalho.dataInicio)
-        dataFim = strToDate(cabecalho.dataFim)
-        qtdItens: int = floor((dataFim - dataInicio).days/30) + 1
-        listaItens: List[dict] = []
-
-        if cabecalho.nb is not None:
-            tipoItem = TipoItemContribuicao.beneficio.value
-        elif cabecalho.cdEmp is None:
-            tipoItem = TipoItemContribuicao.contribuicao.value
-        else:
-            tipoItem = TipoItemContribuicao.remuneracao.value
-
-        for i in range(0, qtdItens):
-            if i + 1 == qtdItens:
-                competencia = dataFim
-            else:
-                competencia = dataInicio + relativedelta(months=i)
-
-            listaItens.append({
-                "clienteId": cliente,
-                "seq": cabecalho.seq,
-                "tipo": tipoItem,
-                "competencia": competencia,
-                "contribuicao": 0,
-                "salContribuicao": 0,
-                "validoTempoContrib": True,
-                "validoSalContrib": False
-            })
-
-        return listaItens
+    def iniciaAvaliacaoCnis(self):
+        self.carregaDoc(self.pathCnis)
+        self.carregaDados()
 
     def trataExtrairCabecalhos(self, documentoLinhas, posInicio):
         if any(filter(lambda item: re.fullmatch(self.expRegNB, item), documentoLinhas[posInicio:posInicio + 16])):
@@ -588,11 +560,6 @@ class CNISModelo:
             listaContrib: List[dict] = self.buscaPeloSeq(listaContribuicoes, seq=cabecalho.seq)
             listaRemu: List[dict] = self.buscaPeloSeq(listaRemuneracoes, seq=cabecalho.seq)
             listaBene: List[dict] = self.buscaPeloSeq(listaBeneficios, seq=cabecalho.seq)
-
-            # Caso o contribuinte tenha remunerações ou contribuições sem discriminação unitária
-            # if len(listaContrib) == 0 and len(listaRemu) == 0 and len(listaBene) == 0 and not cabecalho.dadoFaltante:
-            #     listaItensContrib += self.criaItensNaoDiscriminados(cabecalho, cliente)
-            #     continue
 
             # Caso o cabeçalho tenha a data de início e fim mais apuradas ou não exista o descritivo das competências
             falhaInicio = self.verificaFalhaDescricao(dataInicio=cabecalho.dataInicio, listaContrib=listaContrib, listaRemu=listaRemu, listaBene=listaBene)

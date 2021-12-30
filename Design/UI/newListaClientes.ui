@@ -80,6 +80,15 @@
 	background-color: white;
 }
 
+#frInfoIconeBusca {
+	background-image: url(:/cabecalho/checkSuccess.png);
+	background-position: center;
+	background-repeat: no-repeat;
+
+	background-color: transparent;
+	border-radius: 0px;
+}
+
 /*------------------------------------------ Line Edit ------------------------------------------*/
 #leBusca {
 	border: 0px solid gray;
@@ -129,15 +138,6 @@
 #lbInfoBusca {
 	font: 10pt &quot;Avenir LT Std&quot;;
 	color: #6F757B;
-}
-
-#frInfoIconeBusca {
-	background-image: url(:/cabecalho/checkSuccess.png);
-	background-position: center;
-	background-repeat: no-repeat;
-
-	background-color: transparent;
-	border-radius: 0px;
 }</string>
         </property>
         <property name="frameShape">
@@ -418,6 +418,8 @@
         <property name="styleSheet">
          <string notr="true">/*------------------------------------------- Table Widget -------------------------------------------*/
 #tblClientes {
+	selection-background-color: #F9F9F9;
+	selection-color: grey;
 	gridline-color: white;
 	border: 0px solid transparent;
 }
@@ -431,6 +433,13 @@ QHeaderView::section {
     padding-left: 4px;
     border: 0px solid white;
 	min-height: 45px;
+}
+
+#tblClientes::item:last {
+	selection-background-color: black;
+	selection-color: grey;
+	gridline-color: black;
+	border: 0px solid transparent;
 }</string>
         </property>
         <property name="frameShape">
@@ -444,7 +453,7 @@ QHeaderView::section {
           <number>0</number>
          </property>
          <property name="leftMargin">
-          <number>0</number>
+          <number>36</number>
          </property>
          <property name="topMargin">
           <number>24</number>
@@ -460,8 +469,17 @@ QHeaderView::section {
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
            </property>
+           <property name="sizeAdjustPolicy">
+            <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+           </property>
            <property name="editTriggers">
             <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="showDropIndicator" stdset="0">
+            <bool>false</bool>
+           </property>
+           <property name="dragDropOverwriteMode">
+            <bool>false</bool>
            </property>
            <property name="selectionMode">
             <enum>QAbstractItemView::SingleSelection</enum>
@@ -487,6 +505,9 @@ QHeaderView::section {
            <attribute name="horizontalHeaderMinimumSectionSize">
             <number>70</number>
            </attribute>
+           <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+            <bool>false</bool>
+           </attribute>
            <attribute name="horizontalHeaderStretchLastSection">
             <bool>false</bool>
            </attribute>
@@ -494,6 +515,9 @@ QHeaderView::section {
             <bool>false</bool>
            </attribute>
            <attribute name="verticalHeaderHighlightSections">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="verticalHeaderShowSortIndicator" stdset="0">
             <bool>false</bool>
            </attribute>
            <row>

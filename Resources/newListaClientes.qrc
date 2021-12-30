@@ -4,4 +4,7 @@
     <file>busca.png</file>
     <file>filtros.png</file>
   </qresource>
+  <qresource prefix="opcoes">
+    <file>opcoes.png</file>
+  </qresource>
 </RCC>

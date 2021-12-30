@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1181</width>
-    <height>659</height>
+    <width>1194</width>
+    <height>671</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,16 +51,16 @@
        <number>0</number>
       </property>
       <property name="leftMargin">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="topMargin">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="rightMargin">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="bottomMargin">
-       <number>2</number>
+       <number>0</number>
       </property>
       <item>
        <widget class="QFrame" name="frCabecalho">
@@ -78,6 +78,15 @@
         </property>
         <property name="styleSheet">
          <string notr="true">/*------------------------------------------- Frame -------------------------------------------*/
+#frFotoCliente {
+	background-color: #F9F9F9;
+	border: 0px solid none;
+	border-radius: 8px;
+
+	background-image: url(:/cliente/cliente.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}
 
 
 /*------------------------------------------- Push Button -------------------------------------------*/
@@ -131,6 +140,9 @@
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <property name="spacing">
           <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>36</number>
          </property>
          <item>
           <widget class="QFrame" name="frTitulo">
@@ -226,7 +238,7 @@
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <property name="spacing">
-                <number>2</number>
+                <number>16</number>
                </property>
                <property name="leftMargin">
                 <number>0</number>
@@ -277,9 +289,9 @@
                    <number>0</number>
                   </property>
                   <item>
-                   <widget class="QLabel" name="label">
+                   <widget class="QLabel" name="lbFotoCliente">
                     <property name="text">
-                     <string>Foto</string>
+                     <string/>
                     </property>
                    </widget>
                   </item>
@@ -574,7 +586,7 @@
           <number>0</number>
          </property>
          <property name="leftMargin">
-          <number>16</number>
+          <number>36</number>
          </property>
          <property name="topMargin">
           <number>0</number>

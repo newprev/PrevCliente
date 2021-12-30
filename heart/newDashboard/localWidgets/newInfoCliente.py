@@ -68,16 +68,30 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
 
             # Informações CNIS
             pathCnis: str = cliente.pathCnis
-            indexNomeArquivo = pathCnis.rfind('/') + 1
+            if pathCnis is not None:
+                indexNomeArquivo = pathCnis.rfind('/') + 1
 
-            secEpoch = int(time.time()) - os.path.getatime(pathCnis)
-            ultimaAtualizacaoArquivo: datetime = date.today() - relativedelta(seconds=secEpoch)
+                secEpoch = int(time.time()) - os.path.getatime(pathCnis)
+                ultimaAtualizacaoArquivo: relativedelta = relativedelta(seconds=secEpoch)
+                self.lbInfoMetaArquivo.show()
 
-            self.lbInfoNomeArquivo.setText(pathCnis[indexNomeArquivo:])
-            if ultimaAtualizacaoArquivo.day == 0:
-                self.lbInfoMetaArquivo.setText(f"{ultimaAtualizacaoArquivo.hour} horas atrás")
+                self.lbInfoNomeArquivo.setText(pathCnis[indexNomeArquivo:])
+                if ultimaAtualizacaoArquivo.years != 0:
+                    self.lbInfoMetaArquivo.setText(f"{int(ultimaAtualizacaoArquivo.years)} anos atrás")
+                elif ultimaAtualizacaoArquivo.months != 0:
+                    self.lbInfoMetaArquivo.setText(f"{int(ultimaAtualizacaoArquivo.months)} meses atrás")
+                elif ultimaAtualizacaoArquivo.days != 0:
+                    self.lbInfoMetaArquivo.setText(f"{int(ultimaAtualizacaoArquivo.days)} dias atrás")
+                elif ultimaAtualizacaoArquivo.hours != 0:
+                    self.lbInfoMetaArquivo.setText(f"{int(ultimaAtualizacaoArquivo.hours)} horas atrás")
+                elif ultimaAtualizacaoArquivo.minutes != 0:
+                    self.lbInfoMetaArquivo.setText(f"{int(ultimaAtualizacaoArquivo.minutes)} minutos atrás")
+                elif ultimaAtualizacaoArquivo.seconds != 0:
+                    self.lbInfoMetaArquivo.setText(f"{int(ultimaAtualizacaoArquivo.seconds)} segundos atrás")
             else:
-                self.lbInfoMetaArquivo.setText(f"{ultimaAtualizacaoArquivo.day} dias atrás")
+                self.lbInfoNomeArquivo.setText('CNIS NÃO ENVIADO')
+                self.lbInfoMetaArquivo.hide()
+
         else:
             self.toasty.showMessage(self, "Não foi possível carregar as informações do cliente.")
 

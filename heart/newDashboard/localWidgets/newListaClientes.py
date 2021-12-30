@@ -6,12 +6,14 @@ from typing import List
 
 from PyQt5.QtCore import QObject, QEvent, Qt
 from PyQt5.QtGui import QFont, QKeyEvent
-from PyQt5.QtWidgets import QFrame, QTableWidgetItem
+from PyQt5.QtWidgets import QFrame, QTableWidgetItem, QPushButton
 
 from Design.pyUi.newListaClientes import Ui_wdgListaClientes
 from Design.CustomWidgets.newPopupCNIS import NewPopupCNIS
 from Design.CustomWidgets.newToast import QToaster
+from Design.CustomWidgets.newMenuOpcoes import NewMenuOpcoes
 from Design.pyUi.efeitos import Efeitos
+from heart.newDashboard.localStyleSheet import btnOpcoesStyle
 
 from modelos.cabecalhoORM import CnisCabecalhos
 
@@ -40,9 +42,11 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.popupCNIS = None
         self.escritorioAtual = escritorio
         self.advogadoAtual = advogado
+
         self.sinais = Sinais()
         self.sinais.sEnviaClienteParam.connect(self.enviaClienteDashboard)
         self.sinais.sEnviaInfoCliente.connect(self.enviaInfoClienteDashboard)
+        self.efeitos = Efeitos()
         self.toast = QToaster(parent=self)
 
         self.tblClientes.hideColumn(0)
@@ -52,6 +56,11 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.tblClientes.doubleClicked.connect(self.selecionaCliente)
 
         self.atualizaTblClientes()
+
+    def abreMenuOpcoes(self, linha: int):
+        menu = NewMenuOpcoes(parent=self, funcEditar=lambda: print(f"abreMenuOpcoes: {linha}"), funcExcluir=lambda: print(f"abreMenuOpcoes: {linha}"))
+        self.efeitos.shadowCards([menu])
+        menu.show()
 
     def atualizaTblClientes(self, clientes: list = None):
         if clientes is None:
@@ -70,14 +79,17 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             if telefone is None:
                 telefone = Telefones()
 
+            # 0 - clienteId <Escondida>
             cdClienteItem = QTableWidgetItem(str(cliente.clienteId))
             cdClienteItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 0, cdClienteItem)
 
+            # 1 - Nome completo do cliente <Aparente>
             nomeCompletoItem = QTableWidgetItem(f"{cliente.nomeCliente} {cliente.sobrenomeCliente}")
             nomeCompletoItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 1, nomeCompletoItem)
 
+            # 2 - E-mail do cliente <Aparente>
             if cliente.email is None:
                 emailItem = QTableWidgetItem('')
             else:
@@ -85,10 +97,12 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             emailItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 2, emailItem)
 
+            # 3 - Contato do cliente <Aparente>
             telefoneItem = QTableWidgetItem(f"{mascaraTelCel(telefone.numero)}")
             telefoneItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 3, telefoneItem)
 
+            # 4 - Cidade de nascimento do cliente <Aparente>
             if cliente.cidade is None:
                 cidadeItem = QTableWidgetItem('')
             else:
@@ -96,9 +110,15 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             cidadeItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 4, cidadeItem)
 
-            tipoProcessoItem = QTableWidgetItem(strTipoBeneficio(processo.tipoBeneficio, processo.subTipoApos))
-            tipoProcessoItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-            self.tblClientes.setItem(numLinha, 5, tipoProcessoItem)
+            # tipoProcessoItem = QTableWidgetItem(strTipoBeneficio(processo.tipoBeneficio, processo.subTipoApos))
+            # tipoProcessoItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            # self.tblClientes.setItem(numLinha, 5, tipoProcessoItem)
+
+            pbOpcoes = QPushButton()
+            pbOpcoes.clicked.connect(lambda: self.abreMenuOpcoes(numLinha))
+            pbOpcoes.setStyleSheet(btnOpcoesStyle())
+            pbOpcoes.setMaximumSize(24, 24)
+            self.tblClientes.setCellWidget(numLinha, 6, pbOpcoes)
 
         self.tblClientes.resizeColumnsToContents()
 
@@ -214,7 +234,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.sinais.sEnviaClienteParam.emit(clienteAtual)
 
     def eventFilter(self, a0: QObject, tecla: QEvent) -> bool:
-        if isinstance(tecla, QKeyEvent):
+        if isinstance(tecla, QKeyEvent) and self.popupCNIS is not None:
             if self.popupCNIS.isVisible():
                 self.popupCNIS.close()
 

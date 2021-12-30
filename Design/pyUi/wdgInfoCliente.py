@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgInfoCliente(object):
     def setupUi(self, wdgInfoCliente):
         wdgInfoCliente.setObjectName("wdgInfoCliente")
-        wdgInfoCliente.resize(1181, 659)
+        wdgInfoCliente.resize(1194, 671)
         wdgInfoCliente.setStyleSheet("#wdgCadastroCliente {\n"
 "    background-color: white;\n"
 "}\n"
@@ -31,7 +31,7 @@ class Ui_wdgInfoCliente(object):
         self.frPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frPrincipal.setObjectName("frPrincipal")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.frPrincipal)
-        self.verticalLayout.setContentsMargins(2, 2, 2, 2)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frCabecalho = QtWidgets.QFrame(self.frPrincipal)
@@ -42,6 +42,15 @@ class Ui_wdgInfoCliente(object):
         self.frCabecalho.setSizePolicy(sizePolicy)
         self.frCabecalho.setMaximumSize(QtCore.QSize(16777215, 200))
         self.frCabecalho.setStyleSheet("/*------------------------------------------- Frame -------------------------------------------*/\n"
+"#frFotoCliente {\n"
+"    background-color: #F9F9F9;\n"
+"    border: 0px solid none;\n"
+"    border-radius: 8px;\n"
+"\n"
+"    background-image: url(:/cliente/cliente.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"}\n"
 "\n"
 "\n"
 "/*------------------------------------------- Push Button -------------------------------------------*/\n"
@@ -89,6 +98,7 @@ class Ui_wdgInfoCliente(object):
         self.frCabecalho.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frCabecalho.setObjectName("frCabecalho")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frCabecalho)
+        self.verticalLayout_2.setContentsMargins(36, -1, -1, -1)
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.frTitulo = QtWidgets.QFrame(self.frCabecalho)
@@ -125,7 +135,7 @@ class Ui_wdgInfoCliente(object):
         self.frame_4.setObjectName("frame_4")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frame_4)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_3.setSpacing(2)
+        self.horizontalLayout_3.setSpacing(16)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.frFotoCliente = QtWidgets.QFrame(self.frame_4)
         self.frFotoCliente.setMinimumSize(QtCore.QSize(80, 80))
@@ -137,9 +147,10 @@ class Ui_wdgInfoCliente(object):
         self.horizontalLayout_27.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_27.setSpacing(0)
         self.horizontalLayout_27.setObjectName("horizontalLayout_27")
-        self.label = QtWidgets.QLabel(self.frFotoCliente)
-        self.label.setObjectName("label")
-        self.horizontalLayout_27.addWidget(self.label)
+        self.lbFotoCliente = QtWidgets.QLabel(self.frFotoCliente)
+        self.lbFotoCliente.setText("")
+        self.lbFotoCliente.setObjectName("lbFotoCliente")
+        self.horizontalLayout_27.addWidget(self.lbFotoCliente)
         self.horizontalLayout_3.addWidget(self.frFotoCliente)
         self.frInfoFotoCliente = QtWidgets.QFrame(self.frame_4)
         self.frInfoFotoCliente.setMinimumSize(QtCore.QSize(0, 0))
@@ -308,7 +319,7 @@ class Ui_wdgInfoCliente(object):
         self.frRodape.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frRodape.setObjectName("frRodape")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.frRodape)
-        self.horizontalLayout_5.setContentsMargins(16, 0, 0, 0)
+        self.horizontalLayout_5.setContentsMargins(36, 0, 0, 0)
         self.horizontalLayout_5.setSpacing(0)
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.frInfoPessoais = QtWidgets.QFrame(self.frRodape)
@@ -732,7 +743,6 @@ class Ui_wdgInfoCliente(object):
         _translate = QtCore.QCoreApplication.translate
         wdgInfoCliente.setWindowTitle(_translate("wdgInfoCliente", "Form"))
         self.lbNomeCliente.setText(_translate("wdgInfoCliente", "Fulana de Tal"))
-        self.label.setText(_translate("wdgInfoCliente", "Foto"))
         self.lbTelefone.setText(_translate("wdgInfoCliente", "(11) 9.7275-7721"))
         self.lbEmail.setText(_translate("wdgInfoCliente", "fulana.deTal@gmail.com"))
         self.pbResumo.setText(_translate("wdgInfoCliente", "Resumo CNIS"))

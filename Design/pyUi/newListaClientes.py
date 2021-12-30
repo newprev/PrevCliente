@@ -47,6 +47,15 @@ class Ui_wdgListaClientes(object):
 "    background-color: white;\n"
 "}\n"
 "\n"
+"#frInfoIconeBusca {\n"
+"    background-image: url(:/cabecalho/checkSuccess.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"\n"
+"    background-color: transparent;\n"
+"    border-radius: 0px;\n"
+"}\n"
+"\n"
 "/*------------------------------------------ Line Edit ------------------------------------------*/\n"
 "#leBusca {\n"
 "    border: 0px solid gray;\n"
@@ -96,15 +105,6 @@ class Ui_wdgListaClientes(object):
 "#lbInfoBusca {\n"
 "    font: 10pt \"Avenir LT Std\";\n"
 "    color: #6F757B;\n"
-"}\n"
-"\n"
-"#frInfoIconeBusca {\n"
-"    background-image: url(:/cabecalho/checkSuccess.png);\n"
-"    background-position: center;\n"
-"    background-repeat: no-repeat;\n"
-"\n"
-"    background-color: transparent;\n"
-"    border-radius: 0px;\n"
 "}")
         self.frCabecalhoLista.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frCabecalhoLista.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -206,6 +206,8 @@ class Ui_wdgListaClientes(object):
         self.frTabela = QtWidgets.QFrame(self.frPrincipal)
         self.frTabela.setStyleSheet("/*------------------------------------------- Table Widget -------------------------------------------*/\n"
 "#tblClientes {\n"
+"    selection-background-color: #F9F9F9;\n"
+"    selection-color: grey;\n"
 "    gridline-color: white;\n"
 "    border: 0px solid transparent;\n"
 "}\n"
@@ -219,17 +221,27 @@ class Ui_wdgListaClientes(object):
 "    padding-left: 4px;\n"
 "    border: 0px solid white;\n"
 "    min-height: 45px;\n"
+"}\n"
+"\n"
+"#tblClientes::item:last {\n"
+"    selection-background-color: black;\n"
+"    selection-color: grey;\n"
+"    gridline-color: black;\n"
+"    border: 0px solid transparent;\n"
 "}")
         self.frTabela.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frTabela.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frTabela.setObjectName("frTabela")
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frTabela)
-        self.horizontalLayout_6.setContentsMargins(0, 24, 0, 0)
+        self.horizontalLayout_6.setContentsMargins(36, 24, 0, 0)
         self.horizontalLayout_6.setSpacing(0)
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
         self.tblClientes = QtWidgets.QTableWidget(self.frTabela)
         self.tblClientes.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.tblClientes.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
         self.tblClientes.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tblClientes.setProperty("showDropIndicator", False)
+        self.tblClientes.setDragDropOverwriteMode(False)
         self.tblClientes.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.tblClientes.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.tblClientes.setShowGrid(False)
@@ -316,9 +328,11 @@ class Ui_wdgListaClientes(object):
         self.tblClientes.setItem(0, 6, item)
         self.tblClientes.horizontalHeader().setCascadingSectionResizes(True)
         self.tblClientes.horizontalHeader().setMinimumSectionSize(70)
+        self.tblClientes.horizontalHeader().setSortIndicatorShown(False)
         self.tblClientes.horizontalHeader().setStretchLastSection(False)
         self.tblClientes.verticalHeader().setVisible(False)
         self.tblClientes.verticalHeader().setHighlightSections(False)
+        self.tblClientes.verticalHeader().setSortIndicatorShown(False)
         self.horizontalLayout_6.addWidget(self.tblClientes)
         self.verticalLayout.addWidget(self.frTabela)
         self.gridLayout.addWidget(self.frPrincipal, 0, 0, 1, 1)

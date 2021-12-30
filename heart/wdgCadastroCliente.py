@@ -14,7 +14,8 @@ from repositorios.integracaoRepositorio import IntegracaoRepository
 
 from util.dateHelper import strToDate
 from util.enums.dashboardEnums import TelaAtual, Navegacao, EtapaCadastraCliente
-from util.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit, estCivil, getEscolaridade, getEstados, getEstadoBySigla
+from util.enums.telefoneEnums import TipoTelefone, TelefonePesoal
+from util.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit, estCivil, getEscolaridade, getEstados, getEstadoBySigla, unmaskAll
 from util.popUps import popUpOkAlerta
 
 
@@ -30,7 +31,8 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
 
         self.leRg.editingFinished.connect(lambda: self.leRg.setText(mascaraRG(self.leRg.text())))
         self.leCpf.editingFinished.connect(lambda: self.leCpf.setText(mascaraCPF(self.leCpf.text())))
-        self.leTelefone1.editingFinished.connect(lambda: self.leTelefone1.setText(mascaraTelCel(self.leTelefone1.text())))
+        self.leTelefone1.editingFinished.connect(self.avaliaInsereTelefone)
+        self.leTelefone2.editingFinished.connect(self.avaliaInsereTelefoneSecundario)
         self.leCep.editingFinished.connect(lambda: self.leCep.setText(mascaraCep(self.leCep.text())))
 
         self.leCep.editingFinished.connect(lambda: self.carregaInfoTela('cep'))
@@ -38,8 +40,8 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.leCidade.textEdited.connect(lambda: self.carregaInfoTela('cidade'))
         self.leBairro.textEdited.connect(lambda: self.carregaInfoTela('bairro'))
         self.leComplemento.textEdited.connect(lambda: self.carregaInfoTela('complemento'))
-        self.leTelefone1.textEdited.connect(lambda: self.carregaInfoTela('telefone1'))
-        self.leTelefone2.textEdited.connect(lambda: self.carregaInfoTela('telefone2'))
+        # self.leTelefone1.editingFinished.connect(lambda: self.carregaInfoTela('telefone1'))
+        # self.leTelefone2.editingFinished.connect(lambda: self.carregaInfoTela('telefone2'))
         self.leCarteiraProf.textEdited.connect(lambda: self.carregaInfoTela('cartProf'))
         self.leProfissao.textEdited.connect(lambda: self.carregaInfoTela('profissao'))
         self.leNomeCliente.textEdited.connect(lambda: self.carregaInfoTela('nomeCliente'))
@@ -82,6 +84,46 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
 
         elif tipo == Navegacao.proximo:
             pass
+
+    def avaliaInsereTelefone(self):
+        try:
+            telefone: Telefones = Telefones.select().where(Telefones.clienteId == self.clienteAtual.clienteId, Telefones.principal == True).get()
+            telefone.numero = unmaskAll(self.leTelefone1.text())
+            telefone.dataUltAlt = datetime.now()
+            telefone.save()
+        except Telefones.DoesNotExist as err:
+            telefone = Telefones(
+                clienteId=self.clienteAtual.clienteId,
+                principal=True,
+                numero=unmaskAll(self.leTelefone1.text()),
+                pessoalRecado=TelefonePesoal.Pessoal.value,
+                tipoTelefone=TipoTelefone.Whatsapp.value,
+                ativo=True
+            ).save()
+        finally:
+            self.clienteAtual.telefoneId = telefone
+            self.clienteAtual.dataUltAlt = datetime.now()
+            self.clienteAtual.save()
+
+            self.leTelefone1.setText(mascaraTelCel(self.leTelefone1.text()))
+
+    def avaliaInsereTelefoneSecundario(self):
+        try:
+            telefone: Telefones = Telefones.select().where(Telefones.clienteId == self.clienteAtual.clienteId, Telefones.principal == False).get()
+            telefone.numero = unmaskAll(self.leTelefone2.text())
+            telefone.dataUltAlt = datetime.now()
+            telefone.save()
+        except Telefones.DoesNotExist as err:
+            Telefones(
+                clienteId=self.clienteAtual.clienteId,
+                principal=False,
+                numero=unmaskAll(self.leTelefone2.text()),
+                pessoalRecado=TelefonePesoal.Recado.value,
+                tipoTelefone=TipoTelefone.Whatsapp.value,
+                ativo=True
+            ).save()
+        finally:
+            self.leTelefone2.setText(mascaraTelCel(self.leTelefone2.text()))
 
     def avaliaSalvaDados(self):
         if self.etapaAtual == EtapaCadastraCliente.pessoal:

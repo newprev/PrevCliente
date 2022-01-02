@@ -7,6 +7,8 @@ from PyQt5.QtWidgets import QMainWindow
 from Design.pyUi.splashScreen import Ui_MainWindow
 from heart.login.loginController import LoginController
 from connections import ConfigConnection
+from modelos.clienteInfoBanco import ClienteInfoBanco
+from modelos.clienteProfissao import ClienteProfissao
 
 from modelos.convMonORM import ConvMon
 from modelos.especieBenefORM import EspecieBenef
@@ -92,7 +94,9 @@ class Main(Ui_MainWindow, QMainWindow):
             SalarioMinimo: 'CRIANDO TABELA DE SALÁRIOS MÍNIMOS...',
             Aposentadoria: 'CRIANDO TABELA DE APOSENTADORIAS...',
             IpcaMensal: 'CRIANDO TABELA DE IPCA MENSAL...',
-            TipoAposentadoria: 'CRIANDO TABELA DE TIPOS DE APOSENTADORIAS...'
+            TipoAposentadoria: 'CRIANDO TABELA DE TIPOS DE APOSENTADORIAS...',
+            ClienteInfoBanco: 'CRIANDO TABLEA DE INFORMAÇÕES BANCÁRIAS',
+            ClienteProfissao: 'CRIANDO TABLEA DE INFORMAÇÕES PROFISSIONAIS',
         }
 
         # percentLoading = ceil(100 / len(listaLoading))

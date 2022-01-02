@@ -1,4 +1,5 @@
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import QFrame, QSizePolicy
 
 from Design.pyUi.newMenuOpcoes import Ui_newMenuOpcoes
@@ -6,6 +7,7 @@ from typing import Callable
 
 
 class NewMenuOpcoes(Ui_newMenuOpcoes, QFrame):
+
     def __init__(self, parent=None, funcArquivar: Callable = None, funcEditar: Callable = None, funcExcluir: Callable = None):
         super(NewMenuOpcoes, self).__init__(parent=parent)
         self.setupUi(self)
@@ -21,16 +23,16 @@ class NewMenuOpcoes(Ui_newMenuOpcoes, QFrame):
         self.atualizaTamanho()
 
     def atualizaTamanho(self):
-        newHeight = 24
+        newHeight = 4
 
         if self.funcExcluir is not None:
-            newHeight += 44
+            newHeight += 22
 
         if self.funcEditar is not None:
-            newHeight += 44
+            newHeight += 22
 
         if self.funcArquivar is not None:
-            newHeight += 44
+            newHeight += 22
 
         self.resize(self.width(), newHeight)
 
@@ -56,3 +58,5 @@ class NewMenuOpcoes(Ui_newMenuOpcoes, QFrame):
         else:
             self.pbEditar.clicked.connect(lambda: self.funcEditar())
 
+    def leaveEvent(self, a0: QtCore.QEvent) -> None:
+        self.close()

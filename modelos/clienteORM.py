@@ -1,11 +1,15 @@
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
+
+from modelos.telefonesORM import Telefones
+from modelos.clienteProfissao import ClienteProfissao
+from modelos.clienteInfoBanco import ClienteInfoBanco
 from systemLog.logs import logPrioridade
 from modelos.escritoriosORM import Escritorios
 from util.dateHelper import strToDate
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
-from peewee import AutoField, CharField, ForeignKeyField, DeferredForeignKey, DateField, IntegerField, DateTimeField, BooleanField
+from peewee import AutoField, CharField, ForeignKeyField, DateField, IntegerField, DateTimeField
 from datetime import datetime
 
 TABLENAME = 'cliente'
@@ -25,10 +29,9 @@ def buscaEscritorioIdAtual() -> int:
 class Cliente(BaseModel, Model):
     clienteId = AutoField(column_name='clienteId', null=True)
     escritorioId = ForeignKeyField(column_name='escritorioId', field='escritorioId', model=Escritorios, backref='escritorios', default=buscaEscritorioIdAtual())
-    telefoneId = DeferredForeignKey('Telefones', column_name='telefoneId', field='telefoneId', backref='telefones', null=True)
+    telefoneId = ForeignKeyField(column_name='telefoneId', field='telefoneId', model=Telefones, backref='telefones', null=True)
     nomeCliente = CharField(column_name='nomeCliente')
     sobrenomeCliente = CharField(column_name='sobrenomeCliente')
-    agenciaBanco = CharField(column_name='agenciaBanco', null=True)
     bairro = CharField(null=True)
     cep = CharField(null=True)
     cidade = CharField(null=True)
@@ -42,21 +45,14 @@ class Cliente(BaseModel, Model):
     genero = CharField(default='M')
     grauEscolaridade = CharField(column_name='grauEscolaridade', null=True)
     idade = IntegerField()
-    nit = CharField()
-    nomeBanco = CharField(column_name='nomeBanco', null=True)
     nomeMae = CharField(column_name='nomeMae')
-    numCarteiraProf = CharField(column_name='numCarteiraProf', null=True)
     numero = IntegerField(null=True)
-    numCartProf = CharField(column_name='numCartProf', null=True)
-    numeroConta = CharField(column_name='numeroConta', null=True)
-    pixCliente = CharField(column_name='pixCliente', null=True)
-    profissao = CharField(null=True)
-    professor = BooleanField(default=False)
-    quaCarteiraProf = CharField(column_name='quaCarteiraProf', null=True)
+    dadosBancarios = ForeignKeyField(column_name='dadosBancarios', field='infoId', model=ClienteInfoBanco, backref='ClienteInfoBanco', null=True)
+    dadosProfissionais = ForeignKeyField(column_name='dadosProfissionais', field='infoId', model=ClienteProfissao, backref='ClienteProfissao', null=True)
     rgCliente = CharField(column_name='rgCliente', null=True)
     senhaINSS = CharField(column_name='senhaINSS', null=True)
-    serieCarteiraProf = CharField(column_name='serieCarteiraProf', null=True)
     pathCnis = CharField(column_name='pathCnis', null=True)
+
     observacoes = CharField(column_name='observacoes', max_length=4000, null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
@@ -76,15 +72,8 @@ class Cliente(BaseModel, Model):
             'email': self.email,
             'rgCliente': self.rgCliente,
             'cpfCliente': self.cpfCliente,
-            'nomeBanco': self.nomeBanco,
-            'agenciaBanco': self.agenciaBanco,
-            'numeroConta': self.numeroConta,
-            'pixCliente': self.pixCliente,
             'grauEscolaridade': self.grauEscolaridade,
             'senhaINSS': self.senhaINSS,
-            'professor': self.professor,
-            'numCartProf': self.numCartProf,
-            'nit': self.nit,
             'nomeMae': self.nomeMae,
             'estadoCivil': self.estadoCivil,
             'endereco': self.endereco,
@@ -109,15 +98,8 @@ class Cliente(BaseModel, Model):
         self.email = dictCliente['email']
         self.rgCliente = dictCliente['rgCliente']
         self.cpfCliente = dictCliente['cpfCliente']
-        self.nomeBanco = dictCliente['nomeBanco']
-        self.agenciaBanco = dictCliente['agenciaBanco']
-        self.numeroConta = dictCliente['numeroConta']
-        self.pixCliente = dictCliente['pixCliente']
         self.grauEscolaridade = dictCliente['grauEscolaridade']
         self.senhaINSS = dictCliente['senhaINSS']
-        self.professor = dictCliente['professor']
-        self.numCartProf = dictCliente['numCartProf']
-        self.nit = dictCliente['nit']
         self.nomeMae = dictCliente['nomeMae']
         self.estadoCivil = dictCliente['estadoCivil']
         self.endereco = dictCliente['endereco']
@@ -131,7 +113,7 @@ class Cliente(BaseModel, Model):
         self.pathCnis = dictCliente['pathCnis']
 
     def __bool__(self):
-        return self.nit != '' and self.nit is not None
+        return self.nomeCliente != '' and self.nomeCliente is not None
 
     def prettyPrint(self, backRef: bool = False):
 
@@ -153,17 +135,10 @@ class Cliente(BaseModel, Model):
             email: {self.email},
             rgCliente: {self.rgCliente},
             cpfCliente: {self.cpfCliente},
-            nomeBanco: {self.nomeBanco},
-            agenciaBanco: {self.agenciaBanco},
-            numeroConta: {self.numeroConta},
-            pixCliente: {self.pixCliente},
             grauEscolaridade: {self.grauEscolaridade},
             senhaINSS: {self.senhaINSS},
-            professor: {self.professor},
-            nit: {self.nit},
             nomeMae: {self.nomeMae},
             estadoCivil: {self.estadoCivil},
-            numCartProf: {self.numCartProf},
             endereco: {self.endereco},
             numero: {self.numero},
             estado: {self.estado},

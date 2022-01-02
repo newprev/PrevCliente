@@ -14,8 +14,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_newMenuOpcoes(object):
     def setupUi(self, newMenuOpcoes):
         newMenuOpcoes.setObjectName("newMenuOpcoes")
-        newMenuOpcoes.resize(138, 132)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        newMenuOpcoes.resize(94, 70)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(newMenuOpcoes.sizePolicy().hasHeightForWidth())
@@ -28,8 +28,10 @@ class Ui_newMenuOpcoes(object):
 "    border: 0px solid none;\n"
 "}\n"
 "\n"
+"\n"
+"/*-------------------------------- Push Button --------------------------------*/\n"
 "#pbArquivar, #pbEditar {\n"
-"    font: 14pt \"Avenir LT Std\";\n"
+"    font: 10pt \"Avenir LT Std\";\n"
 "    color: #3F4E8C;\n"
 "\n"
 "    background-color: white;\n"
@@ -37,10 +39,27 @@ class Ui_newMenuOpcoes(object):
 "}\n"
 "\n"
 "#pbExcluir {\n"
-"    font: 14pt \"Avenir LT Std\";\n"
+"    font: 10pt \"Avenir LT Std\";\n"
 "    color: #E70000;\n"
 "\n"
 "    background-color: white;\n"
+"    border: 0px solid none;\n"
+"}\n"
+"\n"
+"#pbArquivar:hover, \n"
+"#pbEditar:hover {\n"
+"    font: 10pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"\n"
+"    background-color: lightgrey;\n"
+"    border: 0px solid none;\n"
+"}\n"
+"\n"
+"#pbExcluir:hover {\n"
+"    font: 10pt \"Avenir LT Std\";\n"
+"    color: #E70000;\n"
+"\n"
+"    background-color: lightgrey;\n"
 "    border: 0px solid none;\n"
 "}")
         self.gridLayout = QtWidgets.QGridLayout(newMenuOpcoes)
@@ -48,7 +67,7 @@ class Ui_newMenuOpcoes(object):
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
         self.frPrincipal = QtWidgets.QFrame(newMenuOpcoes)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frPrincipal.sizePolicy().hasHeightForWidth())
@@ -57,19 +76,34 @@ class Ui_newMenuOpcoes(object):
         self.frPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frPrincipal.setObjectName("frPrincipal")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.frPrincipal)
-        self.verticalLayout.setContentsMargins(24, 12, 24, 12)
-        self.verticalLayout.setSpacing(24)
+        self.verticalLayout.setContentsMargins(2, 4, 2, 2)
+        self.verticalLayout.setSpacing(2)
         self.verticalLayout.setObjectName("verticalLayout")
         self.pbArquivar = QtWidgets.QPushButton(self.frPrincipal)
-        self.pbArquivar.setMinimumSize(QtCore.QSize(90, 20))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pbArquivar.sizePolicy().hasHeightForWidth())
+        self.pbArquivar.setSizePolicy(sizePolicy)
+        self.pbArquivar.setMinimumSize(QtCore.QSize(0, 20))
         self.pbArquivar.setObjectName("pbArquivar")
         self.verticalLayout.addWidget(self.pbArquivar)
         self.pbEditar = QtWidgets.QPushButton(self.frPrincipal)
-        self.pbEditar.setMinimumSize(QtCore.QSize(90, 20))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pbEditar.sizePolicy().hasHeightForWidth())
+        self.pbEditar.setSizePolicy(sizePolicy)
+        self.pbEditar.setMinimumSize(QtCore.QSize(0, 20))
         self.pbEditar.setObjectName("pbEditar")
         self.verticalLayout.addWidget(self.pbEditar)
         self.pbExcluir = QtWidgets.QPushButton(self.frPrincipal)
-        self.pbExcluir.setMinimumSize(QtCore.QSize(90, 20))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pbExcluir.sizePolicy().hasHeightForWidth())
+        self.pbExcluir.setSizePolicy(sizePolicy)
+        self.pbExcluir.setMinimumSize(QtCore.QSize(0, 20))
         self.pbExcluir.setObjectName("pbExcluir")
         self.verticalLayout.addWidget(self.pbExcluir)
         self.gridLayout.addWidget(self.frPrincipal, 0, 0, 1, 1)

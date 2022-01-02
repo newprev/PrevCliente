@@ -1,11 +1,10 @@
 import os
-from timeit import Timer
 
 from peewee import SqliteDatabase
 from typing import List
 
 from PyQt5.QtCore import QObject, QEvent, Qt
-from PyQt5.QtGui import QFont, QKeyEvent
+from PyQt5.QtGui import QFont, QKeyEvent, QCursor
 from PyQt5.QtWidgets import QFrame, QTableWidgetItem, QPushButton
 
 from Design.pyUi.newListaClientes import Ui_wdgListaClientes
@@ -13,10 +12,10 @@ from Design.CustomWidgets.newPopupCNIS import NewPopupCNIS
 from Design.CustomWidgets.newToast import QToaster
 from Design.CustomWidgets.newMenuOpcoes import NewMenuOpcoes
 from Design.pyUi.efeitos import Efeitos
+
 from heart.newDashboard.localStyleSheet import btnOpcoesStyle
 
 from modelos.cabecalhoORM import CnisCabecalhos
-
 from modelos.clienteORM import Cliente
 from modelos.cnisModelo import CNISModelo
 from modelos.escritoriosORM import Escritorios
@@ -24,10 +23,12 @@ from modelos.itemContribuicao import ItemContribuicao
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
 from modelos.advogadoORM import Advogados
+from modelos.clienteProfissao import ClienteProfissao
+
 from sinaisCustomizados import Sinais
 from util.dateHelper import strToDate, atividadesConcorrentes, atividadeSecundaria
 
-from util.helpers import mascaraTelCel, strTipoBeneficio, unmaskAll, calculaIdadeFromString
+from util.helpers import mascaraTelCel, unmaskAll, calculaIdadeFromString
 from util.popUps import popUpOkAlerta
 
 
@@ -58,8 +59,14 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.atualizaTblClientes()
 
     def abreMenuOpcoes(self, linha: int):
-        menu = NewMenuOpcoes(parent=self, funcEditar=lambda: print(f"abreMenuOpcoes: {linha}"), funcExcluir=lambda: print(f"abreMenuOpcoes: {linha}"))
+        menu = NewMenuOpcoes(
+            parent=self,
+            funcEditar=lambda: print(f"abreMenuOpcoes: {linha}"),
+            funcArquivar=lambda: print(f"abreMenuOpcoes: {linha}"),
+        )
         self.efeitos.shadowCards([menu])
+        position = self.mapToGlobal(QCursor.pos())
+        menu.move(position.x() - 10, position.y() - 250)
         menu.show()
 
     def atualizaTblClientes(self, clientes: list = None):
@@ -165,7 +172,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 query = ItemContribuicao.update({ItemContribuicao.ativPrimaria: False}).where(
                     ItemContribuicao.clienteId == clienteId,
                     ItemContribuicao.seq == seqSecundarioCalculado,
-                )
+                    )
                 query.execute()
 
     def carregaCnis(self, pathCnis: str):
@@ -174,9 +181,8 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.cnisClienteAtual: CNISModelo = CNISModelo(path=pathCnis)
         self.cnisClienteAtual.iniciaAvaliacaoCnis()
         db: SqliteDatabase = Cliente._meta.database
-        
-        clienteAtual = Cliente()
 
+        clienteAtual = Cliente()
         try:
             infoPessoais: dict = self.cnisClienteAtual.getInfoPessoais()
 
@@ -186,17 +192,27 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 clienteAInserir.cpfCliente = unmaskAll(infoPessoais['cpf'])
                 clienteAInserir.dataNascimento = strToDate(infoPessoais['dataNascimento'])
                 clienteAInserir.idade = calculaIdadeFromString(infoPessoais['dataNascimento'])
-                clienteAInserir.nit = unmaskAll(infoPessoais['nit'])
                 clienteAInserir.nomeMae = infoPessoais['nomeMae'].title()
                 clienteAInserir.nomeCliente = infoPessoais['nomeCompleto'].split(' ')[0].title()
                 clienteAInserir.sobrenomeCliente = ' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title()
                 clienteAInserir.escritorioId = Escritorios.select().where(Escritorios.escritorioId == self.escritorioAtual.escritorioId)
+
+                # clienteAInserir.nit = unmaskAll(infoPessoais['nit'])
 
                 with db.atomic() as transaction:
                     try:
                         Cliente.insert(**clienteAInserir.toDict()).on_conflict_replace().execute()
                         clienteAtual: Cliente = Cliente.get(Cliente.cpfCliente == clienteAInserir.cpfCliente)
                         clienteAtual.pathCnis = pathCnis
+
+                        # Dados profissionais
+                        dadosProfissao: ClienteProfissao = ClienteProfissao(
+                            clienteId=clienteAtual.clienteId,
+                            nit=unmaskAll(infoPessoais['nit'])
+                        )
+                        dadosProfissao.save()
+
+                        clienteAtual.dadosProfissionais = dadosProfissao
 
                         contribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=clienteAtual.clienteId)
                         cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
@@ -208,6 +224,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                         clienteAtual.telefoneId = Telefones.get_by_id(clienteAtual)
                         transaction.commit()
                         cnisInseridoComSucesso = True
+
                     except Cliente.DoesNotExist:
                         self.showPopupAlerta('Erro ao inserir cliente.')
                         transaction.rollback()
@@ -226,7 +243,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
         except Exception as err:
             popUpOkAlerta('Não foi possível salvar o cliente. Tente novamente.', erro=str(err))
-            print(f'carregaCnis - erro: ({type(err)}) {err}')
+            print(f'carregaCnis - erro: {err=}')
 
         if cnisInseridoComSucesso:
             self.avaliaAtividadesPrincipais(clienteAtual.clienteId)

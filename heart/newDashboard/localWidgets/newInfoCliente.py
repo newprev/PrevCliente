@@ -62,7 +62,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
             self.lbComplemento.setText(cliente.complemento)
 
             # Informações profissionais
-            self.lbNit.setText(mascaraNit(cliente.nit))
+            # self.lbNit.setText(mascaraNit(cliente.nit))
             self.lbProfissao.setText(cliente.profissao)
             self.lbCarteiraProfissional.setText(cliente.numCartProf)
 

@@ -7,6 +7,8 @@ from PyQt5.QtWidgets import QWidget
 
 from Design.pyUi.wdgInfoCliente import Ui_wdgInfoCliente
 from Design.CustomWidgets.newToast import QToaster
+from modelos.clienteInfoBanco import ClienteInfoBanco
+from modelos.clienteProfissao import ClienteProfissao
 
 from sinaisCustomizados import Sinais
 
@@ -20,6 +22,8 @@ from modelos.clienteORM import Cliente
 
 class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
     clienteAtual: Cliente
+    dadosBancarios: ClienteInfoBanco
+    dadosProfissionais: ClienteProfissao
     toasty: QToaster
 
     def __init__(self, parent=None):
@@ -36,6 +40,8 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
     def carregaClienteNaTela(self, cliente: Cliente):
         if cliente is not None and cliente.clienteId is not None:
             self.clienteAtual = cliente
+            self.dadosBancarios = ClienteInfoBanco.get_by_id(self.clienteAtual.dadosBancarios)
+            self.dadosProfissionais = ClienteInfoBanco.get_by_id(self.clienteAtual.dadosProfissionais)
 
             # Cabeçalho
             self.lbNomeCliente.setText(f"{cliente.nomeCliente} {cliente.sobrenomeCliente.strip()}")
@@ -63,8 +69,8 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
 
             # Informações profissionais
             # self.lbNit.setText(mascaraNit(cliente.nit))
-            self.lbProfissao.setText(cliente.profissao)
-            self.lbCarteiraProfissional.setText(cliente.numCartProf)
+            self.lbProfissao.setText(self.dadosProfissionais.nomeProfissao)
+            self.lbCarteiraProfissional.setText(self.dadosProfissionais.numCaretiraTrabalho)
 
             # Informações CNIS
             pathCnis: str = cliente.pathCnis

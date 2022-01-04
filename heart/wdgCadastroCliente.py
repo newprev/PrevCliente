@@ -118,6 +118,9 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
                 return False
             self.dadosBancarios.dataUltAlt = datetime.now()
             self.dadosBancarios.save()
+
+            self.clienteAtual.dadosBancarios = self.dadosBancarios
+            self.clienteAtual.save()
             self.trocaEtapa(EtapaCadastraCliente.finaliza)
 
         self.editando = False

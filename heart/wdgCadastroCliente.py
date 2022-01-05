@@ -5,6 +5,7 @@ from datetime import datetime
 
 from Design.pyUi.wdgCadastroCliente import Ui_wdgCadastroCliente
 from Design.CustomWidgets.newToast import QToaster
+
 from heart.localStyleSheet.cadastroCliente import etapaCadatro
 
 from modelos.clienteORM import Cliente
@@ -12,6 +13,7 @@ from modelos.telefonesORM import Telefones
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.clienteProfissao import ClienteProfissao
 from modelos.clienteInfoBanco import ClienteInfoBanco
+
 from repositorios.integracaoRepositorio import IntegracaoRepository
 
 from util.dateHelper import strToDate
@@ -71,9 +73,10 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
                 pessoalRecado=TelefonePesoal.Pessoal.value,
                 tipoTelefone=TipoTelefone.Whatsapp.value,
                 ativo=True
-            ).save()
+            )
+            telefone.save()
         finally:
-            self.clienteAtual.telefoneId = telefone
+            self.clienteAtual.telefoneId = telefone.telefoneId
             self.clienteAtual.dataUltAlt = datetime.now()
             self.clienteAtual.save()
 
@@ -116,6 +119,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         elif self.etapaAtual == EtapaCadastraCliente.bancarias:
             if not self.leNumeroAgencia.text().isnumeric():
                 return False
+            self.dadosBancarios.estado = self.clienteAtual.estado
             self.dadosBancarios.dataUltAlt = datetime.now()
             self.dadosBancarios.save()
 
@@ -176,6 +180,10 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             print(f"buscaDadosBancarios: {err=}")
         finally:
             return infoBanco
+
+    # def buscaTelefone(self):
+    #     try:
+    #         telefone: Telefones = Telefones.select().where(Telefones.)
 
     def carregaClienteNaTela(self, cliente: Cliente, cadastro: bool = False):
         try:
@@ -384,8 +392,12 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
 
         elif info == 'telefone2':
             if self.clienteAtual.telefoneId is None:
-                telefoneSecundario = Telefones(
+                Telefones(
+                    clienteId=self.clienteAtual.clienteId,
                     numero=self.leTelefone2.text(),
+                    principal=False,
+                    pessoalRecado=TelefonePesoal.Recado.value,
+                    tipoTelefone=TipoTelefone.Whatsapp.value,
                 ).save()
 
         elif info == 'rbMasculino' or info == 'rbFeminino':
@@ -395,7 +407,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
                 self.clienteAtual.genero = 'F'
 
         elif info == 'leNumero':
-            if self.leNumero.text() != '':
+            if self.leNumero.text() != '' and self.leNumero.text().isnumeric():
                 self.clienteAtual.numero = int(self.leNumero.text())
 
         elif info == 'leSenhaINSS':

@@ -18,7 +18,7 @@ class ClienteProfissao(BaseModel, Model):
     nit = CharField(column_name='nit')
     professor = BooleanField(column_name='professor', default=False)
     insalubridade = BooleanField(column_name='insalubridade', default=False)
-    nlvInsalubre = FloatField(column_name='nlvInsalubre', null=True, default=None)
+    nivelInsalubre = FloatField(column_name='nlvInsalubre', null=True, default=None)
     jovemAprendiz = BooleanField(column_name='jovemAprendiz', default=False)
     servicoMilitar = BooleanField(column_name='servicoMilitar', default=False)
     observacoes = CharField(column_name='observacoes', max_length=4000, null=True)

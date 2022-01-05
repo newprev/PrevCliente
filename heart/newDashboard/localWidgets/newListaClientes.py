@@ -182,64 +182,50 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.cnisClienteAtual.iniciaAvaliacaoCnis()
         db: SqliteDatabase = Cliente._meta.database
 
-        clienteAtual = Cliente()
+        # clienteAtual = Cliente()
         try:
             infoPessoais: dict = self.cnisClienteAtual.getInfoPessoais()
 
             if infoPessoais is not None:
-                clienteAInserir = Cliente()
+                clienteAtual: Cliente = Cliente(
+                    escritorioId=Escritorios.select().where(Escritorios.escritorioId == self.escritorioAtual.escritorioId),
+                    cpfCliente=unmaskAll(infoPessoais['cpf']),
+                    dataNascimento=strToDate(infoPessoais['dataNascimento']),
+                    idade=calculaIdadeFromString(infoPessoais['dataNascimento']),
+                    nomeMae=infoPessoais['nomeMae'].title(),
+                    nomeCliente=infoPessoais['nomeCompleto'].split(' ')[0].title(),
+                    sobrenomeCliente=' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title(),
+                    pathCnis=pathCnis
+                )
+                clienteAtual.save()
 
-                clienteAInserir.cpfCliente = unmaskAll(infoPessoais['cpf'])
-                clienteAInserir.dataNascimento = strToDate(infoPessoais['dataNascimento'])
-                clienteAInserir.idade = calculaIdadeFromString(infoPessoais['dataNascimento'])
-                clienteAInserir.nomeMae = infoPessoais['nomeMae'].title()
-                clienteAInserir.nomeCliente = infoPessoais['nomeCompleto'].split(' ')[0].title()
-                clienteAInserir.sobrenomeCliente = ' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title()
-                clienteAInserir.escritorioId = Escritorios.select().where(Escritorios.escritorioId == self.escritorioAtual.escritorioId)
+                # Dados profissionais
+                dadosProfissao: ClienteProfissao = ClienteProfissao(
+                    clienteId=clienteAtual.clienteId,
+                    nit=unmaskAll(infoPessoais['nit'])
+                )
+                dadosProfissao.save()
 
-                # clienteAInserir.nit = unmaskAll(infoPessoais['nit'])
+                clienteAtual.dadosProfissionais = dadosProfissao
 
-                with db.atomic() as transaction:
-                    try:
-                        Cliente.insert(**clienteAInserir.toDict()).on_conflict_replace().execute()
-                        clienteAtual: Cliente = Cliente.get(Cliente.cpfCliente == clienteAInserir.cpfCliente)
-                        clienteAtual.pathCnis = pathCnis
+                contribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=clienteAtual.clienteId)
+                cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
+                cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
 
-                        # Dados profissionais
-                        dadosProfissao: ClienteProfissao = ClienteProfissao(
-                            clienteId=clienteAtual.clienteId,
-                            nit=unmaskAll(infoPessoais['nit'])
-                        )
-                        dadosProfissao.save()
+                CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
+                CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
 
-                        clienteAtual.dadosProfissionais = dadosProfissao
+                clienteAtual.telefoneId = self.buscaTelefone(clienteAtual)
+                clienteAtual.save()
 
-                        contribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=clienteAtual.clienteId)
-                        cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
-                        cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
+                self.cnisClienteAtual.insereItensContribuicao(clienteAtual)
+                cnisInseridoComSucesso = True
 
-                        CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
-                        CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
-
-                        clienteAtual.telefoneId = Telefones.get_by_id(clienteAtual)
-                        transaction.commit()
-                        cnisInseridoComSucesso = True
-
-                    except Cliente.DoesNotExist:
-                        self.showPopupAlerta('Erro ao inserir cliente.')
-                        transaction.rollback()
-                        return False
-                    except Telefones.DoesNotExist:
-                        clienteAtual.telefoneId = Telefones()
-                        transaction.commit()
-                        cnisInseridoComSucesso = True
-                    except Exception as err:
-                        erro = f"carregaCnis: ({type(err)}) {err}"
-                        transaction.rollback()
-                        popUpOkAlerta('Erro ao inserir cliente.', erro=erro)
-                        return False
-
-            self.cnisClienteAtual.insereItensContribuicao(clienteAtual)
+        except Cliente.DoesNotExist:
+            self.showPopupAlerta('Erro ao inserir cliente.')
+            if clienteAtual is not None:
+                clienteAtual.delete()
+            return False
 
         except Exception as err:
             popUpOkAlerta('Não foi possível salvar o cliente. Tente novamente.', erro=str(err))
@@ -249,6 +235,12 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             self.avaliaAtividadesPrincipais(clienteAtual.clienteId)
 
         self.sinais.sEnviaClienteParam.emit(clienteAtual)
+
+    def buscaTelefone(self, clienteAtual: Cliente) -> Telefones:
+        try:
+            return Telefones.select().where(Telefones.clienteId == clienteAtual.clienteId).get()
+        except Telefones.DoesNotExist:
+            return None
 
     def eventFilter(self, a0: QObject, tecla: QEvent) -> bool:
         if isinstance(tecla, QKeyEvent) and self.popupCNIS is not None:

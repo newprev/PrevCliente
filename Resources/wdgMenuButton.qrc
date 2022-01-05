@@ -5,4 +5,14 @@
     <file>resumoCNIS.png</file>
     <file>processos.png</file>
   </qresource>
+  <qresource prefix="configuracoes">
+    <file>settingsDarker.png</file>
+  </qresource>
+  <qresource prefix="ferramentas">
+    <file>lifeHeart.png</file>
+    <file>sacoDinheiro.png</file>
+    <file>information-black-16.png</file>
+    <file>indices.png</file>
+    <file>salario.png</file>
+  </qresource>
 </RCC>

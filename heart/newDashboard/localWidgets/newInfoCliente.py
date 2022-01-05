@@ -1,10 +1,13 @@
 from datetime import date, datetime
 import os
 import time
+
+from PyQt5.QtGui import QCursor
 from dateutil.relativedelta import relativedelta
 
 from PyQt5.QtWidgets import QWidget
 
+from Design.CustomWidgets.newMenuOpcoes import NewMenuOpcoes
 from Design.pyUi.wdgInfoCliente import Ui_wdgInfoCliente
 from Design.CustomWidgets.newToast import QToaster
 from modelos.clienteInfoBanco import ClienteInfoBanco
@@ -32,10 +35,25 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         self.dashboard = parent
         self.sinais = Sinais()
         self.sinais.sVoltaTela.connect(self.voltarDashboard)
+        self.sinais.sEnviaInfo.connect(self.editarInfoCliente)
         self.toasty = QToaster()
         self.limpaTudo()
 
+        self.rbMasculino.setDisabled(True)
+        self.rbFeminino.setDisabled(True)
+
         self.pbVoltar.clicked.connect(lambda: self.sinais.sVoltaTela.emit())
+
+        self.iniciarBotoesOpcoes()
+
+    def abreMenuOpcoes(self, info: str):
+
+        menu = NewMenuOpcoes(
+            parent=self,
+            funcEditar=lambda: self.sinais.sEnviaInfo.emit(info),
+        )
+        menu.exec_(QCursor.pos())
+        return True
 
     def carregaClienteNaTela(self, cliente: Cliente):
         if cliente is not None and cliente.clienteId is not None:
@@ -119,6 +137,20 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         except ClienteInfoBanco.DoesNotExist as err:
             print(f"buscaDadosBancarios: {err=}")
             return None
+
+    def editarInfoCliente(self, info):
+        self.dashboard.recebeCliente(self.clienteAtual, info=info)
+        return True
+
+    def iniciarBotoesOpcoes(self):
+        # Informações pessoais
+        self.pbInfoPessoais.clicked.connect(lambda: self.abreMenuOpcoes('infoPessoais'))
+
+        # Informações residenciais
+        self.pbInfoResidenciais.clicked.connect(lambda: self.abreMenuOpcoes('infoResidenciais'))
+
+        # Informações profissionais
+        self.pbInfoProfissionais.clicked.connect(lambda: self.abreMenuOpcoes('infoProfissionais'))
 
     def limpaTudo(self):
         self.clienteAtual = None

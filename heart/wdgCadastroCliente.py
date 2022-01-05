@@ -181,7 +181,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         finally:
             return infoBanco
 
-    def carregaClienteNaTela(self, cliente: Cliente, cadastro: bool = False):
+    def carregaClienteNaTela(self, cliente: Cliente, cadastro: bool = False, tela: str=None):
         try:
             #################################### Info pessoal
             self.clienteAtual = cliente
@@ -273,6 +273,14 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             self.dashboard.trocaTela(TelaAtual.Cliente)
             if cadastro:
                 self.deletaCliente(cliente.clienteId)
+
+        if tela is not None:
+            if tela == 'infoPessoais' or tela == 'infoResidenciais':
+                self.trocaEtapa(EtapaCadastraCliente.pessoal)
+            elif tela == 'infoProfissionais':
+                self.trocaEtapa(EtapaCadastraCliente.profissional)
+            else:
+                self.trocaEtapa(EtapaCadastraCliente.bancarias)
 
         return True
 

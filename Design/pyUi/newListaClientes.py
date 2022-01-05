@@ -209,6 +209,7 @@ class Ui_wdgListaClientes(object):
 "    selection-background-color: #F9F9F9;\n"
 "    selection-color: grey;\n"
 "    gridline-color: white;\n"
+"\n"
 "    border: 0px solid transparent;\n"
 "}\n"
 "\n"
@@ -228,6 +229,10 @@ class Ui_wdgListaClientes(object):
 "    selection-color: grey;\n"
 "    gridline-color: black;\n"
 "    border: 0px solid transparent;\n"
+"}\n"
+"\n"
+"#tblClientes::item {\n"
+"    padding: 2px 24px 2px 24px;\n"
 "}")
         self.frTabela.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frTabela.setFrameShadow(QtWidgets.QFrame.Raised)

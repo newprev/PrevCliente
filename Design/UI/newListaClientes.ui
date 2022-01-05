@@ -421,6 +421,7 @@
 	selection-background-color: #F9F9F9;
 	selection-color: grey;
 	gridline-color: white;
+
 	border: 0px solid transparent;
 }
 
@@ -440,6 +441,10 @@ QHeaderView::section {
 	selection-color: grey;
 	gridline-color: black;
 	border: 0px solid transparent;
+}
+
+#tblClientes::item {
+	padding: 2px 24px 2px 24px;
 }</string>
         </property>
         <property name="frameShape">

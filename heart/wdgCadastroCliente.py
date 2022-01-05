@@ -181,10 +181,6 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         finally:
             return infoBanco
 
-    # def buscaTelefone(self):
-    #     try:
-    #         telefone: Telefones = Telefones.select().where(Telefones.)
-
     def carregaClienteNaTela(self, cliente: Cliente, cadastro: bool = False):
         try:
             #################################### Info pessoal
@@ -196,6 +192,10 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             self.leNomeDaMae.setText(cliente.nomeMae)
             self.leNomeCliente.setText(cliente.nomeCliente + ' ' + cliente.sobrenomeCliente)
             self.leCdCliente.setText(str(cliente.clienteId))
+
+            telefoneSecundario = self.carregaTelefoneSecundario(cliente.clienteId)
+            if telefoneSecundario is not None:
+                self.leTelefone2.setText(mascaraTelCel(telefoneSecundario.numero))
 
             if cliente.rgCliente not in [None, 'None']:
                 self.leRg.setText(mascaraRG(cliente.rgCliente))
@@ -262,10 +262,10 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
                 self.leNomeBanco.setText(self.dadosBancarios.nomeBanco)
 
             if self.dadosBancarios.chavePix not in [None, 'None']:
-                self.lePix.setText(self.dadosBancarios.pixCliente)
+                self.lePix.setText(self.dadosBancarios.chavePix)
 
             if self.dadosBancarios.numeroAgencia not in [None, 'None']:
-                self.leNumeroAgencia.setText(self.dadosBancarios.agenciaBanco)
+                self.leNumeroAgencia.setText(self.dadosBancarios.numeroAgencia)
 
         except Exception as err:
             print(f"carregaClienteNaTela <NewCadastraCliente>: {err=}")
@@ -281,6 +281,13 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.cbxEscolaridade.addItems(getEscolaridade().keys())
         self.cbxEstado.addItems(getEstados().keys())
         self.cbxEstado.setCurrentIndex(24)
+
+    def carregaTelefoneSecundario(self, clienteId: int):
+        try:
+            return Telefones.select(Telefones.numero).where(Telefones.clienteId==clienteId, Telefones.principal==False).get()
+        except Telefones.DoesNotExist as err:
+            print(f"{err=}")
+            return None
 
     def deletaCliente(self, clienteId: int):
         Cliente.delete_by_id(clienteId)
@@ -358,7 +365,6 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             self.clienteAtual.rgCliente = self.leRg.text()
 
         elif info == 'dataNascimento':
-            # self.cliente.dataNascimento = self.dtNascimento.date().toPyDate().strftime('%Y-%m-%d %H:%M')
             self.clienteAtual.dataNascimento = self.dtNascimento.date().toPyDate().strftime('%Y-%m-%d')
 
         elif info == 'idade':
@@ -390,15 +396,15 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             self.clienteAtual.telefoneId.dataUltAlt = datetime.now()
             self.clienteAtual.telefoneId.save()
 
-        elif info == 'telefone2':
-            if self.clienteAtual.telefoneId is None:
-                Telefones(
-                    clienteId=self.clienteAtual.clienteId,
-                    numero=self.leTelefone2.text(),
-                    principal=False,
-                    pessoalRecado=TelefonePesoal.Recado.value,
-                    tipoTelefone=TipoTelefone.Whatsapp.value,
-                ).save()
+        # elif info == 'telefone2':
+        #     if self.clienteAtual.telefoneId is None:
+        #         Telefones(
+        #             clienteId=self.clienteAtual.clienteId,
+        #             numero=self.leTelefone2.text(),
+        #             principal=False,
+        #             pessoalRecado=TelefonePesoal.Recado.value,
+        #             tipoTelefone=TipoTelefone.Whatsapp.value,
+        #         ).save()
 
         elif info == 'rbMasculino' or info == 'rbFeminino':
             if self.rbMasculino.isChecked():

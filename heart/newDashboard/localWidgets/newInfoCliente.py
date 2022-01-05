@@ -40,8 +40,8 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
     def carregaClienteNaTela(self, cliente: Cliente):
         if cliente is not None and cliente.clienteId is not None:
             self.clienteAtual = cliente
-            self.dadosBancarios = ClienteInfoBanco.get_by_id(self.clienteAtual.dadosBancarios)
-            self.dadosProfissionais = ClienteInfoBanco.get_by_id(self.clienteAtual.dadosProfissionais)
+            self.dadosBancarios = self.buscaDadosBancarios()
+            self.dadosProfissionais = self.buscaDadosProfissionais()
 
             # Cabeçalho
             self.lbNomeCliente.setText(f"{cliente.nomeCliente} {cliente.sobrenomeCliente.strip()}")
@@ -68,9 +68,14 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
             self.lbComplemento.setText(cliente.complemento)
 
             # Informações profissionais
-            # self.lbNit.setText(mascaraNit(cliente.nit))
-            self.lbProfissao.setText(self.dadosProfissionais.nomeProfissao)
-            self.lbCarteiraProfissional.setText(self.dadosProfissionais.numCaretiraTrabalho)
+            if self.dadosProfissionais is not None:
+                self.lbNit.setText(mascaraNit(self.dadosProfissionais.nit))
+                self.lbProfissao.setText(self.dadosProfissionais.nomeProfissao)
+                self.lbCarteiraProfissional.setText(self.dadosProfissionais.numCaretiraTrabalho)
+            else:
+                self.lbNit.setText('-')
+                self.lbProfissao.setText('-')
+                self.lbCarteiraProfissional.setText('-')
 
             # Informações CNIS
             pathCnis: str = cliente.pathCnis
@@ -100,6 +105,20 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
 
         else:
             self.toasty.showMessage(self, "Não foi possível carregar as informações do cliente.")
+
+    def buscaDadosProfissionais(self):
+        try:
+            return ClienteProfissao.get_by_id(self.clienteAtual.dadosProfissionais)
+        except ClienteProfissao.DoesNotExist as err:
+            print(f"buscaDadosProfissionais: {err=}")
+            return None
+
+    def buscaDadosBancarios(self):
+        try:
+            return ClienteInfoBanco.get_by_id(self.clienteAtual.dadosBancarios)
+        except ClienteInfoBanco.DoesNotExist as err:
+            print(f"buscaDadosBancarios: {err=}")
+            return None
 
     def limpaTudo(self):
         self.clienteAtual = None

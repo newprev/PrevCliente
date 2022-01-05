@@ -1,4 +1,5 @@
 import os
+import datetime
 
 from peewee import SqliteDatabase
 from typing import List
@@ -29,7 +30,7 @@ from sinaisCustomizados import Sinais
 from util.dateHelper import strToDate, atividadesConcorrentes, atividadeSecundaria
 
 from util.helpers import mascaraTelCel, unmaskAll, calculaIdadeFromString
-from util.popUps import popUpOkAlerta
+from util.popUps import popUpOkAlerta, popUpSimCancela
 
 
 class NewListaClientes(QFrame, Ui_wdgListaClientes):
@@ -58,20 +59,20 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
         self.atualizaTblClientes()
 
-    def abreMenuOpcoes(self, linha: int):
+    def abreMenuOpcoes(self):
+        linhaSelecionada: int = self.tblClientes.selectedItems()[0].row()
+        clienteId: int = int(self.tblClientes.item(linhaSelecionada, 0).text())
+
         menu = NewMenuOpcoes(
             parent=self,
-            funcEditar=lambda: print(f"abreMenuOpcoes: {linha}"),
-            funcArquivar=lambda: print(f"abreMenuOpcoes: {linha}"),
+            funcEditar=lambda: self.editarCliente(clienteId),
+            funcArquivar=lambda: self.avaliaArquivarCliente(clienteId, linhaSelecionada),
         )
-        self.efeitos.shadowCards([menu])
-        position = self.mapToGlobal(QCursor.pos())
-        menu.move(position.x() - 10, position.y() - 250)
-        menu.show()
+        menu.exec_(QCursor.pos())
 
     def atualizaTblClientes(self, clientes: list = None):
         if clientes is None:
-            clientesModels: list = Cliente.select().order_by(Cliente.nomeCliente)
+            clientesModels: list = Cliente.select().where(Cliente.arquivado==False).order_by(Cliente.nomeCliente)
         else:
             clientesModels = []
 
@@ -122,7 +123,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             # self.tblClientes.setItem(numLinha, 5, tipoProcessoItem)
 
             pbOpcoes = QPushButton()
-            pbOpcoes.clicked.connect(lambda: self.abreMenuOpcoes(numLinha))
+            pbOpcoes.clicked.connect(self.abreMenuOpcoes)
             pbOpcoes.setStyleSheet(btnOpcoesStyle())
             pbOpcoes.setMaximumSize(24, 24)
             self.tblClientes.setCellWidget(numLinha, 6, pbOpcoes)
@@ -140,6 +141,24 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.popupCNIS.show()
 
         self.popupCNIS.setFocus()
+
+    def arquivarCliente(self, clienteId: int):
+        try:
+            clienteAArquivar: Cliente = Cliente.get_by_id(clienteId)
+            clienteAArquivar.arquivado = True
+            clienteAArquivar.dataUltAlt = datetime.datetime.now()
+            clienteAArquivar.save()
+            return True
+        except Cliente.DoesNotExist as err:
+            print(f"{err=}")
+            popUpOkAlerta("Não foi possível arquivar o cliente selecionado. Verifique se os dados estão corretos e tente novamente.", erro=err)
+            return False
+
+    def avaliaArquivarCliente(self, clienteId: int, linhaSelecionada: int):
+        nomeCliente: str = self.tblClientes.item(linhaSelecionada, 1).text().upper()
+        popUpSimCancela(f"Tem certeza que deseja arquivar o(a) cliente {nomeCliente} ?", funcao=lambda: self.arquivarCliente(clienteId))
+        self.atualizaTblClientes()
+        return True
 
     def avaliaDadosFaltantesNoCNIS(self, cabecalhos: List[dict]) -> List[dict]:
         listaReturn: List[dict] = []
@@ -174,6 +193,12 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                     ItemContribuicao.seq == seqSecundarioCalculado,
                     )
                 query.execute()
+
+    def buscaTelefone(self, clienteAtual: Cliente) -> Telefones:
+        try:
+            return Telefones.select().where(Telefones.clienteId == clienteAtual.clienteId).get()
+        except Telefones.DoesNotExist:
+            return None
 
     def carregaCnis(self, pathCnis: str):
         cnisInseridoComSucesso: bool = False
@@ -236,11 +261,22 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
         self.sinais.sEnviaClienteParam.emit(clienteAtual)
 
-    def buscaTelefone(self, clienteAtual: Cliente) -> Telefones:
+    def editarCliente(self, clienteId: int):
         try:
-            return Telefones.select().where(Telefones.clienteId == clienteAtual.clienteId).get()
-        except Telefones.DoesNotExist:
-            return None
+            clienteSelecionado: Cliente = Cliente.get_by_id(clienteId)
+            self.sinais.sEnviaClienteParam.emit(clienteSelecionado)
+        except Cliente.DoesNotExist as err:
+            popUpOkAlerta(
+                "Não foi possível carregar as informações do cliente selecionado. Tente novamente mais tarde.",
+                erro=err
+            )
+            return False
+
+    def enviaClienteDashboard(self, cliente: Cliente):
+        self.dashboard.recebeCliente(cliente)
+
+    def enviaInfoClienteDashboard(self, cliente: Cliente):
+        self.dashboard.navegaInfoCliente(cliente)
 
     def eventFilter(self, a0: QObject, tecla: QEvent) -> bool:
         if isinstance(tecla, QKeyEvent) and self.popupCNIS is not None:
@@ -248,12 +284,6 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 self.popupCNIS.close()
 
         return super(NewListaClientes, self).eventFilter(a0, tecla)
-
-    def enviaClienteDashboard(self, cliente: Cliente):
-        self.dashboard.recebeCliente(cliente)
-
-    def enviaInfoClienteDashboard(self, cliente: Cliente):
-        self.dashboard.navegaInfoCliente(cliente)
 
     def selecionaCliente(self, *args, **kwargs):
         linhaSelecionada = args[0].row()

@@ -9,7 +9,7 @@ def popUpOkAlerta(mensagem, titulo: str = 'Atenção!', erro: str = None, funcao
     pop.setStandardButtons(QMessageBox.Ok)
 
     if erro is not None:
-        pop.setDetailedText(erro)
+        pop.setDetailedText(f"{erro=}")
 
     if funcao is not None:
         x = pop.exec_()

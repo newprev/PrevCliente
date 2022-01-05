@@ -9,7 +9,7 @@ from modelos.escritoriosORM import Escritorios
 from util.dateHelper import strToDate
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
-from peewee import AutoField, CharField, ForeignKeyField, DateField, IntegerField, DateTimeField
+from peewee import AutoField, CharField, ForeignKeyField, DateField, IntegerField, DateTimeField, BooleanField
 from datetime import datetime
 
 TABLENAME = 'cliente'
@@ -52,6 +52,7 @@ class Cliente(BaseModel, Model):
     rgCliente = CharField(column_name='rgCliente', null=True)
     senhaINSS = CharField(column_name='senhaINSS', null=True)
     pathCnis = CharField(column_name='pathCnis', null=True)
+    arquivado = BooleanField(column_name='arquivado', default=False)
     observacoes = CharField(column_name='observacoes', max_length=4000, null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())

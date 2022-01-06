@@ -21,7 +21,7 @@ class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
         super(NewPopupCNIS, self).__init__(parent=parent)
         self.setupUi(self)
         self.center()
-        self.wdgListaCliente = parent
+        self.parent = parent
         self.dashboard = dashboard
         self.sinais = Sinais()
         self.sinais.sEnviaPath.connect(self.enviaPath)
@@ -103,10 +103,10 @@ class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
 
     def enviaPath(self, pathCnis: str):
         self.close()
-        self.wdgListaCliente.recebePathCnis(pathCnis)
-        
+        self.parent.recebePathCnis(pathCnis)
+
     def mostraToast(self):
-        self.wdgListaCliente.toastCarregaCnis()
+        self.parent.toastCarregaCnis()
 
     def processaCnis(self, path: str):
         if os.path.isfile(path):

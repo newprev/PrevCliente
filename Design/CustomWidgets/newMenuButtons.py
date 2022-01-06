@@ -5,6 +5,7 @@ from Design.pyUi.wdgMenuButton import Ui_wdgMenuButton
 from heart.informacoesTelas.expSobrevidaTela import ExpSobrevidaTela
 from heart.informacoesTelas.indicadoresTela import IndicadoresController
 from heart.informacoesTelas.tetosPrevidenciariosTela import TetosPrevidenciarios
+from heart.menuLateral.configuracoesPage import ConfiguracoesPage
 from sinaisCustomizados import Sinais
 from util.enums.configEnums import TipoConfiguracao
 
@@ -102,3 +103,7 @@ class NewMenuButton(QWidget, Ui_wdgMenuButton):
                 TetosPrevidenciarios(parent=self).show()
             elif self.tipoBotao == FerramentasEInfo.expSobrevida:
                 ExpSobrevidaTela(parent=self).show()
+
+        elif isinstance(self.tipoBotao, TipoConfiguracao):
+            if self.tipoBotao == TipoConfiguracao.sistema:
+                ConfiguracoesPage(parent=self).show()

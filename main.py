@@ -155,17 +155,12 @@ class Main(Ui_MainWindow, QMainWindow):
 if __name__ == '__main__':
     import sys
     from os.path import join
-    import os
     from util.helpers import pathTo
     from util.enums.configEnums import ImportantPaths
 
     PATH_FONTS = pathTo(ImportantPaths.fonts)
 
     app = QtWidgets.QApplication(sys.argv)
-    # QtCore.QDir(join(PATH_FONTS, "Bebas"))
-    # QtCore.QDir(join(PATH_FONTS, "Avenir"))
-
-    # print(os.listdir(join(PATH_FONTS, 'Bebas')))
 
     _idAvenir = QtGui.QFontDatabase.addApplicationFont(join(PATH_FONTS, 'Avenir', 'AvenirLTStd-Roman.otf'))
     _idBebas = QtGui.QFontDatabase.addApplicationFont(join(PATH_FONTS, 'Bebas', 'BebasNeue-Regular.ttf'))

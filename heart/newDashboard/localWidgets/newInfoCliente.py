@@ -1,22 +1,30 @@
 from datetime import date, datetime
 import os
 import time
+from typing import List
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
 from dateutil.relativedelta import relativedelta
 
 from PyQt5.QtWidgets import QWidget
 
 from Design.CustomWidgets.newMenuOpcoes import NewMenuOpcoes
+from Design.CustomWidgets.newPopupCNIS import NewPopupCNIS
+from Design.pyUi.efeitos import Efeitos
 from Design.pyUi.wdgInfoCliente import Ui_wdgInfoCliente
 from Design.CustomWidgets.newToast import QToaster
+from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.clienteInfoBanco import ClienteInfoBanco
 from modelos.clienteProfissao import ClienteProfissao
+from modelos.cnisModelo import CNISModelo
+from modelos.itemContribuicao import ItemContribuicao
 
 from sinaisCustomizados import Sinais
 
-from util.dateHelper import mascaraData, calculaIdade
+from util.dateHelper import mascaraData, calculaIdade, atividadesConcorrentes, strToDate, atividadeSecundaria
 from util.enums.dashboardEnums import TelaAtual
+from util.popUps import popUpSimCancela, popUpOkAlerta
 
 from util.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit
 
@@ -27,6 +35,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
     clienteAtual: Cliente
     dadosBancarios: ClienteInfoBanco
     dadosProfissionais: ClienteProfissao
+    popupCNIS: NewPopupCNIS
     toasty: QToaster
 
     def __init__(self, parent=None):
@@ -37,16 +46,16 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         self.sinais.sVoltaTela.connect(self.voltarDashboard)
         self.sinais.sEnviaInfo.connect(self.editarInfoCliente)
         self.toasty = QToaster()
+        self.popupCNIS = None
         self.limpaTudo()
 
         self.rbMasculino.setDisabled(True)
         self.rbFeminino.setDisabled(True)
 
         self.pbVoltar.clicked.connect(lambda: self.sinais.sVoltaTela.emit())
-
         self.iniciarBotoesOpcoes()
 
-    def abreMenuOpcoes(self, info: str):
+    def abreMenuInfoOpcoes(self, info: str):
 
         menu = NewMenuOpcoes(
             parent=self,
@@ -54,6 +63,91 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         )
         menu.exec_(QCursor.pos())
         return True
+
+    def abreMenuCnisOpcoes(self):
+
+        menu = NewMenuOpcoes(
+            parent=self,
+            funcAtualizar=self.verificaAtualizarCnis,
+        )
+        menu.exec_(QCursor.pos())
+        return True
+
+    def abrirPopupCNIS(self):
+        if self.popupCNIS is not None and self.popupCNIS.isVisible():
+            self.popupCNIS.close()
+            self.popupCNIS.setParent(None)
+
+        self.popupCNIS = NewPopupCNIS(parent=self, dashboard=self.dashboard)
+        Efeitos().shadowCards([self.popupCNIS])
+        self.popupCNIS.raise_()
+        self.popupCNIS.show()
+
+        self.popupCNIS.setFocus()
+
+    def atualizarCnis(self, novoCnis: str):
+        try:
+            self.clienteAtual.pathCnis = novoCnis
+
+            cnisClienteAtual: CNISModelo = CNISModelo(path=novoCnis)
+            cnisClienteAtual.iniciaAvaliacaoCnis()
+
+            infoPessoais: dict = cnisClienteAtual.getInfoPessoais()
+
+            if infoPessoais is not None:
+                contribuicoes = cnisClienteAtual.getAllDict(toInsert=True, clienteId=self.clienteAtual.clienteId)
+                cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
+                cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
+
+                CnisCabecalhos.delete().where(CnisCabecalhos.clienteId==self.clienteAtual.clienteId).execute()
+                ItemContribuicao.delete().where(ItemContribuicao.clienteId==self.clienteAtual.clienteId).execute()
+
+                CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
+                CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
+
+                cnisClienteAtual.insereItensContribuicao(self.clienteAtual)
+                self.avaliaAtividadesPrincipais(self.clienteAtual.clienteId)
+
+                self.clienteAtual.dataUltAlt = datetime.now()
+                self.clienteAtual.save()
+
+        except Exception as err:
+            popUpOkAlerta('Não foi possível salvar o cliente. Tente novamente.', erro=str(err))
+            print(f"atualizarCnis <NewInfoCliente>: {err=}")
+
+    def avaliaAtividadesPrincipais(self, clienteId: int):
+        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == clienteId)
+
+        for index, cabecalho in enumerate(listaCabecalhos):
+            if index == 0 or listaCabecalhos[index-1].dadoFaltante or listaCabecalhos[index].dadoFaltante:
+                continue
+
+            conflitoAtividades = atividadesConcorrentes(
+                dataIniAtivA=strToDate(listaCabecalhos[index-1].dataInicio),
+                dataFimAtvA=strToDate(listaCabecalhos[index-1].dataFim),
+                dataIniAtivB=strToDate(listaCabecalhos[index].dataInicio),
+                dataFimAtivB=strToDate(listaCabecalhos[index].dataFim),
+            )
+
+            if conflitoAtividades:
+                seqSecundarioCalculado = atividadeSecundaria(listaCabecalhos[index-1], listaCabecalhos[index])
+                query = ItemContribuicao.update({ItemContribuicao.ativPrimaria: False}).where(
+                    ItemContribuicao.clienteId == clienteId,
+                    ItemContribuicao.seq == seqSecundarioCalculado,
+                    )
+                query.execute()
+
+    def avaliaDadosFaltantesNoCNIS(self, cabecalhos: List[dict]) -> List[dict]:
+        listaReturn: List[dict] = []
+
+        for cabecalho in cabecalhos:
+            faltaDataFim = cabecalho['dataFim'] is None or cabecalho['dataFim'] == ''
+            faltaDataInicio = cabecalho['dataInicio'] is None or cabecalho['dataInicio'] == ''
+
+            cabecalho['dadoFaltante'] = faltaDataFim or faltaDataInicio
+            listaReturn.append(cabecalho)
+
+        return listaReturn
 
     def carregaClienteNaTela(self, cliente: Cliente):
         if cliente is not None and cliente.clienteId is not None:
@@ -144,13 +238,16 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
 
     def iniciarBotoesOpcoes(self):
         # Informações pessoais
-        self.pbInfoPessoais.clicked.connect(lambda: self.abreMenuOpcoes('infoPessoais'))
+        self.pbInfoPessoais.clicked.connect(lambda: self.abreMenuInfoOpcoes('infoPessoais'))
 
         # Informações residenciais
-        self.pbInfoResidenciais.clicked.connect(lambda: self.abreMenuOpcoes('infoResidenciais'))
+        self.pbInfoResidenciais.clicked.connect(lambda: self.abreMenuInfoOpcoes('infoResidenciais'))
 
         # Informações profissionais
-        self.pbInfoProfissionais.clicked.connect(lambda: self.abreMenuOpcoes('infoProfissionais'))
+        self.pbInfoProfissionais.clicked.connect(lambda: self.abreMenuInfoOpcoes('infoProfissionais'))
+
+        # Atualizar CNIS
+        self.pbOpcoesCnis.clicked.connect(self.abreMenuCnisOpcoes)
 
     def limpaTudo(self):
         self.clienteAtual = None
@@ -187,6 +284,26 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         # Informações CNIS
         self.lbInfoNomeArquivo.setText('fulanoDeTal.pdf')
         self.lbInfoMetaArquivo.setText("10 dias atrás")
+
+    def recebePathCnis(self, pathCnis:str):
+        if os.path.isfile(pathCnis):
+            self.atualizarCnis(pathCnis)
+            return True
+        else:
+            popUpOkAlerta("O caminho escolhido está incorreto. Tente novamente.")
+            print(f'recebePathCnis <NewInfoCliente>: {os.path.isfile(pathCnis)=}')
+            return False
+
+    def toastCarregaCnis(self):
+        self.toasty.showMessage(self, "Analisando informações do CNIS...", corner=Qt.BottomLeftCorner)
+
+    def verificaAtualizarCnis(self):
+        popUpSimCancela(
+            "Atualizar o CNIS excluirá todos as contribuições e benefícios inseridos anteriormente, além das simulações geradas.\nDeseja continuar?",
+            titulo="Atualizar arquivo do CNIS",
+            funcao=lambda: self.abrirPopupCNIS()
+        )
+        return True
 
     def voltarDashboard(self):
         self.limpaTudo()

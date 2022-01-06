@@ -194,6 +194,17 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                     )
                 query.execute()
 
+    def buscaClienteEdicao(self, cpf: str):
+        if cpf is not None and cpf != '':
+            try:
+                clienteAEditar: Cliente = Cliente.select().where(Cliente.cpfCliente==cpf).get()
+                self.enviaClienteDashboard(clienteAEditar)
+                return True
+            except Cliente.DoesNotExist as err:
+                print(f"buscaClienteEdicao: {err=}")
+                popUpOkAlerta(f"Houve um erro ao busca cliente já cadastrado com o CPF: {cpf}. Tente novamente.", erro=err)
+                return False
+
     def buscaTelefone(self, clienteAtual: Cliente) -> Telefones:
         try:
             return Telefones.select().where(Telefones.clienteId == clienteAtual.clienteId).get()
@@ -202,16 +213,14 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
     def carregaCnis(self, pathCnis: str):
         cnisInseridoComSucesso: bool = False
-
-        self.cnisClienteAtual: CNISModelo = CNISModelo(path=pathCnis)
-        self.cnisClienteAtual.iniciaAvaliacaoCnis()
-        db: SqliteDatabase = Cliente._meta.database
-
-        # clienteAtual = Cliente()
         try:
+            self.cnisClienteAtual: CNISModelo = CNISModelo(path=pathCnis)
+            self.cnisClienteAtual.iniciaAvaliacaoCnis()
             infoPessoais: dict = self.cnisClienteAtual.getInfoPessoais()
 
-            if infoPessoais is not None:
+            clienteCadastrado: bool = self.verificaClienteJaCadastrado(unmaskAll(infoPessoais['cpf']))
+
+            if infoPessoais is not None and not clienteCadastrado:
                 clienteAtual: Cliente = Cliente(
                     escritorioId=Escritorios.select().where(Escritorios.escritorioId == self.escritorioAtual.escritorioId),
                     cpfCliente=unmaskAll(infoPessoais['cpf']),
@@ -245,6 +254,13 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
                 self.cnisClienteAtual.insereItensContribuicao(clienteAtual)
                 cnisInseridoComSucesso = True
+            elif infoPessoais is not None:
+                popUpSimCancela(
+                    f"O(a) cliente {infoPessoais['nomeCompleto'].upper()} já está cadastrado(a). Deseja atualizar suas informações?",
+                    titulo="Cliente já cadastrado(a)",
+                    funcao=lambda: self.buscaClienteEdicao(unmaskAll(infoPessoais['cpf']))
+                )
+                return False
 
         except Cliente.DoesNotExist:
             self.showPopupAlerta('Erro ao inserir cliente.')
@@ -300,6 +316,14 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
     def toastCarregaCnis(self):
         self.toast.showMessage(self, "Analisando informações do CNIS...", corner=Qt.BottomLeftCorner)
+
+    def verificaClienteJaCadastrado(self, cpf: str) -> bool:
+        try:
+            Cliente.select().where(Cliente.cpfCliente==cpf).get()
+            return True
+        except Exception as err:
+            print(f"verificaClienteJaCadastrado: {err=}")
+            return False
 
 
 if __name__ == '__main__':

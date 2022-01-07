@@ -12,6 +12,7 @@ class Sinais(QObject):
     sEnviaInfo = QtCore.pyqtSignal(str, name='info')
     sAbreToast = QtCore.pyqtSignal(name='toast')
     sVoltaTela = QtCore.pyqtSignal(name='voltaTela')
+    sEnviaFiltro = QtCore.pyqtSignal(name='enviaFiltro')
     # sTrocaPrimeiroAcesso = QtCore.pyqtSignal(AdvogadoModelo, name='advogado')
     sTrocaPrimeiroAcesso = QtCore.pyqtSignal(Advogados, name='advogado')
     sTrocaTelaEntrevista = QtCore.pyqtSignal(list, name='tela')

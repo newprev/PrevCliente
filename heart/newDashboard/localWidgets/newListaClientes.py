@@ -1,7 +1,6 @@
 import os
 import datetime
 
-from peewee import SqliteDatabase
 from typing import List
 
 from PyQt5.QtCore import QObject, QEvent, Qt
@@ -10,6 +9,7 @@ from PyQt5.QtWidgets import QFrame, QTableWidgetItem, QPushButton
 
 from Design.pyUi.newListaClientes import Ui_wdgListaClientes
 from Design.CustomWidgets.newPopupCNIS import NewPopupCNIS
+from Design.CustomWidgets.newFiltroClientes import NewFiltroClientes
 from Design.CustomWidgets.newToast import QToaster
 from Design.CustomWidgets.newMenuOpcoes import NewMenuOpcoes
 from Design.pyUi.efeitos import Efeitos
@@ -36,6 +36,7 @@ from util.popUps import popUpOkAlerta, popUpSimCancela
 class NewListaClientes(QFrame, Ui_wdgListaClientes):
     popupCNIS: NewPopupCNIS
     toast: QToaster
+    menuFiltro: NewFiltroClientes
 
     def __init__(self, escritorio: Escritorios, advogado: Advogados, parent=None):
         super(NewListaClientes, self).__init__(parent=parent)
@@ -49,15 +50,23 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.sinais.sEnviaClienteParam.connect(self.enviaClienteDashboard)
         self.sinais.sEnviaInfoCliente.connect(self.enviaInfoClienteDashboard)
         self.efeitos = Efeitos()
+
         self.toast = QToaster(parent=self)
 
         self.tblClientes.hideColumn(0)
         self.installEventFilter(self)
 
         self.pbNovoCliente.clicked.connect(self.abrirPopupCNIS)
+        self.pbFiltro.clicked.connect(self.abreMenuFiltro)
         self.tblClientes.doubleClicked.connect(self.selecionaCliente)
 
         self.atualizaTblClientes()
+
+    def abreMenuFiltro(self):
+        self.menuFiltro = NewFiltroClientes(parent=self, position=QCursor.pos())
+        Efeitos().shadowCards([self.menuFiltro])
+        self.menuFiltro.raise_()
+        self.menuFiltro.show()
 
     def abreMenuOpcoes(self):
         linhaSelecionada: int = self.tblClientes.selectedItems()[0].row()
@@ -300,6 +309,9 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 self.popupCNIS.close()
 
         return super(NewListaClientes, self).eventFilter(a0, tecla)
+
+    def filtraClientes(self, filtros: dict):
+        print(f"{filtros=}")
 
     def selecionaCliente(self, *args, **kwargs):
         linhaSelecionada = args[0].row()

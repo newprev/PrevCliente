@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="icone">
+    <file>down.png</file>
+    <file>filtros.png</file>
+    <file>filtrosWhite.png</file>
+  </qresource>
+</RCC>

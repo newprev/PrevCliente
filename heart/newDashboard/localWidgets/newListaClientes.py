@@ -55,10 +55,13 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
         self.tblClientes.hideColumn(0)
         self.installEventFilter(self)
+        self.frInfoCliEncontrados.hide()
 
         self.pbNovoCliente.clicked.connect(self.abrirPopupCNIS)
         self.pbFiltro.clicked.connect(self.abreMenuFiltro)
+        self.pbBusca.clicked.connect(self.avaliaFiltroTexto)
         self.tblClientes.doubleClicked.connect(self.selecionaCliente)
+        self.leBusca.editingFinished.connect(self.avaliaFiltroTexto)
 
         self.atualizaTblClientes()
 
@@ -180,6 +183,39 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             listaReturn.append(cabecalho)
 
         return listaReturn
+
+    def avaliaFiltroTexto(self):
+        strBusca: str = self.leBusca.text().strip()
+        qtdLinhas = self.tblClientes.rowCount()
+        qtdEncontrados: int = 0
+
+        if strBusca == '':
+            self.frInfoCliEncontrados.hide()
+            for linha in range(qtdLinhas):
+                self.tblClientes.showRow(linha)
+            return True
+
+        if len(strBusca) == 1:
+            for linha in range(qtdLinhas):
+                primeiraLetra = self.tblClientes.item(linha, 1).text()[0]
+                if primeiraLetra.upper() == strBusca.upper():
+                    qtdEncontrados += 1
+                    self.tblClientes.showRow(linha)
+                else:
+                    self.tblClientes.hideRow(linha)
+
+        else:
+            for linha in range(qtdLinhas):
+                nomeCompleto: str = self.tblClientes.item(linha, 1).text().upper()
+                nomes: List[str] = nomeCompleto.split(' ')
+                if strBusca.upper() in nomes:
+                    qtdEncontrados += 1
+                    self.tblClientes.showRow(linha)
+                else:
+                    self.tblClientes.hideRow(linha)
+
+        self.lbInfoBusca.setText(f'{qtdEncontrados} clientes encontrados')
+        self.frInfoCliEncontrados.show()
 
     def avaliaAtividadesPrincipais(self, clienteId: int):
         listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == clienteId)

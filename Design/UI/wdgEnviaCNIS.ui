@@ -7,16 +7,16 @@
     <x>0</x>
     <y>0</y>
     <width>587</width>
-    <height>300</height>
+    <height>325</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">/*#wdgEnviaCNIS {
+   <string notr="true">#wdgEnviaCNIS {
 	background-color: lightgrey;
-}*/
+}
 
 /*---------------------------------------- Frame ----------------------------------------*/
 #frPrincipal, #frTop, #frBottom{
@@ -47,13 +47,35 @@
 	color: #52555A;
 }
 
-/*---------------------------------------- Push button ----------------------------------------*/
+/*---------------------------------- Push button ---------------------------------*/
 #pbBuscaCNIS {
 	font: 12pt &quot;Avenir LT Std&quot;;
 	color: #52555A;
 
 	background-color: white;
 	border: 0px solid white;
+}
+
+#pbCadSemCnis {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: white;
+
+	background-color: #009E38;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 12px;
+	border-bottom-left-radius: 12px;
+}
+
+#pbCadSemCnis:hover {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: white;
+
+	background-color: #23E386;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 12px;
+	border-bottom-left-radius: 12px;
 }</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -256,6 +278,19 @@
           </spacer>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbCadSemCnis">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Cadastrar sem CNIS</string>
+        </property>
        </widget>
       </item>
      </layout>

@@ -15,7 +15,7 @@ from Design.CustomWidgets.newMenuOpcoes import NewMenuOpcoes
 from Design.pyUi.efeitos import Efeitos
 from Design.DesignSystem.colors import NewColorsWhite
 
-from heart.newDashboard.localStyleSheet.localStyleSheet import btnOpcoesStyle
+from heart.newDashboard.localStyleSheet.localStyleSheet import btnOpcoesStyle, styleTooltip
 
 from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.clienteORM import Cliente
@@ -48,6 +48,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.escritorioAtual = escritorio
         self.advogadoAtual = advogado
         self.filtros = None
+        self.menuFiltro = None
 
         self.sinais = Sinais()
         self.sinais.sEnviaClienteParam.connect(self.enviaClienteDashboard)
@@ -67,13 +68,18 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.tblClientes.doubleClicked.connect(self.selecionaCliente)
         self.leBusca.editingFinished.connect(self.avaliaFiltroTexto)
 
+        # Tooltips
+        self.setStyleSheet(styleTooltip())
+        self.pbFiltro.setToolTip('Utilize filtros para pesquisas específicas.')
+
         self.atualizaTblClientes()
 
     def abreMenuFiltro(self):
-        self.menuFiltro = NewFiltroClientes(parent=self, position=QCursor.pos(), filtros=self.filtros)
-        Efeitos().shadowCards([self.menuFiltro])
-        self.menuFiltro.raise_()
-        self.menuFiltro.show()
+        if self.menuFiltro is None:
+            self.menuFiltro = NewFiltroClientes(parent=self, position=QCursor.pos(), filtros=self.filtros)
+            Efeitos().shadowCards([self.menuFiltro])
+            self.menuFiltro.raise_()
+            self.menuFiltro.show()
 
     def abreMenuOpcoes(self):
         linhaSelecionada: int = self.tblClientes.selectedItems()[0].row()
@@ -206,6 +212,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         return listaReturn
 
     def avaliaFiltrosMenu(self, filtros: dict):
+        self.menuFiltro = None
         self.filtros = filtros
         if filtros.keys():
             for chave, valor in filtros.items():
@@ -213,13 +220,6 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 if chave == 'arquivados':
                     self.atualizaTblClientes(arquivados=valor)
                     self.avaliaFiltroTexto()
-                    # mostraArquivados = valor
-                    # qtdLinhas: int = self.tblClientes.rowCount()
-                    #
-                    # for linha in range(qtdLinhas):
-                    #     item: QTableWidgetItem = self.tblClientes.item(linha, 7)
-                    #     if item.checkState() and mostraArquivados:
-                    #         self.tblClientes.showRow(linha)
 
     def avaliaFiltroTexto(self):
         strBusca: str = self.leBusca.text().strip()

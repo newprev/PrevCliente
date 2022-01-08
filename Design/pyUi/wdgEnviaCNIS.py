@@ -14,10 +14,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgEnviaCNIS(object):
     def setupUi(self, wdgEnviaCNIS):
         wdgEnviaCNIS.setObjectName("wdgEnviaCNIS")
-        wdgEnviaCNIS.resize(587, 300)
-        wdgEnviaCNIS.setStyleSheet("/*#wdgEnviaCNIS {\n"
+        wdgEnviaCNIS.resize(587, 325)
+        wdgEnviaCNIS.setStyleSheet("#wdgEnviaCNIS {\n"
 "    background-color: lightgrey;\n"
-"}*/\n"
+"}\n"
 "\n"
 "/*---------------------------------------- Frame ----------------------------------------*/\n"
 "#frPrincipal, #frTop, #frBottom{\n"
@@ -48,13 +48,35 @@ class Ui_wdgEnviaCNIS(object):
 "    color: #52555A;\n"
 "}\n"
 "\n"
-"/*---------------------------------------- Push button ----------------------------------------*/\n"
+"/*---------------------------------- Push button ---------------------------------*/\n"
 "#pbBuscaCNIS {\n"
 "    font: 12pt \"Avenir LT Std\";\n"
 "    color: #52555A;\n"
 "\n"
 "    background-color: white;\n"
 "    border: 0px solid white;\n"
+"}\n"
+"\n"
+"#pbCadSemCnis {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"\n"
+"    background-color: #009E38;\n"
+"    border-top-left-radius: 0px;\n"
+"    border-top-right-radius: 0px;\n"
+"    border-bottom-right-radius: 12px;\n"
+"    border-bottom-left-radius: 12px;\n"
+"}\n"
+"\n"
+"#pbCadSemCnis:hover {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"\n"
+"    background-color: #23E386;\n"
+"    border-top-left-radius: 0px;\n"
+"    border-top-right-radius: 0px;\n"
+"    border-bottom-right-radius: 12px;\n"
+"    border-bottom-left-radius: 12px;\n"
 "}")
         self.gridLayout = QtWidgets.QGridLayout(wdgEnviaCNIS)
         self.gridLayout.setObjectName("gridLayout")
@@ -130,6 +152,10 @@ class Ui_wdgEnviaCNIS(object):
         spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem3)
         self.verticalLayout.addWidget(self.frBottom)
+        self.pbCadSemCnis = QtWidgets.QPushButton(self.frPrincipal)
+        self.pbCadSemCnis.setMinimumSize(QtCore.QSize(0, 50))
+        self.pbCadSemCnis.setObjectName("pbCadSemCnis")
+        self.verticalLayout.addWidget(self.pbCadSemCnis)
         self.gridLayout.addWidget(self.frPrincipal, 0, 0, 1, 1)
 
         self.retranslateUi(wdgEnviaCNIS)
@@ -141,6 +167,7 @@ class Ui_wdgEnviaCNIS(object):
         self.lbTitulo.setText(_translate("wdgEnviaCNIS", "PREENCHIMENTO AUTOMÁTICO"))
         self.lbSubtitulo.setText(_translate("wdgEnviaCNIS", "Cadastro a partir do CNIS"))
         self.pbBuscaCNIS.setText(_translate("wdgEnviaCNIS", "Arraste ou clique aqui para buscar o CNIS"))
+        self.pbCadSemCnis.setText(_translate("wdgEnviaCNIS", "Cadastrar sem CNIS"))
 import Resources.wdgEnviaCNIS
 
 

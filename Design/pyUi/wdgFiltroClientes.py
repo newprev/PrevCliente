@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgFiltroClientes(object):
     def setupUi(self, wdgFiltroClientes):
         wdgFiltroClientes.setObjectName("wdgFiltroClientes")
-        wdgFiltroClientes.resize(307, 154)
+        wdgFiltroClientes.resize(307, 173)
         wdgFiltroClientes.setStyleSheet("/*--------------------------------------- Frames ---------------------------------------*/\n"
 "#wdgFiltroClientes {\n"
 "    background-color: transparent;\n"
@@ -43,21 +43,21 @@ class Ui_wdgFiltroClientes(object):
 "/*---------------------------------- Push button -----------------------------------*/\n"
 "#pbOk {\n"
 "    font: 10pt \"Avenir LT Std\";\n"
-"    color: #3F4E8C;\n"
+"    color: white;\n"
 "    font-weight: 750;\n"
 "\n"
-"    background-color: white;\n"
-"    border: 2px solid #566BBF;\n"
+"    background-color: #3F4E8C;\n"
+"    border: 0px solid #566BBF;\n"
 "    border-radius: 8px;\n"
 "}\n"
 "\n"
 "#pbOk:hover {\n"
 "    font: 10pt \"Avenir LT Std\";\n"
-"    color: #3F4E8C;\n"
+"    color: white;\n"
 "    font-weight: 750;\n"
 "\n"
-"    background-color: #F9F9F9;\n"
-"    border: 2px solid #3F4E8C;\n"
+"    background-color: #292D40;\n"
+"    border: 0px solid #3F4E8C;\n"
 "    border-radius: 8px;\n"
 "}\n"
 "\n"
@@ -68,10 +68,24 @@ class Ui_wdgFiltroClientes(object):
 "    font-weight: 750;\n"
 "}\n"
 "\n"
-"#lbInfoTipoProcesso {\n"
+"#lbInfoTipoProcesso, #lbInfoArquivados {\n"
 "    font: 10pt \"Avenir LT Std\";\n"
 "    color: black;\n"
 "    font-weight: 750;\n"
+"}\n"
+"\n"
+"/*--------------------------------------- Check box -----------------------------------*/\n"
+"#cbArquivados {\n"
+"    font: 11pt \"Avenir LT Std\";\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"#cbArquivados::indicator:unchecked {\n"
+"    image: url(:/checkBox/CheckBoxFalse.png);\n"
+"}\n"
+"\n"
+"#cbArquivados::indicator:checked {\n"
+"    image: url(:/checkBox/checkBoxTrue.png);\n"
 "}\n"
 "\n"
 "/*---------------------------------------- Combo box ----------------------------------------*/\n"
@@ -157,8 +171,9 @@ class Ui_wdgFiltroClientes(object):
         self.frPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frPrincipal.setObjectName("frPrincipal")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frPrincipal)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.frPrincipal)
+        self.gridLayout_2.setVerticalSpacing(18)
+        self.gridLayout_2.setObjectName("gridLayout_2")
         self.frTipoProcesso = QtWidgets.QFrame(self.frPrincipal)
         self.frTipoProcesso.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frTipoProcesso.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -179,17 +194,32 @@ class Ui_wdgFiltroClientes(object):
         self.cbxTipoProcesso.setObjectName("cbxTipoProcesso")
         self.cbxTipoProcesso.addItem("")
         self.verticalLayout.addWidget(self.cbxTipoProcesso)
-        self.verticalLayout_2.addWidget(self.frTipoProcesso)
+        self.gridLayout_2.addWidget(self.frTipoProcesso, 0, 0, 1, 1, QtCore.Qt.AlignLeft)
+        self.frame = QtWidgets.QFrame(self.frPrincipal)
+        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frame)
+        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2.setSpacing(6)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.lbInfoArquivados = QtWidgets.QLabel(self.frame)
+        self.lbInfoArquivados.setObjectName("lbInfoArquivados")
+        self.verticalLayout_2.addWidget(self.lbInfoArquivados)
+        self.cbArquivados = QtWidgets.QCheckBox(self.frame)
+        self.cbArquivados.setObjectName("cbArquivados")
+        self.verticalLayout_2.addWidget(self.cbArquivados)
+        self.gridLayout_2.addWidget(self.frame, 1, 0, 1, 1)
         self.pbOk = QtWidgets.QPushButton(self.frPrincipal)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pbOk.sizePolicy().hasHeightForWidth())
         self.pbOk.setSizePolicy(sizePolicy)
-        self.pbOk.setMinimumSize(QtCore.QSize(50, 25))
-        self.pbOk.setMaximumSize(QtCore.QSize(50, 25))
+        self.pbOk.setMinimumSize(QtCore.QSize(80, 30))
+        self.pbOk.setMaximumSize(QtCore.QSize(80, 30))
         self.pbOk.setObjectName("pbOk")
-        self.verticalLayout_2.addWidget(self.pbOk, 0, QtCore.Qt.AlignRight)
+        self.gridLayout_2.addWidget(self.pbOk, 1, 1, 1, 1)
         self.verticalLayout_3.addWidget(self.frPrincipal)
         self.gridLayout.addWidget(self.frBackground, 0, 0, 1, 1)
 
@@ -202,6 +232,8 @@ class Ui_wdgFiltroClientes(object):
         self.lbInfoFiltro.setText(_translate("wdgFiltroClientes", "Filtros"))
         self.lbInfoTipoProcesso.setText(_translate("wdgFiltroClientes", "Tipo de processo"))
         self.cbxTipoProcesso.setItemText(0, _translate("wdgFiltroClientes", "Aposentadoria"))
+        self.lbInfoArquivados.setText(_translate("wdgFiltroClientes", "Clientes arquivados"))
+        self.cbArquivados.setText(_translate("wdgFiltroClientes", "Mostrar"))
         self.pbOk.setText(_translate("wdgFiltroClientes", "Filtrar"))
 import Resources.wdgFiltroClientes
 

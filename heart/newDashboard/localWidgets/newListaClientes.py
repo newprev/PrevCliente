@@ -13,8 +13,9 @@ from Design.CustomWidgets.newFiltroClientes import NewFiltroClientes
 from Design.CustomWidgets.newToast import QToaster
 from Design.CustomWidgets.newMenuOpcoes import NewMenuOpcoes
 from Design.pyUi.efeitos import Efeitos
+from Design.DesignSystem.colors import NewColorsWhite
 
-from heart.newDashboard.localStyleSheet import btnOpcoesStyle
+from heart.newDashboard.localStyleSheet.localStyleSheet import btnOpcoesStyle
 
 from modelos.cabecalhoORM import CnisCabecalhos
 from modelos.clienteORM import Cliente
@@ -37,6 +38,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
     popupCNIS: NewPopupCNIS
     toast: QToaster
     menuFiltro: NewFiltroClientes
+    filtros: dict
 
     def __init__(self, escritorio: Escritorios, advogado: Advogados, parent=None):
         super(NewListaClientes, self).__init__(parent=parent)
@@ -45,6 +47,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.popupCNIS = None
         self.escritorioAtual = escritorio
         self.advogadoAtual = advogado
+        self.filtros = None
 
         self.sinais = Sinais()
         self.sinais.sEnviaClienteParam.connect(self.enviaClienteDashboard)
@@ -54,6 +57,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.toast = QToaster(parent=self)
 
         self.tblClientes.hideColumn(0)
+        self.tblClientes.hideColumn(7)
         self.installEventFilter(self)
         self.frInfoCliEncontrados.hide()
 
@@ -66,7 +70,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.atualizaTblClientes()
 
     def abreMenuFiltro(self):
-        self.menuFiltro = NewFiltroClientes(parent=self, position=QCursor.pos())
+        self.menuFiltro = NewFiltroClientes(parent=self, position=QCursor.pos(), filtros=self.filtros)
         Efeitos().shadowCards([self.menuFiltro])
         self.menuFiltro.raise_()
         self.menuFiltro.show()
@@ -82,13 +86,17 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         )
         menu.exec_(QCursor.pos())
 
-    def atualizaTblClientes(self, clientes: list = None):
-        if clientes is None:
-            clientesModels: list = Cliente.select().where(Cliente.arquivado==False).order_by(Cliente.nomeCliente)
+    def atualizaTblClientes(self, arquivados: bool = False):
+        if arquivados:
+            clientesModels: list = Cliente.select().order_by(
+                Cliente.arquivado,
+                Cliente.nomeCliente
+            )
         else:
-            clientesModels = []
+            clientesModels: list = Cliente.select().where(Cliente.arquivado==False).order_by(Cliente.nomeCliente)
 
         self.tblClientes.setRowCount(0)
+
         for numLinha, cliente in enumerate(clientesModels):
             self.tblClientes.insertRow(numLinha)
             processo: Processos = Processos.get_or_none(Processos.clienteId == cliente.clienteId)
@@ -130,17 +138,30 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             cidadeItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 4, cidadeItem)
 
-            # tipoProcessoItem = QTableWidgetItem(strTipoBeneficio(processo.tipoBeneficio, processo.subTipoApos))
-            # tipoProcessoItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-            # self.tblClientes.setItem(numLinha, 5, tipoProcessoItem)
+            # 5 - Documentos <Aparente>
+            docs = QTableWidgetItem('')
+            self.tblClientes.setItem(numLinha, 5, docs)
 
+            # 6 - Botão de edição <Aparente>
             pbOpcoes = QPushButton()
             pbOpcoes.clicked.connect(self.abreMenuOpcoes)
             pbOpcoes.setStyleSheet(btnOpcoesStyle())
             pbOpcoes.setMaximumSize(24, 24)
             self.tblClientes.setCellWidget(numLinha, 6, pbOpcoes)
 
+            # 7 - Arquivado <Escondido>
+            arquivado = QTableWidgetItem()
+            arquivado.setFlags(Qt.ItemFlag.ItemIsUserCheckable)
+            arquivado.setCheckState(cliente.arquivado)
+            self.tblClientes.setItem(numLinha, 7, arquivado)
+
+            if cliente.arquivado:
+                for numColuna in range(self.tblClientes.columnCount()):
+                    if self.tblClientes.item(numLinha, numColuna) is not None:
+                        self.tblClientes.item(numLinha, numColuna).setBackground(NewColorsWhite.white200Qt.value)
+
         self.tblClientes.resizeColumnsToContents()
+        self.pbNovoCliente.setFocus()
 
     def abrirPopupCNIS(self):
         if self.popupCNIS is not None and self.popupCNIS.isVisible():
@@ -183,6 +204,22 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             listaReturn.append(cabecalho)
 
         return listaReturn
+
+    def avaliaFiltrosMenu(self, filtros: dict):
+        self.filtros = filtros
+        if filtros.keys():
+            for chave, valor in filtros.items():
+
+                if chave == 'arquivados':
+                    self.atualizaTblClientes(arquivados=valor)
+                    self.avaliaFiltroTexto()
+                    # mostraArquivados = valor
+                    # qtdLinhas: int = self.tblClientes.rowCount()
+                    #
+                    # for linha in range(qtdLinhas):
+                    #     item: QTableWidgetItem = self.tblClientes.item(linha, 7)
+                    #     if item.checkState() and mostraArquivados:
+                    #         self.tblClientes.showRow(linha)
 
     def avaliaFiltroTexto(self):
         strBusca: str = self.leBusca.text().strip()
@@ -346,9 +383,6 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
         return super(NewListaClientes, self).eventFilter(a0, tecla)
 
-    def filtraClientes(self, filtros: dict):
-        print(f"{filtros=}")
-
     def selecionaCliente(self, *args, **kwargs):
         linhaSelecionada = args[0].row()
 
@@ -375,7 +409,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
 
 if __name__ == '__main__':
-    from PyQt5 import QtWidgets, QtGui
+    from PyQt5 import QtWidgets
     import sys
     app = QtWidgets.QApplication(sys.argv)
     w = NewListaClientes()

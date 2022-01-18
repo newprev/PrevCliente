@@ -8,7 +8,10 @@ from Design.CustomWidgets.newToast import QToaster
 
 from heart.localStyleSheet.cadastroCliente import etapaCadatro
 
+from cache.cacheEscritorio import CacheEscritorio
+
 from modelos.clienteORM import Cliente
+from modelos.escritoriosORM import Escritorios
 from modelos.telefonesORM import Telefones
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.clienteProfissao import ClienteProfissao
@@ -24,9 +27,10 @@ from util.popUps import popUpOkAlerta
 
 
 class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
-    clienteAtual: Cliente
-    dadosBancarios: ClienteInfoBanco
-    dadosProfissionais: ClienteProfissao
+    clienteAtual: Cliente = None
+    escritorioAtual: Escritorios = None
+    dadosBancarios: ClienteInfoBanco = None
+    dadosProfissionais: ClienteProfissao = None
     etapaAtual: EtapaCadastraCliente
     editando: bool = False
 
@@ -34,6 +38,8 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         super(NewCadastraCliente, self).__init__(parent=parent)
         self.setupUi(self)
         self.dashboard = parent
+
+        self.buscaEscritorio()
 
         self.iniciaCamposPessoais()
         self.iniciaCamposProfissionais()
@@ -66,6 +72,8 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             telefone.dataUltAlt = datetime.now()
             telefone.save()
         except Telefones.DoesNotExist as err:
+            self.clienteAtual.save()
+            
             telefone = Telefones(
                 clienteId=self.clienteAtual.clienteId,
                 principal=True,
@@ -74,7 +82,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
                 tipoTelefone=TipoTelefone.Whatsapp.value,
                 ativo=True
             )
-            # telefone.save()
+            telefone.save()
         finally:
             self.clienteAtual.telefoneId = telefone.telefoneId
             self.clienteAtual.dataUltAlt = datetime.now()
@@ -89,6 +97,9 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             telefone.dataUltAlt = datetime.now()
             telefone.save()
         except Telefones.DoesNotExist as err:
+            if self.clienteAtual.clienteId is None:
+                self.clienteAtual.save()
+
             Telefones(
                 clienteId=self.clienteAtual.clienteId,
                 principal=False,
@@ -114,6 +125,12 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         elif self.etapaAtual == EtapaCadastraCliente.profissional:
             self.dadosProfissionais.dataUltAlt = datetime.now()
             self.dadosProfissionais.save()
+
+            if self.clienteAtual.dadosProfissionais is None:
+                self.clienteAtual.dadosProfissionais = self.dadosProfissionais.infoId
+                self.clienteAtual.dataUltAlt = datetime.now()
+                self.clienteAtual.save()
+
             self.trocaEtapa(EtapaCadastraCliente.bancarias)
 
         elif self.etapaAtual == EtapaCadastraCliente.bancarias:
@@ -181,11 +198,29 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         finally:
             return infoBanco
 
+    def buscaEscritorio(self) -> bool:
+        if self.escritorioAtual is None:
+            self.escritorioAtual = CacheEscritorio().carregarCache()
+
+            if self.escritorioAtual is None:
+                self.escritorioAtual = CacheEscritorio().carregarCacheTemporario()
+
+                if self.escritorioAtual is None:
+                    if self.clienteAtual is not None:
+                        ClienteInfoBanco.delete().where(ClienteInfoBanco.clienteId == self.clienteAtual.clienteId).execute()
+                        ClienteProfissao.delete().where(ClienteProfissao.clienteId == self.clienteAtual.clienteId).execute()
+                        self.clienteAtual.delete()
+                    popUpOkAlerta("Não foi possível carregar as informações do escritório. Tente novamente.", erro="NewCadastraCliente<buscaEscritorio>")
+                    return False
+
+        return True
+
     def carregaClienteNaTela(self, cliente: Cliente, cadastro: bool = False, tela: str=None):
         try:
             #################################### Info pessoal
             self.clienteAtual = cliente
             if self.clienteAtual.clienteId is None:
+                self.leNomeCliente.setFocus()
                 return True
 
             self.leCpf.setText(mascaraCPF(cliente.cpfCliente))
@@ -333,14 +368,15 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.leComplemento.textEdited.connect(lambda: self.insereInfoTela('complemento'))
 
     def iniciaCamposProfissionais(self):
-        self.leCarteiraProf.textEdited.connect(lambda: self.insereInfoTela('cartProf'))
-        self.leProfissao.textEdited.connect(lambda: self.insereInfoTela('profissao'))
+        self.leCarteiraProf.editingFinished.connect(lambda: self.insereInfoTela('cartProf'))
+        self.leProfissao.editingFinished.connect(lambda: self.insereInfoTela('profissao'))
+        self.leNit.editingFinished.connect(lambda: self.insereInfoTela('nit'))
 
     def iniciaCamposBancarios(self):
-        self.lePix.textEdited.connect(lambda: self.insereInfoTela('lePix'))
-        self.leNomeBanco.textEdited.connect(lambda: self.insereInfoTela('leNomeBanco'))
-        self.leConta.textEdited.connect(lambda: self.insereInfoTela('leNumeroConta'))
-        self.leNumeroAgencia.textEdited.connect(lambda: self.insereInfoTela('leNumeroAgencia'))
+        self.lePix.editingFinished.connect(lambda: self.insereInfoTela('lePix'))
+        self.leNomeBanco.editingFinished.connect(lambda: self.insereInfoTela('leNomeBanco'))
+        self.leConta.editingFinished.connect(lambda: self.insereInfoTela('leNumeroConta'))
+        self.leNumeroAgencia.editingFinished.connect(lambda: self.insereInfoTela('leNumeroAgencia'))
 
     def iniciaTela(self):
         self.limpaTudo()
@@ -390,6 +426,9 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
 
         elif info == 'telefone1':
             if self.clienteAtual.telefoneId is None or self.clienteAtual.telefoneId.telefoneId is None:
+                if self.clienteAtual.clienteId is None:
+                    self.clienteAtual.save()
+
                 telefone = Telefones(
                     clienteId=self.clienteAtual.clienteId,
                     numero=self.leTelefone1.text(),
@@ -432,9 +471,23 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
 
         #//////////////////////////////////// Dados bancários
         elif info == 'leNomeBanco':
+            if self.dadosBancarios is None:
+                self.dadosBancarios = ClienteInfoBanco(
+                    clienteId=self.clienteAtual.clienteId,
+                    nomeBanco=self.leNomeBanco.text()
+                )
+                self.dadosBancarios.save()
+
             self.dadosBancarios.nomeBanco = self.leNomeBanco.text()
 
         elif info == 'leNumeroConta':
+            if self.dadosBancarios is None:
+                self.dadosBancarios = ClienteInfoBanco(
+                    clienteId=self.clienteAtual.clienteId,
+                    nomeBanco=self.leNomeBanco.text()
+                )
+                self.dadosBancarios.save()
+
             self.dadosBancarios.numeroConta = self.leConta.text()
 
         elif info == 'leNumeroAgencia':
@@ -445,12 +498,30 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
 
         #//////////////////////////////////// Dados profissionais
         elif info == 'nit':
+            if self.dadosProfissionais is None:
+                self.dadosProfissionais = ClienteProfissao(
+                    clienteId=self.clienteAtual.clienteId,
+                    nit=self.leNit.text()
+                )
+                # self.dadosProfissionais.save()
+                # self.clienteAtual.dadosProfissionais = self.dadosProfissionais.infoId
+                # self.clienteAtual.dataUltAlt = datetime.now()
+                # self.clienteAtual.save()
+
             self.dadosProfissionais.nit = self.leNit.text()
 
         elif info == 'cartProf':
+            if self.dadosProfissionais is None:
+                self.dadosProfissionais = ClienteProfissao(clienteId=self.clienteAtual.clienteId)
+                # self.dadosProfissionais.save()
+
             self.dadosProfissionais.numCaretiraTrabalho = self.leCarteiraProf.text()
 
         elif info == 'profissao':
+            if self.dadosProfissionais is None:
+                self.dadosProfissionais = ClienteProfissao(clienteId=self.clienteAtual.clienteId)
+                # self.dadosProfissionais.save()
+
             self.dadosProfissionais.nomeProfissao = self.leProfissao.text()
 
     def limpaTudo(self):

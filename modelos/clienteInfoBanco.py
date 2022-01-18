@@ -13,9 +13,9 @@ TABLENAME = 'clienteInfoBanco'
 class ClienteInfoBanco(BaseModel, Model):
     infoId = AutoField(column_name='infoId', null=True)
     clienteId = IntegerField(column_name='clienteId')
-    nomeBanco = CharField(column_name='nomeBanco')
-    numeroAgencia = CharField(column_name='numeroAgencia')
-    numeroConta = CharField(column_name='numeroConta')
+    nomeBanco = CharField(column_name='nomeBanco', null=True)
+    numeroAgencia = CharField(column_name='numeroAgencia', null=True)
+    numeroConta = CharField(column_name='numeroConta', null=True)
     chavePix = CharField(column_name='chavePix', null=True)
     estado = CharField(null=True)
     observacoes = CharField(column_name='observacoes', max_length=4000, null=True)

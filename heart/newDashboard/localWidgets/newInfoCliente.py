@@ -288,6 +288,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
     def recebePathCnis(self, pathCnis:str):
         if os.path.isfile(pathCnis):
             self.atualizarCnis(pathCnis)
+            self.carregaClienteNaTela(self.clienteAtual)
             return True
         else:
             popUpOkAlerta("O caminho escolhido está incorreto. Tente novamente.")

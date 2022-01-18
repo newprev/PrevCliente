@@ -32,6 +32,7 @@ from util.dateHelper import strToDate, atividadesConcorrentes, atividadeSecundar
 
 from util.helpers import mascaraTelCel, unmaskAll, calculaIdadeFromString
 from util.popUps import popUpOkAlerta, popUpSimCancela
+from util.enums.cadastroEnums import Status
 
 
 class NewListaClientes(QFrame, Ui_wdgListaClientes):
@@ -300,29 +301,37 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             self.cnisClienteAtual.iniciaAvaliacaoCnis()
             infoPessoais: dict = self.cnisClienteAtual.getInfoPessoais()
 
-            clienteCadastrado: bool = self.verificaClienteJaCadastrado(unmaskAll(infoPessoais['cpf']))
+            clienteCadastrado: Status = self.verificaCadastradoCliente(unmaskAll(infoPessoais['cpf']))
 
-            if infoPessoais is not None and not clienteCadastrado:
-                clienteAtual: Cliente = Cliente(
-                    escritorioId=Escritorios.select().where(Escritorios.escritorioId == self.escritorioAtual.escritorioId),
-                    cpfCliente=unmaskAll(infoPessoais['cpf']),
-                    dataNascimento=strToDate(infoPessoais['dataNascimento']),
-                    idade=calculaIdadeFromString(infoPessoais['dataNascimento']),
-                    nomeMae=infoPessoais['nomeMae'].title(),
-                    nomeCliente=infoPessoais['nomeCompleto'].split(' ')[0].title(),
-                    sobrenomeCliente=' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title(),
-                    pathCnis=pathCnis
-                )
-                clienteAtual.save()
+            if infoPessoais is not None and clienteCadastrado != Status.jaCadastrado:
+                if clienteCadastrado in [Status.semCabecalho, Status.semContrib]:
+                    clienteAtual: Cliente = Cliente.select().where(
+                        Cliente.cpfCliente==unmaskAll(infoPessoais['cpf'])
+                    ).get()
+                else:
+                    clienteAtual: Cliente = Cliente(
+                        escritorioId=Escritorios.select().where(Escritorios.escritorioId == self.escritorioAtual.escritorioId),
+                        cpfCliente=unmaskAll(infoPessoais['cpf']),
+                        dataNascimento=strToDate(infoPessoais['dataNascimento']),
+                        idade=calculaIdadeFromString(infoPessoais['dataNascimento']),
+                        nomeMae=infoPessoais['nomeMae'].title(),
+                        nomeCliente=infoPessoais['nomeCompleto'].split(' ')[0].title(),
+                        sobrenomeCliente=' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title(),
+                        pathCnis=pathCnis
+                    )
+                    clienteAtual.save()
 
-                # Dados profissionais
-                dadosProfissao: ClienteProfissao = ClienteProfissao(
-                    clienteId=clienteAtual.clienteId,
-                    nit=unmaskAll(infoPessoais['nit'])
-                )
-                dadosProfissao.save()
+                    # Dados profissionais
+                    dadosProfissao: ClienteProfissao = ClienteProfissao(
+                        clienteId=clienteAtual.clienteId,
+                        nit=unmaskAll(infoPessoais['nit'])
+                    )
+                    dadosProfissao.save()
 
-                clienteAtual.dadosProfissionais = dadosProfissao
+                    clienteAtual.dadosProfissionais = dadosProfissao
+
+                    clienteAtual.telefoneId = self.buscaTelefone(clienteAtual)
+                    clienteAtual.save()
 
                 contribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=clienteAtual.clienteId)
                 cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
@@ -331,11 +340,9 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
                 CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
 
-                clienteAtual.telefoneId = self.buscaTelefone(clienteAtual)
-                clienteAtual.save()
-
                 self.cnisClienteAtual.insereItensContribuicao(clienteAtual)
                 cnisInseridoComSucesso = True
+
             elif infoPessoais is not None:
                 popUpSimCancela(
                     f"O(a) cliente {infoPessoais['nomeCompleto'].upper()} já está cadastrado(a). Deseja atualizar suas informações?",
@@ -392,20 +399,52 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.sinais.sEnviaInfoCliente.emit(clienteSelecionado)
 
     def recebePathCnis(self, path: str):
-        if os.path.isfile(path):
+        if path is None or path == '':
+            clienteSemCnis: Cliente = Cliente()
+            # clienteSemCnis.save()
+            self.sinais.sEnviaClienteParam.emit(clienteSemCnis)
+            return True
+        elif os.path.isfile(path):
             self.carregaCnis(path)
             return True
+
+        return False
 
     def toastCarregaCnis(self):
         self.toast.showMessage(self, "Analisando informações do CNIS...", corner=Qt.BottomLeftCorner)
 
-    def verificaClienteJaCadastrado(self, cpf: str) -> bool:
+    def verificaCadastradoCliente(self, cpf: str) -> Status:
         try:
-            Cliente.select().where(Cliente.cpfCliente==cpf).get()
-            return True
+            cliente: Cliente = Cliente.select().where(Cliente.cpfCliente==cpf).get()
+            qtdItens: int = ItemContribuicao.select().where(ItemContribuicao.clienteId==cliente.clienteId).count()
+            qtdCabecalhos: int = CnisCabecalhos.select().where(CnisCabecalhos.clienteId==cliente.clienteId).count()
+
+            if qtdItens == 0:
+                CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId).get()
+                return Status.semContrib
+            elif qtdCabecalhos == 0:
+                ItemContribuicao.delete().where(ItemContribuicao.clienteId == cliente.clienteId).execute()
+                return Status.semCabecalho
+            return Status.jaCadastrado
+
+        except Cliente.DoesNotExist as err:
+            # TODO: ADICIONAR LOG
+            print(f"verificaCadastradoCliente: {err=}")
+            return Status.naoCadastrado
+        except ItemContribuicao.DoesNotExist as err:
+            # TODO: ADICIONAR LOG
+            print(f"verificaCadastradoCliente: {err=}")
+            CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId).get()
+            return Status.semContrib
+        except CnisCabecalhos.DoesNotExist as err:
+            # TODO: ADICIONAR LOG
+            print(f"verificaCadastradoCliente: {err=}")
+            ItemContribuicao.delete().where(ItemContribuicao.clienteId==cliente.clienteId).execute()
+            return Status.semCabecalho
         except Exception as err:
+            # TODO: ADICIONAR LOG
             print(f"verificaClienteJaCadastrado: {err=}")
-            return False
+            return Status.erro
 
 
 if __name__ == '__main__':

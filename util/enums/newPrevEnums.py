@@ -28,7 +28,6 @@ class TipoEdicao(Enum):
     cache = 7
     erro = 8
 
-
 class ErroConexao(Enum):
     ConnectionError = 0
 

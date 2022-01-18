@@ -33,6 +33,7 @@ class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
         self.toast = QToaster()
 
         self.pbBuscaCNIS.clicked.connect(self.abreBuscaCNIS)
+        self.pbCadSemCnis.clicked.connect(self.cadastraSemCnis)
 
     def abreBuscaCNIS(self):
         home = str(Path.home())
@@ -69,6 +70,9 @@ class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
 
         self.aGeometry.start()
         self.aOpacity.start()
+
+    def cadastraSemCnis(self):
+        self.sinais.sEnviaPath.emit('')
 
     def center(self):
         frameGm = self.frameGeometry()

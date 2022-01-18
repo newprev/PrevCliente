@@ -74,11 +74,11 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
                 tipoTelefone=TipoTelefone.Whatsapp.value,
                 ativo=True
             )
-            telefone.save()
+            # telefone.save()
         finally:
             self.clienteAtual.telefoneId = telefone.telefoneId
             self.clienteAtual.dataUltAlt = datetime.now()
-            self.clienteAtual.save()
+            # self.clienteAtual.save()
 
             self.leTelefone1.setText(mascaraTelCel(self.leTelefone1.text()))
 
@@ -185,6 +185,8 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         try:
             #################################### Info pessoal
             self.clienteAtual = cliente
+            if self.clienteAtual.clienteId is None:
+                return True
 
             self.leCpf.setText(mascaraCPF(cliente.cpfCliente))
             self.dtNascimento.setDate(strToDate(cliente.dataNascimento))
@@ -360,14 +362,10 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             if self.leCdCliente.text() != '':
                 self.clienteAtual.clienteId = int(self.leCdCliente.text())
 
-        elif info == 'sbCliente':
-            if self.sbCdCliente.text() != '':
-                self.buscaProxCliente()
-
-            elif info == 'nomeCliente':
-                index: int = self.leNomeCliente.text().find(' ')
-                self.clienteAtual.nomeCliente = self.leNomeCliente[:index]
-                self.clienteAtual.sobrenomeCliente = self.leNomeCliente.text()[index + 1:]
+        elif info == 'nomeCliente':
+            index: int = self.leNomeCliente.text().find(' ')
+            self.clienteAtual.nomeCliente = self.leNomeCliente.text()[:index]
+            self.clienteAtual.sobrenomeCliente = self.leNomeCliente.text()[index + 1:]
 
         elif info == 'rg':
             self.clienteAtual.rgCliente = self.leRg.text()
@@ -403,16 +401,6 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             self.clienteAtual.telefoneId.numero = self.leTelefone1.text()
             self.clienteAtual.telefoneId.dataUltAlt = datetime.now()
             self.clienteAtual.telefoneId.save()
-
-        # elif info == 'telefone2':
-        #     if self.clienteAtual.telefoneId is None:
-        #         Telefones(
-        #             clienteId=self.clienteAtual.clienteId,
-        #             numero=self.leTelefone2.text(),
-        #             principal=False,
-        #             pessoalRecado=TelefonePesoal.Recado.value,
-        #             tipoTelefone=TipoTelefone.Whatsapp.value,
-        #         ).save()
 
         elif info == 'rbMasculino' or info == 'rbFeminino':
             if self.rbMasculino.isChecked():

@@ -46,6 +46,38 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.leIdade.setDisabled(True)
         self.leCdCliente.setDisabled(True)
 
+        # Definindo ordem do focus
+        self.setTabOrder(self.leNomeCliente, self.dtNascimento)
+        self.setTabOrder(self.dtNascimento, self.cbxEstadoCivil)
+        self.setTabOrder(self.cbxEstadoCivil, self.cbxEscolaridade)
+        self.setTabOrder(self.cbxEscolaridade, self.leRg)
+        self.setTabOrder(self.leRg, self.leCpf)
+        self.setTabOrder(self.leCpf, self.rbMasculino)
+        self.setTabOrder(self.rbMasculino, self.leTelefone1)
+        self.setTabOrder(self.leTelefone1, self.leTelefone2)
+        self.setTabOrder(self.leTelefone2, self.leEmail)
+        self.setTabOrder(self.leEmail, self.leNomeDaMae)
+        self.setTabOrder(self.leNomeDaMae, self.leCep)
+        self.setTabOrder(self.leCep, self.pbBuscaCep)
+        self.setTabOrder(self.pbBuscaCep, self.leCidade)
+        self.setTabOrder(self.leCidade, self.cbxEstado)
+        self.setTabOrder(self.cbxEstado, self.leEndereco)
+        self.setTabOrder(self.leEndereco, self.leBairro)
+        self.setTabOrder(self.leBairro, self.leComplemento)
+        self.setTabOrder(self.leComplemento, self.leNumero)
+        self.setTabOrder(self.leNumero, self.pbSalvarDados)
+
+        self.setTabOrder(self.leNit, self.leCarteiraProf)
+        self.setTabOrder(self.leCarteiraProf, self.leProfissao)
+        self.setTabOrder(self.leProfissao, self.pbSalvarDados)
+
+        self.setTabOrder(self.leNomeBanco, self.leNumeroAgencia)
+        self.setTabOrder(self.leNumeroAgencia, self.leConta)
+        self.setTabOrder(self.leNumeroAgencia, self.leConta)
+        self.setTabOrder(self.leConta, self.lePix)
+        self.setTabOrder(self.lePix, self.leSenhaInss)
+        self.setTabOrder(self.leSenhaInss, self.pbSalvarDados)
+
         self.pbVoltar.clicked.connect(lambda: self.avaliaNavegacao(Navegacao.anterior))
         self.pbSalvarDados.clicked.connect(self.avaliaSalvaDados)
         self.cbMostraPix.stateChanged.connect(lambda: self.avaliaMostraSenhas('pix'))
@@ -125,6 +157,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
 
             self.salvaEtapaPessoal()
             self.trocaEtapa(EtapaCadastraCliente.profissional)
+            self.leNit.setFocus()
 
         elif self.etapaAtual == EtapaCadastraCliente.profissional:
             self.salvaEtapaProfissional()
@@ -135,6 +168,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
                 self.clienteAtual.save()
 
             self.trocaEtapa(EtapaCadastraCliente.bancarias)
+            self.leNomeBanco.setFocus()
 
         elif self.etapaAtual == EtapaCadastraCliente.bancarias:
             if not self.leNumeroAgencia.text().isnumeric():
@@ -593,3 +627,5 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             else:
                 self.frSegundaEtapa.setStyleSheet(etapaCadatro(EtapaCadastraCliente.profissional, sucesso=False))
                 self.frTerceiraEtapa.setStyleSheet(etapaCadatro(EtapaCadastraCliente.bancarias, sucesso=False))
+
+

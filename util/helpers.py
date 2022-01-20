@@ -337,6 +337,8 @@ def mascaraRG(rg: str):
 
 
 def mascaraCep(cep: str):
+    if len(cep) == 0:
+        return ''
     return f'{cep[:5]}-{cep[5:]}'
 
 

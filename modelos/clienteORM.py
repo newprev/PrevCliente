@@ -44,7 +44,6 @@ class Cliente(BaseModel, Model):
     estadoCivil = CharField(column_name='estadoCivil', default='Solteiro(A)', null=True)
     genero = CharField(default='M')
     grauEscolaridade = CharField(column_name='grauEscolaridade', null=True)
-    idade = IntegerField()
     nomeMae = CharField(column_name='nomeMae')
     numero = IntegerField(null=True)
     dadosBancarios = ForeignKeyField(column_name='dadosBancarios', field='infoId', model=ClienteInfoBanco, backref='clienteInfoBanco', null=True)
@@ -67,7 +66,6 @@ class Cliente(BaseModel, Model):
             'nomeCliente': self.nomeCliente,
             'sobrenomeCliente': self.sobrenomeCliente,
             'genero': self.genero,
-            'idade': self.idade,
             'dataNascimento': self.dataNascimento,
             'email': self.email,
             'rgCliente': self.rgCliente,
@@ -93,7 +91,6 @@ class Cliente(BaseModel, Model):
         self.nomeCliente = dictCliente['nomeCliente']
         self.sobrenomeCliente = dictCliente['sobrenomeCliente']
         self.genero = dictCliente['genero']
-        self.idade = dictCliente['idade']
         self.dataNascimento = strToDate(dictCliente['dataNascimento'])
         self.email = dictCliente['email']
         self.rgCliente = dictCliente['rgCliente']
@@ -130,7 +127,6 @@ class Cliente(BaseModel, Model):
             nomeCliente: {self.nomeCliente},
             sobrenomeCliente: {self.sobrenomeCliente},
             genero: {self.genero},
-            idade: {self.idade},
             dataNascimento: {self.dataNascimento},
             email: {self.email},
             rgCliente: {self.rgCliente},

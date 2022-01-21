@@ -490,9 +490,11 @@ def dateToSql(data: datetime.date) -> str:
 
 def strToFloat(valor: str) -> float:
     try:
-        retorno = valor.replace('.', '').replace(',', '.')
-        return float(retorno)
+        return float(valor)
     except ValueError:
+        retorno = valor.replace(',', '')
+        return strToFloat(retorno)
+    except:
         return valor
 
 

@@ -2,17 +2,25 @@ from PyQt5.QtWidgets import QWidget, QLineEdit
 from PyQt5.QtCore import Qt
 
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 from Design.pyUi.wdgCadastroCliente import Ui_wdgCadastroCliente
 from Design.CustomWidgets.newToast import QToaster
+
 from heart.localStyleSheet.cadastroCliente import etapaCadatro
 
+from cache.cacheEscritorio import CacheEscritorio
+
 from modelos.clienteORM import Cliente
+from modelos.escritoriosORM import Escritorios
 from modelos.telefonesORM import Telefones
 from modelos.itemContribuicao import ItemContribuicao
+from modelos.clienteProfissao import ClienteProfissao
+from modelos.clienteInfoBanco import ClienteInfoBanco
+
 from repositorios.integracaoRepositorio import IntegracaoRepository
 
-from util.dateHelper import strToDate
+from util.dateHelper import strToDate, calculaIdade
 from util.enums.dashboardEnums import TelaAtual, Navegacao, EtapaCadastraCliente
 from util.enums.telefoneEnums import TipoTelefone, TelefonePesoal
 from util.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit, estCivil, getEscolaridade, getEstados, getEstadoBySigla, unmaskAll
@@ -20,7 +28,10 @@ from util.popUps import popUpOkAlerta
 
 
 class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
-    clienteAtual: Cliente
+    clienteAtual: Cliente = None
+    escritorioAtual: Escritorios = None
+    dadosBancarios: ClienteInfoBanco = None
+    dadosProfissionais: ClienteProfissao = None
     etapaAtual: EtapaCadastraCliente
     editando: bool = False
 
@@ -29,48 +40,55 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.setupUi(self)
         self.dashboard = parent
 
-        self.leRg.editingFinished.connect(lambda: self.leRg.setText(mascaraRG(self.leRg.text())))
-        self.leCpf.editingFinished.connect(lambda: self.leCpf.setText(mascaraCPF(self.leCpf.text())))
-        self.leTelefone1.editingFinished.connect(self.avaliaInsereTelefone)
-        self.leTelefone2.editingFinished.connect(self.avaliaInsereTelefoneSecundario)
-        self.leCep.editingFinished.connect(lambda: self.leCep.setText(mascaraCep(self.leCep.text())))
+        self.buscaEscritorio()
 
-        self.leCep.editingFinished.connect(lambda: self.carregaInfoTela('cep'))
-        self.leEndereco.textEdited.connect(lambda: self.carregaInfoTela('endereco'))
-        self.leCidade.textEdited.connect(lambda: self.carregaInfoTela('cidade'))
-        self.leBairro.textEdited.connect(lambda: self.carregaInfoTela('bairro'))
-        self.leComplemento.textEdited.connect(lambda: self.carregaInfoTela('complemento'))
-        # self.leTelefone1.editingFinished.connect(lambda: self.carregaInfoTela('telefone1'))
-        # self.leTelefone2.editingFinished.connect(lambda: self.carregaInfoTela('telefone2'))
-        self.leCarteiraProf.textEdited.connect(lambda: self.carregaInfoTela('cartProf'))
-        self.leProfissao.textEdited.connect(lambda: self.carregaInfoTela('profissao'))
-        self.leNomeCliente.textEdited.connect(lambda: self.carregaInfoTela('nomeCliente'))
-        self.leRg.textEdited.connect(lambda: self.carregaInfoTela('rg'))
-        self.leNumero.textEdited.connect(lambda: self.carregaInfoTela('leNumero'))
-        self.leIdade.textEdited.connect(lambda: self.carregaInfoTela('idade'))
-        self.leCpf.textEdited.connect(lambda: self.carregaInfoTela('cpf'))
-        self.leNomeDaMae.textEdited.connect(lambda: self.carregaInfoTela('nomeMae'))
-        self.leEmail.textEdited.connect(lambda: self.carregaInfoTela('email'))
-        self.leNomeBanco.textEdited.connect(lambda: self.carregaInfoTela('leNomeBanco'))
-        self.leConta.textEdited.connect(lambda: self.carregaInfoTela('leNumeroConta'))
-        self.leNumeroAgencia.textEdited.connect(lambda: self.carregaInfoTela('leNumeroAgencia'))
-        self.leSenhaInss.textEdited.connect(lambda: self.carregaInfoTela('leSenhaINSS'))
-        self.lePix.textEdited.connect(lambda: self.carregaInfoTela('lePix'))
-        self.rbFeminino.clicked.connect(lambda: self.carregaInfoTela('rbFeminino'))
-        self.rbMasculino.clicked.connect(lambda: self.carregaInfoTela('rbMasculino'))
+        self.iniciaCamposPessoais()
+        self.leIdade.setDisabled(True)
+        self.leCdCliente.setDisabled(True)
 
-        self.dtNascimento.dateChanged.connect(lambda: self.carregaInfoTela('dataNascimento'))
+        # Definindo ordem do focus
+        self.setTabOrder(self.leNomeCliente, self.dtNascimento)
+        self.setTabOrder(self.dtNascimento, self.cbxEstadoCivil)
+        self.setTabOrder(self.cbxEstadoCivil, self.cbxEscolaridade)
+        self.setTabOrder(self.cbxEscolaridade, self.leRg)
+        self.setTabOrder(self.leRg, self.leCpf)
+        self.setTabOrder(self.leCpf, self.rbMasculino)
+        self.setTabOrder(self.rbMasculino, self.leTelefone1)
+        self.setTabOrder(self.leTelefone1, self.leTelefone2)
+        self.setTabOrder(self.leTelefone2, self.leEmail)
+        self.setTabOrder(self.leEmail, self.leNomeDaMae)
+        self.setTabOrder(self.leNomeDaMae, self.leCep)
+        self.setTabOrder(self.leCep, self.pbBuscaCep)
+        self.setTabOrder(self.pbBuscaCep, self.leCidade)
+        self.setTabOrder(self.leCidade, self.cbxEstado)
+        self.setTabOrder(self.cbxEstado, self.leEndereco)
+        self.setTabOrder(self.leEndereco, self.leBairro)
+        self.setTabOrder(self.leBairro, self.leComplemento)
+        self.setTabOrder(self.leComplemento, self.leNumero)
+        self.setTabOrder(self.leNumero, self.pbSalvarDados)
 
-        self.cbxEstadoCivil.activated.connect(lambda: self.carregaInfoTela('estCivil'))
-        self.cbxEscolaridade.activated.connect(lambda: self.carregaInfoTela('cbxEscolaridade'))
+        self.setTabOrder(self.leNit, self.leCarteiraProf)
+        self.setTabOrder(self.leCarteiraProf, self.leProfissao)
+        self.setTabOrder(self.leProfissao, self.pbSalvarDados)
+
+        self.setTabOrder(self.leNomeBanco, self.leNumeroAgencia)
+        self.setTabOrder(self.leNumeroAgencia, self.leConta)
+        self.setTabOrder(self.leNumeroAgencia, self.leConta)
+        self.setTabOrder(self.leConta, self.lePix)
+        self.setTabOrder(self.lePix, self.leSenhaInss)
+        self.setTabOrder(self.leSenhaInss, self.pbSalvarDados)
 
         self.pbVoltar.clicked.connect(lambda: self.avaliaNavegacao(Navegacao.anterior))
         self.pbSalvarDados.clicked.connect(self.avaliaSalvaDados)
-        self.pbBuscaCep.clicked.connect(self.buscaCep)
         self.cbMostraPix.stateChanged.connect(lambda: self.avaliaMostraSenhas('pix'))
         self.cbMostraMeuInss.stateChanged.connect(lambda: self.avaliaMostraSenhas('meuInss'))
 
         self.trocaEtapa(EtapaCadastraCliente.pessoal)
+
+    def atualizaIdadeTela(self):
+        dataNascimento: datetime.date = self.dtNascimento.date().toPyDate()
+        idade: relativedelta = calculaIdade(dataNascimento, datetime.today())
+        self.leIdade.setText(f"{idade.years} anos, {idade.months} meses")
 
     def avaliaNavegacao(self, tipo: Navegacao):
         if tipo == Navegacao.anterior:
@@ -86,6 +104,9 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             pass
 
     def avaliaInsereTelefone(self):
+        if self.leTelefone1.text() == '':
+            return True
+
         try:
             telefone: Telefones = Telefones.select().where(Telefones.clienteId == self.clienteAtual.clienteId, Telefones.principal == True).get()
             telefone.numero = unmaskAll(self.leTelefone1.text())
@@ -99,15 +120,19 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
                 pessoalRecado=TelefonePesoal.Pessoal.value,
                 tipoTelefone=TipoTelefone.Whatsapp.value,
                 ativo=True
-            ).save()
+            )
+            telefone.save()
         finally:
-            self.clienteAtual.telefoneId = telefone
+            self.clienteAtual.telefoneId = telefone.telefoneId
             self.clienteAtual.dataUltAlt = datetime.now()
             self.clienteAtual.save()
 
             self.leTelefone1.setText(mascaraTelCel(self.leTelefone1.text()))
 
     def avaliaInsereTelefoneSecundario(self):
+        if self.leTelefone2.text() == '':
+            return True
+
         try:
             telefone: Telefones = Telefones.select().where(Telefones.clienteId == self.clienteAtual.clienteId, Telefones.principal == False).get()
             telefone.numero = unmaskAll(self.leTelefone2.text())
@@ -129,17 +154,34 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         if self.etapaAtual == EtapaCadastraCliente.pessoal:
             if self.leNomeCliente.text() == '' or self.leNomeCliente.text().isnumeric():
                 return False
+
+            self.salvaEtapaPessoal()
             self.trocaEtapa(EtapaCadastraCliente.profissional)
+            self.leNit.setFocus()
 
         elif self.etapaAtual == EtapaCadastraCliente.profissional:
+            self.salvaEtapaProfissional()
+
+            if self.clienteAtual.dadosProfissionais is None:
+                self.clienteAtual.dadosProfissionais = self.dadosProfissionais.infoId
+                self.clienteAtual.dataUltAlt = datetime.now()
+                self.clienteAtual.save()
+
             self.trocaEtapa(EtapaCadastraCliente.bancarias)
+            self.leNomeBanco.setFocus()
 
         elif self.etapaAtual == EtapaCadastraCliente.bancarias:
             if not self.leNumeroAgencia.text().isnumeric():
                 return False
+
+            self.salvaEtapaBancaria()
+
+            self.clienteAtual.dadosBancarios = self.dadosBancarios
+            self.clienteAtual.dataUltAlt = datetime.now()
+            self.clienteAtual.save()
+
             self.trocaEtapa(EtapaCadastraCliente.finaliza)
 
-        self.clienteAtual.save()
         self.editando = False
         return True
 
@@ -176,127 +218,59 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         elif 'erro' in dictCep.keys():
             self.showPopupAlerta(dictCep['erro'])
 
-    def carregaInfoTela(self, info, *args):
-        self.editando = True
-
-        if info == 'cep':
-            self.clienteAtual.cep = self.leCep.text().replace('-', '')
-
-        elif info == 'endereco':
-            self.clienteAtual.endereco = self.leEndereco.text()
-
-        elif info == 'leNomeBanco':
-            self.clienteAtual.nomeBanco = self.leNomeBanco.text()
-
-        elif info == 'leNumeroConta':
-            self.clienteAtual.numeroConta = self.leConta.text()
-
-        elif info == 'leNumeroAgencia':
-            self.clienteAtual.agenciaBanco = self.leNumeroAgencia.text()
-
-        elif info == 'leSenhaINSS':
-            self.clienteAtual.senhaINSS = self.leSenhaInss.text()
-
-        elif info == 'cidade':
-            self.clienteAtual.cidade = self.leCidade.text()
-
-        elif info == 'bairro':
-            self.clienteAtual.bairro = self.leBairro.text()
-
-        elif info == 'estado':
-            self.clienteAtual.estado = self.cbxEstado.currentText()
-
-        elif info == 'cbxEscolaridade':
-            self.clienteAtual.grauEscolaridade = self.cbxEscolaridade.currentText()
-
-        elif info == 'complemento':
-            self.clienteAtual.complemento = self.leComplemento.text()
-
-        elif info == 'nit':
-            self.clienteAtual.nit = self.leNit.text()
-
-        elif info == 'cartProf':
-            self.clienteAtual.numCartProf = self.leCarteiraProf.text()
-
-        elif info == 'profissao':
-            self.clienteAtual.profissao = self.leProfissao.text()
-
-        elif info == 'cdCliente':
-            if self.leCdCliente.text() != '':
-                self.clienteAtual.clienteId = int(self.leCdCliente.text())
-
-        elif info == 'sbCliente':
-            if self.sbCdCliente.text() != '':
-                self.buscaProxCliente()
-
-        elif info == 'nomeCliente':
-            index: int = self.leNomeCliente.text().find(' ')
-            self.clienteAtual.nomeCliente = self.leNomeCliente[:index]
-            self.clienteAtual.sobrenomeCliente = self.leNomeCliente.text()[index + 1:]
-
-        elif info == 'rg':
-            self.clienteAtual.rgCliente = self.leRg.text()
-
-        elif info == 'dataNascimento':
-            # self.cliente.dataNascimento = self.dtNascimento.date().toPyDate().strftime('%Y-%m-%d %H:%M')
-            self.clienteAtual.dataNascimento = self.dtNascimento.date().toPyDate().strftime('%Y-%m-%d')
-
-        elif info == 'idade':
-            self.clienteAtual.idade = self.leIdade.text()
-
-        elif info == 'cpf':
-            self.clienteAtual.cpfCliente = self.leCpf.text()
-
-        elif info == 'nomeMae':
-            self.clienteAtual.nomeMae = self.leNomeDaMae.text()
-
-        elif info == 'estCivil':
-            self.clienteAtual.estadoCivil = self.cbxEstadoCivil.currentText()
-
-        elif info == 'email':
-            self.clienteAtual.email = self.leEmail.text()
-
-        elif info == 'telefone1':
-            if self.clienteAtual.telefoneId is None or self.clienteAtual.telefoneId.telefoneId is None:
-                telefone = Telefones(
-                    clienteId=self.clienteAtual.clienteId,
-                    numero=self.leTelefone1.text(),
-                    pessoalRecado='P',
-                    tipoTelefone='W'
-                ).save()
-                self.clienteAtual.telefoneId = telefone
-
-            self.clienteAtual.telefoneId.numero = self.leTelefone1.text()
-            self.clienteAtual.telefoneId.dataUltAlt = datetime.now()
-            self.clienteAtual.telefoneId.save()
-
-        elif info == 'telefone2':
-            if self.clienteAtual.telefoneId is None:
-                telefoneSecundario = Telefones(
-                    numero=self.leTelefone2.text(),
-                ).save()
-
-        elif info == 'rbMasculino' or info == 'rbFeminino':
-            if self.rbMasculino.isChecked():
-                self.clienteAtual.genero = 'M'
-            else:
-                self.clienteAtual.genero = 'F'
-
-        elif info == 'leNumero':
-            if self.leNumero.text() != '':
-                self.clienteAtual.numero = int(self.leNumero.text())
-
-        elif info == 'lePix':
-            self.clienteAtual.pixCliente = self.lePix.text()
-
-    def carregaClienteNaTela(self, cliente: Cliente, cadastro: bool = False):
+    def buscaDadosBancarios(self) -> ClienteInfoBanco:
         try:
+            infoBanco = None
+            infoBanco = ClienteInfoBanco.select().where(
+                ClienteInfoBanco.clienteId == self.clienteAtual.clienteId
+            ).get()
+            return infoBanco
+        except ClienteInfoBanco.DoesNotExist as err:
+            infoBanco = ClienteInfoBanco(
+                clienteId=self.clienteAtual.clienteId
+            )
+            infoBanco.save()
+            print(f"buscaDadosBancarios: {err=}")
+        except Exception as err:
+            print(f"buscaDadosBancarios: {err=}")
+        finally:
+            return infoBanco
+
+    def buscaEscritorio(self) -> bool:
+        if self.escritorioAtual is None:
+            self.escritorioAtual = CacheEscritorio().carregarCache()
+
+            if self.escritorioAtual is None:
+                self.escritorioAtual = CacheEscritorio().carregarCacheTemporario()
+
+                if self.escritorioAtual is None:
+                    if self.clienteAtual is not None:
+                        ClienteInfoBanco.delete().where(ClienteInfoBanco.clienteId == self.clienteAtual.clienteId).execute()
+                        ClienteProfissao.delete().where(ClienteProfissao.clienteId == self.clienteAtual.clienteId).execute()
+                        self.clienteAtual.delete()
+                    popUpOkAlerta("Não foi possível carregar as informações do escritório. Tente novamente.", erro="NewCadastraCliente<buscaEscritorio>")
+                    return False
+
+        return True
+
+    def carregaClienteNaTela(self, cliente: Cliente, cadastro: bool = False, tela: str=None):
+        try:
+            #################################### Info pessoal
+            self.clienteAtual = cliente
+            if self.clienteAtual.clienteId is None:
+                self.leNomeCliente.setFocus()
+                return True
+
             self.leCpf.setText(mascaraCPF(cliente.cpfCliente))
             self.dtNascimento.setDate(strToDate(cliente.dataNascimento))
-            self.leIdade.setText(f'{cliente.idade}')
+            self.atualizaIdadeTela()
             self.leNomeDaMae.setText(cliente.nomeMae)
             self.leNomeCliente.setText(cliente.nomeCliente + ' ' + cliente.sobrenomeCliente)
             self.leCdCliente.setText(str(cliente.clienteId))
+
+            telefoneSecundario = self.carregaTelefoneSecundario(cliente.clienteId)
+            if telefoneSecundario is not None:
+                self.leTelefone2.setText(mascaraTelCel(telefoneSecundario.numero))
 
             if cliente.rgCliente not in [None, 'None']:
                 self.leRg.setText(mascaraRG(cliente.rgCliente))
@@ -328,27 +302,6 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             if cliente.complemento not in [None, 'None']:
                 self.leComplemento.setText(cliente.complemento)
 
-            if cliente.nit not in [None, 'None']:
-                self.leNit.setText(mascaraNit(int(cliente.nit)))
-
-            if cliente.numCartProf not in [None, 'None']:
-                self.leCarteiraProf.setText(str(cliente.numCartProf))
-
-            if cliente.profissao not in [None, 'None']:
-                self.leProfissao.setText(cliente.profissao)
-
-            if cliente.numeroConta not in [None, 'None']:
-                self.leConta.setText(cliente.numeroConta)
-
-            if cliente.nomeBanco not in [None, 'None']:
-                self.leNomeBanco.setText(cliente.nomeBanco)
-
-            if cliente.pixCliente not in [None, 'None']:
-                self.lePix.setText(cliente.pixCliente)
-
-            if cliente.agenciaBanco not in [None, 'None']:
-                self.leNumeroAgencia.setText(cliente.agenciaBanco)
-
             if cliente.grauEscolaridade not in [None, 'None']:
                 self.cbxEscolaridade.setCurrentText(cliente.grauEscolaridade)
 
@@ -360,6 +313,35 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             else:
                 self.rbFeminino.setChecked(True)
 
+            #################################### Info profissionais
+            self.dadosProfissionais = ClienteProfissao.get_by_id(cliente.dadosProfissionais)
+
+            if self.dadosProfissionais.nit not in [None, 'None']:
+                self.leNit.setText(mascaraNit(int(self.dadosProfissionais.nit)))
+
+            if self.dadosProfissionais.numCaretiraTrabalho not in [None, 'None']:
+                self.leCarteiraProf.setText(str(self.dadosProfissionais.numCaretiraTrabalho))
+
+            if self.dadosProfissionais.nomeProfissao not in [None, 'None']:
+                self.leProfissao.setText(self.dadosProfissionais.nomeProfissao)
+
+            #################################### Info bancárias
+            self.dadosBancarios = self.buscaDadosBancarios()
+            if self.dadosBancarios is None:
+                return True
+
+            if self.dadosBancarios.numeroConta not in [None, 'None']:
+                self.leConta.setText(self.dadosBancarios.numeroConta)
+
+            if self.dadosBancarios.nomeBanco not in [None, 'None']:
+                self.leNomeBanco.setText(self.dadosBancarios.nomeBanco)
+
+            if self.dadosBancarios.chavePix not in [None, 'None']:
+                self.lePix.setText(self.dadosBancarios.chavePix)
+
+            if self.dadosBancarios.numeroAgencia not in [None, 'None']:
+                self.leNumeroAgencia.setText(self.dadosBancarios.numeroAgencia)
+
         except Exception as err:
             print(f"carregaClienteNaTela <NewCadastraCliente>: {err=}")
             popUpOkAlerta("Não foi possível carregar as informações do cliente na tela. Tente novamente.", erro=str(err))
@@ -367,7 +349,14 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             if cadastro:
                 self.deletaCliente(cliente.clienteId)
 
-        self.clienteAtual = cliente
+        if tela is not None:
+            if tela == 'infoPessoais' or tela == 'infoResidenciais':
+                self.trocaEtapa(EtapaCadastraCliente.pessoal)
+            elif tela == 'infoProfissionais':
+                self.trocaEtapa(EtapaCadastraCliente.profissional)
+            else:
+                self.trocaEtapa(EtapaCadastraCliente.bancarias)
+
         return True
 
     def carregaComboBoxes(self):
@@ -376,16 +365,169 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.cbxEstado.addItems(getEstados().keys())
         self.cbxEstado.setCurrentIndex(24)
 
+    def carregaTelefoneSecundario(self, clienteId: int):
+        try:
+            return Telefones.select(Telefones.numero).where(Telefones.clienteId==clienteId, Telefones.principal==False).get()
+        except Telefones.DoesNotExist as err:
+            print(f"{err=}")
+            return None
+
     def deletaCliente(self, clienteId: int):
         Cliente.delete_by_id(clienteId)
         ItemContribuicao.delete_by_id(clienteId)
         Telefones.delete_by_id(clienteId)
 
+    def iniciaCamposPessoais(self):
+        self.leRg.editingFinished.connect(lambda: self.leRg.setText(mascaraRG(self.leRg.text())))
+        self.leCpf.editingFinished.connect(lambda: self.leCpf.setText(mascaraCPF(self.leCpf.text())))
+        self.leCep.editingFinished.connect(lambda: self.leCep.setText(mascaraCep(self.leCep.text())))
+        self.leTelefone1.editingFinished.connect(lambda: self.leTelefone1.setText(mascaraTelCel(self.leTelefone1.text())))
+        self.leTelefone2.editingFinished.connect(lambda: self.leTelefone2.setText(mascaraTelCel(self.leTelefone2.text())))
+        self.dtNascimento.dateChanged.connect(self.atualizaIdadeTela)
+        self.pbBuscaCep.clicked.connect(self.buscaCep)
+
     def iniciaTela(self):
-        self.carregaComboBoxes()
         self.limpaTudo()
+        self.carregaComboBoxes()
         self.trocaEtapa(EtapaCadastraCliente.pessoal)
         self.clienteAtual = Cliente()
+
+    def insereInfoTela(self, info, *args):
+        self.editando = True
+
+        #//////////////////////////////////// Dados pessoais
+        if info == 'cep':
+            self.clienteAtual.cep = self.leCep.text().replace('-', '')
+
+        elif info == 'endereco':
+            self.clienteAtual.endereco = self.leEndereco.text()
+
+        elif info == 'cdCliente':
+            if self.leCdCliente.text() != '':
+                self.clienteAtual.clienteId = int(self.leCdCliente.text())
+
+        elif info == 'nomeCliente':
+            index: int = self.leNomeCliente.text().find(' ')
+            self.clienteAtual.nomeCliente = self.leNomeCliente.text()[:index]
+            self.clienteAtual.sobrenomeCliente = self.leNomeCliente.text()[index + 1:]
+
+        elif info == 'rg':
+            self.clienteAtual.rgCliente = self.leRg.text()
+
+        elif info == 'dataNascimento':
+            self.clienteAtual.dataNascimento = self.dtNascimento.date().toPyDate().strftime('%Y-%m-%d')
+
+        elif info == 'cpf':
+            self.clienteAtual.cpfCliente = self.leCpf.text()
+
+        elif info == 'nomeMae':
+            self.clienteAtual.nomeMae = self.leNomeDaMae.text()
+
+        elif info == 'estCivil':
+            self.clienteAtual.estadoCivil = self.cbxEstadoCivil.currentText()
+
+        elif info == 'email':
+            self.clienteAtual.email = self.leEmail.text()
+
+        elif info == 'telefone1':
+            if self.clienteAtual.telefoneId is None or self.clienteAtual.telefoneId.telefoneId is None:
+                if self.clienteAtual.clienteId is None:
+                    self.clienteAtual.save()
+
+                telefone = Telefones(
+                    clienteId=self.clienteAtual.clienteId,
+                    numero=self.leTelefone1.text(),
+                    pessoalRecado='P',
+                    tipoTelefone='W'
+                ).save()
+                self.clienteAtual.telefoneId = telefone
+
+            self.clienteAtual.telefoneId.numero = self.leTelefone1.text()
+            self.clienteAtual.telefoneId.dataUltAlt = datetime.now()
+            self.clienteAtual.telefoneId.save()
+
+        elif info == 'rbMasculino' or info == 'rbFeminino':
+            if self.rbMasculino.isChecked():
+                self.clienteAtual.genero = 'M'
+            else:
+                self.clienteAtual.genero = 'F'
+
+        elif info == 'leNumero':
+            if self.leNumero.text() != '' and self.leNumero.text().isnumeric():
+                self.clienteAtual.numero = int(self.leNumero.text())
+
+        elif info == 'leSenhaINSS':
+            self.clienteAtual.senhaINSS = self.leSenhaInss.text()
+
+        elif info == 'cidade':
+            self.clienteAtual.cidade = self.leCidade.text()
+
+        elif info == 'bairro':
+            self.clienteAtual.bairro = self.leBairro.text()
+
+        elif info == 'estado':
+            self.clienteAtual.estado = self.cbxEstado.currentText()
+
+        elif info == 'cbxEscolaridade':
+            self.clienteAtual.grauEscolaridade = self.cbxEscolaridade.currentText()
+
+        elif info == 'complemento':
+            self.clienteAtual.complemento = self.leComplemento.text()
+
+        #//////////////////////////////////// Dados bancários
+        elif info == 'leNomeBanco':
+            if self.dadosBancarios is None:
+                self.dadosBancarios = ClienteInfoBanco(
+                    clienteId=self.clienteAtual.clienteId,
+                    nomeBanco=self.leNomeBanco.text()
+                )
+                self.dadosBancarios.save()
+
+            self.dadosBancarios.nomeBanco = self.leNomeBanco.text()
+
+        elif info == 'leNumeroConta':
+            if self.dadosBancarios is None:
+                self.dadosBancarios = ClienteInfoBanco(
+                    clienteId=self.clienteAtual.clienteId,
+                    nomeBanco=self.leNomeBanco.text()
+                )
+                self.dadosBancarios.save()
+
+            self.dadosBancarios.numeroConta = self.leConta.text()
+
+        elif info == 'leNumeroAgencia':
+            self.dadosBancarios.numeroAgencia = self.leNumeroAgencia.text()
+
+        elif info == 'lePix':
+            self.dadosBancarios.chavePix = self.lePix.text()
+
+        #//////////////////////////////////// Dados profissionais
+        elif info == 'nit':
+            if self.dadosProfissionais is None:
+                self.dadosProfissionais = ClienteProfissao(
+                    clienteId=self.clienteAtual.clienteId,
+                    nit=self.leNit.text()
+                )
+                # self.dadosProfissionais.save()
+                # self.clienteAtual.dadosProfissionais = self.dadosProfissionais.infoId
+                # self.clienteAtual.dataUltAlt = datetime.now()
+                # self.clienteAtual.save()
+
+            self.dadosProfissionais.nit = self.leNit.text()
+
+        elif info == 'cartProf':
+            if self.dadosProfissionais is None:
+                self.dadosProfissionais = ClienteProfissao(clienteId=self.clienteAtual.clienteId)
+                # self.dadosProfissionais.save()
+
+            self.dadosProfissionais.numCaretiraTrabalho = self.leCarteiraProf.text()
+
+        elif info == 'profissao':
+            if self.dadosProfissionais is None:
+                self.dadosProfissionais = ClienteProfissao(clienteId=self.clienteAtual.clienteId)
+                # self.dadosProfissionais.save()
+
+            self.dadosProfissionais.nomeProfissao = self.leProfissao.text()
 
     def limpaTudo(self):
         self.leNomeCliente.clear()
@@ -414,6 +556,56 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.editando = False
 
         self.cbxEstado.setCurrentIndex(24)
+        self.cbxEstadoCivil.clear()
+
+    def salvaEtapaBancaria(self):
+        if self.dadosBancarios is None:
+            self.dadosBancarios = ClienteInfoBanco()
+
+        self.dadosBancarios.estado = self.clienteAtual.estado
+        self.dadosBancarios.clienteId = self.clienteAtual.clienteId
+        self.insereInfoTela('lePix')
+        self.insereInfoTela('leNomeBanco')
+        self.insereInfoTela('leNumeroConta')
+        self.insereInfoTela('leNumeroAgencia')
+        self.insereInfoTela('leSenhaINSS')
+        self.dadosBancarios.save()
+
+    def salvaEtapaPessoal(self):
+        self.insereInfoTela('nomeCliente')
+        self.insereInfoTela('nomeMae')
+        self.insereInfoTela('rg')
+        self.insereInfoTela('cpf')
+        self.insereInfoTela('email')
+        self.insereInfoTela('dataNascimento')
+        self.insereInfoTela('estCivil')
+        self.insereInfoTela('cbxEscolaridade')
+        self.insereInfoTela('complemento')
+        self.insereInfoTela('cep')
+        self.insereInfoTela('endereco')
+        self.insereInfoTela('cidade')
+        self.insereInfoTela('bairro')
+        self.insereInfoTela('leNumero')
+        self.insereInfoTela('complemento')
+
+        if self.rbMasculino.isChecked():
+            self.insereInfoTela('rbMasculino')
+        else:
+            self.insereInfoTela('rbFeminino')
+
+        if self.clienteAtual.escritorioId is None:
+            self.clienteAtual.escritorioId = self.escritorioAtual.escritorioId
+
+        self.clienteAtual.save()
+
+        self.avaliaInsereTelefone()
+        self.avaliaInsereTelefoneSecundario()
+
+    def salvaEtapaProfissional(self):
+        self.insereInfoTela('cartProf')
+        self.insereInfoTela('profissao')
+        self.insereInfoTela('nit')
+        self.dadosProfissionais.save()
 
     def trocaEtapa(self, etapa: EtapaCadastraCliente, sucesso: bool = True):
         self.etapaAtual = etapa
@@ -435,3 +627,5 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             else:
                 self.frSegundaEtapa.setStyleSheet(etapaCadatro(EtapaCadastraCliente.profissional, sucesso=False))
                 self.frTerceiraEtapa.setStyleSheet(etapaCadatro(EtapaCadastraCliente.bancarias, sucesso=False))
+
+

@@ -14,13 +14,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgMenuPrincipal(object):
     def setupUi(self, wdgMenuPrincipal):
         wdgMenuPrincipal.setObjectName("wdgMenuPrincipal")
-        wdgMenuPrincipal.resize(200, 200)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        wdgMenuPrincipal.resize(232, 883)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(wdgMenuPrincipal.sizePolicy().hasHeightForWidth())
         wdgMenuPrincipal.setSizePolicy(sizePolicy)
-        wdgMenuPrincipal.setMinimumSize(QtCore.QSize(200, 200))
+        wdgMenuPrincipal.setMinimumSize(QtCore.QSize(0, 0))
         wdgMenuPrincipal.setStyleSheet("/*#wdgMenuPrincipal {\n"
 "    background-color: lightgrey;\n"
 "}*/\n"
@@ -29,13 +29,32 @@ class Ui_wdgMenuPrincipal(object):
 "#frPrincipal {\n"
 "    background-color: white;\n"
 "    border-radius: 10px;\n"
-"    \n"
+"}\n"
+"\n"
+"#frFirulaPrincipal {\n"
+"    background-color: #292D40;\n"
+"}\n"
+"\n"
+"#frFirulaFerramentas {\n"
+"    background-color: #3F4E8C;\n"
+"}\n"
+"\n"
+"#frFirulaConfiguracoes  {\n"
+"    background-color: #3F64FF;\n"
+"}\n"
+"\n"
+"\n"
+"/*--------------------------------- Labels ---------------------------------*/\n"
+"#lbInfoFerramentas, #lbInfoPrincipal,\n"
+"#lbInfoConfiguracoes {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
 "}")
         self.verticalLayout = QtWidgets.QVBoxLayout(wdgMenuPrincipal)
         self.verticalLayout.setContentsMargins(9, -1, -1, -1)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frPrincipal = QtWidgets.QFrame(wdgMenuPrincipal)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frPrincipal.sizePolicy().hasHeightForWidth())
@@ -43,15 +62,97 @@ class Ui_wdgMenuPrincipal(object):
         self.frPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frPrincipal.setFrameShadow(QtWidgets.QFrame.Plain)
         self.frPrincipal.setObjectName("frPrincipal")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frPrincipal)
-        self.verticalLayout_2.setContentsMargins(4, 4, 4, 4)
-        self.verticalLayout_2.setSpacing(0)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.gridLayout = QtWidgets.QGridLayout(self.frPrincipal)
+        self.gridLayout.setContentsMargins(8, 8, 8, 16)
+        self.gridLayout.setVerticalSpacing(10)
+        self.gridLayout.setObjectName("gridLayout")
+        self.glFerramentas = QtWidgets.QGridLayout()
+        self.glFerramentas.setSizeConstraint(QtWidgets.QLayout.SetMaximumSize)
+        self.glFerramentas.setObjectName("glFerramentas")
+        self.gridLayout.addLayout(self.glFerramentas, 3, 0, 1, 1)
+        self.frame_4 = QtWidgets.QFrame(self.frPrincipal)
+        self.frame_4.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_4.setObjectName("frame_4")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame_4)
+        self.horizontalLayout_2.setContentsMargins(0, 8, 0, 0)
+        self.horizontalLayout_2.setSpacing(2)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.lbInfoConfiguracoes = QtWidgets.QLabel(self.frame_4)
+        self.lbInfoConfiguracoes.setObjectName("lbInfoConfiguracoes")
+        self.horizontalLayout_2.addWidget(self.lbInfoConfiguracoes, 0, QtCore.Qt.AlignLeft)
+        self.frFirulaConfiguracoes = QtWidgets.QFrame(self.frame_4)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frFirulaConfiguracoes.sizePolicy().hasHeightForWidth())
+        self.frFirulaConfiguracoes.setSizePolicy(sizePolicy)
+        self.frFirulaConfiguracoes.setMinimumSize(QtCore.QSize(0, 3))
+        self.frFirulaConfiguracoes.setMaximumSize(QtCore.QSize(16777215, 3))
+        self.frFirulaConfiguracoes.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frFirulaConfiguracoes.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frFirulaConfiguracoes.setObjectName("frFirulaConfiguracoes")
+        self.horizontalLayout_2.addWidget(self.frFirulaConfiguracoes)
+        self.gridLayout.addWidget(self.frame_4, 4, 0, 1, 1)
+        self.frame_2 = QtWidgets.QFrame(self.frPrincipal)
+        self.frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_2.setObjectName("frame_2")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frame_2)
+        self.horizontalLayout_3.setContentsMargins(0, 4, 0, 0)
+        self.horizontalLayout_3.setSpacing(2)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.lbInfoPrincipal = QtWidgets.QLabel(self.frame_2)
+        self.lbInfoPrincipal.setObjectName("lbInfoPrincipal")
+        self.horizontalLayout_3.addWidget(self.lbInfoPrincipal, 0, QtCore.Qt.AlignLeft)
+        self.frFirulaPrincipal = QtWidgets.QFrame(self.frame_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frFirulaPrincipal.sizePolicy().hasHeightForWidth())
+        self.frFirulaPrincipal.setSizePolicy(sizePolicy)
+        self.frFirulaPrincipal.setMinimumSize(QtCore.QSize(0, 3))
+        self.frFirulaPrincipal.setMaximumSize(QtCore.QSize(16777215, 3))
+        self.frFirulaPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frFirulaPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frFirulaPrincipal.setObjectName("frFirulaPrincipal")
+        self.horizontalLayout_3.addWidget(self.frFirulaPrincipal)
+        self.gridLayout.addWidget(self.frame_2, 0, 0, 1, 1)
         self.glPrincipal = QtWidgets.QGridLayout()
+        self.glPrincipal.setSizeConstraint(QtWidgets.QLayout.SetMaximumSize)
         self.glPrincipal.setSpacing(2)
         self.glPrincipal.setObjectName("glPrincipal")
-        self.verticalLayout_2.addLayout(self.glPrincipal)
+        self.gridLayout.addLayout(self.glPrincipal, 1, 0, 1, 1)
+        self.frame = QtWidgets.QFrame(self.frPrincipal)
+        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame)
+        self.horizontalLayout.setContentsMargins(0, 8, 0, 0)
+        self.horizontalLayout.setSpacing(2)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.lbInfoFerramentas = QtWidgets.QLabel(self.frame)
+        self.lbInfoFerramentas.setObjectName("lbInfoFerramentas")
+        self.horizontalLayout.addWidget(self.lbInfoFerramentas, 0, QtCore.Qt.AlignLeft)
+        self.frFirulaFerramentas = QtWidgets.QFrame(self.frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frFirulaFerramentas.sizePolicy().hasHeightForWidth())
+        self.frFirulaFerramentas.setSizePolicy(sizePolicy)
+        self.frFirulaFerramentas.setMinimumSize(QtCore.QSize(0, 3))
+        self.frFirulaFerramentas.setMaximumSize(QtCore.QSize(16777215, 3))
+        self.frFirulaFerramentas.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frFirulaFerramentas.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frFirulaFerramentas.setObjectName("frFirulaFerramentas")
+        self.horizontalLayout.addWidget(self.frFirulaFerramentas)
+        self.gridLayout.addWidget(self.frame, 2, 0, 1, 1, QtCore.Qt.AlignBottom)
+        self.glConfiguracoes = QtWidgets.QGridLayout()
+        self.glConfiguracoes.setObjectName("glConfiguracoes")
+        self.gridLayout.addLayout(self.glConfiguracoes, 5, 0, 1, 1)
         self.verticalLayout.addWidget(self.frPrincipal)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
 
         self.retranslateUi(wdgMenuPrincipal)
         QtCore.QMetaObject.connectSlotsByName(wdgMenuPrincipal)
@@ -59,6 +160,9 @@ class Ui_wdgMenuPrincipal(object):
     def retranslateUi(self, wdgMenuPrincipal):
         _translate = QtCore.QCoreApplication.translate
         wdgMenuPrincipal.setWindowTitle(_translate("wdgMenuPrincipal", "Form"))
+        self.lbInfoConfiguracoes.setText(_translate("wdgMenuPrincipal", "Configurações"))
+        self.lbInfoPrincipal.setText(_translate("wdgMenuPrincipal", "Principal"))
+        self.lbInfoFerramentas.setText(_translate("wdgMenuPrincipal", "Ferramentas"))
 
 
 if __name__ == "__main__":

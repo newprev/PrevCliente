@@ -21,7 +21,7 @@ class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
         super(NewPopupCNIS, self).__init__(parent=parent)
         self.setupUi(self)
         self.center()
-        self.wdgListaCliente = parent
+        self.parent = parent
         self.dashboard = dashboard
         self.sinais = Sinais()
         self.sinais.sEnviaPath.connect(self.enviaPath)
@@ -33,6 +33,7 @@ class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
         self.toast = QToaster()
 
         self.pbBuscaCNIS.clicked.connect(self.abreBuscaCNIS)
+        self.pbCadSemCnis.clicked.connect(self.cadastraSemCnis)
 
     def abreBuscaCNIS(self):
         home = str(Path.home())
@@ -70,6 +71,9 @@ class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
         self.aGeometry.start()
         self.aOpacity.start()
 
+    def cadastraSemCnis(self):
+        self.sinais.sEnviaPath.emit('')
+
     def center(self):
         frameGm = self.frameGeometry()
         screen = QtWidgets.QApplication.desktop().screenNumber(QtWidgets.QApplication.desktop().cursor().pos())
@@ -103,10 +107,10 @@ class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
 
     def enviaPath(self, pathCnis: str):
         self.close()
-        self.wdgListaCliente.recebePathCnis(pathCnis)
-        
+        self.parent.recebePathCnis(pathCnis)
+
     def mostraToast(self):
-        self.wdgListaCliente.toastCarregaCnis()
+        self.parent.toastCarregaCnis()
 
     def processaCnis(self, path: str):
         if os.path.isfile(path):

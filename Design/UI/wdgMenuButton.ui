@@ -27,6 +27,15 @@
 	background-position: center;
 }
 
+#pbFuncionalidade:hover {
+	background-color: #F2F2F2;
+	border-radius: 15px;
+
+	background-image: url(:/funcionalidade/processos.png);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
 /*------------------------------------ Label ------------------------------------*/
 #lbNomeFuncionalidade {
 	
@@ -59,7 +68,7 @@
      </property>
      <property name="maximumSize">
       <size>
-       <width>60</width>
+       <width>80</width>
        <height>60</height>
       </size>
      </property>

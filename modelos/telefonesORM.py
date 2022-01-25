@@ -1,10 +1,9 @@
 from modelos.baseModelORM import BaseModel
-from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
 from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
-from peewee import CharField, DateTimeField, AutoField, ForeignKeyField, BooleanField
+from peewee import IntegerField, CharField, DateTimeField, AutoField, ForeignKeyField, BooleanField
 from datetime import datetime
 
 TABLENAME = 'telefones'
@@ -12,7 +11,7 @@ TABLENAME = 'telefones'
 
 class Telefones(BaseModel, Model):
     telefoneId = AutoField(column_name='telefoneId', null=True)
-    clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente, backref='cliente')
+    clienteId = IntegerField(column_name='clienteId')
     ativo = BooleanField(default=True)
     principal = BooleanField(default=True)
     numero = CharField(null=False)

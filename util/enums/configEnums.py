@@ -10,3 +10,7 @@ class ImportantPaths(Enum):
     design = 0
     fonts = 1
 
+
+class TipoConfiguracao(Enum):
+    sistema = 0
+

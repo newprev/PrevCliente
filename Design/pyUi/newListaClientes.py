@@ -161,26 +161,26 @@ class Ui_wdgListaClientes(object):
         self.pbBusca.setObjectName("pbBusca")
         self.horizontalLayout_2.addWidget(self.pbBusca)
         self.gridLayout_2.addWidget(self.frBusca, 0, 0, 1, 2, QtCore.Qt.AlignVCenter)
-        self.frame_3 = QtWidgets.QFrame(self.frAreaBusca)
-        self.frame_3.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_3.setObjectName("frame_3")
-        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.frame_3)
+        self.frInfoCliEncontrados = QtWidgets.QFrame(self.frAreaBusca)
+        self.frInfoCliEncontrados.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfoCliEncontrados.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoCliEncontrados.setObjectName("frInfoCliEncontrados")
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.frInfoCliEncontrados)
         self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_5.setSpacing(8)
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.frInfoIconeBusca = QtWidgets.QFrame(self.frame_3)
+        self.frInfoIconeBusca = QtWidgets.QFrame(self.frInfoCliEncontrados)
         self.frInfoIconeBusca.setMinimumSize(QtCore.QSize(24, 24))
         self.frInfoIconeBusca.setMaximumSize(QtCore.QSize(24, 24))
         self.frInfoIconeBusca.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frInfoIconeBusca.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frInfoIconeBusca.setObjectName("frInfoIconeBusca")
         self.horizontalLayout_5.addWidget(self.frInfoIconeBusca)
-        self.lbInfoBusca = QtWidgets.QLabel(self.frame_3)
+        self.lbInfoBusca = QtWidgets.QLabel(self.frInfoCliEncontrados)
         self.lbInfoBusca.setObjectName("lbInfoBusca")
         self.horizontalLayout_5.addWidget(self.lbInfoBusca)
-        self.gridLayout_2.addWidget(self.frame_3, 1, 0, 1, 2, QtCore.Qt.AlignTop)
-        self.horizontalLayout.addWidget(self.frAreaBusca)
+        self.gridLayout_2.addWidget(self.frInfoCliEncontrados, 1, 0, 1, 2, QtCore.Qt.AlignTop)
+        self.horizontalLayout.addWidget(self.frAreaBusca, 0, QtCore.Qt.AlignTop)
         self.frame = QtWidgets.QFrame(self.frCabecalhoLista)
         self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -209,6 +209,7 @@ class Ui_wdgListaClientes(object):
 "    selection-background-color: #F9F9F9;\n"
 "    selection-color: grey;\n"
 "    gridline-color: white;\n"
+"\n"
 "    border: 0px solid transparent;\n"
 "}\n"
 "\n"
@@ -228,6 +229,10 @@ class Ui_wdgListaClientes(object):
 "    selection-color: grey;\n"
 "    gridline-color: black;\n"
 "    border: 0px solid transparent;\n"
+"}\n"
+"\n"
+"#tblClientes::item {\n"
+"    padding: 2px 24px 2px 24px;\n"
 "}")
         self.frTabela.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frTabela.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -248,7 +253,7 @@ class Ui_wdgListaClientes(object):
         self.tblClientes.setGridStyle(QtCore.Qt.NoPen)
         self.tblClientes.setCornerButtonEnabled(True)
         self.tblClientes.setObjectName("tblClientes")
-        self.tblClientes.setColumnCount(7)
+        self.tblClientes.setColumnCount(8)
         self.tblClientes.setRowCount(1)
         item = QtWidgets.QTableWidgetItem()
         self.tblClientes.setVerticalHeaderItem(0, item)
@@ -313,6 +318,8 @@ class Ui_wdgListaClientes(object):
         item.setBackground(QtGui.QColor(255, 255, 255))
         self.tblClientes.setHorizontalHeaderItem(6, item)
         item = QtWidgets.QTableWidgetItem()
+        self.tblClientes.setHorizontalHeaderItem(7, item)
+        item = QtWidgets.QTableWidgetItem()
         self.tblClientes.setItem(0, 0, item)
         item = QtWidgets.QTableWidgetItem()
         self.tblClientes.setItem(0, 1, item)
@@ -362,6 +369,8 @@ class Ui_wdgListaClientes(object):
         item.setText(_translate("wdgListaClientes", "Cidade"))
         item = self.tblClientes.horizontalHeaderItem(5)
         item.setText(_translate("wdgListaClientes", "Documentos"))
+        item = self.tblClientes.horizontalHeaderItem(7)
+        item.setText(_translate("wdgListaClientes", "arquivado"))
         __sortingEnabled = self.tblClientes.isSortingEnabled()
         self.tblClientes.setSortingEnabled(False)
         item = self.tblClientes.item(0, 0)

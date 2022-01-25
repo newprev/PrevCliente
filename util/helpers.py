@@ -337,6 +337,8 @@ def mascaraRG(rg: str):
 
 
 def mascaraCep(cep: str):
+    if len(cep) == 0:
+        return ''
     return f'{cep[:5]}-{cep[5:]}'
 
 
@@ -488,9 +490,11 @@ def dateToSql(data: datetime.date) -> str:
 
 def strToFloat(valor: str) -> float:
     try:
-        retorno = valor.replace('.', '').replace(',', '.')
-        return float(retorno)
+        return float(valor)
     except ValueError:
+        retorno = valor.replace(',', '')
+        return strToFloat(retorno)
+    except:
         return valor
 
 

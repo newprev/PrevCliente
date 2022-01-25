@@ -14,10 +14,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgEnviaCNIS(object):
     def setupUi(self, wdgEnviaCNIS):
         wdgEnviaCNIS.setObjectName("wdgEnviaCNIS")
-        wdgEnviaCNIS.resize(587, 300)
-        wdgEnviaCNIS.setStyleSheet("/*#wdgEnviaCNIS {\n"
+        wdgEnviaCNIS.resize(587, 350)
+        wdgEnviaCNIS.setStyleSheet("#wdgEnviaCNIS {\n"
 "    background-color: lightgrey;\n"
-"}*/\n"
+"}\n"
 "\n"
 "/*---------------------------------------- Frame ----------------------------------------*/\n"
 "#frPrincipal, #frTop, #frBottom{\n"
@@ -48,20 +48,50 @@ class Ui_wdgEnviaCNIS(object):
 "    color: #52555A;\n"
 "}\n"
 "\n"
-"/*---------------------------------------- Push button ----------------------------------------*/\n"
+"/*---------------------------------- Push button ---------------------------------*/\n"
 "#pbBuscaCNIS {\n"
 "    font: 12pt \"Avenir LT Std\";\n"
 "    color: #52555A;\n"
 "\n"
 "    background-color: white;\n"
 "    border: 0px solid white;\n"
+"}\n"
+"\n"
+"#pbBuscaCNIS:hover {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #52555A;\n"
+"\n"
+"    background-color: #F9F9F9;\n"
+"    border: 0px solid white;\n"
+"}\n"
+"\n"
+"#pbCadSemCnis {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"\n"
+"    background-color: #009E38;\n"
+"    border-top-left-radius: 0px;\n"
+"    border-top-right-radius: 0px;\n"
+"    border-bottom-right-radius: 12px;\n"
+"    border-bottom-left-radius: 12px;\n"
+"}\n"
+"\n"
+"#pbCadSemCnis:hover {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"\n"
+"    background-color: #23E386;\n"
+"    border-top-left-radius: 0px;\n"
+"    border-top-right-radius: 0px;\n"
+"    border-bottom-right-radius: 12px;\n"
+"    border-bottom-left-radius: 12px;\n"
 "}")
         self.gridLayout = QtWidgets.QGridLayout(wdgEnviaCNIS)
         self.gridLayout.setObjectName("gridLayout")
         self.frPrincipal = QtWidgets.QFrame(wdgEnviaCNIS)
         self.frPrincipal.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
         self.frPrincipal.setAcceptDrops(True)
-        self.frPrincipal.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frPrincipal.setObjectName("frPrincipal")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.frPrincipal)
@@ -104,7 +134,7 @@ class Ui_wdgEnviaCNIS(object):
         self.frMiddle.setObjectName("frMiddle")
         self.verticalLayout.addWidget(self.frMiddle)
         self.frBottom = QtWidgets.QFrame(self.frPrincipal)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frBottom.sizePolicy().hasHeightForWidth())
@@ -114,22 +144,29 @@ class Ui_wdgEnviaCNIS(object):
         self.frBottom.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frBottom.setObjectName("frBottom")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.frBottom)
+        self.horizontalLayout.setSizeConstraint(QtWidgets.QLayout.SetMaximumSize)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem2)
-        self.frIcone = QtWidgets.QFrame(self.frBottom)
-        self.frIcone.setMinimumSize(QtCore.QSize(30, 30))
-        self.frIcone.setMaximumSize(QtCore.QSize(30, 30))
-        self.frIcone.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frIcone.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frIcone.setObjectName("frIcone")
-        self.horizontalLayout.addWidget(self.frIcone)
         self.pbBuscaCNIS = QtWidgets.QPushButton(self.frBottom)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pbBuscaCNIS.sizePolicy().hasHeightForWidth())
+        self.pbBuscaCNIS.setSizePolicy(sizePolicy)
+        self.pbBuscaCNIS.setMinimumSize(QtCore.QSize(0, 100))
+        self.pbBuscaCNIS.setMaximumSize(QtCore.QSize(6546546, 16777215))
+        self.pbBuscaCNIS.setSizeIncrement(QtCore.QSize(-706, 0))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/upload/enviaArquivo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbBuscaCNIS.setIcon(icon)
+        self.pbBuscaCNIS.setIconSize(QtCore.QSize(36, 36))
         self.pbBuscaCNIS.setObjectName("pbBuscaCNIS")
         self.horizontalLayout.addWidget(self.pbBuscaCNIS)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem3)
         self.verticalLayout.addWidget(self.frBottom)
+        self.pbCadSemCnis = QtWidgets.QPushButton(self.frPrincipal)
+        self.pbCadSemCnis.setMinimumSize(QtCore.QSize(0, 50))
+        self.pbCadSemCnis.setObjectName("pbCadSemCnis")
+        self.verticalLayout.addWidget(self.pbCadSemCnis)
         self.gridLayout.addWidget(self.frPrincipal, 0, 0, 1, 1)
 
         self.retranslateUi(wdgEnviaCNIS)
@@ -141,6 +178,7 @@ class Ui_wdgEnviaCNIS(object):
         self.lbTitulo.setText(_translate("wdgEnviaCNIS", "PREENCHIMENTO AUTOMÁTICO"))
         self.lbSubtitulo.setText(_translate("wdgEnviaCNIS", "Cadastro a partir do CNIS"))
         self.pbBuscaCNIS.setText(_translate("wdgEnviaCNIS", "Arraste ou clique aqui para buscar o CNIS"))
+        self.pbCadSemCnis.setText(_translate("wdgEnviaCNIS", "Cadastrar sem CNIS"))
 import Resources.wdgEnviaCNIS
 
 

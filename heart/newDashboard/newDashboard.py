@@ -94,10 +94,13 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
         self.wdgInfoCliente.carregaClienteNaTela(cliente)
         self.trocaTela(TelaAtual.InfoCliente)
 
-    def recebeCliente(self, cliente: Cliente):
-        if cliente is not None and cliente.clienteId is not None:
+    def recebeCliente(self, cliente: Cliente, **kwargs):
+        if cliente is not None:
             self.wdgCadastroCliente.iniciaTela()
-            self.wdgCadastroCliente.carregaClienteNaTela(cliente)
+            if 'info' in kwargs.keys():
+                self.wdgCadastroCliente.carregaClienteNaTela(cliente, tela=kwargs['info'])
+            else:
+                self.wdgCadastroCliente.carregaClienteNaTela(cliente)
             self.trocaTela(TelaAtual.CadastroCliente)
 
     def recarregaListaClientes(self):

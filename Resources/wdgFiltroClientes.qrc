@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="icone">
+    <file>down.png</file>
+    <file>filtros.png</file>
+    <file>filtrosWhite.png</file>
+  </qresource>
+  <qresource prefix="checkBox">
+    <file>CheckBoxFalse.png</file>
+    <file>checkBoxTrue.png</file>
+  </qresource>
+</RCC>

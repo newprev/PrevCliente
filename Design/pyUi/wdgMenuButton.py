@@ -28,6 +28,15 @@ class Ui_wdgMenuButton(object):
 "    background-position: center;\n"
 "}\n"
 "\n"
+"#pbFuncionalidade:hover {\n"
+"    background-color: #F2F2F2;\n"
+"    border-radius: 15px;\n"
+"\n"
+"    background-image: url(:/funcionalidade/processos.png);\n"
+"    background-repeat: no-repeat;\n"
+"    background-position: center;\n"
+"}\n"
+"\n"
 "/*------------------------------------ Label ------------------------------------*/\n"
 "#lbNomeFuncionalidade {\n"
 "    \n"
@@ -39,7 +48,7 @@ class Ui_wdgMenuButton(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.frPrincipal = QtWidgets.QFrame(wdgMenuButton)
         self.frPrincipal.setMinimumSize(QtCore.QSize(60, 60))
-        self.frPrincipal.setMaximumSize(QtCore.QSize(60, 60))
+        self.frPrincipal.setMaximumSize(QtCore.QSize(80, 60))
         self.frPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frPrincipal.setObjectName("frPrincipal")

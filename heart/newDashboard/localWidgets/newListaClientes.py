@@ -1,22 +1,23 @@
 import os
-from timeit import Timer
+import datetime
 
-from peewee import SqliteDatabase
 from typing import List
 
 from PyQt5.QtCore import QObject, QEvent, Qt
-from PyQt5.QtGui import QFont, QKeyEvent
+from PyQt5.QtGui import QFont, QKeyEvent, QCursor
 from PyQt5.QtWidgets import QFrame, QTableWidgetItem, QPushButton
 
 from Design.pyUi.newListaClientes import Ui_wdgListaClientes
 from Design.CustomWidgets.newPopupCNIS import NewPopupCNIS
+from Design.CustomWidgets.newFiltroClientes import NewFiltroClientes
 from Design.CustomWidgets.newToast import QToaster
 from Design.CustomWidgets.newMenuOpcoes import NewMenuOpcoes
 from Design.pyUi.efeitos import Efeitos
-from heart.newDashboard.localStyleSheet import btnOpcoesStyle
+from Design.DesignSystem.colors import NewColorsWhite
+
+from heart.newDashboard.localStyleSheet.localStyleSheet import btnOpcoesStyle, styleTooltip
 
 from modelos.cabecalhoORM import CnisCabecalhos
-
 from modelos.clienteORM import Cliente
 from modelos.cnisModelo import CNISModelo
 from modelos.escritoriosORM import Escritorios
@@ -24,16 +25,21 @@ from modelos.itemContribuicao import ItemContribuicao
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
 from modelos.advogadoORM import Advogados
+from modelos.clienteProfissao import ClienteProfissao
+
 from sinaisCustomizados import Sinais
 from util.dateHelper import strToDate, atividadesConcorrentes, atividadeSecundaria
 
-from util.helpers import mascaraTelCel, strTipoBeneficio, unmaskAll, calculaIdadeFromString
-from util.popUps import popUpOkAlerta
+from util.helpers import mascaraTelCel, unmaskAll, calculaIdadeFromString
+from util.popUps import popUpOkAlerta, popUpSimCancela
+from util.enums.cadastroEnums import Status
 
 
 class NewListaClientes(QFrame, Ui_wdgListaClientes):
     popupCNIS: NewPopupCNIS
     toast: QToaster
+    menuFiltro: NewFiltroClientes
+    filtros: dict
 
     def __init__(self, escritorio: Escritorios, advogado: Advogados, parent=None):
         super(NewListaClientes, self).__init__(parent=parent)
@@ -42,33 +48,62 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.popupCNIS = None
         self.escritorioAtual = escritorio
         self.advogadoAtual = advogado
+        self.filtros = None
+        self.menuFiltro = None
 
         self.sinais = Sinais()
         self.sinais.sEnviaClienteParam.connect(self.enviaClienteDashboard)
         self.sinais.sEnviaInfoCliente.connect(self.enviaInfoClienteDashboard)
         self.efeitos = Efeitos()
+
         self.toast = QToaster(parent=self)
 
         self.tblClientes.hideColumn(0)
+        self.tblClientes.hideColumn(7)
         self.installEventFilter(self)
+        self.frInfoCliEncontrados.hide()
 
         self.pbNovoCliente.clicked.connect(self.abrirPopupCNIS)
+        self.pbFiltro.clicked.connect(self.abreMenuFiltro)
+        self.pbBusca.clicked.connect(self.avaliaFiltroTexto)
         self.tblClientes.doubleClicked.connect(self.selecionaCliente)
+        self.leBusca.editingFinished.connect(self.avaliaFiltroTexto)
+
+        # Tooltips
+        self.setStyleSheet(styleTooltip())
+        self.pbFiltro.setToolTip('Utilize filtros para pesquisas específicas.')
 
         self.atualizaTblClientes()
 
-    def abreMenuOpcoes(self, linha: int):
-        menu = NewMenuOpcoes(parent=self, funcEditar=lambda: print(f"abreMenuOpcoes: {linha}"), funcExcluir=lambda: print(f"abreMenuOpcoes: {linha}"))
-        self.efeitos.shadowCards([menu])
-        menu.show()
+    def abreMenuFiltro(self):
+        if self.menuFiltro is None:
+            self.menuFiltro = NewFiltroClientes(parent=self, position=QCursor.pos(), filtros=self.filtros)
+            Efeitos().shadowCards([self.menuFiltro])
+            self.menuFiltro.raise_()
+            self.menuFiltro.show()
 
-    def atualizaTblClientes(self, clientes: list = None):
-        if clientes is None:
-            clientesModels: list = Cliente.select().order_by(Cliente.nomeCliente)
+    def abreMenuOpcoes(self):
+        linhaSelecionada: int = self.tblClientes.selectedItems()[0].row()
+        clienteId: int = int(self.tblClientes.item(linhaSelecionada, 0).text())
+
+        menu = NewMenuOpcoes(
+            parent=self,
+            funcEditar=lambda: self.editarCliente(clienteId),
+            funcArquivar=lambda: self.avaliaArquivarCliente(clienteId, linhaSelecionada),
+        )
+        menu.exec_(QCursor.pos())
+
+    def atualizaTblClientes(self, arquivados: bool = False):
+        if arquivados:
+            clientesModels: list = Cliente.select().order_by(
+                Cliente.arquivado,
+                Cliente.nomeCliente
+            )
         else:
-            clientesModels = []
+            clientesModels: list = Cliente.select().where(Cliente.arquivado==False).order_by(Cliente.nomeCliente)
 
         self.tblClientes.setRowCount(0)
+
         for numLinha, cliente in enumerate(clientesModels):
             self.tblClientes.insertRow(numLinha)
             processo: Processos = Processos.get_or_none(Processos.clienteId == cliente.clienteId)
@@ -110,17 +145,30 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             cidadeItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 4, cidadeItem)
 
-            # tipoProcessoItem = QTableWidgetItem(strTipoBeneficio(processo.tipoBeneficio, processo.subTipoApos))
-            # tipoProcessoItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-            # self.tblClientes.setItem(numLinha, 5, tipoProcessoItem)
+            # 5 - Documentos <Aparente>
+            docs = QTableWidgetItem('')
+            self.tblClientes.setItem(numLinha, 5, docs)
 
+            # 6 - Botão de edição <Aparente>
             pbOpcoes = QPushButton()
-            pbOpcoes.clicked.connect(lambda: self.abreMenuOpcoes(numLinha))
+            pbOpcoes.clicked.connect(self.abreMenuOpcoes)
             pbOpcoes.setStyleSheet(btnOpcoesStyle())
             pbOpcoes.setMaximumSize(24, 24)
             self.tblClientes.setCellWidget(numLinha, 6, pbOpcoes)
 
+            # 7 - Arquivado <Escondido>
+            arquivado = QTableWidgetItem()
+            arquivado.setFlags(Qt.ItemFlag.ItemIsUserCheckable)
+            arquivado.setCheckState(cliente.arquivado)
+            self.tblClientes.setItem(numLinha, 7, arquivado)
+
+            if cliente.arquivado:
+                for numColuna in range(self.tblClientes.columnCount()):
+                    if self.tblClientes.item(numLinha, numColuna) is not None:
+                        self.tblClientes.item(numLinha, numColuna).setBackground(NewColorsWhite.white200Qt.value)
+
         self.tblClientes.resizeColumnsToContents()
+        self.pbNovoCliente.setFocus()
 
     def abrirPopupCNIS(self):
         if self.popupCNIS is not None and self.popupCNIS.isVisible():
@@ -134,6 +182,24 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
         self.popupCNIS.setFocus()
 
+    def arquivarCliente(self, clienteId: int):
+        try:
+            clienteAArquivar: Cliente = Cliente.get_by_id(clienteId)
+            clienteAArquivar.arquivado = True
+            clienteAArquivar.dataUltAlt = datetime.datetime.now()
+            clienteAArquivar.save()
+            return True
+        except Cliente.DoesNotExist as err:
+            print(f"{err=}")
+            popUpOkAlerta("Não foi possível arquivar o cliente selecionado. Verifique se os dados estão corretos e tente novamente.", erro=err)
+            return False
+
+    def avaliaArquivarCliente(self, clienteId: int, linhaSelecionada: int):
+        nomeCliente: str = self.tblClientes.item(linhaSelecionada, 1).text().upper()
+        popUpSimCancela(f"Tem certeza que deseja arquivar o(a) cliente {nomeCliente} ?", funcao=lambda: self.arquivarCliente(clienteId))
+        self.atualizaTblClientes()
+        return True
+
     def avaliaDadosFaltantesNoCNIS(self, cabecalhos: List[dict]) -> List[dict]:
         listaReturn: List[dict] = []
 
@@ -145,6 +211,49 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             listaReturn.append(cabecalho)
 
         return listaReturn
+
+    def avaliaFiltrosMenu(self, filtros: dict):
+        self.menuFiltro = None
+        self.filtros = filtros
+        if filtros.keys():
+            for chave, valor in filtros.items():
+
+                if chave == 'arquivados':
+                    self.atualizaTblClientes(arquivados=valor)
+                    self.avaliaFiltroTexto()
+
+    def avaliaFiltroTexto(self):
+        strBusca: str = self.leBusca.text().strip()
+        qtdLinhas = self.tblClientes.rowCount()
+        qtdEncontrados: int = 0
+
+        if strBusca == '':
+            self.frInfoCliEncontrados.hide()
+            for linha in range(qtdLinhas):
+                self.tblClientes.showRow(linha)
+            return True
+
+        if len(strBusca) == 1:
+            for linha in range(qtdLinhas):
+                primeiraLetra = self.tblClientes.item(linha, 1).text()[0]
+                if primeiraLetra.upper() == strBusca.upper():
+                    qtdEncontrados += 1
+                    self.tblClientes.showRow(linha)
+                else:
+                    self.tblClientes.hideRow(linha)
+
+        else:
+            for linha in range(qtdLinhas):
+                nomeCompleto: str = self.tblClientes.item(linha, 1).text().upper()
+                nomes: List[str] = nomeCompleto.split(' ')
+                if strBusca.upper() in nomes:
+                    qtdEncontrados += 1
+                    self.tblClientes.showRow(linha)
+                else:
+                    self.tblClientes.hideRow(linha)
+
+        self.lbInfoBusca.setText(f'{qtdEncontrados} clientes encontrados')
+        self.frInfoCliEncontrados.show()
 
     def avaliaAtividadesPrincipais(self, clienteId: int):
         listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == clienteId)
@@ -165,73 +274,114 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 query = ItemContribuicao.update({ItemContribuicao.ativPrimaria: False}).where(
                     ItemContribuicao.clienteId == clienteId,
                     ItemContribuicao.seq == seqSecundarioCalculado,
-                )
+                    )
                 query.execute()
+
+    def buscaClienteEdicao(self, cpf: str):
+        if cpf is not None and cpf != '':
+            try:
+                clienteAEditar: Cliente = Cliente.select().where(Cliente.cpfCliente==cpf).get()
+                self.enviaClienteDashboard(clienteAEditar)
+                return True
+            except Cliente.DoesNotExist as err:
+                print(f"buscaClienteEdicao: {err=}")
+                popUpOkAlerta(f"Houve um erro ao busca cliente já cadastrado com o CPF: {cpf}. Tente novamente.", erro=err)
+                return False
+
+    def buscaTelefone(self, clienteAtual: Cliente) -> Telefones:
+        try:
+            return Telefones.select().where(Telefones.clienteId == clienteAtual.clienteId).get()
+        except Telefones.DoesNotExist:
+            return None
 
     def carregaCnis(self, pathCnis: str):
         cnisInseridoComSucesso: bool = False
-
-        self.cnisClienteAtual: CNISModelo = CNISModelo(path=pathCnis)
-        self.cnisClienteAtual.iniciaAvaliacaoCnis()
-        db: SqliteDatabase = Cliente._meta.database
-        
-        clienteAtual = Cliente()
-
         try:
+            self.cnisClienteAtual: CNISModelo = CNISModelo(path=pathCnis)
+            self.cnisClienteAtual.iniciaAvaliacaoCnis()
             infoPessoais: dict = self.cnisClienteAtual.getInfoPessoais()
 
-            if infoPessoais is not None:
-                clienteAInserir = Cliente()
+            clienteCadastrado: Status = self.verificaCadastradoCliente(unmaskAll(infoPessoais['cpf']))
 
-                clienteAInserir.cpfCliente = unmaskAll(infoPessoais['cpf'])
-                clienteAInserir.dataNascimento = strToDate(infoPessoais['dataNascimento'])
-                clienteAInserir.idade = calculaIdadeFromString(infoPessoais['dataNascimento'])
-                clienteAInserir.nit = unmaskAll(infoPessoais['nit'])
-                clienteAInserir.nomeMae = infoPessoais['nomeMae'].title()
-                clienteAInserir.nomeCliente = infoPessoais['nomeCompleto'].split(' ')[0].title()
-                clienteAInserir.sobrenomeCliente = ' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title()
-                clienteAInserir.escritorioId = Escritorios.select().where(Escritorios.escritorioId == self.escritorioAtual.escritorioId)
+            if infoPessoais is not None and clienteCadastrado != Status.jaCadastrado:
+                if clienteCadastrado in [Status.semCabecalho, Status.semContrib]:
+                    clienteAtual: Cliente = Cliente.select().where(
+                        Cliente.cpfCliente==unmaskAll(infoPessoais['cpf'])
+                    ).get()
+                else:
+                    clienteAtual: Cliente = Cliente(
+                        escritorioId=Escritorios.select().where(Escritorios.escritorioId == self.escritorioAtual.escritorioId),
+                        cpfCliente=unmaskAll(infoPessoais['cpf']),
+                        dataNascimento=strToDate(infoPessoais['dataNascimento']),
+                        idade=calculaIdadeFromString(infoPessoais['dataNascimento']),
+                        nomeMae=infoPessoais['nomeMae'].title(),
+                        nomeCliente=infoPessoais['nomeCompleto'].split(' ')[0].title(),
+                        sobrenomeCliente=' '.join(infoPessoais['nomeCompleto'].split(' ')[1:]).title(),
+                        pathCnis=pathCnis
+                    )
+                    clienteAtual.save()
 
-                with db.atomic() as transaction:
-                    try:
-                        Cliente.insert(**clienteAInserir.toDict()).on_conflict_replace().execute()
-                        clienteAtual: Cliente = Cliente.get(Cliente.cpfCliente == clienteAInserir.cpfCliente)
-                        clienteAtual.pathCnis = pathCnis
+                    # Dados profissionais
+                    dadosProfissao: ClienteProfissao = ClienteProfissao(
+                        clienteId=clienteAtual.clienteId,
+                        nit=unmaskAll(infoPessoais['nit'])
+                    )
+                    dadosProfissao.save()
 
-                        contribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=clienteAtual.clienteId)
-                        cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
-                        cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
+                    clienteAtual.dadosProfissionais = dadosProfissao
 
-                        CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
-                        CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
+                    clienteAtual.telefoneId = self.buscaTelefone(clienteAtual)
+                    clienteAtual.save()
 
-                        clienteAtual.telefoneId = Telefones.get_by_id(clienteAtual)
-                        transaction.commit()
-                        cnisInseridoComSucesso = True
-                    except Cliente.DoesNotExist:
-                        self.showPopupAlerta('Erro ao inserir cliente.')
-                        transaction.rollback()
-                        return False
-                    except Telefones.DoesNotExist:
-                        clienteAtual.telefoneId = Telefones()
-                        transaction.commit()
-                        cnisInseridoComSucesso = True
-                    except Exception as err:
-                        erro = f"carregaCnis: ({type(err)}) {err}"
-                        transaction.rollback()
-                        popUpOkAlerta('Erro ao inserir cliente.', erro=erro)
-                        return False
+                contribuicoes = self.cnisClienteAtual.getAllDict(toInsert=True, clienteId=clienteAtual.clienteId)
+                cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
+                cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
 
-            self.cnisClienteAtual.insereItensContribuicao(clienteAtual)
+                CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
+                CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
+
+                self.cnisClienteAtual.insereItensContribuicao(clienteAtual)
+                cnisInseridoComSucesso = True
+
+            elif infoPessoais is not None:
+                popUpSimCancela(
+                    f"O(a) cliente {infoPessoais['nomeCompleto'].upper()} já está cadastrado(a). Deseja atualizar suas informações?",
+                    titulo="Cliente já cadastrado(a)",
+                    funcao=lambda: self.buscaClienteEdicao(unmaskAll(infoPessoais['cpf']))
+                )
+                return False
+
+        except Cliente.DoesNotExist:
+            self.showPopupAlerta('Erro ao inserir cliente.')
+            if clienteAtual is not None:
+                clienteAtual.delete()
+            return False
 
         except Exception as err:
             popUpOkAlerta('Não foi possível salvar o cliente. Tente novamente.', erro=str(err))
-            print(f'carregaCnis - erro: ({type(err)}) {err}')
+            print(f'carregaCnis - erro: {err=}')
 
         if cnisInseridoComSucesso:
             self.avaliaAtividadesPrincipais(clienteAtual.clienteId)
 
         self.sinais.sEnviaClienteParam.emit(clienteAtual)
+
+    def editarCliente(self, clienteId: int):
+        try:
+            clienteSelecionado: Cliente = Cliente.get_by_id(clienteId)
+            self.sinais.sEnviaClienteParam.emit(clienteSelecionado)
+        except Cliente.DoesNotExist as err:
+            popUpOkAlerta(
+                "Não foi possível carregar as informações do cliente selecionado. Tente novamente mais tarde.",
+                erro=err
+            )
+            return False
+
+    def enviaClienteDashboard(self, cliente: Cliente):
+        self.dashboard.recebeCliente(cliente)
+
+    def enviaInfoClienteDashboard(self, cliente: Cliente):
+        self.dashboard.navegaInfoCliente(cliente)
 
     def eventFilter(self, a0: QObject, tecla: QEvent) -> bool:
         if isinstance(tecla, QKeyEvent) and self.popupCNIS is not None:
@@ -239,12 +389,6 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 self.popupCNIS.close()
 
         return super(NewListaClientes, self).eventFilter(a0, tecla)
-
-    def enviaClienteDashboard(self, cliente: Cliente):
-        self.dashboard.recebeCliente(cliente)
-
-    def enviaInfoClienteDashboard(self, cliente: Cliente):
-        self.dashboard.navegaInfoCliente(cliente)
 
     def selecionaCliente(self, *args, **kwargs):
         linhaSelecionada = args[0].row()
@@ -255,16 +399,56 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.sinais.sEnviaInfoCliente.emit(clienteSelecionado)
 
     def recebePathCnis(self, path: str):
-        if os.path.isfile(path):
+        if path is None or path == '':
+            clienteSemCnis: Cliente = Cliente()
+            # clienteSemCnis.save()
+            self.sinais.sEnviaClienteParam.emit(clienteSemCnis)
+            return True
+        elif os.path.isfile(path):
             self.carregaCnis(path)
             return True
+
+        return False
 
     def toastCarregaCnis(self):
         self.toast.showMessage(self, "Analisando informações do CNIS...", corner=Qt.BottomLeftCorner)
 
+    def verificaCadastradoCliente(self, cpf: str) -> Status:
+        try:
+            cliente: Cliente = Cliente.select().where(Cliente.cpfCliente==cpf).get()
+            qtdItens: int = ItemContribuicao.select().where(ItemContribuicao.clienteId==cliente.clienteId).count()
+            qtdCabecalhos: int = CnisCabecalhos.select().where(CnisCabecalhos.clienteId==cliente.clienteId).count()
+
+            if qtdItens == 0:
+                CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId).get()
+                return Status.semContrib
+            elif qtdCabecalhos == 0:
+                ItemContribuicao.delete().where(ItemContribuicao.clienteId == cliente.clienteId).execute()
+                return Status.semCabecalho
+            return Status.jaCadastrado
+
+        except Cliente.DoesNotExist as err:
+            # TODO: ADICIONAR LOG
+            print(f"verificaCadastradoCliente: {err=}")
+            return Status.naoCadastrado
+        except ItemContribuicao.DoesNotExist as err:
+            # TODO: ADICIONAR LOG
+            print(f"verificaCadastradoCliente: {err=}")
+            CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId).get()
+            return Status.semContrib
+        except CnisCabecalhos.DoesNotExist as err:
+            # TODO: ADICIONAR LOG
+            print(f"verificaCadastradoCliente: {err=}")
+            ItemContribuicao.delete().where(ItemContribuicao.clienteId==cliente.clienteId).execute()
+            return Status.semCabecalho
+        except Exception as err:
+            # TODO: ADICIONAR LOG
+            print(f"verificaClienteJaCadastrado: {err=}")
+            return Status.erro
+
 
 if __name__ == '__main__':
-    from PyQt5 import QtWidgets, QtGui
+    from PyQt5 import QtWidgets
     import sys
     app = QtWidgets.QApplication(sys.argv)
     w = NewListaClientes()

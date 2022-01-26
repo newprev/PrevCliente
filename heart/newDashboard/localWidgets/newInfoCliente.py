@@ -3,8 +3,8 @@ import os
 import time
 from typing import List
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QCursor
+from PyQt5.QtCore import Qt, QObject, QEvent
+from PyQt5.QtGui import QCursor, QKeyEvent
 from dateutil.relativedelta import relativedelta
 
 from PyQt5.QtWidgets import QWidget
@@ -51,6 +51,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
 
         self.rbMasculino.setDisabled(True)
         self.rbFeminino.setDisabled(True)
+        self.installEventFilter(self)
 
         self.pbVoltar.clicked.connect(lambda: self.sinais.sVoltaTela.emit())
         self.iniciarBotoesOpcoes()
@@ -78,7 +79,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
             self.popupCNIS.close()
             self.popupCNIS.setParent(None)
 
-        self.popupCNIS = NewPopupCNIS(parent=self, dashboard=self.dashboard)
+        self.popupCNIS = NewPopupCNIS(parent=self, dashboard=self.dashboard, esconderBotao=True)
         Efeitos().shadowCards([self.popupCNIS])
         self.popupCNIS.raise_()
         self.popupCNIS.show()
@@ -235,6 +236,14 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
     def editarInfoCliente(self, info):
         self.dashboard.recebeCliente(self.clienteAtual, info=info)
         return True
+
+    def eventFilter(self, a0: QObject, tecla: QEvent) -> bool:
+        if isinstance(tecla, QKeyEvent) and self.popupCNIS is not None:
+            print(f"self.popupCNIS.isVisible(): {self.popupCNIS.isVisible()}")
+            if self.popupCNIS.isVisible():
+                self.popupCNIS.close()
+
+        return super(NewInfoCliente, self).eventFilter(a0, tecla)
 
     def iniciarBotoesOpcoes(self):
         # Informações pessoais

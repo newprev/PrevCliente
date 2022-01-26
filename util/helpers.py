@@ -492,7 +492,13 @@ def strToFloat(valor: str) -> float:
     try:
         return float(valor)
     except ValueError:
-        retorno = valor.replace(',', '')
+        import re
+        padrao = '.{0,20},[0-9]{1,2}'
+        if re.match(padrao, valor):
+            retorno = valor.replace('.', '').replace(',', '.')
+        else:
+            retorno = valor.replace(',', '')
+
         return strToFloat(retorno)
     except:
         return valor

@@ -239,7 +239,6 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
 
     def eventFilter(self, a0: QObject, tecla: QEvent) -> bool:
         if isinstance(tecla, QKeyEvent) and self.popupCNIS is not None:
-            print(f"self.popupCNIS.isVisible(): {self.popupCNIS.isVisible()}")
             if self.popupCNIS.isVisible():
                 self.popupCNIS.close()
 

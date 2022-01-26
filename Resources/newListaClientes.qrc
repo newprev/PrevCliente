@@ -4,6 +4,10 @@
     <file>busca.png</file>
     <file>filtros.png</file>
   </qresource>
+  <qresource prefix="status">
+    <file>pink-circle.png</file>
+    <file>green-circle.png</file>
+  </qresource>
   <qresource prefix="opcoes">
     <file>opcoes.png</file>
   </qresource>

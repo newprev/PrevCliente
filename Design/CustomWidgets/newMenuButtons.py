@@ -94,7 +94,7 @@ class NewMenuButton(QWidget, Ui_wdgMenuButton):
 
     def verificaFluxo(self):
         if isinstance(self.tipoBotao, TelaPosicao):
-            self.sinais.sTrocaWidgetCentral.emit()
+            self.sinais.sTrocaWidgetCentral.emit(self.tipoBotao)
 
         elif isinstance(self.tipoBotao, FerramentasEInfo):
             if self.tipoBotao == FerramentasEInfo.indicadores:

@@ -76,6 +76,17 @@ class Ui_wdgListaClientes(object):
 "    padding: 8px;\n"
 "}\n"
 "\n"
+"#pbCalculadora {\n"
+"    background-color: white;\n"
+"    border-radius: 8px;\n"
+"    border: 2px solid #3F4E8C;\n"
+"\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    padding: 8px;\n"
+"}\n"
+"\n"
 "#pbFiltro {\n"
 "    background-image: url(:/cabecalho/filtros.png);\n"
 "    background-position: center;\n"
@@ -110,7 +121,6 @@ class Ui_wdgListaClientes(object):
         self.frCabecalhoLista.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frCabecalhoLista.setObjectName("frCabecalhoLista")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.frCabecalhoLista)
-        self.horizontalLayout.setSpacing(8)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.frame_2 = QtWidgets.QFrame(self.frCabecalhoLista)
         self.frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -180,7 +190,7 @@ class Ui_wdgListaClientes(object):
         self.lbInfoBusca.setObjectName("lbInfoBusca")
         self.horizontalLayout_5.addWidget(self.lbInfoBusca)
         self.gridLayout_2.addWidget(self.frInfoCliEncontrados, 1, 0, 1, 2, QtCore.Qt.AlignTop)
-        self.horizontalLayout.addWidget(self.frAreaBusca, 0, QtCore.Qt.AlignTop)
+        self.horizontalLayout.addWidget(self.frAreaBusca)
         self.frame = QtWidgets.QFrame(self.frCabecalhoLista)
         self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -196,8 +206,12 @@ class Ui_wdgListaClientes(object):
         self.pbFiltro.setObjectName("pbFiltro")
         self.horizontalLayout_3.addWidget(self.pbFiltro, 0, QtCore.Qt.AlignTop)
         self.horizontalLayout.addWidget(self.frame)
-        spacerItem = QtWidgets.QSpacerItem(614, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(500, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
+        self.pbCalculadora = QtWidgets.QPushButton(self.frCabecalhoLista)
+        self.pbCalculadora.setMinimumSize(QtCore.QSize(165, 40))
+        self.pbCalculadora.setObjectName("pbCalculadora")
+        self.horizontalLayout.addWidget(self.pbCalculadora)
         self.pbNovoCliente = QtWidgets.QPushButton(self.frCabecalhoLista)
         self.pbNovoCliente.setMinimumSize(QtCore.QSize(165, 40))
         self.pbNovoCliente.setObjectName("pbNovoCliente")
@@ -425,6 +439,7 @@ class Ui_wdgListaClientes(object):
         self.lbInfoCliente.setText(_translate("wdgListaClientes", "Clientes"))
         self.leBusca.setPlaceholderText(_translate("wdgListaClientes", "Pesquise por cliente ou processo"))
         self.lbInfoBusca.setText(_translate("wdgListaClientes", "6 clientes encontrados"))
+        self.pbCalculadora.setText(_translate("wdgListaClientes", "Calculadora rápida"))
         self.pbNovoCliente.setText(_translate("wdgListaClientes", "Novo cliente"))
         self.lbAtivos.setText(_translate("wdgListaClientes", "Ativos"))
         self.lbArquivados.setText(_translate("wdgListaClientes", "Arquivados"))
@@ -462,7 +477,7 @@ class Ui_wdgListaClientes(object):
         item = self.tblClientes.item(0, 7)
         item.setText(_translate("wdgListaClientes", ":"))
         self.tblClientes.setSortingEnabled(__sortingEnabled)
-import Resources.newListaClientes
+import newListaClientes_rc
 
 
 if __name__ == "__main__":

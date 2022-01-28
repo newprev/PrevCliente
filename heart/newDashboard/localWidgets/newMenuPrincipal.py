@@ -24,7 +24,7 @@ class NewMenuPrincipal(QFrame, Ui_wdgMenuPrincipal):
     def adicionaBotoes(self):
         # Principal
         wdgCliente = NewMenuButton(None)
-        wdgEntrevista = NewMenuButton(None)
+        wdgEntrevista = NewMenuButton(dashboard=self.parent, parent=self)
         wdgProcesso = NewMenuButton(None)
         wdgResumo = NewMenuButton(None)
 

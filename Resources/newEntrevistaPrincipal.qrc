@@ -1,0 +1,21 @@
+<RCC>
+  <qresource prefix="voltar">
+    <file>back.png</file>
+  </qresource>
+  <qresource prefix="busca">
+    <file>localizacao.png</file>
+    <file>busca.png</file>
+  </qresource>
+  <qresource prefix="show">
+    <file>hide.png</file>
+    <file>show.png</file>
+  </qresource>
+  <qresource prefix="radioButton">
+    <file>rbChecked.png</file>
+    <file>rbUnchecked.png</file>
+  </qresource>
+  <qresource prefix="upDown">
+    <file>up.png</file>
+    <file>down.png</file>
+  </qresource>
+</RCC>

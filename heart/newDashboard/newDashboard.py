@@ -1,5 +1,3 @@
-from PyQt5.QtGui import QFont
-
 from Design.pyUi.newDashboard import Ui_newDashboard
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import QtGui
@@ -21,6 +19,7 @@ from heart.newDashboard.localWidgets.newMenuPrincipal import NewMenuPrincipal
 from heart.newDashboard.localWidgets.newListaClientes import NewListaClientes
 from heart.wdgCadastroCliente import NewCadastraCliente
 from heart.newDashboard.localWidgets.newInfoCliente import NewInfoCliente
+from heart.newEntrevista.principal import NewEntrevistaPrincipal
 
 
 class NewDashboard(QMainWindow, Ui_newDashboard):
@@ -29,6 +28,7 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
     advogadoAtual: Advogados
     wdgCadastroCliente: NewCadastraCliente
     wdgInfoCliente: NewInfoCliente
+    wdgEntrevista: NewEntrevistaPrincipal
 
     def __init__(self, parent=None):
         super(NewDashboard, self).__init__(parent=parent)
@@ -83,10 +83,12 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
         self.clienteController = NewListaClientes(self.escritorioAtual, self.advogadoAtual, parent=self)
         self.wdgCadastroCliente = NewCadastraCliente(parent=self)
         self.wdgInfoCliente = NewInfoCliente(parent=self)
+        self.wdgEntrevista = NewEntrevistaPrincipal(self.escritorioAtual, parent=self)
 
         self.stkPrincipal.addWidget(self.clienteController)
         self.stkPrincipal.addWidget(self.wdgCadastroCliente)
         self.stkPrincipal.addWidget(self.wdgInfoCliente)
+        self.stkPrincipal.addWidget(self.wdgEntrevista)
 
         self.stkPrincipal.setCurrentIndex(TelaAtual.Cliente.value)
 

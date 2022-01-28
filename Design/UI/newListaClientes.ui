@@ -109,6 +109,17 @@
 	padding: 8px;
 }
 
+#pbCalculadora {
+	background-color: white;
+	border-radius: 8px;
+	border: 2px solid #3F4E8C;
+
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	padding: 8px;
+}
+
 #pbFiltro {
 	background-image: url(:/cabecalho/filtros.png);
 	background-position: center;
@@ -147,9 +158,6 @@
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
-         <property name="spacing">
-          <number>8</number>
-         </property>
          <item>
           <widget class="QFrame" name="frame_2">
            <property name="frameShape">
@@ -184,7 +192,7 @@
            </layout>
           </widget>
          </item>
-         <item alignment="Qt::AlignTop">
+         <item>
           <widget class="QFrame" name="frAreaBusca">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -391,11 +399,24 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>614</width>
+             <width>500</width>
              <height>20</height>
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pbCalculadora">
+           <property name="minimumSize">
+            <size>
+             <width>165</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Calculadora rápida</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="pbNovoCliente">

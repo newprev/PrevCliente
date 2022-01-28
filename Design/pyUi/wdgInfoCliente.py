@@ -72,7 +72,7 @@ class Ui_wdgInfoCliente(object):
 "    border-radius: 8px;\n"
 "}\n"
 "\n"
-"#pbResumo, #pbProcessos {\n"
+"#pbResumo, #pbProcessos, #pbEntrevista {\n"
 "    font: 12pt \"Avenir LT Std\";\n"
 "    color: #3F4E8C;\n"
 "\n"
@@ -181,8 +181,12 @@ class Ui_wdgInfoCliente(object):
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_3.setObjectName("frame_3")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame_3)
-        self.horizontalLayout_4.setSpacing(24)
+        self.horizontalLayout_4.setSpacing(16)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.pbEntrevista = QtWidgets.QPushButton(self.frame_3)
+        self.pbEntrevista.setMinimumSize(QtCore.QSize(170, 40))
+        self.pbEntrevista.setObjectName("pbEntrevista")
+        self.horizontalLayout_4.addWidget(self.pbEntrevista)
         self.pbResumo = QtWidgets.QPushButton(self.frame_3)
         self.pbResumo.setMinimumSize(QtCore.QSize(170, 40))
         self.pbResumo.setObjectName("pbResumo")
@@ -745,6 +749,7 @@ class Ui_wdgInfoCliente(object):
         self.lbNomeCliente.setText(_translate("wdgInfoCliente", "Fulana de Tal"))
         self.lbTelefone.setText(_translate("wdgInfoCliente", "(11) 9.7275-7721"))
         self.lbEmail.setText(_translate("wdgInfoCliente", "fulana.deTal@gmail.com"))
+        self.pbEntrevista.setText(_translate("wdgInfoCliente", "Entrevista"))
         self.pbResumo.setText(_translate("wdgInfoCliente", "Resumo CNIS"))
         self.pbProcessos.setText(_translate("wdgInfoCliente", "Processos"))
         self.lbTituloInfoPessoais.setText(_translate("wdgInfoCliente", "Informações pessoais"))
@@ -789,7 +794,7 @@ class Ui_wdgInfoCliente(object):
         self.lbInfoCnis.setText(_translate("wdgInfoCliente", "CNIS"))
         self.lbInfoNomeArquivo.setText(_translate("wdgInfoCliente", "nomeArquivo"))
         self.lbInfoMetaArquivo.setText(_translate("wdgInfoCliente", "5m atrás"))
-import Resources.wdgInfoCliente
+import wdgInfoCliente_rc
 
 
 if __name__ == "__main__":

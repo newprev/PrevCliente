@@ -108,7 +108,7 @@
 	border-radius: 8px;
 }
 
-#pbResumo, #pbProcessos {
+#pbResumo, #pbProcessos, #pbEntrevista {
 	font: 12pt &quot;Avenir LT Std&quot;;
 	color: #3F4E8C;
 
@@ -403,8 +403,21 @@
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_4">
                <property name="spacing">
-                <number>24</number>
+                <number>16</number>
                </property>
+               <item>
+                <widget class="QPushButton" name="pbEntrevista">
+                 <property name="minimumSize">
+                  <size>
+                   <width>170</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Entrevista</string>
+                 </property>
+                </widget>
+               </item>
                <item>
                 <widget class="QPushButton" name="pbResumo">
                  <property name="minimumSize">

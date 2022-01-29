@@ -309,32 +309,50 @@ class Ui_wdgEntrevistaPrincipal(object):
 "}\n"
 "\n"
 "/*-------------------------------------------  Label --------------------------------------------*/\n"
-"#lbTituloNatureza, #lbTituloTpBeneficio, #lbTituloTpProcesso  {\n"
+"#lbTituloNatureza, #lbTituloTpBeneficio, \n"
+"#lbTituloTpProcesso {\n"
 "    font: 14pt \"Avenir LT Std\";\n"
 "    color: #1F1E29;\n"
 "    font-weight: 750;\n"
 "}\n"
 "\n"
-"#lbDescNatureza, #lbDescTpBeneficio, #lbDescTpProcesso {\n"
+"#lbDescNatureza, #lbDescTpBeneficio, \n"
+"#lbDescTpProcesso {\n"
 "    font: 11pt \"Avenir LT Std\";\n"
 "    color: #1F1E29;\n"
 "}\n"
 "\n"
-"#lbNatureza, #lbTpBeneficio, #lbTpProcesso {\n"
+"#lbNatureza, #lbInfoPessoais,\n"
+"#lbTpBeneficio, #lbTpProcesso {\n"
 "    font: 12pt \"Avenir LT Std\";\n"
 "    color: #3F4E8C;\n"
 "    font-weight: 750;\n"
 "}\n"
 "\n"
-"#lbNaturezaEscolhida, #lbTpBeneEscolhido,\n"
+"#lbNaturezaEscolhida, #lbTpBeneEscolhido, \n"
 "#lbTpProcEscolhido {\n"
 "    font: 11pt \"Avenir LT Std\";\n"
 "    color: black;\n"
 "}\n"
 "\n"
+"#lbInfoNome, #lbInfoCpf,\n"
+"#lbInfoDataNascimento {\n"
+"    font: 11pt \"Avenir LT Std\";\n"
+"    color: black;\n"
+"\n"
+"    font-weight: 750;\n"
+"}\n"
+"\n"
+"#lbNome, #lbCpf,\n"
+"#lbDataNascimento {\n"
+"    font: 11pt \"Avenir LT Std\";\n"
+"    color: black;\n"
+"\n"
+"}\n"
+"\n"
 "/* ------------------------------------ Frames ------------------------------------*/\n"
-"#frInfoNatureza, #frInfoTpBeneficio,\n"
-"#frInfoTpProcesso {\n"
+"#frInfoNatureza, #frInfoPessoais,\n"
+"#frInfoTpBeneficio, #frInfoTpProcesso {\n"
 "    background-color: #F9F9F9;\n"
 "    border: 0px solid none;\n"
 "    border-radius: 8px;\n"
@@ -372,6 +390,43 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.frEsquerda.setObjectName("frEsquerda")
         self.verticalLayout_15 = QtWidgets.QVBoxLayout(self.frEsquerda)
         self.verticalLayout_15.setObjectName("verticalLayout_15")
+        self.frInfoHistPessoais = QtWidgets.QFrame(self.frEsquerda)
+        self.frInfoHistPessoais.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfoHistPessoais.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoHistPessoais.setObjectName("frInfoHistPessoais")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.frInfoHistPessoais)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.lbInfoDataNascimento = QtWidgets.QLabel(self.frInfoHistPessoais)
+        self.lbInfoDataNascimento.setObjectName("lbInfoDataNascimento")
+        self.gridLayout_2.addWidget(self.lbInfoDataNascimento, 3, 0, 1, 1)
+        self.lbInfoNome = QtWidgets.QLabel(self.frInfoHistPessoais)
+        self.lbInfoNome.setObjectName("lbInfoNome")
+        self.gridLayout_2.addWidget(self.lbInfoNome, 1, 0, 1, 1)
+        self.lbInfoCpf = QtWidgets.QLabel(self.frInfoHistPessoais)
+        self.lbInfoCpf.setObjectName("lbInfoCpf")
+        self.gridLayout_2.addWidget(self.lbInfoCpf, 2, 0, 1, 1)
+        self.lbNome = QtWidgets.QLabel(self.frInfoHistPessoais)
+        self.lbNome.setObjectName("lbNome")
+        self.gridLayout_2.addWidget(self.lbNome, 1, 1, 1, 1, QtCore.Qt.AlignLeft)
+        self.lbCpf = QtWidgets.QLabel(self.frInfoHistPessoais)
+        self.lbCpf.setObjectName("lbCpf")
+        self.gridLayout_2.addWidget(self.lbCpf, 2, 1, 1, 1, QtCore.Qt.AlignLeft)
+        self.lbDataNascimento = QtWidgets.QLabel(self.frInfoHistPessoais)
+        self.lbDataNascimento.setObjectName("lbDataNascimento")
+        self.gridLayout_2.addWidget(self.lbDataNascimento, 3, 1, 1, 1, QtCore.Qt.AlignLeft)
+        self.frInfoPessoais = QtWidgets.QFrame(self.frInfoHistPessoais)
+        self.frInfoPessoais.setMinimumSize(QtCore.QSize(250, 0))
+        self.frInfoPessoais.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.frInfoPessoais.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfoPessoais.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoPessoais.setObjectName("frInfoPessoais")
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frInfoPessoais)
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.lbInfoPessoais = QtWidgets.QLabel(self.frInfoPessoais)
+        self.lbInfoPessoais.setObjectName("lbInfoPessoais")
+        self.horizontalLayout_6.addWidget(self.lbInfoPessoais)
+        self.gridLayout_2.addWidget(self.frInfoPessoais, 0, 0, 1, 2)
+        self.verticalLayout_15.addWidget(self.frInfoHistPessoais)
         self.frNaturezaHist = QtWidgets.QFrame(self.frEsquerda)
         self.frNaturezaHist.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frNaturezaHist.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -592,6 +647,13 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.lbInfoTpBeneficio.setText(_translate("wdgEntrevistaPrincipal", "Tipo do benefício"))
         self.lbInfoTpProcesso.setText(_translate("wdgEntrevistaPrincipal", "Tipo de processo"))
         self.lbInfoEntrevista.setText(_translate("wdgEntrevistaPrincipal", "Entrevista"))
+        self.lbInfoDataNascimento.setText(_translate("wdgEntrevistaPrincipal", "Data de nascimento:"))
+        self.lbInfoNome.setText(_translate("wdgEntrevistaPrincipal", "Nome completo:"))
+        self.lbInfoCpf.setText(_translate("wdgEntrevistaPrincipal", "CPF:"))
+        self.lbNome.setText(_translate("wdgEntrevistaPrincipal", "Nome"))
+        self.lbCpf.setText(_translate("wdgEntrevistaPrincipal", "cpf"))
+        self.lbDataNascimento.setText(_translate("wdgEntrevistaPrincipal", "dataNascimento"))
+        self.lbInfoPessoais.setText(_translate("wdgEntrevistaPrincipal", "Informações pessoais"))
         self.lbNatureza.setText(_translate("wdgEntrevistaPrincipal", "Natureza do processo"))
         self.lbNaturezaEscolhida.setText(_translate("wdgEntrevistaPrincipal", "Administrativo"))
         self.lbTpBeneficio.setText(_translate("wdgEntrevistaPrincipal", "Tipo do benefício"))

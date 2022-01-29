@@ -14,10 +14,11 @@ from cache.cachingLogin import CacheLogin
 
 from Design.CustomWidgets.newCardPadrao import NewCardPadrao
 from sinaisCustomizados import Sinais
+from util.dateHelper import calculaIdade, mascaraData, strToDate
 from util.enums.dashboardEnums import TelaPosicao
 from util.enums.entrevistaEnums import EtapaEntrevista
 from util.enums.processoEnums import NaturezaProcesso, TipoBeneficioEnum, TipoProcesso
-from util.helpers import strTipoBeneFacilitado, strTipoProcesso
+from util.helpers import strTipoBeneFacilitado, strTipoProcesso, mascaraCPF
 from util.popUps import popUpSimCancela, popUpOkAlerta
 
 
@@ -43,6 +44,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
 
         self.buscaAdvogadoAtual()
         self.carregaTiposBeneficio()
+        self.iniciaInfoPessoais()
         self.iniciaNatureza()
         self.iniciaBeneficio()
         self.iniciaTpProcesso()
@@ -120,6 +122,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.processoAtual.natureza = natureza.value
         self.processoAtual.dataUltAlt = datetime.datetime.now()
         self.processoAtual.advogadoId = self.advogadoAtual.advogadoId
+        self.processoAtual.estado = self.escritorio.estado
         self.processoAtual.save()
         self.trocaEtapa(EtapaEntrevista.tipoBeneficio)
         self.clearFocus()
@@ -200,6 +203,16 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.vlTpBeneficio.addWidget(pbPensaoMorte)
         self.vlTpBeneficio.addWidget(pbSalMaternidade)
 
+    def iniciaInfoPessoais(self):
+        if self.clienteAtual is not None and self.clienteAtual.clienteId is not None:
+            idadeCliente = calculaIdade(self.clienteAtual.dataNascimento, datetime.datetime.today())
+            self.lbNome.setText(f"{self.clienteAtual.nomeCliente} {self.clienteAtual.sobrenomeCliente}")
+            self.lbCpf.setText(mascaraCPF(self.clienteAtual.cpfCliente))
+            self.lbDataNascimento.setText(f"{mascaraData(strToDate(self.clienteAtual.dataNascimento))} ({idadeCliente.years} anos)")
+            self.frInfoHistPessoais.show()
+        else:
+            self.frInfoHistPessoais.hide()
+
     def iniciaTpProcesso(self):
         pbConcessao = NewCardPadrao(
             TipoProcesso.Concessao,
@@ -260,6 +273,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
     def defineCliente(self, cliente: Cliente):
         if cliente is not None and cliente.clienteId is not None:
             self.clienteAtual = cliente
+            self.iniciaInfoPessoais()
 
     def sairEntrevista(self):
         self.sinais.sTrocaWidgetCentral.emit(TelaPosicao.Cliente)

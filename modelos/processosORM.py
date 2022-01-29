@@ -7,6 +7,7 @@ from util.enums.newPrevEnums import TipoEdicao, Prioridade
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.advogadoORM import Advogados
 from modelos.clienteORM import Cliente
+from modelos.tipoBeneficioORM import TipoBeneficioModel
 
 TABLENAME = 'processos'
 
@@ -29,7 +30,7 @@ class Processos(BaseModel, Model):
     situacaoId = IntegerField(column_name='situacaoId', default=0)
     subTipoApos = IntegerField(column_name='subTipoApos', null=True)
     tempoContribuicao = IntegerField(column_name='tempoContribuicao', null=True)
-    tipoBeneficio = IntegerField(column_name='tipoBeneficio', null=True)
+    tipoBeneficio = ForeignKeyField(column_name='tipoBeneficio', field='tipoId', model=TipoBeneficioModel, null=True, backref='TipoBeneficioModel')
     tipoProcesso = IntegerField(column_name='tipoProcesso', null=True)
     valorCausa = FloatField(column_name='valorCausa', null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())

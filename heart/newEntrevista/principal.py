@@ -4,6 +4,8 @@ from typing import List
 from PyQt5.QtWidgets import QWidget
 from Design.pyUi.newEntrevistaPrincipal import Ui_wdgEntrevistaPrincipal
 
+from .localStyleSheet.principal import styleEtapaEntrevista
+
 from modelos.escritoriosORM import Escritorios
 from modelos.processosORM import Processos
 from modelos.tipoBeneficioORM import TipoBeneficioModel
@@ -14,6 +16,7 @@ from cache.cachingLogin import CacheLogin
 
 from Design.CustomWidgets.newCardPadrao import NewCardPadrao
 from sinaisCustomizados import Sinais
+
 from util.dateHelper import calculaIdade, mascaraData, strToDate
 from util.enums.dashboardEnums import TelaPosicao
 from util.enums.entrevistaEnums import EtapaEntrevista
@@ -59,6 +62,12 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
             self.frTpBeneficioHist.hide()
             self.lbTpBeneEscolhido.setText('')
             self.trocaEtapa(EtapaEntrevista.naturezaProcesso)
+        elif self.etapaAtual == EtapaEntrevista.tipoProcesso:
+            self.frTpProcessoHist.hide()
+            self.lbTpProcEscolhido.setText('')
+            self.trocaEtapa(EtapaEntrevista.tipoBeneficio)
+        elif self.etapaAtual == EtapaEntrevista.quizEntrevista:
+            self.trocaEtapa(EtapaEntrevista.tipoProcesso)
 
     def atualizaDescricaoBeneficio(self, tipo: TipoBeneficioEnum):
         beneficio: TipoBeneficioModel = self.listaBeneficios[tipo.value]
@@ -115,6 +124,8 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
             self.lbNaturezaEscolhida.setText("Administrativo")
         else:
             self.lbNaturezaEscolhida.setText("Judicial")
+
+        self.frNaturezaHist.show()
 
         if self.clienteAtual is not None and self.clienteAtual.clienteId is not None:
             self.processoAtual.clienteId = self.clienteAtual.clienteId
@@ -245,7 +256,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.vlTpProcesso.addWidget(pbRecEspecial)
 
     def iniciaHistorico(self):
-        self.lbNaturezaEscolhida.setText('')
+        self.frNaturezaHist.hide()
         self.frTpBeneficioHist.hide()
         self.frTpProcessoHist.hide()
         self.frEntrevistaHist.hide()
@@ -281,6 +292,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
     def trocaEtapa(self, etapaDestino: EtapaEntrevista):
         self.etapaAtual = etapaDestino
         self.stkEntrevista.setCurrentIndex(etapaDestino.value)
+        self.frMigalhas.setStyleSheet(styleEtapaEntrevista(etapaDestino))
 
     def voltarDashboard(self):
         self.processoAtual.delete().execute()

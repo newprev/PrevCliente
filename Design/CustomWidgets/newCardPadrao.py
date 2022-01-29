@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QFrame
 from Design.CustomWidgets.styleSheets.newCardPadrao import firulaHover
 from Design.pyUi.efeitos import Efeitos
 from Design.pyUi.newCardPadrao import Ui_frCardPadrao
-from util.enums.processoEnums import NaturezaProcesso, TipoBeneficio
+from util.enums.processoEnums import NaturezaProcesso, TipoBeneficioEnum
 from util.helpers import strTipoBeneFacilitado
 
 
@@ -33,7 +33,7 @@ class NewCardPadrao(Ui_frCardPadrao, QFrame):
             else:
                 self.pbFuncionalidade.setText('JUDICIAL')
 
-        elif isinstance(self.tipoCard, TipoBeneficio):
+        elif isinstance(self.tipoCard, TipoBeneficioEnum):
             self.pbFuncionalidade.setText(strTipoBeneFacilitado(self.tipoCard).upper())
 
     def enterEvent(self, a0: QtCore.QEvent) -> None:

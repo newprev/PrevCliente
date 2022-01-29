@@ -11,7 +11,7 @@ class TipoProcesso(Enum):
     RecOrdinario = 2
     RecEspecial = 3
 
-class TipoBeneficio(Enum):
+class TipoBeneficioEnum(Enum):
     Aposentadoria = 0
     AuxDoenca = 1
     AuxAcidente = 2

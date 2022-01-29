@@ -1,14 +1,17 @@
+from typing import List
+
 from PyQt5.QtWidgets import QWidget
 from Design.pyUi.newEntrevistaPrincipal import Ui_wdgEntrevistaPrincipal
 
 from modelos.escritoriosORM import Escritorios
 from modelos.processosORM import Processos
+from modelos.tipoBeneficioORM import TipoBeneficioModel
 
 from Design.CustomWidgets.newCardPadrao import NewCardPadrao
 from sinaisCustomizados import Sinais
 from util.enums.dashboardEnums import TelaPosicao
 from util.enums.entrevistaEnums import EtapaEntrevista
-from util.enums.processoEnums import NaturezaProcesso, TipoBeneficio
+from util.enums.processoEnums import NaturezaProcesso, TipoBeneficioEnum
 from util.helpers import strTipoBeneFacilitado
 from util.popUps import popUpSimCancela
 
@@ -17,6 +20,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
     escritorio: Escritorios
     processoAtual: Processos
     etapaAtual: EtapaEntrevista
+    listaBeneficios: List[TipoBeneficioModel]
 
     def __init__(self, escritorioAtual: Escritorios, parent=None):
         super(NewEntrevistaPrincipal, self).__init__(parent=parent)
@@ -27,7 +31,9 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.sinais = Sinais()
         self.sinais.sTrocaWidgetCentral.connect(self.voltarDashboard)
         self.processoAtual = Processos()
+        self.listaBeneficios = []
 
+        self.carregaTiposBeneficio()
         self.iniciaNatureza()
         self.iniciaBeneficio()
         self.iniciaHistorico()
@@ -56,14 +62,16 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
             De maneira geral, um processo jurídico é o pedido do autor (pessoa física ou jurídica) para a resolução de um conflito. Para isso, ele bate às portas do Poder Judiciário a espera que o Estado, na figura de um juiz, decida sobre a suposta violação de direitos. Podemos também definir o processo judicial como o instrumento legal que pretende eliminar conflitos entre os sujeitos envolvidos, através da aplicação da lei em relação aos fatos apresentados neste processo.
             Cabe destacar, desde logo, que uma ação judicial é diferente de um processo administrativo ou até de um processo criminal. O processo administrativo é um procedimento interno, normalmente desenvolvido dentro de órgãos ligados ao Poder Executivo e são julgado por Tribunais Administrativos. Já o processo criminal, é um processo judicial que discute a responsabilidade penal de um ato através de uma acusação e tem um rito diferente do cível.""")
 
-    def atualizaDescricaoBeneficio(self, tipo: TipoBeneficio):
-        self.lbTituloTpBeneficio.setText(strTipoBeneFacilitado(tipo).upper())
-        self.lbDescTpBeneficio.setText('Sem descrição')
+    def atualizaDescricaoBeneficio(self, tipo: TipoBeneficioEnum):
+        beneficio: TipoBeneficioModel = self.listaBeneficios[tipo.value]
 
-    def atualizaTipoBeneficio(self, tipo: TipoBeneficio):
+        self.lbTituloTpBeneficio.setText(strTipoBeneFacilitado(tipo).upper())
+        self.lbDescTpBeneficio.setText(beneficio.descricao)
+
+    def atualizaTipoBeneficio(self, tipo: TipoBeneficioEnum):
         self.lbTpBeneEscolhido.setText(strTipoBeneFacilitado(tipo))
         self.frTpBeneficioHist.show()
-        self.processoAtual.tipoBeneficio = tipo.value
+        self.processoAtual.tipoBeneficioEnum = tipo.value
 
     def atualizaNaturezaProcesso(self, natureza: NaturezaProcesso):
         if natureza == NaturezaProcesso.administrativo:
@@ -75,52 +83,62 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.trocaEtapa(EtapaEntrevista.tipoBeneficio)
         self.clearFocus()
 
+    def carregaTiposBeneficio(self):
+        self.listaBeneficios = TipoBeneficioModel.select()
+
     def iniciaBeneficio(self):
         pbAposentadoria = NewCardPadrao(
-            TipoBeneficio.Aposentadoria,
+            TipoBeneficioEnum.Aposentadoria,
             parent=self,
-            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficio.Aposentadoria),
-            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficio.Aposentadoria),
+            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficioEnum.Aposentadoria),
+            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficioEnum.Aposentadoria),
         )
         pbAuxDoenca = NewCardPadrao(
-            TipoBeneficio.AuxDoenca,
+            TipoBeneficioEnum.AuxDoenca,
             parent=self,
-            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficio.AuxDoenca),
-            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficio.AuxDoenca),
+            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficioEnum.AuxDoenca),
+            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficioEnum.AuxDoenca),
+        )
+        pbAuxAcidente = NewCardPadrao(
+            TipoBeneficioEnum.AuxAcidente,
+            parent=self,
+            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficioEnum.AuxAcidente),
+            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficioEnum.AuxAcidente),
         )
         pbAuxReclusao = NewCardPadrao(
-            TipoBeneficio.AuxReclusao,
+            TipoBeneficioEnum.AuxReclusao,
             parent=self,
-            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficio.AuxReclusao),
-            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficio.AuxReclusao),
+            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficioEnum.AuxReclusao),
+            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficioEnum.AuxReclusao),
         )
         pbBeneIdoso = NewCardPadrao(
-            TipoBeneficio.BeneIdoso,
+            TipoBeneficioEnum.BeneIdoso,
             parent=self,
-            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficio.BeneIdoso),
-            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficio.BeneIdoso),
+            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficioEnum.BeneIdoso),
+            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficioEnum.BeneIdoso),
         )
         pbBeneDeficiente = NewCardPadrao(
-            TipoBeneficio.BeneDeficiencia,
+            TipoBeneficioEnum.BeneDeficiencia,
             parent=self,
-            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficio.BeneDeficiencia),
-            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficio.BeneDeficiencia),
+            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficioEnum.BeneDeficiencia),
+            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficioEnum.BeneDeficiencia),
         )
         pbSalMaternidade = NewCardPadrao(
-            TipoBeneficio.SalMaternidade,
+            TipoBeneficioEnum.SalMaternidade,
             parent=self,
-            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficio.SalMaternidade),
-            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficio.SalMaternidade),
+            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficioEnum.SalMaternidade),
+            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficioEnum.SalMaternidade),
         )
         pbPensaoMorte = NewCardPadrao(
-            TipoBeneficio.PensaoMorte,
+            TipoBeneficioEnum.PensaoMorte,
             parent=self,
-            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficio.PensaoMorte),
-            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficio.PensaoMorte),
+            onHover=lambda: self.atualizaDescricaoBeneficio(TipoBeneficioEnum.PensaoMorte),
+            onClick=lambda: self.atualizaTipoBeneficio(TipoBeneficioEnum.PensaoMorte),
         )
 
         self.vlTpBeneficio.addWidget(pbAposentadoria)
         self.vlTpBeneficio.addWidget(pbAuxDoenca)
+        self.vlTpBeneficio.addWidget(pbAuxAcidente)
         self.vlTpBeneficio.addWidget(pbAuxReclusao)
         self.vlTpBeneficio.addWidget(pbBeneIdoso)
         self.vlTpBeneficio.addWidget(pbBeneDeficiente)

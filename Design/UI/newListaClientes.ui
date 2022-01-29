@@ -406,29 +406,56 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pbCalculadora">
-           <property name="minimumSize">
-            <size>
-             <width>165</width>
-             <height>40</height>
-            </size>
+          <widget class="QFrame" name="frame_5">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
            </property>
-           <property name="text">
-            <string>Calculadora rápida</string>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbNovoCliente">
-           <property name="minimumSize">
-            <size>
-             <width>165</width>
-             <height>40</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Novo cliente</string>
-           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <property name="spacing">
+             <number>16</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="pbCalculadora">
+              <property name="minimumSize">
+               <size>
+                <width>165</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Calculadora rápida</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pbNovoCliente">
+              <property name="minimumSize">
+               <size>
+                <width>165</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Novo cliente</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>

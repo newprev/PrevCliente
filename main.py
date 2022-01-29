@@ -32,7 +32,7 @@ from modelos.itemContribuicao import ItemContribuicao
 from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.aposentadoriaORM import Aposentadoria
 from modelos.ipcaMensalORM import IpcaMensal
-from modelos.tipoBeneficioORM import TipoBeneficio
+from modelos.tipoBeneficioORM import TipoBeneficioModel
 from modelos.tiposESubtipos.tipoAposentadoriaORM import TipoAposentadoria
 from repositorios.informacoesRepositorio import ApiInformacoes
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
@@ -64,13 +64,13 @@ class Main(Ui_MainWindow, QMainWindow):
         self.timer.start(35)
 
     async def carregaTabelasIniciais(self):
-        if TipoBeneficio.select().count() == 0:
+        if TipoBeneficioModel.select().count() == 0:
             asyncTasks = []
             asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.tipoBeneficio)))
 
             apiInfo: List[dict] = await aio.gather(*asyncTasks)
             tiposBeneficio = apiInfo[0]
-            TipoBeneficio.insert_many(tiposBeneficio).execute()
+            TipoBeneficioModel.insert_many(tiposBeneficio).execute()
 
         return True
 
@@ -115,7 +115,7 @@ class Main(Ui_MainWindow, QMainWindow):
             TipoAposentadoria: 'CRIANDO TABELA DE TIPOS DE APOSENTADORIAS...',
             ClienteInfoBanco: 'CRIANDO TABLEA DE INFORMAÇÕES BANCÁRIAS',
             ClienteProfissao: 'CRIANDO TABLEA DE INFORMAÇÕES PROFISSIONAIS',
-            TipoBeneficio: 'CRIANDO TABLEA DE TIPOS DE BENEFÍCIOS',
+            TipoBeneficioModel: 'CRIANDO TABLEA DE TIPOS DE BENEFÍCIOS',
         }
 
         percentLoading = ceil(100 / len(listaTabelas))

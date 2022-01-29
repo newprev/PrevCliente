@@ -15,7 +15,7 @@ from modelos.processosORM import Processos
 
 from util.dateHelper import strToDatetime
 from util.enums.aposentadoriaEnums import SubTipoAposentadoria
-from util.enums.processoEnums import TipoBeneficio
+from util.enums.processoEnums import TipoBeneficioEnum
 from util.helpers import mascaraCep, mascaraTelCel, strTipoBeneficio, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG
 from util.dateHelper import mascaraDataPequena
 
@@ -80,8 +80,8 @@ class GeracaoDocumentos:
         pathConteudoEspecifico: str = self.getPathConteudo(soConteudo=True)
 
         tipoBeneEspecifico: list = [
-            TipoBeneficio.BeneIdoso.value,
-            TipoBeneficio.BeneDeficiencia.value
+            TipoBeneficioEnum.BeneIdoso.value,
+            TipoBeneficioEnum.BeneDeficiencia.value
         ]
 
         if self.processo.tipoBeneficio in tipoBeneEspecifico:
@@ -92,12 +92,12 @@ class GeracaoDocumentos:
             with open(pathConteudoEspecifico, encoding='utf-8', mode='r') as f:
                 conteudoDict: dict = json.load(f)
 
-            if self.processo.tipoBeneficio == TipoBeneficio.Aposentadoria.value:
+            if self.processo.tipoBeneficio == TipoBeneficioEnum.Aposentadoria.value:
                 conteudoEspecifico = conteudoDict['Aposentadoria'][SubTipoAposentadoria(self.processo.subTipoApos).name]
                 if len(conteudoEspecifico.splitlines()) == 1:
                     conteudoEspecifico = [conteudoEspecifico]
             else:
-                conteudoEspecifico = conteudoDict[TipoBeneficio(self.processo.tipoBeneficio).name].splitlines()
+                conteudoEspecifico = conteudoDict[TipoBeneficioEnum(self.processo.tipoBeneficio).name].splitlines()
 
             self.dictInfo['conteudoEspecifico'] = conteudoEspecifico
 
@@ -233,7 +233,7 @@ class GeracaoDocumentos:
         self.dictInfo['nomeUsuario'] = self.advogado.nomeUsuario
         self.dictInfo['sobrenomeUsuario'] = self.advogado.sobrenomeUsuario
         self.dictInfo['tipoProcesso'] = strTipoProcesso(self.processo.tipoProcesso)
-        self.dictInfo['tipoBeneficio'] = strTipoBeneficio(self.processo.tipoBeneficio, self.processo.subTipoApos)
+        self.dictInfo['tipoBeneficio'] = strTipoBeneficioEnum(self.processo.tipoBeneficio, self.processo.subTipoApos)
 
     def geraCorpoProcuracao(self):
         estadoSigla: str = getEstados()[self.cliente.estado]
@@ -271,7 +271,7 @@ class GeracaoDocumentos:
         self.dictInfo['estadoEscritorio'] = self.escritorio.estado
 
         # Informações do processo
-        self.dictInfo['tipoBeneficio'] = strTipoBeneficio(self.processo.tipoBeneficio, self.processo.subTipoApos)
+        self.dictInfo['tipoBeneficio'] = strTipoBeneficioEnum(self.processo.tipoBeneficio, self.processo.subTipoApos)
 
         # Informações sobre a localidade atual
         self.dictInfo['cidadeAtual'] = self.strCidadeAtual
@@ -388,17 +388,17 @@ class GeracaoDocumentos:
     def getPathConteudo(self, soConteudo: bool = False) -> str:
         strPathConteudo: str = os.path.join(self.pathTemplate, 'conteudo')
         beneMaisGenericos: list = [
-            TipoBeneficio.Aposentadoria.value,
-            TipoBeneficio.AuxDoenca.value,
-            TipoBeneficio.AuxReclusao.value
+            TipoBeneficioEnum.Aposentadoria.value,
+            TipoBeneficioEnum.AuxDoenca.value,
+            TipoBeneficioEnum.AuxReclusao.value
         ]
         if soConteudo:
             return strPathConteudo
         elif self.processo.tipoBeneficio in beneMaisGenericos:
             strPathConteudo = os.path.join(strPathConteudo, 'docGerais.txt')
-        elif self.processo.tipoBeneficio == TipoBeneficio.BeneIdoso.value:
+        elif self.processo.tipoBeneficio == TipoBeneficioEnum.BeneIdoso.value:
             strPathConteudo = os.path.join(strPathConteudo, 'docIdoso.txt')
-        elif self.processo.tipoBeneficio == TipoBeneficio.BeneDeficiencia.value:
+        elif self.processo.tipoBeneficio == TipoBeneficioEnum.BeneDeficiencia.value:
             strPathConteudo = os.path.join(strPathConteudo, 'docDeficiencia.txt')
 
         return strPathConteudo

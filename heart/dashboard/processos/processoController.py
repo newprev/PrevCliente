@@ -23,7 +23,7 @@ from cache.cachingLogin import CacheLogin
 from util.dateHelper import strToDate
 
 from util.enums.aposentadoriaEnums import TelaAtiva
-from util.enums.processoEnums import TipoBeneficio, TipoProcesso, SituacaoProcesso, NaturezaProcesso
+from util.enums.processoEnums import TipoBeneficioEnum, TipoProcesso, SituacaoProcesso, NaturezaProcesso
 from util.helpers import mascaraCPF
 from util.popUps import popUpOkAlerta
 
@@ -44,7 +44,7 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
 
         self.clienteAtual: Cliente = cliente
         self.processoAtual: Processos = processo
-        self.tipoBeneficioAtual: TipoBeneficio = TipoBeneficio.Aposentadoria
+        self.tipoBeneficioAtual: TipoBeneficioEnum = TipoBeneficioEnum.Aposentadoria
         self.aposentadoriaAtual: Aposentadoria = None
         self.tabAposController = TabAposentariasController()
         self.vlAposentadoria.addWidget(self.tabAposController)
@@ -63,14 +63,14 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
         self.pbFecharProcesso.clicked.connect(self.fecharProcesso)
 
         # Botões benefícios
-        self.pbAposentadorias.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.Aposentadoria))
-        self.pbAuxAcidente.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.AuxAcidente))
-        self.pbAuxDoenca.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.AuxDoenca))
-        self.pbAuxReclusao.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.AuxReclusao))
-        self.pbBeneDeficiente.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.BeneDeficiencia))
-        self.pbBeneIdoso.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.BeneIdoso))
-        self.pbSalMaternidade.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.SalMaternidade))
-        self.pbPensaoMorte.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficio.PensaoMorte))
+        self.pbAposentadorias.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficioEnum.Aposentadoria))
+        self.pbAuxAcidente.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficioEnum.AuxAcidente))
+        self.pbAuxDoenca.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficioEnum.AuxDoenca))
+        self.pbAuxReclusao.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficioEnum.AuxReclusao))
+        self.pbBeneDeficiente.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficioEnum.BeneDeficiencia))
+        self.pbBeneIdoso.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficioEnum.BeneIdoso))
+        self.pbSalMaternidade.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficioEnum.SalMaternidade))
+        self.pbPensaoMorte.clicked.connect(lambda: self.avaliaNavegacaoProcesso(TipoBeneficioEnum.PensaoMorte))
 
         # Botões documentos
         self.pbProcuracao.clicked.connect(self.avaliaCriaProcuracao)
@@ -104,7 +104,7 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
     def avaliaCriaRequerimento(self):
         if self.geraDocumentos is not None and self.processoAtual is not None:
             if self.processoAtual.natureza == NaturezaProcesso.administrativo.value:
-                if self.tipoBeneficioAtual == TipoBeneficio.Aposentadoria:
+                if self.tipoBeneficioAtual == TipoBeneficioEnum.Aposentadoria:
                     self.aposentadoriaAtual = self.tabAposController.aposentadoriaEscolhida
                     try:
                         listaItens: List[ItemContribuicao] = ItemContribuicao.select(
@@ -123,16 +123,16 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
                 popUpOkAlerta('Deu problema')
 
     #################### Gerar documentos
-    def avaliaNavegacaoProcesso(self, beneficio: TipoBeneficio):
+    def avaliaNavegacaoProcesso(self, beneficio: TipoBeneficioEnum):
         self.tipoBeneficioAtual = beneficio
         funcionaslidadeNaoImplementadas = [
-            TipoBeneficio.BeneIdoso,
-            TipoBeneficio.BeneDeficiencia,
-            TipoBeneficio.AuxDoenca,
-            TipoBeneficio.AuxReclusao,
-            TipoBeneficio.AuxAcidente,
-            TipoBeneficio.PensaoMorte,
-            TipoBeneficio.SalMaternidade
+            TipoBeneficioEnum.BeneIdoso,
+            TipoBeneficioEnum.BeneDeficiencia,
+            TipoBeneficioEnum.AuxDoenca,
+            TipoBeneficioEnum.AuxReclusao,
+            TipoBeneficioEnum.AuxAcidente,
+            TipoBeneficioEnum.PensaoMorte,
+            TipoBeneficioEnum.SalMaternidade
         ]
         if beneficio in funcionaslidadeNaoImplementadas:
             popUpOkAlerta(
@@ -276,7 +276,7 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
             strPrefixo = TipoProcesso(self.processoAtual.tipoProcesso).name
 
         if sufix:
-            strSufixo = TipoBeneficio(self.processoAtual.tipoBeneficio).name
+            strSufixo = TipoBeneficioEnum(self.processoAtual.tipoBeneficio).name
 
         if prefix and sufix:
             return strPrefixo + ': ' + strSufixo

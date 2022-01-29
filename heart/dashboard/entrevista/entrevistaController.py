@@ -33,7 +33,7 @@ from processos.aposentadoria import CalculosAposentadoria
 
 from util.enums.newPrevEnums import *
 from util.enums.aposentadoriaEnums import *
-from util.enums.processoEnums import NaturezaProcesso, TipoProcesso, TipoBeneficio
+from util.enums.processoEnums import NaturezaProcesso, TipoProcesso, TipoBeneficioEnum
 from util.popUps import popUpOkAlerta
 
 
@@ -326,44 +326,44 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.pbProxEtapa.setText('Concluir')
                 self.infoBeneficio.atualizaInfo(wdgFuturo.name, True)
 
-                if wdgFuturo == TipoBeneficio.Aposentadoria:
+                if wdgFuturo == TipoBeneficioEnum.Aposentadoria:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
-                    self.processoModelo.tipoBeneficio = TipoBeneficio.Aposentadoria.value
+                    self.processoModelo.tipoBeneficio = TipoBeneficioEnum.Aposentadoria.value
                     self.tipoAtividadePg.pegaClienteAtual(self.clienteAtual)
                     self.stackedWidget.setCurrentIndex(4)
-                elif wdgFuturo == TipoBeneficio.AuxDoenca:
+                elif wdgFuturo == TipoBeneficioEnum.AuxDoenca:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
-                    self.processoModelo.tipoBeneficio = TipoBeneficio.AuxDoenca.value
+                    self.processoModelo.tipoBeneficio = TipoBeneficioEnum.AuxDoenca.value
                     # TODO: wdgAtual dos tiposESubtipos de atividades auxílio doença
                     pass
-                elif wdgFuturo == TipoBeneficio.AuxAcidente:
+                elif wdgFuturo == TipoBeneficioEnum.AuxAcidente:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
-                    self.processoModelo.tipoBeneficio = TipoBeneficio.AposTempoContr.value
+                    self.processoModelo.tipoBeneficio = TipoBeneficioEnum.AposTempoContr.value
                     # TODO: wdgAtual dos tiposESubtipos de atividades aposentadoria por tempo de contribuição
                     pass
-                elif wdgFuturo == TipoBeneficio.AuxReclusao:
+                elif wdgFuturo == TipoBeneficioEnum.AuxReclusao:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
-                    self.processoModelo.tipoBeneficio = TipoBeneficio.AuxReclusao.value
+                    self.processoModelo.tipoBeneficio = TipoBeneficioEnum.AuxReclusao.value
                     # TODO: wdgAtual dos tiposESubtipos de atividades auxílio reclusão
                     pass
-                elif wdgFuturo == TipoBeneficio.BeneIdoso:
+                elif wdgFuturo == TipoBeneficioEnum.BeneIdoso:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
-                    self.processoModelo.tipoBeneficio = TipoBeneficio.BeneIdoso.value
+                    self.processoModelo.tipoBeneficio = TipoBeneficioEnum.BeneIdoso.value
                     # TODO: wdgAtual dos tiposESubtipos de atividades benefício idoso
                     pass
-                elif wdgFuturo == TipoBeneficio.BeneDeficiencia:
+                elif wdgFuturo == TipoBeneficioEnum.BeneDeficiencia:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
-                    self.processoModelo.tipoBeneficio = TipoBeneficio.BeneDeficiencia.value
+                    self.processoModelo.tipoBeneficio = TipoBeneficioEnum.BeneDeficiencia.value
                     # TODO: wdgAtual dos tiposESubtipos de atividades benefício deficientes
                     pass
-                elif wdgFuturo == TipoBeneficio.PensaoMorte:
+                elif wdgFuturo == TipoBeneficioEnum.PensaoMorte:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
-                    self.processoModelo.tipoBeneficio = TipoBeneficio.PensaoMorte.value
+                    self.processoModelo.tipoBeneficio = TipoBeneficioEnum.PensaoMorte.value
                     # TODO: wdgAtual dos tiposESubtipos de atividades pensão por morte
                     pass
-                elif wdgFuturo == TipoBeneficio.SalMaternidade:
+                elif wdgFuturo == TipoBeneficioEnum.SalMaternidade:
                     self.telaAtual = MomentoEntrevista.tipoAtividade
-                    self.processoModelo.tipoBeneficio = TipoBeneficio.SalMaternidade.value
+                    self.processoModelo.tipoBeneficio = TipoBeneficioEnum.SalMaternidade.value
                     # TODO: wdgAtual dos tiposESubtipos de atividades salário maternidade
                     pass
                 else:

@@ -9,7 +9,7 @@ from datetime import datetime
 TABLENAME = 'tipoBeneficio'
 
 
-class TipoBeneficio(BaseModel, Model):
+class TipoBeneficioModel(BaseModel, Model):
     tipoId = AutoField(column_name='tipoId', null=True, unique=True)
     nome = CharField(max_length=20, null=False)
     descricao = CharField(max_length=600, null=False)
@@ -50,7 +50,7 @@ class TipoBeneficio(BaseModel, Model):
         )""")
 
 
-@post_save(sender=TipoBeneficio)
+@post_save(sender=TipoBeneficioModel)
 def inserindoTipoBeneficio(*args, **kwargs):
     if kwargs['created']:
         logPrioridade(f'INSERT<inserindoTipoBeneficio>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
@@ -58,6 +58,6 @@ def inserindoTipoBeneficio(*args, **kwargs):
         logPrioridade(f'UPDATE<inserindoTipoBeneficio>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
-@pre_delete(sender=TipoBeneficio)
+@pre_delete(sender=TipoBeneficioModel)
 def deletandoTipoBeneficio(*args, **kwargs):
     logPrioridade(f'DELETE<inserindoTipoBeneficio>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

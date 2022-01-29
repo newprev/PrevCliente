@@ -223,7 +223,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
 
     def confirmaIniciaEntrevista(self):
         popUpSimCancela(
-            f"Você deseja iniciar uma nova entrevista com o(a) cliente: \n{self.clienteAtual.nomeCliente}?",
+            f"Você deseja iniciar uma nova entrevista com o(a) cliente: \n\n{self.clienteAtual.nomeCliente} {self.clienteAtual.sobrenomeCliente}?",
             titulo="Iniciar entrevista",
             funcao=self.sinais.sIniciaEntrevista.emit,
         )

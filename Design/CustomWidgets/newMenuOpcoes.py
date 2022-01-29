@@ -6,7 +6,15 @@ from typing import Callable
 
 
 class NewMenuOpcoes(QMenu):
-    def __init__(self, parent=None, funcArquivar: Callable = None, funcEditar: Callable = None, funcExcluir: Callable = None, funcAtualizar: Callable = None):
+    def __init__(
+            self,
+            parent=None,
+            funcArquivar: Callable = None,
+            funcEditar: Callable = None,
+            funcExcluir: Callable = None,
+            funcAtualizar: Callable = None,
+            funcEntrevista: Callable = None,
+    ):
         super(NewMenuOpcoes, self).__init__(parent=parent)
         self.carregaEstilo()
 
@@ -14,6 +22,7 @@ class NewMenuOpcoes(QMenu):
         self.funcEditar = funcEditar
         self.funcExcluir = funcExcluir
         self.funcAtualizar = funcAtualizar
+        self.funcEntrevista = funcEntrevista
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -46,4 +55,9 @@ class NewMenuOpcoes(QMenu):
             acaoAtualizar = QAction('Atualizar', self)
             acaoAtualizar.triggered.connect(lambda: self.funcAtualizar())
             self.addAction(acaoAtualizar)
+
+        if self.funcEntrevista is not None:
+            acaoEntrevista = QAction('Entrevista', self)
+            acaoEntrevista.triggered.connect(lambda: self.funcEntrevista())
+            self.addAction(acaoEntrevista)
 

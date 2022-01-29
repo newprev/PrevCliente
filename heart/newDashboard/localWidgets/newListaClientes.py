@@ -29,6 +29,7 @@ from modelos.clienteProfissao import ClienteProfissao
 
 from sinaisCustomizados import Sinais
 from util.dateHelper import strToDate, atividadesConcorrentes, atividadeSecundaria
+from util.enums.dashboardEnums import TelaAtual
 
 from util.helpers import mascaraTelCel, unmaskAll, calculaIdadeFromString
 from util.popUps import popUpOkAlerta, popUpSimCancela
@@ -90,6 +91,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             parent=self,
             funcEditar=lambda: self.editarCliente(clienteId),
             funcArquivar=lambda: self.avaliaArquivarCliente(clienteId, linhaSelecionada),
+            funcEntrevista=lambda: self.confirmaInicioEntrevista(clienteId),
         )
         menu.exec_(QCursor.pos())
 
@@ -372,6 +374,16 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             self.avaliaAtividadesPrincipais(clienteAtual.clienteId)
 
         self.sinais.sEnviaClienteParam.emit(clienteAtual)
+
+    def confirmaInicioEntrevista(self, clienteId: int):
+        clienteEscolhido: Cliente = Cliente.get_by_id(clienteId)
+
+        popUpSimCancela(
+            f"Deseja iniciar uma entrevista com o(a) cliente:\n\n{clienteEscolhido.nomeCliente} {clienteEscolhido.sobrenomeCliente}?",
+            titulo="Iniciar entrevista",
+            funcao=lambda: self.dashboard.trocaTela(TelaAtual.Entrevista, clienteEscolhido)
+        )
+        return True
 
     def editarCliente(self, clienteId: int):
         try:

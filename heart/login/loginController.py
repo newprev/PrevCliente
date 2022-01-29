@@ -70,6 +70,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.toasty = QToaster()
 
+        # Definindo ordem dos tabs
+        self.setTabOrder(self.leLogin, self.leSenha)
+        self.setTabOrder(self.leSenha, self.cbSalvarSenha)
+        self.setTabOrder(self.cbSalvarSenha, self.pbEntrar)
+
         self.configGerais = ConfigGerais()
 
         self.daoEscritorio = Escritorios()
@@ -79,6 +84,9 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         self.trocaTelaAtual(TelaLogin.principal)
         self.pbEnviarCodigo_2.hide()
+
+        self.cbPASenha.setChecked(True)
+        self.cbPAConfirmaSenha.setChecked(True)
 
         self.pbFechar.clicked.connect(self.close)
         self.pbEntrar.clicked.connect(self.entrar)
@@ -103,6 +111,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             self.iniciarAutomaticamente()
 
         self.center()
+        self.leLogin.setFocus()
 
     def avaliaCodAcessoEnviado(self):
         codAcesso = self.lePrimeiro.text() + self.leSegundo.text() + self.leTerceiro.text() + self.leQuarto.text() + self.leQuinto.text()
@@ -160,12 +169,12 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 popUpOkAlerta(f"Não foi possível confirmar o cadastro. Tente novamente.")
 
     def avaliaCriaSenha(self):
-        if self.lePASenha.text() == '' or self.leConfirmaSenha.text() == '':
+        if self.lePASenha.text() == '' or self.lePAConfirmaSenha.text() == '':
             self.toasty.showMessage(self, "É preciso informar uma senha no primeiro campo e confirmá-la no campo abaixo.")
             # popUpOkAlerta("É preciso informar uma senha no primeiro campo e confirmá-la no campo abaixo.")
             self.lePASenha.setFocus()
             return False
-        elif self.lePASenha.text() != self.leConfirmaSenha.text():
+        elif self.lePASenha.text() != self.lePAConfirmaSenha.text():
             self.toasty.showMessage(self, "As senhas não coincidem. Tente digitá-las novamente.")
             # popUpOkAlerta("As senhas não coincidem. Tente digitá-las novamente.")
             return False
@@ -189,18 +198,12 @@ class LoginController(QMainWindow, Ui_mwLogin):
             return False
         else:
             advogadoId: int = self.usuarioRepositorio.buscaCpfEmailPrimeiroAcesso(self.lePACpfEmail.text())
-            if advogadoId > 0:
-                self.advogado = self.usuarioRepositorio.buscaAdvPor(advogadoId=advogadoId)
-                if self.advogado is None or self.advogado.advogadoId is None:
-                    self.toasty.showMessage(self, "E-mail ou CPF não encontrados. Verifique se a digitação está correta", fontSize=FontSize.H3)
-                    return False
-                else:
-                    self.iniciaTimerPrimeiroAcesso()
-                    self.trocaTelaAtual(TelaLogin.primAcessoKey)
-                return True
-            else:
-                self.toasty.showMessage(self, "E-mail ou CPF não encontrados. Verifique se a digitação está correta", fontSize=FontSize.H3)
-                return False
+            self.advogado = self.usuarioRepositorio.buscaAdvPor(advogadoId=advogadoId)
+            self.iniciaTimerPrimeiroAcesso()
+            self.trocaTelaAtual(TelaLogin.primAcessoKey)
+            self.toasty.showMessage(self, "Você receberá o código de acesso dentro de alguns instantes", fontSize=FontSize.H3)
+
+            return True
 
     def avaliaFocus(self):
         if self.lePrimeiro.hasFocus():
@@ -241,15 +244,15 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
     def avaliaMostraSenha(self, checkBox: str):
         if checkBox == 'senha':
-            if self.cbPASenha.isChecked():
+            if not self.cbPASenha.isChecked():
                 self.lePASenha.setEchoMode(QLineEdit.EchoMode.Normal)
             else:
                 self.lePASenha.setEchoMode(QLineEdit.EchoMode.Password)
         else:
-            if self.cbPAConfirmaSenha.isChecked():
-                self.leConfirmaSenha.setEchoMode(QLineEdit.EchoMode.Normal)
+            if not self.cbPAConfirmaSenha.isChecked():
+                self.lePAConfirmaSenha.setEchoMode(QLineEdit.EchoMode.Normal)
             else:
-                self.leConfirmaSenha.setEchoMode(QLineEdit.EchoMode.Password)
+                self.lePAConfirmaSenha.setEchoMode(QLineEdit.EchoMode.Password)
 
     def avaliaVoltar(self):
         if self.telaAtual == TelaLogin.primAcessoSenha:

@@ -26,8 +26,17 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#mwLogin, #centralwidget, #stkPrimeiroAcesso {
+   <string notr="true">#mwLogin, #centralwidget, 
+#stkPrimeiroAcesso, #frMain {
 	border-radius: 8px;
+}
+
+#frLogin, #frPrimAcesso,
+#frPrimAcessoKey, #frPrimAcessoSenha {
+	border-top-left-radius: 8px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 8px;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -163,7 +172,7 @@
 </string>
       </property>
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
@@ -508,7 +517,7 @@ programa</string>
            <item row="0" column="0">
             <widget class="QFrame" name="frPrimeiroAcesso">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::NoFrame</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
@@ -829,7 +838,7 @@ programa</string>
            <item row="0" column="0">
             <widget class="QFrame" name="frPAKey">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::NoFrame</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
@@ -1213,7 +1222,7 @@ programa</string>
 }
 
 /*----------------------------------------- Line Edit ------------------------------------------*/
-#lePASenha, #leConfirmaSenha {
+#lePASenha, #lePAConfirmaSenha {
 	font: 10pt &quot;Avenir LT Std&quot;;
     border: 0px solid gray;
     border-radius: 8px;
@@ -1302,7 +1311,7 @@ programa</string>
            <item row="0" column="0">
             <widget class="QFrame" name="frPASenha">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::NoFrame</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
@@ -1367,7 +1376,7 @@ programa</string>
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLineEdit" name="leConfirmaSenha">
+                  <widget class="QLineEdit" name="lePASenha">
                    <property name="minimumSize">
                     <size>
                      <width>200</width>
@@ -1417,7 +1426,7 @@ programa</string>
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLineEdit" name="lePASenha">
+                  <widget class="QLineEdit" name="lePAConfirmaSenha">
                    <property name="minimumSize">
                     <size>
                      <width>200</width>

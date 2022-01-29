@@ -477,7 +477,7 @@ class Ui_wdgListaClientes(object):
         item = self.tblClientes.item(0, 7)
         item.setText(_translate("wdgListaClientes", ":"))
         self.tblClientes.setSortingEnabled(__sortingEnabled)
-import newListaClientes_rc
+import Resources.newListaClientes
 
 
 if __name__ == "__main__":

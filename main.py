@@ -1,5 +1,8 @@
 from math import ceil
+from typing import List
+
 from aiohttp import ClientConnectorError
+import asyncio as aio
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow
@@ -29,7 +32,10 @@ from modelos.itemContribuicao import ItemContribuicao
 from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.aposentadoriaORM import Aposentadoria
 from modelos.ipcaMensalORM import IpcaMensal
+from modelos.tipoBeneficioORM import TipoBeneficio
 from modelos.tiposESubtipos.tipoAposentadoriaORM import TipoAposentadoria
+from repositorios.informacoesRepositorio import ApiInformacoes
+from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 
 from util.enums.newPrevEnums import TiposConexoes
 from util.popUps import popUpOkAlerta
@@ -57,6 +63,17 @@ class Main(Ui_MainWindow, QMainWindow):
         self.timer.timeout.connect(self.progresso)
         self.timer.start(35)
 
+    async def carregaTabelasIniciais(self):
+        if TipoBeneficio.select().count() == 0:
+            asyncTasks = []
+            asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.tipoBeneficio)))
+
+            apiInfo: List[dict] = await aio.gather(*asyncTasks)
+            tiposBeneficio = apiInfo[0]
+            TipoBeneficio.insert_many(tiposBeneficio).execute()
+
+        return True
+
     def progresso(self, add=None):
         if add is None:
             self.contador += 1
@@ -73,6 +90,7 @@ class Main(Ui_MainWindow, QMainWindow):
             self.lbInfo.setText('INICIANDO SUBMERSAO...')
 
     def iniciaBancosETelas(self):
+        loop = aio.get_event_loop()
 
         listaTabelas = {
             Escritorios: 'CRIANDO TABELA DOS ESCRITORIOS...',
@@ -97,9 +115,9 @@ class Main(Ui_MainWindow, QMainWindow):
             TipoAposentadoria: 'CRIANDO TABELA DE TIPOS DE APOSENTADORIAS...',
             ClienteInfoBanco: 'CRIANDO TABLEA DE INFORMAÇÕES BANCÁRIAS',
             ClienteProfissao: 'CRIANDO TABLEA DE INFORMAÇÕES PROFISSIONAIS',
+            TipoBeneficio: 'CRIANDO TABLEA DE TIPOS DE BENEFÍCIOS',
         }
 
-        # percentLoading = ceil(100 / len(listaLoading))
         percentLoading = ceil(100 / len(listaTabelas))
 
         for instancia, label in listaTabelas.items():
@@ -110,7 +128,7 @@ class Main(Ui_MainWindow, QMainWindow):
         self.lbInfo.setText('CRIANDO TELA DE LOGIN...')
         self.progresso(add=percentLoading)
 
-        # self.iniciaNewPrev()
+        loop.run_until_complete(self.carregaTabelasIniciais())
         self.avaliaAbrirTelaLogin()
 
     def avaliaAbrirTelaLogin(self):

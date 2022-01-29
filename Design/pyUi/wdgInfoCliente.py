@@ -794,7 +794,7 @@ class Ui_wdgInfoCliente(object):
         self.lbInfoCnis.setText(_translate("wdgInfoCliente", "CNIS"))
         self.lbInfoNomeArquivo.setText(_translate("wdgInfoCliente", "nomeArquivo"))
         self.lbInfoMetaArquivo.setText(_translate("wdgInfoCliente", "5m atrás"))
-import wdgInfoCliente_rc
+import Resources.wdgInfoCliente
 
 
 if __name__ == "__main__":

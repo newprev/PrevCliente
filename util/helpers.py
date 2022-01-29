@@ -517,14 +517,14 @@ def strNatureza(natureza: int) -> str:
         return '-'
 
 
-def strTipoProcesso(tipoProcesso: int) -> str:
-    if tipoProcesso == TipoProcesso.Revisao.value:
+def strTipoProcesso(tipoProcesso: TipoProcesso) -> str:
+    if tipoProcesso == TipoProcesso.Revisao:
         return 'Revisão'
-    elif tipoProcesso == TipoProcesso.Concessao.value:
+    elif tipoProcesso == TipoProcesso.Concessao:
         return 'Concessão'
-    elif tipoProcesso == TipoProcesso.RecEspecial.value:
+    elif tipoProcesso == TipoProcesso.RecEspecial:
         return 'Recurso Especial'
-    elif tipoProcesso == TipoProcesso.RecOrdinario.value:
+    elif tipoProcesso == TipoProcesso.RecOrdinario:
         return 'Recurso Ordinário'
     else:
         return '-'

@@ -780,18 +780,18 @@
 }
 
 /*-------------------------------------------  Widget --------------------------------------------*/
-#pgNatureza, #pgTpBeneficio, #pgBancarias {
+#pgNatureza, #pgTpBeneficio, #pgTpProcesso {
 	background-color: white;
 }
 
 /*-------------------------------------------  Label --------------------------------------------*/
-#lbTituloNatureza, #lbTituloTpBeneficio  {
+#lbTituloNatureza, #lbTituloTpBeneficio, #lbTituloTpProcesso  {
 	font: 14pt &quot;Avenir LT Std&quot;;
 	color: #1F1E29;
 	font-weight: 750;
 }
 
-#lbDescNatureza, #lbDescTpBeneficio {
+#lbDescNatureza, #lbDescTpBeneficio, #lbDescTpProcesso {
 	font: 11pt &quot;Avenir LT Std&quot;;
 	color: #1F1E29;
 }
@@ -1281,7 +1281,7 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="pgBancarias">
+           <widget class="QWidget" name="pgTpProcesso">
             <layout class="QGridLayout" name="gridLayout_8">
              <property name="topMargin">
               <number>0</number>
@@ -1293,13 +1293,92 @@
               <number>16</number>
              </property>
              <item row="0" column="0">
-              <widget class="QFrame" name="frame_13">
+              <widget class="QFrame" name="frTpProcessoPrincipal">
+               <property name="maximumSize">
+                <size>
+                 <width>600</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
                </property>
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
+               <layout class="QVBoxLayout" name="verticalLayout_22">
+                <item>
+                 <layout class="QVBoxLayout" name="vlTpProcesso">
+                  <property name="sizeConstraint">
+                   <enum>QLayout::SetFixedSize</enum>
+                  </property>
+                 </layout>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_12">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lbTituloTpProcesso">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Titulo de processo</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lbDescTpProcesso">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Descricao</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_13">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>351</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
               </widget>
              </item>
             </layout>

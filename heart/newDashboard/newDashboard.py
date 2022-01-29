@@ -63,7 +63,7 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
     def buscaAdvogado(self):
         self.advogadoAtual = self.cacheLogin.carregarCache()
         if self.advogadoAtual is None or self.advogadoAtual.advogadoId is None:
-            self.escritorioAtual = self.cacheLogin.carregarCacheTemporario()
+            self.advogadoAtual = self.cacheLogin.carregarCacheTemporario()
 
             if self.advogadoAtual is None or self.advogadoAtual.escritorioId is None:
                 popUpOkAlerta("Não foi possível carregar as informações do advogado. Tente fazer o login novamente.")
@@ -108,7 +108,11 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
     def recarregaListaClientes(self):
         self.clienteController.atualizaTblClientes()
 
-    def trocaTela(self, tela: TelaAtual):
+    def trocaTela(self, tela: TelaAtual, *args):
+        if len(args) != 0:
+            if isinstance(args[0], Cliente):
+                self.wdgEntrevista.defineCliente(args[0])
+
         self.stkPrincipal.setCurrentIndex(tela.value)
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:

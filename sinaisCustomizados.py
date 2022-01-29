@@ -17,6 +17,7 @@ class Sinais(QObject):
     sTrocaPrimeiroAcesso = QtCore.pyqtSignal(Advogados, name='advogado')
     sTrocaTelaEntrevista = QtCore.pyqtSignal(list, name='tela')
     sTrocaInfoLateral = QtCore.pyqtSignal(dict, name='infoLateral')
+    sIniciaEntrevista = QtCore.pyqtSignal(name='iniciaEntrevista')
     sEnviaCliente = QtCore.pyqtSignal(name='enviaCliente')
     sEnviaInfoCliente = QtCore.pyqtSignal(Cliente, name='enviaInfoCliente')
     sEnviaClienteParam = QtCore.pyqtSignal(Cliente, name='enviaClienteParam')

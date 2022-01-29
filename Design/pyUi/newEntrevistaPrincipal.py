@@ -304,18 +304,18 @@ class Ui_wdgEntrevistaPrincipal(object):
 "}\n"
 "\n"
 "/*-------------------------------------------  Widget --------------------------------------------*/\n"
-"#pgNatureza, #pgTpBeneficio, #pgBancarias {\n"
+"#pgNatureza, #pgTpBeneficio, #pgTpProcesso {\n"
 "    background-color: white;\n"
 "}\n"
 "\n"
 "/*-------------------------------------------  Label --------------------------------------------*/\n"
-"#lbTituloNatureza, #lbTituloTpBeneficio  {\n"
+"#lbTituloNatureza, #lbTituloTpBeneficio, #lbTituloTpProcesso  {\n"
 "    font: 14pt \"Avenir LT Std\";\n"
 "    color: #1F1E29;\n"
 "    font-weight: 750;\n"
 "}\n"
 "\n"
-"#lbDescNatureza, #lbDescTpBeneficio {\n"
+"#lbDescNatureza, #lbDescTpBeneficio, #lbDescTpProcesso {\n"
 "    font: 11pt \"Avenir LT Std\";\n"
 "    color: #1F1E29;\n"
 "}\n"
@@ -538,19 +538,44 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.verticalLayout_10.addItem(spacerItem12)
         self.gridLayout_7.addWidget(self.frTpBenePrincipal, 0, 0, 1, 1)
         self.stkEntrevista.addWidget(self.pgTpBeneficio)
-        self.pgBancarias = QtWidgets.QWidget()
-        self.pgBancarias.setObjectName("pgBancarias")
-        self.gridLayout_8 = QtWidgets.QGridLayout(self.pgBancarias)
+        self.pgTpProcesso = QtWidgets.QWidget()
+        self.pgTpProcesso.setObjectName("pgTpProcesso")
+        self.gridLayout_8 = QtWidgets.QGridLayout(self.pgTpProcesso)
         self.gridLayout_8.setContentsMargins(-1, 0, -1, -1)
         self.gridLayout_8.setHorizontalSpacing(32)
         self.gridLayout_8.setVerticalSpacing(16)
         self.gridLayout_8.setObjectName("gridLayout_8")
-        self.frame_13 = QtWidgets.QFrame(self.pgBancarias)
-        self.frame_13.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_13.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_13.setObjectName("frame_13")
-        self.gridLayout_8.addWidget(self.frame_13, 0, 0, 1, 1)
-        self.stkEntrevista.addWidget(self.pgBancarias)
+        self.frTpProcessoPrincipal = QtWidgets.QFrame(self.pgTpProcesso)
+        self.frTpProcessoPrincipal.setMaximumSize(QtCore.QSize(600, 16777215))
+        self.frTpProcessoPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTpProcessoPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTpProcessoPrincipal.setObjectName("frTpProcessoPrincipal")
+        self.verticalLayout_22 = QtWidgets.QVBoxLayout(self.frTpProcessoPrincipal)
+        self.verticalLayout_22.setObjectName("verticalLayout_22")
+        self.vlTpProcesso = QtWidgets.QVBoxLayout()
+        self.vlTpProcesso.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
+        self.vlTpProcesso.setObjectName("vlTpProcesso")
+        self.verticalLayout_22.addLayout(self.vlTpProcesso)
+        spacerItem13 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.verticalLayout_22.addItem(spacerItem13)
+        self.lbTituloTpProcesso = QtWidgets.QLabel(self.frTpProcessoPrincipal)
+        self.lbTituloTpProcesso.setMinimumSize(QtCore.QSize(0, 20))
+        self.lbTituloTpProcesso.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.lbTituloTpProcesso.setObjectName("lbTituloTpProcesso")
+        self.verticalLayout_22.addWidget(self.lbTituloTpProcesso)
+        self.lbDescTpProcesso = QtWidgets.QLabel(self.frTpProcessoPrincipal)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbDescTpProcesso.sizePolicy().hasHeightForWidth())
+        self.lbDescTpProcesso.setSizePolicy(sizePolicy)
+        self.lbDescTpProcesso.setWordWrap(True)
+        self.lbDescTpProcesso.setObjectName("lbDescTpProcesso")
+        self.verticalLayout_22.addWidget(self.lbDescTpProcesso)
+        spacerItem14 = QtWidgets.QSpacerItem(20, 351, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_22.addItem(spacerItem14)
+        self.gridLayout_8.addWidget(self.frTpProcessoPrincipal, 0, 0, 1, 1)
+        self.stkEntrevista.addWidget(self.pgTpProcesso)
         self.horizontalLayout_4.addWidget(self.stkEntrevista)
         self.verticalLayout.addWidget(self.frMiolo)
         self.gridLayout.addWidget(self.frPrincipal, 0, 0, 1, 1)
@@ -578,6 +603,8 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.lbDescNatureza.setText(_translate("wdgEntrevistaPrincipal", "Descricao"))
         self.lbTituloTpBeneficio.setText(_translate("wdgEntrevistaPrincipal", "Titulo Beneficio"))
         self.lbDescTpBeneficio.setText(_translate("wdgEntrevistaPrincipal", "Descricao"))
+        self.lbTituloTpProcesso.setText(_translate("wdgEntrevistaPrincipal", "Titulo de processo"))
+        self.lbDescTpProcesso.setText(_translate("wdgEntrevistaPrincipal", "Descricao"))
 import Resources.newEntrevistaPrincipal
 
 

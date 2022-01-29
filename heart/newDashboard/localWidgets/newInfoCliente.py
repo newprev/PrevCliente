@@ -45,6 +45,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         self.sinais = Sinais()
         self.sinais.sVoltaTela.connect(self.voltarDashboard)
         self.sinais.sEnviaInfo.connect(self.editarInfoCliente)
+        self.sinais.sIniciaEntrevista.connect(self.iniciarEntrevista)
         self.toasty = QToaster()
         self.popupCNIS = None
         self.limpaTudo()
@@ -54,6 +55,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         self.installEventFilter(self)
 
         self.pbVoltar.clicked.connect(lambda: self.sinais.sVoltaTela.emit())
+        self.pbEntrevista.clicked.connect(self.confirmaIniciaEntrevista)
         self.iniciarBotoesOpcoes()
 
     def abreMenuInfoOpcoes(self, info: str):
@@ -219,6 +221,14 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         else:
             self.toasty.showMessage(self, "Não foi possível carregar as informações do cliente.")
 
+    def confirmaIniciaEntrevista(self):
+        popUpSimCancela(
+            f"Você deseja iniciar uma nova entrevista com o(a) cliente: \n{self.clienteAtual.nomeCliente}?",
+            titulo="Iniciar entrevista",
+            funcao=self.sinais.sIniciaEntrevista.emit,
+        )
+        return True
+
     def buscaDadosProfissionais(self):
         try:
             return ClienteProfissao.get_by_id(self.clienteAtual.dadosProfissionais)
@@ -243,6 +253,9 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
                 self.popupCNIS.close()
 
         return super(NewInfoCliente, self).eventFilter(a0, tecla)
+
+    def iniciarEntrevista(self):
+        self.dashboard.trocaTela(TelaAtual.Entrevista, self.clienteAtual)
 
     def iniciarBotoesOpcoes(self):
         # Informações pessoais

@@ -56,11 +56,16 @@ class UsuarioRepository:
             )
             return False
 
-    def buscaCpfEmailPrimeiroAcesso(self, cpfEmail: int) -> int:
-        url: str = self.baseUrl + 'advogados/auth/primeiroAcesso/' + str(cpfEmail)
+    def buscaCpfEmailPrimeiroAcesso(self, cpfEmail: str, esqueceuSenha: bool = False) -> int:
+        url: str = self.baseUrl + 'advogados/auth/trocaSenha/'
+
+        body: dict = {
+            'info': cpfEmail,
+            'esqueceuSenha': esqueceuSenha
+        }
 
         logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<advogados/auth/primeiroAcesso/>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
-        response = http.post(url)
+        response = http.post(url, data=body)
 
         if 199 < response.status_code < 400:
             clienteId: int = response.json()['advogadoId']
@@ -71,9 +76,13 @@ class UsuarioRepository:
             return -1
 
     def verificaCodAcesso(self, codAcesso: int) -> bool:
-        url: str = self.baseUrl + 'advogados/auth/autenticaCodAcesso/' + str(codAcesso)
+        url: str = self.baseUrl + 'advogados/auth/autenticaCodAcesso/'
 
-        response = http.patch(url)
+        body: dict = {
+            'codigo': codAcesso
+        }
+
+        response = http.patch(url, data=body)
 
         if 199 < response.status_code < 400:
             logPrioridade(

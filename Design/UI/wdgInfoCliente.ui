@@ -117,6 +117,15 @@
 	padding: 8px;
 }
 
+#pbFoto {
+	font: 11pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+
+	border: 2px solid #3F4E8C;
+	border-radius: 8px;
+	padding: 4px;
+}
+
 
 /*------------------------------------------- Label -------------------------------------------*/
 #lbNomeCliente {
@@ -236,10 +245,7 @@
               <property name="frameShadow">
                <enum>QFrame::Raised</enum>
               </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_3">
-               <property name="spacing">
-                <number>16</number>
-               </property>
+              <layout class="QGridLayout" name="gridLayout_2">
                <property name="leftMargin">
                 <number>0</number>
                </property>
@@ -252,7 +258,7 @@
                <property name="bottomMargin">
                 <number>0</number>
                </property>
-               <item>
+               <item row="0" column="0">
                 <widget class="QFrame" name="frFotoCliente">
                  <property name="minimumSize">
                   <size>
@@ -298,7 +304,7 @@
                  </layout>
                 </widget>
                </item>
-               <item>
+               <item row="0" column="1">
                 <widget class="QFrame" name="frInfoFotoCliente">
                  <property name="minimumSize">
                   <size>
@@ -375,6 +381,13 @@
                    </spacer>
                   </item>
                  </layout>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="pbFoto">
+                 <property name="text">
+                  <string>Tirar foto</string>
+                 </property>
                 </widget>
                </item>
               </layout>

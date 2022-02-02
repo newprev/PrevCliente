@@ -83,6 +83,7 @@ class Ui_wdgListaClientes(object):
 "\n"
 "    font: 12pt \"Avenir LT Std\";\n"
 "    color: #3F4E8C;\n"
+"    font-weight: 750;\n"
 "    \n"
 "    padding: 8px;\n"
 "}\n"

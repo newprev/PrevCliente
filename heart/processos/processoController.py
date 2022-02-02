@@ -6,8 +6,8 @@ from typing import List
 
 from heart.buscaClientePage import BuscaClientePage
 from heart.buscaProcessoPage import BuscaProcessosPage
-from heart.dashboard.processos.localStyleSheet.processo import layoutBotaoGuia
-from heart.dashboard.processos.localWidgets.tabAposentadorias import TabAposentariasController
+from heart.processos.localStyleSheet.processo import layoutBotaoGuia
+from heart.processos.localWidgets.tabAposentadorias import TabAposentariasController
 
 from modelos.clienteORM import Cliente
 from modelos.processosORM import Processos

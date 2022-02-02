@@ -16,7 +16,7 @@ from heart.dashboard.entrevista.tipoBeneficioController import TipoBeneficioConc
 from heart.dashboard.entrevista.tipoAtividadeController import TipoAtividadeController
 from heart.dashboard.tabs.clienteController import TabCliente
 from heart.dashboard.entrevista.localWidgets.pgConfigSimulacao import PgConfigSimulacao
-from heart.dashboard.processos.processoController import ProcessosController
+from heart.processos.processoController import ProcessosController
 from heart.dashboard.gerarDocsPage import GerarDocsPage
 from heart.dashboard.entrevista.localStyleSheet.cabecalho import *
 from sinaisCustomizados import Sinais

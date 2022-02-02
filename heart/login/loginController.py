@@ -51,6 +51,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
     telaAtual: TelaLogin
     timerPrimeiroAcesso: QtCore.QTimer
     somaTimer: int = 0
+    esqueceuSenha: bool = False
     toasty: QToaster
 
     def __init__(self, db=None):
@@ -90,12 +91,13 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         self.pbFechar.clicked.connect(self.close)
         self.pbEntrar.clicked.connect(self.entrar)
-        self.pbPrimeiroAcesso.clicked.connect(lambda: self.trocaTelaAtual(TelaLogin.primAcessoEmail))
+        self.pbPrimeiroAcesso.clicked.connect(self.fluxoPrimeiroAcesso)
         self.pbVoltar.clicked.connect(self.avaliaVoltar)
         self.pbVoltar2.clicked.connect(self.avaliaVoltar)
         self.pbVoltar3.clicked.connect(self.avaliaVoltar)
         self.pbEnviarCodigo.clicked.connect(self.avaliaEnviarCodigo)
         self.pbCriaSenha.clicked.connect(self.avaliaCriaSenha)
+        self.pbEsqueceuSenha.clicked.connect(self.fluxoEsqueceuSenha)
         self.cbPASenha.stateChanged.connect(lambda: self.avaliaMostraSenha('senha'))
         self.cbPAConfirmaSenha.stateChanged.connect(lambda: self.avaliaMostraSenha('confirmaSenha'))
 
@@ -112,6 +114,18 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         self.center()
         self.leLogin.setFocus()
+
+    def alteraLabelEsqueceuSenha(self):
+        if self.esqueceuSenha:
+            self.lbPALogin.setText("ESQUECEU A SENHA")
+            self.lbPALogin_2.setText("ESQUECEU A SENHA")
+            self.lbPALogin_3.setText("ESQUECEU A SENHA")
+            self.pbCriaSenha.setText("Alterar senha")
+        else:
+            self.lbPALogin.setText("PRIMEIRO ACESSO")
+            self.lbPALogin_2.setText("PRIMEIRO ACESSO")
+            self.lbPALogin_3.setText("PRIMEIRO ACESSO")
+            self.pbCriaSenha.setText("Criar senha")
 
     def avaliaCodAcessoEnviado(self):
         codAcesso = self.lePrimeiro.text() + self.leSegundo.text() + self.leTerceiro.text() + self.leQuarto.text() + self.leQuinto.text()
@@ -197,7 +211,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             popUpOkAlerta('Digite seu e-mail cadastrado ou o número do CPF para receber o código de acesso.')
             return False
         else:
-            advogadoId: int = self.usuarioRepositorio.buscaCpfEmailPrimeiroAcesso(self.lePACpfEmail.text())
+            advogadoId: int = self.usuarioRepositorio.buscaCpfEmailPrimeiroAcesso(self.lePACpfEmail.text(), esqueceuSenha=self.esqueceuSenha)
             self.advogado = self.usuarioRepositorio.buscaAdvPor(advogadoId=advogadoId)
             self.iniciaTimerPrimeiroAcesso()
             self.trocaTelaAtual(TelaLogin.primAcessoKey)
@@ -405,6 +419,16 @@ class LoginController(QMainWindow, Ui_mwLogin):
             # self.limpa()
 
         self.edittingFinished = True
+
+    def fluxoEsqueceuSenha(self):
+        self.esqueceuSenha = True
+        self.alteraLabelEsqueceuSenha()
+        self.trocaTelaAtual(TelaLogin.primAcessoEmail)
+
+    def fluxoPrimeiroAcesso(self):
+        self.esqueceuSenha = False
+        self.alteraLabelEsqueceuSenha()
+        self.trocaTelaAtual(TelaLogin.primAcessoEmail)
 
     def iniciaDashboard(self):
         self.dashboard = NewDashboard()

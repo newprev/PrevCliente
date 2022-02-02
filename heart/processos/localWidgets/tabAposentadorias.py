@@ -5,7 +5,7 @@ from typing import List, Tuple
 from modelos.aposentadoriaORM import Aposentadoria
 from modelos.clienteORM import Cliente
 
-from heart.dashboard.processos.localWidgets.cardAposentadoria import CardAposentadoria
+from heart.processos.localWidgets.cardAposentadoria import CardAposentadoria
 
 from Design.pyUi.efeitos import Efeitos
 

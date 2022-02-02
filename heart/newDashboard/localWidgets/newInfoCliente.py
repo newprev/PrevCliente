@@ -46,7 +46,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         self.sinais.sVoltaTela.connect(self.voltarDashboard)
         self.sinais.sEnviaInfo.connect(self.editarInfoCliente)
         self.sinais.sIniciaEntrevista.connect(self.iniciarEntrevista)
-        self.toasty = QToaster()
+        self.toasty = None
         self.popupCNIS = None
         self.limpaTudo()
 
@@ -219,6 +219,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
                 self.lbInfoMetaArquivo.hide()
 
         else:
+            self.toasty = QToaster()
             self.toasty.showMessage(self, "Não foi possível carregar as informações do cliente.")
 
     def confirmaIniciaEntrevista(self):

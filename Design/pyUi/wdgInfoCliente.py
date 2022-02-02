@@ -81,6 +81,15 @@ class Ui_wdgInfoCliente(object):
 "    padding: 8px;\n"
 "}\n"
 "\n"
+"#pbFoto {\n"
+"    font: 11pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"\n"
+"    border: 2px solid #3F4E8C;\n"
+"    border-radius: 8px;\n"
+"    padding: 4px;\n"
+"}\n"
+"\n"
 "\n"
 "/*------------------------------------------- Label -------------------------------------------*/\n"
 "#lbNomeCliente {\n"
@@ -133,10 +142,9 @@ class Ui_wdgInfoCliente(object):
         self.frame_4.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_4.setObjectName("frame_4")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frame_4)
-        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_3.setSpacing(16)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.frame_4)
+        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_2.setObjectName("gridLayout_2")
         self.frFotoCliente = QtWidgets.QFrame(self.frame_4)
         self.frFotoCliente.setMinimumSize(QtCore.QSize(80, 80))
         self.frFotoCliente.setMaximumSize(QtCore.QSize(80, 80))
@@ -151,7 +159,7 @@ class Ui_wdgInfoCliente(object):
         self.lbFotoCliente.setText("")
         self.lbFotoCliente.setObjectName("lbFotoCliente")
         self.horizontalLayout_27.addWidget(self.lbFotoCliente)
-        self.horizontalLayout_3.addWidget(self.frFotoCliente)
+        self.gridLayout_2.addWidget(self.frFotoCliente, 0, 0, 1, 1)
         self.frInfoFotoCliente = QtWidgets.QFrame(self.frame_4)
         self.frInfoFotoCliente.setMinimumSize(QtCore.QSize(0, 0))
         self.frInfoFotoCliente.setMaximumSize(QtCore.QSize(16777215, 80))
@@ -172,7 +180,10 @@ class Ui_wdgInfoCliente(object):
         self.verticalLayout_3.addWidget(self.lbEmail)
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem2)
-        self.horizontalLayout_3.addWidget(self.frInfoFotoCliente)
+        self.gridLayout_2.addWidget(self.frInfoFotoCliente, 0, 1, 1, 1)
+        self.pbFoto = QtWidgets.QPushButton(self.frame_4)
+        self.pbFoto.setObjectName("pbFoto")
+        self.gridLayout_2.addWidget(self.pbFoto, 1, 0, 1, 1)
         self.horizontalLayout_2.addWidget(self.frame_4)
         spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem3)
@@ -749,6 +760,7 @@ class Ui_wdgInfoCliente(object):
         self.lbNomeCliente.setText(_translate("wdgInfoCliente", "Fulana de Tal"))
         self.lbTelefone.setText(_translate("wdgInfoCliente", "(11) 9.7275-7721"))
         self.lbEmail.setText(_translate("wdgInfoCliente", "fulana.deTal@gmail.com"))
+        self.pbFoto.setText(_translate("wdgInfoCliente", "Tirar foto"))
         self.pbEntrevista.setText(_translate("wdgInfoCliente", "Entrevista"))
         self.pbResumo.setText(_translate("wdgInfoCliente", "Resumo CNIS"))
         self.pbProcessos.setText(_translate("wdgInfoCliente", "Processos"))

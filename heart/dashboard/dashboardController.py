@@ -10,7 +10,7 @@ from heart.dashboard.tabs.tabResumoCNIS import TabResumoCNIS
 from heart.informacoesTelas.informacoesGerais import InformacoesGerais
 from heart.menuLateral.ferramentasPage import FerramentasPage
 from heart.dashboard.entrevista.entrevistaController import EntrevistaController
-from heart.dashboard.processos.processoController import ProcessosController
+from heart.processos.processoController import ProcessosController
 from sinaisCustomizados import Sinais
 from cache.cachingLogin import CacheLogin
 
@@ -23,11 +23,10 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         super(DashboardController, self).__init__(parent=parent)
         self.setupUi(self)
         self.boxLayout = QHBoxLayout()
-        # self.db = db
         self.sinais = Sinais()
         self.parent = parent
         self.cacheLogin = CacheLogin()
-        self.toast = QToaster()
+        self.toast = None
 
         self.setWindowTitle('Dashboard - [dashboardController]')
 
@@ -74,8 +73,6 @@ class DashboardController(QMainWindow, Ui_mwDashBoard):
         self.boxLayout.addWidget(self.funcOutra5)
 
         self.scaTelas.setLayout(self.boxLayout)
-
-        self.toast.showMessage(self, 'Testando toast com uma mensagem razoavelmente longa.', corner=QtCore.Qt.BottomLeftCorner)
 
     def trocarParaPagina(self, telaAlvo: TelaPosicao):
         if telaAlvo == TelaPosicao.Entrevista:

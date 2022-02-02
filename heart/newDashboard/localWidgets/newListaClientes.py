@@ -57,7 +57,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.sinais.sEnviaInfoCliente.connect(self.enviaInfoClienteDashboard)
         self.efeitos = Efeitos()
 
-        self.toast = QToaster(parent=self)
+        self.toast = None
 
         self.tblClientes.hideColumn(0)
         self.tblClientes.hideColumn(8)
@@ -430,6 +430,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         return False
 
     def toastCarregaCnis(self):
+        self.toast = QToaster(None)
         self.toast.showMessage(self, "Analisando informações do CNIS...", corner=Qt.BottomLeftCorner)
 
     def verificaCadastradoCliente(self, cpf: str) -> Status:

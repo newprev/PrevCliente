@@ -7,7 +7,6 @@ from Design.pyUi.pgTetosPrevidenciarios import Ui_mwTetosPrev
 from modelos.tetosPrevORM import TetosPrev
 from util.dateHelper import mascaraDataPequena, strToDate
 from util.helpers import mascaraDinheiro, dinheiroToFloat
-from Design.CustomWidgets.newCheckBox import NewCheckBox
 
 
 class TetosPrevidenciarios(QMainWindow, Ui_mwTetosPrev):
@@ -21,12 +20,6 @@ class TetosPrevidenciarios(QMainWindow, Ui_mwTetosPrev):
         self.desativaFiltros(True)
         self.setWindowTitle('Tetos previdenciários - [tetosPrevidenciariosTela]')
 
-        self.cbAtivaFiltros = NewCheckBox()
-        self.vlCheckBox.addWidget(self.cbAtivaFiltros)
-
-        self.cbAtivaFiltros.stateChanged.connect(self.avaliaEstadoFiltros)
-        self.pbFiltrar.clicked.connect(self.avaliaFiltros)
-        self.pbRefresh.clicked.connect(self.limpaFiltros)
         self.dtDe.dateChanged.connect(lambda: self.editandoFiltro('dtDe'))
         self.dtAte.dateChanged.connect(lambda: self.editandoFiltro('dtAte'))
         self.leDe.textChanged.connect(lambda: self.editandoFiltro('leDe'))
@@ -70,11 +63,9 @@ class TetosPrevidenciarios(QMainWindow, Ui_mwTetosPrev):
 
     def desativaFiltros(self, valor: bool):
         if valor:
-            self.pbFiltrar.hide()
             self.frDtReferente.hide()
             self.frValor.hide()
         else:
-            self.pbFiltrar.show()
             self.frDtReferente.show()
             self.frValor.show()
         

@@ -7,7 +7,6 @@ from heart.menuLateral.configuracoesPage import ConfiguracoesPage
 from heart.dashboard.localWidgets.cardFuncionalidade import CardFuncionalidade
 from heart.dashboard.tabs.clienteController import TabCliente
 from heart.dashboard.tabs.tabResumoCNIS import TabResumoCNIS
-from heart.informacoesTelas.informacoesGerais import InformacoesGerais
 from heart.menuLateral.ferramentasPage import FerramentasPage
 from heart.dashboard.entrevista.entrevistaController import EntrevistaController
 from heart.processos.processoController import ProcessosController

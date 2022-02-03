@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="filtros">
+    <file>filtros.png</file>
+  </qresource>
+</RCC>

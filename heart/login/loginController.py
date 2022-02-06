@@ -469,7 +469,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
     def verificaRotinaAtualizacao(self):
 
-        pathFile = os.path.join(os.getcwd(), '.sync', '.syncFile')
+        pathFile = os.path.join(os.getcwd(), '.sync', '.syncFile.json')
         syncJson = {
             'syncConvMon': datetimeToSql(datetime.datetime.now()),
             'syncTetosPrev': datetimeToSql(datetime.datetime.now()),

@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>1254</width>
-    <height>480</height>
+    <height>241</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -36,6 +42,12 @@
    </property>
    <item row="0" column="0">
     <widget class="QFrame" name="frPrincipal">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -50,12 +62,15 @@
        <number>24</number>
       </property>
       <property name="topMargin">
-       <number>12</number>
+       <number>0</number>
       </property>
       <property name="rightMargin">
        <number>24</number>
       </property>
-      <item>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item alignment="Qt::AlignTop">
        <widget class="QFrame" name="frCabecalhoLista">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -159,6 +174,9 @@
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="topMargin">
+          <number>9</number>
+         </property>
          <item>
           <widget class="QFrame" name="frame_2">
            <property name="frameShape">
@@ -462,7 +480,7 @@
         </layout>
        </widget>
       </item>
-      <item>
+      <item alignment="Qt::AlignTop">
        <widget class="QFrame" name="frMiddle">
         <property name="styleSheet">
          <string notr="true">/*----------------------------------- Frame ---------------------------------------*/
@@ -632,8 +650,14 @@
         </layout>
        </widget>
       </item>
-      <item>
+      <item alignment="Qt::AlignTop">
        <widget class="QFrame" name="frTabela">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="styleSheet">
          <string notr="true">/*------------------------------------------- Table Widget -------------------------------------------*/
 #tblClientes {
@@ -680,7 +704,7 @@ QHeaderView::section {
           <number>36</number>
          </property>
          <property name="topMargin">
-          <number>24</number>
+          <number>0</number>
          </property>
          <property name="rightMargin">
           <number>0</number>
@@ -688,8 +712,14 @@ QHeaderView::section {
          <property name="bottomMargin">
           <number>0</number>
          </property>
-         <item>
+         <item alignment="Qt::AlignTop">
           <widget class="QTableWidget" name="tblClientes">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
            </property>
@@ -969,6 +999,19 @@ QHeaderView::section {
          </item>
         </layout>
        </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>

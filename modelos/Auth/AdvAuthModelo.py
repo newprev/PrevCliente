@@ -5,32 +5,32 @@ class AdvAuthModelo:
 
     def __init__(self):
         self.advogadoId: int = None
+        self.escritorioId: int = None
         self.login: str = None
         self.senha: str = None
         self.numeroOAB: str = None
         self.email: str = None
         self.ativo: bool = True
-        self.confirmado: bool = False
 
-    def toDict(self):
+    def toDict(self) -> dict:
         dictAuth = {
             'advogadoId': self.advogadoId,
+            'escritorioId': self.escritorioId,
             'login': self.login,
             'senha': self.senha,
             'numeroOAB': self.numeroOAB,
             'email': self.email,
             'ativo': self.ativo,
-            'confirmado': self.confirmado
         }
         return dictAuth
 
     def fromDict(self, dictAuth: dict, retornaInst: bool = True):
         self.senha = dictAuth['senha']
+        self.escritorioId = dictAuth['escritorioId']
         self.login = dictAuth['login']
         self.numeroOAB = dictAuth['numeroOAB']
         self.email = dictAuth['email']
         self.advogadoId = dictAuth['advogadoId']
-        self.confirmado = ['confirmado']
 
         if 'ativo' not in dictAuth.keys():
             self.ativo = False
@@ -46,11 +46,11 @@ class AdvAuthModelo:
         else:
             if len(listUsuario) != 0:
                 self.advogadoId = listUsuario[0]
-                self.login = listUsuario[1]
-                self.senha = listUsuario[2]
-                self.numeroOAB = listUsuario[3]
-                self.email = listUsuario[4]
-                self.confirmado = listUsuario[5]
+                self.escritorioId = listUsuario[1]
+                self.login = listUsuario[2]
+                self.senha = listUsuario[3]
+                self.numeroOAB = listUsuario[4]
+                self.email = listUsuario[5]
             if retornaInst:
                 return self
 
@@ -58,12 +58,12 @@ class AdvAuthModelo:
         return f"""
         ClientAuth(
             advogadoId: {self.advogadoId},
+            escritorioId: {self.escritorioId},
             login: {self.login},
             senha: {self.senha},
             numeroOAB: {self.numeroOAB},
             email: {self.email},
             ativo: {self.ativo},
-            confirmado: {self.confirmado}
 """
     
     def __eq__(self, other):

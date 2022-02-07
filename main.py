@@ -1,5 +1,6 @@
 from math import ceil
 from typing import List
+import os
 
 from aiohttp import ClientConnectorError
 import asyncio as aio
@@ -86,50 +87,59 @@ class Main(Ui_MainWindow, QMainWindow):
             self.timer.stop()
             self.iniciaBancosETelas()
 
-        if self.contador == 100:
+        if self.contador == 90:
             self.lbInfo.setText('INICIANDO SUBMERSAO...')
 
     def iniciaBancosETelas(self):
-        loop = aio.get_event_loop()
+        try:
+            loop = aio.get_event_loop()
 
-        listaTabelas = {
-            Escritorios: 'CRIANDO TABELA DOS ESCRITORIOS...',
-            Advogados: 'CRIANDO TABELA DOS ADVOGADOS...',
-            Cliente: 'CRIANDO TABELA DO CLIENTE...',
-            CnisCabecalhos: 'CRIANDO TABELA DE CABEÇALHOS...',
-            ConvMon: 'CRIANDO TABELA DE CONVERSÕES MONETÁRIAS...',
-            EspecieBenef: 'CRIANDO TABELA DE ESPÉCIES DE BENEFÍCIOS...',
-            ExpSobrevida: 'CRIANDO TABELA DAS EXPECTATIVAS DE SOBREVIDA...',
-            Indicadores: 'CRIANDO TABELA DE INDICADORES...',
-            IndiceAtuMonetaria: 'CRIANDO TABELA DOS ÍNDICES DE ATUALIZAÇÃO MONETARIA...',
-            Ppp: 'CRIANDO TABELA DOS PPP...',
-            Processos: 'CRIANDO TABELA DOS PROCESSOS...',
-            Telefones: 'CRIANDO TABELA DE TELEFONES...',
-            TetosPrev: 'CRIANDO TABELA DE TETOS PREVIDENCIÁRIOS...',
-            CarenciaLei91: 'CRIANDO TABELA DE CARÊNCIAS LEI 8.213/91...',
-            ConfigGerais: 'CRIANDO TABELA DE CONFIGURAÇÕES GERAIS...',
-            ItemContribuicao: 'CRIANDO TABELA DE ITENS DE CONTRIBUIÇÃO...',
-            SalarioMinimo: 'CRIANDO TABELA DE SALÁRIOS MÍNIMOS...',
-            Aposentadoria: 'CRIANDO TABELA DE APOSENTADORIAS...',
-            IpcaMensal: 'CRIANDO TABELA DE IPCA MENSAL...',
-            TipoAposentadoria: 'CRIANDO TABELA DE TIPOS DE APOSENTADORIAS...',
-            ClienteInfoBanco: 'CRIANDO TABLEA DE INFORMAÇÕES BANCÁRIAS',
-            ClienteProfissao: 'CRIANDO TABLEA DE INFORMAÇÕES PROFISSIONAIS',
-            TipoBeneficioModel: 'CRIANDO TABLEA DE TIPOS DE BENEFÍCIOS',
-        }
+            listaTabelas = {
+                Escritorios: 'CRIANDO TABELA DOS ESCRITORIOS...',
+                Advogados: 'CRIANDO TABELA DOS ADVOGADOS...',
+                Cliente: 'CRIANDO TABELA DO CLIENTE...',
+                CnisCabecalhos: 'CRIANDO TABELA DE CABEÇALHOS...',
+                ConvMon: 'CRIANDO TABELA DE CONVERSÕES MONETÁRIAS...',
+                EspecieBenef: 'CRIANDO TABELA DE ESPÉCIES DE BENEFÍCIOS...',
+                ExpSobrevida: 'CRIANDO TABELA DAS EXPECTATIVAS DE SOBREVIDA...',
+                Indicadores: 'CRIANDO TABELA DE INDICADORES...',
+                IndiceAtuMonetaria: 'CRIANDO TABELA DOS ÍNDICES DE ATUALIZAÇÃO MONETARIA...',
+                Ppp: 'CRIANDO TABELA DOS PPP...',
+                Processos: 'CRIANDO TABELA DOS PROCESSOS...',
+                Telefones: 'CRIANDO TABELA DE TELEFONES...',
+                TetosPrev: 'CRIANDO TABELA DE TETOS PREVIDENCIÁRIOS...',
+                CarenciaLei91: 'CRIANDO TABELA DE CARÊNCIAS LEI 8.213/91...',
+                ConfigGerais: 'CRIANDO TABELA DE CONFIGURAÇÕES GERAIS...',
+                ItemContribuicao: 'CRIANDO TABELA DE ITENS DE CONTRIBUIÇÃO...',
+                SalarioMinimo: 'CRIANDO TABELA DE SALÁRIOS MÍNIMOS...',
+                Aposentadoria: 'CRIANDO TABELA DE APOSENTADORIAS...',
+                IpcaMensal: 'CRIANDO TABELA DE IPCA MENSAL...',
+                TipoAposentadoria: 'CRIANDO TABELA DE TIPOS DE APOSENTADORIAS...',
+                ClienteInfoBanco: 'CRIANDO TABLEA DE INFORMAÇÕES BANCÁRIAS',
+                ClienteProfissao: 'CRIANDO TABLEA DE INFORMAÇÕES PROFISSIONAIS',
+                TipoBeneficioModel: 'CRIANDO TABLEA DE TIPOS DE BENEFÍCIOS',
+            }
 
-        percentLoading = ceil(100 / len(listaTabelas))
+            percentLoading = ceil(90 / len(listaTabelas))
 
-        for instancia, label in listaTabelas.items():
-            self.lbInfo.setText(label)
-            instancia.create_table()
+            for instancia, label in listaTabelas.items():
+                self.lbInfo.setText(label)
+                instancia.create_table()
+                self.progresso(add=percentLoading)
+
+            self.lbInfo.setText('CRIANDO TELA DE LOGIN...')
             self.progresso(add=percentLoading)
 
-        self.lbInfo.setText('CRIANDO TELA DE LOGIN...')
-        self.progresso(add=percentLoading)
-
-        loop.run_until_complete(self.carregaTabelasIniciais())
-        self.avaliaAbrirTelaLogin()
+            loop.run_until_complete(self.carregaTabelasIniciais())
+            self.avaliaAbrirTelaLogin()
+        except ClientConnectorError as err:
+            popUpOkAlerta(
+                "O NewPrev não conseguiu se conectar com o servidor. Entre em contato com o suporte.",
+                "Sem conexão!",
+                erro=err.strerror,
+                funcao=self.close(),
+            )
+            print(f"{err=}")
 
     def avaliaAbrirTelaLogin(self):
         advogado = CacheLogin().carregarCache()

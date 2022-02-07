@@ -10,6 +10,7 @@ from Design.CustomWidgets.newToast import QToaster
 from Design.DesignSystem.fonts import FontSize
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
+from modelos.Auth import AdvAuthModelo
 
 from repositorios.clienteRepositorio import UsuarioRepository
 from repositorios.escritorioRepositorio import EscritorioRepositorio
@@ -36,6 +37,8 @@ from util.dateHelper import strToDatetime
 from util.enums.loginEnums import TelaLogin
 from util.enums.newPrevEnums import *
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
+
+from crypt.gerarChaves import Chaves
 
 import os
 import json
@@ -353,6 +356,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         # TODO: Criar uma verificação se o usuário salvo em cache tem o mesmo login e senha digitado na tela de login
 
         loop = aio.get_event_loop()
+        print('PASSOU POR AQUI!')
 
         self.loading(20)
         if self.infoNaoNulo():
@@ -365,18 +369,18 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 return False
 
             # Autentica advogado
-            self.advogado = self.procuraAdvogado()
+            advogadoAutenticado: AdvAuthModelo = self.authAdvogado()
 
             if self.advogado:
-                # if not self.advogado.confirmado:
-                #     self.iniciarPrimeiroAcesso()
-                #     return True
-
                 # Autentica escritório
                 self.escritorio = self.procuraEscritorio(self.advogado.escritorioId)
                 if self.escritorio:
                     escritorioCadastrado = Escritorios.get_by_id(self.escritorio.escritorioId)
                     advogadoCadastrado = Advogados.get_by_id(self.advogado.advogadoId)
+
+                    if not (escritorioCadastrado and advogadoCadastrado):
+                        if self.precisaGerarChaves():
+                            self.gerarChave(self.escritorio.email)
 
                     if not escritorioCadastrado:
                         self.daoEscritorio.insereEscritorio(self.escritorio)
@@ -430,6 +434,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.alteraLabelEsqueceuSenha()
         self.trocaTelaAtual(TelaLogin.primAcessoEmail)
 
+    def gerarChave(self, emailEscritorio: str) -> None:
+        primoEmail: int = ord(emailEscritorio)
+        print(f"{primoEmail=}")
+        # cryptKeys = Chaves()
+
     def iniciaDashboard(self):
         self.dashboard = NewDashboard()
         self.dashboard.iniciaDash()
@@ -453,7 +462,19 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         return login and senha
 
-    def procuraAdvogado(self) -> Advogados:
+    def precisaGerarChaves(self):
+        chavePrivada = os.path.join(os.getcwd(), os.pardir, 'PrevCliente', 'crypt', '.privateKey.txt')
+        chavePrivada = os.path.normpath(chavePrivada)
+
+        chavePublica = os.path.join(os.getcwd(), os.pardir, 'PrevCliente', 'crypt', 'publicKey.txt')
+        chavePublica = os.path.normpath(chavePublica)
+
+        existChavePublica = os.path.exists(chavePublica) and os.path.isfile(chavePublica)
+        existChavePrivada = os.path.exists(chavePrivada) and os.path.isfile(chavePrivada)
+
+        return not (existChavePublica and existChavePrivada)
+
+    def authAdvogado(self) -> AdvAuthModelo:
         senha = self.leSenha.text()
 
         if self.leLogin.text().isdecimal():

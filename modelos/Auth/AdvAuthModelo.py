@@ -1,7 +1,7 @@
 from modelos.advogadoORM import Advogados
 
 
-class ClientAuthModelo:
+class AdvAuthModelo:
 
     def __init__(self):
         self.advogadoId: int = None

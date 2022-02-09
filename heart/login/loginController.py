@@ -30,7 +30,7 @@ from modelos.ipcaMensalORM import IpcaMensal
 
 from Design.pyUi.loginPage import Ui_mwLogin
 
-from heart.dashboard.dashboardController import DashboardController
+# from heart.dashboard.dashboardController import DashboardController
 from heart.newDashboard.newDashboard import NewDashboard
 
 from util.dateHelper import strToDatetime

@@ -1,4 +1,5 @@
 import datetime
+import os.path
 from math import floor, ceil
 from peewee import ModelSelect
 from typing import Union, Tuple, List
@@ -600,6 +601,18 @@ def strTipoAposentadoria(tipoAposentadoria: str) -> str:
         return "Aposentadoria por pontos pela regra de transição"
     elif tipoAposentadoria == TipoAposentadoria.regra8595.value:
         return "Aposentadoria por pontos pela regra 85/95"
+
+
+def buscaSql(caminhoSql: str) -> str:
+    if os.path.exists(caminhoSql) and os.path.isfile(caminhoSql):
+        sqlScript: str = ""
+
+        with open(caminhoSql, encoding='utf-8', mode='r') as sql:
+            script = sql.readlines()
+            for linha in script:
+                sqlScript += linha.replace("\\t", "")
+
+        return sqlScript
 
 
 def strTipoSimulacao(tipoSimulacao: str) -> str:

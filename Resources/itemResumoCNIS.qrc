@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="opcoes">
+    <file>information-blue-16.png</file>
+    <file>redDeletar.png</file>
+    <file>blueEditar.png</file>
+  </qresource>
+</RCC>

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'itemResumoCNIS.ui'
+# Form implementation generated from reading ui file 'Design/UI/itemResumoCNIS.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -15,128 +15,96 @@ class Ui_WdgItemRes(object):
     def setupUi(self, WdgItemRes):
         WdgItemRes.setObjectName("WdgItemRes")
         WdgItemRes.resize(734, 144)
-        WdgItemRes.setStyleSheet("/*-------------------------------- Labels -----------------------------------------*/\n"
+        WdgItemRes.setStyleSheet("/*-------------------------------- Group box -----------------------------------------*/\n"
+"#gbMain {\n"
+"    background-color: #F9F9F9;\n"
+"    border-radius: 8px;\n"
+"    border: 1px solid #3F4E8C;\n"
+"}\n"
+"\n"
+"#gbMain::indicator {\n"
+"    width: 0px;\n"
+"    height: 0px;\n"
+"}\n"
+"\n"
+"#gbMain::indicator:unchecked {\n"
+"    image: none;\n"
+"}\n"
+"\n"
+"#gbMain::indicator:checked {\n"
+"    image: none;\n"
+"}\n"
+"\n"
+"/*-------------------------------- Labels -----------------------------------------*/\n"
 "#lbCdEmp {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 24px;\n"
-"    font-weight: 900;\n"
+"    font: 16pt \"Avenir LT Std\";\n"
+"    font-weight: 750;\n"
+"\n"
+"    color: #3F4E8C;\n"
 "}\n"
 "\n"
-"#lbDataInicio, #lbDataFim, #lbSituacao {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 16px;\n"
+"#lbCNPJouNB {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    line-height: 16px;\n"
+"    color: #3F4E8C;\n"
 "}\n"
 "\n"
-"#lbInfoDataInicio, #lbInfoDataFim, \n"
-"#lbInfoSituacao {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
-"    text-decoration: underline;\n"
+"#lbInfoDataInicio, \n"
+"#lbInfoDataFim, #lbInfoSituacao,\n"
+"#lbDataInicio, #lbDataFim, \n"
+"#lbSituacao {\n"
+"    font: 11pt \"Avenir LT Std\";\n"
+"    line-height: 16px;\n"
+"    color: #3F4E8C;\n"
 "}\n"
 "\n"
 "#lbInfoFalta {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;\n"
+"    font: 10pt \"Avenir LT Std\";\n"
+"    line-height: 16px;\n"
+"    color: #3F4E8C;\n"
 "}\n"
 "\n"
 "/* --------------------------------- Frames --------------------------------- */\n"
-"#frMain {\n"
-"    /*background-color: white;*/\n"
-"    background-color: qlineargradient(spread:pad, x1:0.398, y1:0.5, x2:1, y2:1, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(238, 238, 238, 255));\n"
-"    border-radius: 8px;\n"
-"    border: 1px solid grey;\n"
-"}\n"
-"\n"
-"#frIcone {\n"
-"    background: url(:/remuneracao/remuneracao.png);\n"
-"    background-repeat: no-repeat;\n"
-"    background-position: center;\n"
-"}\n"
-"\n"
 "#frInfoTag {\n"
-"    background: url(:/info/information-black-16.png);\n"
+"    background-image: url(:/opcoes/information-blue-16.png);\n"
 "    background-repeat: no-repeat;\n"
 "    background-position: center;\n"
 "\n"
-"    border-radius: 4px;\n"
+"    background-color: transparent;\n"
+"    border: 0px solid none;\n"
 "}\n"
-"\n"
-"#frInfoTag:hover {\n"
-"    background: url(:/info/information-white-16.png);\n"
-"    background-repeat: no-repeat;\n"
-"    background-position: center;\n"
-"\n"
-"    border-radius: 12px;\n"
-"    background-color: rgb(136, 138, 133);\n"
-"}\n"
-"\n"
-"#frIndicador{\n"
-"    background-color: rgb(0, 170, 127);\n"
-"    border-top-left-radius: 5px;\n"
-"    border-top-right-radius: 5px;\n"
-"    border-bottom-right-radius: 5px;\n"
-"    border-bottom-left-radius: 5px;\n"
-"}\n"
-"\n"
 "\n"
 "/* --------------------------------- Push Button --------------------------------- */\n"
 "#pbEditar {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
-"    color: white;\n"
+"    background-image: url(:/opcoes/blueEditar.png);\n"
+"    background-repeat: no-repeat;\n"
+"    background-position: center;\n"
 "\n"
-"    border-radius: 4px;\n"
-"    background-color: rgb(92, 53, 102);\n"
-"}\n"
-"\n"
-"#pbEditar:hover {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
-"    color: white;\n"
-"\n"
-"    border-radius: 4px;\n"
-"    border: 1px solid;\n"
-"    background-color: rgb(112, 73, 122);\n"
+"    background-color: transparent;\n"
+"    border: 0px solid none;\n"
 "}\n"
 "\n"
 "#pbRemover {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;\n"
-"    color: white;\n"
+"    background-image: url(:/opcoes/redDeletar.png);\n"
+"    background-repeat: no-repeat;\n"
+"    background-position: center;\n"
 "\n"
-"    border-radius: 4px;\n"
-"    background-color: rgb(193, 125, 17);\n"
-"}\n"
-"\n"
-"#pbRemover:hover {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;\n"
-"    color: white;\n"
-"\n"
-"    border-radius: 4px;\n"
-"    border: 0px solid;\n"
-"    background-color: rgb(204, 0, 0);\n"
+"    background-color: transparent;\n"
+"    border: 0px solid none;\n"
 "}")
         self.horizontalLayout = QtWidgets.QHBoxLayout(WdgItemRes)
         self.horizontalLayout.setContentsMargins(2, 2, 2, 2)
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.frMain = QtWidgets.QFrame(WdgItemRes)
-        self.frMain.setMinimumSize(QtCore.QSize(680, 140))
-        self.frMain.setMaximumSize(QtCore.QSize(16777215, 160))
-        self.frMain.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frMain.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frMain.setObjectName("frMain")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frMain)
+        self.gbMain = QtWidgets.QGroupBox(WdgItemRes)
+        self.gbMain.setMinimumSize(QtCore.QSize(680, 140))
+        self.gbMain.setMaximumSize(QtCore.QSize(16777215, 160))
+        self.gbMain.setCheckable(True)
+        self.gbMain.setChecked(False)
+        self.gbMain.setObjectName("gbMain")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.gbMain)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.frIndicador = QtWidgets.QFrame(self.frMain)
-        self.frIndicador.setMinimumSize(QtCore.QSize(10, 0))
-        self.frIndicador.setMaximumSize(QtCore.QSize(10, 16777215))
-        self.frIndicador.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frIndicador.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frIndicador.setObjectName("frIndicador")
-        self.horizontalLayout_2.addWidget(self.frIndicador)
-        self.frame_2 = QtWidgets.QFrame(self.frMain)
+        self.frame_2 = QtWidgets.QFrame(self.gbMain)
         self.frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
@@ -149,38 +117,22 @@ class Ui_WdgItemRes(object):
         self.frame_3.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_3.setObjectName("frame_3")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frame_3)
-        self.horizontalLayout_3.setContentsMargins(8, 0, 0, 0)
-        self.horizontalLayout_3.setSpacing(4)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.frIcone = QtWidgets.QFrame(self.frame_3)
-        self.frIcone.setMinimumSize(QtCore.QSize(40, 40))
-        self.frIcone.setMaximumSize(QtCore.QSize(40, 40))
-        self.frIcone.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frIcone.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frIcone.setObjectName("frIcone")
-        self.horizontalLayout_3.addWidget(self.frIcone, 0, QtCore.Qt.AlignTop)
-        self.frame_8 = QtWidgets.QFrame(self.frame_3)
-        self.frame_8.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_8.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_8.setObjectName("frame_8")
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frame_8)
-        self.verticalLayout_3.setContentsMargins(8, 4, 0, 4)
-        self.verticalLayout_3.setSpacing(0)
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frame_3)
+        self.verticalLayout_3.setContentsMargins(12, 12, 0, 0)
+        self.verticalLayout_3.setSpacing(4)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.lbCdEmp = QtWidgets.QLabel(self.frame_8)
+        self.lbCdEmp = QtWidgets.QLabel(self.frame_3)
         self.lbCdEmp.setMinimumSize(QtCore.QSize(0, 0))
         self.lbCdEmp.setMaximumSize(QtCore.QSize(16777215, 100))
         self.lbCdEmp.setWordWrap(True)
         self.lbCdEmp.setObjectName("lbCdEmp")
         self.verticalLayout_3.addWidget(self.lbCdEmp)
-        self.lbCNPJouNB = QtWidgets.QLabel(self.frame_8)
+        self.lbCNPJouNB = QtWidgets.QLabel(self.frame_3)
         self.lbCNPJouNB.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextSelectableByMouse)
         self.lbCNPJouNB.setObjectName("lbCNPJouNB")
-        self.verticalLayout_3.addWidget(self.lbCNPJouNB, 0, QtCore.Qt.AlignTop)
+        self.verticalLayout_3.addWidget(self.lbCNPJouNB)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem)
-        self.horizontalLayout_3.addWidget(self.frame_8)
         self.verticalLayout_2.addWidget(self.frame_3)
         self.frame_4 = QtWidgets.QFrame(self.frame_2)
         self.frame_4.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -194,56 +146,89 @@ class Ui_WdgItemRes(object):
         self.frame_7.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_7.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_7.setObjectName("frame_7")
-        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.frame_7)
-        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.gridLayout = QtWidgets.QGridLayout(self.frame_7)
+        self.gridLayout.setHorizontalSpacing(4)
+        self.gridLayout.setObjectName("gridLayout")
         self.lbInfoDataInicio = QtWidgets.QLabel(self.frame_7)
         self.lbInfoDataInicio.setObjectName("lbInfoDataInicio")
-        self.verticalLayout_6.addWidget(self.lbInfoDataInicio)
+        self.gridLayout.addWidget(self.lbInfoDataInicio, 0, 0, 1, 1, QtCore.Qt.AlignRight)
         self.lbDataInicio = QtWidgets.QLabel(self.frame_7)
         self.lbDataInicio.setObjectName("lbDataInicio")
-        self.verticalLayout_6.addWidget(self.lbDataInicio)
+        self.gridLayout.addWidget(self.lbDataInicio, 0, 1, 1, 1, QtCore.Qt.AlignLeft)
         self.horizontalLayout_4.addWidget(self.frame_7)
         self.frame_5 = QtWidgets.QFrame(self.frame_4)
         self.frame_5.setMaximumSize(QtCore.QSize(16548798, 16777215))
         self.frame_5.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_5.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_5.setObjectName("frame_5")
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.frame_5)
-        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.frame_5)
+        self.gridLayout_2.setHorizontalSpacing(4)
+        self.gridLayout_2.setObjectName("gridLayout_2")
         self.lbInfoDataFim = QtWidgets.QLabel(self.frame_5)
         self.lbInfoDataFim.setObjectName("lbInfoDataFim")
-        self.verticalLayout_4.addWidget(self.lbInfoDataFim)
+        self.gridLayout_2.addWidget(self.lbInfoDataFim, 0, 0, 1, 1, QtCore.Qt.AlignRight)
         self.lbDataFim = QtWidgets.QLabel(self.frame_5)
         self.lbDataFim.setObjectName("lbDataFim")
-        self.verticalLayout_4.addWidget(self.lbDataFim)
+        self.gridLayout_2.addWidget(self.lbDataFim, 0, 1, 1, 1, QtCore.Qt.AlignLeft)
         self.horizontalLayout_4.addWidget(self.frame_5)
         self.frame_6 = QtWidgets.QFrame(self.frame_4)
         self.frame_6.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.frame_6.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_6.setObjectName("frame_6")
-        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.frame_6)
-        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.gridLayout_3 = QtWidgets.QGridLayout(self.frame_6)
+        self.gridLayout_3.setHorizontalSpacing(4)
+        self.gridLayout_3.setObjectName("gridLayout_3")
         self.lbInfoSituacao = QtWidgets.QLabel(self.frame_6)
         self.lbInfoSituacao.setObjectName("lbInfoSituacao")
-        self.verticalLayout_5.addWidget(self.lbInfoSituacao)
+        self.gridLayout_3.addWidget(self.lbInfoSituacao, 0, 0, 1, 1, QtCore.Qt.AlignRight)
         self.lbSituacao = QtWidgets.QLabel(self.frame_6)
         self.lbSituacao.setObjectName("lbSituacao")
-        self.verticalLayout_5.addWidget(self.lbSituacao)
+        self.gridLayout_3.addWidget(self.lbSituacao, 0, 1, 1, 1, QtCore.Qt.AlignLeft)
         self.horizontalLayout_4.addWidget(self.frame_6)
         self.verticalLayout_2.addWidget(self.frame_4)
         self.horizontalLayout_2.addWidget(self.frame_2)
-        self.frame = QtWidgets.QFrame(self.frMain)
-        self.frame.setMinimumSize(QtCore.QSize(120, 0))
-        self.frame.setMaximumSize(QtCore.QSize(120, 16777215))
+        self.frOpcoes = QtWidgets.QFrame(self.gbMain)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frOpcoes.sizePolicy().hasHeightForWidth())
+        self.frOpcoes.setSizePolicy(sizePolicy)
+        self.frOpcoes.setMinimumSize(QtCore.QSize(120, 0))
+        self.frOpcoes.setMaximumSize(QtCore.QSize(120, 16777215))
+        self.frOpcoes.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frOpcoes.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frOpcoes.setObjectName("frOpcoes")
+        self.gridLayout_4 = QtWidgets.QGridLayout(self.frOpcoes)
+        self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_4.setHorizontalSpacing(4)
+        self.gridLayout_4.setObjectName("gridLayout_4")
+        self.frame = QtWidgets.QFrame(self.frOpcoes)
         self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.frame)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setSpacing(4)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.frDadoFaltante = QtWidgets.QFrame(self.frame)
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frame)
+        self.horizontalLayout_3.setContentsMargins(-1, -1, -1, 24)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.pbRemover = QtWidgets.QPushButton(self.frame)
+        self.pbRemover.setMinimumSize(QtCore.QSize(40, 40))
+        self.pbRemover.setMaximumSize(QtCore.QSize(40, 40))
+        self.pbRemover.setText("")
+        self.pbRemover.setObjectName("pbRemover")
+        self.horizontalLayout_3.addWidget(self.pbRemover)
+        self.pbEditar = QtWidgets.QPushButton(self.frame)
+        self.pbEditar.setMinimumSize(QtCore.QSize(40, 40))
+        self.pbEditar.setMaximumSize(QtCore.QSize(40, 40))
+        self.pbEditar.setText("")
+        self.pbEditar.setObjectName("pbEditar")
+        self.horizontalLayout_3.addWidget(self.pbEditar)
+        self.gridLayout_4.addWidget(self.frame, 1, 0, 1, 1)
+        self.frDadoFaltante = QtWidgets.QFrame(self.frOpcoes)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frDadoFaltante.sizePolicy().hasHeightForWidth())
+        self.frDadoFaltante.setSizePolicy(sizePolicy)
         self.frDadoFaltante.setMinimumSize(QtCore.QSize(120, 24))
         self.frDadoFaltante.setMaximumSize(QtCore.QSize(16777215, 24))
         self.frDadoFaltante.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -263,17 +248,9 @@ class Ui_WdgItemRes(object):
         self.frInfoTag.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frInfoTag.setObjectName("frInfoTag")
         self.horizontalLayout_6.addWidget(self.frInfoTag)
-        self.verticalLayout.addWidget(self.frDadoFaltante)
-        self.pbEditar = QtWidgets.QPushButton(self.frame)
-        self.pbEditar.setMinimumSize(QtCore.QSize(0, 26))
-        self.pbEditar.setObjectName("pbEditar")
-        self.verticalLayout.addWidget(self.pbEditar)
-        self.pbRemover = QtWidgets.QPushButton(self.frame)
-        self.pbRemover.setMinimumSize(QtCore.QSize(0, 26))
-        self.pbRemover.setObjectName("pbRemover")
-        self.verticalLayout.addWidget(self.pbRemover)
-        self.horizontalLayout_2.addWidget(self.frame)
-        self.horizontalLayout.addWidget(self.frMain)
+        self.gridLayout_4.addWidget(self.frDadoFaltante, 0, 0, 1, 1)
+        self.horizontalLayout_2.addWidget(self.frOpcoes)
+        self.horizontalLayout.addWidget(self.gbMain)
 
         self.retranslateUi(WdgItemRes)
         QtCore.QMetaObject.connectSlotsByName(WdgItemRes)
@@ -281,8 +258,8 @@ class Ui_WdgItemRes(object):
     def retranslateUi(self, WdgItemRes):
         _translate = QtCore.QCoreApplication.translate
         WdgItemRes.setWindowTitle(_translate("WdgItemRes", "Form"))
-        self.lbCdEmp.setText(_translate("WdgItemRes", "TextLabel"))
-        self.lbCNPJouNB.setText(_translate("WdgItemRes", "TextLabel"))
+        self.lbCdEmp.setText(_translate("WdgItemRes", "DROGARIA COMERCIAL LTDA"))
+        self.lbCNPJouNB.setText(_translate("WdgItemRes", "CNPJ: 45.652.000-1/32"))
         self.lbInfoDataInicio.setText(_translate("WdgItemRes", "Data início:"))
         self.lbDataInicio.setText(_translate("WdgItemRes", "TextLabel"))
         self.lbInfoDataFim.setText(_translate("WdgItemRes", "Data fim:"))
@@ -290,9 +267,7 @@ class Ui_WdgItemRes(object):
         self.lbInfoSituacao.setText(_translate("WdgItemRes", "Situação:"))
         self.lbSituacao.setText(_translate("WdgItemRes", "Situação:"))
         self.lbInfoFalta.setText(_translate("WdgItemRes", "Dado faltante"))
-        self.pbEditar.setText(_translate("WdgItemRes", "Editar"))
-        self.pbRemover.setText(_translate("WdgItemRes", "Remover"))
-import Resources.itemResumo
+import itemResumoCNIS_rc
 
 
 if __name__ == "__main__":

@@ -70,32 +70,38 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>90</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>160</height>
+          <height>100</height>
          </size>
         </property>
         <property name="styleSheet">
          <string notr="true">/*------------------------------------------- Frame -------------------------------------------*/
-#frPrimeiraEtapa {
-	border-radius: 8px;
-	background-color: #009E38;
+#frFirulaEmpresa, #frFirulaContrib,
+#frFirulaBeneficios {
+	background-color: #3F4E8C;
+	border: 0px solid none;
+	border-radius: 2px;
 }
 
-#frSegundaEtapa, #frTerceiraEtapa, 
-#frQuartaEtapa {
-	border-radius: 8px;
-	background-color: #CFF2DC;
+#frFirulaContrib,
+#frFirulaBeneficios {
+	background-color: white;
+	border: 0px solid none;
+	border-radius: 2px;
 }
 
-#frSeparador1, #frSeparador2, #frSeparador3 {
-	background-color: lightgrey;
-}
 
 /*------------------------------------------- Push Button -------------------------------------------*/
 #pbVoltar {
-	background-image: url(:/voltar/back.png);
+	background-image: url(:/cabecalho/back.png);
 	background-position: center;
 	background-repeat: no-repeat;
 
@@ -112,6 +118,27 @@
 	border-radius: 8px;
 }
 
+#pbEmpresas {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	font-weight: 750;
+
+	background-color: transparent;
+	border: 0px solid none;
+
+	margin: 4px;
+}
+
+#pbBeneficios,
+#pbContrib {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: black;
+
+	background-color: transparent;
+	border: 0px solid none;
+
+	margin: 4px;
+}
 
 /*------------------------------------------- Label -------------------------------------------*/
 #lbInfoTitulo {
@@ -120,10 +147,18 @@
 	font-weight: 750;
 }
 
-#lbInfoPessoais, #lbInfoProfissionais,
-#lbInfoBancarias {
-	font: 10pt &quot;Avenir LT Std&quot;;
-	color: black;
+#lbNomeCliente {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	font-weight: 750;
+
+	padding: 4px;
+}
+
+#lbCpfCliente {
+	font: 11pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+
 	padding: 4px;
 }</string>
         </property>
@@ -181,6 +216,15 @@
                <enum>QFrame::Raised</enum>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_3">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
                <item>
                 <widget class="QLabel" name="lbNomeCliente">
                  <property name="text">
@@ -223,21 +267,54 @@
                <item>
                 <widget class="QFrame" name="frEmpresas">
                  <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
+                  <enum>QFrame::NoFrame</enum>
                  </property>
                  <property name="frameShadow">
                   <enum>QFrame::Raised</enum>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_6">
-                  <item>
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item alignment="Qt::AlignBottom">
                    <widget class="QPushButton" name="pbEmpresas">
                     <property name="text">
                      <string>Empresas</string>
                     </property>
+                    <property name="checkable">
+                     <bool>true</bool>
+                    </property>
+                    <property name="checked">
+                     <bool>false</bool>
+                    </property>
                    </widget>
                   </item>
-                  <item>
+                  <item alignment="Qt::AlignTop">
                    <widget class="QFrame" name="frFirulaEmpresa">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>4</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>4</height>
+                     </size>
+                    </property>
                     <property name="frameShape">
                      <enum>QFrame::StyledPanel</enum>
                     </property>
@@ -252,21 +329,48 @@
                <item>
                 <widget class="QFrame" name="frContrib">
                  <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
+                  <enum>QFrame::NoFrame</enum>
                  </property>
                  <property name="frameShadow">
                   <enum>QFrame::Raised</enum>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_5">
-                  <item>
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item alignment="Qt::AlignBottom">
                    <widget class="QPushButton" name="pbContrib">
                     <property name="text">
                      <string>Contribuições</string>
                     </property>
                    </widget>
                   </item>
-                  <item>
+                  <item alignment="Qt::AlignTop">
                    <widget class="QFrame" name="frFirulaContrib">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>4</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>4</height>
+                     </size>
+                    </property>
                     <property name="frameShape">
                      <enum>QFrame::StyledPanel</enum>
                     </property>
@@ -281,21 +385,48 @@
                <item>
                 <widget class="QFrame" name="frBeneficios">
                  <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
+                  <enum>QFrame::NoFrame</enum>
                  </property>
                  <property name="frameShadow">
                   <enum>QFrame::Raised</enum>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_4">
-                  <item>
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item alignment="Qt::AlignBottom">
                    <widget class="QPushButton" name="pbBeneficios">
                     <property name="text">
                      <string>Benefícios</string>
                     </property>
                    </widget>
                   </item>
-                  <item>
+                  <item alignment="Qt::AlignTop">
                    <widget class="QFrame" name="frFirulaBeneficios">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>4</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>4</height>
+                     </size>
+                    </property>
                     <property name="frameShape">
                      <enum>QFrame::StyledPanel</enum>
                     </property>
@@ -331,178 +462,43 @@
 }
 
 /*-------------------------------------------  Widget --------------------------------------------*/
-#pgPessoais, #pgProfissionais, #pgBancarias {
+#pgEmpresas, #pgContribuicoes, 
+#pgBeneficios {
 	background-color: white;
 }
 
 /*-------------------------------------------  Label --------------------------------------------*/
-#lbInfoCamposPessoais, #lbInfoCamposEndereco,
-#lbInfoCamposProf, #lbInfoCamposBancarias {
-	font: 12pt &quot;Avenir LT Std&quot;;
-	color: #3F4E8C;
-}
+
 
 /*-------------------------------------------  Frame --------------------------------------------*/
-#frInfoCamposPessoais, #frInfoCamposEndereco,
-#frInfoCamposProf, #frInfoCamposBancarias {
-	border: 2px solid #3F4E8C;
-	border-radius: 8px;
 
-	padding: 4px;
-}
-
-#frBusca {
-	background-image: url(:/busca/busca.png);
-	background-position: center;
-	background-repeat: no-repeat;
-
-	background-color: transparent;
-}
-
-#frBuscaCep {
-	background: #F9F9F9;
-	border-radius: 8px;
-	padding: 0px 8px 0px 0px;
-}
-
-#frMeuInss, #frPix {
-	background-color: #F9F9F9;
-	border-radius: 8px;
-}
 
 /*---------------------------- Push Button ----------------------------------*/
-#pbBuscaCep{
-	background-image: url(:/busca/localizacao.png);
-	background-position: center;
-	background-repeat: no-repeat;
-
-	background-color: #F4F5F8;
+#pbInserir {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	border: 2px solid #3F4E8C;
 	border-radius: 8px;
-}
-
-#pbBuscaCep:hover {
-	background-image: url(:/busca/localizacao.png);
-	background-position: center;
-	background-repeat: no-repeat;
-
-	background-color: rgb(228, 233, 248);
-	border-radius: 8px;
+	padding: 6px;
 }
 
 /*----------------------------  Line Edit ---------------------------------------*/
-QLineEdit {
-	font: 12pt &quot;Avenir LT Std&quot;;
-    border: 0px solid gray;
-    border-radius: 8px;
-   	padding: 0 8px;
-    background: #F9F9F9;
-    selection-background-color: darkgray;
-}
 
-/*------------------------------ Radio Button -------------------------------------*/
-#rbMasculino, #rbFeminino {
-	font: 12pt &quot;Avenir LT Std&quot;;
-}
 
-#rbMasculino::indicator::unchecked, 
-#rbFeminino::indicator::unchecked {
-	image: url(:/radioButton/rbUnchecked.png);
-}
-
-#rbMasculino::indicator::checked, 
-#rbFeminino::indicator::checked {
-	image: url(:/radioButton/rbChecked.png);
+/*----------------------- Scroll Area  and  QWidget ------------------------*/
+#scaPrincipal, #wdgScroll {
+	background-color: white;
 }
 
 /*------------------------------ Check Box -------------------------------------*/
-#cbMostraMeuInss::indicator:unchecked, #cbMostraPix::indicator:unchecked {
-	image: url(:/show/hide.png);
-}
-
-#cbMostraMeuInss::indicator:checked, 
-#cbMostraPix::indicator:checked {
-	image: url(:/show/show.png);
-}
 
 
 /*----------------------------- Combo box --------------------------------------*/
-QComboBox {
-    border: 0px solid gray;
-    border-radius: 8px;
-    padding: 1px 18px 1px 8px;
-	
-	font: 12pt &quot;Avenir LT Std&quot;;
-	color: #606970;	
-}
 
-QComboBox:editable {
-    background: white;
-}
-
-QComboBox:!editable, QComboBox::drop-down:editable {
-     background: #F9F9F9;
-}
-
-QComboBox:!editable:on, QComboBox::drop-down:editable:on {
-    background: #F9F9F9;
-}
-
-QComboBox:on { /* shift the text when the popup opens */
-    padding-top: 3px;
-    padding-left: 4px;
-}
-
-QComboBox::drop-down {
-    subcontrol-origin: padding;
-    subcontrol-position: top right;
-    width: 15px;
-	padding: 0px 8px 0px 0px;
-
-    border-left-width: 0px;
-}
-
-QComboBox::down-arrow {
-    image: url(:/upDown/down.png);
-}
-
-QComboBox::down-arrow:on { /* shift the arrow when popup is open */
-    top: 1px;
-    left: 1px;
-}
 
 /*----------------------------- Date Edit --------------------------------------*/
-#dtNascimento {
-	border: 0px solid gray;
-    border-radius: 8px;
-    padding: 1px 18px 1px 8px;
-	
-	font: 12pt &quot;Avenir LT Std&quot;;
-	color: #606970;
-
-	background-color: #F9F9F9;
-}
-
-#dtNascimento::down-button {
-	subcontrol-origin: padding;
-    subcontrol-position: top right;
-    width: 15px;
-	padding: 0px 8px 0px 0px;
-
-    border-left-width: 0px;
-}
-
-#dtNascimento::down-arrow {
-    image: url(:/upDown/down.png);
-}
-
-#dtNascimento::drop-down {
-	subcontrol-origin: padding;
-    subcontrol-position: top right;
-    width: 15px;
-	padding: 0px 8px 0px 0px;
-
-    border-left-width: 0px;
-}</string>
+</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
@@ -529,7 +525,7 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
          <item row="0" column="0">
           <widget class="QStackedWidget" name="stkCliente">
            <property name="currentIndex">
-            <number>2</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="pgEmpresas">
             <property name="sizePolicy">
@@ -538,7 +534,7 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <layout class="QGridLayout" name="gridLayout_3">
+            <layout class="QGridLayout" name="gridLayout_8">
              <property name="topMargin">
               <number>0</number>
              </property>
@@ -551,6 +547,89 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
              <property name="verticalSpacing">
               <number>16</number>
              </property>
+             <item row="0" column="0">
+              <widget class="QFrame" name="frame">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_4">
+                <item row="0" column="0">
+                 <widget class="QFrame" name="frame_2">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_3">
+                   <item>
+                    <spacer name="horizontalSpacer_3">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>479</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="pbInserir">
+                     <property name="minimumSize">
+                      <size>
+                       <width>80</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Inserir</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QScrollArea" name="scaPrincipal">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="widgetResizable">
+                   <bool>true</bool>
+                  </property>
+                  <widget class="QWidget" name="wdgScroll">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>586</width>
+                     <height>406</height>
+                    </rect>
+                   </property>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
             </layout>
            </widget>
            <widget class="QWidget" name="pgContribuicoes">
@@ -582,7 +661,7 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <layout class="QGridLayout" name="gridLayout_8">
+            <layout class="QGridLayout" name="gridLayout_3">
              <property name="topMargin">
               <number>0</number>
              </property>
@@ -645,38 +724,6 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
          <property name="bottomMargin">
           <number>0</number>
          </property>
-         <item>
-          <widget class="QPushButton" name="pbSalvarDados">
-           <property name="minimumSize">
-            <size>
-             <width>192</width>
-             <height>56</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>192</width>
-             <height>56</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Salvar dados</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
         </layout>
        </widget>
       </item>

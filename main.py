@@ -1,9 +1,10 @@
+import os.path
 from math import ceil
 from typing import List
-import os
 
 from aiohttp import ClientConnectorError
 import asyncio as aio
+from peewee import SqliteDatabase
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow
@@ -36,6 +37,7 @@ from modelos.ipcaMensalORM import IpcaMensal
 from modelos.tipoBeneficioORM import TipoBeneficioModel
 from modelos.tiposESubtipos.tipoAposentadoriaORM import TipoAposentadoria
 from repositorios.informacoesRepositorio import ApiInformacoes
+from util.enums.databaseEnums import DatabaseEnum
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 
 from util.enums.newPrevEnums import TiposConexoes
@@ -86,9 +88,20 @@ class Main(Ui_MainWindow, QMainWindow):
         if self.contador == 10:
             self.timer.stop()
             self.iniciaBancosETelas()
+            self.verificaBackups()
 
         if self.contador == 90:
             self.lbInfo.setText('INICIANDO SUBMERSAO...')
+
+    def verificaBackups(self):
+        qtdTipos = TipoAposentadoria.select().count()
+        database = SqliteDatabase(DatabaseEnum.producao.value)
+        if qtdTipos == 0:
+            tipoAposPath = os.path.join(os.getcwd(), 'Daos', 'backup', 'cTipoAposentadoria.sql')
+            sqlScript: str = buscaSql(tipoAposPath)
+            database.execute_sql(sqlScript)
+
+        return True
 
     def iniciaBancosETelas(self):
         try:
@@ -120,7 +133,7 @@ class Main(Ui_MainWindow, QMainWindow):
                 TipoBeneficioModel: 'CRIANDO TABLEA DE TIPOS DE BENEFÍCIOS',
             }
 
-            percentLoading = ceil(90 / len(listaTabelas))
+            percentLoading = ceil(80 / len(listaTabelas))
 
             for instancia, label in listaTabelas.items():
                 self.lbInfo.setText(label)
@@ -183,7 +196,7 @@ class Main(Ui_MainWindow, QMainWindow):
 if __name__ == '__main__':
     import sys
     from os.path import join
-    from util.helpers import pathTo
+    from util.helpers import pathTo, buscaSql
     from util.enums.configEnums import ImportantPaths
 
     PATH_FONTS = pathTo(ImportantPaths.fonts)

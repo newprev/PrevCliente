@@ -9,6 +9,7 @@ class AdvAuthModelo:
         self.login: str = None
         self.senha: str = None
         self.numeroOAB: str = None
+        self.cpf: str = None
         self.email: str = None
         self.ativo: bool = True
 
@@ -19,23 +20,29 @@ class AdvAuthModelo:
             'login': self.login,
             'senha': self.senha,
             'numeroOAB': self.numeroOAB,
+            'cpf': self.cpf,
             'email': self.email,
             'ativo': self.ativo,
         }
         return dictAuth
 
     def fromDict(self, dictAuth: dict, retornaInst: bool = True):
-        self.senha = dictAuth['senha']
         self.escritorioId = dictAuth['escritorioId']
         self.login = dictAuth['login']
         self.numeroOAB = dictAuth['numeroOAB']
         self.email = dictAuth['email']
         self.advogadoId = dictAuth['advogadoId']
 
+        if 'senha' in dictAuth.keys():
+            self.senha = dictAuth['senha']
+
+        if 'cpf' in dictAuth.keys():
+            self.cpf = dictAuth['cpf']
+
         if 'ativo' not in dictAuth.keys():
-            self.ativo = False
-        else:
             self.ativo = True
+        else:
+            self.ativo = dictAuth['ativo']
 
         if retornaInst:
             return self
@@ -50,7 +57,8 @@ class AdvAuthModelo:
                 self.login = listUsuario[2]
                 self.senha = listUsuario[3]
                 self.numeroOAB = listUsuario[4]
-                self.email = listUsuario[5]
+                self.cpf = listUsuario[5]
+                self.email = listUsuario[6]
             if retornaInst:
                 return self
 
@@ -62,6 +70,7 @@ class AdvAuthModelo:
             login: {self.login},
             senha: {self.senha},
             numeroOAB: {self.numeroOAB},
+            cpf: {self.cpf},
             email: {self.email},
             ativo: {self.ativo},
 """
@@ -74,9 +83,10 @@ class AdvAuthModelo:
         senhaAuth: bool = self.senha == other.senha
         loginAuth: bool = self.login == other.login
         emailAuth: bool = self.email == other.email
+        cpfAuth: bool = self.cpf == other.cpf
         idAuth: bool = self.advogadoId == self.advogadoId
 
-        return (loginAuth and senhaAuth) or (emailAuth and senhaAuth) or (idAuth and senhaAuth)
+        return (loginAuth and senhaAuth) or (emailAuth and senhaAuth) or (idAuth and senhaAuth) or (cpfAuth and senhaAuth)
 
     def __bool__(self):
         lga: bool = self.senha is not None and self.login is not None and self.ativo

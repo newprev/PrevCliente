@@ -197,8 +197,8 @@ class GeracaoDocumentos:
         self.dictInfo['cepCliente'] = mascaraCep(self.cliente.cep)
 
         # Conteúdo referente ao contratado (Advogado)
-        self.dictInfo['nomeAdvogado'] = self.advogado.nomeUsuario
-        self.dictInfo['sobrenomeAdvogado'] = self.advogado.sobrenomeUsuario
+        self.dictInfo['nomeAdvogado'] = self.advogado.nomeAdvogado
+        self.dictInfo['sobrenomeAdvogado'] = self.advogado.sobrenomeAdvogado
         self.dictInfo['nacionalidadeAdvogado'] = 'brasileiro(a)'
         self.dictInfo['siglaEstadoAdvogado'] = siglaEstadoEscritorio
         self.dictInfo['numeroOAB'] = self.advogado.numeroOAB
@@ -230,8 +230,8 @@ class GeracaoDocumentos:
 
     def geraSessaoInicialDocComp(self):
 
-        self.dictInfo['nomeUsuario'] = self.advogado.nomeUsuario
-        self.dictInfo['sobrenomeUsuario'] = self.advogado.sobrenomeUsuario
+        self.dictInfo['nomeAdvogado'] = self.advogado.nomeAdvogado
+        self.dictInfo['sobrenomeAdvogado'] = self.advogado.sobrenomeAdvogado
         self.dictInfo['tipoProcesso'] = strTipoProcesso(self.processo.tipoProcesso)
         self.dictInfo['tipoBeneficio'] = strTipoBeneficioEnum(self.processo.tipoBeneficio, self.processo.subTipoApos)
 
@@ -255,8 +255,8 @@ class GeracaoDocumentos:
         self.dictInfo['bairro'] = self.cliente.bairro
 
         # Informações do advogado
-        self.dictInfo['nomeUsuario'] = self.advogado.nomeUsuario
-        self.dictInfo['sobrenomeUsuario'] = self.advogado.sobrenomeUsuario
+        self.dictInfo['nomeAdvogado'] = self.advogado.nomeAdvogado
+        self.dictInfo['sobrenomeAdvogado'] = self.advogado.sobrenomeAdvogado
         self.dictInfo['nacionalidade'] = self.advogado.nacionalidade
         self.dictInfo['estadoCivil'] = self.advogado.estadoCivil
         self.dictInfo['escritorioEstado'] = self.escritorio.estado
@@ -308,8 +308,8 @@ class GeracaoDocumentos:
         self.dictInfo['emailCliente'] = self.cliente.email
 
         # Conteúdo referente ao contratado (Advogado)
-        self.dictInfo['nomeAdvogado'] = self.advogado.nomeUsuario
-        self.dictInfo['sobrenomeAdvogado'] = self.advogado.sobrenomeUsuario
+        self.dictInfo['nomeAdvogado'] = self.advogado.nomeAdvogado
+        self.dictInfo['sobrenomeAdvogado'] = self.advogado.sobrenomeAdvogado
         self.dictInfo['nacionalidadeAdvogado'] = 'brasileiro(a)'
         self.dictInfo['estadoCivilAdvogado'] = self.advogado.estadoCivil
         self.dictInfo['siglaEstadoAdvogado'] = siglaEstadoEscritorio

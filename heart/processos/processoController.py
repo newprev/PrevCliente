@@ -232,7 +232,7 @@ class ProcessosController(QMainWindow, Ui_mwProcessoPage):
         # Info advogado e escritório
         self.lbNomeEscritorio.setText(self.escritorioAtual.nomeEscritorio)
         self.lbNumOab.setText(self.advogadoAtual.numeroOAB)
-        self.lbNomeAdv.setText(self.advogadoAtual.nomeUsuario + ' ' + self.advogadoAtual.sobrenomeUsuario)
+        self.lbNomeAdv.setText(self.advogadoAtual.nomeAdvogado + ' ' + self.advogadoAtual.sobrenomeAdvogado)
 
     def multiplosProcessos(self) -> bool:
         qtdProcessos: int = Processos.select().where(Processos.clienteId == self.clienteAtual.clienteId).count()

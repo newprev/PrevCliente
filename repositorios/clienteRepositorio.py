@@ -182,8 +182,7 @@ class UsuarioRepository:
                 else:
                     advogado.senha = 'senhaProvisoria'
 
-                # Advogados.insert(advogado.toDict()).on_conflict_replace().execute()
-                advogado: Advogados = Advogados.fromDict(advogado.toDict())
+                advogado: Advogados = Advogados().fromDict(advogado.toDict())
 
                 if not advogado:
                     logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
@@ -194,24 +193,23 @@ class UsuarioRepository:
             else:
                 logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
                 return False
-        # except Escritorios.DoesNotExist:
-        #     escritorio: Escritorios = EscritorioRepositorio().buscaEscritorio(escritorioId)
-        #     Escritorios.insert(escritorio.toDict()).on_conflict_replace().execute()
-        #     return self.buscaAdvPor(advogadoId, senhaInserida=senhaInserida)
 
         except Exception as erro:
             print(f'buscaAdvPor - Erro: {type(erro)}')
             logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
 
-    def loginAuth(self, senha, numeroOAB: str = None, email: str = None) -> AdvAuthModelo:
+    def loginAuth(self, senha, OabCpf: str = None, email: str = None) -> AdvAuthModelo:
         url: str = self.baseUrl + f'advogados/auth/login/'
         authAdvogado: AdvAuthModelo = AdvAuthModelo()
         authAdvogado.senha = senha
         authAdvogado.ativo = True
         authAdvogado.confirmado = True
 
-        if numeroOAB is not None:
-            authAdvogado.numeroOAB = numeroOAB
+        if OabCpf is not None:
+            if len(OabCpf) == 9:
+                authAdvogado.cpf = OabCpf
+            else:
+                authAdvogado.numeroOAB = OabCpf
         else:
             authAdvogado.email = email
 

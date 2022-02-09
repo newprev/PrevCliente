@@ -77,7 +77,7 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
         if self.buscaEscritorio():
             self.lbNomeEscritorio.setText(self.escritorioAtual.nomeEscritorio)
         if self.buscaAdvogado():
-            self.lbNomeAdvogado.setText(self.advogadoAtual.nomeUsuario + ' ' + self.advogadoAtual.sobrenomeUsuario)
+            self.lbNomeAdvogado.setText(self.advogadoAtual.nomeAdvogado + ' ' + self.advogadoAtual.sobrenomeAdvogado)
             self.lbOAB.setText('OAB: ' + self.advogadoAtual.numeroOAB + '/' + self.escritorioAtual.estado)
 
         self.clienteController = NewListaClientes(self.escritorioAtual, self.advogadoAtual, parent=self)

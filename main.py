@@ -39,11 +39,11 @@ from modelos.tiposESubtipos.tipoAposentadoriaORM import TipoAposentadoria
 from repositorios.informacoesRepositorio import ApiInformacoes
 from util.enums.databaseEnums import DatabaseEnum
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
-
 from util.enums.newPrevEnums import TiposConexoes
 from util.popUps import popUpOkAlerta
 
 from cache.cachingLogin import CacheLogin
+from crypt.newRsa import Crypt
 
 
 class Main(Ui_MainWindow, QMainWindow):
@@ -85,13 +85,25 @@ class Main(Ui_MainWindow, QMainWindow):
 
         self.pbarSplash.setValue(self.contador)
 
-        if self.contador == 10:
-            self.timer.stop()
-            self.iniciaBancosETelas()
-            self.verificaBackups()
+        if 10 <= self.contador < 70:
+            if self.contador == 10:
+                self.timer.stop()
+                self.iniciaBancosETelas()
+                self.verificaBackups()
+            return True
 
-        if self.contador == 90:
+        elif 70 <= self.contador < 90:
+            self.lbInfo.setText('GERANDO CHAVES DE CRIPTOGRAFIA...')
+            if self.precisaGerarChaves():
+                Crypt().gerarChaves()
+
+            self.progresso(add=90 - self.contador)
+            return True
+
+        elif self.contador == 90:
             self.lbInfo.setText('INICIANDO SUBMERSAO...')
+            self.avaliaAbrirTelaLogin()
+            return True
 
     def verificaBackups(self):
         qtdTipos = TipoAposentadoria.select().count()
@@ -133,7 +145,7 @@ class Main(Ui_MainWindow, QMainWindow):
                 TipoBeneficioModel: 'CRIANDO TABLEA DE TIPOS DE BENEFÍCIOS',
             }
 
-            percentLoading = ceil(80 / len(listaTabelas))
+            percentLoading = ceil(60 / len(listaTabelas))
 
             for instancia, label in listaTabelas.items():
                 self.lbInfo.setText(label)
@@ -144,7 +156,6 @@ class Main(Ui_MainWindow, QMainWindow):
             self.progresso(add=percentLoading)
 
             loop.run_until_complete(self.carregaTabelasIniciais())
-            self.avaliaAbrirTelaLogin()
         except ClientConnectorError as err:
             popUpOkAlerta(
                 "O NewPrev não conseguiu se conectar com o servidor. Entre em contato com o suporte.",
@@ -184,6 +195,18 @@ class Main(Ui_MainWindow, QMainWindow):
     def iniciaNewPrev(self):
         self.loginPage.show()
         self.close()
+
+    def precisaGerarChaves(self):
+        chavePrivada = os.path.join(os.getcwd(), os.pardir, 'PrevCliente', 'crypt', '.privateKey.txt')
+        chavePrivada = os.path.normpath(chavePrivada)
+
+        chavePublica = os.path.join(os.getcwd(), os.pardir, 'PrevCliente', 'crypt', 'publicKey.txt')
+        chavePublica = os.path.normpath(chavePublica)
+
+        existChavePublica = os.path.exists(chavePublica) and os.path.isfile(chavePublica)
+        existChavePrivada = os.path.exists(chavePrivada) and os.path.isfile(chavePrivada)
+
+        return not (existChavePublica and existChavePrivada)
 
     def center(self):
         frameGm = self.frameGeometry()

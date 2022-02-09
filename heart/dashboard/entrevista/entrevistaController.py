@@ -260,7 +260,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
         self.vlQuestionario.addWidget(self.infoQuestionario)
 
         # Rodapé
-        self.lbNomeAdv.setText(self.advogadoAtual.nomeUsuario + self.advogadoAtual.sobrenomeUsuario)
+        self.lbNomeAdv.setText(self.advogadoAtual.nomeAdvogado + self.advogadoAtual.sobrenomeAdvogado)
         self.lbNumOab.setText(str(self.advogadoAtual.numeroOAB))
         self.lbNomeEscritorio.setText(self.escritorioAtual.nomeFantasia)
 

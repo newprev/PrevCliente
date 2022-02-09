@@ -13,7 +13,7 @@ class WdgAdvController(QWidget, Ui_wdgAdv):
         self.loginPage = parent
         self.advogado = advogado
 
-        self.lbNomeAdv.setText(self.advogado.nomeUsuario.strip() + ' ' + self.advogado.sobrenomeUsuario.strip())
+        self.lbNomeAdv.setText(self.advogado.nomeAdvogado.strip() + ' ' + self.advogado.sobrenomeAdvogado.strip())
         self.lbNumeroOAB.setText(self.advogado.numeroOAB)
 
         self.pbCadastrar.clicked.connect(self.enviaSinal)

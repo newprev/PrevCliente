@@ -38,8 +38,8 @@ class TabelasConfig:
         CREATE TABLE IF NOT EXISTS {self.tblAdvogados}(
             {cabecalho}
             escritorioId INTEGER REFERENCES {self.tblEscritorios}(escritorioId) ON DELETE CASCADE,
-            nomeUsuario VARCHAR(20) NOT NULL,
-            sobrenomeUsuario VARCHAR(40) NOT NULL,
+            nomeAdvogado VARCHAR(20) NOT NULL,
+            sobrenomeAdvogado VARCHAR(40) NOT NULL,
             login VARCHAR(30) NOT NULL,
             senha VARCHAR(30) NOT NULL,
             email VARCHAR(40) NOT NULL,

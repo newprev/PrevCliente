@@ -2,6 +2,8 @@ import datetime
 import pymysql
 import asyncio as aio
 from typing import List
+from peewee import fn
+
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QMainWindow
@@ -30,15 +32,12 @@ from modelos.ipcaMensalORM import IpcaMensal
 
 from Design.pyUi.loginPage import Ui_mwLogin
 
-# from heart.dashboard.dashboardController import DashboardController
 from heart.newDashboard.newDashboard import NewDashboard
 
 from util.dateHelper import strToDatetime
 from util.enums.loginEnums import TelaLogin
 from util.enums.newPrevEnums import *
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
-
-from crypt.gerarChaves import Chaves
 
 import os
 import json
@@ -83,8 +82,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         self.daoEscritorio = Escritorios()
         self.daoAdvogado = Advogados(self.db)
-
-        self.dashboard: DashboardController = None
 
         self.trocaTelaAtual(TelaLogin.principal)
         self.pbEnviarCodigo_2.hide()
@@ -284,7 +281,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
     def buscaEscritorio(self, escritorioId: int):
         if escritorioId is None:
             popUpOkAlerta(
-                f'Não foi possível encontrar o escritório na qual o advogado {self.advogado.nomeUsuario} está cadastrado. Entre em contato com o suporte.',
+                f'Não foi possível encontrar o escritório na qual o advogado {self.advogado.nomeAdvogado} está cadastrado. Entre em contato com o suporte.',
                 erro=f'buscaEscritorio<LoginController> escritorioId: {escritorioId}'
             )
             return False
@@ -355,9 +352,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
     def entrar(self):
         # TODO: Criar uma verificação se o usuário salvo em cache tem o mesmo login e senha digitado na tela de login
 
-        loop = aio.get_event_loop()
-        print('PASSOU POR AQUI!')
-
         self.loading(20)
         if self.infoNaoNulo():
             if ApiFerramentas().conexaoOnline():
@@ -371,21 +365,16 @@ class LoginController(QMainWindow, Ui_mwLogin):
             # Autentica advogado
             advogadoAutenticado: AdvAuthModelo = self.authAdvogado()
 
-            if self.advogado:
-                # Autentica escritório
-                self.escritorio = self.procuraEscritorio(self.advogado.escritorioId)
+            if advogadoAutenticado:
+                self.escritorio = self.escritorioRepositorio.buscaEscritorio(advogadoAutenticado.escritorioId)
                 if self.escritorio:
-                    escritorioCadastrado = Escritorios.get_by_id(self.escritorio.escritorioId)
-                    advogadoCadastrado = Advogados.get_by_id(self.advogado.advogadoId)
+                    self.escritorio = self.buscaInsereEscritorio(self.escritorio)
 
-                    if not (escritorioCadastrado and advogadoCadastrado):
-                        if self.precisaGerarChaves():
-                            self.gerarChave(self.escritorio.email)
+                self.advogado = self.usuarioRepositorio.buscaAdvPor(advogadoAutenticado.advogadoId, senhaInserida=self.leSenha.text())
+                if self.advogado:
+                    self.advogado = self.buscaInsereAdvogado(self.advogado)
 
-                    if not escritorioCadastrado:
-                        self.daoEscritorio.insereEscritorio(self.escritorio)
-                    if not advogadoCadastrado:
-                        self.daoAdvogado.insereAdvogado(self.advogado)
+                if self.advogado and self.escritorio:
 
                     # Decide se salva informações no "temporários", dependendo do checkBox
                     if self.cbSalvarSenha.isChecked():
@@ -403,12 +392,14 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
                     # Inicia programa
                     self.iniciaDashboard()
-
                 else:
-                    popUpOkAlerta("Houve um problema ao encontrar o escritório no banco de dados. Entre em contato com o suporte.")
                     self.cacheLogin.limpaCache()
                     self.cacheEscritorio.limpaCache()
-                    # TODO: Lógica para clicar no botão "Ok" e fechar o programa
+                    popUpOkAlerta(
+                        "Houve um problema em encontrar o escritório ou o advogado no banco de dados. Entre em contato com o suporte.",
+                        erro=f"{self.advogado=}\n{self.escritorio=}",
+                        funcao=self.fecharPrograma
+                    )
             else:
                 self.tentativasSenha -= 1
                 popUpOkAlerta("Usuário ou senha inválidos. Tente novamente")
@@ -416,7 +407,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.cacheEscritorio.limpaCache()
                 # TODO: Lógica para clicar no botão "Ok" e fechar o programa
                 if self.tentativasSenha == 0:
-                    popUpOkAlerta("A quantidade de tentativas excedeu o limite e o programa será fechado.")
+                    popUpOkAlerta("A quantidade de tentativas excedeu o limite e o programa será fechado.", funcao=self.close)
 
         else:
             popUpOkAlerta("Campo login e senha precisam ser preenchidos")
@@ -434,10 +425,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.alteraLabelEsqueceuSenha()
         self.trocaTelaAtual(TelaLogin.primAcessoEmail)
 
-    def gerarChave(self, emailEscritorio: str) -> None:
-        primoEmail: int = ord(emailEscritorio)
-        print(f"{primoEmail=}")
-        # cryptKeys = Chaves()
+    def fecharPrograma(self):
+        self.close()
 
     def iniciaDashboard(self):
         self.dashboard = NewDashboard()
@@ -462,31 +451,80 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         return login and senha
 
-    def precisaGerarChaves(self):
-        chavePrivada = os.path.join(os.getcwd(), os.pardir, 'PrevCliente', 'crypt', '.privateKey.txt')
-        chavePrivada = os.path.normpath(chavePrivada)
-
-        chavePublica = os.path.join(os.getcwd(), os.pardir, 'PrevCliente', 'crypt', 'publicKey.txt')
-        chavePublica = os.path.normpath(chavePublica)
-
-        existChavePublica = os.path.exists(chavePublica) and os.path.isfile(chavePublica)
-        existChavePrivada = os.path.exists(chavePrivada) and os.path.isfile(chavePrivada)
-
-        return not (existChavePublica and existChavePrivada)
-
     def authAdvogado(self) -> AdvAuthModelo:
         senha = self.leSenha.text()
 
         if self.leLogin.text().isdecimal():
             numeroOAB = self.leLogin.text()
-            return self.usuarioRepositorio.loginAuth(senha, numeroOAB=numeroOAB)
+            return self.usuarioRepositorio.loginAuth(senha, OabCpf=numeroOAB)
         else:
             email = self.leLogin.text()
             return self.usuarioRepositorio.loginAuth(senha, email=email)
 
-    def procuraEscritorio(self, escritorioId: int) -> Escritorios:
-        escritorio: Escritorios = self.escritorioRepositorio.buscaEscritorio(escritorioId)
-        return escritorio
+    def buscaInsereEscritorio(self, escritorio: Escritorios, escritorioInserido: bool = False) -> Escritorios:
+        try:
+            escritorio: Escritorios = Escritorios.get_by_id(escritorio.escritorioId)
+            return escritorio
+        except Escritorios.DoesNotExist as err:
+            if not escritorioInserido:
+                Escritorios.create(
+                    escritorioId=escritorio.escritorioId,
+                    bairro=escritorio.bairro,
+                    cep=escritorio.cep,
+                    cidade=escritorio.cidade,
+                    cnpj=escritorio.cnpj,
+                    complemento=escritorio.complemento,
+                    cpf=escritorio.cpf,
+                    email=escritorio.email,
+                    endereco=escritorio.endereco,
+                    estado=escritorio.estado,
+                    inscEstadual=escritorio.inscEstadual,
+                    nomeEscritorio=escritorio.nomeEscritorio,
+                    nomeFantasia=escritorio.nomeFantasia,
+                    numero=escritorio.numero,
+                    telefone=escritorio.telefone,
+                ).save()
+                return self.buscaInsereEscritorio(escritorio, escritorioInserido=True)
+
+            popUpOkAlerta("Não foi possível cadastrar o escritório. Entre em contato com o suporte", erro=err, funcao=self.fecharPrograma)
+            return None
+
+    def buscaInsereAdvogado(self, advogado: Advogados, advInserido: bool = False) -> Advogados:
+        try:
+            # advogado: Advogados = Advogados.get_by_id(advogado.advogadoId)
+            advogado = Advogados.select(
+                Advogados.advogadoId,
+                Advogados.escritorioId,
+                Advogados.nomeAdvogado,
+                Advogados.sobrenomeAdvogado,
+                Advogados.numeroOAB,
+                Advogados.email,
+                Advogados.login,
+                Advogados.estadoCivil,
+            ).where(
+                Advogados.advogadoId == advogado.advogadoId).get()
+            return advogado
+        except Advogados.DoesNotExist as err:
+            if not advInserido:
+                Advogados.create(
+                    advogadoId=advogado.advogadoId,
+                    escritorioId=advogado.escritorioId,
+                    admin=False,
+                    ativo=advogado.ativo,
+                    confirmado=advogado.confirmado,
+                    email=advogado.email,
+                    estadoCivil=advogado.estadoCivil,
+                    login=advogado.login,
+                    nacionalidade=advogado.nacionalidade,
+                    nomeAdvogado=advogado.nomeAdvogado,
+                    numeroOAB=advogado.numeroOAB,
+                    senha=fn.cifrar(advogado.senha),
+                    sobrenomeAdvogado=advogado.sobrenomeAdvogado
+                ).save()
+                return self.buscaInsereAdvogado(advogado, advInserido=True)
+
+            popUpOkAlerta("Não foi possível cadastrar o advogado. Entre em contato com o suporte", erro=err, funcao=self.fecharPrograma)
+            return None
 
     def verificaRotinaAtualizacao(self):
 

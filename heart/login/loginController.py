@@ -501,6 +501,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 Advogados.email,
                 Advogados.login,
                 Advogados.estadoCivil,
+                fn.decifrar(Advogados.senha),
             ).where(
                 Advogados.advogadoId == advogado.advogadoId).get()
             return advogado

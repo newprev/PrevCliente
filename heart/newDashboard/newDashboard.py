@@ -2,6 +2,7 @@ from Design.pyUi.newDashboard import Ui_newDashboard
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import QtGui
 
+from heart.resumoCnis.resumoCnis import ResumoCnisController
 from modelos.clienteORM import Cliente
 from util.popUps import popUpOkAlerta
 
@@ -84,11 +85,13 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
         self.wdgCadastroCliente = NewCadastraCliente(parent=self)
         self.wdgInfoCliente = NewInfoCliente(parent=self)
         self.wdgEntrevista = NewEntrevistaPrincipal(self.escritorioAtual, parent=self)
+        self.wdgResumoCnis = ResumoCnisController(parent=self)
 
         self.stkPrincipal.addWidget(self.clienteController)
         self.stkPrincipal.addWidget(self.wdgCadastroCliente)
         self.stkPrincipal.addWidget(self.wdgInfoCliente)
         self.stkPrincipal.addWidget(self.wdgEntrevista)
+        self.stkPrincipal.addWidget(self.wdgResumoCnis)
 
         self.stkPrincipal.setCurrentIndex(TelaAtual.Cliente.value)
 
@@ -109,9 +112,11 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
         self.clienteController.atualizaTblClientes()
 
     def trocaTela(self, tela: TelaAtual, *args):
-        if len(args) != 0:
-            if isinstance(args[0], Cliente):
+        if len(args) != 0 and isinstance(args[0], Cliente):
+            if tela == TelaAtual.Entrevista:
                 self.wdgEntrevista.defineCliente(args[0])
+            elif tela == TelaAtual.Resumo:
+                self.wdgResumoCnis.recebeCliente(args[0])
 
         self.stkPrincipal.setCurrentIndex(tela.value)
 

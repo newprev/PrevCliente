@@ -14,7 +14,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_WdgItemRes(object):
     def setupUi(self, WdgItemRes):
         WdgItemRes.setObjectName("WdgItemRes")
-        WdgItemRes.resize(734, 144)
+        WdgItemRes.resize(608, 144)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(WdgItemRes.sizePolicy().hasHeightForWidth())
+        WdgItemRes.setSizePolicy(sizePolicy)
         WdgItemRes.setStyleSheet("/*-------------------------------- Group box -----------------------------------------*/\n"
 "#gbMain {\n"
 "    background-color: #F9F9F9;\n"
@@ -23,16 +28,16 @@ class Ui_WdgItemRes(object):
 "}\n"
 "\n"
 "#gbMain::indicator {\n"
-"    width: 0px;\n"
-"    height: 0px;\n"
+"    width: 20px;\n"
+"    height: 20px;\n"
 "}\n"
 "\n"
 "#gbMain::indicator:unchecked {\n"
-"    image: none;\n"
+"    image: url(:/selecionado/CheckBoxFalse.png);\n"
 "}\n"
 "\n"
 "#gbMain::indicator:checked {\n"
-"    image: none;\n"
+"    image: url(:/selecionado/checkBoxTrue.png);\n"
 "}\n"
 "\n"
 "/*-------------------------------- Labels -----------------------------------------*/\n"
@@ -44,7 +49,7 @@ class Ui_WdgItemRes(object):
 "}\n"
 "\n"
 "#lbCNPJouNB {\n"
-"    font: 12pt \"Avenir LT Std\";\n"
+"    font: 11pt \"Avenir LT Std\";\n"
 "    line-height: 16px;\n"
 "    color: #3F4E8C;\n"
 "}\n"
@@ -97,14 +102,24 @@ class Ui_WdgItemRes(object):
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.gbMain = QtWidgets.QGroupBox(WdgItemRes)
-        self.gbMain.setMinimumSize(QtCore.QSize(680, 140))
-        self.gbMain.setMaximumSize(QtCore.QSize(16777215, 160))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.gbMain.sizePolicy().hasHeightForWidth())
+        self.gbMain.setSizePolicy(sizePolicy)
+        self.gbMain.setMinimumSize(QtCore.QSize(0, 140))
+        self.gbMain.setMaximumSize(QtCore.QSize(16777215, 13215644))
         self.gbMain.setCheckable(True)
         self.gbMain.setChecked(False)
         self.gbMain.setObjectName("gbMain")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.gbMain)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.frame_2 = QtWidgets.QFrame(self.gbMain)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
+        self.frame_2.setSizePolicy(sizePolicy)
         self.frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
@@ -267,7 +282,7 @@ class Ui_WdgItemRes(object):
         self.lbInfoSituacao.setText(_translate("WdgItemRes", "Situação:"))
         self.lbSituacao.setText(_translate("WdgItemRes", "Situação:"))
         self.lbInfoFalta.setText(_translate("WdgItemRes", "Dado faltante"))
-import itemResumoCNIS_rc
+import Resources.itemResumoCNIS
 
 
 if __name__ == "__main__":

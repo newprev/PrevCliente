@@ -26,6 +26,7 @@ class TelaAtual(Enum):
     CadastroCliente = 1
     InfoCliente = 2
     Entrevista = 3
+    Resumo = 4
 
 class Icone(Enum):
     cliente = ':/funcionalidade/blueCliente.png'

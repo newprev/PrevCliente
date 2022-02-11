@@ -15,7 +15,7 @@ class Advogados(BaseModel, Model):
     admin = BooleanField(default=False)
     ativo = BooleanField(default=False)
     confirmado = BooleanField(default=False)
-    email = CharField()
+    email = CharField(max_length=50)
     estadoCivil = CharField(column_name='estadoCivil')
     login = CharField()
     nacionalidade = CharField()

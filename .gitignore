@@ -28,3 +28,7 @@ prevCliEnv/
 
 .templates/.~lock.requerimentoAdm.docx#
 /Resources/teste.svg
+
+crypt/.privateKey.txt
+
+crypt/publicKey.txt

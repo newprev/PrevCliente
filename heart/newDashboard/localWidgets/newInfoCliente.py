@@ -46,6 +46,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         self.sinais.sVoltaTela.connect(self.voltarDashboard)
         self.sinais.sEnviaInfo.connect(self.editarInfoCliente)
         self.sinais.sIniciaEntrevista.connect(self.iniciarEntrevista)
+        self.sinais.sAbreResumoCnis.connect(self.abreResumo)
         self.toasty = None
         self.popupCNIS = None
         self.limpaTudo()
@@ -56,7 +57,11 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
 
         self.pbVoltar.clicked.connect(lambda: self.sinais.sVoltaTela.emit())
         self.pbEntrevista.clicked.connect(self.confirmaIniciaEntrevista)
+        self.pbResumo.clicked.connect(self.enviaSinalResumoCnis)
         self.iniciarBotoesOpcoes()
+
+    def abreResumo(self):
+        self.dashboard.trocaTela(TelaAtual.Resumo, self.clienteAtual)
 
     def abreMenuInfoOpcoes(self, info: str):
 
@@ -247,6 +252,9 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
     def editarInfoCliente(self, info):
         self.dashboard.recebeCliente(self.clienteAtual, info=info)
         return True
+
+    def enviaSinalResumoCnis(self):
+        self.sinais.sAbreResumoCnis.emit()
 
     def eventFilter(self, a0: QObject, tecla: QEvent) -> bool:
         if isinstance(tecla, QKeyEvent) and self.popupCNIS is not None:

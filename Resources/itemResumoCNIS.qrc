@@ -4,4 +4,8 @@
     <file>redDeletar.png</file>
     <file>blueEditar.png</file>
   </qresource>
+  <qresource prefix="selecionado">
+    <file>CheckBoxFalse.png</file>
+    <file>checkBoxTrue.png</file>
+  </qresource>
 </RCC>

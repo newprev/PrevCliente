@@ -14,7 +14,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgResumoCnis(object):
     def setupUi(self, wdgResumoCnis):
         wdgResumoCnis.setObjectName("wdgResumoCnis")
-        wdgResumoCnis.resize(1181, 575)
+        wdgResumoCnis.resize(1181, 515)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(wdgResumoCnis.sizePolicy().hasHeightForWidth())
+        wdgResumoCnis.setSizePolicy(sizePolicy)
         wdgResumoCnis.setStyleSheet("#wdgCadastroCliente {\n"
 "    background-color: white;\n"
 "}\n"
@@ -27,6 +32,11 @@ class Ui_wdgResumoCnis(object):
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
         self.frPrincipal = QtWidgets.QFrame(wdgResumoCnis)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frPrincipal.sizePolicy().hasHeightForWidth())
+        self.frPrincipal.setSizePolicy(sizePolicy)
         self.frPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frPrincipal.setObjectName("frPrincipal")
@@ -43,8 +53,7 @@ class Ui_wdgResumoCnis(object):
         self.frCabecalho.setMinimumSize(QtCore.QSize(0, 90))
         self.frCabecalho.setMaximumSize(QtCore.QSize(16777215, 100))
         self.frCabecalho.setStyleSheet("/*------------------------------------------- Frame -------------------------------------------*/\n"
-"#frFirulaEmpresa, #frFirulaContrib,\n"
-"#frFirulaBeneficios {\n"
+"#frFirulaEmpresa {\n"
 "    background-color: #3F4E8C;\n"
 "    border: 0px solid none;\n"
 "    border-radius: 2px;\n"
@@ -117,8 +126,10 @@ class Ui_wdgResumoCnis(object):
 "#lbCpfCliente {\n"
 "    font: 11pt \"Avenir LT Std\";\n"
 "    color: #3F4E8C;\n"
-"\n"
-"    padding: 4px;\n"
+"    \n"
+"    font-weight: 120;\n"
+"    line-height: 24px;\n"
+"    padding: 4px 0px 0px 4px;\n"
 "}")
         self.frCabecalho.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frCabecalho.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -243,14 +254,23 @@ class Ui_wdgResumoCnis(object):
 "    background-color: white;\n"
 "}\n"
 "\n"
-"/*-------------------------------------------  Label --------------------------------------------*/\n"
+"/*-------------------------------------------  Scroll Bar --------------------------------------------*/\n"
+"QScrollBar:vertical {\n"
+"    border: 0px solid none;\n"
+"    background: #F2F2F2;\n"
+"}\n"
 "\n"
+"QScrollBar::handle:vertical {\n"
+"    background-color: #3F4E8C;\n"
+"    min-height: 10px;\n"
+"    max-height: 20px;\n"
 "\n"
-"/*-------------------------------------------  Frame --------------------------------------------*/\n"
+"    border-radius: 5px;\n"
+"}\n"
 "\n"
 "\n"
 "/*---------------------------- Push Button ----------------------------------*/\n"
-"#pbInserir {\n"
+"#pbInserir, #pbInserirContrib {\n"
 "    font: 12pt \"Avenir LT Std\";\n"
 "    color: #3F4E8C;\n"
 "    \n"
@@ -259,21 +279,63 @@ class Ui_wdgResumoCnis(object):
 "    padding: 6px;\n"
 "}\n"
 "\n"
-"/*----------------------------  Line Edit ---------------------------------------*/\n"
-"\n"
-"\n"
 "/*----------------------- Scroll Area  and  QWidget ------------------------*/\n"
 "#scaPrincipal, #wdgScroll {\n"
 "    background-color: white;\n"
 "}\n"
 "\n"
-"/*------------------------------ Check Box -------------------------------------*/\n"
+"/*-------------------------------- Labels -----------------------------------------*/\n"
+"#lbNomeEmp {\n"
+"    font: 15pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    font-weight: 750;\n"
+"    line-height: 24px;\n"
 "\n"
+"    margin: 8px 0px 0px 0px;\n"
+"}\n"
 "\n"
-"/*----------------------------- Combo box --------------------------------------*/\n"
+"#lbCNPJouNB, #lbDataInicio, \n"
+"#lbDataFim {\n"
+"    font: 11pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    font-weight: 120;\n"
+"    line-height: 24px;\n"
 "\n"
+"    margin: 2px 0px 0px 0px;\n"
+"}\n"
 "\n"
-"/*----------------------------- Date Edit --------------------------------------*/\n"
+"/*------------------------------------------- Table Widget -------------------------------------------*/\n"
+"#tblContribuicoes {\n"
+"    selection-background-color: #F9F9F9;\n"
+"    selection-color: grey;\n"
+"    gridline-color: white;\n"
+"\n"
+"    border: 0px solid transparent;\n"
+"}\n"
+"\n"
+"QHeaderView {\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"QHeaderView::section {\n"
+"    background-color: white;\n"
+"    padding-left: 4px;\n"
+"    border: 0px solid white;\n"
+"    min-height: 45px;\n"
+"}\n"
+"\n"
+"#tblContribuicoes::item:last {\n"
+"    selection-background-color: black;\n"
+"    selection-color: grey;\n"
+"    gridline-color: black;\n"
+"    border: 0px solid transparent;\n"
+"}\n"
+"\n"
+"#tblContribuicoes::item {\n"
+"    padding: 2px 24px 2px 24px;\n"
+"}\n"
 "")
         self.frMiolo.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frMiolo.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -283,6 +345,11 @@ class Ui_wdgResumoCnis(object):
         self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.stkCliente = QtWidgets.QStackedWidget(self.frMiolo)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.stkCliente.sizePolicy().hasHeightForWidth())
+        self.stkCliente.setSizePolicy(sizePolicy)
         self.stkCliente.setObjectName("stkCliente")
         self.pgEmpresas = QtWidgets.QWidget()
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
@@ -303,6 +370,11 @@ class Ui_wdgResumoCnis(object):
         self.gridLayout_4 = QtWidgets.QGridLayout(self.frame)
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.frame_2 = QtWidgets.QFrame(self.frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
+        self.frame_2.setSizePolicy(sizePolicy)
         self.frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
@@ -316,30 +388,194 @@ class Ui_wdgResumoCnis(object):
         self.horizontalLayout_3.addWidget(self.pbInserir)
         self.gridLayout_4.addWidget(self.frame_2, 0, 0, 1, 1)
         self.scaPrincipal = QtWidgets.QScrollArea(self.frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scaPrincipal.sizePolicy().hasHeightForWidth())
+        self.scaPrincipal.setSizePolicy(sizePolicy)
         self.scaPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scaPrincipal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.scaPrincipal.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
         self.scaPrincipal.setWidgetResizable(True)
         self.scaPrincipal.setObjectName("scaPrincipal")
         self.wdgScroll = QtWidgets.QWidget()
-        self.wdgScroll.setGeometry(QtCore.QRect(0, 0, 586, 406))
+        self.wdgScroll.setGeometry(QtCore.QRect(0, 0, 569, 350))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.wdgScroll.sizePolicy().hasHeightForWidth())
+        self.wdgScroll.setSizePolicy(sizePolicy)
         self.wdgScroll.setObjectName("wdgScroll")
         self.scaPrincipal.setWidget(self.wdgScroll)
         self.gridLayout_4.addWidget(self.scaPrincipal, 1, 0, 1, 1)
         self.gridLayout_8.addWidget(self.frame, 0, 0, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_8.addItem(spacerItem2, 0, 1, 1, 1)
         self.stkCliente.addWidget(self.pgEmpresas)
         self.pgContribuicoes = QtWidgets.QWidget()
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pgContribuicoes.sizePolicy().hasHeightForWidth())
         self.pgContribuicoes.setSizePolicy(sizePolicy)
         self.pgContribuicoes.setObjectName("pgContribuicoes")
-        self.gridLayout_7 = QtWidgets.QGridLayout(self.pgContribuicoes)
-        self.gridLayout_7.setContentsMargins(-1, 0, -1, 0)
-        self.gridLayout_7.setHorizontalSpacing(32)
-        self.gridLayout_7.setVerticalSpacing(16)
+        self.gridLayout_6 = QtWidgets.QGridLayout(self.pgContribuicoes)
+        self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_6.setHorizontalSpacing(0)
+        self.gridLayout_6.setObjectName("gridLayout_6")
+        self.frInfoPrincipal = QtWidgets.QFrame(self.pgContribuicoes)
+        self.frInfoPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfoPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoPrincipal.setObjectName("frInfoPrincipal")
+        self.gridLayout_5 = QtWidgets.QGridLayout(self.frInfoPrincipal)
+        self.gridLayout_5.setContentsMargins(-1, 0, -1, -1)
+        self.gridLayout_5.setObjectName("gridLayout_5")
+        self.tblContribuicoes = QtWidgets.QTableWidget(self.frInfoPrincipal)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.tblContribuicoes.sizePolicy().hasHeightForWidth())
+        self.tblContribuicoes.setSizePolicy(sizePolicy)
+        self.tblContribuicoes.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.tblContribuicoes.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
+        self.tblContribuicoes.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tblContribuicoes.setProperty("showDropIndicator", False)
+        self.tblContribuicoes.setDragDropOverwriteMode(False)
+        self.tblContribuicoes.setAlternatingRowColors(True)
+        self.tblContribuicoes.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+        self.tblContribuicoes.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.tblContribuicoes.setShowGrid(False)
+        self.tblContribuicoes.setGridStyle(QtCore.Qt.NoPen)
+        self.tblContribuicoes.setObjectName("tblContribuicoes")
+        self.tblContribuicoes.setColumnCount(6)
+        self.tblContribuicoes.setRowCount(1)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblContribuicoes.setVerticalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblContribuicoes.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblContribuicoes.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblContribuicoes.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblContribuicoes.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblContribuicoes.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblContribuicoes.setHorizontalHeaderItem(5, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblContribuicoes.setItem(0, 0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblContribuicoes.setItem(0, 1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblContribuicoes.setItem(0, 2, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblContribuicoes.setItem(0, 3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblContribuicoes.setItem(0, 4, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblContribuicoes.setItem(0, 5, item)
+        self.tblContribuicoes.horizontalHeader().setVisible(False)
+        self.tblContribuicoes.horizontalHeader().setCascadingSectionResizes(True)
+        self.tblContribuicoes.horizontalHeader().setMinimumSectionSize(70)
+        self.tblContribuicoes.horizontalHeader().setSortIndicatorShown(False)
+        self.tblContribuicoes.verticalHeader().setVisible(False)
+        self.tblContribuicoes.verticalHeader().setHighlightSections(False)
+        self.gridLayout_5.addWidget(self.tblContribuicoes, 1, 0, 1, 1)
+        self.frInfoResumo = QtWidgets.QFrame(self.frInfoPrincipal)
+        self.frInfoResumo.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfoResumo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoResumo.setObjectName("frInfoResumo")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frInfoResumo)
+        self.horizontalLayout_4.setContentsMargins(-1, 0, -1, 0)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.frInfoEmp = QtWidgets.QFrame(self.frInfoResumo)
+        self.frInfoEmp.setMinimumSize(QtCore.QSize(450, 0))
+        self.frInfoEmp.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfoEmp.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoEmp.setObjectName("frInfoEmp")
+        self.gridLayout_7 = QtWidgets.QGridLayout(self.frInfoEmp)
+        self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_7.setObjectName("gridLayout_7")
+        self.lbNomeEmp = QtWidgets.QLabel(self.frInfoEmp)
+        self.lbNomeEmp.setWordWrap(True)
+        self.lbNomeEmp.setObjectName("lbNomeEmp")
+        self.gridLayout_7.addWidget(self.lbNomeEmp, 0, 0, 1, 2)
+        self.lbDataInicio = QtWidgets.QLabel(self.frInfoEmp)
+        self.lbDataInicio.setObjectName("lbDataInicio")
+        self.gridLayout_7.addWidget(self.lbDataInicio, 3, 0, 1, 1, QtCore.Qt.AlignBottom)
+        self.lbCNPJouNB = QtWidgets.QLabel(self.frInfoEmp)
+        self.lbCNPJouNB.setObjectName("lbCNPJouNB")
+        self.gridLayout_7.addWidget(self.lbCNPJouNB, 1, 0, 1, 1, QtCore.Qt.AlignTop)
+        self.lbDataFim = QtWidgets.QLabel(self.frInfoEmp)
+        self.lbDataFim.setObjectName("lbDataFim")
+        self.gridLayout_7.addWidget(self.lbDataFim, 3, 1, 1, 1, QtCore.Qt.AlignLeft|QtCore.Qt.AlignBottom)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 12, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_7.addItem(spacerItem3, 2, 0, 1, 1)
+        self.horizontalLayout_4.addWidget(self.frInfoEmp)
+        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem4)
+        self.pbInserirContrib = QtWidgets.QPushButton(self.frInfoResumo)
+        self.pbInserirContrib.setMinimumSize(QtCore.QSize(80, 0))
+        self.pbInserirContrib.setObjectName("pbInserirContrib")
+        self.horizontalLayout_4.addWidget(self.pbInserirContrib)
+        self.gridLayout_5.addWidget(self.frInfoResumo, 0, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.frInfoPrincipal, 0, 0, 1, 1)
         self.stkCliente.addWidget(self.pgContribuicoes)
         self.pgBeneficios = QtWidgets.QWidget()
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
@@ -391,13 +627,49 @@ class Ui_wdgResumoCnis(object):
         _translate = QtCore.QCoreApplication.translate
         wdgResumoCnis.setWindowTitle(_translate("wdgResumoCnis", "Form"))
         self.lbInfoTitulo.setText(_translate("wdgResumoCnis", "Resumo do CNIS"))
-        self.lbNomeCliente.setText(_translate("wdgResumoCnis", "nomeCliente"))
-        self.lbCpfCliente.setText(_translate("wdgResumoCnis", "cpfCliente"))
+        self.lbNomeCliente.setText(_translate("wdgResumoCnis", "Maria de Lourdes da Silva Prado"))
+        self.lbCpfCliente.setText(_translate("wdgResumoCnis", "CPF: 632.154.874-56"))
         self.pbEmpresas.setText(_translate("wdgResumoCnis", "Empresas"))
         self.pbContrib.setText(_translate("wdgResumoCnis", "Contribuições"))
         self.pbBeneficios.setText(_translate("wdgResumoCnis", "Benefícios"))
         self.pbInserir.setText(_translate("wdgResumoCnis", "Inserir"))
-import wdgResumoCNIS_rc
+        self.tblContribuicoes.setSortingEnabled(True)
+        item = self.tblContribuicoes.verticalHeaderItem(0)
+        item.setText(_translate("wdgResumoCnis", "Teste"))
+        item = self.tblContribuicoes.horizontalHeaderItem(0)
+        item.setText(_translate("wdgResumoCnis", "id"))
+        item = self.tblContribuicoes.horizontalHeaderItem(1)
+        item.setText(_translate("wdgResumoCnis", "Entrada"))
+        item = self.tblContribuicoes.horizontalHeaderItem(2)
+        item.setText(_translate("wdgResumoCnis", "Competência"))
+        item = self.tblContribuicoes.horizontalHeaderItem(3)
+        item.setText(_translate("wdgResumoCnis", "Salário de\n"
+"contribuição"))
+        item = self.tblContribuicoes.horizontalHeaderItem(4)
+        item.setText(_translate("wdgResumoCnis", "Natureza"))
+        item = self.tblContribuicoes.horizontalHeaderItem(5)
+        item.setText(_translate("wdgResumoCnis", "Indicadores"))
+        __sortingEnabled = self.tblContribuicoes.isSortingEnabled()
+        self.tblContribuicoes.setSortingEnabled(False)
+        item = self.tblContribuicoes.item(0, 0)
+        item.setText(_translate("wdgResumoCnis", "5"))
+        item = self.tblContribuicoes.item(0, 1)
+        item.setText(_translate("wdgResumoCnis", "10"))
+        item = self.tblContribuicoes.item(0, 2)
+        item.setText(_translate("wdgResumoCnis", "10/02/2020"))
+        item = self.tblContribuicoes.item(0, 3)
+        item.setText(_translate("wdgResumoCnis", "R$ 1200,00"))
+        item = self.tblContribuicoes.item(0, 4)
+        item.setText(_translate("wdgResumoCnis", "Recolhimento"))
+        item = self.tblContribuicoes.item(0, 5)
+        item.setText(_translate("wdgResumoCnis", "sdfasdfasdfasdfsd"))
+        self.tblContribuicoes.setSortingEnabled(__sortingEnabled)
+        self.lbNomeEmp.setText(_translate("wdgResumoCnis", "DROGARIA COMERCIAL DE REMÉDIOS LTDA"))
+        self.lbDataInicio.setText(_translate("wdgResumoCnis", "Início: 01/02/2000"))
+        self.lbCNPJouNB.setText(_translate("wdgResumoCnis", "CNPJ: 45.658.000-1/34"))
+        self.lbDataFim.setText(_translate("wdgResumoCnis", "Fim: 04/05/2010"))
+        self.pbInserirContrib.setText(_translate("wdgResumoCnis", "Inserir"))
+import Resources.wdgResumoCNIS
 
 
 if __name__ == "__main__":

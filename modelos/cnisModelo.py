@@ -332,14 +332,14 @@ class CNISModelo:
                     self.dictContribuicoes['dataPagamento'].append(documentoLinhas[pos])
                 elif self.verificaSalario(documentoLinhas[pos]):
                     if ehContribuicao:
-                        self.dictContribuicoes['contribuicao'].append(strToFloat(documentoLinhas[pos]))
+                        self.dictContribuicoes['contribuicao'].append(round(strToFloat(documentoLinhas[pos]), ndigits=2))
                         if not self.verificaSalario(documentoLinhas[pos + 1]):
                             ehContribuicao = False
                             if documentoLinhas[pos + 1].replace(',', '') not in self.dictIndicadores.keys():
                                 if re.fullmatch(self.expRegDataMenor, documentoLinhas[pos + 1]) is None:
                                     blocoContribuicoes = False
                     else:
-                        self.dictContribuicoes['salContribuicao'].append(strToFloat(documentoLinhas[pos]))
+                        self.dictContribuicoes['salContribuicao'].append(round(strToFloat(documentoLinhas[pos]), ndigits=2))
                         if documentoLinhas[pos + 1].replace(',', '') not in self.dictIndicadores.keys():
                             self.dictContribuicoes['indicadores'].append('')
                         if self.verificaSalario(documentoLinhas[pos + 1]):
@@ -577,7 +577,7 @@ class CNISModelo:
                     "seq": cabecalho.seq,
                     "tipo": TipoItemContribuicao.remuneracao.value,
                     "competencia": remuneracao['competencia'],
-                    "contribuicao": remuneracao['remuneracao'] * 0.2 if not impedidoPorIndicadores else None,
+                    "contribuicao": round(remuneracao['remuneracao'] * 0.2, ndigits=2) if not impedidoPorIndicadores else None,
                     "salContribuicao": remuneracao['remuneracao'],
                     "indicadores": remuneracao['indicadores'],
                     "validoTempoContrib": not impedidoPorIndicadores,
@@ -608,7 +608,7 @@ class CNISModelo:
                     "tipo": TipoItemContribuicao.beneficio.value,
                     "competencia": beneficio['competencia'],
                     "contribuicao": beneficio['remuneracao'],
-                    "salContribuicao": beneficio['remuneracao'] * 0.2,
+                    "salContribuicao": round(beneficio['remuneracao'] * 0.2, ndigits=2),
                     "indicadores": beneficio['indicadores'],
                     "validoTempoContrib": not impedidoPorIndicadores,
                     "validoSalContrib": not impedidoPorIndicadores and not impedidoPelaData

@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QWidget, QFileDialog, QMainWindow
 from PyQt5.QtCore import QPropertyAnimation, QRect, pyqtProperty, Qt, QEasingCurve, QUrl
 
 from Design.CustomWidgets.newToast import QToaster
+from Design.CustomWidgets.styleSheets.popupCnis import cadSemCnis
 from Design.pyUi.wdgEnviaCNIS import Ui_wdgEnviaCNIS
 
 from sinaisCustomizados import Sinais
@@ -17,7 +18,7 @@ class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
     dashboard: QMainWindow
     toast: QToaster
 
-    def __init__(self, dashboard=None, parent=None):
+    def __init__(self, dashboard=None, parent=None, esconderBotao: bool = False):
         super(NewPopupCNIS, self).__init__(parent=parent)
         self.setupUi(self)
         self.center()
@@ -33,7 +34,12 @@ class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
         self.toast = QToaster()
 
         self.pbBuscaCNIS.clicked.connect(self.abreBuscaCNIS)
-        self.pbCadSemCnis.clicked.connect(self.cadastraSemCnis)
+
+        if esconderBotao:
+            self.pbCadSemCnis.hide()
+            self.pbBuscaCNIS.setStyleSheet(cadSemCnis())
+        else:
+            self.pbCadSemCnis.clicked.connect(self.cadastraSemCnis)
 
     def abreBuscaCNIS(self):
         home = str(Path.home())

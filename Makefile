@@ -18,6 +18,8 @@ cleanAll: ## Limpa todo o cache e exclui o banco de dados
 	@rm -f cache/.escritorio.json && echo "---> cache/.escritorio.json"
 	@rm -f cache/.login.json && echo "---> cache/.login.json"
 	@rm -f Daos/producao.db	&& echo "---> Daos/producao.db"
+	@rm -f crypt/.privateKey.txt && echo "---> crypt/.privateKey.txt"
+	@rm -f crypt/publicKey.txt && echo "---> crypt/publicKey.txt"
 
 
 ## @ Build

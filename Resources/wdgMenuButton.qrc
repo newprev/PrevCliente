@@ -1,18 +1,15 @@
 <RCC>
   <qresource prefix="funcionalidade">
-    <file>cliente.png</file>
-    <file>interview.png</file>
-    <file>resumoCNIS.png</file>
-    <file>processos.png</file>
+    <file>blueCliente.png</file>
+    <file>blueProcessos.png</file>
+    <file>blueInterview.png</file>
   </qresource>
   <qresource prefix="configuracoes">
     <file>settingsDarker.png</file>
   </qresource>
   <qresource prefix="ferramentas">
-    <file>lifeHeart.png</file>
-    <file>sacoDinheiro.png</file>
-    <file>information-black-16.png</file>
-    <file>indices.png</file>
-    <file>salario.png</file>
+    <file>blueResumoCNIS.png</file>
+    <file>blueIndices.png</file>
+    <file>blueCalculadora.png</file>
   </qresource>
 </RCC>

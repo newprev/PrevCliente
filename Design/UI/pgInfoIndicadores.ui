@@ -22,61 +22,95 @@
 
 #frDescricao {
 	border-radius: 8px;
-	border: 1px solid black;
+	border: 0px solid none;
+}
+
+#frCabecalho {
+	background-color: #3F4E8C;
+	border: 0px solid none;
+	border-radius: 8px;
+}
+
+#frBusca {
+	background-color: rgb(244, 244, 244);
+	border-radius: 8px;
 }
 
 /* ----------------------------------------------- Label ----------------------------------------------- */
-#lbTitulo, #lbSigla {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 24px;
+#lbTitulo {
+	font: 16pt &quot;Avenir LT Std&quot;;
+	color: white;
+
+	font-weight: 750;
 }
 
-#lbSubtitulo, #lbSiglaCbx, #lbFonte {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 12px;
-	
-	background-color: transparent;
+#lbSigla {
+	font: 24pt &quot;Avenir LT Std&quot;;
+	color: #6F757B;
 }
 
- #lbDesc {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 14px;
-	
+#lbSubtitulo, #lbSiglaCbx, 
+#lbFonte, #lbDescricao {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #6F757B;
+
+	background-color: white;
+}
+
+ #lbDesc {	
+	font: 14pt &quot;Avenir LT Std&quot;;
 	background-color: transparent;
 }
 
 #lbResumo {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font: bold 14px;
+	font: 12pt &quot;Avenir LT Std&quot;;
+	font-weight: 750;
 	
-	background-color: transparent;
+	background-color: white;
 }
 
 /* ----------------------------------------------- ScrollArea ----------------------------------------------- */
-
-#scaIndicadores {
+#scaIndicadores, #scaDescricao, 
+#scrollAreaWidgetContents {
 	background-color: white;
+}
+
+/* ----------------------------------------------- Line Edit ----------------------------------------------- */
+#leBusca {
+	border: 0px solid gray;
+    border-radius: 0px;
+    padding: 0 8px;
+    background: rgb(244, 244, 244);
+    selection-background-color: darkgray;
 }
 
 /* --------------------------------------------- Push Button --------------------------------------------- */
 
 #pbEnviar {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 12px;
+	font: 12pt &quot;Avenir LT Std&quot;;
 	color: white;
 
-	border-radius: 4px;
-/*	background-color: rgb(52, 73, 94);*/
-	background-color: rgb(92, 53, 102);
+	border-radius: 8px;
+	padding: 10px;
+	background-color: #3F4E8C;
 }
 
-#pbEnviar:hover {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 12px;
-	color: white;
+#pbFiltro {
+	background-image: url(:/filtro/filtros.png);
+	background-position: center;
+	background-repeat: no-repeat;
 
-	border-radius: 4px;
-	background-color: rgb(72, 93, 114);
+	background-color: rgb(239, 239, 239);
+	border-radius: 8px;
+}
+
+#pbBusca {
+	background-image: url(:/filtro/busca.png);
+	background-position: center;
+	background-repeat: no-repeat;
+
+	background-color: rgb(244, 244, 244);
+	border-radius: 8px;
 }</string>
   </property>
   <widget class="QWidget" name="wdgMain">
@@ -89,8 +123,23 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="verticalSpacing">
+        <number>14</number>
+       </property>
+       <item row="0" column="0">
         <widget class="QFrame" name="frCabecalho">
          <property name="minimumSize">
           <size>
@@ -110,35 +159,18 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <widget class="QLabel" name="lbTitulo">
-          <property name="geometry">
-           <rect>
-            <x>20</x>
-            <y>10</y>
-            <width>371</width>
-            <height>31</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Informações dos indicadores</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="lbSubtitulo">
-          <property name="geometry">
-           <rect>
-            <x>20</x>
-            <y>40</y>
-            <width>431</width>
-            <height>17</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Encontre todas as informações dos indicadores do CNIS</string>
-          </property>
-         </widget>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0" alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="lbTitulo">
+            <property name="text">
+             <string>Informações dos indicadores</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
-       <item>
+       <item row="1" column="0">
         <widget class="QFrame" name="frConteudo">
          <property name="enabled">
           <bool>true</bool>
@@ -149,8 +181,82 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <property name="spacing">
+           <number>12</number>
+          </property>
+          <item row="0" column="0" colspan="2">
+           <widget class="QFrame" name="frBusca">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="sizeIncrement">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>4</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLineEdit" name="leBusca">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="maxLength">
+                <number>15</number>
+               </property>
+               <property name="placeholderText">
+                <string>Digite a sigla de algum indicador</string>
+               </property>
+               <property name="clearButtonEnabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pbBusca">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="0">
            <widget class="QFrame" name="frame">
             <property name="maximumSize">
              <size>
@@ -181,13 +287,6 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QLabel" name="lbSiglaCbx">
-               <property name="text">
-                <string>Escolha o(s) indicador(es)</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QScrollArea" name="scrollArea">
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
@@ -203,8 +302,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>242</width>
-                  <height>464</height>
+                  <width>215</width>
+                  <height>438</height>
                  </rect>
                 </property>
                </widget>
@@ -213,7 +312,7 @@
             </layout>
            </widget>
           </item>
-          <item>
+          <item row="1" column="3">
            <widget class="QFrame" name="frame_2">
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
@@ -300,7 +399,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QScrollArea" name="scrollArea_2">
+                    <widget class="QScrollArea" name="scaDescricao">
                      <property name="frameShape">
                       <enum>QFrame::NoFrame</enum>
                      </property>
@@ -321,8 +420,8 @@
                        <rect>
                         <x>0</x>
                         <y>0</y>
-                        <width>460</width>
-                        <height>347</height>
+                        <width>462</width>
+                        <height>309</height>
                        </rect>
                       </property>
                       <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -383,20 +482,79 @@
                   </layout>
                  </widget>
                 </item>
-                <item alignment="Qt::AlignRight">
-                 <widget class="QPushButton" name="pbEnviar">
-                  <property name="minimumSize">
-                   <size>
-                    <width>110</width>
-                    <height>24</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Fechar / Enviar</string>
-                  </property>
-                 </widget>
-                </item>
                </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QFrame" name="frame_5">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="pbFiltro">
+               <property name="minimumSize">
+                <size>
+                 <width>40</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>355</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pbEnviar">
+               <property name="minimumSize">
+                <size>
+                 <width>110</width>
+                 <height>24</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Fechar / Enviar</string>
+               </property>
               </widget>
              </item>
             </layout>
@@ -411,6 +569,8 @@
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../Resources/pgInfoIndicadores.qrc"/>
+ </resources>
  <connections/>
 </ui>

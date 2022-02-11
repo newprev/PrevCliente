@@ -3,9 +3,9 @@ import datetime
 
 from typing import List
 
-from PyQt5.QtCore import QObject, QEvent, Qt
-from PyQt5.QtGui import QFont, QKeyEvent, QCursor
-from PyQt5.QtWidgets import QFrame, QTableWidgetItem, QPushButton
+from PyQt5.QtCore import QObject, QEvent, Qt, QSize
+from PyQt5.QtGui import QFont, QKeyEvent, QCursor, QIcon
+from PyQt5.QtWidgets import QFrame, QTableWidgetItem, QPushButton, QHeaderView
 
 from Design.pyUi.newListaClientes import Ui_wdgListaClientes
 from Design.CustomWidgets.newPopupCNIS import NewPopupCNIS
@@ -29,6 +29,7 @@ from modelos.clienteProfissao import ClienteProfissao
 
 from sinaisCustomizados import Sinais
 from util.dateHelper import strToDate, atividadesConcorrentes, atividadeSecundaria
+from util.enums.dashboardEnums import TelaAtual
 
 from util.helpers import mascaraTelCel, unmaskAll, calculaIdadeFromString
 from util.popUps import popUpOkAlerta, popUpSimCancela
@@ -56,10 +57,10 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.sinais.sEnviaInfoCliente.connect(self.enviaInfoClienteDashboard)
         self.efeitos = Efeitos()
 
-        self.toast = QToaster(parent=self)
+        self.toast = None
 
         self.tblClientes.hideColumn(0)
-        self.tblClientes.hideColumn(7)
+        self.tblClientes.hideColumn(8)
         self.installEventFilter(self)
         self.frInfoCliEncontrados.hide()
 
@@ -90,19 +91,18 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             parent=self,
             funcEditar=lambda: self.editarCliente(clienteId),
             funcArquivar=lambda: self.avaliaArquivarCliente(clienteId, linhaSelecionada),
+            funcEntrevista=lambda: self.confirmaInicioEntrevista(clienteId),
         )
         menu.exec_(QCursor.pos())
 
     def atualizaTblClientes(self, arquivados: bool = False):
         if arquivados:
-            clientesModels: list = Cliente.select().order_by(
-                Cliente.arquivado,
-                Cliente.nomeCliente
-            )
+            clientesModels: list = Cliente.select().order_by(Cliente.nomeCliente)
         else:
             clientesModels: list = Cliente.select().where(Cliente.arquivado==False).order_by(Cliente.nomeCliente)
 
         self.tblClientes.setRowCount(0)
+        self.tblClientes.setIconSize(QSize(8, 8))
 
         for numLinha, cliente in enumerate(clientesModels):
             self.tblClientes.insertRow(numLinha)
@@ -119,53 +119,62 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             cdClienteItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 0, cdClienteItem)
 
-            # 1 - Nome completo do cliente <Aparente>
+            # 1 - icone arquivado <Aparente>
+            if cliente.arquivado:
+                iconItem = QTableWidgetItem()
+                icone = QIcon(":/status/pink-circle.png")
+                iconItem.setIcon(icone)
+                iconItem.setTextAlignment(Qt.AlignRight)
+                self.tblClientes.setItem(numLinha, 1, iconItem)
+            else:
+                iconItem = QTableWidgetItem()
+                icone = QIcon(":/status/green-circle.png")
+                iconItem.setIcon(icone)
+                iconItem.setTextAlignment(Qt.AlignRight)
+                self.tblClientes.setItem(numLinha, 1, iconItem)
+
+            # 2 - Nome completo do cliente <Aparente>
             nomeCompletoItem = QTableWidgetItem(f"{cliente.nomeCliente} {cliente.sobrenomeCliente}")
             nomeCompletoItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-            self.tblClientes.setItem(numLinha, 1, nomeCompletoItem)
+            self.tblClientes.setItem(numLinha, 2, nomeCompletoItem)
 
-            # 2 - E-mail do cliente <Aparente>
+            # 3 - E-mail do cliente <Aparente>
             if cliente.email is None:
                 emailItem = QTableWidgetItem('')
             else:
                 emailItem = QTableWidgetItem(f"{cliente.email}")
             emailItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-            self.tblClientes.setItem(numLinha, 2, emailItem)
+            self.tblClientes.setItem(numLinha, 3, emailItem)
 
-            # 3 - Contato do cliente <Aparente>
+            # 4 - Contato do cliente <Aparente>
             telefoneItem = QTableWidgetItem(f"{mascaraTelCel(telefone.numero)}")
             telefoneItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-            self.tblClientes.setItem(numLinha, 3, telefoneItem)
+            self.tblClientes.setItem(numLinha, 4, telefoneItem)
 
-            # 4 - Cidade de nascimento do cliente <Aparente>
+            # 5 - Cidade de nascimento do cliente <Aparente>
             if cliente.cidade is None:
                 cidadeItem = QTableWidgetItem('')
             else:
                 cidadeItem = QTableWidgetItem(f"{cliente.cidade}")
             cidadeItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-            self.tblClientes.setItem(numLinha, 4, cidadeItem)
+            self.tblClientes.setItem(numLinha, 5, cidadeItem)
 
-            # 5 - Documentos <Aparente>
+            # 6 - Documentos <Aparente>
             docs = QTableWidgetItem('')
-            self.tblClientes.setItem(numLinha, 5, docs)
+            self.tblClientes.setItem(numLinha, 6, docs)
 
-            # 6 - Botão de edição <Aparente>
+            # 7 - Botão de edição <Aparente>
             pbOpcoes = QPushButton()
             pbOpcoes.clicked.connect(self.abreMenuOpcoes)
             pbOpcoes.setStyleSheet(btnOpcoesStyle())
             pbOpcoes.setMaximumSize(24, 24)
-            self.tblClientes.setCellWidget(numLinha, 6, pbOpcoes)
+            self.tblClientes.setCellWidget(numLinha, 7, pbOpcoes)
 
-            # 7 - Arquivado <Escondido>
+            # 8 - Arquivado <Escondido>
             arquivado = QTableWidgetItem()
             arquivado.setFlags(Qt.ItemFlag.ItemIsUserCheckable)
             arquivado.setCheckState(cliente.arquivado)
-            self.tblClientes.setItem(numLinha, 7, arquivado)
-
-            if cliente.arquivado:
-                for numColuna in range(self.tblClientes.columnCount()):
-                    if self.tblClientes.item(numLinha, numColuna) is not None:
-                        self.tblClientes.item(numLinha, numColuna).setBackground(NewColorsWhite.white200Qt.value)
+            self.tblClientes.setItem(numLinha, 8, arquivado)
 
         self.tblClientes.resizeColumnsToContents()
         self.pbNovoCliente.setFocus()
@@ -366,6 +375,16 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
         self.sinais.sEnviaClienteParam.emit(clienteAtual)
 
+    def confirmaInicioEntrevista(self, clienteId: int):
+        clienteEscolhido: Cliente = Cliente.get_by_id(clienteId)
+
+        popUpSimCancela(
+            f"Deseja iniciar uma entrevista com o(a) cliente:\n\n{clienteEscolhido.nomeCliente} {clienteEscolhido.sobrenomeCliente}?",
+            titulo="Iniciar entrevista",
+            funcao=lambda: self.dashboard.trocaTela(TelaAtual.Entrevista, clienteEscolhido)
+        )
+        return True
+
     def editarCliente(self, clienteId: int):
         try:
             clienteSelecionado: Cliente = Cliente.get_by_id(clienteId)
@@ -411,6 +430,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         return False
 
     def toastCarregaCnis(self):
+        self.toast = QToaster(None)
         self.toast.showMessage(self, "Analisando informações do CNIS...", corner=Qt.BottomLeftCorner)
 
     def verificaCadastradoCliente(self, cpf: str) -> Status:

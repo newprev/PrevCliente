@@ -1,0 +1,18 @@
+<RCC>
+  <qresource prefix="config">
+    <file>settings.png</file>
+  </qresource>
+  <qresource prefix="Ferramentas">
+    <file>blueResumoCNIS.png</file>
+    <file>blueCalculadora.png</file>
+  </qresource>
+  <qresource prefix="Consultas">
+    <file>blueResumoCNIS.png</file>
+    <file>blueIndices.png</file>
+  </qresource>
+  <qresource prefix="Escritorio">
+    <file>blueProcessos.png</file>
+    <file>blueInterview.png</file>
+    <file>blueCliente.png</file>
+  </qresource>
+</RCC>

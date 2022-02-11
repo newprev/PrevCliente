@@ -3,8 +3,8 @@ import os
 import time
 from typing import List
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QCursor
+from PyQt5.QtCore import Qt, QObject, QEvent
+from PyQt5.QtGui import QCursor, QKeyEvent
 from dateutil.relativedelta import relativedelta
 
 from PyQt5.QtWidgets import QWidget
@@ -45,15 +45,23 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         self.sinais = Sinais()
         self.sinais.sVoltaTela.connect(self.voltarDashboard)
         self.sinais.sEnviaInfo.connect(self.editarInfoCliente)
-        self.toasty = QToaster()
+        self.sinais.sIniciaEntrevista.connect(self.iniciarEntrevista)
+        self.sinais.sAbreResumoCnis.connect(self.abreResumo)
+        self.toasty = None
         self.popupCNIS = None
         self.limpaTudo()
 
         self.rbMasculino.setDisabled(True)
         self.rbFeminino.setDisabled(True)
+        self.installEventFilter(self)
 
         self.pbVoltar.clicked.connect(lambda: self.sinais.sVoltaTela.emit())
+        self.pbEntrevista.clicked.connect(self.confirmaIniciaEntrevista)
+        self.pbResumo.clicked.connect(self.enviaSinalResumoCnis)
         self.iniciarBotoesOpcoes()
+
+    def abreResumo(self):
+        self.dashboard.trocaTela(TelaAtual.Resumo, self.clienteAtual)
 
     def abreMenuInfoOpcoes(self, info: str):
 
@@ -78,7 +86,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
             self.popupCNIS.close()
             self.popupCNIS.setParent(None)
 
-        self.popupCNIS = NewPopupCNIS(parent=self, dashboard=self.dashboard)
+        self.popupCNIS = NewPopupCNIS(parent=self, dashboard=self.dashboard, esconderBotao=True)
         Efeitos().shadowCards([self.popupCNIS])
         self.popupCNIS.raise_()
         self.popupCNIS.show()
@@ -216,7 +224,16 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
                 self.lbInfoMetaArquivo.hide()
 
         else:
+            self.toasty = QToaster()
             self.toasty.showMessage(self, "Não foi possível carregar as informações do cliente.")
+
+    def confirmaIniciaEntrevista(self):
+        popUpSimCancela(
+            f"Você deseja iniciar uma nova entrevista com o(a) cliente: \n\n{self.clienteAtual.nomeCliente} {self.clienteAtual.sobrenomeCliente}?",
+            titulo="Iniciar entrevista",
+            funcao=self.sinais.sIniciaEntrevista.emit,
+        )
+        return True
 
     def buscaDadosProfissionais(self):
         try:
@@ -235,6 +252,19 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
     def editarInfoCliente(self, info):
         self.dashboard.recebeCliente(self.clienteAtual, info=info)
         return True
+
+    def enviaSinalResumoCnis(self):
+        self.sinais.sAbreResumoCnis.emit()
+
+    def eventFilter(self, a0: QObject, tecla: QEvent) -> bool:
+        if isinstance(tecla, QKeyEvent) and self.popupCNIS is not None:
+            if self.popupCNIS.isVisible():
+                self.popupCNIS.close()
+
+        return super(NewInfoCliente, self).eventFilter(a0, tecla)
+
+    def iniciarEntrevista(self):
+        self.dashboard.trocaTela(TelaAtual.Entrevista, self.clienteAtual)
 
     def iniciarBotoesOpcoes(self):
         # Informações pessoais

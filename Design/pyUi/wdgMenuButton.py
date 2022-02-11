@@ -14,52 +14,59 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgMenuButton(object):
     def setupUi(self, wdgMenuButton):
         wdgMenuButton.setObjectName("wdgMenuButton")
-        wdgMenuButton.resize(265, 70)
+        wdgMenuButton.resize(265, 116)
         wdgMenuButton.setStyleSheet("/*------------------------------------ Frame ------------------------------------*/\n"
+"#frPrincipal {\n"
+"    background-color: white;\n"
+"    border: 0px solid none;\n"
+"    border-radius: 6px;\n"
 "\n"
+"    padding: 4px;\n"
+"}\n"
 "\n"
 "/*------------------------------------ Push Button ------------------------------------*/\n"
 "#pbFuncionalidade {\n"
-"    background-color: #DDDEDF;\n"
+"    background-color: white;\n"
 "    border-radius: 15px;\n"
 "\n"
-"    background-image: url(:/funcionalidade/processos.png);\n"
 "    background-repeat: no-repeat;\n"
 "    background-position: center;\n"
 "}\n"
 "\n"
 "#pbFuncionalidade:hover {\n"
-"    background-color: #F2F2F2;\n"
+"    background-color: white;\n"
 "    border-radius: 15px;\n"
 "\n"
-"    background-image: url(:/funcionalidade/processos.png);\n"
 "    background-repeat: no-repeat;\n"
 "    background-position: center;\n"
 "}\n"
 "\n"
 "/*------------------------------------ Label ------------------------------------*/\n"
 "#lbNomeFuncionalidade {\n"
-"    \n"
-"    font: 10pt \"Avenir LT Std\";\n"
+"    font: 9pt \"Avenir LT Std\";\n"
+"    color: #3A405A;\n"
 "}")
         self.horizontalLayout = QtWidgets.QHBoxLayout(wdgMenuButton)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.frPrincipal = QtWidgets.QFrame(wdgMenuButton)
-        self.frPrincipal.setMinimumSize(QtCore.QSize(60, 60))
-        self.frPrincipal.setMaximumSize(QtCore.QSize(80, 60))
+        self.frPrincipal.setMinimumSize(QtCore.QSize(70, 75))
+        self.frPrincipal.setMaximumSize(QtCore.QSize(70, 75))
         self.frPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frPrincipal.setObjectName("frPrincipal")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frPrincipal)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_2.setSpacing(2)
+        self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.pbFuncionalidade = QtWidgets.QPushButton(self.frPrincipal)
         self.pbFuncionalidade.setMinimumSize(QtCore.QSize(30, 30))
         self.pbFuncionalidade.setMaximumSize(QtCore.QSize(30, 30))
         self.pbFuncionalidade.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/funcionalidade/blueProcessos.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbFuncionalidade.setIcon(icon)
         self.pbFuncionalidade.setObjectName("pbFuncionalidade")
         self.verticalLayout_2.addWidget(self.pbFuncionalidade, 0, QtCore.Qt.AlignHCenter)
         self.lbNomeFuncionalidade = QtWidgets.QLabel(self.frPrincipal)

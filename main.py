@@ -1,5 +1,10 @@
+import os.path
 from math import ceil
+from typing import List
+
 from aiohttp import ClientConnectorError
+import asyncio as aio
+from peewee import SqliteDatabase
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow
@@ -29,12 +34,16 @@ from modelos.itemContribuicao import ItemContribuicao
 from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.aposentadoriaORM import Aposentadoria
 from modelos.ipcaMensalORM import IpcaMensal
+from modelos.tipoBeneficioORM import TipoBeneficioModel
 from modelos.tiposESubtipos.tipoAposentadoriaORM import TipoAposentadoria
-
+from repositorios.informacoesRepositorio import ApiInformacoes
+from util.enums.databaseEnums import DatabaseEnum
+from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 from util.enums.newPrevEnums import TiposConexoes
 from util.popUps import popUpOkAlerta
 
 from cache.cachingLogin import CacheLogin
+from crypt.newRsa import Crypt
 
 
 class Main(Ui_MainWindow, QMainWindow):
@@ -57,6 +66,17 @@ class Main(Ui_MainWindow, QMainWindow):
         self.timer.timeout.connect(self.progresso)
         self.timer.start(35)
 
+    async def carregaTabelasIniciais(self):
+        if TipoBeneficioModel.select().count() == 0:
+            asyncTasks = []
+            asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.tipoBeneficio)))
+
+            apiInfo: List[dict] = await aio.gather(*asyncTasks)
+            tiposBeneficio = apiInfo[0]
+            TipoBeneficioModel.insert_many(tiposBeneficio).execute()
+
+        return True
+
     def progresso(self, add=None):
         if add is None:
             self.contador += 1
@@ -65,53 +85,85 @@ class Main(Ui_MainWindow, QMainWindow):
 
         self.pbarSplash.setValue(self.contador)
 
-        if self.contador == 10:
-            self.timer.stop()
-            self.iniciaBancosETelas()
+        if 10 <= self.contador < 70:
+            if self.contador == 10:
+                self.timer.stop()
+                self.iniciaBancosETelas()
+                self.verificaBackups()
+            return True
 
-        if self.contador == 100:
+        elif 70 <= self.contador < 90:
+            self.lbInfo.setText('GERANDO CHAVES DE CRIPTOGRAFIA...')
+            if self.precisaGerarChaves():
+                Crypt().gerarChaves()
+
+            self.progresso(add=90 - self.contador)
+            return True
+
+        elif self.contador == 90:
             self.lbInfo.setText('INICIANDO SUBMERSAO...')
+            self.avaliaAbrirTelaLogin()
+            return True
+
+    def verificaBackups(self):
+        qtdTipos = TipoAposentadoria.select().count()
+        database = SqliteDatabase(DatabaseEnum.producao.value)
+        if qtdTipos == 0:
+            tipoAposPath = os.path.join(os.getcwd(), 'Daos', 'backup', 'cTipoAposentadoria.sql')
+            sqlScript: str = buscaSql(tipoAposPath)
+            database.execute_sql(sqlScript)
+
+        return True
 
     def iniciaBancosETelas(self):
+        try:
+            loop = aio.get_event_loop()
 
-        listaTabelas = {
-            Escritorios: 'CRIANDO TABELA DOS ESCRITORIOS...',
-            Advogados: 'CRIANDO TABELA DOS ADVOGADOS...',
-            Cliente: 'CRIANDO TABELA DO CLIENTE...',
-            CnisCabecalhos: 'CRIANDO TABELA DE CABEÇALHOS...',
-            ConvMon: 'CRIANDO TABELA DE CONVERSÕES MONETÁRIAS...',
-            EspecieBenef: 'CRIANDO TABELA DE ESPÉCIES DE BENEFÍCIOS...',
-            ExpSobrevida: 'CRIANDO TABELA DAS EXPECTATIVAS DE SOBREVIDA...',
-            Indicadores: 'CRIANDO TABELA DE INDICADORES...',
-            IndiceAtuMonetaria: 'CRIANDO TABELA DOS ÍNDICES DE ATUALIZAÇÃO MONETARIA...',
-            Ppp: 'CRIANDO TABELA DOS PPP...',
-            Processos: 'CRIANDO TABELA DOS PROCESSOS...',
-            Telefones: 'CRIANDO TABELA DE TELEFONES...',
-            TetosPrev: 'CRIANDO TABELA DE TETOS PREVIDENCIÁRIOS...',
-            CarenciaLei91: 'CRIANDO TABELA DE CARÊNCIAS LEI 8.213/91...',
-            ConfigGerais: 'CRIANDO TABELA DE CONFIGURAÇÕES GERAIS...',
-            ItemContribuicao: 'CRIANDO TABELA DE ITENS DE CONTRIBUIÇÃO...',
-            SalarioMinimo: 'CRIANDO TABELA DE SALÁRIOS MÍNIMOS...',
-            Aposentadoria: 'CRIANDO TABELA DE APOSENTADORIAS...',
-            IpcaMensal: 'CRIANDO TABELA DE IPCA MENSAL...',
-            TipoAposentadoria: 'CRIANDO TABELA DE TIPOS DE APOSENTADORIAS...',
-            ClienteInfoBanco: 'CRIANDO TABLEA DE INFORMAÇÕES BANCÁRIAS',
-            ClienteProfissao: 'CRIANDO TABLEA DE INFORMAÇÕES PROFISSIONAIS',
-        }
+            listaTabelas = {
+                Escritorios: 'CRIANDO TABELA DOS ESCRITORIOS...',
+                Advogados: 'CRIANDO TABELA DOS ADVOGADOS...',
+                Cliente: 'CRIANDO TABELA DO CLIENTE...',
+                CnisCabecalhos: 'CRIANDO TABELA DE CABEÇALHOS...',
+                ConvMon: 'CRIANDO TABELA DE CONVERSÕES MONETÁRIAS...',
+                EspecieBenef: 'CRIANDO TABELA DE ESPÉCIES DE BENEFÍCIOS...',
+                ExpSobrevida: 'CRIANDO TABELA DAS EXPECTATIVAS DE SOBREVIDA...',
+                Indicadores: 'CRIANDO TABELA DE INDICADORES...',
+                IndiceAtuMonetaria: 'CRIANDO TABELA DOS ÍNDICES DE ATUALIZAÇÃO MONETARIA...',
+                Ppp: 'CRIANDO TABELA DOS PPP...',
+                Processos: 'CRIANDO TABELA DOS PROCESSOS...',
+                Telefones: 'CRIANDO TABELA DE TELEFONES...',
+                TetosPrev: 'CRIANDO TABELA DE TETOS PREVIDENCIÁRIOS...',
+                CarenciaLei91: 'CRIANDO TABELA DE CARÊNCIAS LEI 8.213/91...',
+                ConfigGerais: 'CRIANDO TABELA DE CONFIGURAÇÕES GERAIS...',
+                ItemContribuicao: 'CRIANDO TABELA DE ITENS DE CONTRIBUIÇÃO...',
+                SalarioMinimo: 'CRIANDO TABELA DE SALÁRIOS MÍNIMOS...',
+                Aposentadoria: 'CRIANDO TABELA DE APOSENTADORIAS...',
+                IpcaMensal: 'CRIANDO TABELA DE IPCA MENSAL...',
+                TipoAposentadoria: 'CRIANDO TABELA DE TIPOS DE APOSENTADORIAS...',
+                ClienteInfoBanco: 'CRIANDO TABLEA DE INFORMAÇÕES BANCÁRIAS',
+                ClienteProfissao: 'CRIANDO TABLEA DE INFORMAÇÕES PROFISSIONAIS',
+                TipoBeneficioModel: 'CRIANDO TABLEA DE TIPOS DE BENEFÍCIOS',
+            }
 
-        # percentLoading = ceil(100 / len(listaLoading))
-        percentLoading = ceil(100 / len(listaTabelas))
+            percentLoading = ceil(60 / len(listaTabelas))
 
-        for instancia, label in listaTabelas.items():
-            self.lbInfo.setText(label)
-            instancia.create_table()
+            for instancia, label in listaTabelas.items():
+                self.lbInfo.setText(label)
+                instancia.create_table()
+                self.progresso(add=percentLoading)
+
+            self.lbInfo.setText('CRIANDO TELA DE LOGIN...')
             self.progresso(add=percentLoading)
 
-        self.lbInfo.setText('CRIANDO TELA DE LOGIN...')
-        self.progresso(add=percentLoading)
-
-        # self.iniciaNewPrev()
-        self.avaliaAbrirTelaLogin()
+            loop.run_until_complete(self.carregaTabelasIniciais())
+        except ClientConnectorError as err:
+            popUpOkAlerta(
+                "O NewPrev não conseguiu se conectar com o servidor. Entre em contato com o suporte.",
+                "Sem conexão!",
+                erro=err.strerror,
+                funcao=self.close(),
+            )
+            print(f"{err=}")
 
     def avaliaAbrirTelaLogin(self):
         advogado = CacheLogin().carregarCache()
@@ -144,6 +196,18 @@ class Main(Ui_MainWindow, QMainWindow):
         self.loginPage.show()
         self.close()
 
+    def precisaGerarChaves(self):
+        chavePrivada = os.path.join(os.getcwd(), os.pardir, 'PrevCliente', 'crypt', '.privateKey.txt')
+        chavePrivada = os.path.normpath(chavePrivada)
+
+        chavePublica = os.path.join(os.getcwd(), os.pardir, 'PrevCliente', 'crypt', 'publicKey.txt')
+        chavePublica = os.path.normpath(chavePublica)
+
+        existChavePublica = os.path.exists(chavePublica) and os.path.isfile(chavePublica)
+        existChavePrivada = os.path.exists(chavePrivada) and os.path.isfile(chavePrivada)
+
+        return not (existChavePublica and existChavePrivada)
+
     def center(self):
         frameGm = self.frameGeometry()
         screen = QtWidgets.QApplication.desktop().screenNumber(QtWidgets.QApplication.desktop().cursor().pos())
@@ -155,7 +219,7 @@ class Main(Ui_MainWindow, QMainWindow):
 if __name__ == '__main__':
     import sys
     from os.path import join
-    from util.helpers import pathTo
+    from util.helpers import pathTo, buscaSql
     from util.enums.configEnums import ImportantPaths
 
     PATH_FONTS = pathTo(ImportantPaths.fonts)

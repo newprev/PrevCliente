@@ -15,14 +15,14 @@ class Advogados(BaseModel, Model):
     admin = BooleanField(default=False)
     ativo = BooleanField(default=False)
     confirmado = BooleanField(default=False)
-    email = CharField()
+    email = CharField(max_length=50)
     estadoCivil = CharField(column_name='estadoCivil')
     login = CharField()
     nacionalidade = CharField()
-    nomeUsuario = CharField(column_name='nomeUsuario')
+    nomeAdvogado = CharField(column_name='nomeAdvogado')
     numeroOAB = CharField(column_name='numeroOAB')
     senha = CharField(null=False)
-    sobrenomeUsuario = CharField(column_name='sobrenomeUsuario', null=False)
+    sobrenomeAdvogado = CharField(column_name='sobrenomeAdvogado', null=False)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
@@ -38,11 +38,11 @@ class Advogados(BaseModel, Model):
         dictUsuario = {
             'advogadoId': self.advogadoId,
             'escritorioId': self.escritorioId.escritorioId,
-            'nomeUsuario': self.nomeUsuario,
+            'nomeAdvogado': self.nomeAdvogado,
             'login': self.login,
             'senha': self.senha,
             'email': email,
-            'sobrenomeUsuario': self.sobrenomeUsuario,
+            'sobrenomeAdvogado': self.sobrenomeAdvogado,
             'nacionalidade': self.nacionalidade,
             'estadoCivil': self.estadoCivil,
             'numeroOAB': self.numeroOAB,
@@ -76,11 +76,11 @@ class Advogados(BaseModel, Model):
             escritorio = dictUsuario['escritorioId']
 
         self.escritorioId = escritorio
-        self.nomeUsuario = dictUsuario['nomeUsuario']
+        self.nomeAdvogado = dictUsuario['nomeAdvogado']
         self.login = dictUsuario['login']
         # self.telefone = dictUsuario['telefone'],
         self.email = dictUsuario['email'],
-        self.sobrenomeUsuario = dictUsuario['sobrenomeUsuario']
+        self.sobrenomeAdvogado = dictUsuario['sobrenomeAdvogado']
         self.nacionalidade = dictUsuario['nacionalidade']
         self.numeroOAB = dictUsuario['numeroOAB']
         self.estadoCivil = dictUsuario['estadoCivil']
@@ -102,7 +102,7 @@ class Advogados(BaseModel, Model):
         return senhaAuth and loginAuth
 
     def __bool__(self):
-        return self.login is not None and self.nomeUsuario is not None
+        return self.advogadoId is not None and self.nomeAdvogado is not None
 
     def prettyPrint(self, backRef: bool = False):
 
@@ -115,10 +115,10 @@ class Advogados(BaseModel, Model):
         Usuario(
             escritorioId: {self.escritorioId},
             advogadoId: {self.advogadoId},
-            nomeUsuario: {self.nomeUsuario},
+            nomeAdvogado: {self.nomeAdvogado},
             login: {self.login},
             senha: {self.senha},
-            sobrenomeUsuario: {self.sobrenomeUsuario},
+            sobrenomeAdvogado: {self.sobrenomeAdvogado},
             nacionalidade: {self.nacionalidade},
             email: {self.email},
             numeroOAB: {self.numeroOAB},

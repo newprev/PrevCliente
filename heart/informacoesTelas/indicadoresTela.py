@@ -27,6 +27,7 @@ class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
 
         self.lbSigla.setText('')
         self.lbDescricao.setText('')
+        self.lbFonte.setText('')
 
         self.pbEnviar.clicked.connect(lambda: self.close())
 

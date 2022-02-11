@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>1254</width>
-    <height>480</height>
+    <height>508</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -23,7 +29,7 @@
     <number>0</number>
    </property>
    <property name="topMargin">
-    <number>0</number>
+    <number>8</number>
    </property>
    <property name="rightMargin">
     <number>0</number>
@@ -36,6 +42,12 @@
    </property>
    <item row="0" column="0">
     <widget class="QFrame" name="frPrincipal">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -50,12 +62,15 @@
        <number>24</number>
       </property>
       <property name="topMargin">
-       <number>12</number>
+       <number>0</number>
       </property>
       <property name="rightMargin">
        <number>24</number>
       </property>
-      <item>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item alignment="Qt::AlignTop">
        <widget class="QFrame" name="frCabecalhoLista">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -109,6 +124,18 @@
 	padding: 8px;
 }
 
+#pbCalculadora {
+	background-color: white;
+	border-radius: 8px;
+	border: 2px solid #3F4E8C;
+
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	font-weight: 750;
+	
+	padding: 8px;
+}
+
 #pbFiltro {
 	background-image: url(:/cabecalho/filtros.png);
 	background-position: center;
@@ -147,8 +174,8 @@
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
-         <property name="spacing">
-          <number>8</number>
+         <property name="topMargin">
+          <number>9</number>
          </property>
          <item>
           <widget class="QFrame" name="frame_2">
@@ -184,7 +211,7 @@
            </layout>
           </widget>
          </item>
-         <item alignment="Qt::AlignTop">
+         <item>
           <widget class="QFrame" name="frAreaBusca">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -391,30 +418,246 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>614</width>
+             <width>500</width>
              <height>20</height>
             </size>
            </property>
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pbNovoCliente">
-           <property name="minimumSize">
-            <size>
-             <width>165</width>
-             <height>40</height>
-            </size>
+          <widget class="QFrame" name="frame_5">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
            </property>
-           <property name="text">
-            <string>Novo cliente</string>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
            </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <property name="spacing">
+             <number>16</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="pbCalculadora">
+              <property name="minimumSize">
+               <size>
+                <width>165</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Calculadora rápida</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pbNovoCliente">
+              <property name="minimumSize">
+               <size>
+                <width>165</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Novo cliente</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
        </widget>
       </item>
-      <item>
+      <item alignment="Qt::AlignTop">
+       <widget class="QFrame" name="frMiddle">
+        <property name="styleSheet">
+         <string notr="true">/*----------------------------------- Frame ---------------------------------------*/
+#frColorArquivado {
+	background-color: #FF345E;
+	border-radius: 4px;
+	border: 0px solid none;
+}
+
+#frColorAtivo {
+	background-color: #23E386;
+	border-radius: 4px;
+	border: 0px solid none;
+}
+
+/*----------------------------------- Label ---------------------------------------*/
+#lbAtivos, #lbArquivados {
+	font: 10pt &quot;Avenir LT Std&quot;;
+	color: black;
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QFrame" name="frame_3">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item alignment="Qt::AlignVCenter">
+             <widget class="QFrame" name="frColorAtivo">
+              <property name="minimumSize">
+               <size>
+                <width>8</width>
+                <height>8</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>8</width>
+                <height>8</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignVCenter">
+             <widget class="QLabel" name="lbAtivos">
+              <property name="text">
+               <string>Ativos</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="frame_4">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item alignment="Qt::AlignVCenter">
+             <widget class="QFrame" name="frColorArquivado">
+              <property name="minimumSize">
+               <size>
+                <width>8</width>
+                <height>8</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>8</width>
+                <height>8</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lbArquivados">
+              <property name="text">
+               <string>Arquivados</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>170</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item alignment="Qt::AlignTop">
        <widget class="QFrame" name="frTabela">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="styleSheet">
          <string notr="true">/*------------------------------------------- Table Widget -------------------------------------------*/
 #tblClientes {
@@ -461,7 +704,7 @@ QHeaderView::section {
           <number>36</number>
          </property>
          <property name="topMargin">
-          <number>24</number>
+          <number>0</number>
          </property>
          <property name="rightMargin">
           <number>0</number>
@@ -469,8 +712,14 @@ QHeaderView::section {
          <property name="bottomMargin">
           <number>0</number>
          </property>
-         <item>
+         <item alignment="Qt::AlignTop">
           <widget class="QTableWidget" name="tblClientes">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
            </property>
@@ -529,10 +778,19 @@ QHeaderView::section {
             <property name="text">
              <string>Teste</string>
             </property>
+            <property name="icon">
+             <iconset resource="../../Resources/newListaClientes.qrc">
+              <normaloff>:/status/green-circle.png</normaloff>:/status/green-circle.png</iconset>
+            </property>
            </row>
            <column>
             <property name="text">
              <string>clienteId</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string/>
             </property>
            </column>
            <column>
@@ -543,6 +801,8 @@ QHeaderView::section {
              <font>
               <family>Avenir LT Std</family>
               <pointsize>12</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="textAlignment">
@@ -573,6 +833,8 @@ QHeaderView::section {
              <font>
               <family>Avenir LT Std</family>
               <pointsize>12</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="textAlignment">
@@ -603,6 +865,8 @@ QHeaderView::section {
              <font>
               <family>Avenir LT Std</family>
               <pointsize>12</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="textAlignment">
@@ -633,6 +897,8 @@ QHeaderView::section {
              <font>
               <family>Avenir LT Std</family>
               <pointsize>12</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="textAlignment">
@@ -663,6 +929,8 @@ QHeaderView::section {
              <font>
               <family>Avenir LT Std</family>
               <pointsize>12</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="textAlignment">
@@ -707,32 +975,32 @@ QHeaderView::section {
              <string>1</string>
             </property>
            </item>
-           <item row="0" column="1">
+           <item row="0" column="2">
             <property name="text">
              <string>Israel</string>
             </property>
            </item>
-           <item row="0" column="2">
+           <item row="0" column="3">
             <property name="text">
              <string>israel.gomes@gmail.com</string>
             </property>
            </item>
-           <item row="0" column="3">
+           <item row="0" column="4">
             <property name="text">
              <string>(11) 9.7275-7721</string>
             </property>
            </item>
-           <item row="0" column="4">
+           <item row="0" column="5">
             <property name="text">
              <string>São Paulo - SP</string>
             </property>
            </item>
-           <item row="0" column="5">
+           <item row="0" column="6">
             <property name="text">
              <string>4/5</string>
             </property>
            </item>
-           <item row="0" column="6">
+           <item row="0" column="7">
             <property name="text">
              <string>:</string>
             </property>
@@ -741,6 +1009,22 @@ QHeaderView::section {
          </item>
         </layout>
        </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>

@@ -10,3 +10,4 @@ class FerramentasEInfo(Enum):
     atuMonetaria = 5    # Atualizações monetárias
     salarioMinimo = 6   # Atualizações Salários mínimmos desde 1994
     ipca = 7            # Ipca mensal
+    tipoBeneficio = 8   # Tipos de benefício

@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>1259</width>
-    <height>576</height>
+    <height>319</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -17,6 +23,12 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="frMain">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="styleSheet">
     <string notr="true">/*-------------------------------------------------- Frames --------------------------------------------------*/
 #frCabecalho {
@@ -92,6 +104,12 @@ QLabel {
     </property>
     <item row="0" column="0">
      <widget class="QFrame" name="frCenter">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
@@ -259,6 +277,12 @@ QLabel {
        </item>
        <item>
         <widget class="QFrame" name="frConteudo">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -282,7 +306,14 @@ QLabel {
            <number>0</number>
           </property>
           <item row="0" column="0">
-           <widget class="QStackedWidget" name="stkPrincipal"/>
+           <widget class="QStackedWidget" name="stkPrincipal">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

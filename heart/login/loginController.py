@@ -2,6 +2,8 @@ import datetime
 import pymysql
 import asyncio as aio
 from typing import List
+from peewee import fn
+
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QMainWindow
@@ -10,6 +12,7 @@ from Design.CustomWidgets.newToast import QToaster
 from Design.DesignSystem.fonts import FontSize
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
+from modelos.Auth import AdvAuthModelo
 
 from repositorios.clienteRepositorio import UsuarioRepository
 from repositorios.escritorioRepositorio import EscritorioRepositorio
@@ -29,7 +32,6 @@ from modelos.ipcaMensalORM import IpcaMensal
 
 from Design.pyUi.loginPage import Ui_mwLogin
 
-from heart.dashboard.dashboardController import DashboardController
 from heart.newDashboard.newDashboard import NewDashboard
 
 from util.dateHelper import strToDatetime
@@ -51,6 +53,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
     telaAtual: TelaLogin
     timerPrimeiroAcesso: QtCore.QTimer
     somaTimer: int = 0
+    esqueceuSenha: bool = False
     toasty: QToaster
 
     def __init__(self, db=None):
@@ -70,24 +73,31 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.toasty = QToaster()
 
+        # Definindo ordem dos tabs
+        self.setTabOrder(self.leLogin, self.leSenha)
+        self.setTabOrder(self.leSenha, self.cbSalvarSenha)
+        self.setTabOrder(self.cbSalvarSenha, self.pbEntrar)
+
         self.configGerais = ConfigGerais()
 
         self.daoEscritorio = Escritorios()
         self.daoAdvogado = Advogados(self.db)
 
-        self.dashboard: DashboardController = None
-
         self.trocaTelaAtual(TelaLogin.principal)
         self.pbEnviarCodigo_2.hide()
 
+        self.cbPASenha.setChecked(True)
+        self.cbPAConfirmaSenha.setChecked(True)
+
         self.pbFechar.clicked.connect(self.close)
         self.pbEntrar.clicked.connect(self.entrar)
-        self.pbPrimeiroAcesso.clicked.connect(lambda: self.trocaTelaAtual(TelaLogin.primAcessoEmail))
+        self.pbPrimeiroAcesso.clicked.connect(self.fluxoPrimeiroAcesso)
         self.pbVoltar.clicked.connect(self.avaliaVoltar)
         self.pbVoltar2.clicked.connect(self.avaliaVoltar)
         self.pbVoltar3.clicked.connect(self.avaliaVoltar)
         self.pbEnviarCodigo.clicked.connect(self.avaliaEnviarCodigo)
         self.pbCriaSenha.clicked.connect(self.avaliaCriaSenha)
+        self.pbEsqueceuSenha.clicked.connect(self.fluxoEsqueceuSenha)
         self.cbPASenha.stateChanged.connect(lambda: self.avaliaMostraSenha('senha'))
         self.cbPAConfirmaSenha.stateChanged.connect(lambda: self.avaliaMostraSenha('confirmaSenha'))
 
@@ -103,6 +113,19 @@ class LoginController(QMainWindow, Ui_mwLogin):
             self.iniciarAutomaticamente()
 
         self.center()
+        self.leLogin.setFocus()
+
+    def alteraLabelEsqueceuSenha(self):
+        if self.esqueceuSenha:
+            self.lbPALogin.setText("ESQUECEU A SENHA")
+            self.lbPALogin_2.setText("ESQUECEU A SENHA")
+            self.lbPALogin_3.setText("ESQUECEU A SENHA")
+            self.pbCriaSenha.setText("Alterar senha")
+        else:
+            self.lbPALogin.setText("PRIMEIRO ACESSO")
+            self.lbPALogin_2.setText("PRIMEIRO ACESSO")
+            self.lbPALogin_3.setText("PRIMEIRO ACESSO")
+            self.pbCriaSenha.setText("Criar senha")
 
     def avaliaCodAcessoEnviado(self):
         codAcesso = self.lePrimeiro.text() + self.leSegundo.text() + self.leTerceiro.text() + self.leQuarto.text() + self.leQuinto.text()
@@ -160,12 +183,12 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 popUpOkAlerta(f"Não foi possível confirmar o cadastro. Tente novamente.")
 
     def avaliaCriaSenha(self):
-        if self.lePASenha.text() == '' or self.leConfirmaSenha.text() == '':
+        if self.lePASenha.text() == '' or self.lePAConfirmaSenha.text() == '':
             self.toasty.showMessage(self, "É preciso informar uma senha no primeiro campo e confirmá-la no campo abaixo.")
             # popUpOkAlerta("É preciso informar uma senha no primeiro campo e confirmá-la no campo abaixo.")
             self.lePASenha.setFocus()
             return False
-        elif self.lePASenha.text() != self.leConfirmaSenha.text():
+        elif self.lePASenha.text() != self.lePAConfirmaSenha.text():
             self.toasty.showMessage(self, "As senhas não coincidem. Tente digitá-las novamente.")
             # popUpOkAlerta("As senhas não coincidem. Tente digitá-las novamente.")
             return False
@@ -188,19 +211,13 @@ class LoginController(QMainWindow, Ui_mwLogin):
             popUpOkAlerta('Digite seu e-mail cadastrado ou o número do CPF para receber o código de acesso.')
             return False
         else:
-            advogadoId: int = self.usuarioRepositorio.buscaCpfEmailPrimeiroAcesso(self.lePACpfEmail.text())
-            if advogadoId > 0:
-                self.advogado = self.usuarioRepositorio.buscaAdvPor(advogadoId=advogadoId)
-                if self.advogado is None or self.advogado.advogadoId is None:
-                    self.toasty.showMessage(self, "E-mail ou CPF não encontrados. Verifique se a digitação está correta", fontSize=FontSize.H3)
-                    return False
-                else:
-                    self.iniciaTimerPrimeiroAcesso()
-                    self.trocaTelaAtual(TelaLogin.primAcessoKey)
-                return True
-            else:
-                self.toasty.showMessage(self, "E-mail ou CPF não encontrados. Verifique se a digitação está correta", fontSize=FontSize.H3)
-                return False
+            advogadoId: int = self.usuarioRepositorio.buscaCpfEmailPrimeiroAcesso(self.lePACpfEmail.text(), esqueceuSenha=self.esqueceuSenha)
+            self.advogado = self.usuarioRepositorio.buscaAdvPor(advogadoId=advogadoId)
+            self.iniciaTimerPrimeiroAcesso()
+            self.trocaTelaAtual(TelaLogin.primAcessoKey)
+            self.toasty.showMessage(self, "Você receberá o código de acesso dentro de alguns instantes", fontSize=FontSize.H3)
+
+            return True
 
     def avaliaFocus(self):
         if self.lePrimeiro.hasFocus():
@@ -241,15 +258,15 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
     def avaliaMostraSenha(self, checkBox: str):
         if checkBox == 'senha':
-            if self.cbPASenha.isChecked():
+            if not self.cbPASenha.isChecked():
                 self.lePASenha.setEchoMode(QLineEdit.EchoMode.Normal)
             else:
                 self.lePASenha.setEchoMode(QLineEdit.EchoMode.Password)
         else:
-            if self.cbPAConfirmaSenha.isChecked():
-                self.leConfirmaSenha.setEchoMode(QLineEdit.EchoMode.Normal)
+            if not self.cbPAConfirmaSenha.isChecked():
+                self.lePAConfirmaSenha.setEchoMode(QLineEdit.EchoMode.Normal)
             else:
-                self.leConfirmaSenha.setEchoMode(QLineEdit.EchoMode.Password)
+                self.lePAConfirmaSenha.setEchoMode(QLineEdit.EchoMode.Password)
 
     def avaliaVoltar(self):
         if self.telaAtual == TelaLogin.primAcessoSenha:
@@ -264,7 +281,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
     def buscaEscritorio(self, escritorioId: int):
         if escritorioId is None:
             popUpOkAlerta(
-                f'Não foi possível encontrar o escritório na qual o advogado {self.advogado.nomeUsuario} está cadastrado. Entre em contato com o suporte.',
+                f'Não foi possível encontrar o escritório na qual o advogado {self.advogado.nomeAdvogado} está cadastrado. Entre em contato com o suporte.',
                 erro=f'buscaEscritorio<LoginController> escritorioId: {escritorioId}'
             )
             return False
@@ -335,8 +352,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
     def entrar(self):
         # TODO: Criar uma verificação se o usuário salvo em cache tem o mesmo login e senha digitado na tela de login
 
-        loop = aio.get_event_loop()
-
         self.loading(20)
         if self.infoNaoNulo():
             if ApiFerramentas().conexaoOnline():
@@ -348,23 +363,18 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 return False
 
             # Autentica advogado
-            self.advogado = self.procuraAdvogado()
+            advogadoAutenticado: AdvAuthModelo = self.authAdvogado()
 
-            if self.advogado:
-                # if not self.advogado.confirmado:
-                #     self.iniciarPrimeiroAcesso()
-                #     return True
-
-                # Autentica escritório
-                self.escritorio = self.procuraEscritorio(self.advogado.escritorioId)
+            if advogadoAutenticado:
+                self.escritorio = self.escritorioRepositorio.buscaEscritorio(advogadoAutenticado.escritorioId)
                 if self.escritorio:
-                    escritorioCadastrado = Escritorios.get_by_id(self.escritorio.escritorioId)
-                    advogadoCadastrado = Advogados.get_by_id(self.advogado.advogadoId)
+                    self.escritorio = self.buscaInsereEscritorio(self.escritorio)
 
-                    if not escritorioCadastrado:
-                        self.daoEscritorio.insereEscritorio(self.escritorio)
-                    if not advogadoCadastrado:
-                        self.daoAdvogado.insereAdvogado(self.advogado)
+                self.advogado = self.usuarioRepositorio.buscaAdvPor(advogadoAutenticado.advogadoId, senhaInserida=self.leSenha.text())
+                if self.advogado:
+                    self.advogado = self.buscaInsereAdvogado(self.advogado)
+
+                if self.advogado and self.escritorio:
 
                     # Decide se salva informações no "temporários", dependendo do checkBox
                     if self.cbSalvarSenha.isChecked():
@@ -382,12 +392,14 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
                     # Inicia programa
                     self.iniciaDashboard()
-
                 else:
-                    popUpOkAlerta("Houve um problema ao encontrar o escritório no banco de dados. Entre em contato com o suporte.")
                     self.cacheLogin.limpaCache()
                     self.cacheEscritorio.limpaCache()
-                    # TODO: Lógica para clicar no botão "Ok" e fechar o programa
+                    popUpOkAlerta(
+                        "Houve um problema em encontrar o escritório ou o advogado no banco de dados. Entre em contato com o suporte.",
+                        erro=f"{self.advogado=}\n{self.escritorio=}",
+                        funcao=self.fecharPrograma
+                    )
             else:
                 self.tentativasSenha -= 1
                 popUpOkAlerta("Usuário ou senha inválidos. Tente novamente")
@@ -395,13 +407,26 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.cacheEscritorio.limpaCache()
                 # TODO: Lógica para clicar no botão "Ok" e fechar o programa
                 if self.tentativasSenha == 0:
-                    popUpOkAlerta("A quantidade de tentativas excedeu o limite e o programa será fechado.")
+                    popUpOkAlerta("A quantidade de tentativas excedeu o limite e o programa será fechado.", funcao=self.close)
 
         else:
             popUpOkAlerta("Campo login e senha precisam ser preenchidos")
             # self.limpa()
 
         self.edittingFinished = True
+
+    def fluxoEsqueceuSenha(self):
+        self.esqueceuSenha = True
+        self.alteraLabelEsqueceuSenha()
+        self.trocaTelaAtual(TelaLogin.primAcessoEmail)
+
+    def fluxoPrimeiroAcesso(self):
+        self.esqueceuSenha = False
+        self.alteraLabelEsqueceuSenha()
+        self.trocaTelaAtual(TelaLogin.primAcessoEmail)
+
+    def fecharPrograma(self):
+        self.close()
 
     def iniciaDashboard(self):
         self.dashboard = NewDashboard()
@@ -426,23 +451,85 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         return login and senha
 
-    def procuraAdvogado(self) -> Advogados:
+    def authAdvogado(self) -> AdvAuthModelo:
         senha = self.leSenha.text()
 
         if self.leLogin.text().isdecimal():
             numeroOAB = self.leLogin.text()
-            return self.usuarioRepositorio.loginAuth(senha, numeroOAB=numeroOAB)
+            return self.usuarioRepositorio.loginAuth(senha, OabCpf=numeroOAB)
         else:
             email = self.leLogin.text()
             return self.usuarioRepositorio.loginAuth(senha, email=email)
 
-    def procuraEscritorio(self, escritorioId: int) -> Escritorios:
-        escritorio: Escritorios = self.escritorioRepositorio.buscaEscritorio(escritorioId)
-        return escritorio
+    def buscaInsereEscritorio(self, escritorio: Escritorios, escritorioInserido: bool = False) -> Escritorios:
+        try:
+            escritorio: Escritorios = Escritorios.get_by_id(escritorio.escritorioId)
+            return escritorio
+        except Escritorios.DoesNotExist as err:
+            if not escritorioInserido:
+                Escritorios.create(
+                    escritorioId=escritorio.escritorioId,
+                    bairro=escritorio.bairro,
+                    cep=escritorio.cep,
+                    cidade=escritorio.cidade,
+                    cnpj=escritorio.cnpj,
+                    complemento=escritorio.complemento,
+                    cpf=escritorio.cpf,
+                    email=escritorio.email,
+                    endereco=escritorio.endereco,
+                    estado=escritorio.estado,
+                    inscEstadual=escritorio.inscEstadual,
+                    nomeEscritorio=escritorio.nomeEscritorio,
+                    nomeFantasia=escritorio.nomeFantasia,
+                    numero=escritorio.numero,
+                    telefone=escritorio.telefone,
+                ).save()
+                return self.buscaInsereEscritorio(escritorio, escritorioInserido=True)
+
+            popUpOkAlerta("Não foi possível cadastrar o escritório. Entre em contato com o suporte", erro=err, funcao=self.fecharPrograma)
+            return None
+
+    def buscaInsereAdvogado(self, advogado: Advogados, advInserido: bool = False) -> Advogados:
+        try:
+            # advogado: Advogados = Advogados.get_by_id(advogado.advogadoId)
+            advogado = Advogados.select(
+                Advogados.advogadoId,
+                Advogados.escritorioId,
+                Advogados.nomeAdvogado,
+                Advogados.sobrenomeAdvogado,
+                Advogados.numeroOAB,
+                Advogados.email,
+                Advogados.login,
+                Advogados.estadoCivil,
+                fn.decifrar(Advogados.senha),
+            ).where(
+                Advogados.advogadoId == advogado.advogadoId).get()
+            return advogado
+        except Advogados.DoesNotExist as err:
+            if not advInserido:
+                Advogados.create(
+                    advogadoId=advogado.advogadoId,
+                    escritorioId=advogado.escritorioId,
+                    admin=False,
+                    ativo=advogado.ativo,
+                    confirmado=advogado.confirmado,
+                    email=advogado.email,
+                    estadoCivil=advogado.estadoCivil,
+                    login=advogado.login,
+                    nacionalidade=advogado.nacionalidade,
+                    nomeAdvogado=advogado.nomeAdvogado,
+                    numeroOAB=advogado.numeroOAB,
+                    senha=fn.cifrar(advogado.senha),
+                    sobrenomeAdvogado=advogado.sobrenomeAdvogado
+                ).save()
+                return self.buscaInsereAdvogado(advogado, advInserido=True)
+
+            popUpOkAlerta("Não foi possível cadastrar o advogado. Entre em contato com o suporte", erro=err, funcao=self.fecharPrograma)
+            return None
 
     def verificaRotinaAtualizacao(self):
 
-        pathFile = os.path.join(os.getcwd(), '.sync', '.syncFile')
+        pathFile = os.path.join(os.getcwd(), '.sync', '.syncFile.json')
         syncJson = {
             'syncConvMon': datetimeToSql(datetime.datetime.now()),
             'syncTetosPrev': datetimeToSql(datetime.datetime.now()),

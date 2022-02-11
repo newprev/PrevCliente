@@ -1,4 +1,5 @@
 import datetime
+import os.path
 from math import floor, ceil
 from peewee import ModelSelect
 from typing import Union, Tuple, List
@@ -7,7 +8,7 @@ from util.dateHelper import strToDate
 from util.enums.aposentadoriaEnums import SubTipoAposentadoria, TipoAposentadoria, ContribSimulacao
 from util.enums.configEnums import ImportantPaths
 from util.enums.newPrevEnums import *
-from util.enums.processoEnums import TipoBeneficio, TipoProcesso, NaturezaProcesso
+from util.enums.processoEnums import TipoBeneficioEnum, TipoProcesso, NaturezaProcesso
 
 estCivil = ['Solteiro(a)', 'Casado(a)', 'Divorciado(a)', 'Viúvo(a)']
 
@@ -492,7 +493,13 @@ def strToFloat(valor: str) -> float:
     try:
         return float(valor)
     except ValueError:
-        retorno = valor.replace(',', '')
+        import re
+        padrao = '.{0,20},[0-9]{1,2}'
+        if re.match(padrao, valor):
+            retorno = valor.replace('.', '').replace(',', '.')
+        else:
+            retorno = valor.replace(',', '')
+
         return strToFloat(retorno)
     except:
         return valor
@@ -511,14 +518,14 @@ def strNatureza(natureza: int) -> str:
         return '-'
 
 
-def strTipoProcesso(tipoProcesso: int) -> str:
-    if tipoProcesso == TipoProcesso.Revisao.value:
+def strTipoProcesso(tipoProcesso: TipoProcesso) -> str:
+    if tipoProcesso == TipoProcesso.Revisao:
         return 'Revisão'
-    elif tipoProcesso == TipoProcesso.Concessao.value:
+    elif tipoProcesso == TipoProcesso.Concessao:
         return 'Concessão'
-    elif tipoProcesso == TipoProcesso.RecEspecial.value:
+    elif tipoProcesso == TipoProcesso.RecEspecial:
         return 'Recurso Especial'
-    elif tipoProcesso == TipoProcesso.RecOrdinario.value:
+    elif tipoProcesso == TipoProcesso.RecOrdinario:
         return 'Recurso Ordinário'
     else:
         return '-'
@@ -526,7 +533,7 @@ def strTipoProcesso(tipoProcesso: int) -> str:
 
 def strTipoBeneficio(tipoBeneficio: int, subTipoApos: int) -> str:
 
-    if tipoBeneficio == TipoBeneficio.Aposentadoria.value:
+    if tipoBeneficio == TipoBeneficioEnum.Aposentadoria.value:
         if subTipoApos == SubTipoAposentadoria.Idade.value:
             return 'Aposentadoria por idade'
         elif subTipoApos == SubTipoAposentadoria.Rural.value:
@@ -539,37 +546,39 @@ def strTipoBeneficio(tipoBeneficio: int, subTipoApos: int) -> str:
             return 'Aposentadoria por invalidez'
         elif subTipoApos == SubTipoAposentadoria.TempoContrib.value:
             return 'Aposentadoria por tempo de contribuição'
-    elif tipoBeneficio == TipoBeneficio.AuxDoenca.value:
+    elif tipoBeneficio == TipoBeneficioEnum.AuxDoenca.value:
         return 'Auxílio doença'
-    elif tipoBeneficio == TipoBeneficio.AuxReclusao.value:
+    elif tipoBeneficio == TipoBeneficioEnum.AuxReclusao.value:
         return 'Auxílio reclusão'
-    elif tipoBeneficio == TipoBeneficio.BeneIdoso.value:
+    elif tipoBeneficio == TipoBeneficioEnum.BeneIdoso.value:
         return 'Benefício assistencial ao idoso'
-    elif tipoBeneficio == TipoBeneficio.BeneDeficiencia.value:
+    elif tipoBeneficio == TipoBeneficioEnum.BeneDeficiencia.value:
         return 'Benefício assistencial à pessoa com deficiência'
-    elif tipoBeneficio == TipoBeneficio.PensaoMorte.value:
+    elif tipoBeneficio == TipoBeneficioEnum.PensaoMorte.value:
         return 'Pensão por morte'
-    elif tipoBeneficio == TipoBeneficio.SalMaternidade.value:
+    elif tipoBeneficio == TipoBeneficioEnum.SalMaternidade.value:
         return 'Salário maternidade'
     else:
         return ''
 
 
-def strTipoBeneFacilitado(tipoBeneficio: TipoBeneficio) -> str:
+def strTipoBeneFacilitado(tipoBeneficio: TipoBeneficioEnum) -> str:
 
-    if tipoBeneficio == TipoBeneficio.Aposentadoria:
+    if tipoBeneficio == TipoBeneficioEnum.Aposentadoria:
         return 'Aposentadoria'
-    elif tipoBeneficio == TipoBeneficio.AuxDoenca:
+    elif tipoBeneficio == TipoBeneficioEnum.AuxDoenca:
         return 'Auxílio doença'
-    elif tipoBeneficio == TipoBeneficio.AuxReclusao:
+    elif tipoBeneficio == TipoBeneficioEnum.AuxAcidente:
+        return 'Auxílio acidente'
+    elif tipoBeneficio == TipoBeneficioEnum.AuxReclusao:
         return 'Auxílio reclusão'
-    elif tipoBeneficio == TipoBeneficio.BeneIdoso:
+    elif tipoBeneficio == TipoBeneficioEnum.BeneIdoso:
         return 'Benefício assistencial ao idoso'
-    elif tipoBeneficio == TipoBeneficio.BeneDeficiencia:
+    elif tipoBeneficio == TipoBeneficioEnum.BeneDeficiencia:
         return 'Benefício assistencial à pessoa com deficiência'
-    elif tipoBeneficio == TipoBeneficio.PensaoMorte:
+    elif tipoBeneficio == TipoBeneficioEnum.PensaoMorte:
         return 'Pensão por morte'
-    elif tipoBeneficio == TipoBeneficio.SalMaternidade:
+    elif tipoBeneficio == TipoBeneficioEnum.SalMaternidade:
         return 'Salário maternidade'
     else:
         return ''
@@ -592,6 +601,18 @@ def strTipoAposentadoria(tipoAposentadoria: str) -> str:
         return "Aposentadoria por pontos pela regra de transição"
     elif tipoAposentadoria == TipoAposentadoria.regra8595.value:
         return "Aposentadoria por pontos pela regra 85/95"
+
+
+def buscaSql(caminhoSql: str) -> str:
+    if os.path.exists(caminhoSql) and os.path.isfile(caminhoSql):
+        sqlScript: str = ""
+
+        with open(caminhoSql, encoding='utf-8', mode='r') as sql:
+            script = sql.readlines()
+            for linha in script:
+                sqlScript += linha.replace("\\t", "")
+
+        return sqlScript
 
 
 def strTipoSimulacao(tipoSimulacao: str) -> str:

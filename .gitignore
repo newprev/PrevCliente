@@ -7,7 +7,7 @@
 
 Daos/producao.db
 
-systemLog/historicoLogs/*
+systemLog/historicoLogs/*.txt
 /envCliente/
 
 .idea/
@@ -24,7 +24,11 @@ DocGerados/*
 
 prevCliEnv/
 
-.sync/*
+.sync/*.json
 
 .templates/.~lock.requerimentoAdm.docx#
 /Resources/teste.svg
+
+crypt/.privateKey.txt
+
+crypt/publicKey.txt

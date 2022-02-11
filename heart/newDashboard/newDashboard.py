@@ -1,9 +1,8 @@
-from PyQt5.QtGui import QFont
-
 from Design.pyUi.newDashboard import Ui_newDashboard
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import QtGui
 
+from heart.resumoCnis.resumoCnis import ResumoCnisController
 from modelos.clienteORM import Cliente
 from util.popUps import popUpOkAlerta
 
@@ -21,6 +20,7 @@ from heart.newDashboard.localWidgets.newMenuPrincipal import NewMenuPrincipal
 from heart.newDashboard.localWidgets.newListaClientes import NewListaClientes
 from heart.wdgCadastroCliente import NewCadastraCliente
 from heart.newDashboard.localWidgets.newInfoCliente import NewInfoCliente
+from heart.newEntrevista.principal import NewEntrevistaPrincipal
 
 
 class NewDashboard(QMainWindow, Ui_newDashboard):
@@ -29,6 +29,7 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
     advogadoAtual: Advogados
     wdgCadastroCliente: NewCadastraCliente
     wdgInfoCliente: NewInfoCliente
+    wdgEntrevista: NewEntrevistaPrincipal
 
     def __init__(self, parent=None):
         super(NewDashboard, self).__init__(parent=parent)
@@ -63,7 +64,7 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
     def buscaAdvogado(self):
         self.advogadoAtual = self.cacheLogin.carregarCache()
         if self.advogadoAtual is None or self.advogadoAtual.advogadoId is None:
-            self.escritorioAtual = self.cacheLogin.carregarCacheTemporario()
+            self.advogadoAtual = self.cacheLogin.carregarCacheTemporario()
 
             if self.advogadoAtual is None or self.advogadoAtual.escritorioId is None:
                 popUpOkAlerta("Não foi possível carregar as informações do advogado. Tente fazer o login novamente.")
@@ -77,16 +78,20 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
         if self.buscaEscritorio():
             self.lbNomeEscritorio.setText(self.escritorioAtual.nomeEscritorio)
         if self.buscaAdvogado():
-            self.lbNomeAdvogado.setText(self.advogadoAtual.nomeUsuario + ' ' + self.advogadoAtual.sobrenomeUsuario)
+            self.lbNomeAdvogado.setText(self.advogadoAtual.nomeAdvogado + ' ' + self.advogadoAtual.sobrenomeAdvogado)
             self.lbOAB.setText('OAB: ' + self.advogadoAtual.numeroOAB + '/' + self.escritorioAtual.estado)
 
         self.clienteController = NewListaClientes(self.escritorioAtual, self.advogadoAtual, parent=self)
         self.wdgCadastroCliente = NewCadastraCliente(parent=self)
         self.wdgInfoCliente = NewInfoCliente(parent=self)
+        self.wdgEntrevista = NewEntrevistaPrincipal(self.escritorioAtual, parent=self)
+        self.wdgResumoCnis = ResumoCnisController(parent=self)
 
         self.stkPrincipal.addWidget(self.clienteController)
         self.stkPrincipal.addWidget(self.wdgCadastroCliente)
         self.stkPrincipal.addWidget(self.wdgInfoCliente)
+        self.stkPrincipal.addWidget(self.wdgEntrevista)
+        self.stkPrincipal.addWidget(self.wdgResumoCnis)
 
         self.stkPrincipal.setCurrentIndex(TelaAtual.Cliente.value)
 
@@ -106,7 +111,13 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
     def recarregaListaClientes(self):
         self.clienteController.atualizaTblClientes()
 
-    def trocaTela(self, tela: TelaAtual):
+    def trocaTela(self, tela: TelaAtual, *args):
+        if len(args) != 0 and isinstance(args[0], Cliente):
+            if tela == TelaAtual.Entrevista:
+                self.wdgEntrevista.defineCliente(args[0])
+            elif tela == TelaAtual.Resumo:
+                self.wdgResumoCnis.recebeCliente(args[0])
+
         self.stkPrincipal.setCurrentIndex(tela.value)
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:

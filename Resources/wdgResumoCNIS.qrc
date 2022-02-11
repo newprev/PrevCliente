@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="cabecalho">
+    <file>back.png</file>
+  </qresource>
+</RCC>

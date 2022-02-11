@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>1194</width>
-    <height>671</height>
+    <height>588</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -40,6 +46,12 @@
    </property>
    <item row="0" column="0">
     <widget class="QFrame" name="frPrincipal">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -108,13 +120,22 @@
 	border-radius: 8px;
 }
 
-#pbResumo, #pbProcessos {
+#pbResumo, #pbProcessos, #pbEntrevista {
 	font: 12pt &quot;Avenir LT Std&quot;;
 	color: #3F4E8C;
 
 	border: 2px solid #3F4E8C;
 	border-radius: 8px;
 	padding: 8px;
+}
+
+#pbFoto {
+	font: 11pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+
+	border: 2px solid #3F4E8C;
+	border-radius: 8px;
+	padding: 4px;
 }
 
 
@@ -200,10 +221,16 @@
          </item>
          <item>
           <widget class="QFrame" name="frame_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>100</height>
+             <height>80</height>
             </size>
            </property>
            <property name="frameShape">
@@ -230,16 +257,19 @@
             </property>
             <item>
              <widget class="QFrame" name="frame_4">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="frameShape">
                <enum>QFrame::NoFrame</enum>
               </property>
               <property name="frameShadow">
                <enum>QFrame::Raised</enum>
               </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_3">
-               <property name="spacing">
-                <number>16</number>
-               </property>
+              <layout class="QGridLayout" name="gridLayout_2">
                <property name="leftMargin">
                 <number>0</number>
                </property>
@@ -252,53 +282,7 @@
                <property name="bottomMargin">
                 <number>0</number>
                </property>
-               <item>
-                <widget class="QFrame" name="frFotoCliente">
-                 <property name="minimumSize">
-                  <size>
-                   <width>80</width>
-                   <height>80</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>80</width>
-                   <height>80</height>
-                  </size>
-                 </property>
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_27">
-                  <property name="spacing">
-                   <number>0</number>
-                  </property>
-                  <property name="leftMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="topMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="bottomMargin">
-                   <number>0</number>
-                  </property>
-                  <item>
-                   <widget class="QLabel" name="lbFotoCliente">
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
+               <item row="0" column="1">
                 <widget class="QFrame" name="frInfoFotoCliente">
                  <property name="minimumSize">
                   <size>
@@ -377,6 +361,52 @@
                  </layout>
                 </widget>
                </item>
+               <item row="0" column="0">
+                <widget class="QFrame" name="frFotoCliente">
+                 <property name="minimumSize">
+                  <size>
+                   <width>80</width>
+                   <height>80</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>80</width>
+                   <height>80</height>
+                  </size>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::NoFrame</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Raised</enum>
+                 </property>
+                 <layout class="QHBoxLayout" name="horizontalLayout_27">
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QLabel" name="lbFotoCliente">
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -403,8 +433,27 @@
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_4">
                <property name="spacing">
-                <number>24</number>
+                <number>16</number>
                </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="pbEntrevista">
+                 <property name="minimumSize">
+                  <size>
+                   <width>170</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Entrevista</string>
+                 </property>
+                </widget>
+               </item>
                <item>
                 <widget class="QPushButton" name="pbResumo">
                  <property name="minimumSize">
@@ -455,6 +504,12 @@
       </item>
       <item>
        <widget class="QFrame" name="frRodape">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="styleSheet">
          <string notr="true">/*----------------------------------------- Push Button---------------------------------------------*/
 #pbInfoPessoais, #pbInfoResidenciais, 
@@ -607,7 +662,7 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <property name="spacing">
-             <number>4</number>
+             <number>0</number>
             </property>
             <property name="leftMargin">
              <number>0</number>
@@ -623,6 +678,12 @@
             </property>
             <item>
              <widget class="QFrame" name="frame_6">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="frameShape">
                <enum>QFrame::NoFrame</enum>
               </property>
@@ -631,7 +692,7 @@
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_6">
                <property name="bottomMargin">
-                <number>24</number>
+                <number>9</number>
                </property>
                <item>
                 <widget class="QLabel" name="lbTituloInfoPessoais">
@@ -1052,7 +1113,7 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
             <property name="spacing">
-             <number>4</number>
+             <number>0</number>
             </property>
             <property name="leftMargin">
              <number>0</number>
@@ -1068,6 +1129,12 @@
             </property>
             <item>
              <widget class="QFrame" name="frame_14">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="frameShape">
                <enum>QFrame::NoFrame</enum>
               </property>
@@ -1076,7 +1143,7 @@
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_16">
                <property name="bottomMargin">
-                <number>24</number>
+                <number>9</number>
                </property>
                <item>
                 <widget class="QLabel" name="lbTituloInfoResidenciais">
@@ -1380,7 +1447,7 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <property name="spacing">
-             <number>4</number>
+             <number>0</number>
             </property>
             <property name="leftMargin">
              <number>0</number>
@@ -1396,6 +1463,12 @@
             </property>
             <item>
              <widget class="QFrame" name="frame_23">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="frameShape">
                <enum>QFrame::NoFrame</enum>
               </property>
@@ -1404,7 +1477,7 @@
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_23">
                <property name="bottomMargin">
-                <number>24</number>
+                <number>9</number>
                </property>
                <item>
                 <widget class="QLabel" name="lbTituloInfoProfissionais">

@@ -12,7 +12,7 @@ from Configs.systemConfig import buscaSystemConfigs
 
 from modelos.advogadoORM import Advogados
 from modelos.escritoriosORM import Escritorios
-from modelos.Auth.ClientAuthModelo import ClientAuthModelo
+from modelos.Auth.AdvAuthModelo import AdvAuthModelo
 from repositorios.escritorioRepositorio import EscritorioRepositorio
 
 
@@ -28,7 +28,7 @@ class UsuarioRepository:
             self.baseUrl = 'http://localhost:8000/api/'
         else:
             # url para produção
-            self.baseUrl = 'http://newprev.dev.br/api/'
+            self.baseUrl = 'http://3.139.65.128:8080/api/'
 
     def confirmaAlteraSenha(self, senha: str, advogadoId: int) -> bool:
         url: str = self.baseUrl + 'advogados/'
@@ -56,11 +56,16 @@ class UsuarioRepository:
             )
             return False
 
-    def buscaCpfEmailPrimeiroAcesso(self, cpfEmail: int) -> int:
-        url: str = self.baseUrl + 'advogados/auth/primeiroAcesso/' + str(cpfEmail)
+    def buscaCpfEmailPrimeiroAcesso(self, cpfEmail: str, esqueceuSenha: bool = False) -> int:
+        url: str = self.baseUrl + 'advogados/auth/trocaSenha/'
+
+        body: dict = {
+            'info': cpfEmail,
+            'esqueceuSenha': esqueceuSenha
+        }
 
         logPrioridade(f"API => buscaEscritorioPrimeiroAcesso ____________________GET<advogados/auth/primeiroAcesso/>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
-        response = http.post(url)
+        response = http.post(url, data=body)
 
         if 199 < response.status_code < 400:
             clienteId: int = response.json()['advogadoId']
@@ -71,9 +76,13 @@ class UsuarioRepository:
             return -1
 
     def verificaCodAcesso(self, codAcesso: int) -> bool:
-        url: str = self.baseUrl + 'advogados/auth/autenticaCodAcesso/' + str(codAcesso)
+        url: str = self.baseUrl + 'advogados/auth/autenticaCodAcesso/'
 
-        response = http.patch(url)
+        body: dict = {
+            'codigo': codAcesso
+        }
+
+        response = http.patch(url, data=body)
 
         if 199 < response.status_code < 400:
             logPrioridade(
@@ -162,22 +171,18 @@ class UsuarioRepository:
 
     def buscaAdvPor(self, advogadoId: int = None, senhaInserida: str = None) -> Advogados:
         url: str = self.baseUrl + f'advogados/{advogadoId}/'
-        advogado: Advogados = Advogados()
-
         response = http.get(url)
 
         try:
             if 199 < response.status_code < 400:
-                escritorioId = response.json()['escritorioId']
                 advogado = Advogados().fromDict(response.json())
-                advogado.escritorioId = Escritorios.select().where(Escritorios.escritorioId == escritorioId)
 
                 if senhaInserida is not None:
                     advogado.senha = senhaInserida
                 else:
                     advogado.senha = 'senhaProvisoria'
 
-                Advogados.insert(advogado.toDict()).on_conflict_replace().execute()
+                advogado: Advogados = Advogados().fromDict(advogado.toDict())
 
                 if not advogado:
                     logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
@@ -188,46 +193,37 @@ class UsuarioRepository:
             else:
                 logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
                 return False
-        except Escritorios.DoesNotExist:
-            escritorio: Escritorios = EscritorioRepositorio().buscaEscritorio(escritorioId)
-            Escritorios.insert(escritorio.toDict()).on_conflict_replace().execute()
-            return self.buscaAdvPor(advogadoId, senhaInserida=senhaInserida)
 
         except Exception as erro:
             print(f'buscaAdvPor - Erro: {type(erro)}')
             logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
 
-    def loginAuth(self, senha, numeroOAB: str = None, email: str = None) -> Advogados:
-        url: str = self.baseUrl + f'advogados/auth/'
-        if numeroOAB is not None:
-            url += numeroOAB
+    def loginAuth(self, senha, OabCpf: str = None, email: str = None) -> AdvAuthModelo:
+        url: str = self.baseUrl + f'advogados/auth/login/'
+        authAdvogado: AdvAuthModelo = AdvAuthModelo()
+        authAdvogado.senha = senha
+        authAdvogado.ativo = True
+        authAdvogado.confirmado = True
+
+        if OabCpf is not None:
+            if len(OabCpf) == 9:
+                authAdvogado.cpf = OabCpf
+            else:
+                authAdvogado.numeroOAB = OabCpf
         else:
-            url += email
+            authAdvogado.email = email
+
         try:
-            response = http.get(url)
+            response = http.patch(url, data=authAdvogado.toDict())
 
             if 199 < response.status_code < 400:
-                advAuth = ClientAuthModelo().fromDict(response.json())
-                advAuth.ativo = True
+                advAuth = AdvAuthModelo().fromDict(response.json())
 
                 if not advAuth:
                     logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
                     return None
                 else:
-
-                    try:
-                        advogadoALogar = Advogados.get_by_id(advAuth.advogadoId)
-                    except Advogados.DoesNotExist:
-                        logPrioridade(f"API => buscaAdvPor ____________________GET<Advogados.DoesNotExist>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
-                        advogadoALogar = self.buscaAdvPor(advAuth.advogadoId, senhaInserida=advAuth.senha)
-
-                    advogadoALogar.senha = senha
-                    if advAuth == advogadoALogar:
-                        logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
-                        return advogadoALogar
-                    else:
-                        logPrioridade(f"API => buscaAdvPor ____________________GET<Autenticação não confere com o advogado em questão>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
-                        return None
+                   return advAuth
             else:
                 logPrioridade(f"API => buscaAdvPor ____________________GET</advogados/auth/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
                 return None
@@ -247,7 +243,7 @@ class UsuarioRepository:
             response = http.get(url)
 
             if 199 < response.status_code < 400:
-                auth: ClientAuthModelo = ClientAuthModelo().fromDict(response.json())
+                auth: AdvAuthModelo = AdvAuthModelo().fromDict(response.json())
 
                 if auth is not None and auth == advogado:
                     logPrioridade(f"API => loginAuthFromCache ____________________GET</advogados/auth/<str:numeroOAB>>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)

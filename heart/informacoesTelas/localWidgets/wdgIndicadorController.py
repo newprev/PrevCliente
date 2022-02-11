@@ -11,7 +11,7 @@ class WdgIndicadorController(QWidget, Ui_wdgIndicador):
     def __init__(self, indicador: Indicadores, mostraCb=True, parent=None):
         super(WdgIndicadorController, self).__init__(parent=parent)
         self.setupUi(self)
-        self.cbIndicador.setText(indicador.indicadorId)
+        self.cbIndicador.setText(indicador.indicadorId.upper())
         self.parent = parent
         self.indicador = indicador
         self.sinais = Sinais()
@@ -22,7 +22,7 @@ class WdgIndicadorController(QWidget, Ui_wdgIndicador):
 
     def enviaIndicador(self):
         if self.cbIndicador.isChecked():
-            self.efeitos.shadowCards([self])
+            self.efeitos.shadowCards([self], radius=10, color=(63, 63, 63, 100))
         else:
             self.efeitos.desativarSombra([self])
         self.parent.recebeIndicador(self.indicador.indicadorId, self.cbIndicador.isChecked())

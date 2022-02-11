@@ -2,19 +2,24 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QFrame
 
 from Design.pyUi.wdgMenuPrincipal import Ui_wdgMenuPrincipal
-from Design.CustomWidgets.newMenuButtons import NewMenuButton
-from util.enums.configEnums import TipoConfiguracao
+from heart.informacoesTelas.indicadoresTela import IndicadoresController
+from heart.informacoesTelas.tetosPrevidenciariosTela import TetosPrevidenciarios
+from heart.informacoesTelas.expSobrevidaTela import ExpSobrevidaTela
+from heart.processos.processoController import ProcessosController
 
-from util.enums.dashboardEnums import TelaPosicao
-from util.enums.ferramentasEInfoEnums import FerramentasEInfo
+from Design.CustomWidgets.newToast import QToaster
+from util.enums.dashboardEnums import TelaAtual
 
 
 class NewMenuPrincipal(QFrame, Ui_wdgMenuPrincipal):
+    toasty: QToaster
 
     def __init__(self, parent=None, **kwargs):
         super(NewMenuPrincipal, self).__init__(parent=parent, **kwargs)
         self.setupUi(self)
         self.parent = parent
+        self.dashboard = parent
+        self.toasty = None
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -22,41 +27,55 @@ class NewMenuPrincipal(QFrame, Ui_wdgMenuPrincipal):
         self.adicionaBotoes()
 
     def adicionaBotoes(self):
-        # Principal
-        wdgCliente = NewMenuButton(None)
-        wdgEntrevista = NewMenuButton(None)
-        wdgProcesso = NewMenuButton(None)
-        wdgResumo = NewMenuButton(None)
-
-        wdgCliente.setupInicial(TelaPosicao.Cliente)
-        wdgEntrevista.setupInicial(TelaPosicao.Entrevista)
-        wdgProcesso.setupInicial(TelaPosicao.Processo)
-        wdgResumo.setupInicial(TelaPosicao.Resumo)
-
-        self.glPrincipal.addWidget(wdgCliente, 0, 0)
-        self.glPrincipal.addWidget(wdgEntrevista, 0, 1)
-        self.glPrincipal.addWidget(wdgProcesso, 1, 0)
-        self.glPrincipal.addWidget(wdgResumo, 1, 1)
-
         # Ferramentas
-        wdgFIndicadores = NewMenuButton(None)
-        wdgFTetosPrev = NewMenuButton(None)
-        wdgFExpSobrevida = NewMenuButton(None)
+        #Calculadora
+        self.pbCalculadora.clicked.connect(self.openFaltaImplementacao)
 
-        wdgFIndicadores.setupInicial(ferramenta=FerramentasEInfo.indicadores)
-        wdgFTetosPrev.setupInicial(ferramenta=FerramentasEInfo.tetos)
-        wdgFExpSobrevida.setupInicial(ferramenta=FerramentasEInfo.expSobrevida)
+        # Consultas
+        # Indicadores, Tetos, Expectativas de sobrevida
+        self.pbIndicadores.clicked.connect(self.openIndicadores)
+        self.pbTetos.clicked.connect(self.openTetos)
+        self.pbExpSobrevida.clicked.connect(self.openExpSobrevida)
+        self.pbResumoCnis.clicked.connect(self.openFaltaImplementacao)
 
-        self.glFerramentas.addWidget(wdgFIndicadores, 0, 0)
-        self.glFerramentas.addWidget(wdgFTetosPrev, 0, 1)
-        self.glFerramentas.addWidget(wdgFExpSobrevida, 1, 0)
+        # Escritorio
+        # Clientes, entrevista, processos
+        self.pbProcessos.clicked.connect(self.openProcessos)
+        self.pbCliente.clicked.connect(self.openCliente)
+        self.pbEntrevista.clicked.connect(self.openEntrevista)
 
-        # Configurações
-        wdgConfiguracoes = NewMenuButton(None)
+    def openIndicadores(self):
+        indicadoresPage = IndicadoresController(parent=self)
+        indicadoresPage.raise_()
+        indicadoresPage.show()
 
-        wdgConfiguracoes.setupInicial(configuracoes=TipoConfiguracao.sistema)
+    def openTetos(self):
+        tetosPage = TetosPrevidenciarios(parent=self)
+        tetosPage.raise_()
+        tetosPage.show()
 
-        self.glConfiguracoes.addWidget(wdgConfiguracoes)
+    def openExpSobrevida(self):
+        expSobrevidaPage = ExpSobrevidaTela(parent=self)
+        expSobrevidaPage.raise_()
+        expSobrevidaPage.show()
+
+    def openProcessos(self):
+        processosPage = ProcessosController(cliente=None, processo=None, parent=self)
+        processosPage.raise_()
+        processosPage.show()
+        self.close()
+
+    def openEntrevista(self):
+        self.dashboard.trocaTela(TelaAtual.Entrevista)
+        self.close()
+
+    def openCliente(self):
+        self.dashboard.trocaTela(TelaAtual.Cliente)
+        self.close()
+
+    def openFaltaImplementacao(self):
+        self.toasty = QToaster()
+        self.toasty.showMessage(self.dashboard, "Funcionalidade ainda não implementada")
 
     def showEvent(self, a0: QtGui.QShowEvent) -> None:
         geo = self.geometry()

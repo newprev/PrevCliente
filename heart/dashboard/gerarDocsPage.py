@@ -8,7 +8,7 @@ from sinaisCustomizados import Sinais
 from modelos.clienteORM import Cliente
 from modelos.processosORM import Processos
 from modelos.aposentadoriaORM import Aposentadoria
-from util.enums.processoEnums import TipoBeneficio
+from util.enums.processoEnums import TipoBeneficioEnum
 
 
 class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):
@@ -49,7 +49,7 @@ class GerarDocsPage(QWidget, Ui_wdgImpressaoDocs):
 
     def avaliaCheckBoxes(self):
         if self.processo is not None:
-            if self.processo.tipoBeneficio == TipoBeneficio.Aposentadoria.value:
+            if self.processo.tipoBeneficio == TipoBeneficioEnum.Aposentadoria.value:
                 self.cbProcuracao.setChecked(True)
                 self.efeitos.shadowCards([self.frProcuracao])
 

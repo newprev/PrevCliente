@@ -20,7 +20,7 @@ class ApiFerramentas:
             self.baseUrl = 'http://localhost:8000/api/'
         else:
             # url para produção
-            self.baseUrl = 'http://newprev.dev.br/api/'
+            self.baseUrl = 'http://3.139.65.128:8080/api/'
 
     async def getAllFerramentas(self, tipo: FerramentasEInfo):
         if tipo == FerramentasEInfo.atuMonetaria:

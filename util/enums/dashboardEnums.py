@@ -15,8 +15,8 @@ class TelaPosicao(Enum):
     Cliente = 0
     Resumo = 1
     Configuracoes = 2
-    Ferramentas = 3
-    Entrevista = 4
+    Entrevista = 3
+    Ferramentas = 4
     InformacoesGerais = 5
     Calculos = 6
     Processo = 7
@@ -25,17 +25,19 @@ class TelaAtual(Enum):
     Cliente = 0
     CadastroCliente = 1
     InfoCliente = 2
+    Entrevista = 3
+    Resumo = 4
 
 class Icone(Enum):
-    cliente = 'url(:/funcionalidade/cliente.png)'
-    resumo = 'url(:/funcionalidade/resumoCNIS.png)'
-    entrevista = 'url(:/funcionalidade/interview.png)'
-    processos = 'url(:/funcionalidade/processos.png)'
-    indicadores = 'url(:/ferramentas/information-black-16.png)'
-    ipca = 'url(:/ferramentas/indices.png)'
-    tetos = 'url(:/ferramentas/sacoDinheiro.png)'
-    expSobrevida = 'url(:/ferramentas/lifeHeart.png)'
-    configSistema = 'url(:/configuracoes/settingsDarker.png)'
+    cliente = ':/funcionalidade/blueCliente.png'
+    resumo = ':/ferramentas/blueResumoCNIS.png'
+    entrevista = ':/funcionalidade/blueInterview.png'
+    processos = ':/funcionalidade/blueProcessos.png'
+    indicadores = ':/ferramentas/blueResumoCNIS.png'
+    ipca = ':/ferramentas/blueIndices.png'
+    tetos = ':/ferramentas/blueCalculadora.png'
+    expSobrevida = ':/ferramentas/blueIndices.png'
+    configSistema = ':/configuracoes/settingsDarker.png'
 
 class TextoBotao(Enum):
     cliente = 'Cliente'
@@ -45,5 +47,5 @@ class TextoBotao(Enum):
     indicadores = 'Indicadores'
     ipca = 'IPCA mensal'
     tetos = 'Tetos prev.'
-    expSobrevida = 'Expectativa de sobrevida'
+    expSobrevida = 'Expectativa sobrevida'
     configSistema = 'Sistema'

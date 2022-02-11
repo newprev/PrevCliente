@@ -4,9 +4,8 @@ from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from typing import List
 
 from Design.pyUi.pgExpSobrevida import Ui_mwExpSobrevida
-from Design.CustomWidgets.newCheckBox import NewCheckBox
 from modelos.expSobrevidaORM import ExpSobrevida
-from util.dateHelper import mascaraDataPequena, strAnoToDate, strToDate
+from util.dateHelper import mascaraDataPequena, strToDate
 
 
 class ExpSobrevidaTela(QMainWindow, Ui_mwExpSobrevida):
@@ -17,17 +16,10 @@ class ExpSobrevidaTela(QMainWindow, Ui_mwExpSobrevida):
         self.setupUi(self)
         self.setWindowTitle('Experiência de sobrevida - [expSobrevidaTela]')
 
-        self.cbFiltro = NewCheckBox()
-
         self.tblInfo.hideColumn(0)
         self.rbAmbos.setChecked(True)
 
-        self.vlChecBox.addWidget(self.cbFiltro)
-
         self.desativarFiltros(True)
-        self.cbFiltro.stateChanged.connect(self.avaliaDesativaFiltros)
-        self.pbRefresh.clicked.connect(self.limpaFiltros)
-        self.pbFiltrar.clicked.connect(self.avaliaFiltros)
 
         self.carregaTabela()
         self.dtDeDataRef.dateChanged.connect(lambda: self.editandoFiltro('dtDeDataRef'))
@@ -36,9 +28,6 @@ class ExpSobrevidaTela(QMainWindow, Ui_mwExpSobrevida):
         self.sbAteExp.textChanged.connect(lambda: self.editandoFiltro('sbAteExp'))
         self.sbDe.valueChanged.connect(lambda: self.editandoFiltro('sbDe'))
         self.sbPara.valueChanged.connect(lambda: self.editandoFiltro('sbPara'))
-
-    def avaliaDesativaFiltros(self):
-        self.desativarFiltros(not self.cbFiltro.isChecked())
 
     def avaliaFiltros(self):
         for linha in range(self.tblInfo.rowCount()):
@@ -131,13 +120,11 @@ class ExpSobrevidaTela(QMainWindow, Ui_mwExpSobrevida):
             self.frIdade.hide()
             self.frGenero.hide()
             self.frExpectativa.hide()
-            self.pbFiltrar.hide()
         else:
             self.frDtReferente.show()
             self.frIdade.show()
             self.frGenero.show()
             self.frExpectativa.show()
-            self.pbFiltrar.show()
 
     def editandoFiltro(self, info: str):
         if info == 'dtDeDataRef':

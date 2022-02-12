@@ -105,7 +105,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.leSegundo.textChanged.connect(self.avaliaFocus)
         self.leTerceiro.textChanged.connect(self.avaliaFocus)
         self.leQuarto.textChanged.connect(self.avaliaFocus)
-        self.leQuinto.textChanged.connect(self.avaliaFocus)
+        self.leQuinto.textEdited.connect(self.avaliaFocus)
 
         self.carregaCacheLogin()
 
@@ -185,7 +185,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
     def avaliaCriaSenha(self):
         if self.lePASenha.text() == '' or self.lePAConfirmaSenha.text() == '':
             self.toasty.showMessage(self, "É preciso informar uma senha no primeiro campo e confirmá-la no campo abaixo.")
-            # popUpOkAlerta("É preciso informar uma senha no primeiro campo e confirmá-la no campo abaixo.")
             self.lePASenha.setFocus()
             return False
         elif self.lePASenha.text() != self.lePAConfirmaSenha.text():

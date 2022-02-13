@@ -22,7 +22,7 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
         self.sinais = Sinais()
         self.sinais.sAtualizaCabecalho.connect(self.enviaCabecalho)
 
-        self.gbMain.toggled.connect(self.cabecalhoselecionado)
+        self.mouseDoubleClickEvent = lambda _: self.cabecalhoselecionado()
 
     def carregaCabecalho(self):
         # Nome da empresa ou do benefícios
@@ -57,7 +57,7 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
             self.frDadoFaltante.hide()
 
     def cabecalhoselecionado(self):
-        self.selecionado = self.gbMain.isChecked()
+        self.selecionado = not self.selecionado
 
         if self.selecionado:
             Efeitos().shadowCards([self])
@@ -71,4 +71,3 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
     def desselecionaCabecalho(self):
         Efeitos().desativarSombra([self])
         self.selecionado = False
-        self.gbMain.setChecked(False)

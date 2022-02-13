@@ -64,7 +64,7 @@ def buscaIndicesByClienteId(clienteId: int, indices: list = []) -> str:
 
     return strComando
 
-def remuEContrib(clienteId: int) -> str:
+def remuEContrib(clienteId: int, seq: int) -> str:
     return f"""
     SELECT
         --Contribuições
@@ -82,5 +82,6 @@ def remuEContrib(clienteId: int) -> str:
                 AND con.competencia <= cm.dataFinal
         LEFT JOIN tetosPrev tp
             ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', con.competencia)
-    WHERE clienteId = {clienteId}
+    WHERE con.clienteId = {clienteId}
+        AND con.seq = {seq}
             """

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>608</width>
+    <width>612</width>
     <height>144</height>
    </rect>
   </property>
@@ -115,7 +115,7 @@
     <number>2</number>
    </property>
    <item>
-    <widget class="QGroupBox" name="gbMain">
+    <widget class="QWidget" name="gbMain" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
        <horstretch>0</horstretch>
@@ -133,12 +133,6 @@
        <width>16777215</width>
        <height>13215644</height>
       </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>

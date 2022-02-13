@@ -1,27 +1,33 @@
 from typing import List, Generator
-
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont
 from peewee import SqliteDatabase
 
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTableWidgetItem, QScrollBar
+from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTableWidgetItem, QPushButton, QHBoxLayout
+
 from Design.pyUi.wdgResumoCNIS import Ui_wdgResumoCnis
 from SQLs.itensContribuicao import remuEContrib
 from modelos.Auxiliares.remuEContribs import RemuEContribs
 from modelos.itemContribuicao import ItemContribuicao
 from util.dateHelper import mascaraData
 from util.enums.dashboardEnums import TelaAtual
-from util.enums.newPrevEnums import TipoContribuicao
-from .localStyleSheet.resumoCnis import selecionaBotao
+from util.enums.newPrevEnums import TipoContribuicao, TipoEdicao, Prioridade
 
+from .localStyleSheet.resumoCnis import selecionaBotao, botaoOpcoes
 from .localWidgets.wdgItemCabecalho import ItemResumoCnis
+
+from Design.CustomWidgets.newToast import QToaster
 
 from modelos.clienteORM import Cliente
 from modelos.cabecalhoORM import CnisCabecalhos
 
 from util.helpers import mascaraCPF, mascaraCNPJ, mascaraDinheiro, dataUSAtoBR
-from util.enums.resumoCnisEnums import TelaResumo
+from util.layoutHelpers import limpaLayout
+from util.enums.resumoCnisEnums import TelaResumo, TipoBotaoResumo
 from util.enums.databaseEnums import DatabaseEnum
+from util.popUps import popUpSimCancela
+
+from systemLog.logs import logPrioridade
 
 
 class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
@@ -29,6 +35,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
     telaAtual: TelaResumo
     cabecalhoAtual: CnisCabecalhos
     vlResumos: QVBoxLayout = QVBoxLayout()
+    toasty: QToaster
 
     def __init__(self, parent=None):
         super(ResumoCnisController, self).__init__(parent=parent)
@@ -37,6 +44,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
 
         self.telaAtual = TelaResumo.resumos
         self.cabecalhoAtual = None
+        self.toasty = None
 
         self.tblContribuicoes.horizontalHeader().show()
         self.tblContribuicoes.hideColumn(0)
@@ -100,9 +108,14 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
         else:
             self.trocaTela(TelaResumo.beneficios)
 
+    def atualizarVinculos(self):
+        self.limpaTudo()
+        self.carregaResumos()
+
     def avaliaVoltar(self):
         if self.telaAtual == TelaResumo.resumos:
             self.dashboard.trocaTela(TelaAtual.Cliente)
+            self.limpaTudo()
         else:
             self.trocaTela(TelaResumo.resumos)
 
@@ -161,6 +174,28 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblContribuicoes.setItem(contLinha, 6, strItem)
 
+            # Botões de edição (Ações) - Coluna 7 <Aparente>
+            hlOpcoes = QHBoxLayout()
+            hlOpcoes.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
+
+            pbEditar = QPushButton()
+            pbEditar.setStyleSheet(botaoOpcoes(TipoBotaoResumo.editar))
+            pbEditar.setFixedSize(QSize(25, 25))
+            pbEditar.clicked.connect(lambda state, item=item: self.avaliaOpcoes(item, TipoBotaoResumo.editar))
+
+            pbDeletar = QPushButton()
+            pbDeletar.setStyleSheet(botaoOpcoes(TipoBotaoResumo.deletar))
+            pbDeletar.setFixedSize(QSize(25, 25))
+            pbDeletar.clicked.connect(lambda state, item=item: self.avaliaOpcoes(item, TipoBotaoResumo.deletar))
+
+            hlOpcoes.addWidget(pbDeletar)
+            hlOpcoes.addWidget(pbEditar)
+
+            wdgAuxiliar = QWidget()
+            wdgAuxiliar.setLayout(hlOpcoes)
+
+            self.tblContribuicoes.setCellWidget(contLinha, 7, wdgAuxiliar)
+
         self.tblContribuicoes.resizeColumnsToContents()
         self.tblContribuicoes.resizeRowsToContents()
 
@@ -208,6 +243,28 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             strRemuneracao.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblBeneficios.setItem(contLinha, 4, strRemuneracao)
 
+            # Botões de edição (Ações) - Coluna 5 <Aparente>
+            hlOpcoes = QHBoxLayout()
+            hlOpcoes.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
+
+            pbEditar = QPushButton()
+            pbEditar.setStyleSheet(botaoOpcoes(TipoBotaoResumo.editar))
+            pbEditar.setFixedSize(QSize(25, 25))
+            pbEditar.clicked.connect(lambda state, beneficio=beneficio: self.avaliaOpcoes(beneficio, TipoBotaoResumo.editar))
+
+            pbDeletar = QPushButton()
+            pbDeletar.setStyleSheet(botaoOpcoes(TipoBotaoResumo.deletar))
+            pbDeletar.setFixedSize(QSize(25, 25))
+            pbDeletar.clicked.connect(lambda state, beneficio=beneficio: self.avaliaOpcoes(beneficio, TipoBotaoResumo.editar))
+
+            hlOpcoes.addWidget(pbDeletar)
+            hlOpcoes.addWidget(pbEditar)
+
+            wdgAuxiliar = QWidget()
+            wdgAuxiliar.setLayout(hlOpcoes)
+
+            self.tblBeneficios.setCellWidget(contLinha, 5, wdgAuxiliar)
+
         self.tblBeneficios.resizeColumnsToContents()
         self.tblBeneficios.resizeRowsToContents()
 
@@ -219,27 +276,73 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
 
         self.wdgScroll.setLayout(self.vlResumos)
 
+    def excluirItem(self, itemTabela: ItemContribuicao):
+        try:
+            logPrioridade(f'DELETE<excluirItem>___________________{itemTabela.itemContribuicaoId=}', tipoEdicao=TipoEdicao.insert, priodiade=Prioridade.saidaComum)
+            ItemContribuicao.delete_by_id(itemTabela.itemContribuicaoId)
+            if self.toasty is None:
+                self.toasty = QToaster(self)
+            self.toasty.showMessage(self, f"Competência {mascaraData(itemTabela.competencia)} excluída com sucesso")
+            self.carregaTblContribuicoes()
+        except Exception as err:
+            logPrioridade(f'DELETE<excluirItem>::erro ___________________{err=}', tipoEdicao=TipoEdicao.insert, priodiade=Prioridade.saidaComum)
+        finally:
+            return True
+
     def permiteTrocaTela(self, tela: TelaResumo) -> bool:
         if self.telaAtual == TelaResumo.resumos:
+            # Mensagem, caso não permita trocar a tela
+            if tela == TelaResumo.beneficios:
+                mensagem = f"A entrada selecionada não é um benefício."
+            else:
+                mensagem = f"A entrada selecionada é um benefício e não uma contribuição."
+
             # Resumos -> Contribuições
             if tela == TelaResumo.contribuicoes:
                 for index in range(self.vlResumos.count()):
                     wdgCabecalho: ItemResumoCnis = self.vlResumos.itemAt(index).widget()
                     if wdgCabecalho.selecionado and wdgCabecalho.cabecalhoAtual.cabecalhosId == self.cabecalhoAtual.cabecalhosId:
-                        return self.cabecalhoAtual.nb is None
+                        ehBeneficio: bool = self.cabecalhoAtual.nb is not None
+                        if ehBeneficio:
+                            if self.toasty is None:
+                                self.toasty = QToaster(self)
+                            self.toasty.showMessage(self, mensagem)
+
+                        return not ehBeneficio
 
             # Resumos -> Benefícios
             elif tela == TelaResumo.beneficios:
                 for index in range(self.vlResumos.count()):
                     wdgCabecalho: ItemResumoCnis = self.vlResumos.itemAt(index).widget()
                     if wdgCabecalho.selecionado and wdgCabecalho.cabecalhoAtual.cabecalhosId == self.cabecalhoAtual.cabecalhosId:
-                        return self.cabecalhoAtual.nb is not None
+                        ehBeneficio: bool = self.cabecalhoAtual.nb is not None
+                        if not ehBeneficio:
+                            if self.toasty is None:
+                                self.toasty = QToaster(self)
+                            self.toasty.showMessage(self, mensagem)
+                        return ehBeneficio
 
         # Qualquer tela -> Resumo
         else:
             return True
 
         return False
+
+    def limpaTudo(self):
+        limpaLayout(self.vlResumos)
+
+    def avaliaOpcoes(self, itemTabela: RemuEContribs, acao: TipoBotaoResumo):
+        itemId: int = itemTabela.itemContribuicaoId
+
+        itemContribuicao: ItemContribuicao = ItemContribuicao.get_by_id(itemId)
+
+        if acao == TipoBotaoResumo.editar:
+            print(f"Editou o item {itemContribuicao.competencia}")
+        else:
+            popUpSimCancela(
+                f"Você deseja excluir a competência {mascaraData(itemContribuicao.competencia)}?",
+                funcao=lambda: self.excluirItem(itemContribuicao),
+            )
 
     def recebeCliente(self, cliente: Cliente):
         if cliente is not None:

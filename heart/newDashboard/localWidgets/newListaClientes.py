@@ -92,6 +92,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             funcEditar=lambda: self.editarCliente(clienteId),
             funcArquivar=lambda: self.avaliaArquivarCliente(clienteId, linhaSelecionada),
             funcEntrevista=lambda: self.confirmaInicioEntrevista(clienteId),
+            funcResumoCnis=lambda: self.navegaResumoCnis(clienteId),
         )
         menu.exec_(QCursor.pos())
 
@@ -408,6 +409,10 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 self.popupCNIS.close()
 
         return super(NewListaClientes, self).eventFilter(a0, tecla)
+
+    def navegaResumoCnis(self, clienteId: int):
+        clienteEscolhido: Cliente = Cliente.get_by_id(clienteId)
+        self.dashboard.trocaTela(TelaAtual.Resumo, clienteEscolhido)
 
     def selecionaCliente(self, *args, **kwargs):
         linhaSelecionada = args[0].row()

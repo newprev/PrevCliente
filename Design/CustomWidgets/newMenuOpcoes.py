@@ -14,6 +14,7 @@ class NewMenuOpcoes(QMenu):
             funcExcluir: Callable = None,
             funcAtualizar: Callable = None,
             funcEntrevista: Callable = None,
+            funcResumoCnis: Callable = None,
     ):
         super(NewMenuOpcoes, self).__init__(parent=parent)
         self.carregaEstilo()
@@ -23,6 +24,7 @@ class NewMenuOpcoes(QMenu):
         self.funcExcluir = funcExcluir
         self.funcAtualizar = funcAtualizar
         self.funcEntrevista = funcEntrevista
+        self.funcResumoCnis = funcResumoCnis
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -31,7 +33,6 @@ class NewMenuOpcoes(QMenu):
         self.iniciaLayout()
 
     def carregaEstilo(self):
-        # print(f"{self.dumpObjectTree()=}")
         self.setStyleSheet("#NewMenuOpcoes { background-color: transparent; }")
         self.setStyleSheet(estiloMenu())
 
@@ -60,4 +61,9 @@ class NewMenuOpcoes(QMenu):
             acaoEntrevista = QAction('Entrevista', self)
             acaoEntrevista.triggered.connect(lambda: self.funcEntrevista())
             self.addAction(acaoEntrevista)
+
+        if self.funcResumoCnis is not None:
+            acaoResumoCnis = QAction('Resumo CNIS', self)
+            acaoResumoCnis.triggered.connect(lambda: self.funcResumoCnis())
+            self.addAction(acaoResumoCnis)
 

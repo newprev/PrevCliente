@@ -2,4 +2,8 @@
   <qresource prefix="cabecalho">
     <file>back.png</file>
   </qresource>
+  <qresource prefix="opcoes">
+    <file>redDeletar.png</file>
+    <file>blueEditar.png</file>
+  </qresource>
 </RCC>

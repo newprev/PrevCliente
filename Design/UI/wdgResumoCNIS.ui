@@ -581,7 +581,7 @@ QHeaderView::section {
 }
 
 #tblContribuicoes::item {
-	padding: 2px 24px 2px 24px;
+	padding: 2px 2px 2px 2px;
 }</string>
         </property>
         <property name="frameShape">
@@ -861,6 +861,15 @@ QHeaderView::section {
                      <attribute name="verticalHeaderVisible">
                       <bool>false</bool>
                      </attribute>
+                     <attribute name="verticalHeaderCascadingSectionResizes">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderMinimumSectionSize">
+                      <number>25</number>
+                     </attribute>
+                     <attribute name="verticalHeaderDefaultSectionSize">
+                      <number>40</number>
+                     </attribute>
                      <attribute name="verticalHeaderHighlightSections">
                       <bool>false</bool>
                      </attribute>
@@ -889,7 +898,7 @@ QHeaderView::section {
                      </column>
                      <column>
                       <property name="text">
-                       <string>Entrada</string>
+                       <string>Vínculo</string>
                       </property>
                       <property name="font">
                        <font>
@@ -1094,7 +1103,7 @@ previdenciários</string>
                        </font>
                       </property>
                       <property name="textAlignment">
-                       <set>AlignTrailing|AlignVCenter</set>
+                       <set>AlignCenter</set>
                       </property>
                       <property name="background">
                        <color>
@@ -1111,11 +1120,6 @@ previdenciários</string>
                          <blue>140</blue>
                         </color>
                        </brush>
-                      </property>
-                     </column>
-                     <column>
-                      <property name="text">
-                       <string/>
                       </property>
                      </column>
                      <item row="0" column="1">
@@ -1560,7 +1564,7 @@ previdenciários</string>
                      </column>
                      <column>
                       <property name="text">
-                       <string>Entrada</string>
+                       <string>Vínculo</string>
                       </property>
                       <property name="font">
                        <font>
@@ -1699,7 +1703,7 @@ previdenciários</string>
                        </font>
                       </property>
                       <property name="textAlignment">
-                       <set>AlignTrailing|AlignVCenter</set>
+                       <set>AlignCenter</set>
                       </property>
                       <property name="background">
                        <color>
@@ -1716,11 +1720,6 @@ previdenciários</string>
                          <blue>140</blue>
                         </color>
                        </brush>
-                      </property>
-                     </column>
-                     <column>
-                      <property name="text">
-                       <string/>
                       </property>
                      </column>
                      <item row="0" column="1">

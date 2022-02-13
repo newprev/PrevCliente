@@ -1,4 +1,4 @@
-from util.enums.resumoCnisEnums import TelaResumo
+from util.enums.resumoCnisEnums import TelaResumo, TipoBotaoResumo
 
 
 def selecionaBotao(tela: TelaResumo, seleciona: bool) -> str:
@@ -51,3 +51,16 @@ def selecionaBotao(tela: TelaResumo, seleciona: bool) -> str:
     }}"""
 
     return style
+
+
+def botaoOpcoes(botao: TipoBotaoResumo) -> str:
+    return f"""
+    QPushButton {{
+        background-image: url({botao.value});
+        background-position: center;
+        background-repeat: no-repeat;
+    
+        background-color: transparent;
+        border-radius: 0px;
+    }}
+    """

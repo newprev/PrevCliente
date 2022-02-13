@@ -2,8 +2,8 @@ import json
 
 import requests as http
 from systemLog.logs import logPrioridade
-from typing import List
-from playhouse.shortcuts import dict_to_model, model_to_dict
+from typing import List, Tuple
+from playhouse.shortcuts import dict_to_model
 
 from util.enums.newPrevEnums import *
 from util.enums.logEnums import TipoLog
@@ -13,7 +13,6 @@ from Configs.systemConfig import buscaSystemConfigs
 from modelos.advogadoORM import Advogados
 from modelos.escritoriosORM import Escritorios
 from modelos.Auth.AdvAuthModelo import AdvAuthModelo
-from repositorios.escritorioRepositorio import EscritorioRepositorio
 
 
 class UsuarioRepository:
@@ -52,6 +51,27 @@ class UsuarioRepository:
                 f"API [{response.status_code}]=> confirmaAlteraSenha ____________________PATCH<advogados/>:::{url}",
                 tipoEdicao=TipoEdicao.api,
                 tipoLog=TipoLog.Rest,
+                priodiade=Prioridade.saidaComum,
+            )
+            return False
+
+    def desconfirmaAdvogado(self, advogadoId: int) -> bool:
+        url: str = self.baseUrl + f'advogados/{advogadoId}/confirmacao/'
+        body: dict = {'confirmado': False}
+
+        response = http.patch(url, data=body)
+        if 199 < response.status_code < 400:
+            logPrioridade(
+                f"API => desconfirmaAdvogado ____________________PATCH<advogados/{advogadoId}/confirmacao/>",
+                tipoEdicao=TipoEdicao.api,
+                tipoLog=TipoLog.Rest,
+                priodiade=Prioridade.saidaComum,
+            )
+            return True
+        else:
+            logPrioridade(
+                f"API => desconfirmaAdvogado[{response.status_code=}] ____________________PATCH<advogados/{advogadoId}/confirmacao/>",
+                tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest,
                 priodiade=Prioridade.saidaComum,
             )
             return False
@@ -169,7 +189,12 @@ class UsuarioRepository:
             logPrioridade(f"API => atualizaSenha ____________________PATCH<advogado/<int:id>/confirmacao/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
             return {"statusCode": response.status_code}
 
-    def buscaAdvPor(self, advogadoId: int = None, senhaInserida: str = None) -> Advogados:
+    def buscaAdvPor(self, advogadoId: int = None, senhaInserida: str = None) -> Tuple[Advogados, int]:
+        """
+        Por necessidade do framework peewee, essa função devolve o escritorioId e a instância do
+        advogado.
+        """
+
         url: str = self.baseUrl + f'advogados/{advogadoId}/'
         response = http.get(url)
 
@@ -182,17 +207,17 @@ class UsuarioRepository:
                 else:
                     advogado.senha = 'senhaProvisoria'
 
-                advogado: Advogados = Advogados().fromDict(advogado.toDict())
+                escritorioId = response.json()['escritorioId']
 
                 if not advogado:
                     logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
-                    return False
+                    return Advogados(), 0
                 else:
                     logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
-                    return advogado
+                    return advogado, escritorioId
             else:
                 logPrioridade(f"API => buscaAdvPor ____________________GET<advogados/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
-                return False
+                return Advogados(), 0
 
         except Exception as erro:
             print(f'buscaAdvPor - Erro: {type(erro)}')

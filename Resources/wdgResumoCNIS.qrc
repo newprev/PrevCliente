@@ -2,7 +2,14 @@
   <qresource prefix="cabecalho">
     <file>back.png</file>
   </qresource>
+  <qresource prefix="upDown">
+    <file>down.png</file>
+  </qresource>
   <qresource prefix="opcoes">
+    <file>busca.png</file>
+    <file>addIcon.png</file>
+    <file>rbUnchecked.png</file>
+    <file>rbChecked.png</file>
     <file>redDeletar.png</file>
     <file>blueEditar.png</file>
   </qresource>

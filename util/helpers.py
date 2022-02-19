@@ -317,7 +317,9 @@ def mascaraTelCel(telCel):
 
 
 def mascaraCNPJ(cnpj):
-    if cnpj is None or len(cnpj) != 14:
+    if cnpj == '':
+        return '-'
+    elif cnpj is None or len(cnpj) != 14:
         return cnpj
     else:
         return f'{cnpj[:2]}.{cnpj[2:5]}.{cnpj[5:8]}/{cnpj[8:12]}-{cnpj[12:]}'

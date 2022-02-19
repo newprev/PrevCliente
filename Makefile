@@ -14,7 +14,7 @@ SQL_FILE = arquivo.sql
 ## @ Limpeza
 cleanAll: ## Limpa todo o cache e exclui o banco de dados
 	@echo 'Limpando o cache'
-	@rm -f .sync/.syncFile && echo "---> .sync/.syncFile"
+	@rm -f .sync/.syncFile.json && echo "---> .sync/.syncFile.json"
 	@rm -f cache/.escritorio.json && echo "---> cache/.escritorio.json"
 	@rm -f cache/.login.json && echo "---> cache/.login.json"
 	@rm -f Daos/producao.db	&& echo "---> Daos/producao.db"

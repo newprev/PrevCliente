@@ -39,6 +39,10 @@ class ApiInformacoes:
             endpoint = 'ipcaMensal/'
         elif tipo == FerramentasEInfo.tipoBeneficio:
             endpoint = 'tipoBeneficio/'
+        elif tipo == FerramentasEInfo.especieBeneficio:
+            endpoint = 'especieBeneficio/'
+        else:
+            endpoint = ''
 
         async with aiohttp.ClientSession() as http:
             url = self.baseUrl + endpoint

@@ -848,7 +848,7 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
          <item row="0" column="0">
           <widget class="QStackedWidget" name="stkCliente">
            <property name="currentIndex">
-            <number>2</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="pgPessoais">
             <property name="sizePolicy">

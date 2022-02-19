@@ -16,7 +16,7 @@ from modelos.clienteInfoBanco import ClienteInfoBanco
 from modelos.clienteProfissao import ClienteProfissao
 
 from modelos.convMonORM import ConvMon
-from modelos.especieBenefORM import EspecieBenef
+from modelos.especieBenefORM import EspecieBene
 from modelos.expSobrevidaORM import ExpSobrevida
 from modelos.indicadoresORM import Indicadores
 from modelos.indiceAtuMonetariaORM import IndiceAtuMonetaria
@@ -125,7 +125,7 @@ class Main(Ui_MainWindow, QMainWindow):
                 Cliente: 'CRIANDO TABELA DO CLIENTE...',
                 CnisCabecalhos: 'CRIANDO TABELA DE CABEÇALHOS...',
                 ConvMon: 'CRIANDO TABELA DE CONVERSÕES MONETÁRIAS...',
-                EspecieBenef: 'CRIANDO TABELA DE ESPÉCIES DE BENEFÍCIOS...',
+                EspecieBene: 'CRIANDO TABELA DE ESPÉCIES DE BENEFÍCIOS...',
                 ExpSobrevida: 'CRIANDO TABELA DAS EXPECTATIVAS DE SOBREVIDA...',
                 Indicadores: 'CRIANDO TABELA DE INDICADORES...',
                 IndiceAtuMonetaria: 'CRIANDO TABELA DOS ÍNDICES DE ATUALIZAÇÃO MONETARIA...',

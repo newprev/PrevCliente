@@ -16,7 +16,7 @@ class CnisCabecalhos(BaseModel, Model):
     seq = IntegerField(null=False)
     cdEmp = CharField(column_name='cdEmp', null=True)
     dadoFaltante = BooleanField(column_name='dadoFaltante', default=False)
-    dadoOrigem = CharField(column_name='dadoOrigem', default='CNIS')
+    dadoOrigem = CharField(column_name='dadoOrigem', default='CNIS', max_length=10)
     dataFim = DateField(column_name='dataFim', null=True, formats=DATEFORMATS)
     dataInicio = DateField(column_name='dataInicio', formats=DATEFORMATS)
     especie = CharField(null=True)

@@ -11,10 +11,9 @@ from heart.informacoesTelas.localWidgets.wdgIndicadorController import WdgIndica
 
 class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):
 
-    def __init__(self, retornaIndicadores=False, parent=None, db=None):
+    def __init__(self, retornaIndicadores=False, parent=None):
         super(IndicadoresController, self).__init__(parent=parent)
         self.setupUi(self)
-        self.db = db
         self.parent = parent
         self.indicadores = []
         self.indicadoresNoProcesso: List[str] = []

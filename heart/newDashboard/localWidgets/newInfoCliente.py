@@ -231,7 +231,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         popUpSimCancela(
             f"Você deseja iniciar uma nova entrevista com o(a) cliente: \n\n{self.clienteAtual.nomeCliente} {self.clienteAtual.sobrenomeCliente}?",
             titulo="Iniciar entrevista",
-            funcao=self.sinais.sIniciaEntrevista.emit,
+            funcaoSim=self.sinais.sIniciaEntrevista.emit,
         )
         return True
 
@@ -332,7 +332,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         popUpSimCancela(
             "Atualizar o CNIS excluirá todos as contribuições e benefícios inseridos anteriormente, além das simulações geradas.\nDeseja continuar?",
             titulo="Atualizar arquivo do CNIS",
-            funcao=lambda: self.abrirPopupCNIS()
+            funcaoSim=lambda: self.abrirPopupCNIS()
         )
         return True
 

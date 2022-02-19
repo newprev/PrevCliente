@@ -5,8 +5,13 @@ class TelaResumo(Enum):
     resumos = 0
     contribuicoes = 1
     beneficios = 2
-    addContrib = 3
-    addBeneficio = 4
+    addVinculo = 3
+    addContriBene = 4
+
+
+class TipoVinculo(Enum):
+    contribuicao = 0
+    beneficio = 1
 
 
 class TipoBotaoResumo(Enum):

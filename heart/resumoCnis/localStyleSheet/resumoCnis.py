@@ -64,3 +64,51 @@ def botaoOpcoes(botao: TipoBotaoResumo) -> str:
         border-radius: 0px;
     }}
     """
+
+
+def cadLineEdit() -> str:
+    return """
+        QLineEdit {
+            font: 12pt "Avenir LT Std";
+            border: 0px solid gray;
+            border-radius: 8px;
+            padding: 0 8px;
+            background: #F9F9F9;
+            selection-background-color: darkgray;
+        }"""
+
+
+def cadDataEdit() -> str:
+    return """
+     QDateEdit {
+        border: 0px solid gray;
+        border-radius: 8px;
+        padding: 1px 18px 1px 8px;
+        
+        font: 12pt "Avenir LT Std";
+        color: #606970;
+    
+        background-color: #F9F9F9;
+    }
+    
+    QDateEdit::down-button {
+        subcontrol-origin: padding;
+        subcontrol-position: top right;
+        width: 15px;
+        padding: 0px 8px 0px 0px;
+    
+        border-left-width: 0px;
+    }
+    
+    QDateEdit::down-arrow {
+        image: url(:/upDown/down.png);
+    }
+    
+    QDateEdit::drop-down {
+        subcontrol-origin: padding;
+        subcontrol-position: top right;
+        width: 15px;
+        padding: 0px 8px 0px 0px;
+    
+        border-left-width: 0px;
+}"""

@@ -57,7 +57,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
 
     def avaliarVoltar(self):
         if self.etapaAtual == EtapaEntrevista.naturezaProcesso:
-            popUpSimCancela('Deseja deixar a entrevista?\nTodas as informações serão perdidas.', funcao=self.sairEntrevista)
+            popUpSimCancela('Deseja deixar a entrevista?\nTodas as informações serão perdidas.', funcaoSim=self.sairEntrevista)
         elif self.etapaAtual == EtapaEntrevista.tipoBeneficio:
             self.frTpBeneficioHist.hide()
             self.lbTpBeneEscolhido.setText('')

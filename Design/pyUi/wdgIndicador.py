@@ -42,6 +42,14 @@ class Ui_wdgIndicador(object):
 "#cbIndicador {\n"
 "    font: 12pt \"Avenir LT Std\";\n"
 "    color: #040D14;\n"
+"}\n"
+"\n"
+"#cbIndicador::indicator:unchecked {\n"
+"    image: url(:/indicador/CheckBoxFalse.png);\n"
+"}\n"
+"\n"
+"#cbIndicador::indicator:checked {\n"
+"    image: url(:/indicador/checkBoxTrue.png);\n"
 "}")
         self.horizontalLayout = QtWidgets.QHBoxLayout(wdgIndicador)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -81,6 +89,7 @@ class Ui_wdgIndicador(object):
         _translate = QtCore.QCoreApplication.translate
         wdgIndicador.setWindowTitle(_translate("wdgIndicador", "Form"))
         self.cbIndicador.setText(_translate("wdgIndicador", "CheckBox"))
+import Resources.wdgIndicador
 
 
 if __name__ == "__main__":

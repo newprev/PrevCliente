@@ -14,7 +14,7 @@ from modelos.itemContribuicao import ItemContribuicao
 from modelos.clienteORM import Cliente
 from util.dateHelper import strToDate, comparaMesAno
 from util.enums.newPrevEnums import TipoItemContribuicao, ComparaData
-from util.helpers import strToFloat, dictIndicadores, verificaIndicadorProibitivo
+from util.helpers import strToFloat, dictIndicadores, verificaIndicadorProibitivo, unmaskAll
 
 
 class CNISModelo:
@@ -185,7 +185,7 @@ class CNISModelo:
                     self.dictCabecalho['nit'].append(documentoLinhas[j])
                     nit = True
                 elif re.fullmatch(self.expRegCNPJ, documentoLinhas[j]) is not None or re.fullmatch(self.expRegCNPJalter, documentoLinhas[j]):
-                    self.dictCabecalho['cdEmp'].append(documentoLinhas[j])
+                    self.dictCabecalho['cdEmp'].append(unmaskAll(documentoLinhas[j]))
                     cdEmp = True
                 elif self.isIndicador(documentoLinhas[j]):
                     self.dictCabecalho['indicadores'].append(documentoLinhas[j])

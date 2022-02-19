@@ -206,7 +206,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
     def avaliaArquivarCliente(self, clienteId: int, linhaSelecionada: int):
         nomeCliente: str = self.tblClientes.item(linhaSelecionada, 1).text().upper()
-        popUpSimCancela(f"Tem certeza que deseja arquivar o(a) cliente {nomeCliente} ?", funcao=lambda: self.arquivarCliente(clienteId))
+        popUpSimCancela(f"Tem certeza que deseja arquivar o(a) cliente {nomeCliente} ?", funcaoSim=lambda: self.arquivarCliente(clienteId))
         self.atualizaTblClientes()
         return True
 
@@ -357,7 +357,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 popUpSimCancela(
                     f"O(a) cliente {infoPessoais['nomeCompleto'].upper()} já está cadastrado(a). Deseja atualizar suas informações?",
                     titulo="Cliente já cadastrado(a)",
-                    funcao=lambda: self.buscaClienteEdicao(unmaskAll(infoPessoais['cpf']))
+                    funcaoSim=lambda: self.buscaClienteEdicao(unmaskAll(infoPessoais['cpf']))
                 )
                 return False
 
@@ -382,7 +382,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         popUpSimCancela(
             f"Deseja iniciar uma entrevista com o(a) cliente:\n\n{clienteEscolhido.nomeCliente} {clienteEscolhido.sobrenomeCliente}?",
             titulo="Iniciar entrevista",
-            funcao=lambda: self.dashboard.trocaTela(TelaAtual.Entrevista, clienteEscolhido)
+            funcaoSim=lambda: self.dashboard.trocaTela(TelaAtual.Entrevista, clienteEscolhido)
         )
         return True
 

@@ -13,6 +13,7 @@ from Design.DesignSystem.fonts import FontSize
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 from modelos.Auth import AdvAuthModelo
+from modelos.especieBenefORM import EspecieBene
 
 from repositorios.clienteRepositorio import UsuarioRepository
 from repositorios.escritorioRepositorio import EscritorioRepositorio
@@ -560,6 +561,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             'syncCarenciasLei91': datetimeToSql(datetime.datetime.now()),
             'syncAtuMonetaria': datetimeToSql(datetime.datetime.now()),
             'syncSalarioMinimo': datetimeToSql(datetime.datetime.now()),
+            'syncEspecieBeneficio': datetimeToSql(datetime.datetime.now()),
             'syncIpca': datetimeToSql(datetime.datetime.now()),
         }
         loop = aio.get_event_loop()
@@ -582,6 +584,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     dateSyncCarenciasLei91 = strToDatetime(syncDict['syncCarenciasLei91'])
                     dateSyncAtuMonetaria = strToDatetime(syncDict['syncAtuMonetaria'])
                     dateSyncSalarioMinimo = strToDatetime(syncDict['syncSalarioMinimo'])
+                    dateSyncEspecieBeneficio = strToDatetime(syncDict['syncEspecieBeneficio'])
                     dateSyncIpca = strToDatetime(syncDict['syncIpca'])
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
@@ -619,6 +622,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     else:
                         syncJson['syncSalarioMinimo'] = syncDict['syncSalarioMinimo']
 
+                    if (datetime.datetime.now() - dateSyncEspecieBeneficio).days != 0:
+                        infoToUpdate[FerramentasEInfo.especieBeneficio] = True
+                    else:
+                        syncJson['syncEspecieBeneficio'] = syncDict['syncEspecieBeneficio']
+
                     if (datetime.datetime.now() - dateSyncIpca).days != 0:
                         infoToUpdate[FerramentasEInfo.ipca] = True
                     else:
@@ -637,6 +645,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 FerramentasEInfo.carenciasLei91: True,
                 FerramentasEInfo.atuMonetaria: True,
                 FerramentasEInfo.salarioMinimo: True,
+                FerramentasEInfo.especieBeneficio: True,
                 FerramentasEInfo.ipca: True,
             }
             loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
@@ -652,6 +661,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         qtdCarenciasLei91 = CarenciaLei91.select().count()
         qtdAtuMonetarias = IndiceAtuMonetaria.select().count()
         qtdSalariosMinimos = SalarioMinimo.select().count()
+        qtdEspecieBeneficios = EspecieBene.select().count()
         qtdIpca = IpcaMensal().select().count()
 
         asyncTasks = []
@@ -671,6 +681,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.atuMonetaria)))
                 elif tipoInfo == FerramentasEInfo.salarioMinimo:
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.salarioMinimo)))
+                elif tipoInfo == FerramentasEInfo.especieBeneficio:
+                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.especieBeneficio)))
                 elif tipoInfo == FerramentasEInfo.ipca:
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.ipca)))
 
@@ -718,6 +730,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 listaSalarios: List[dict] = infoApi
                 if qtdSalariosMinimos < len(listaSalarios):
                     SalarioMinimo.insert_many(listaSalarios).on_conflict('replace').execute()
+
+            elif aioTask == FerramentasEInfo.especieBeneficio:
+                listaEspecieBene: List[dict] = infoApi
+                if qtdEspecieBeneficios < len(listaEspecieBene):
+                    EspecieBene.insert_many(listaEspecieBene).on_conflict('replace').execute()
 
             elif aioTask == FerramentasEInfo.ipca:
                 listaIpca: List[dict] = infoApi

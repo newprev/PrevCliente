@@ -25,21 +25,27 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
         self.cabecalhoAtual = cabecalhoCnis
         self.carregaCabecalho()
         self.sinais = Sinais()
-        self.sinais.sAtualizaCabecalho.connect(self.enviaCabecalho)
-        self.sinais.sAtualizaCabecalho.connect(self.atualizarCabecalhos)
+        self.sinais.sAtualizaVinculo.connect(self.enviaCabecalho)
+        self.sinais.sDeletaVinculo.connect(self.atualizarCabecalhos)
+        self.sinais.sEditaVinculo.connect(self.enviaParaEdicao)
         self.toasty = None
 
         self.mouseDoubleClickEvent = lambda _: self.cabecalhoselecionado()
         self.pbRemover.clicked.connect(self.avaliaDeletarResumo)
+        self.pbEditar.clicked.connect(self.avaliaEnviaParaEdicao)
 
     def atualizarCabecalhos(self):
         self.resumoPage.atualizarVinculos()
+
+    def avaliaEnviaParaEdicao(self):
+        if self.cabecalhoAtual is not None:
+            self.sinais.sEditaVinculo.emit()
 
     def avaliaDeletarResumo(self):
         nomeVinculo = self.cabecalhoAtual.nomeEmp if self.cabecalhoAtual.nb is None else self.cabecalhoAtual.especie[5:]
         popUpSimCancela(
             f"Você realmente deseja deletar o vínculo {nomeVinculo} e todas as suas competências?",
-            funcao=self.deletarVinculo
+            funcaoSim=self.deletarVinculo
         )
 
     def carregaCabecalho(self):
@@ -79,7 +85,7 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
 
         if self.selecionado:
             Efeitos().shadowCards([self])
-            self.sinais.sAtualizaCabecalho.emit()
+            self.sinais.sAtualizaVinculo.emit()
         else:
             Efeitos().desativarSombra([self])
 
@@ -95,7 +101,7 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
                 ItemContribuicao.seq == self.cabecalhoAtual.seq,
             ).execute()
             CnisCabecalhos.delete_by_id(self.cabecalhoAtual.cabecalhosId)
-            self.sinais.sAtualizaCabecalho.emit()
+            self.sinais.sDeletaVinculo.emit()
             if self.toasty is None:
                 self.toasty = QToaster(self)
                 self.toasty.showMessage(self, f"O vínculo e {qtdeCompetencias} competências foram excluídas com sucesso.")
@@ -105,9 +111,12 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
                 self.toasty = QToaster(self)
             self.toasty.showMessage(self, f"Houve um erro e não foi possível excluir os itens e o vínculo.")
 
-    def enviaCabecalho(self):
-        self.resumoPage.atualizaCabecalhoSelecionado(self.cabecalhoAtual)
-
     def desselecionaCabecalho(self):
         Efeitos().desativarSombra([self])
         self.selecionado = False
+
+    def enviaCabecalho(self):
+        self.resumoPage.atualizaCabecalhoSelecionado(self.cabecalhoAtual)
+
+    def enviaParaEdicao(self):
+        self.resumoPage.vinculoParaEdicao(self.cabecalhoAtual)

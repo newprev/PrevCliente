@@ -75,6 +75,38 @@
 	background-color: white;
 }
 
+/*-------------------------------------------  Scroll Bar --------------------------------------------*/
+QScrollBar:vertical {
+        background-color: #DDDEDF;
+        width: 15px;
+        margin: 15px 3px 15px 3px;
+        border: 1px transparent #2A2929;
+        border-radius: 4px;
+    }
+
+QScrollBar::handle:vertical {
+    background-color: #3F4E8C;
+    min-height: 5px;
+    width: 20px;
+	border-radius: 4px;
+}
+
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical{
+      border: none;
+      background: none;
+      color: none;
+}
+
+QScrollBar::add-line:vertical {
+	border: none;
+    background: none;
+}
+
+QScrollBar::sub-line:vertical {
+	border: none;
+    background: none;
+}
+
 /* ----------------------------------------------- Line Edit ----------------------------------------------- */
 #leBusca {
 	border: 0px solid gray;
@@ -288,21 +320,33 @@
              </property>
              <item>
               <widget class="QScrollArea" name="scrollArea">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
                </property>
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
+               <property name="horizontalScrollBarPolicy">
+                <enum>Qt::ScrollBarAlwaysOff</enum>
+               </property>
                <property name="widgetResizable">
                 <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
                </property>
                <widget class="QWidget" name="scaIndicadores">
                 <property name="geometry">
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>215</width>
+                  <width>218</width>
                   <height>438</height>
                  </rect>
                 </property>

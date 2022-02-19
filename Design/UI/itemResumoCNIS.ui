@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>612</width>
+    <width>704</width>
     <height>144</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -114,31 +114,43 @@
    <property name="bottomMargin">
     <number>2</number>
    </property>
-   <item>
+   <item alignment="Qt::AlignHCenter|Qt::AlignTop">
     <widget class="QWidget" name="gbMain" native="true">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
      <property name="minimumSize">
       <size>
-       <width>0</width>
+       <width>700</width>
        <height>140</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>16777215</width>
+       <width>820</width>
        <height>13215644</height>
       </size>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="leftMargin">
+       <number>4</number>
+      </property>
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="rightMargin">
+       <number>4</number>
+      </property>
+      <property name="bottomMargin">
+       <number>4</number>
+      </property>
       <item>
        <widget class="QFrame" name="frame_2">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -168,7 +180,7 @@
          <item>
           <widget class="QFrame" name="frame_3">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -193,7 +205,7 @@
              <number>12</number>
             </property>
             <property name="topMargin">
-             <number>12</number>
+             <number>6</number>
             </property>
             <property name="rightMargin">
              <number>0</number>
@@ -203,6 +215,12 @@
             </property>
             <item>
              <widget class="QLabel" name="lbCdEmp">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -212,7 +230,7 @@
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>100</height>
+                <height>16548465</height>
                </size>
               </property>
               <property name="text">
@@ -225,6 +243,12 @@
             </item>
             <item>
              <widget class="QLabel" name="lbCNPJouNB">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>CNPJ: 45.652.000-1/32</string>
               </property>
@@ -237,6 +261,9 @@
              <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Preferred</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -252,7 +279,7 @@
          <item>
           <widget class="QFrame" name="frame_4">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -394,13 +421,13 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>120</width>
+          <width>80</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>120</width>
+          <width>80</width>
           <height>16777215</height>
          </size>
         </property>
@@ -428,17 +455,29 @@
          </property>
          <item row="1" column="0">
           <widget class="QFrame" name="frame">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
            </property>
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <layout class="QGridLayout" name="gridLayout_5">
+            <property name="leftMargin">
+             <number>4</number>
+            </property>
+            <property name="rightMargin">
+             <number>4</number>
+            </property>
             <property name="bottomMargin">
              <number>24</number>
             </property>
-            <item>
+            <item row="0" column="0">
              <widget class="QPushButton" name="pbRemover">
               <property name="minimumSize">
                <size>
@@ -457,7 +496,7 @@
               </property>
              </widget>
             </item>
-            <item>
+            <item row="0" column="1">
              <widget class="QPushButton" name="pbEditar">
               <property name="minimumSize">
                <size>
@@ -505,10 +544,7 @@
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <property name="spacing">
-             <number>2</number>
-            </property>
+           <layout class="QGridLayout" name="gridLayout_6">
             <property name="leftMargin">
              <number>0</number>
             </property>
@@ -521,14 +557,7 @@
             <property name="bottomMargin">
              <number>0</number>
             </property>
-            <item alignment="Qt::AlignVCenter">
-             <widget class="QLabel" name="lbInfoFalta">
-              <property name="text">
-               <string>Dado faltante</string>
-              </property>
-             </widget>
-            </item>
-            <item>
+            <item row="0" column="0" alignment="Qt::AlignRight">
              <widget class="QFrame" name="frInfoTag">
               <property name="minimumSize">
                <size>

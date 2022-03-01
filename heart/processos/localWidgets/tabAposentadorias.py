@@ -7,7 +7,7 @@ from modelos.clienteORM import Cliente
 
 from heart.processos.localWidgets.cardAposentadoria import CardAposentadoria
 
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 
 from util.helpers import calculaCoordenadas
 

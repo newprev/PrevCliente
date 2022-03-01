@@ -101,7 +101,7 @@ def cadDataEdit() -> str:
     }
     
     QDateEdit::down-arrow {
-        image: url(:/upDown/down.png);
+        image: url(:/upDown/calendar.png);
     }
     
     QDateEdit::drop-down {

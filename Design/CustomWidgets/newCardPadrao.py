@@ -4,7 +4,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QFrame
 
 from Design.CustomWidgets.styleSheets.newCardPadrao import firulaHover
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 from Design.pyUi.newCardPadrao import Ui_frCardPadrao
 from util.enums.processoEnums import NaturezaProcesso, TipoBeneficioEnum, TipoProcesso
 from util.helpers import strTipoBeneFacilitado, strTipoProcesso

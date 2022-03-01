@@ -150,11 +150,11 @@ class Cliente(BaseModel, Model):
 @post_save(sender=Cliente)
 def inserindoCliente(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
+        logPrioridade(f'INSERT<inserindoVinculo>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'UPDATE<inserindoCabecalho>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+        logPrioridade(f'UPDATE<inserindoVinculo>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
 @pre_delete(sender=Cliente)
 def deletandoCliente(*args, **kwargs):
-    logPrioridade(f'DELETE<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    logPrioridade(f'DELETE<inserindoVinculo>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

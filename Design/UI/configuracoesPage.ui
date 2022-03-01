@@ -1,83 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>wdgTabConfiguracoes</class>
- <widget class="QWidget" name="wdgTabConfiguracoes">
+ <class>mwConfiguracoes</class>
+ <widget class="QMainWindow" name="mwConfiguracoes">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>945</width>
-    <height>500</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>945</width>
-    <height>500</height>
-   </size>
-  </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>MainWindow</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">#tabMain, #tabTetosPrev {
-	border-radius: 8px;
-	background-color: white;
-	padding: 4px;
-	
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 16px;
-}
-
-#tabMain::pane {
-	background-color: white;
-	border-radius: 8px;
-/*	border-top: 4px solid rgb(52, 73, 94);
-	border-bottom: 4px solid rgb(52, 73, 94);
-	border-right: 4px solid rgb(52, 73, 94);
-	border-left: 4px solid rgba(66, 147, 215, 255);*/
-
-	border: 4px solid transparent;
-}
-
-#tabMain::tab-bar {
-	left: 16px;
-}
-
-QTabBar::tab{
-	background: rgb(52, 73, 94);
-	color: white;
-	min-width: 24ex;
-	margin-left: 4px;
-	margin-right: 4px;
-}
-
-QTabBar::tab:selected, QTabBar::tab:hover {
-	background: white;
-	color: rgb(52, 73, 94);
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	border-bottom-left-radius: 4px;
-	border-bottom-right-radius: 4px;
-	border: 2px solid white;
-	padding: 4px;
-}</string>
-  </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
-   <item>
-    <widget class="QTabWidget" name="tabMain">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="currentIndex">
-      <number>0</number>
-     </property>
-     <widget class="QWidget" name="tabGeral">
-      <property name="styleSheet">
-       <string notr="true">/*------------------------------------ Tables --------------------------------------*/
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QTabWidget" name="tabMain">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tabGeral">
+       <property name="styleSheet">
+        <string notr="true">/*------------------------------------ Tables --------------------------------------*/
 #tblTetos{
 	background-color: transparent;
 }
@@ -191,126 +157,127 @@ QGroupBox QGroupBox {
 	border: 1px dashed grey;
 }
 </string>
-      </property>
-      <attribute name="title">
-       <string>Geral</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="gpIniciando">
-         <property name="title">
-          <string>Iniciando o programa</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <property name="spacing">
-           <number>4</number>
+       </property>
+       <attribute name="title">
+        <string>Geral</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="1" column="0">
+         <widget class="QGroupBox" name="gpIniciando">
+          <property name="title">
+           <string>Iniciando o programa</string>
           </property>
-          <property name="leftMargin">
-           <number>16</number>
-          </property>
-          <property name="topMargin">
-           <number>26</number>
-          </property>
-          <property name="rightMargin">
-           <number>4</number>
-          </property>
-          <property name="bottomMargin">
-           <number>4</number>
-          </property>
-          <item>
-           <widget class="QFrame" name="frame">
-            <property name="frameShape">
-             <enum>QFrame::NoFrame</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <property name="spacing">
-              <number>16</number>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="spacing">
+            <number>4</number>
+           </property>
+           <property name="leftMargin">
+            <number>16</number>
+           </property>
+           <property name="topMargin">
+            <number>26</number>
+           </property>
+           <property name="rightMargin">
+            <number>4</number>
+           </property>
+           <property name="bottomMargin">
+            <number>4</number>
+           </property>
+           <item>
+            <widget class="QFrame" name="frame">
+             <property name="frameShape">
+              <enum>QFrame::NoFrame</enum>
              </property>
-             <property name="leftMargin">
-              <number>0</number>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
              </property>
-             <property name="topMargin">
-              <number>2</number>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <property name="spacing">
+               <number>16</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>2</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <layout class="QHBoxLayout" name="hlInicioAutomatico"/>
+              </item>
+              <item alignment="Qt::AlignVCenter">
+               <widget class="QLabel" name="lbInicioAutomatico">
+                <property name="text">
+                 <string>Iniciar automaticamente</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
              </property>
-             <property name="rightMargin">
-              <number>0</number>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
              </property>
-             <item>
-              <layout class="QHBoxLayout" name="hlInicioAutomatico"/>
-             </item>
-             <item alignment="Qt::AlignVCenter">
-              <widget class="QLabel" name="lbInicioAutomatico">
-               <property name="text">
-                <string>Iniciar automaticamente</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lbTitulo">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>60</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Configurações gerais</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QGroupBox" name="groupBox_2">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QGroupBox" name="groupBox_3">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="lbTitulo">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>60</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Configurações gerais</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string>GroupBox</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="title">
+           <string>GroupBox</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="title">
+           <string>GroupBox</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="clientes">
+       <attribute name="title">
+        <string>Backups</string>
+       </attribute>
+      </widget>
      </widget>
-     <widget class="QWidget" name="clientes">
-      <attribute name="title">
-       <string>Backups</string>
-      </attribute>
-     </widget>
-    </widget>
-   </item>
-  </layout>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
  <connections/>

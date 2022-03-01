@@ -178,7 +178,7 @@ class DaoCalculos:
     #
     #     strComando = f"""
     #         SELECT
-    #             cabecalhosId, clienteId, seq,
+    #             vinculoId, clienteId, seq,
     #             nit, nb, cdEmp,
     #             nomeEmp, dataInicio, dataFim,
     #             tipoVinculo, orgVinculo, especie,
@@ -186,20 +186,20 @@ class DaoCalculos:
     #             situacao, dadoFaltante, dataCadastro,
     #             dataUltAlt
     #         FROM
-    #             {self.config.tblCnisCabecalhos}
+    #             {self.config.tblcnisVinculos}
     #         WHERE
     #             clienteId = {clienteId}
     #     """
     #
     #     try:
     #         cursor.execute(strComando)
-    #         logPrioridade(f'SELECT<buscaCabecalhosClienteId>___________________{self.config.tblCnisCabecalhos}', TipoEdicao.select, Prioridade.saidaComum)
+    #         logPrioridade(f'SELECT<buscaCabecalhosClienteId>___________________{self.config.tblcnisVinculos}', TipoEdicao.select, Prioridade.saidaComum)
     #         listaCabecalhos = (CabecalhoModelo().fromList(cabecalho) for cabecalho in cursor.fetchall())
     #         return listaCabecalhos
     #     except Exception as erro:
     #         print(f'buscaCabecalhosClienteId ({type(erro)}) - {erro}')
-    #         logPrioridade(f'Erro SQL - buscaCabecalhosClienteId {self.config.tblCnisCabecalhos}', TipoEdicao.erro, Prioridade.saidaImportante)
-    #         raise Warning(f'Erro SQL - buscaCabecalhosClienteId {self.config.tblCnisCabecalhos} <SELECT>')
+    #         logPrioridade(f'Erro SQL - buscaCabecalhosClienteId {self.config.tblcnisVinculos}', TipoEdicao.erro, Prioridade.saidaImportante)
+    #         raise Warning(f'Erro SQL - buscaCabecalhosClienteId {self.config.tblcnisVinculos} <SELECT>')
     #     finally:
     #         self.disconectBD(cursor)
 

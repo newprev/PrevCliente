@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget
 
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 from Design.pyUi.wdgIndicador import Ui_wdgIndicador
 from sinaisCustomizados import Sinais
 from modelos.indicadoresORM import Indicadores

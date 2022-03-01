@@ -5,19 +5,18 @@ from typing import List
 
 from PyQt5.QtCore import QObject, QEvent, Qt, QSize
 from PyQt5.QtGui import QFont, QKeyEvent, QCursor, QIcon
-from PyQt5.QtWidgets import QFrame, QTableWidgetItem, QPushButton, QHeaderView
+from PyQt5.QtWidgets import QFrame, QTableWidgetItem, QPushButton
 
 from Design.pyUi.newListaClientes import Ui_wdgListaClientes
 from Design.CustomWidgets.newPopupCNIS import NewPopupCNIS
 from Design.CustomWidgets.newFiltroClientes import NewFiltroClientes
 from Design.CustomWidgets.newToast import QToaster
 from Design.CustomWidgets.newMenuOpcoes import NewMenuOpcoes
-from Design.pyUi.efeitos import Efeitos
-from Design.DesignSystem.colors import NewColorsWhite
+from Design.efeitos import Efeitos
 
 from heart.newDashboard.localStyleSheet.localStyleSheet import btnOpcoesStyle, styleTooltip
 
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import CnisVinculos
 from modelos.clienteORM import Cliente
 from modelos.cnisModelo import CNISModelo
 from modelos.escritoriosORM import Escritorios
@@ -266,7 +265,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.frInfoCliEncontrados.show()
 
     def avaliaAtividadesPrincipais(self, clienteId: int):
-        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == clienteId)
+        listaCabecalhos: List[CnisVinculos] = CnisVinculos.select().where(CnisVinculos.clienteId == clienteId)
 
         for index, cabecalho in enumerate(listaCabecalhos):
             if index == 0 or listaCabecalhos[index-1].dadoFaltante or listaCabecalhos[index].dadoFaltante:
@@ -347,8 +346,8 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
                 cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
 
-                CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
-                CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
+                CnisVinculos.insert_many(cabecalho).on_conflict_replace().execute()
+                CnisVinculos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
 
                 self.cnisClienteAtual.insereItensContribuicao(clienteAtual)
                 cnisInseridoComSucesso = True
@@ -393,7 +392,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         except Cliente.DoesNotExist as err:
             popUpOkAlerta(
                 "Não foi possível carregar as informações do cliente selecionado. Tente novamente mais tarde.",
-                erro=err
+                erro=f"editarCliente: {err=}"
             )
             return False
 
@@ -442,10 +441,10 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         try:
             cliente: Cliente = Cliente.select().where(Cliente.cpfCliente==cpf).get()
             qtdItens: int = ItemContribuicao.select().where(ItemContribuicao.clienteId==cliente.clienteId).count()
-            qtdCabecalhos: int = CnisCabecalhos.select().where(CnisCabecalhos.clienteId==cliente.clienteId).count()
+            qtdCabecalhos: int = CnisVinculos.select().where(CnisVinculos.clienteId==cliente.clienteId).count()
 
             if qtdItens == 0:
-                CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId).get()
+                CnisVinculos.select().where(CnisVinculos.clienteId == cliente.clienteId).get()
                 return Status.semContrib
             elif qtdCabecalhos == 0:
                 ItemContribuicao.delete().where(ItemContribuicao.clienteId == cliente.clienteId).execute()
@@ -459,9 +458,9 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         except ItemContribuicao.DoesNotExist as err:
             # TODO: ADICIONAR LOG
             print(f"verificaCadastradoCliente: {err=}")
-            CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId).get()
+            CnisVinculos.select().where(CnisVinculos.clienteId == cliente.clienteId).get()
             return Status.semContrib
-        except CnisCabecalhos.DoesNotExist as err:
+        except CnisVinculos.DoesNotExist as err:
             # TODO: ADICIONAR LOG
             print(f"verificaCadastradoCliente: {err=}")
             ItemContribuicao.delete().where(ItemContribuicao.clienteId==cliente.clienteId).execute()

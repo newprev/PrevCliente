@@ -7,11 +7,11 @@ from util.enums.newPrevEnums import TipoEdicao, Prioridade
 from peewee import AutoField, CharField, ForeignKeyField, BooleanField, BigIntegerField, DateField, IntegerField, DateTimeField
 from datetime import datetime
 
-TABLENAME = 'cnisCabecalhos'
+TABLENAME = 'cnisVinculos'
 
 
-class CnisCabecalhos(BaseModel, Model):
-    cabecalhosId = AutoField(column_name='cabecalhosId', null=True)
+class CnisVinculos(BaseModel, Model):
+    vinculoId = AutoField(column_name='vinculoId', null=True)
     clienteId = ForeignKeyField(column_name='clienteId', field='clienteId', model=Cliente)
     seq = IntegerField(null=False)
     cdEmp = CharField(column_name='cdEmp', null=True)
@@ -33,11 +33,11 @@ class CnisCabecalhos(BaseModel, Model):
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
-        table_name = 'cnisCabecalhos'
+        table_name = 'cnisVinculos'
 
     def toDict(self):
         dictUsuario = {
-            'cabecalhosId': self.cabecalhosId,
+            'vinculoId': self.vinculoId,
             'clienteId': self.clienteId,
             'seq': self.seq,
             'nit': self.nit,
@@ -61,7 +61,7 @@ class CnisCabecalhos(BaseModel, Model):
         return dictUsuario
 
     def fromDict(self, dictCabecalho):
-        self.cabecalhosId = dictCabecalho['cabecalhosId']
+        self.vinculoId = dictCabecalho['vinculoId']
         self.clienteId = dictCabecalho['clienteId']
         self.seq = dictCabecalho['seq']
         self.nit = dictCabecalho['nit']
@@ -83,12 +83,12 @@ class CnisCabecalhos(BaseModel, Model):
         self.dataUltAlt = dictCabecalho['dataUltAlt']
 
     def __eq__(self, other):
-        return self.cabecalhosId == other.cabecalhosId
+        return self.vinculoId == other.vinculoId
 
     def prettyPrint(self, backRef: bool = False):
         print(f"""
         Cabecalho(
-            cabecalhosId: {self.cabecalhosId},
+            vinculoId: {self.vinculoId},
             clienteId: {self.clienteId},
             seq: {self.seq},
             nit: {self.nit},
@@ -111,14 +111,14 @@ class CnisCabecalhos(BaseModel, Model):
         )""")
 
 
-@post_save(sender=CnisCabecalhos)
-def inserindoCabecalho(*args, **kwargs):
+@post_save(sender=CnisVinculos)
+def inserindoVinculo(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
+        logPrioridade(f'INSERT<inserindoVinculo>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
     else:
-        logPrioridade(f'UPDATE<inserindoCabecalho>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+        logPrioridade(f'UPDATE<inserindoVinculo>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
 
 
-@pre_delete(sender=CnisCabecalhos)
-def deletandoCabecalho(*args, **kwargs):
-    logPrioridade(f'DELETE<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+@pre_delete(sender=CnisVinculos)
+def deletandoVinculo(*args, **kwargs):
+    logPrioridade(f'DELETE<deletandoVinculo>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)

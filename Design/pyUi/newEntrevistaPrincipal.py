@@ -130,7 +130,7 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.lbInfoTitulo.setObjectName("lbInfoTitulo")
         self.horizontalLayout.addWidget(self.lbInfoTitulo)
         self.frMigalhas = QtWidgets.QFrame(self.frTitulo)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frMigalhas.sizePolicy().hasHeightForWidth())
@@ -185,7 +185,7 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.frSeparador1.setObjectName("frSeparador1")
         self.verticalLayout_4.addWidget(self.frSeparador1)
         self.lbInfoNatureza = QtWidgets.QLabel(self.frame_4)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lbInfoNatureza.sizePolicy().hasHeightForWidth())
@@ -237,7 +237,7 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.frSeparador2.setObjectName("frSeparador2")
         self.verticalLayout_6.addWidget(self.frSeparador2)
         self.lbInfoTpBeneficio = QtWidgets.QLabel(self.frame_6)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lbInfoTpBeneficio.sizePolicy().hasHeightForWidth())
@@ -289,7 +289,7 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.frSeparador3.setObjectName("frSeparador3")
         self.verticalLayout_8.addWidget(self.frSeparador3)
         self.lbInfoTpProcesso = QtWidgets.QLabel(self.frame_5)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lbInfoTpProcesso.sizePolicy().hasHeightForWidth())
@@ -341,7 +341,7 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.frSeparador4.setObjectName("frSeparador4")
         self.verticalLayout_11.addWidget(self.frSeparador4)
         self.lbInfoEntrevista = QtWidgets.QLabel(self.frame_14)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lbInfoEntrevista.sizePolicy().hasHeightForWidth())
@@ -384,7 +384,8 @@ class Ui_wdgEntrevistaPrincipal(object):
 "}\n"
 "\n"
 "/*-------------------------------------------  Widget --------------------------------------------*/\n"
-"#pgNatureza, #pgTpBeneficio, #pgTpProcesso {\n"
+"#pgNatureza, #pgTpBeneficio, \n"
+"#pgTpProcesso, #pgQuestionario {\n"
 "    background-color: white;\n"
 "}\n"
 "\n"
@@ -451,13 +452,13 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.horizontalLayout_4.setSpacing(0)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.frEsquerda = QtWidgets.QFrame(self.frMiolo)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frEsquerda.sizePolicy().hasHeightForWidth())
         self.frEsquerda.setSizePolicy(sizePolicy)
         self.frEsquerda.setMinimumSize(QtCore.QSize(350, 0))
-        self.frEsquerda.setMaximumSize(QtCore.QSize(370, 16777215))
+        self.frEsquerda.setMaximumSize(QtCore.QSize(450, 16777215))
         self.frEsquerda.setStyleSheet("")
         self.frEsquerda.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frEsquerda.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -477,13 +478,18 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.scaOut.setWidgetResizable(True)
         self.scaOut.setObjectName("scaOut")
         self.scaPrincipal = QtWidgets.QWidget()
-        self.scaPrincipal.setGeometry(QtCore.QRect(0, 0, 346, 491))
+        self.scaPrincipal.setGeometry(QtCore.QRect(0, 0, 446, 491))
         self.scaPrincipal.setObjectName("scaPrincipal")
         self.verticalLayout_15 = QtWidgets.QVBoxLayout(self.scaPrincipal)
         self.verticalLayout_15.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_15.setSpacing(0)
         self.verticalLayout_15.setObjectName("verticalLayout_15")
         self.frInfoHistPessoais = QtWidgets.QFrame(self.scaPrincipal)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frInfoHistPessoais.sizePolicy().hasHeightForWidth())
+        self.frInfoHistPessoais.setSizePolicy(sizePolicy)
         self.frInfoHistPessoais.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frInfoHistPessoais.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frInfoHistPessoais.setObjectName("frInfoHistPessoais")
@@ -499,6 +505,11 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.lbInfoCpf.setObjectName("lbInfoCpf")
         self.gridLayout_2.addWidget(self.lbInfoCpf, 2, 0, 1, 1)
         self.lbNome = QtWidgets.QLabel(self.frInfoHistPessoais)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbNome.sizePolicy().hasHeightForWidth())
+        self.lbNome.setSizePolicy(sizePolicy)
         self.lbNome.setObjectName("lbNome")
         self.gridLayout_2.addWidget(self.lbNome, 1, 1, 1, 1, QtCore.Qt.AlignLeft)
         self.lbCpf = QtWidgets.QLabel(self.frInfoHistPessoais)
@@ -749,6 +760,82 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.verticalLayout_22.addWidget(self.lbDescTpProcesso, 0, QtCore.Qt.AlignTop)
         self.gridLayout_8.addWidget(self.frTpProcessoPrincipal, 0, 0, 1, 1, QtCore.Qt.AlignTop)
         self.stkEntrevista.addWidget(self.pgTpProcesso)
+        self.pgQuestionario = QtWidgets.QWidget()
+        self.pgQuestionario.setStyleSheet("/* ------------------------ Push Button ------------------------*/\n"
+"#pbFinalizarEntrevista {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 8px;\n"
+"    padding: 10px;\n"
+"    background-color: #3F4E8C;\n"
+"}\n"
+"\n"
+"#pbConfigSimulacao {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"\n"
+"    border-radius: 8px;\n"
+"    padding: 10px;\n"
+"    background-color: white;\n"
+"\n"
+"    border: 2px solid #3F4E8C;\n"
+"}\n"
+"\n"
+"/* ------------------------ Labels ------------------------*/\n"
+"#lbInfoQuestionario {\n"
+"    font: 14pt \"Avenir LT Std\";\n"
+"    font-weight: 750;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"/* ------------------------ Frames ------------------------*/\n"
+"#frInfoQuestionario {\n"
+"    background-color: #3F4E8C;\n"
+"    border-radius: 8px;\n"
+"    \n"
+"    border: 0px solid none;\n"
+"}")
+        self.pgQuestionario.setObjectName("pgQuestionario")
+        self.gridLayout_5 = QtWidgets.QGridLayout(self.pgQuestionario)
+        self.gridLayout_5.setContentsMargins(24, -1, -1, -1)
+        self.gridLayout_5.setObjectName("gridLayout_5")
+        self.pbConfigSimulacao = QtWidgets.QPushButton(self.pgQuestionario)
+        self.pbConfigSimulacao.setObjectName("pbConfigSimulacao")
+        self.gridLayout_5.addWidget(self.pbConfigSimulacao, 4, 1, 1, 1)
+        self.frInfoQuestionario = QtWidgets.QFrame(self.pgQuestionario)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frInfoQuestionario.sizePolicy().hasHeightForWidth())
+        self.frInfoQuestionario.setSizePolicy(sizePolicy)
+        self.frInfoQuestionario.setMinimumSize(QtCore.QSize(0, 40))
+        self.frInfoQuestionario.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfoQuestionario.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoQuestionario.setObjectName("frInfoQuestionario")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frInfoQuestionario)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.lbInfoQuestionario = QtWidgets.QLabel(self.frInfoQuestionario)
+        self.lbInfoQuestionario.setObjectName("lbInfoQuestionario")
+        self.horizontalLayout_3.addWidget(self.lbInfoQuestionario, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.gridLayout_5.addWidget(self.frInfoQuestionario, 0, 0, 1, 1, QtCore.Qt.AlignTop)
+        self.pbFinalizarEntrevista = QtWidgets.QPushButton(self.pgQuestionario)
+        self.pbFinalizarEntrevista.setMinimumSize(QtCore.QSize(150, 40))
+        self.pbFinalizarEntrevista.setMaximumSize(QtCore.QSize(170, 16777215))
+        self.pbFinalizarEntrevista.setSizeIncrement(QtCore.QSize(0, 0))
+        self.pbFinalizarEntrevista.setObjectName("pbFinalizarEntrevista")
+        self.gridLayout_5.addWidget(self.pbFinalizarEntrevista, 5, 1, 1, 1)
+        self.frQuestionario = QtWidgets.QFrame(self.pgQuestionario)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frQuestionario.sizePolicy().hasHeightForWidth())
+        self.frQuestionario.setSizePolicy(sizePolicy)
+        self.frQuestionario.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frQuestionario.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frQuestionario.setObjectName("frQuestionario")
+        self.gridLayout_5.addWidget(self.frQuestionario, 1, 0, 2, 1)
+        self.stkEntrevista.addWidget(self.pgQuestionario)
         self.horizontalLayout_4.addWidget(self.stkEntrevista)
         self.verticalLayout.addWidget(self.frMiolo)
         self.gridLayout.addWidget(self.frPrincipal, 0, 0, 1, 1)
@@ -785,6 +872,9 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.lbDescTpBeneficio.setText(_translate("wdgEntrevistaPrincipal", "Descricao"))
         self.lbTituloTpProcesso.setText(_translate("wdgEntrevistaPrincipal", "Titulo de processo"))
         self.lbDescTpProcesso.setText(_translate("wdgEntrevistaPrincipal", "Descricao"))
+        self.pbConfigSimulacao.setText(_translate("wdgEntrevistaPrincipal", "Configurar Simulação"))
+        self.lbInfoQuestionario.setText(_translate("wdgEntrevistaPrincipal", "Questionário"))
+        self.pbFinalizarEntrevista.setText(_translate("wdgEntrevistaPrincipal", "Finalizar entrevista"))
 import Resources.newEntrevistaPrincipal
 
 

@@ -1,46 +1,48 @@
 from typing import List, Generator
 from peewee import SqliteDatabase, fn
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTableWidgetItem, QPushButton, QHBoxLayout, QLineEdit, QDateEdit, QComboBox
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTableWidgetItem, QPushButton, QHBoxLayout, QLineEdit, QDateEdit
 
 from Design.CustomWidgets.newToast import QToaster
 from Design.pyUi.wdgResumoCNIS import Ui_wdgResumoCnis
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 from SQLs.itensContribuicao import remuEContrib
 from modelos.especieBenefORM import EspecieBene
 
 from util.enums.dashboardEnums import TelaAtual
 from util.enums.newPrevEnums import TipoContribuicao, TipoEdicao, Prioridade, ItemOrigem
-from util.enums.resumoCnisEnums import TelaResumo, TipoBotaoResumo, TipoVinculo
+from util.enums.resumoCnisEnums import TelaResumo, TipoBotaoResumo, TipoContribuicao, TipoVinculo
 from util.enums.databaseEnums import DatabaseEnum
 
 from .localStyleSheet.resumoCnis import selecionaBotao, botaoOpcoes, cadDataEdit
+from .localWidgets.duplicadorController import DuplicadorController
 from .localWidgets.wdgItemCabecalho import ItemResumoCnis
 from .localWidgets.itemVazioResumoCnis import ItemVazioCnis
 
 from modelos.clienteORM import Cliente
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import CnisVinculos
 from modelos.Auxiliares.remuEContribs import RemuEContribs
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.clienteProfissao import ClienteProfissao
 
-from util.helpers import mascaraCPF, mascaraCNPJ, mascaraDinheiro, dataUSAtoBR, situacaoBeneficio
+from util.helpers import mascaraCPF, mascaraCNPJ, mascaraDinheiro, dataUSAtoBR, situacaoBeneficio, strToFloat
 from util.layoutHelpers import limpaLayout
 from util.popUps import popUpSimCancela, popUpOkAlerta
-from util.dateHelper import mascaraData, strToDate
+from util.dateHelper import mascaraData, strToDate, mascaraDataPequena
 
 from systemLog.logs import logPrioridade
-from ..informacoesTelas.indicadoresTela import IndicadoresController
+from ..configsInfos.indicadoresTela import IndicadoresController
 
 
 class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
     cliente: Cliente
     clienteInfoProf: ClienteProfissao
     telaAtual: TelaResumo
-    cabecalhoAtual: CnisCabecalhos
+    vinculoAtual: CnisVinculos
     vlResumos: QVBoxLayout = QVBoxLayout()
     toasty: QToaster
 
@@ -50,7 +52,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
         self.dashboard = parent
 
         self.telaAtual = TelaResumo.resumos
-        self.cabecalhoAtual = None
+        self.vinculoAtual = None
         self.toasty = None
 
         self.tblContribuicoes.horizontalHeader().show()
@@ -59,7 +61,6 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
         self.tblBeneficios.horizontalHeader().show()
         self.tblBeneficios.hideColumn(0)
 
-        self.tblCadBene.hideColumn(0)
         self.tblCadBene.resizeColumnsToContents()
         self.tblCadContrib.resizeColumnsToContents()
 
@@ -72,20 +73,21 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
         self.pbBeneficios.clicked.connect(lambda: self.trocaTela(TelaResumo.beneficios))
         self.pbVoltar.clicked.connect(self.avaliaVoltar)
         self.pbInserirResumo.clicked.connect(self.avaliaInserirVinculo)
-        self.rbBeneficio.clicked.connect(lambda: self.avaliaTrocaVinculo(TipoVinculo.beneficio))
-        self.rbContribuicao.clicked.connect(lambda: self.avaliaTrocaVinculo(TipoVinculo.contribuicao))
+        self.rbBeneficio.clicked.connect(lambda: self.avaliaTrocaVinculo(TipoContribuicao.beneficio))
+        self.rbContribuicao.clicked.connect(lambda: self.avaliaTrocaVinculo(TipoContribuicao.contribuicao))
         self.pbSeguir.clicked.connect(self.avaliaSalvarVinculo)
         self.pbCancelar.clicked.connect(self.avaliaCancelar)
-        self.pbInserirContrib.clicked.connect(lambda: self.trocaTela(TelaResumo.addContriBene, tipoVinculo=TipoVinculo.contribuicao))
-        self.pbInserirBeneficios.clicked.connect(lambda: self.trocaTela(TelaResumo.addContriBene, tipoVinculo=TipoVinculo.beneficio))
-        self.pbAddContrib.clicked.connect(lambda: self.adicionaLinhaCadastro(TipoVinculo.contribuicao))
-        self.pbAddBene.clicked.connect(lambda: self.adicionaLinhaCadastro(TipoVinculo.beneficio))
+        self.pbInserirContrib.clicked.connect(lambda: self.trocaTela(TelaResumo.addContriBene, tipoContribuicao=TipoContribuicao.contribuicao))
+        self.pbInserirBeneficios.clicked.connect(lambda: self.trocaTela(TelaResumo.addContriBene, tipoContribuicao=TipoContribuicao.beneficio))
+        self.pbAddContrib.clicked.connect(lambda: self.adicionaLinhaCadastro(TipoContribuicao.contribuicao))
+        self.pbAddBene.clicked.connect(lambda: self.adicionaLinhaCadastro(TipoContribuicao.beneficio))
         self.pbBuscaIndicador.clicked.connect(lambda: IndicadoresController(retornaIndicadores=True, parent=self).show())
+        self.pbFinalizar.clicked.connect(self.avaliaAddContrib)
 
         self.trocaTela(self.telaAtual)
 
-    def adicionaLinhaCadastro(self, tipo: TipoVinculo):
-        if tipo == TipoVinculo.contribuicao:
+    def adicionaLinhaCadastro(self, tipo: TipoContribuicao, valorContribuicao:float = 0.0):
+        if tipo == TipoContribuicao.contribuicao:
             linhaDeInsercao = self.tblCadContrib.rowCount()
             self.tblCadContrib.insertRow(linhaDeInsercao)
 
@@ -94,12 +96,18 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             leSeqVinculo.setDisabled(True)
             leSeqVinculo.setMinimumHeight(35)
             leSeqVinculo.setMaximumHeight(40)
-            if self.cabecalhoAtual is not None:
-                leSeqVinculo.setText(str(self.cabecalhoAtual.seq))
+            if self.vinculoAtual is not None:
+                leSeqVinculo.setText(str(self.vinculoAtual.seq))
             self.tblCadContrib.setCellWidget(linhaDeInsercao, 0, leSeqVinculo)
 
             # Competência - Coluna 2 (aparente)
             dtCompetencia = QDateEdit()
+
+            if linhaDeInsercao != 0:
+                #-- Adiciona um mês à próxima competência
+                competenciaAnterior = self.tblCadContrib.cellWidget(linhaDeInsercao - 1, 1).date().toPyDate()
+                dtCompetencia.setDate(competenciaAnterior + relativedelta(months=1))
+
             dtCompetencia.setStyleSheet(cadDataEdit())
             dtCompetencia.setCalendarPopup(True)
             dtCompetencia.setMinimumHeight(35)
@@ -112,6 +120,8 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             # leSalContrib.setStyleSheet(cadLineEdit())
             leSalContrib.setMinimumHeight(35)
             leSalContrib.setMaximumHeight(40)
+            if valorContribuicao != 0:
+                leSalContrib.setText(str(valorContribuicao))
             self.tblCadContrib.setCellWidget(linhaDeInsercao, 2, leSalContrib)
 
             # Indicadores - Coluna 3 (aparente)
@@ -121,78 +131,180 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             leIndicadores.setMaximumHeight(40)
             self.tblCadContrib.setCellWidget(linhaDeInsercao, 3, leIndicadores)
 
+            # Ações - Coluna 4 (Aparente)
+            hlOpcoes = QHBoxLayout()
+            hlOpcoes.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+            pbDeletar = QPushButton()
+            pbDeletar.setStyleSheet(botaoOpcoes(TipoBotaoResumo.deletar))
+            pbDeletar.setFixedSize(QSize(25, 25))
+            pbDeletar.clicked.connect(lambda state, item=linhaDeInsercao: self.avaliaOpcoesAddContribBene(linhaDeInsercao, TipoBotaoResumo.deletar))
+
+            pbDuplicar = QPushButton()
+            pbDuplicar.setStyleSheet(botaoOpcoes(TipoBotaoResumo.duplicar))
+            pbDuplicar.setFixedSize(QSize(25, 25))
+            pbDuplicar.clicked.connect(lambda state, item=linhaDeInsercao: self.avaliaOpcoesAddContribBene(linhaDeInsercao, TipoBotaoResumo.duplicar))
+
+            hlOpcoes.addWidget(pbDeletar)
+            hlOpcoes.addWidget(pbDuplicar)
+
+            wdgAuxiliar = QWidget()
+            wdgAuxiliar.setLayout(hlOpcoes)
+            self.tblCadContrib.setCellWidget(linhaDeInsercao, 4, wdgAuxiliar)
+
             self.tblCadContrib.resizeColumnsToContents()
             self.tblCadContrib.resizeRowsToContents()
 
         else:
-            pass
+            linhaDeInsercao = self.tblCadBene.rowCount()
+            self.tblCadBene.insertRow(linhaDeInsercao)
+
+            # Número do benefício - Coluna 1 (aparente)
+            leNumBene = QLineEdit()
+            leNumBene.setMinimumHeight(35)
+            leNumBene.setMaximumHeight(40)
+            leNumBene.setDisabled(True)
+            if self.vinculoAtual is not None:
+                leNumBene.setText(str(self.vinculoAtual.nb))
+            self.tblCadBene.setCellWidget(linhaDeInsercao, 0, leNumBene)
+
+            # Competência - Coluna 2 (aparente)
+            dtCompetencia = QDateEdit()
+
+            if linhaDeInsercao != 0:
+                # -- Adiciona um mês à próxima competência
+                competenciaAnterior = self.tblCadBene.cellWidget(linhaDeInsercao - 1, 1).date().toPyDate()
+                dtCompetencia.setDate(competenciaAnterior + relativedelta(months=1))
+
+            dtCompetencia.setStyleSheet(cadDataEdit())
+            dtCompetencia.setCalendarPopup(True)
+            dtCompetencia.setMinimumHeight(35)
+            dtCompetencia.setMinimumWidth(140)
+            dtCompetencia.setMaximumHeight(40)
+            self.tblCadBene.setCellWidget(linhaDeInsercao, 1, dtCompetencia)
+
+            # Valor do benefício - Coluna 2 (aparente)
+            leValBene = QLineEdit()
+            leValBene.setMinimumHeight(35)
+            leValBene.setMaximumHeight(40)
+            if valorContribuicao != 0:
+                leValBene.setText(str(valorContribuicao))
+            self.tblCadBene.setCellWidget(linhaDeInsercao, 2, leValBene)
+
+            # Ações - Coluna 3 (Aparente)
+            hlOpcoes = QHBoxLayout()
+            hlOpcoes.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+            pbDeletar = QPushButton()
+            pbDeletar.setStyleSheet(botaoOpcoes(TipoBotaoResumo.deletar))
+            pbDeletar.setFixedSize(QSize(25, 25))
+            pbDeletar.clicked.connect(lambda state, item=linhaDeInsercao: self.avaliaOpcoesAddContribBene(linhaDeInsercao, TipoBotaoResumo.deletar))
+
+            pbDuplicar = QPushButton()
+            pbDuplicar.setStyleSheet(botaoOpcoes(TipoBotaoResumo.duplicar))
+            pbDuplicar.setFixedSize(QSize(25, 25))
+            pbDuplicar.clicked.connect(lambda state, item=linhaDeInsercao: self.avaliaOpcoesAddContribBene(linhaDeInsercao, TipoBotaoResumo.duplicar))
+
+            hlOpcoes.addWidget(pbDeletar)
+            hlOpcoes.addWidget(pbDuplicar)
+
+            wdgAuxiliar = QWidget()
+            wdgAuxiliar.setLayout(hlOpcoes)
+            self.tblCadBene.setCellWidget(linhaDeInsercao, 3, wdgAuxiliar)
+
+            self.tblCadBene.resizeColumnsToContents()
+            self.tblCadBene.resizeRowsToContents()
 
     def atualizaInfoBeneficios(self):
         # Nome da empresa ou do benefícios
-        self.lbNomeEmpBene.setText(self.cabecalhoAtual.especie[5:])
-        self.lbCNPJouNBBene.setText(f"Núm. Benefício: {self.cabecalhoAtual.nb}")
+        self.lbNomeEmpBene.setText(self.vinculoAtual.especie[5:])
+        self.lbCNPJouNBBene.setText(f"Núm. Benefício: {self.vinculoAtual.nb}")
 
         # Data de início
-        if self.cabecalhoAtual.dataInicio is not None and len(self.cabecalhoAtual.dataInicio) > 0:
-            self.lbDataInicioBene.setText(f"Início: {mascaraData(self.cabecalhoAtual.dataInicio)}")
+        if self.vinculoAtual.dataInicio is not None and len(self.vinculoAtual.dataInicio) > 0:
+            self.lbDataInicioBene.setText(f"Início: {mascaraData(self.vinculoAtual.dataInicio)}")
         else:
             self.lbDataInicio.setText('')
 
         # Data de fim
-        if self.cabecalhoAtual.dataFim is not None and len(self.cabecalhoAtual.dataFim) > 0:
-            self.lbDataFimBene.setText(f"Fim: {mascaraData(self.cabecalhoAtual.dataFim)}")
+        if self.vinculoAtual.dataFim is not None and len(self.vinculoAtual.dataFim) > 0:
+            self.lbDataFimBene.setText(f"Fim: {mascaraData(self.vinculoAtual.dataFim)}")
         else:
             self.lbDataFim.setText('')
 
         # Situação
-        self.lbSituacao.setText(f"Situação: {self.cabecalhoAtual.situacao}")
+        self.lbSituacao.setText(f"Situação: {self.vinculoAtual.situacao}")
 
     def atualizaInfoContrib(self):
         # Nome da empresa ou do benefícios
-        self.lbNomeEmp.setText(self.cabecalhoAtual.nomeEmp)
-        self.lbCNPJouNB.setText("CNPJ: " + mascaraCNPJ(self.cabecalhoAtual.cdEmp))
+        self.lbNomeEmp.setText(self.vinculoAtual.nomeEmp)
+        self.lbCNPJouNB.setText("CNPJ: " + mascaraCNPJ(self.vinculoAtual.cdEmp))
 
         # Data de início
-        if self.cabecalhoAtual.dataInicio is not None and len(self.cabecalhoAtual.dataInicio) > 0:
-            self.lbDataInicio.setText(f"Início: {mascaraData(self.cabecalhoAtual.dataInicio)}")
+        if self.vinculoAtual.dataInicio is not None and len(self.vinculoAtual.dataInicio) > 0:
+            self.lbDataInicio.setText(f"Início: {mascaraData(self.vinculoAtual.dataInicio)}")
         else:
             self.lbDataInicio.setText('')
 
         # Data de fim
-        if self.cabecalhoAtual.dataFim is not None and len(self.cabecalhoAtual.dataFim) > 0:
-            self.lbDataFim.setText(f"Fim: {mascaraData(self.cabecalhoAtual.dataFim)}")
+        if self.vinculoAtual.dataFim is not None and len(self.vinculoAtual.dataFim) > 0:
+            self.lbDataFim.setText(f"Fim: {mascaraData(self.vinculoAtual.dataFim)}")
         else:
             self.lbDataFim.setText('')
 
     def atualizaVinculoEditado(self):
         if self.rbContribuicao.isChecked():
-            self.cabecalhoAtual.nomeEmp = self.leNomeEmp.text()
-            self.cabecalhoAtual.cdEmp = self.leCnpj.text()
-            self.cabecalhoAtual.dataInicio = self.dtDataInicio.date().toPyDate()
-            self.cabecalhoAtual.dataFim = self.dtDataFim.date().toPyDate()
-            # self.cabecalhoAtual.indicadores = self.leIndicadores.text()
-            self.cabecalhoAtual.dataUltAlt = datetime.now()
+            self.vinculoAtual.nomeEmp = self.leNomeEmp.text()
+            self.vinculoAtual.cdEmp = self.leCnpj.text()
+            self.vinculoAtual.dataInicio = self.dtDataInicio.date().toPyDate()
+            self.vinculoAtual.dataFim = self.dtDataFim.date().toPyDate()
+            # self.vinculoAtual.indicadores = self.leIndicadores.text()
+            self.vinculoAtual.dataUltAlt = datetime.now()
         else:
-            self.cabecalhoAtual.nb = self.leNb.text()
-            self.cabecalhoAtual.dataInicio = self.dtDataInicioBene.date().toPyDate()
-            self.cabecalhoAtual.dataFim = self.dtDataFimBene.date().toPyDate()
-            self.cabecalhoAtual.dataUltAlt = datetime.now()
-        self.cabecalhoAtual.save()
+            self.vinculoAtual.nb = self.leNb.text()
+            self.vinculoAtual.dataInicio = self.dtDataInicioBene.date().toPyDate()
+            self.vinculoAtual.dataFim = self.dtDataFimBene.date().toPyDate()
+            self.vinculoAtual.dataUltAlt = datetime.now()
+        self.vinculoAtual.save()
 
-    def atualizaCabecalhoSelecionado(self, cabecalho: CnisCabecalhos):
-        self.cabecalhoAtual = cabecalho
+    def atualizaCabecalhoSelecionado(self, cabecalho: CnisVinculos):
+        self.vinculoAtual = cabecalho
         for index in range(self.vlResumos.count()):
             wdgCabecalho: ItemResumoCnis = self.vlResumos.itemAt(index).widget()
-            if wdgCabecalho.selecionado and wdgCabecalho.cabecalhoAtual.cabecalhosId != cabecalho.cabecalhosId:
+            if wdgCabecalho.selecionado and wdgCabecalho.vinculoAtual.vinculoId != cabecalho.vinculoId:
                 wdgCabecalho.desselecionaCabecalho()
 
-        if self.cabecalhoAtual.nb is None:
+        if self.vinculoAtual.nb is None:
             self.trocaTela(TelaResumo.contribuicoes)
         else:
             self.trocaTela(TelaResumo.beneficios)
 
+    def avaliaAddContrib(self):
+        # Se nb é None, então é uma contribuição. Caso contrário, é um benefício
+        if self.vinculoAtual.nb is None:
+            listaContrib: List[ItemContribuicao] = self.contribsParaCadastrar()
+            if len(listaContrib) == 0:
+                return False
+            mensagemConfirmacao = f"Você está inserindo as seguintes competências:\n\n {'Competência': ^14} {'Salário de contribuição':}\n"
+
+            for item in listaContrib:
+                mensagemConfirmacao += f"{mascaraDataPequena(item.competencia): >14}   {mascaraDinheiro(item.salContribuicao): >23}\n"
+
+            popUpSimCancela(mensagemConfirmacao, funcaoSim=lambda: self.insereContribuicoes(listaContrib))
+        else:
+            listaBene: List[ItemContribuicao] = self.beneficiosParaCadastrar()
+            if len(listaBene) == 0:
+                return False
+            mensagemConfirmacao = f"Você está inserindo as seguintes competências:\n\n {'Competência': ^14} {'Valor da contribuição':}\n"
+
+            for item in listaBene:
+                mensagemConfirmacao += f"{mascaraDataPequena(item.competencia): >14}   {mascaraDinheiro(item.salContribuicao): >23}\n"
+
+            popUpSimCancela(mensagemConfirmacao, funcaoSim=lambda: self.insereContribuicoes(listaBene))
+
     def avaliaInserirVinculo(self):
         if self.cliente is not None:
+            self.limpaVinculos()
             self.trocaTela(TelaResumo.addVinculo)
 
     def avaliaCancelar(self):
@@ -208,21 +320,53 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
         itemContribuicao: ItemContribuicao = ItemContribuicao.get_by_id(itemId)
 
         if acao == TipoBotaoResumo.editar:
-            print(f"Editou o item {itemContribuicao.competencia}")
+            tipoContrib = TipoContribuicao.contribuicao if self.vinculoAtual.nb is None else TipoContribuicao.beneficio
+            self.trocaTela(TelaResumo.addContriBene, tipoContribuicao=tipoContrib, itemContribuicao=itemContribuicao)
         else:
             popUpSimCancela(
                 f"Você deseja excluir a competência {mascaraData(itemContribuicao.competencia)}?",
                 funcaoSim=lambda: self.excluirItem(itemContribuicao),
             )
 
+    def avaliaOpcoesAddContribBene(self, linha: int, tipoBotao:TipoBotaoResumo):
+        if tipoBotao == TipoBotaoResumo.deletar:
+            if self.vinculoAtual.nb is None:
+                self.tblCadContrib.removeRow(linha)
+            else:
+                self.tblCadBene.removeRow(linha)
+        else:
+            if self.vinculoAtual.nb is None:
+                if self.tblCadContrib.cellWidget(linha, 2).text() == '':
+                    popUpOkAlerta(
+                        "Para usar a ferramenta de replicação, é preciso informar o salário de contribuição.",
+                        funcao=self.tblCadContrib.cellWidget(linha, 2).setFocus()
+                    )
+                    return None
+
+                salContrib = self.tblCadContrib.cellWidget(linha, 2).text()
+            else:
+                if self.tblCadBene.cellWidget(linha, 2).text() == '':
+                    popUpOkAlerta(
+                        "Para usar a ferramenta de replicação, é preciso informar o valor do benefício.",
+                        funcao=self.tblCadBene.cellWidget(linha, 2).setFocus()
+                    )
+                    return None
+                salContrib = self.tblCadBene.cellWidget(linha, 2).text()
+
+            duplicador = DuplicadorController(salContrib, parent=self)
+            duplicador.show()
+
     def avaliaSalvarVinculo(self):
-        # TODO: criar validação da data de inicio e/ou fim
-        if self.cabecalhoAtual is not None:
+        if not self.datasCorretas():
+            popUpOkAlerta("As datas de início e de fim não estão corretas. Verifique e tente novamente.")
+            return False
+
+        if self.vinculoAtual is not None:
             self.atualizaVinculoEditado()
 
         elif self.rbContribuicao.isChecked():
             if self.leNomeEmp.text() != "" and self.leCnpj.text() != "":
-                self.criaVinculo(TipoVinculo.contribuicao)
+                self.criaVinculo(TipoContribuicao.contribuicao)
             else:
                 popUpOkAlerta("Não foi possível salvar o vínculo editado pois o nome da empresa ou o CNPJ não foram inseridos")
                 if self.leNomeEmp == '':
@@ -231,7 +375,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
                     self.leCnpj.setFocus()
         else:
             if self.leNb.text() != "":
-                self.criaVinculo(TipoVinculo.beneficio)
+                self.criaVinculo(TipoContribuicao.beneficio)
             else:
                 popUpOkAlerta("Não foi possível salvar o vínculo editado pois o número do benefício não foi inserido")
                 self.leNb.setFocus()
@@ -247,9 +391,9 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
 
         return True
 
-    def avaliaTrocaVinculo(self, tipo: TipoVinculo):
+    def avaliaTrocaVinculo(self, tipo: TipoContribuicao):
         # Verifica se o usuário não clicou sem querer em algum dos radioButton
-        if tipo == TipoVinculo.contribuicao:
+        if tipo == TipoContribuicao.contribuicao:
             if self.leNb.text() != '':
                 popUpSimCancela(
                     "Você adicionou o número do benefício, deseja prosseguir? Sua alteração será perdida.",
@@ -278,30 +422,78 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             self.dashboard.trocaTela(TelaAtual.Cliente)
             self.limpaCabecalhos()
         elif self.telaAtual == TelaResumo.addContriBene:
-            # TODO: Criar lógica para voltar para a tela das contribuições/benefícios que o advogado estava
-            self.trocaTela(TelaResumo.resumos)
+            if self.vinculoAtual.nb is None:
+                self.trocaTela(TelaResumo.contribuicoes)
+            else:
+                self.trocaTela(TelaResumo.beneficios)
         else:
             self.trocaTela(TelaResumo.resumos)
 
+    def beneficiosParaCadastrar(self):
+        listaBene: List[ItemContribuicao] = []
+
+        for linha in range(self.tblCadBene.rowCount()):
+            salContribuicao = strToFloat(self.tblCadBene.cellWidget(linha, 2).text())
+            if salContribuicao is '':
+                popUpOkAlerta("O valor do benefício precisa ser informado.", funcao=self.tblCadBene.cellWidget(linha, 2).setFocus)
+                return []
+
+            listaBene.append(
+                ItemContribuicao(
+                    clienteId=self.cliente,
+                    tipo=TipoContribuicao.beneficio.value,
+                    seq=self.vinculoAtual.seq,
+                    competencia=self.tblCadBene.cellWidget(linha, 1).date().toPyDate(),
+                    salContribuicao=salContribuicao,
+                    contribuicao=salContribuicao * 0.2,
+                    dadoOrigem=ItemOrigem.NEWPREV.value,
+                    geradoAutomaticamente=False,
+                )
+            )
+        return listaBene
+
     def buscaNovoSeq(self) -> int:
         try:
-            maxSeq = ItemContribuicao.select(fn.MAX(ItemContribuicao.seq)).where(
-                ItemContribuicao.clienteId == self.cliente.clienteId
+            maxSeq = CnisVinculos.select(fn.MAX(CnisVinculos.seq)).where(
+                CnisVinculos.clienteId == self.cliente.clienteId
             ).scalar()
             if maxSeq is None:
                 return 1
+            return maxSeq
         except Exception as err:
             # TODO: LOG
             return 999
-        return 999
 
     def carregaClienteNaTela(self):
         self.lbNomeCliente.setText(f"{self.cliente.nomeCliente} {self.cliente.sobrenomeCliente}")
         self.lbCpfCliente.setText(f"CPF: {mascaraCPF(self.cliente.cpfCliente)}")
 
+    def carregaContribBeneEdicao(self, tipoContrib: TipoContribuicao, item: ItemContribuicao):
+        if tipoContrib == TipoContribuicao.contribuicao:
+            leSeq: QLineEdit = self.tblCadContrib.cellWidget(0, 0)
+            leSeq.setText(str(item.seq))
+
+            dtCompetencia: QDateEdit = self.tblCadContrib.cellWidget(0, 1)
+            dtCompetencia.setDate(strToDate(item.competencia))
+
+            leSalContrib: QLineEdit = self.tblCadContrib.cellWidget(0, 2)
+            leSalContrib.setText(str(item.salContribuicao))
+
+            leIndicadores: QLineEdit = self.tblCadContrib.cellWidget(0, 3)
+            leIndicadores.setText('' if item.indicadores is None else item.indicadores)
+        else:
+            leNb: QLineEdit = self.tblCadBene.cellWidget(0, 0)
+            leNb.setText(str(self.vinculoAtual.nb))
+
+            dtCompetencia: QDateEdit = self.tblCadBene.cellWidget(0, 1)
+            dtCompetencia.setDate(strToDate(item.competencia))
+
+            leValorBeneficio: QLineEdit = self.tblCadBene.cellWidget(0, 2)
+            leValorBeneficio.setText(str(item.salContribuicao))
+
     def carregaTblContribuicoes(self):
         dbInst: SqliteDatabase = SqliteDatabase(DatabaseEnum.producao.value)
-        dados = dbInst.execute_sql(remuEContrib(self.cliente.clienteId, self.cabecalhoAtual.seq))
+        dados = dbInst.execute_sql(remuEContrib(self.cliente.clienteId, self.vinculoAtual.seq))
         listaItens: Generator[RemuEContribs] = (RemuEContribs(info) for info in dados)
 
         self.tblContribuicoes.setRowCount(0)
@@ -379,7 +571,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
         dados: List[ItemContribuicao] = ItemContribuicao.select().where(
             ItemContribuicao.clienteId == self.cliente.clienteId,
             ItemContribuicao.tipo == TipoContribuicao.beneficio.value,
-            ItemContribuicao.seq == self.cabecalhoAtual.seq
+            ItemContribuicao.seq == self.vinculoAtual.seq
         )
 
         self.tblBeneficios.setRowCount(0)
@@ -399,10 +591,10 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             self.tblBeneficios.setItem(contLinha, 1, strSeq)
 
             # Nb (Número do benefício) - Coluna 2 (ativa)
-            if str(self.cabecalhoAtual.nb) == '':
+            if str(self.vinculoAtual.nb) == '':
                 strNb = QTableWidgetItem('-')
             else:
-                strNb = QTableWidgetItem(str(self.cabecalhoAtual.nb))
+                strNb = QTableWidgetItem(str(self.vinculoAtual.nb))
             strNb.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             strNb.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblBeneficios.setItem(contLinha, 2, strNb)
@@ -445,7 +637,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
         self.tblBeneficios.resizeRowsToContents()
 
     def carregaResumos(self):
-        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == self.cliente.clienteId)
+        listaCabecalhos: List[CnisVinculos] = CnisVinculos.select().where(CnisVinculos.clienteId == self.cliente.clienteId)
         if len(listaCabecalhos) > 0:
             for cabecalho in listaCabecalhos:
                 cabecalho = ItemResumoCnis(cabecalho, parent=self)
@@ -455,29 +647,62 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
 
         self.wdgScroll.setLayout(self.vlResumos)
 
-    def criaVinculo(self, tipo: TipoVinculo):
+    def contribsParaCadastrar(self) -> List:
+        listaContrib: List[ItemContribuicao] = []
+
+        for linha in range(self.tblCadContrib.rowCount()):
+            if self.tblCadContrib.cellWidget(linha, 2).text() == '':
+                popUpOkAlerta("O campo 'Salário de contribuição' não pode estar vazio.")
+                return []
+            salContribuicao = strToFloat(self.tblCadContrib.cellWidget(linha, 2).text())
+
+            competencia = self.tblCadContrib.cellWidget(linha, 1).date().toPyDate()
+            if not strToDate(self.vinculoAtual.dataInicio) < competencia < strToDate(self.vinculoAtual.dataFim):
+                popUpOkAlerta(
+                    f"A competência {mascaraDataPequena(competencia)} está fora das datas de início e fim do vínculo.\n\n"
+                    f"Data início: {mascaraData(self.vinculoAtual.dataInicio)}\n"
+                    f"Data Fim: {mascaraData(self.vinculoAtual.dataFim)}"
+                )
+                return []
+
+            listaContrib.append(
+                ItemContribuicao(
+                    clienteId=self.cliente,
+                    tipo=TipoContribuicao.contribuicao.value,
+                    seq=self.tblCadContrib.cellWidget(linha, 0).text(),
+                    competencia=self.tblCadContrib.cellWidget(linha, 1).date().toPyDate(),
+                    salContribuicao=salContribuicao,
+                    contribuicao=salContribuicao * 0.2,
+                    ativPrimaria=True,
+                    dadoOrigem=ItemOrigem.NEWPREV.value,
+                    indicadores=self.tblCadContrib.cellWidget(linha, 3).text()
+                )
+            )
+        return listaContrib
+
+    def criaVinculo(self, tipo: TipoContribuicao):
         try:
             seqMax: int = self.buscaNovoSeq()
 
-            if tipo == TipoVinculo.contribuicao:
-                CnisCabecalhos.create(
+            if tipo == TipoContribuicao.contribuicao:
+                CnisVinculos.create(
                     clienteId=self.cliente,
-                    seq=seqMax,
+                    seq=seqMax + 1,
                     cdEmp=self.leCnpj.text(),
                     dadoOrigem=ItemOrigem.NEWPREV.value,
                     dataInicio=self.dtDataInicio.date().toPyDate(),
                     dataFim=self.dtDataFim.date().toPyDate(),
-                    especie=self.cbxEspecie.currentText() if self.cbxEspecie.currentText() != '' else None,
+                    # especie=self.cbxEspecie.currentText() if self.cbxEspecie.currentText() != '' else None,
                     # indicadores=self.leIndicadores.text() if self.leIndicadores.text() != '' else None,
                     indicadores=None,
                     nit=self.clienteInfoProf.nit,
-                    nomeEmp=self.leNomeEmp.text(),
+                    nomeEmp=self.leNomeEmp.text().upper(),
                     tipoVinculo=self.cbxTipoVinculo.currentText(),
                     ultRem=self.dtDataFim.date().toPyDate())
             else:
-                CnisCabecalhos.create(
+                CnisVinculos.create(
                     clienteId=self.cliente,
-                    seq=seqMax,
+                    seq=seqMax + 1,
                     dadoOrigem=ItemOrigem.NEWPREV.value,
                     dataFim=self.dtDataFimBene.date().toPyDate(),
                     dataInicio=self.dtDataInicioBene.date().toPyDate(),
@@ -495,6 +720,12 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             popUpOkAlerta("Não foi possível salvar o vínculo editado. Entre em contato com o suporte.", erro=f"{err}")
             return False
         return True
+
+    def datasCorretas(self):
+        if self.rbContribuicao.isChecked():
+            return self.dtDataFim.date() > self.dtDataInicio.date()
+        else:
+            return self.dtDataFimBene.date() > self.dtDataInicioBene.date()
 
     def excluirItem(self, itemTabela: ItemContribuicao):
         try:
@@ -515,6 +746,24 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             self.cbxEspecie.addItem(f"{especie.especieId} - {especie.descricao}")
 
         self.cbxSituacao.addItems(sorted(situacaoBeneficio))
+
+        listaTipoVinculos = (vinculo.value for vinculo in TipoVinculo)
+        self.cbxTipoVinculo.addItems(sorted(listaTipoVinculos))
+
+    def insereContribuicoes(self, listaContribuicoes: List[ItemContribuicao]) -> bool:
+        try:
+            for item in listaContribuicoes:
+                item.save()
+
+            if self.vinculoAtual.nb is None:
+                self.trocaTela(TelaResumo.contribuicoes)
+            else:
+                self.trocaTela(TelaResumo.beneficios)
+            return True
+        except Exception as err:
+            print(f"insereContribuicoes: {err=}")
+            popUpOkAlerta("Não foi possível inserir uma competência. \nVerifique as datas e os salários de contribuição.")
+            return False
 
     def limpaCabecalhos(self):
         limpaLayout(self.vlResumos)
@@ -539,8 +788,8 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             if tela == TelaResumo.contribuicoes:
                 for index in range(self.vlResumos.count()):
                     wdgCabecalho: ItemResumoCnis = self.vlResumos.itemAt(index).widget()
-                    if wdgCabecalho.selecionado and wdgCabecalho.cabecalhoAtual.cabecalhosId == self.cabecalhoAtual.cabecalhosId:
-                        ehBeneficio: bool = self.cabecalhoAtual.nb is not None
+                    if wdgCabecalho.selecionado and wdgCabecalho.vinculoAtual.vinculoId == self.vinculoAtual.vinculoId:
+                        ehBeneficio: bool = self.vinculoAtual.nb is not None
                         if ehBeneficio:
                             if self.toasty is None:
                                 self.toasty = QToaster(self)
@@ -552,8 +801,8 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             elif tela == TelaResumo.beneficios:
                 for index in range(self.vlResumos.count()):
                     wdgCabecalho: ItemResumoCnis = self.vlResumos.itemAt(index).widget()
-                    if wdgCabecalho.selecionado and wdgCabecalho.cabecalhoAtual.cabecalhosId == self.cabecalhoAtual.cabecalhosId:
-                        ehBeneficio: bool = self.cabecalhoAtual.nb is not None
+                    if wdgCabecalho.selecionado and wdgCabecalho.vinculoAtual.vinculoId == self.vinculoAtual.vinculoId:
+                        ehBeneficio: bool = self.vinculoAtual.nb is not None
                         if not ehBeneficio:
                             if self.toasty is None:
                                 self.toasty = QToaster(self)
@@ -582,8 +831,14 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             for indicador in listaIndicadores:
                 self.cbxIndicadores.addItem(indicador)
 
-    def trocaVinculo(self, tipo: TipoVinculo):
-        if tipo == TipoVinculo.contribuicao:
+    def replicarInsercao(self, qtdReplicacao: int, salContrib: int):
+        tipoContrib = TipoContribuicao.contribuicao if self.vinculoAtual.nb is None else TipoContribuicao.beneficio
+
+        for seqContrib in range(qtdReplicacao):
+            self.adicionaLinhaCadastro(tipoContrib, salContrib)
+
+    def trocaVinculo(self, tipo: TipoContribuicao):
+        if tipo == TipoContribuicao.contribuicao:
             self.rbContribuicao.setChecked(True)
             self.rbBeneficio.setChecked(False)
         else:
@@ -592,7 +847,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
 
         self.stkVinculo.setCurrentIndex(tipo.value)
 
-    def trocaTela(self, tela: TelaResumo, tipoVinculo: TipoVinculo = TipoVinculo.contribuicao):
+    def trocaTela(self, tela: TelaResumo, tipoContribuicao: TipoContribuicao = TipoContribuicao.contribuicao, itemContribuicao: ItemContribuicao = None):
         if not self.permiteTrocaTela(tela):
             # TODO: Responder a negação com as devidas mensagens explicando por que não foi possível trocar de tela
             return False
@@ -604,7 +859,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             self.frEmpresas.setStyleSheet(selecionaBotao(TelaResumo.resumos, True))
             self.frContrib.setStyleSheet(selecionaBotao(TelaResumo.contribuicoes, False))
             self.frBeneficios.setStyleSheet(selecionaBotao(TelaResumo.beneficios, False))
-            self.cabecalhoAtual = None
+            self.vinculoAtual = None
 
         elif tela == TelaResumo.contribuicoes:
             self.frEmpresas.setStyleSheet(selecionaBotao(TelaResumo.resumos, False))
@@ -624,25 +879,33 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
 
         elif tela == TelaResumo.addVinculo:
             self.frBotoes.hide()
-            self.trocaVinculo(tipoVinculo)
+            self.trocaVinculo(tipoContribuicao)
 
         elif tela == TelaResumo.addContriBene:
             self.frBotoes.hide()
             self.tblCadContrib.setRowCount(0)
             self.tblCadBene.setRowCount(0)
-            self.stkCadastro.setCurrentIndex(tipoVinculo.value)
-            self.adicionaLinhaCadastro(tipoVinculo)
+            self.stkCadastro.setCurrentIndex(tipoContribuicao.value)
+            self.adicionaLinhaCadastro(tipoContribuicao)
+
+            if tipoContribuicao == TipoContribuicao.contribuicao:
+                self.lbInfoCadastrar.setText("Cadastrar contribuições")
+            else:
+                self.lbInfoCadastrar.setText("Cadastrar benefícios")
+
+            if itemContribuicao is not None:
+                self.carregaContribBeneEdicao(tipoContribuicao, itemContribuicao)
 
         self.stkCliente.setCurrentIndex(tela.value)
 
-    def vinculoParaEdicao(self, vinculo: CnisCabecalhos):
+    def vinculoParaEdicao(self, vinculo: CnisVinculos):
         if vinculo is not None:
-            self.cabecalhoAtual = vinculo
+            self.vinculoAtual = vinculo
             self.limpaVinculos()
 
             if vinculo.nb is not None:
                 # É um benefício
-                tipoVinculo = TipoVinculo.beneficio
+                tipoVinculo = TipoContribuicao.beneficio
                 self.leNb.setText(str(vinculo.nb))
 
                 if vinculo.dataInicio is not None and vinculo.dataInicio != '':
@@ -653,19 +916,18 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
 
             else:
                 # É uma contribuição
-                tipoVinculo = TipoVinculo.contribuicao
+                tipoContribuicao = TipoContribuicao.contribuicao
                 self.leNomeEmp.setText(vinculo.nomeEmp)
                 self.leCnpj.setText(mascaraCNPJ(vinculo.cdEmp))
 
                 if vinculo.dataInicio is not None:
                     self.dtDataInicio.setDate(strToDate(vinculo.dataInicio))
 
-                if vinculo.dataFim is not None and vinculo.dataInicio != '':
+                if vinculo.dataFim is not None and vinculo.dataFim != '':
                     self.dtDataFim.setDate(strToDate(vinculo.dataFim))
 
                 if vinculo.indicadores is not None and vinculo.dataFim != '':
                     # TODO: ADICIONAR INDICADORES VINDOS DO CNIS
                     pass
 
-            self.trocaTela(TelaResumo.addVinculo, tipoVinculo=tipoVinculo)
-
+            self.trocaTela(TelaResumo.addVinculo, tipoContribuicao=tipoContribuicao)

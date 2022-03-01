@@ -5,7 +5,7 @@ from typing import List
 
 from sinaisCustomizados import Sinais
 from Design.pyUi.buscaProcessos import Ui_mwBuscaProcessos
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 from util.helpers import mascaraTelCel, strTipoProcesso, strTipoBeneficio, dataUSAtoBR
 from modelos.clienteORM import Cliente
 from modelos.telefonesORM import Telefones
@@ -41,7 +41,7 @@ class BuscaProcessosPage(QMainWindow, Ui_mwBuscaProcessos):
     def atualizaInfoTela(self):
         if self.clienteAtual is None:
             popUpOkAlerta(
-                'Algum erro aconteceu ao tentar abrir a tela de busca de processos. Entre em contato com o suporte.',
+                'Algum erro aconteceu ao tentar abrir a tela de busca de beneficios. Entre em contato com o suporte.',
                 erro='atualizaInfoTela <BuscaProcessosPage>',
                 funcao=self.close,
             )

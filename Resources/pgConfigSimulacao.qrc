@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="botoes">
+    <file>closeLarge.png</file>
+  </qresource>
+  <qresource prefix="comboBox">
+    <file>down.png</file>
+  </qresource>
+</RCC>

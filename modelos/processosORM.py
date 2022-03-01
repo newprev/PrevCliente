@@ -9,7 +9,7 @@ from modelos.advogadoORM import Advogados
 from modelos.clienteORM import Cliente
 from modelos.tipoBeneficioORM import TipoBeneficioModel
 
-TABLENAME = 'processos'
+TABLENAME = 'beneficios'
 
 
 class Processos(BaseModel, Model):
@@ -37,7 +37,7 @@ class Processos(BaseModel, Model):
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
-        table_name = 'processos'
+        table_name = 'beneficios'
 
     def toDict(self, recursive=False):
         dictUsuario = {

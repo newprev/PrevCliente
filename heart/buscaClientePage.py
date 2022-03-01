@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from typing import List
 
 from Design.pyUi.buscaCliente import Ui_mwBuscaCliente
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 
 from util.helpers import mascaraTelCel, mascaraNit
 from util.popUps import popUpOkAlerta

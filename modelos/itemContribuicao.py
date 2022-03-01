@@ -39,7 +39,6 @@ class ItemContribuicao(BaseModel, Model):
         dictUsuario = {
             'itemContribuicaoId': self.itemContribuicaoId,
             'clienteId': self.clienteId,
-            'itemId': self.itemId,
             'seq': self.seq,
             'tipo': self.tipo,
             'competencia': self.competencia,
@@ -57,7 +56,6 @@ class ItemContribuicao(BaseModel, Model):
     def fromDict(self, dictContribuicoes):
         self.itemContribuicaoId = dictContribuicoes['itemContribuicaoId']
         self.clienteId = dictContribuicoes['clienteId']
-        self.itemId = dictContribuicoes['itemId']
         self.seq = dictContribuicoes['seq']
         self.tipo = dictContribuicoes['tipo']
         self.competencia = dictContribuicoes['competencia']
@@ -75,7 +73,6 @@ class ItemContribuicao(BaseModel, Model):
         ItemContribuicao(
             itemContribuicaoId: {self.itemContribuicaoId},
             clienteId: {self.clienteId},
-            itemId: {self.itemId},
             seq: {self.seq},
             tipo: {self.tipo},
             competencia: {self.competencia},

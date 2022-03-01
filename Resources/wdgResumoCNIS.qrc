@@ -3,9 +3,11 @@
     <file>back.png</file>
   </qresource>
   <qresource prefix="upDown">
+    <file>calendar.png</file>
     <file>down.png</file>
   </qresource>
   <qresource prefix="opcoes">
+    <file>duplicate.png</file>
     <file>busca.png</file>
     <file>addIcon.png</file>
     <file>rbUnchecked.png</file>

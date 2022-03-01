@@ -6,7 +6,7 @@ from heart.resumoCnis.resumoCnis import ResumoCnisController
 from modelos.clienteORM import Cliente
 from util.popUps import popUpOkAlerta
 
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 from sinaisCustomizados import Sinais

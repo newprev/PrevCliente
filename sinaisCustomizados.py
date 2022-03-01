@@ -10,6 +10,7 @@ class Sinais(QObject):
     sTrocaWidgetCentral = QtCore.pyqtSignal(TelaPosicao, name='pagina')
     sEnviaPath = QtCore.pyqtSignal(str, name='path')
     sEnviaInfo = QtCore.pyqtSignal(str, name='info')
+    sEnviaSinal = QtCore.pyqtSignal(name='sinal')
     sAbreToast = QtCore.pyqtSignal(name='toast')
     sVoltaTela = QtCore.pyqtSignal(name='voltaTela')
     sEnviaFiltro = QtCore.pyqtSignal(name='enviaFiltro')

@@ -2,14 +2,12 @@ import datetime
 import re
 import pandas as pd
 from pathlib import Path
-from typing import List, Union
-from math import floor
-from dateutil.relativedelta import relativedelta
+from typing import List
 
 from PyPDF3 import PdfFileReader
 from PyQt5.QtWidgets import QFileDialog
 
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import CnisVinculos
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.clienteORM import Cliente
 from util.dateHelper import strToDate, comparaMesAno
@@ -548,7 +546,7 @@ class CNISModelo:
     def insereItensContribuicao(self, cliente: Cliente):
         # TODO: Pensar em como identificar atividades primárias...
         listaItensContrib: List[dict] = []
-        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId).order_by(CnisCabecalhos.dataInicio)
+        listaCabecalhos: List[CnisVinculos] = CnisVinculos.select().where(CnisVinculos.clienteId == cliente.clienteId).order_by(CnisVinculos.dataInicio)
         dataTrocaMoeda: datetime.date = datetime.date(1994, 7, 1)
 
         listaRemuneracoes = self.organizaParaInserir(self.dictRemuneracoes, cliente.clienteId)

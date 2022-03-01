@@ -23,7 +23,7 @@ def buscaIndicesByClienteId(clienteId: int, indices: list = []) -> str:
     if 0 <= len(indices) <= 1:
 
         strComando = f"""
-        SELECT indicadores FROM cnisCabecalhos
+        SELECT indicadores FROM cnisVinculos
             WHERE clienteId = {clienteId}
                 AND indicadores LIKE '%{indices[0]}%'
 
@@ -46,7 +46,7 @@ def buscaIndicesByClienteId(clienteId: int, indices: list = []) -> str:
         strOr = strOr.removesuffix(' OR')
 
         strComando = f"""
-        SELECT indicadores FROM cnisCabecalhos
+        SELECT indicadores FROM cnisVinculos
             WHERE clienteId = {clienteId}
                 AND ({strOr})
 

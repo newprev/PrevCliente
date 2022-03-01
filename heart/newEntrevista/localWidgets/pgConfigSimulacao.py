@@ -1,10 +1,11 @@
 from PyQt5 import QtGui
+from PyQt5.QtCore import Qt
 
 from Design.pyUi.pgConfigSimulacao import Ui_mwConfigSimulacao
 from PyQt5.QtWidgets import QMainWindow
 from typing import List
 
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 from sinaisCustomizados import Sinais
 from util.enums.aposentadoriaEnums import *
 
@@ -22,7 +23,7 @@ class PgConfigSimulacao(Ui_mwConfigSimulacao, QMainWindow):
         self.entrevistaParams = entrevistaParams
 
         self.efeitos.shadowCards(
-            [self.frTop, self.gbPorcentagem, self.gbContFuturas, self.gbIndicesReajuste],
+            [self.frTop],
             radius=8,
             offset=(0, 6),
             color=(63, 63, 63, 90),
@@ -33,8 +34,11 @@ class PgConfigSimulacao(Ui_mwConfigSimulacao, QMainWindow):
         self.cbContribFuturas.currentIndexChanged.connect(self.avaliaTrocaContrFuturas)
         self.cbPorcentagem.currentIndexChanged.connect(self.avaliaTrocaPorcentagem)
         self.cbIndiceReajuste.currentIndexChanged.connect(self.avaliaTrocaContrFuturas)
-        self.pbSalvar.clicked.connect(self.avaliaEnvioParams)
+        self.pbSalvarFechar.clicked.connect(self.avaliaEnvioParams)
         # self.sinais.sAtualizaParams.connect(self.enviaParams)
+
+        self.setWindowFlag(Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
 
     def iniciaCombos(self):
         listaContFuturas = ['Último salário', 'Salário mínimo', 'Teto INSS', 'Customizado']

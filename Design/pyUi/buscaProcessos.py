@@ -291,7 +291,7 @@ class Ui_mwBuscaProcessos(object):
         item = self.tblListaProcessos.horizontalHeaderItem(4)
         item.setText(_translate("mwBuscaProcessos", "Última atualização"))
         self.lbTitulo.setText(_translate("mwBuscaProcessos", "Buscar Processos"))
-        self.lbSubtitulo.setText(_translate("mwBuscaProcessos", "Buscar processos de um cliente pré-selecionado."))
+        self.lbSubtitulo.setText(_translate("mwBuscaProcessos", "Buscar beneficios de um cliente pré-selecionado."))
         self.lbInfoTelefone.setText(_translate("mwBuscaProcessos", "Tel/Cel:"))
         self.lbInfoEmail.setText(_translate("mwBuscaProcessos", "E-mail:"))
         self.lbEmail.setText(_translate("mwBuscaProcessos", "-"))

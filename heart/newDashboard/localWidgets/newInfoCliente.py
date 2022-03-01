@@ -11,10 +11,10 @@ from PyQt5.QtWidgets import QWidget
 
 from Design.CustomWidgets.newMenuOpcoes import NewMenuOpcoes
 from Design.CustomWidgets.newPopupCNIS import NewPopupCNIS
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 from Design.pyUi.wdgInfoCliente import Ui_wdgInfoCliente
 from Design.CustomWidgets.newToast import QToaster
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import CnisVinculos
 from modelos.clienteInfoBanco import ClienteInfoBanco
 from modelos.clienteProfissao import ClienteProfissao
 from modelos.cnisModelo import CNISModelo
@@ -24,6 +24,7 @@ from sinaisCustomizados import Sinais
 
 from util.dateHelper import mascaraData, calculaIdade, atividadesConcorrentes, strToDate, atividadeSecundaria
 from util.enums.dashboardEnums import TelaAtual
+from util.enums.newPrevEnums import GeneroCliente
 from util.popUps import popUpSimCancela, popUpOkAlerta
 
 from util.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit
@@ -107,11 +108,11 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
                 cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
                 cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
 
-                CnisCabecalhos.delete().where(CnisCabecalhos.clienteId==self.clienteAtual.clienteId).execute()
+                CnisVinculos.delete().where(CnisVinculos.clienteId==self.clienteAtual.clienteId).execute()
                 ItemContribuicao.delete().where(ItemContribuicao.clienteId==self.clienteAtual.clienteId).execute()
 
-                CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
-                CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
+                CnisVinculos.insert_many(cabecalho).on_conflict_replace().execute()
+                CnisVinculos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
 
                 cnisClienteAtual.insereItensContribuicao(self.clienteAtual)
                 self.avaliaAtividadesPrincipais(self.clienteAtual.clienteId)
@@ -124,7 +125,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
             print(f"atualizarCnis <NewInfoCliente>: {err=}")
 
     def avaliaAtividadesPrincipais(self, clienteId: int):
-        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == clienteId)
+        listaCabecalhos: List[CnisVinculos] = CnisVinculos.select().where(CnisVinculos.clienteId == clienteId)
 
         for index, cabecalho in enumerate(listaCabecalhos):
             if index == 0 or listaCabecalhos[index-1].dadoFaltante or listaCabecalhos[index].dadoFaltante:
@@ -177,7 +178,12 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
             self.lbEmailInferior.setText(cliente.email)
             self.lbEstadoCivil.setText(cliente.estadoCivil)
             self.lbNomeMae.setText(cliente.nomeMae)
-            self.rbMasculino.setChecked(True)
+            if cliente.genero == GeneroCliente.masculino.value:
+                self.rbMasculino.setChecked(True)
+                self.rbFeminino.setChecked(False)
+            else:
+                self.rbMasculino.setChecked(False)
+                self.rbFeminino.setChecked(True)
 
             # Informações residenciais
             self.lbCidade.setText(cliente.cidade)

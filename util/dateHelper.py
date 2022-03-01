@@ -46,6 +46,23 @@ def calculaIdade(dtNascimento, dtLimite) -> relativedelta:
     return idadeRelativa
 
 
+def calculaQtdContribuicoes(dataInicio: datetime.date, dataFim: datetime.date) -> int:
+    """
+    Como o CNIS conta o primeiro mês como uma contribuição, a simples diferênça entre as datas não é suficiente para calcular
+    com precisão a quantidade de contribuições. Para ajustar, é preciso adicionar mais uma unidade.
+    """
+    dataRelativa = relativedelta(dataInicio, dataFim)
+    return abs(dataRelativa.years*12 + dataRelativa.months) + 1
+
+
+def calculaQtdContrib(dataRelativa: relativedelta) -> int:
+    """
+        Como o CNIS conta o primeiro mês como uma contribuição, a simples diferênça entre as datas não é suficiente para calcular
+        com precisão a quantidade de contribuições. Para ajustar, é preciso adicionar mais uma unidade.
+        """
+    return abs(dataRelativa.years*12 + dataRelativa.months) + 1
+
+
 def calculaIdadeAutomatica(dataNascimento) -> str:
     if isinstance(dataNascimento, str):
         dataAUsar = strToDate(dataNascimento)
@@ -72,6 +89,14 @@ def dataConflitante(competencia: datetime.date, seqAtual: int, clienteId: int) -
     return len(itensEncontrados) > 1
 
 
+def dataIdealReforma(dataReforma: datetime.date, dataInicio: datetime.date) -> datetime.date:
+    dataAnteriorReforma = dataInicio
+    while dataAnteriorReforma + relativedelta(months=1) < dataReforma:
+        dataAnteriorReforma += relativedelta(months=1)
+
+    return dataAnteriorReforma
+
+
 def mascaraDataPequena(data: datetime.date, onlyYear=False):
     if isinstance(data, str):
         if len(data) <= 16:
@@ -82,7 +107,10 @@ def mascaraDataPequena(data: datetime.date, onlyYear=False):
     if onlyYear:
         return f'{data.year}'
     else:
-        return f'{data.month}/{data.year}'
+        if len(str(data.month)) == 1:
+            return f'0{data.month}/{data.year}'
+        else:
+            return f'{data.month}/{data.year}'
 
 
 def mascaraData(data):

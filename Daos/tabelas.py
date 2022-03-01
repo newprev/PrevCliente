@@ -9,14 +9,14 @@ class TabelasConfig:
         self.__tblEscritorios = 'escritorios'
         self.__tblCliente = 'cliente'
         self.__tblTelefones = 'telefones'
-        self.__tblProcessos = 'processos'
+        self.__tblProcessos = 'beneficios'
         self.__tblPpp = 'ppp'
         self.__tblIndiceAtuMonetaria = 'indiceAtuMonetaria'
         self.__tblExpSobrevida = 'expSobrevida'
         self.__tblCnisRemuneracoes = 'cnisRemuneracoes'
         self.__tblCnisBeneficios = 'cnisBeneficios'
         self.__tblCnisContribuicoes = 'cnisContribuicoes'
-        self.__tblCnisCabecalhos = 'cnisCabecalhos'
+        self.__tblcnisVinculos = 'cnisVinculos'
         self.__tblIndicadores = 'indicadores'
         self.__tblEspecieBenef = 'especieBenef'
         self.__tblTetosPrev = 'tetosPrev'
@@ -198,7 +198,7 @@ class TabelasConfig:
             dataUltAlt DATETIME NOT NULL{bottom}
         """
 
-    # Comando SQL para criar tabela de processos
+    # Comando SQL para criar tabela de beneficios
     @property
     def sqlCreateProcessos(self):
         if self.tipoBanco != TiposConexoes.sqlite:
@@ -313,17 +313,17 @@ class TabelasConfig:
 
     # Comando SQL para criar tabela de cabeçalhos do CNIS
     @property
-    def sqlCreateCnisCabecalhos(self):
+    def sqlCreatecnisVinculos(self):
         if self.tipoBanco != TiposConexoes.sqlite:
-            cabecalho = 'cabecalhosId INT AUTO_INCREMENT,'
+            cabecalho = 'vinculoId INT AUTO_INCREMENT,'
             bottom = """,
-            PRIMARY KEY (cabecalhosId)
+            PRIMARY KEY (vinculoId)
         );"""
         else:
-            cabecalho = 'cabecalhosId INTEGER PRIMARY KEY AUTOINCREMENT,'
+            cabecalho = 'vinculoId INTEGER PRIMARY KEY AUTOINCREMENT,'
             bottom = f""");"""
         return f"""
-        CREATE TABLE IF NOT EXISTS {self.tblCnisCabecalhos}(
+        CREATE TABLE IF NOT EXISTS {self.tblcnisVinculos}(
             {cabecalho}
             clienteId INTEGER REFERENCES {self.tblCliente}(clienteId) ON DELETE CASCADE,
             seq INT NOT NULL,
@@ -516,8 +516,8 @@ class TabelasConfig:
         return self.__tblCnisBeneficios
 
     @property
-    def tblCnisCabecalhos(self):
-        return self.__tblCnisCabecalhos
+    def tblcnisVinculos(self):
+        return self.__tblcnisVinculos
 
     @property
     def tblIndicadores(self):

@@ -1,8 +1,8 @@
 import datetime
 
-from PyQt5.QtWidgets import QWidget, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
-from Design.pyUi.configuracoesPage import Ui_wdgTabConfiguracoes
+from Design.pyUi.configuracoesPage import Ui_mwConfiguracoes
 from Design.CustomWidgets.newCheckBox import NewCheckBox
 from cache.cachingLogin import CacheLogin
 from modelos.advogadoORM import Advogados
@@ -10,7 +10,7 @@ from modelos.configGeraisORM import ConfigGerais
 from util.popUps import popUpOkAlerta
 
 
-class ConfiguracoesPage(QWidget, Ui_wdgTabConfiguracoes):
+class ConfiguracoesPage(QMainWindow, Ui_mwConfiguracoes):
     advogado: Advogados
     configGerais: ConfigGerais = ConfigGerais()
 

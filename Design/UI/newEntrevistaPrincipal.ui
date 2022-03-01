@@ -211,7 +211,7 @@
             <item alignment="Qt::AlignHCenter">
              <widget class="QFrame" name="frMigalhas">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -349,7 +349,7 @@
                   <item alignment="Qt::AlignVCenter">
                    <widget class="QLabel" name="lbInfoNatureza">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -485,7 +485,7 @@
                   <item alignment="Qt::AlignVCenter">
                    <widget class="QLabel" name="lbInfoTpBeneficio">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -621,7 +621,7 @@
                   <item alignment="Qt::AlignVCenter">
                    <widget class="QLabel" name="lbInfoTpProcesso">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -757,7 +757,7 @@
                   <item>
                    <widget class="QLabel" name="lbInfoEntrevista">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -868,7 +868,8 @@
 }
 
 /*-------------------------------------------  Widget --------------------------------------------*/
-#pgNatureza, #pgTpBeneficio, #pgTpProcesso {
+#pgNatureza, #pgTpBeneficio, 
+#pgTpProcesso, #pgQuestionario {
 	background-color: white;
 }
 
@@ -953,7 +954,7 @@
          <item>
           <widget class="QFrame" name="frEsquerda">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -966,7 +967,7 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>370</width>
+             <width>450</width>
              <height>16777215</height>
             </size>
            </property>
@@ -1017,7 +1018,7 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>346</width>
+                 <width>446</width>
                  <height>491</height>
                 </rect>
                </property>
@@ -1039,6 +1040,12 @@
                 </property>
                 <item>
                  <widget class="QFrame" name="frInfoHistPessoais">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="frameShape">
                    <enum>QFrame::NoFrame</enum>
                   </property>
@@ -1069,6 +1076,12 @@
                    </item>
                    <item row="1" column="1" alignment="Qt::AlignLeft">
                     <widget class="QLabel" name="lbNome">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
                      <property name="text">
                       <string>Nome</string>
                      </property>
@@ -1576,6 +1589,129 @@
                  </widget>
                 </item>
                </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="pgQuestionario">
+            <property name="styleSheet">
+             <string notr="true">/* ------------------------ Push Button ------------------------*/
+#pbFinalizarEntrevista {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: white;
+
+	border-radius: 8px;
+	padding: 10px;
+	background-color: #3F4E8C;
+}
+
+#pbConfigSimulacao {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+
+	border-radius: 8px;
+	padding: 10px;
+	background-color: white;
+
+	border: 2px solid #3F4E8C;
+}
+
+/* ------------------------ Labels ------------------------*/
+#lbInfoQuestionario {
+	font: 14pt &quot;Avenir LT Std&quot;;
+	font-weight: 750;
+	color: white;
+}
+
+/* ------------------------ Frames ------------------------*/
+#frInfoQuestionario {
+	background-color: #3F4E8C;
+	border-radius: 8px;
+	
+	border: 0px solid none;
+}</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_5">
+             <property name="leftMargin">
+              <number>24</number>
+             </property>
+             <item row="4" column="1">
+              <widget class="QPushButton" name="pbConfigSimulacao">
+               <property name="text">
+                <string>Configurar Simulação</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" alignment="Qt::AlignTop">
+              <widget class="QFrame" name="frInfoQuestionario">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                 <widget class="QLabel" name="lbInfoQuestionario">
+                  <property name="text">
+                   <string>Questionário</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="QPushButton" name="pbFinalizarEntrevista">
+               <property name="minimumSize">
+                <size>
+                 <width>150</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>170</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="sizeIncrement">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Finalizar entrevista</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" rowspan="2">
+              <widget class="QFrame" name="frQuestionario">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
               </widget>
              </item>
             </layout>

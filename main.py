@@ -27,7 +27,7 @@ from modelos.tetosPrevORM import TetosPrev
 from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
 from modelos.clienteORM import Cliente
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import CnisVinculos
 from modelos.carenciasLei91 import CarenciaLei91
 from modelos.configGeraisORM import ConfigGerais
 from modelos.itemContribuicao import ItemContribuicao
@@ -123,7 +123,7 @@ class Main(Ui_MainWindow, QMainWindow):
                 Escritorios: 'CRIANDO TABELA DOS ESCRITORIOS...',
                 Advogados: 'CRIANDO TABELA DOS ADVOGADOS...',
                 Cliente: 'CRIANDO TABELA DO CLIENTE...',
-                CnisCabecalhos: 'CRIANDO TABELA DE CABEÇALHOS...',
+                CnisVinculos: 'CRIANDO TABELA DE VÍNCULOS...',
                 ConvMon: 'CRIANDO TABELA DE CONVERSÕES MONETÁRIAS...',
                 EspecieBene: 'CRIANDO TABELA DE ESPÉCIES DE BENEFÍCIOS...',
                 ExpSobrevida: 'CRIANDO TABELA DAS EXPECTATIVAS DE SOBREVIDA...',

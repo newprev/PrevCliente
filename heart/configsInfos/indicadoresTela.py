@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QVBoxLayout
 from Design.pyUi.pgInfoIndicadores import Ui_mwInfoIndicadores
 from sinaisCustomizados import Sinais
 from modelos.indicadoresORM import Indicadores
-from heart.informacoesTelas.localWidgets.wdgIndicadorController import WdgIndicadorController
+from heart.configsInfos.localWidgets.wdgIndicadorController import WdgIndicadorController
 
 
 class IndicadoresController(QMainWindow, Ui_mwInfoIndicadores):

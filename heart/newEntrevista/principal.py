@@ -2,7 +2,14 @@ import datetime
 from typing import List
 
 from PyQt5.QtWidgets import QWidget
+
 from Design.pyUi.newEntrevistaPrincipal import Ui_wdgEntrevistaPrincipal
+from Design.CustomWidgets.newCardPadrao import NewCardPadrao
+from Design.CustomWidgets.newToast import QToaster
+
+from beneficios.aposentadoria import CalculosAposentadoria
+from heart.newEntrevista.localWidgets.pgConfigSimulacao import PgConfigSimulacao
+from util.enums.aposentadoriaEnums import ContribSimulacao, IndiceReajuste
 
 from .localStyleSheet.principal import styleEtapaEntrevista
 
@@ -14,7 +21,6 @@ from modelos.advogadoORM import Advogados
 
 from cache.cachingLogin import CacheLogin
 
-from Design.CustomWidgets.newCardPadrao import NewCardPadrao
 from sinaisCustomizados import Sinais
 
 from util.dateHelper import calculaIdade, mascaraData, strToDate
@@ -32,6 +38,13 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
     listaBeneficios: List[TipoBeneficioModel]
     clienteAtual: Cliente
     advogadoAtual: Advogados
+    toasty: QToaster
+    entrevistaParams: dict = {
+        'contribSimulacao': ContribSimulacao.ULTI,
+        'valorSimulacao': 0.0,
+        'porcentagemCont': 11,
+        'indiceReajuste': IndiceReajuste.Ipca
+    }
 
     def __init__(self, escritorioAtual: Escritorios = None, cliente: Cliente = None, parent=None):
         super(NewEntrevistaPrincipal, self).__init__(parent=parent)
@@ -39,6 +52,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.dashboard = parent
         self.escritorio = escritorioAtual
         self.etapaAtual = EtapaEntrevista.naturezaProcesso
+        self.toasty = None
         self.sinais = Sinais()
         self.sinais.sTrocaWidgetCentral.connect(self.voltarDashboard)
         self.processoAtual = Processos()
@@ -54,6 +68,13 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.iniciaHistorico()
 
         self.pbVoltar.clicked.connect(self.avaliarVoltar)
+        self.pbFinalizarEntrevista.clicked.connect(self.avaliaFinalizaEntrevista)
+        self.pbConfigSimulacao.clicked.connect(self.abreConfig)
+
+    def abreConfig(self):
+        configPage = PgConfigSimulacao(parent=self, entrevistaParams=self.entrevistaParams)
+        configPage.raise_()
+        configPage.show()
 
     def avaliarVoltar(self):
         if self.etapaAtual == EtapaEntrevista.naturezaProcesso:
@@ -119,6 +140,8 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.processoAtual.dataUltAlt = datetime.datetime.now()
         self.processoAtual.save()
 
+        self.trocaEtapa(EtapaEntrevista.quizEntrevista)
+
     def atualizaNaturezaProcesso(self, natureza: NaturezaProcesso):
         if natureza == NaturezaProcesso.administrativo:
             self.lbNaturezaEscolhida.setText("Administrativo")
@@ -137,6 +160,31 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.processoAtual.save()
         self.trocaEtapa(EtapaEntrevista.tipoBeneficio)
         self.clearFocus()
+
+    def avaliaFinalizaEntrevista(self):
+        tipoDoBeneficio = TipoBeneficioEnum(self.processoAtual.tipoBeneficio.tipoId)
+
+        if self.processoAtual.natureza == NaturezaProcesso.administrativo.value:
+            if tipoDoBeneficio == TipoBeneficioEnum.Aposentadoria:
+                CalculosAposentadoria(processo=self.processoAtual, cliente=self.clienteAtual, entrevistaParams=self.entrevistaParams)
+            elif tipoDoBeneficio == TipoBeneficioEnum.AuxAcidente:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            elif tipoDoBeneficio == TipoBeneficioEnum.AuxDoenca:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            elif tipoDoBeneficio == TipoBeneficioEnum.AuxReclusao:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            elif tipoDoBeneficio == TipoBeneficioEnum.BeneDeficiencia:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            elif tipoDoBeneficio == TipoBeneficioEnum.BeneIdoso:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            elif tipoDoBeneficio == TipoBeneficioEnum.PensaoMorte:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            elif tipoDoBeneficio == TipoBeneficioEnum.SalMaternidade:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            else:
+                popUpOkAlerta("Tipo do benefício não encontrado. Entre em contato com o suporte.", erro=f"{self.processoAtual.tipoBeneficio=}\n{self.processoAtual.processoId=}")
+        else:
+            self.mensagemToast("Natureza do processo ainda não implementada...")
 
     def buscaAdvogadoAtual(self):
         cacheAdvogado = CacheLogin()
@@ -285,6 +333,11 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         if cliente is not None and cliente.clienteId is not None:
             self.clienteAtual = cliente
             self.iniciaInfoPessoais()
+            
+    def mensagemToast(self, mensagem: str):
+        if self.toasty is None:
+            self.toasty = QToaster(self)
+        self.toasty.showMessage(self, mensagem)
 
     def sairEntrevista(self):
         self.sinais.sTrocaWidgetCentral.emit(TelaPosicao.Cliente)

@@ -6,14 +6,14 @@ from util.helpers import dataUSAtoBR, mascaraCNPJ, mascaraNB
 
 from heart.dashboard.tabs.localWidgets.wdgCabecalhoBeneficio import WdgBeneficio
 from heart.dashboard.tabs.localWidgets.wdgCabecalhoContribuicao import WdgContribuicao
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import cnisVinculos
 from heart.dashboard.tabs.localStyleSheet.styleResumo import iconeItem, frInfo
 from util.enums.newPrevEnums import TipoIcone
 
 
 class ItemResumoCnis(QWidget, Ui_WdgItemRes):
 
-    def __init__(self, cabecalho: CnisCabecalhos, parent=None):
+    def __init__(self, cabecalho: cnisVinculos, parent=None):
         super(ItemResumoCnis, self).__init__(parent=parent)
         self.setupUi(self)
         self.frDadoFaltante.hide()

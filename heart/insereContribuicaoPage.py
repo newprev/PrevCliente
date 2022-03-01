@@ -14,7 +14,7 @@ from util.popUps import popUpOkAlerta
 from Design.pyUi.insereContrib import Ui_mwInsereContrib
 from heart.localStyleSheet.insereContribuicao import habilita, habilitaBotao
 from heart.informacoesTelas.indicadoresTela import IndicadoresController
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import cnisVinculos
 from modelos.clienteORM import Cliente
 from modelos.convMonORM import ConvMon
 from util.enums.newPrevEnums import TipoContribuicao
@@ -117,7 +117,7 @@ class InsereContribuicaoPage(QMainWindow, Ui_mwInsereContrib):
             self.defineSinalMonetario(contribuicao)
 
         elif tipoContribuicao == TipoContribuicao.beneficio:
-            cabecalho: CnisCabecalhos = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == self.cliente.clienteId, CnisCabecalhos.seq == contribuicao.seq).get()
+            cabecalho: cnisVinculos = cnisVinculos.select().where(cnisVinculos.clienteId == self.cliente.clienteId, cnisVinculos.seq == contribuicao.seq).get()
             if strToDatetime(cabecalho.dataFim) == datetime.min:
                 dataFim: datetime = datetime.now()
             else:

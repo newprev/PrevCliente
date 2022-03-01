@@ -24,7 +24,7 @@ from util.dateHelper import strToDate, calculaIdade
 from util.enums.dashboardEnums import TelaAtual, Navegacao, EtapaCadastraCliente
 from util.enums.telefoneEnums import TipoTelefone, TelefonePesoal
 from util.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit, estCivil, getEscolaridade, getEstados, getEstadoBySigla, unmaskAll
-from util.popUps import popUpOkAlerta
+from util.popUps import popUpOkAlerta, popUpSimCancela
 
 
 class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
@@ -93,8 +93,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
     def avaliaNavegacao(self, tipo: Navegacao):
         if tipo == Navegacao.anterior:
             if self.etapaAtual == EtapaCadastraCliente.pessoal:
-                # TODO: PERGUNTAR PARA O ADVOGADO SE DESEJA SALVAR OU DESCARTAR ALTERAÇÕES
-                self.dashboard.trocaTela(TelaAtual.Cliente)
+                self.verificaPerderAlteracoes()
             elif self.etapaAtual == EtapaCadastraCliente.profissional:
                 self.trocaEtapa(EtapaCadastraCliente.pessoal, sucesso=False)
             elif self.etapaAtual == EtapaCadastraCliente.bancarias:
@@ -317,7 +316,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             self.dadosProfissionais = ClienteProfissao.get_by_id(cliente.dadosProfissionais)
 
             if self.dadosProfissionais.nit not in [None, 'None']:
-                self.leNit.setText(mascaraNit(int(self.dadosProfissionais.nit)))
+                self.leNit.setText(mascaraNit(unmaskAll(self.dadosProfissionais.nit)))
 
             if self.dadosProfissionais.numCaretiraTrabalho not in [None, 'None']:
                 self.leCarteiraProf.setText(str(self.dadosProfissionais.numCaretiraTrabalho))
@@ -557,6 +556,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
 
         self.cbxEstado.setCurrentIndex(24)
         self.cbxEstadoCivil.clear()
+        self.cbxEscolaridade.clear()
 
     def salvaEtapaBancaria(self):
         if self.dadosBancarios is None:
@@ -628,4 +628,8 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
                 self.frSegundaEtapa.setStyleSheet(etapaCadatro(EtapaCadastraCliente.profissional, sucesso=False))
                 self.frTerceiraEtapa.setStyleSheet(etapaCadatro(EtapaCadastraCliente.bancarias, sucesso=False))
 
-
+    def verificaPerderAlteracoes(self):
+        popUpSimCancela(
+            "Deseja voltar para a tela anterior? Isso apagará suas alterações.",
+            funcaoSim=lambda: self.dashboard.trocaTela(TelaAtual.Cliente)
+        )

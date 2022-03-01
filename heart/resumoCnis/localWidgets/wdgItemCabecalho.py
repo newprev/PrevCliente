@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QWidget
 from Design.pyUi.itemResumoCNIS import Ui_WdgItemRes
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import CnisVinculos
 from modelos.itemContribuicao import ItemContribuicao
 from Design.CustomWidgets.newToast import QToaster
 
@@ -13,16 +13,16 @@ from util.popUps import popUpSimCancela
 
 
 class ItemResumoCnis(QWidget, Ui_WdgItemRes):
-    cabecalhoAtual: CnisCabecalhos
+    vinculoAtual: CnisVinculos
     selecionado: bool = False
     toasty: QToaster
 
-    def __init__(self, cabecalhoCnis: CnisCabecalhos, parent=None):
+    def __init__(self, cabecalhoCnis: CnisVinculos, parent=None):
         super(ItemResumoCnis, self).__init__(parent=parent)
         self.setupUi(self)
         self.resumoPage = parent
 
-        self.cabecalhoAtual = cabecalhoCnis
+        self.vinculoAtual = cabecalhoCnis
         self.carregaCabecalho()
         self.sinais = Sinais()
         self.sinais.sAtualizaVinculo.connect(self.enviaCabecalho)
@@ -38,11 +38,11 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
         self.resumoPage.atualizarVinculos()
 
     def avaliaEnviaParaEdicao(self):
-        if self.cabecalhoAtual is not None:
+        if self.vinculoAtual is not None:
             self.sinais.sEditaVinculo.emit()
 
     def avaliaDeletarResumo(self):
-        nomeVinculo = self.cabecalhoAtual.nomeEmp if self.cabecalhoAtual.nb is None else self.cabecalhoAtual.especie[5:]
+        nomeVinculo = self.vinculoAtual.nomeEmp if self.vinculoAtual.nb is None else self.vinculoAtual.especie[5:]
         popUpSimCancela(
             f"Você realmente deseja deletar o vínculo {nomeVinculo} e todas as suas competências?",
             funcaoSim=self.deletarVinculo
@@ -50,34 +50,34 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
 
     def carregaCabecalho(self):
         # Nome da empresa ou do benefícios
-        if self.cabecalhoAtual.especie is not None:
-            self.lbCdEmp.setText(self.cabecalhoAtual.especie[5:])
-            self.lbCNPJouNB.setText(f"Núm. Benefício: {self.cabecalhoAtual.nb}")
+        if self.vinculoAtual.especie is not None:
+            self.lbCdEmp.setText(self.vinculoAtual.especie[5:])
+            self.lbCNPJouNB.setText(f"Núm. Benefício: {self.vinculoAtual.nb}")
         else:
-            self.lbCdEmp.setText(self.cabecalhoAtual.nomeEmp)
-            self.lbCNPJouNB.setText("CNPJ: " + mascaraCNPJ(self.cabecalhoAtual.cdEmp))
+            self.lbCdEmp.setText(self.vinculoAtual.nomeEmp)
+            self.lbCNPJouNB.setText("CNPJ: " + mascaraCNPJ(self.vinculoAtual.cdEmp))
 
         # Data de início
-        if self.cabecalhoAtual.dataInicio is not None and len(self.cabecalhoAtual.dataInicio) > 0:
-            self.lbDataInicio.setText(mascaraData(self.cabecalhoAtual.dataInicio))
+        if self.vinculoAtual.dataInicio is not None and len(self.vinculoAtual.dataInicio) > 0:
+            self.lbDataInicio.setText(mascaraData(self.vinculoAtual.dataInicio))
         else:
             self.lbDataInicio.setText('')
 
         # Data de fim
-        if self.cabecalhoAtual.dataFim is not None and len(self.cabecalhoAtual.dataFim) > 0:
-            self.lbDataFim.setText(mascaraData(self.cabecalhoAtual.dataFim))
+        if self.vinculoAtual.dataFim is not None and len(self.vinculoAtual.dataFim) > 0:
+            self.lbDataFim.setText(mascaraData(self.vinculoAtual.dataFim))
         else:
             self.lbDataFim.setText('')
 
         # Situação do benefício
-        if self.cabecalhoAtual.situacao is not None and len(self.cabecalhoAtual.situacao) > 0:
-            self.lbSituacao.setText(self.cabecalhoAtual.situacao)
+        if self.vinculoAtual.situacao is not None and len(self.vinculoAtual.situacao) > 0:
+            self.lbSituacao.setText(self.vinculoAtual.situacao)
         else:
             self.lbSituacao.setText("")
             self.lbInfoSituacao.setText("")
 
         # Dado faltante
-        if not self.cabecalhoAtual.dadoFaltante:
+        if not self.vinculoAtual.dadoFaltante:
             self.frDadoFaltante.hide()
 
     def cabecalhoselecionado(self):
@@ -92,15 +92,15 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
     def deletarVinculo(self):
         try:
             qtdeCompetencias: int = ItemContribuicao.select().where(
-                ItemContribuicao.clienteId == self.cabecalhoAtual.clienteId,
-                ItemContribuicao.seq == self.cabecalhoAtual.seq,
+                ItemContribuicao.clienteId == self.vinculoAtual.clienteId,
+                ItemContribuicao.seq == self.vinculoAtual.seq,
             ).count()
 
             ItemContribuicao.delete().where(
-                ItemContribuicao.clienteId == self.cabecalhoAtual.clienteId,
-                ItemContribuicao.seq == self.cabecalhoAtual.seq,
+                ItemContribuicao.clienteId == self.vinculoAtual.clienteId,
+                ItemContribuicao.seq == self.vinculoAtual.seq,
             ).execute()
-            CnisCabecalhos.delete_by_id(self.cabecalhoAtual.cabecalhosId)
+            CnisVinculos.delete_by_id(self.vinculoAtual.vinculoId)
             self.sinais.sDeletaVinculo.emit()
             if self.toasty is None:
                 self.toasty = QToaster(self)
@@ -116,7 +116,7 @@ class ItemResumoCnis(QWidget, Ui_WdgItemRes):
         self.selecionado = False
 
     def enviaCabecalho(self):
-        self.resumoPage.atualizaCabecalhoSelecionado(self.cabecalhoAtual)
+        self.resumoPage.atualizaCabecalhoSelecionado(self.vinculoAtual)
 
     def enviaParaEdicao(self):
-        self.resumoPage.vinculoParaEdicao(self.cabecalhoAtual)
+        self.resumoPage.vinculoParaEdicao(self.vinculoAtual)

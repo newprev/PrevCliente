@@ -17,7 +17,7 @@ from heart.telAfinsController import TelAfinsController
 
 from modelos.cnisModelo import CNISModelo
 from modelos.clienteORM import Cliente
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import cnisVinculos
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.escritoriosORM import Escritorios
 from modelos.processosORM import Processos
@@ -305,8 +305,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                             cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
                             cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
 
-                            CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
-                            CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
+                            cnisVinculos.insert_many(cabecalho).on_conflict_replace().execute()
+                            cnisVinculos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
 
                             self.cliente.telefoneId = Telefones.get_by_id(self.cliente)
                             transaction.commit()
@@ -355,7 +355,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         return listaReturn
 
     def avaliaAtividadesPrincipais(self):
-        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == self.cliente.clienteId)
+        listaCabecalhos: List[cnisVinculos] = cnisVinculos.select().where(cnisVinculos.clienteId == self.cliente.clienteId)
 
         for index, cabecalho in enumerate(listaCabecalhos):
             if index == 0 or listaCabecalhos[index-1].dadoFaltante or listaCabecalhos[index].dadoFaltante:

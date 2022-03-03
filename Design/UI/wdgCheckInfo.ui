@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>wdgIndicador</class>
- <widget class="QWidget" name="wdgIndicador">
+ <class>wdgCheckInfo</class>
+ <widget class="QWidget" name="wdgCheckInfo">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -38,16 +38,18 @@
 
 /* ---------------------------------------------- CheckBox ----------------------------------------------*/
 
-#cbIndicador {
+#cbInfo {
 	font: 12pt &quot;Avenir LT Std&quot;;
 	color: #040D14;
+
+	font-weight: 150;
 }
 
-#cbIndicador::indicator:unchecked {
+#cbInfo::indicator:unchecked {
 	image: url(:/indicador/CheckBoxFalse.png);
 }
 
-#cbIndicador::indicator:checked {
+#cbInfo::indicator:checked {
 	image: url(:/indicador/checkBoxTrue.png);
 }</string>
   </property>
@@ -123,7 +125,7 @@
        </widget>
       </item>
       <item alignment="Qt::AlignLeft|Qt::AlignVCenter">
-       <widget class="QCheckBox" name="cbIndicador">
+       <widget class="QCheckBox" name="cbInfo">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -159,7 +161,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../Resources/wdgIndicador.qrc"/>
+  <include location="../../Resources/wdgCheckInfo.qrc"/>
  </resources>
  <connections/>
 </ui>

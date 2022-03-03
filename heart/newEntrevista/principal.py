@@ -1,14 +1,16 @@
 import datetime
 from typing import List
 
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QVBoxLayout
 
 from Design.pyUi.newEntrevistaPrincipal import Ui_wdgEntrevistaPrincipal
 from Design.CustomWidgets.newCardPadrao import NewCardPadrao
 from Design.CustomWidgets.newToast import QToaster
+from Design.CustomWidgets.wdgCheckInfoController import WdgCheckInfo
 
 from beneficios.aposentadoria import CalculosAposentadoria
 from heart.newEntrevista.localWidgets.pgConfigSimulacao import PgConfigSimulacao
+from modelos.Auxiliares.tipoInfo import InformacaoModel
 from util.enums.aposentadoriaEnums import ContribSimulacao, IndiceReajuste
 
 from .localStyleSheet.principal import styleEtapaEntrevista
@@ -25,7 +27,7 @@ from sinaisCustomizados import Sinais
 
 from util.dateHelper import calculaIdade, mascaraData, strToDate
 from util.enums.dashboardEnums import TelaPosicao
-from util.enums.entrevistaEnums import EtapaEntrevista
+from util.enums.entrevistaEnums import EtapaEntrevista, CategoriaQuiz
 from util.enums.processoEnums import NaturezaProcesso, TipoBeneficioEnum, TipoProcesso
 from util.helpers import strTipoBeneFacilitado, strTipoProcesso, mascaraCPF
 from util.popUps import popUpSimCancela, popUpOkAlerta
@@ -59,6 +61,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.clienteAtual = cliente
         self.listaBeneficios = []
 
+        self.iniciaQuiz()
         self.buscaAdvogadoAtual()
         self.carregaTiposBeneficio()
         self.iniciaInfoPessoais()
@@ -272,6 +275,35 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         else:
             self.frInfoHistPessoais.hide()
 
+    def iniciaQuiz(self):
+        vlQuiz = QVBoxLayout(self)
+
+        infoInsalubre = InformacaoModel('Insalubridade', CategoriaQuiz.insalubridade)
+        insalubridade = WdgCheckInfo(infoInsalubre, parent=self)
+        vlQuiz.addWidget(insalubridade)
+
+        infoDeficiente = InformacaoModel('Deficiência', CategoriaQuiz.deficiencia)
+        deficiencia = WdgCheckInfo(infoDeficiente, parent=self)
+        vlQuiz.addWidget(deficiencia)
+
+        infoMilitar = InformacaoModel('Serviço militar', CategoriaQuiz.servicoMilitar)
+        ServMilitar = WdgCheckInfo(infoMilitar, parent=self)
+        vlQuiz.addWidget(ServMilitar)
+
+        infoRural = InformacaoModel('Trabalho rural', CategoriaQuiz.trabalhoRural)
+        trabalhoRural = WdgCheckInfo(infoRural, parent=self)
+        vlQuiz.addWidget(trabalhoRural)
+
+        infoManual = InformacaoModel('Alteração manual', CategoriaQuiz.alteracaoManual)
+        altManual = WdgCheckInfo(infoManual, parent=self)
+        vlQuiz.addWidget(altManual)
+
+        infoOutros = InformacaoModel('Outros', CategoriaQuiz.outros)
+        outros = WdgCheckInfo(infoOutros, parent=self)
+        vlQuiz.addWidget(outros)
+
+        self.scaQuestionario.setLayout(vlQuiz)
+
     def iniciaTpProcesso(self):
         pbConcessao = NewCardPadrao(
             TipoProcesso.Concessao,
@@ -338,6 +370,9 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         if self.toasty is None:
             self.toasty = QToaster(self)
         self.toasty.showMessage(self, mensagem)
+
+    def recebeInfo(self, info: InformacaoModel):
+        print(f"{info}")
 
     def sairEntrevista(self):
         self.sinais.sTrocaWidgetCentral.emit(TelaPosicao.Cliente)

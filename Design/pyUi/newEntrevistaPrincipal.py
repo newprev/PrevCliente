@@ -795,6 +795,11 @@ class Ui_wdgEntrevistaPrincipal(object):
 "    border-radius: 8px;\n"
 "    \n"
 "    border: 0px solid none;\n"
+"}\n"
+"\n"
+"/* ------------------------ Scroll Area, Widget ------------------------*/\n"
+"#scrollEntrevista,  #scaQuestionario {\n"
+"    background-color: white;\n"
 "}")
         self.pgQuestionario.setObjectName("pgQuestionario")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.pgQuestionario)
@@ -826,15 +831,28 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.pbFinalizarEntrevista.setObjectName("pbFinalizarEntrevista")
         self.gridLayout_5.addWidget(self.pbFinalizarEntrevista, 5, 1, 1, 1)
         self.frQuestionario = QtWidgets.QFrame(self.pgQuestionario)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frQuestionario.sizePolicy().hasHeightForWidth())
         self.frQuestionario.setSizePolicy(sizePolicy)
-        self.frQuestionario.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frQuestionario.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frQuestionario.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frQuestionario.setObjectName("frQuestionario")
+        self.verticalLayout_23 = QtWidgets.QVBoxLayout(self.frQuestionario)
+        self.verticalLayout_23.setObjectName("verticalLayout_23")
+        self.scrollEntrevista = QtWidgets.QScrollArea(self.frQuestionario)
+        self.scrollEntrevista.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scrollEntrevista.setWidgetResizable(True)
+        self.scrollEntrevista.setObjectName("scrollEntrevista")
+        self.scaQuestionario = QtWidgets.QWidget()
+        self.scaQuestionario.setGeometry(QtCore.QRect(0, 0, 459, 68))
+        self.scaQuestionario.setObjectName("scaQuestionario")
+        self.scrollEntrevista.setWidget(self.scaQuestionario)
+        self.verticalLayout_23.addWidget(self.scrollEntrevista)
         self.gridLayout_5.addWidget(self.frQuestionario, 1, 0, 2, 1)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.MinimumExpanding)
+        self.gridLayout_5.addItem(spacerItem6, 3, 0, 1, 1)
         self.stkEntrevista.addWidget(self.pgQuestionario)
         self.horizontalLayout_4.addWidget(self.stkEntrevista)
         self.verticalLayout.addWidget(self.frMiolo)

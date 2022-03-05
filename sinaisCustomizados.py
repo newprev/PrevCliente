@@ -31,3 +31,4 @@ class Sinais(QObject):
     sAtualizaParams = QtCore.pyqtSignal(name='AtualizaParams')
     sEnviaProcesso = QtCore.pyqtSignal(name='enviaProcesso')
     sExcluiFiltro = QtCore.pyqtSignal(name='excluiFiltro')
+    sFecharJanela = QtCore.pyqtSignal(name='fecharJanela')

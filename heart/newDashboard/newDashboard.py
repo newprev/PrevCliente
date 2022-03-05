@@ -1,6 +1,6 @@
 from Design.pyUi.newDashboard import Ui_newDashboard
-from PyQt5.QtWidgets import QMainWindow
-from PyQt5 import QtGui
+from PyQt5.QtWidgets import QMainWindow, QFrame, QWidget
+from PyQt5 import QtGui, QtCore
 
 from heart.resumoCnis.resumoCnis import ResumoCnisController
 from modelos.clienteORM import Cliente
@@ -42,6 +42,7 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
         self.setWindowTitle('Dashboard - [dashboardController]')
 
         self.pbMenuPrincipal.clicked.connect(self.abreMenuPrincipal)
+        # self.pbAvisos.clicked.connect(pass)
 
     def abreMenuPrincipal(self):
         efeitos = Efeitos()

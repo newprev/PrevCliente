@@ -89,13 +89,7 @@
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <property name="spacing">
-       <number>4</number>
-      </property>
-      <property name="sizeConstraint">
-       <enum>QLayout::SetMaximumSize</enum>
-      </property>
+     <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -103,13 +97,22 @@
        <number>0</number>
       </property>
       <property name="rightMargin">
-       <number>4</number>
+       <number>0</number>
       </property>
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item>
+      <property name="verticalSpacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0" alignment="Qt::AlignLeft">
        <widget class="QFrame" name="frFirula">
+        <property name="minimumSize">
+         <size>
+          <width>6</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>6</width>
@@ -124,8 +127,14 @@
         </property>
        </widget>
       </item>
-      <item alignment="Qt::AlignLeft|Qt::AlignVCenter">
+      <item row="0" column="1" alignment="Qt::AlignLeft">
        <widget class="QCheckBox" name="cbInfo">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <horstretch>65</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -136,6 +145,12 @@
          <size>
           <width>16777215</width>
           <height>42</height>
+         </size>
+        </property>
+        <property name="sizeIncrement">
+         <size>
+          <width>0</width>
+          <height>0</height>
          </size>
         </property>
         <property name="autoFillBackground">

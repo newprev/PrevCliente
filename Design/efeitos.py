@@ -1,10 +1,12 @@
+from typing import List
+
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QGraphicsDropShadowEffect
+from PyQt5.QtWidgets import QGraphicsDropShadowEffect, QGraphicsBlurEffect, QWidget
 
 
 class Efeitos:
 
-    def shadowCards(self, widgets: list, radius: int = 20, offset: tuple = (1, 7), color: tuple = (63, 63, 63, 180), parentOnly=False):
+    def shadowCards(self, widgets: List, radius: int = 20, offset: tuple = (1, 7), color: tuple = (63, 63, 63, 180), parentOnly=False):
 
         for widget in widgets:
             # criando um QGraphicsDropShadowEffect object
@@ -27,6 +29,16 @@ class Efeitos:
                 for widget in widget.children():
                     widget.setGraphicsEffect(None)
 
-    def desativarSombra(self, listaWdg: list):
+    def desativarSombra(self, listaWdg: List):
         for widget in listaWdg:
             widget.setGraphicsEffect(None)
+
+    def blurWidgets(self, widgets: List[QWidget], radius: int = 10, disable: bool = False, parentOnly: bool = False):
+
+        for widget in widgets:
+            effBlur = QGraphicsBlurEffect()
+
+            effBlur.setBlurRadius(radius)
+            effBlur.setEnabled(not disable)
+
+            widget.setGraphicsEffect(effBlur)

@@ -1,12 +1,14 @@
 import datetime
 from typing import List
 
-from PyQt5.QtWidgets import QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QCheckBox
 
 from Design.pyUi.newEntrevistaPrincipal import Ui_wdgEntrevistaPrincipal
 from Design.CustomWidgets.newCardPadrao import NewCardPadrao
 from Design.CustomWidgets.newToast import QToaster
 from Design.CustomWidgets.wdgCheckInfoController import WdgCheckInfo
+from Design.CustomWidgets.newModalEntrevista import ModalEntrevistaController
+from Design.efeitos import Efeitos
 
 from beneficios.aposentadoria import CalculosAposentadoria
 from heart.newEntrevista.localWidgets.pgConfigSimulacao import PgConfigSimulacao
@@ -265,6 +267,10 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.vlTpBeneficio.addWidget(pbPensaoMorte)
         self.vlTpBeneficio.addWidget(pbSalMaternidade)
 
+    def habilitaBlur(self, ativar: bool = True):
+        efeito = Efeitos()
+        efeito.blurWidgets([self.frPrincipal], disable=not ativar)
+
     def iniciaInfoPessoais(self):
         if self.clienteAtual is not None and self.clienteAtual.clienteId is not None:
             idadeCliente = calculaIdade(self.clienteAtual.dataNascimento, datetime.datetime.today())
@@ -372,7 +378,28 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.toasty.showMessage(self, mensagem)
 
     def recebeInfo(self, info: InformacaoModel):
-        print(f"{info}")
+        perguntas=[
+            InformacaoModel(
+                descricao="Testando questão 1",
+                tipoInfo=QCheckBox()
+            ),
+            InformacaoModel(
+                descricao="Testando questão 2",
+                tipoInfo=QCheckBox(),
+                nivel=1
+            ),
+            InformacaoModel(
+                descricao="Testando questão 3",
+                tipoInfo=QCheckBox()
+            ),
+            InformacaoModel(
+                descricao="Testando questão 4",
+                tipoInfo=QCheckBox()
+            ),
+        ]
+        modalEntrevista = ModalEntrevistaController(info.tipoInfo, perguntas, parent=self, dashboard=self.dashboard)
+        modalEntrevista.show()
+        self.habilitaBlur(ativar=True)
 
     def sairEntrevista(self):
         self.sinais.sTrocaWidgetCentral.emit(TelaPosicao.Cliente)

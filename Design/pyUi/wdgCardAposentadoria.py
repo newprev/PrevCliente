@@ -14,56 +14,56 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgCardAposentadoria(object):
     def setupUi(self, wdgCardAposentadoria):
         wdgCardAposentadoria.setObjectName("wdgCardAposentadoria")
-        wdgCardAposentadoria.resize(374, 450)
+        wdgCardAposentadoria.resize(253, 264)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(wdgCardAposentadoria.sizePolicy().hasHeightForWidth())
         wdgCardAposentadoria.setSizePolicy(sizePolicy)
-        wdgCardAposentadoria.setMaximumSize(QtCore.QSize(380, 16777215))
+        wdgCardAposentadoria.setMinimumSize(QtCore.QSize(253, 264))
+        wdgCardAposentadoria.setMaximumSize(QtCore.QSize(253, 264))
         wdgCardAposentadoria.setStyleSheet("/*#wdgCardAposentadoria {\n"
 "    background-color: black;\n"
 "}*/\n"
 "\n"
 "/*------------------------------------- Label -------------------------------------*/\n"
-"#lbDib, #lbInfoDib {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 10px;\n"
+"#lbTipoApos, #lbDib {\n"
+"    font: 14pt \"Avenir LT Std\";\n"
+"    color: #3A405A;\n"
 "\n"
-"    color: grey;\n"
-"}\n"
-"\n"
-"#lbQtdContrib, #lbValorBeneficio {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 18px;\n"
-"    font-weight: 600;\n"
-"\n"
-"    color: rgb(44, 44, 44);\n"
-"}\n"
-"\n"
-"#lbInfoQtdContrib, #lbInfoValorBeneficio,\n"
-"#lbInfoTipoSimulacao, #lbTipoSimulacao {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;\n"
-"\n"
-"    color: rgb(44, 44, 44);\n"
+"    margin-left: 0px;\n"
+"    margin-right: 0px;\n"
+"    margin-top: 16px;\n"
+"    margin-bottom: 0px;\n"
 "}\n"
 "\n"
 "#lbIdade {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 22px;\n"
-"\n"
-"    color: white;\n"
+"    font: 20pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
 "}\n"
 "\n"
-"#lbTipoApos {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 20px;\n"
+"#lbQtdContrib {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3A405A;\n"
 "\n"
-"    color: grey;\n"
+"    font-weight: 750;\n"
+"}\n"
+"\n"
+"#lbValorBeneficio {\n"
+"    font: 18pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"    \n"
+"    font-weight: 750;\n"
 "}\n"
 "\n"
 "/*------------------------------------- Frame -------------------------------------*/\n"
+"#frMain {\n"
+"    background-color: white;\n"
+"    border-radius: 16px;\n"
+"\n"
+"    border: 2px solid #3F4E8C;\n"
+"}\n"
+"\n"
 "#frIconeCentral {\n"
 "    border-width: 0px;\n"
 "    border-color: grey;\n"
@@ -77,106 +77,81 @@ class Ui_wdgCardAposentadoria(object):
 "    background-color: lightgrey;\n"
 "}\n"
 "\n"
-"/*------------------------------------- Group Box -------------------------------------*/\n"
-"#gbMain {\n"
-"    background-color: white;\n"
-"    border-radius: 8px;\n"
-"}\n"
-"\n"
-"#gbMain::title {\n"
-"    margin-top: 4px;\n"
-"    margin-left: 4px;\n"
-"}\n"
-"\n"
-"#gbMain::indicator {\n"
-"    width: 20px;\n"
-"    height: 20px;\n"
-"}\n"
-"\n"
-"#gbMain::indicator:checked {\n"
-"    background-image: url(:/checkCard/entrevista-check.png);\n"
-"    background-repeat: no-repeat;\n"
-"    background-position: center;    \n"
+"#frBottom {\n"
+"    background-color: #3F4E8C;\n"
+"    border-top-left-radius: 0px;\n"
+"    border-top-right-radius: 0px;\n"
+"    border-bottom-right-radius: 13px;\n"
+"    border-bottom-left-radius: 13px;\n"
 "}\n"
 "\n"
 "/*------------------------------------- Progress Bar  -------------------------------------*/\n"
 "#pbarPrincipal {\n"
 "    border: 2px solid grey;\n"
-"    border-radius: 5px;\n"
+"    border-radius: 12px;\n"
+"\n"
+"    margin-left: 16px;\n"
+"    margin-right: 16px;\n"
+"    margin-top: 0px;\n"
+"    margin-bottom: 0px;\n"
 "}\n"
 "\n"
 "#pbarPrincipal::chunk {\n"
-"    background-color: #05B8CC;\n"
-"    width: 20px;\n"
+"    background-color: #3F64FF;\n"
+"    \n"
+"    border-bottom-left-radius: 10px; \n"
+"    border-top-left-radius: 10px;\n"
 "}")
         self.horizontalLayout = QtWidgets.QHBoxLayout(wdgCardAposentadoria)
+        self.horizontalLayout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.gbMain = QtWidgets.QGroupBox(wdgCardAposentadoria)
-        self.gbMain.setCheckable(True)
-        self.gbMain.setObjectName("gbMain")
-        self.gridLayout = QtWidgets.QGridLayout(self.gbMain)
+        self.frMain = QtWidgets.QFrame(wdgCardAposentadoria)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frMain.sizePolicy().hasHeightForWidth())
+        self.frMain.setSizePolicy(sizePolicy)
+        self.frMain.setMinimumSize(QtCore.QSize(253, 264))
+        self.frMain.setMaximumSize(QtCore.QSize(253, 264))
+        self.frMain.setObjectName("frMain")
+        self.gridLayout = QtWidgets.QGridLayout(self.frMain)
+        self.gridLayout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout.setHorizontalSpacing(0)
+        self.gridLayout.setVerticalSpacing(2)
         self.gridLayout.setObjectName("gridLayout")
-        self.lbInfoDib = QtWidgets.QLabel(self.gbMain)
-        self.lbInfoDib.setObjectName("lbInfoDib")
-        self.gridLayout.addWidget(self.lbInfoDib, 0, 1, 1, 1, QtCore.Qt.AlignRight|QtCore.Qt.AlignTop)
-        self.frame = QtWidgets.QFrame(self.gbMain)
-        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame)
-        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_4.setSpacing(0)
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.frIconeCentral = QtWidgets.QFrame(self.frame)
-        self.frIconeCentral.setMinimumSize(QtCore.QSize(120, 120))
-        self.frIconeCentral.setMaximumSize(QtCore.QSize(120, 120))
-        self.frIconeCentral.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frIconeCentral.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frIconeCentral.setObjectName("frIconeCentral")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frIconeCentral)
-        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_3.setSpacing(0)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.lbIdade = QtWidgets.QLabel(self.frIconeCentral)
+        self.pbarPrincipal = QtWidgets.QProgressBar(self.frMain)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pbarPrincipal.sizePolicy().hasHeightForWidth())
+        self.pbarPrincipal.setSizePolicy(sizePolicy)
+        self.pbarPrincipal.setProperty("value", 24)
+        self.pbarPrincipal.setFormat("")
+        self.pbarPrincipal.setObjectName("pbarPrincipal")
+        self.gridLayout.addWidget(self.pbarPrincipal, 6, 0, 1, 2)
+        self.lbIdade = QtWidgets.QLabel(self.frMain)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbIdade.sizePolicy().hasHeightForWidth())
+        self.lbIdade.setSizePolicy(sizePolicy)
+        self.lbIdade.setAlignment(QtCore.Qt.AlignCenter)
         self.lbIdade.setObjectName("lbIdade")
-        self.horizontalLayout_3.addWidget(self.lbIdade, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.horizontalLayout_4.addWidget(self.frIconeCentral)
-        self.gridLayout.addWidget(self.frame, 2, 0, 1, 3)
-        self.lbDib = QtWidgets.QLabel(self.gbMain)
-        self.lbDib.setObjectName("lbDib")
-        self.gridLayout.addWidget(self.lbDib, 0, 2, 1, 1, QtCore.Qt.AlignRight|QtCore.Qt.AlignTop)
-        self.frame_3 = QtWidgets.QFrame(self.gbMain)
-        self.frame_3.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_3.setObjectName("frame_3")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frame_3)
-        self.verticalLayout_2.setContentsMargins(0, 16, 0, 0)
-        self.verticalLayout_2.setSpacing(4)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.lbValorBeneficio = QtWidgets.QLabel(self.frame_3)
-        self.lbValorBeneficio.setObjectName("lbValorBeneficio")
-        self.verticalLayout_2.addWidget(self.lbValorBeneficio, 0, QtCore.Qt.AlignHCenter)
-        self.lbInfoValorBeneficio = QtWidgets.QLabel(self.frame_3)
-        self.lbInfoValorBeneficio.setObjectName("lbInfoValorBeneficio")
-        self.verticalLayout_2.addWidget(self.lbInfoValorBeneficio, 0, QtCore.Qt.AlignHCenter)
-        self.gridLayout.addWidget(self.frame_3, 5, 1, 1, 2)
-        self.frame_2 = QtWidgets.QFrame(self.gbMain)
-        self.frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName("frame_2")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.frame_2)
-        self.verticalLayout.setContentsMargins(0, 16, 0, 0)
-        self.verticalLayout.setSpacing(4)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.lbQtdContrib = QtWidgets.QLabel(self.frame_2)
+        self.gridLayout.addWidget(self.lbIdade, 3, 0, 1, 2)
+        self.lbQtdContrib = QtWidgets.QLabel(self.frMain)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbQtdContrib.sizePolicy().hasHeightForWidth())
+        self.lbQtdContrib.setSizePolicy(sizePolicy)
+        self.lbQtdContrib.setAlignment(QtCore.Qt.AlignCenter)
         self.lbQtdContrib.setObjectName("lbQtdContrib")
-        self.verticalLayout.addWidget(self.lbQtdContrib, 0, QtCore.Qt.AlignHCenter)
-        self.lbInfoQtdContrib = QtWidgets.QLabel(self.frame_2)
-        self.lbInfoQtdContrib.setObjectName("lbInfoQtdContrib")
-        self.verticalLayout.addWidget(self.lbInfoQtdContrib, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.gridLayout.addWidget(self.frame_2, 5, 0, 1, 1)
-        self.lbTipoApos = QtWidgets.QLabel(self.gbMain)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addWidget(self.lbQtdContrib, 5, 0, 1, 2)
+        self.lbTipoApos = QtWidgets.QLabel(self.frMain)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lbTipoApos.sizePolicy().hasHeightForWidth())
@@ -187,35 +162,45 @@ class Ui_wdgCardAposentadoria(object):
         self.lbTipoApos.setWordWrap(True)
         self.lbTipoApos.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextSelectableByMouse)
         self.lbTipoApos.setObjectName("lbTipoApos")
-        self.gridLayout.addWidget(self.lbTipoApos, 3, 0, 1, 3)
-        self.pbarPrincipal = QtWidgets.QProgressBar(self.gbMain)
-        self.pbarPrincipal.setProperty("value", 24)
-        self.pbarPrincipal.setFormat("")
-        self.pbarPrincipal.setObjectName("pbarPrincipal")
-        self.gridLayout.addWidget(self.pbarPrincipal, 4, 0, 1, 3)
-        self.frame_4 = QtWidgets.QFrame(self.gbMain)
-        self.frame_4.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_4.setObjectName("frame_4")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame_4)
+        self.gridLayout.addWidget(self.lbTipoApos, 2, 0, 1, 2)
+        self.frBottom = QtWidgets.QFrame(self.frMain)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frBottom.sizePolicy().hasHeightForWidth())
+        self.frBottom.setSizePolicy(sizePolicy)
+        self.frBottom.setMinimumSize(QtCore.QSize(249, 60))
+        self.frBottom.setMaximumSize(QtCore.QSize(249, 60))
+        self.frBottom.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frBottom.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frBottom.setObjectName("frBottom")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frBottom)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_2.setSpacing(4)
+        self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.lbInfoTipoSimulacao = QtWidgets.QLabel(self.frame_4)
-        self.lbInfoTipoSimulacao.setObjectName("lbInfoTipoSimulacao")
-        self.horizontalLayout_2.addWidget(self.lbInfoTipoSimulacao, 0, QtCore.Qt.AlignRight)
-        self.lbTipoSimulacao = QtWidgets.QLabel(self.frame_4)
-        self.lbTipoSimulacao.setObjectName("lbTipoSimulacao")
-        self.horizontalLayout_2.addWidget(self.lbTipoSimulacao, 0, QtCore.Qt.AlignRight)
-        self.gridLayout.addWidget(self.frame_4, 7, 0, 1, 3)
-        self.frSeparador1 = QtWidgets.QFrame(self.gbMain)
-        self.frSeparador1.setMinimumSize(QtCore.QSize(0, 2))
-        self.frSeparador1.setMaximumSize(QtCore.QSize(16777215, 2))
-        self.frSeparador1.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frSeparador1.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frSeparador1.setObjectName("frSeparador1")
-        self.gridLayout.addWidget(self.frSeparador1, 6, 0, 1, 3)
-        self.horizontalLayout.addWidget(self.gbMain)
+        self.lbValorBeneficio = QtWidgets.QLabel(self.frBottom)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbValorBeneficio.sizePolicy().hasHeightForWidth())
+        self.lbValorBeneficio.setSizePolicy(sizePolicy)
+        self.lbValorBeneficio.setMinimumSize(QtCore.QSize(0, 60))
+        self.lbValorBeneficio.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbValorBeneficio.setObjectName("lbValorBeneficio")
+        self.horizontalLayout_2.addWidget(self.lbValorBeneficio)
+        self.gridLayout.addWidget(self.frBottom, 9, 0, 1, 2)
+        self.lbDib = QtWidgets.QLabel(self.frMain)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbDib.sizePolicy().hasHeightForWidth())
+        self.lbDib.setSizePolicy(sizePolicy)
+        self.lbDib.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbDib.setObjectName("lbDib")
+        self.gridLayout.addWidget(self.lbDib, 7, 0, 1, 2)
+        spacerItem = QtWidgets.QSpacerItem(20, 5, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem, 4, 0, 1, 2)
+        self.horizontalLayout.addWidget(self.frMain)
 
         self.retranslateUi(wdgCardAposentadoria)
         QtCore.QMetaObject.connectSlotsByName(wdgCardAposentadoria)
@@ -223,16 +208,11 @@ class Ui_wdgCardAposentadoria(object):
     def retranslateUi(self, wdgCardAposentadoria):
         _translate = QtCore.QCoreApplication.translate
         wdgCardAposentadoria.setWindowTitle(_translate("wdgCardAposentadoria", "Form"))
-        self.lbInfoDib.setText(_translate("wdgCardAposentadoria", "DIB:"))
-        self.lbIdade.setText(_translate("wdgCardAposentadoria", "56 anos"))
-        self.lbDib.setText(_translate("wdgCardAposentadoria", "15/10/2023"))
-        self.lbValorBeneficio.setText(_translate("wdgCardAposentadoria", "valorBeneficio"))
-        self.lbInfoValorBeneficio.setText(_translate("wdgCardAposentadoria", "Valor do benefício"))
-        self.lbQtdContrib.setText(_translate("wdgCardAposentadoria", "QtdContribuicoes"))
-        self.lbInfoQtdContrib.setText(_translate("wdgCardAposentadoria", "Quantidade de contribuições"))
+        self.lbIdade.setText(_translate("wdgCardAposentadoria", "65 anos"))
+        self.lbQtdContrib.setText(_translate("wdgCardAposentadoria", "Qtd de contribuições - 15/180"))
         self.lbTipoApos.setText(_translate("wdgCardAposentadoria", "Tipo de aposentadoria"))
-        self.lbInfoTipoSimulacao.setText(_translate("wdgCardAposentadoria", "Simulação:"))
-        self.lbTipoSimulacao.setText(_translate("wdgCardAposentadoria", "Repetição da última contribuição"))
+        self.lbValorBeneficio.setText(_translate("wdgCardAposentadoria", "R$ 1900,00"))
+        self.lbDib.setText(_translate("wdgCardAposentadoria", "DIB: 15/10/2023"))
 import Resources.wdgCardAposentadoria
 
 

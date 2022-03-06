@@ -6,6 +6,7 @@ class EtapaEntrevista(Enum):
     tipoBeneficio = 1
     tipoProcesso = 2
     quizEntrevista = 3
+    simulacoes = 4
 
 
 class CategoriaQuiz(Enum):

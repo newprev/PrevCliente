@@ -1,6 +1,10 @@
 <RCC>
   <qresource prefix="voltar">
+    <file>backWhite.png</file>
     <file>back.png</file>
+  </qresource>
+  <qresource prefix="proximo">
+    <file>next.png</file>
   </qresource>
   <qresource prefix="busca">
     <file>localizacao.png</file>

@@ -854,6 +854,88 @@ class Ui_wdgEntrevistaPrincipal(object):
         spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.MinimumExpanding)
         self.gridLayout_5.addItem(spacerItem6, 3, 0, 1, 1)
         self.stkEntrevista.addWidget(self.pgQuestionario)
+        self.pgSimulacao = QtWidgets.QWidget()
+        self.pgSimulacao.setStyleSheet("/* ---------------- QWidget ----------------- */\n"
+"#pgSimulacao, #frItensSimulacao, #scaSimulacoes {\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"/* ------------------ Push Button --------------------*/\n"
+"#pbInfoCliente {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"\n"
+"    background-color:     rgba(63, 78, 140, 190);\n"
+"    color: white;\n"
+"    border: 0px solid none;\n"
+"\n"
+"    background-image: url(:/proximo/next.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"}\n"
+"\n"
+"#pbSalvarSimulacao {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 8px;\n"
+"    padding: 10px;\n"
+"    background-color: #3F4E8C;\n"
+"}\n"
+"\n"
+"")
+        self.pgSimulacao.setObjectName("pgSimulacao")
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.pgSimulacao)
+        self.horizontalLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_7.setSpacing(24)
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.pbInfoCliente = QtWidgets.QPushButton(self.pgSimulacao)
+        self.pbInfoCliente.setMinimumSize(QtCore.QSize(25, 70))
+        self.pbInfoCliente.setMaximumSize(QtCore.QSize(25, 70))
+        self.pbInfoCliente.setText("")
+        self.pbInfoCliente.setDefault(False)
+        self.pbInfoCliente.setFlat(False)
+        self.pbInfoCliente.setObjectName("pbInfoCliente")
+        self.horizontalLayout_7.addWidget(self.pbInfoCliente, 0, QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.frItensSimulacao = QtWidgets.QFrame(self.pgSimulacao)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frItensSimulacao.sizePolicy().hasHeightForWidth())
+        self.frItensSimulacao.setSizePolicy(sizePolicy)
+        self.frItensSimulacao.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frItensSimulacao.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frItensSimulacao.setObjectName("frItensSimulacao")
+        self.gridLayout_6 = QtWidgets.QGridLayout(self.frItensSimulacao)
+        self.gridLayout_6.setObjectName("gridLayout_6")
+        self.scrollAreaSimulacoes = QtWidgets.QScrollArea(self.frItensSimulacao)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scrollAreaSimulacoes.sizePolicy().hasHeightForWidth())
+        self.scrollAreaSimulacoes.setSizePolicy(sizePolicy)
+        self.scrollAreaSimulacoes.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scrollAreaSimulacoes.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.scrollAreaSimulacoes.setWidgetResizable(True)
+        self.scrollAreaSimulacoes.setAlignment(QtCore.Qt.AlignCenter)
+        self.scrollAreaSimulacoes.setObjectName("scrollAreaSimulacoes")
+        self.scaSimulacoes = QtWidgets.QWidget()
+        self.scaSimulacoes.setGeometry(QtCore.QRect(0, 0, 627, 426))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scaSimulacoes.sizePolicy().hasHeightForWidth())
+        self.scaSimulacoes.setSizePolicy(sizePolicy)
+        self.scaSimulacoes.setObjectName("scaSimulacoes")
+        self.scrollAreaSimulacoes.setWidget(self.scaSimulacoes)
+        self.gridLayout_6.addWidget(self.scrollAreaSimulacoes, 0, 0, 1, 2)
+        self.pbSalvarSimulacao = QtWidgets.QPushButton(self.frItensSimulacao)
+        self.pbSalvarSimulacao.setMinimumSize(QtCore.QSize(185, 45))
+        self.pbSalvarSimulacao.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.pbSalvarSimulacao.setSizeIncrement(QtCore.QSize(0, 0))
+        self.pbSalvarSimulacao.setObjectName("pbSalvarSimulacao")
+        self.gridLayout_6.addWidget(self.pbSalvarSimulacao, 1, 0, 1, 2, QtCore.Qt.AlignHCenter)
+        self.horizontalLayout_7.addWidget(self.frItensSimulacao)
+        self.stkEntrevista.addWidget(self.pgSimulacao)
         self.horizontalLayout_4.addWidget(self.stkEntrevista)
         self.verticalLayout.addWidget(self.frMiolo)
         self.gridLayout.addWidget(self.frPrincipal, 0, 0, 1, 1)
@@ -893,6 +975,7 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.pbConfigSimulacao.setText(_translate("wdgEntrevistaPrincipal", "Configurar Simulação"))
         self.lbInfoQuestionario.setText(_translate("wdgEntrevistaPrincipal", "Questionário"))
         self.pbFinalizarEntrevista.setText(_translate("wdgEntrevistaPrincipal", "Finalizar entrevista"))
+        self.pbSalvarSimulacao.setText(_translate("wdgEntrevistaPrincipal", "Salvar simulação"))
 import Resources.newEntrevistaPrincipal
 
 

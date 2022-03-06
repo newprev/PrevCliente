@@ -19,3 +19,24 @@ def estadoInfoFinalizado(etapa: str, completo=False):
 	background-repeat: no-repeat;
 	background-position: center;
 }"""
+
+
+def iconeInfoCliente(mostra: bool):
+    if mostra:
+        backgroundImage = "url(:/voltar/backWhite.png)"
+    else:
+        backgroundImage = "url(:/proximo/next.png)"
+
+    return f"""
+        #pbInfoCliente {{
+            font: 12pt "Avenir LT Std";
+        
+            background-color: rgba(63, 78, 140, 190);
+            color: white;
+            border: 0px solid none;
+        
+            background-image: {backgroundImage};
+            background-position: center;
+            background-repeat: no-repeat;
+        }}
+        """

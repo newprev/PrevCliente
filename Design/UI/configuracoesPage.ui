@@ -29,6 +29,8 @@ QPushButton {
 
 	background-color: transparent;
 	border: 0px solid none;
+
+	margin: 0px 4px;
 }
 
 QCheckBox {

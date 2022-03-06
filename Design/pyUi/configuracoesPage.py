@@ -30,6 +30,8 @@ class Ui_mwConfiguracoes(object):
 "\n"
 "    background-color: transparent;\n"
 "    border: 0px solid none;\n"
+"\n"
+"    margin: 0px 4px;\n"
 "}\n"
 "\n"
 "QCheckBox {\n"
@@ -204,7 +206,7 @@ class Ui_mwConfiguracoes(object):
         self.lbConfigSisTitulo.setText(_translate("mwConfiguracoes", "Configurações do sistema"))
         self.cbIniciaAutomatico.setText(_translate("mwConfiguracoes", "Iniciar automaticamente, sem a necessidade do login."))
         self.pbSalvar.setText(_translate("mwConfiguracoes", "Salvar e fechar"))
-import configuracoesPage_rc
+import Resources.configuracoesPage
 
 
 if __name__ == "__main__":

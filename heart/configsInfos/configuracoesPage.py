@@ -3,11 +3,14 @@ import datetime
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 from Design.pyUi.configuracoesPage import Ui_mwConfiguracoes
-from Design.CustomWidgets.newCheckBox import NewCheckBox
+
 from cache.cachingLogin import CacheLogin
+from heart.configsInfos.localStyleSheet.configuracoes import configSelecionada
 from modelos.advogadoORM import Advogados
 from modelos.configGeraisORM import ConfigGerais
+
 from util.popUps import popUpOkAlerta
+from util.enums.configEnums import CategoriaConfig
 
 
 class ConfiguracoesPage(QMainWindow, Ui_mwConfiguracoes):
@@ -21,9 +24,12 @@ class ConfiguracoesPage(QMainWindow, Ui_mwConfiguracoes):
 
         self.carregaConfiguracoes()
         self.atualizaTela()
+        self.trocaCategConfig(CategoriaConfig.geral)
 
         self.cbIniciaAutomatico.stateChanged.connect(self.atualizaIniciaAuto)
         self.pbSalvar.clicked.connect(self.close)
+        self.pbGeral.clicked.connect(lambda: self.trocaCategConfig(CategoriaConfig.geral))
+        self.pbBackup.clicked.connect(lambda: self.trocaCategConfig(CategoriaConfig.backup))
 
     def atualizaIniciaAuto(self):
         if self.configGerais is not None:
@@ -82,3 +88,16 @@ class ConfiguracoesPage(QMainWindow, Ui_mwConfiguracoes):
         pop.setStandardButtons(QMessageBox.Ok)
 
         x = pop.exec_()
+
+    def trocaCategConfig(self, categoria: CategoriaConfig):
+        if categoria == CategoriaConfig.geral:
+            self.frGeral.setStyleSheet(configSelecionada(categoria))
+            self.frBackup.setStyleSheet(configSelecionada(CategoriaConfig.backup, habilita=False))
+
+        else:
+            self.frBackup.setStyleSheet(configSelecionada(categoria))
+            self.frGeral.setStyleSheet(configSelecionada(CategoriaConfig.geral, habilita=False))
+
+        self.stkPrincipal.setCurrentIndex(categoria.value)
+
+

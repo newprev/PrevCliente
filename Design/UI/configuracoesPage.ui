@@ -13,7 +13,75 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
+  <property name="styleSheet">
+   <string notr="true">/* ------------------ Geral --------------------*/
+#mwConfiguracoes, #wdgMain {
+	background-color: white;
+}
+
+QLabel {
+	font: 12pt &quot;Avenir LT Std&quot;;
+}
+
+QPushButton {
+	font: 14pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+
+	background-color: transparent;
+	border: 0px solid none;
+}
+
+QCheckBox {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #040D14;
+
+	font-weight: 150;
+	margin: 0px 12px;
+}
+
+QCheckBox::indicator:unchecked {
+	image: url(:/checkbox/CheckBoxFalse.png);
+}
+
+QCheckBox::indicator:checked {
+	image: url(:/checkbox/checkBoxTrue.png);
+}
+
+/* ------------------------- Label ------------------- */
+#lbTitulo {
+	font-size: 20px;
+	color: white;
+
+	font-weight: 750;
+}
+
+/* -------------------- Frames -------------------*/
+#frCabecalho {
+	background-color: #3F4E8C;
+	
+	border-radius: 8px;	
+}
+
+#frFirulaGeral {
+	background-color: #3F4E8C;
+	border-radius: 2px;
+}
+
+/* -------------------- Push buttom ------------------- */
+#pbGeral {
+		font-weight: 750;
+}
+
+#pbSalvar {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: white;
+
+	border-radius: 8px;
+	padding: 10px;
+	background-color: #3F4E8C;
+}</string>
+  </property>
+  <widget class="QWidget" name="wdgMain">
    <layout class="QGridLayout" name="gridLayout_2">
     <property name="leftMargin">
      <number>0</number>
@@ -25,13 +93,200 @@
      <number>0</number>
     </property>
     <property name="bottomMargin">
-     <number>0</number>
+     <number>12</number>
     </property>
     <property name="spacing">
      <number>0</number>
     </property>
+    <item row="1" column="0">
+     <widget class="QFrame" name="frPbCategorias">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>12</number>
+       </property>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QFrame" name="frGeral">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>2</number>
+          </property>
+          <property name="rightMargin">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
+           <number>2</number>
+          </property>
+          <item alignment="Qt::AlignBottom">
+           <widget class="QPushButton" name="pbGeral">
+            <property name="text">
+             <string>Geral</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignTop">
+           <widget class="QFrame" name="frFirulaGeral">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>4</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>4</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frBackup">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>2</number>
+          </property>
+          <property name="rightMargin">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="pbBackup">
+            <property name="text">
+             <string>Backup</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="frFirulaBackup">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>4</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>4</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>36</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
     <item row="0" column="0">
-     <widget class="QTabWidget" name="tabMain">
+     <widget class="QFrame" name="frCabecalho">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>60</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="lbTitulo">
+         <property name="text">
+          <string>Configurações gerais</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QStackedWidget" name="stkPrincipal">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -41,180 +296,50 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tabGeral">
+      <widget class="QWidget" name="pgBackup" native="true">
        <property name="styleSheet">
-        <string notr="true">/*------------------------------------ Tables --------------------------------------*/
-#tblTetos{
-	background-color: transparent;
-}
+        <string notr="true">/* ---------------- Label --------------- */
+#lbConfigSisTitulo {
+	color: #3F4E8C;
+	font-size: 18px;
 
-#tblTetos::item{
-	margin: 4px;
-}
-
-QHeaderView::section {
-    background-color: rgb(52, 73, 94);
-    color: white;
-    padding-left: 4px;
-    border: 1px solid #6c6c6c;
-	min-height: 45px;
-}
-
-QHeaderView::down-arrow {
-    icon-color: white;
-}
-
-QHeaderView::up-arrow {
-    icon-color: white;
-}
-
-/*-------------------------------- Labels -----------------------------------------*/
-#lbTitulo {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 24px;
-}
-
-#lbInicioAutomatico {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 12px;	
-}
-
-/*#lbInfoTitulo {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 14px;
-
-	background-color: white;	
-}*/
-
-/*-------------------------------- Push Buttons --------------------------------*/
-#pbBuscarArq, #pbEditar, 
-#pbExcluir, #pbInserir, 
-#pbEfetivar  {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 14px;
-	color: white;
-
-	border-radius: 4px;
-	background-color: rgb(52, 73, 94);
-}
-
-#pbBuscarArq:hover, #pbEditar:hover, 
-#pbExcluir:hover, #pbInserir:hover,
-#pbEfetivar:hover {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 14px;
-	color: white;
-
-	border-radius: 4px;
-	border: 1px solid;
-	background-color: rgb(72, 93, 114);
-}
-
-#pbCancelar {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 14px;
-	color: black;
-
-	border-radius: 4px;
-	background-color: rgb(225, 224, 53);
-}
-
-#pbCancelar:hover {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 14px;
-	color: black;
-
-	border-radius: 4px;
-	background-color: rgb(225, 240, 73);
-}
-
-/*-------------------------------- Group Box -----------------------------------------*/
-QGroupBox {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 16px;
-	border: 1px solid transparent;
-
-	background-color: white;
-}
-
-QGroupBox QGroupBox {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 12px;
-
-	background-color: white;
-}
-
-#gpIniciando::title {
-	subcontrol-position: top left;
-	background-color: #3A405A;
-	border-top-left-radius: 8px;
-	border-top-right-radius: 8px;
-	color: white;
-	padding: 4px;
-}
-
-#gpIniciando {
-	border: 1px dashed grey;
-}
-</string>
+	margin: 8px 0px;
+}</string>
        </property>
-       <attribute name="title">
-        <string>Geral</string>
-       </attribute>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="1" column="0">
-         <widget class="QGroupBox" name="gpIniciando">
-          <property name="title">
-           <string>Iniciando o programa</string>
+        <item row="0" column="0" alignment="Qt::AlignLeft">
+         <widget class="QFrame" name="frConfigSistema">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
-           <property name="spacing">
-            <number>4</number>
-           </property>
            <property name="leftMargin">
-            <number>16</number>
+            <number>0</number>
            </property>
            <property name="topMargin">
-            <number>26</number>
+            <number>0</number>
            </property>
            <property name="rightMargin">
-            <number>4</number>
+            <number>0</number>
            </property>
            <property name="bottomMargin">
-            <number>4</number>
+            <number>0</number>
            </property>
            <item>
-            <widget class="QFrame" name="frame">
-             <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
+            <widget class="QLabel" name="lbConfigSisTitulo">
+             <property name="text">
+              <string>Configurações do sistema</string>
              </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignLeft">
+            <widget class="QCheckBox" name="cbIniciaAutomatico">
+             <property name="text">
+              <string>Obrigar login ao iniciar o programa</string>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_2">
-              <property name="spacing">
-               <number>16</number>
-              </property>
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>2</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <item>
-               <layout class="QHBoxLayout" name="hlInicioAutomatico"/>
-              </item>
-              <item alignment="Qt::AlignVCenter">
-               <widget class="QLabel" name="lbInicioAutomatico">
-                <property name="text">
-                 <string>Iniciar automaticamente</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </widget>
            </item>
            <item>
@@ -225,7 +350,7 @@ QGroupBox QGroupBox {
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
-               <height>40</height>
+               <height>345</height>
               </size>
              </property>
             </spacer>
@@ -233,52 +358,29 @@ QGroupBox QGroupBox {
           </layout>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="lbTitulo">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>60</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Configurações gerais</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QGroupBox" name="groupBox">
-          <property name="title">
-           <string>GroupBox</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QGroupBox" name="groupBox_2">
-          <property name="title">
-           <string>GroupBox</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QGroupBox" name="groupBox_3">
-          <property name="title">
-           <string>GroupBox</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="clientes">
-       <attribute name="title">
-        <string>Backups</string>
-       </attribute>
-      </widget>
+      <widget class="QWidget" name="pgGeral" native="true"/>
+     </widget>
+    </item>
+    <item row="3" column="0" alignment="Qt::AlignHCenter">
+     <widget class="QPushButton" name="pbSalvar">
+      <property name="minimumSize">
+       <size>
+        <width>160</width>
+        <height>45</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Salvar e fechar</string>
+      </property>
      </widget>
     </item>
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../Resources/configuracoesPage.qrc"/>
+ </resources>
  <connections/>
 </ui>

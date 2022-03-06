@@ -15,192 +15,196 @@ class Ui_mwConfiguracoes(object):
     def setupUi(self, mwConfiguracoes):
         mwConfiguracoes.setObjectName("mwConfiguracoes")
         mwConfiguracoes.resize(800, 600)
-        self.centralwidget = QtWidgets.QWidget(mwConfiguracoes)
-        self.centralwidget.setObjectName("centralwidget")
-        self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
-        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        mwConfiguracoes.setStyleSheet("/* ------------------ Geral --------------------*/\n"
+"#mwConfiguracoes, #wdgMain {\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"QLabel {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"}\n"
+"\n"
+"QPushButton {\n"
+"    font: 14pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"\n"
+"    background-color: transparent;\n"
+"    border: 0px solid none;\n"
+"}\n"
+"\n"
+"QCheckBox {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #040D14;\n"
+"\n"
+"    font-weight: 150;\n"
+"    margin: 0px 12px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    image: url(:/checkbox/CheckBoxFalse.png);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(:/checkbox/checkBoxTrue.png);\n"
+"}\n"
+"\n"
+"/* ------------------------- Label ------------------- */\n"
+"#lbTitulo {\n"
+"    font-size: 20px;\n"
+"    color: white;\n"
+"\n"
+"    font-weight: 750;\n"
+"}\n"
+"\n"
+"/* -------------------- Frames -------------------*/\n"
+"#frCabecalho {\n"
+"    background-color: #3F4E8C;\n"
+"    \n"
+"    border-radius: 8px;    \n"
+"}\n"
+"\n"
+"#frFirulaGeral {\n"
+"    background-color: #3F4E8C;\n"
+"    border-radius: 2px;\n"
+"}\n"
+"\n"
+"/* -------------------- Push buttom ------------------- */\n"
+"#pbGeral {\n"
+"        font-weight: 750;\n"
+"}\n"
+"\n"
+"#pbSalvar {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"\n"
+"    border-radius: 8px;\n"
+"    padding: 10px;\n"
+"    background-color: #3F4E8C;\n"
+"}")
+        self.wdgMain = QtWidgets.QWidget(mwConfiguracoes)
+        self.wdgMain.setObjectName("wdgMain")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.wdgMain)
+        self.gridLayout_2.setContentsMargins(0, 0, 0, 12)
         self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.tabMain = QtWidgets.QTabWidget(self.centralwidget)
-        self.tabMain.setMinimumSize(QtCore.QSize(0, 0))
-        self.tabMain.setObjectName("tabMain")
-        self.tabGeral = QtWidgets.QWidget()
-        self.tabGeral.setStyleSheet("/*------------------------------------ Tables --------------------------------------*/\n"
-"#tblTetos{\n"
-"    background-color: transparent;\n"
-"}\n"
-"\n"
-"#tblTetos::item{\n"
-"    margin: 4px;\n"
-"}\n"
-"\n"
-"QHeaderView::section {\n"
-"    background-color: rgb(52, 73, 94);\n"
-"    color: white;\n"
-"    padding-left: 4px;\n"
-"    border: 1px solid #6c6c6c;\n"
-"    min-height: 45px;\n"
-"}\n"
-"\n"
-"QHeaderView::down-arrow {\n"
-"    icon-color: white;\n"
-"}\n"
-"\n"
-"QHeaderView::up-arrow {\n"
-"    icon-color: white;\n"
-"}\n"
-"\n"
-"/*-------------------------------- Labels -----------------------------------------*/\n"
-"#lbTitulo {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 24px;\n"
-"}\n"
-"\n"
-"#lbInicioAutomatico {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;    \n"
-"}\n"
-"\n"
-"/*#lbInfoTitulo {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
-"\n"
-"    background-color: white;    \n"
-"}*/\n"
-"\n"
-"/*-------------------------------- Push Buttons --------------------------------*/\n"
-"#pbBuscarArq, #pbEditar, \n"
-"#pbExcluir, #pbInserir, \n"
-"#pbEfetivar  {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
-"    color: white;\n"
-"\n"
-"    border-radius: 4px;\n"
-"    background-color: rgb(52, 73, 94);\n"
-"}\n"
-"\n"
-"#pbBuscarArq:hover, #pbEditar:hover, \n"
-"#pbExcluir:hover, #pbInserir:hover,\n"
-"#pbEfetivar:hover {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
-"    color: white;\n"
-"\n"
-"    border-radius: 4px;\n"
-"    border: 1px solid;\n"
-"    background-color: rgb(72, 93, 114);\n"
-"}\n"
-"\n"
-"#pbCancelar {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
-"    color: black;\n"
-"\n"
-"    border-radius: 4px;\n"
-"    background-color: rgb(225, 224, 53);\n"
-"}\n"
-"\n"
-"#pbCancelar:hover {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
-"    color: black;\n"
-"\n"
-"    border-radius: 4px;\n"
-"    background-color: rgb(225, 240, 73);\n"
-"}\n"
-"\n"
-"/*-------------------------------- Group Box -----------------------------------------*/\n"
-"QGroupBox {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 16px;\n"
-"    border: 1px solid transparent;\n"
-"\n"
-"    background-color: white;\n"
-"}\n"
-"\n"
-"QGroupBox QGroupBox {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;\n"
-"\n"
-"    background-color: white;\n"
-"}\n"
-"\n"
-"#gpIniciando::title {\n"
-"    subcontrol-position: top left;\n"
-"    background-color: #3A405A;\n"
-"    border-top-left-radius: 8px;\n"
-"    border-top-right-radius: 8px;\n"
-"    color: white;\n"
-"    padding: 4px;\n"
-"}\n"
-"\n"
-"#gpIniciando {\n"
-"    border: 1px dashed grey;\n"
-"}\n"
-"")
-        self.tabGeral.setObjectName("tabGeral")
-        self.gridLayout = QtWidgets.QGridLayout(self.tabGeral)
-        self.gridLayout.setObjectName("gridLayout")
-        self.gpIniciando = QtWidgets.QGroupBox(self.tabGeral)
-        self.gpIniciando.setObjectName("gpIniciando")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.gpIniciando)
-        self.verticalLayout.setContentsMargins(16, 26, 4, 4)
-        self.verticalLayout.setSpacing(4)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.frame = QtWidgets.QFrame(self.gpIniciando)
-        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame)
-        self.horizontalLayout_2.setContentsMargins(0, 2, 0, -1)
-        self.horizontalLayout_2.setSpacing(16)
+        self.frPbCategorias = QtWidgets.QFrame(self.wdgMain)
+        self.frPbCategorias.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frPbCategorias.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frPbCategorias.setObjectName("frPbCategorias")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frPbCategorias)
+        self.horizontalLayout_2.setSpacing(12)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.hlInicioAutomatico = QtWidgets.QHBoxLayout()
-        self.hlInicioAutomatico.setObjectName("hlInicioAutomatico")
-        self.horizontalLayout_2.addLayout(self.hlInicioAutomatico)
-        self.lbInicioAutomatico = QtWidgets.QLabel(self.frame)
-        self.lbInicioAutomatico.setObjectName("lbInicioAutomatico")
-        self.horizontalLayout_2.addWidget(self.lbInicioAutomatico, 0, QtCore.Qt.AlignVCenter)
-        self.verticalLayout.addWidget(self.frame)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem)
-        self.gridLayout.addWidget(self.gpIniciando, 1, 0, 1, 1)
-        self.lbTitulo = QtWidgets.QLabel(self.tabGeral)
-        self.lbTitulo.setMaximumSize(QtCore.QSize(16777215, 60))
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
+        self.frGeral = QtWidgets.QFrame(self.frPbCategorias)
+        self.frGeral.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frGeral.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frGeral.setObjectName("frGeral")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frGeral)
+        self.verticalLayout_2.setContentsMargins(2, 2, 2, 2)
+        self.verticalLayout_2.setSpacing(0)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.pbGeral = QtWidgets.QPushButton(self.frGeral)
+        self.pbGeral.setObjectName("pbGeral")
+        self.verticalLayout_2.addWidget(self.pbGeral, 0, QtCore.Qt.AlignBottom)
+        self.frFirulaGeral = QtWidgets.QFrame(self.frGeral)
+        self.frFirulaGeral.setMinimumSize(QtCore.QSize(0, 4))
+        self.frFirulaGeral.setMaximumSize(QtCore.QSize(16777215, 4))
+        self.frFirulaGeral.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frFirulaGeral.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frFirulaGeral.setObjectName("frFirulaGeral")
+        self.verticalLayout_2.addWidget(self.frFirulaGeral, 0, QtCore.Qt.AlignTop)
+        self.horizontalLayout_2.addWidget(self.frGeral)
+        self.frBackup = QtWidgets.QFrame(self.frPbCategorias)
+        self.frBackup.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frBackup.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frBackup.setObjectName("frBackup")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frBackup)
+        self.verticalLayout_3.setContentsMargins(2, 2, 2, 2)
+        self.verticalLayout_3.setSpacing(0)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.pbBackup = QtWidgets.QPushButton(self.frBackup)
+        self.pbBackup.setObjectName("pbBackup")
+        self.verticalLayout_3.addWidget(self.pbBackup)
+        self.frFirulaBackup = QtWidgets.QFrame(self.frBackup)
+        self.frFirulaBackup.setMinimumSize(QtCore.QSize(0, 4))
+        self.frFirulaBackup.setMaximumSize(QtCore.QSize(16777215, 4))
+        self.frFirulaBackup.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frFirulaBackup.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frFirulaBackup.setObjectName("frFirulaBackup")
+        self.verticalLayout_3.addWidget(self.frFirulaBackup)
+        self.horizontalLayout_2.addWidget(self.frBackup)
+        spacerItem1 = QtWidgets.QSpacerItem(36, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem1)
+        self.gridLayout_2.addWidget(self.frPbCategorias, 1, 0, 1, 1)
+        self.frCabecalho = QtWidgets.QFrame(self.wdgMain)
+        self.frCabecalho.setMinimumSize(QtCore.QSize(0, 60))
+        self.frCabecalho.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frCabecalho.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frCabecalho.setObjectName("frCabecalho")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.frCabecalho)
+        self.horizontalLayout.setSpacing(0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.lbTitulo = QtWidgets.QLabel(self.frCabecalho)
+        self.lbTitulo.setAlignment(QtCore.Qt.AlignCenter)
         self.lbTitulo.setObjectName("lbTitulo")
-        self.gridLayout.addWidget(self.lbTitulo, 0, 0, 1, 1)
-        self.groupBox = QtWidgets.QGroupBox(self.tabGeral)
-        self.groupBox.setObjectName("groupBox")
-        self.gridLayout.addWidget(self.groupBox, 1, 1, 1, 1)
-        self.groupBox_2 = QtWidgets.QGroupBox(self.tabGeral)
-        self.groupBox_2.setObjectName("groupBox_2")
-        self.gridLayout.addWidget(self.groupBox_2, 2, 0, 1, 1)
-        self.groupBox_3 = QtWidgets.QGroupBox(self.tabGeral)
-        self.groupBox_3.setObjectName("groupBox_3")
-        self.gridLayout.addWidget(self.groupBox_3, 2, 1, 1, 1)
-        self.tabMain.addTab(self.tabGeral, "")
-        self.clientes = QtWidgets.QWidget()
-        self.clientes.setObjectName("clientes")
-        self.tabMain.addTab(self.clientes, "")
-        self.gridLayout_2.addWidget(self.tabMain, 0, 0, 1, 1)
-        mwConfiguracoes.setCentralWidget(self.centralwidget)
+        self.horizontalLayout.addWidget(self.lbTitulo)
+        self.gridLayout_2.addWidget(self.frCabecalho, 0, 0, 1, 1)
+        self.stkPrincipal = QtWidgets.QStackedWidget(self.wdgMain)
+        self.stkPrincipal.setMinimumSize(QtCore.QSize(0, 0))
+        self.stkPrincipal.setObjectName("stkPrincipal")
+        self.pgBackup = QtWidgets.QWidget()
+        self.pgBackup.setStyleSheet("/* ---------------- Label --------------- */\n"
+"#lbConfigSisTitulo {\n"
+"    color: #3F4E8C;\n"
+"    font-size: 18px;\n"
+"\n"
+"    margin: 8px 0px;\n"
+"}")
+        self.pgBackup.setObjectName("pgBackup")
+        self.gridLayout = QtWidgets.QGridLayout(self.pgBackup)
+        self.gridLayout.setObjectName("gridLayout")
+        self.frConfigSistema = QtWidgets.QFrame(self.pgBackup)
+        self.frConfigSistema.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frConfigSistema.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frConfigSistema.setObjectName("frConfigSistema")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.frConfigSistema)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.lbConfigSisTitulo = QtWidgets.QLabel(self.frConfigSistema)
+        self.lbConfigSisTitulo.setObjectName("lbConfigSisTitulo")
+        self.verticalLayout.addWidget(self.lbConfigSisTitulo)
+        self.cbIniciaAutomatico = QtWidgets.QCheckBox(self.frConfigSistema)
+        self.cbIniciaAutomatico.setObjectName("cbIniciaAutomatico")
+        self.verticalLayout.addWidget(self.cbIniciaAutomatico, 0, QtCore.Qt.AlignLeft)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 345, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem2)
+        self.gridLayout.addWidget(self.frConfigSistema, 0, 0, 1, 1, QtCore.Qt.AlignLeft)
+        self.stkPrincipal.addWidget(self.pgBackup)
+        self.pgGeral = QtWidgets.QWidget()
+        self.pgGeral.setObjectName("pgGeral")
+        self.stkPrincipal.addWidget(self.pgGeral)
+        self.gridLayout_2.addWidget(self.stkPrincipal, 2, 0, 1, 1)
+        self.pbSalvar = QtWidgets.QPushButton(self.wdgMain)
+        self.pbSalvar.setMinimumSize(QtCore.QSize(160, 45))
+        self.pbSalvar.setObjectName("pbSalvar")
+        self.gridLayout_2.addWidget(self.pbSalvar, 3, 0, 1, 1, QtCore.Qt.AlignHCenter)
+        mwConfiguracoes.setCentralWidget(self.wdgMain)
 
         self.retranslateUi(mwConfiguracoes)
-        self.tabMain.setCurrentIndex(0)
+        self.stkPrincipal.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(mwConfiguracoes)
 
     def retranslateUi(self, mwConfiguracoes):
         _translate = QtCore.QCoreApplication.translate
         mwConfiguracoes.setWindowTitle(_translate("mwConfiguracoes", "MainWindow"))
-        self.gpIniciando.setTitle(_translate("mwConfiguracoes", "Iniciando o programa"))
-        self.lbInicioAutomatico.setText(_translate("mwConfiguracoes", "Iniciar automaticamente"))
+        self.pbGeral.setText(_translate("mwConfiguracoes", "Geral"))
+        self.pbBackup.setText(_translate("mwConfiguracoes", "Backup"))
         self.lbTitulo.setText(_translate("mwConfiguracoes", "Configurações gerais"))
-        self.groupBox.setTitle(_translate("mwConfiguracoes", "GroupBox"))
-        self.groupBox_2.setTitle(_translate("mwConfiguracoes", "GroupBox"))
-        self.groupBox_3.setTitle(_translate("mwConfiguracoes", "GroupBox"))
-        self.tabMain.setTabText(self.tabMain.indexOf(self.tabGeral), _translate("mwConfiguracoes", "Geral"))
-        self.tabMain.setTabText(self.tabMain.indexOf(self.clientes), _translate("mwConfiguracoes", "Backups"))
+        self.lbConfigSisTitulo.setText(_translate("mwConfiguracoes", "Configurações do sistema"))
+        self.cbIniciaAutomatico.setText(_translate("mwConfiguracoes", "Obrigar login ao iniciar o programa"))
+        self.pbSalvar.setText(_translate("mwConfiguracoes", "Salvar e fechar"))
+import Resources.configuracoesPage
 
 
 if __name__ == "__main__":

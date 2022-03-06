@@ -17,19 +17,17 @@ class ConfiguracoesPage(QMainWindow, Ui_mwConfiguracoes):
     def __init__(self, parent=None):
         super(ConfiguracoesPage, self).__init__(parent=parent)
         self.setupUi(self)
-        self.lbInicioAutomatico.setToolTip('Caso tenha marcado para lembrar senha na tela de login e esse parâmetro esteja ativado.\nO programa iniciará sem passar pela tela de login.')
-
-        self.cbIniciaAutomatico = NewCheckBox(width=40)
-        self.hlInicioAutomatico.addWidget(self.cbIniciaAutomatico)
-        self.cbIniciaAutomatico.stateChanged.connect(self.atualizaIniciaAuto)
+        self.cbIniciaAutomatico.setToolTip('Caso tenha marcado para lembrar senha na tela de login e esse parâmetro esteja ativado.\nO programa iniciará sem passar pela tela de login.')
 
         self.carregaConfiguracoes()
-
         self.atualizaTela()
+
+        self.cbIniciaAutomatico.stateChanged.connect(self.atualizaIniciaAuto)
+        self.pbSalvar.clicked.connect(self.close)
 
     def atualizaIniciaAuto(self):
         if self.configGerais is not None:
-            self.configGerais.iniciaAuto = self.cbIniciaAutomatico.isChecked()
+            self.configGerais.iniciaAuto = not self.cbIniciaAutomatico.isChecked()
             self.configGerais.dataUltAlt = datetime.datetime.now()
             self.configGerais.save()
 

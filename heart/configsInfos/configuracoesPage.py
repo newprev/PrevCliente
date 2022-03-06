@@ -33,7 +33,7 @@ class ConfiguracoesPage(QMainWindow, Ui_mwConfiguracoes):
 
     def atualizaIniciaAuto(self):
         if self.configGerais is not None:
-            self.configGerais.iniciaAuto = not self.cbIniciaAutomatico.isChecked()
+            self.configGerais.iniciaAuto = self.cbIniciaAutomatico.isChecked()
             self.configGerais.dataUltAlt = datetime.datetime.now()
             self.configGerais.save()
 
@@ -50,6 +50,7 @@ class ConfiguracoesPage(QMainWindow, Ui_mwConfiguracoes):
             if not self.advogado:
                 self.advogado = cache.carregarCacheTemporario()
             self.configGerais = ConfigGerais.get(ConfigGerais.advogadoId == self.advogado.advogadoId)
+
         except ConfigGerais.DoesNotExist as err:
             print('Problema!')
             popUpOkAlerta('Não foi possível carregar as configurações. Entre em contato com o suporte', erro=f"carregaConfiguracoes() \n\n{err}")

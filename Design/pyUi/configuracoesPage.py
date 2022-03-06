@@ -202,9 +202,9 @@ class Ui_mwConfiguracoes(object):
         self.pbBackup.setText(_translate("mwConfiguracoes", "Backup"))
         self.lbTitulo.setText(_translate("mwConfiguracoes", "Configurações gerais"))
         self.lbConfigSisTitulo.setText(_translate("mwConfiguracoes", "Configurações do sistema"))
-        self.cbIniciaAutomatico.setText(_translate("mwConfiguracoes", "Obrigar login ao iniciar o programa"))
+        self.cbIniciaAutomatico.setText(_translate("mwConfiguracoes", "Iniciar automaticamente, sem a necessidade do login."))
         self.pbSalvar.setText(_translate("mwConfiguracoes", "Salvar e fechar"))
-import Resources.configuracoesPage
+import configuracoesPage_rc
 
 
 if __name__ == "__main__":

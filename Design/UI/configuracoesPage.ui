@@ -338,7 +338,7 @@ QCheckBox::indicator:checked {
            <item alignment="Qt::AlignLeft">
             <widget class="QCheckBox" name="cbIniciaAutomatico">
              <property name="text">
-              <string>Obrigar login ao iniciar o programa</string>
+              <string>Iniciar automaticamente, sem a necessidade do login.</string>
              </property>
             </widget>
            </item>

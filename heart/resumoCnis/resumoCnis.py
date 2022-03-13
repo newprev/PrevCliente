@@ -258,13 +258,14 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             self.vinculoAtual.cdEmp = self.leCnpj.text()
             self.vinculoAtual.dataInicio = self.dtDataInicio.date().toPyDate()
             self.vinculoAtual.dataFim = self.dtDataFim.date().toPyDate()
-            # self.vinculoAtual.indicadores = self.leIndicadores.text()
             self.vinculoAtual.dataUltAlt = datetime.now()
+            self.vinculoAtual.atualizaDadoFaltante()
         else:
             self.vinculoAtual.nb = self.leNb.text()
             self.vinculoAtual.dataInicio = self.dtDataInicioBene.date().toPyDate()
             self.vinculoAtual.dataFim = self.dtDataFimBene.date().toPyDate()
             self.vinculoAtual.dataUltAlt = datetime.now()
+            self.vinculoAtual.atualizaDadoFaltante()
         self.vinculoAtual.save()
 
     def atualizaCabecalhoSelecionado(self, cabecalho: CnisVinculos):
@@ -916,7 +917,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
 
             else:
                 # É uma contribuição
-                tipoContribuicao = TipoContribuicao.contribuicao
+                tipoVinculo = TipoContribuicao.contribuicao
                 self.leNomeEmp.setText(vinculo.nomeEmp)
                 self.leCnpj.setText(mascaraCNPJ(vinculo.cdEmp))
 
@@ -930,4 +931,4 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
                     # TODO: ADICIONAR INDICADORES VINDOS DO CNIS
                     pass
 
-            self.trocaTela(TelaResumo.addVinculo, tipoContribuicao=tipoContribuicao)
+            self.trocaTela(TelaResumo.addVinculo, tipoContribuicao=tipoVinculo)

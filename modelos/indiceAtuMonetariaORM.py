@@ -12,7 +12,7 @@ TABLENAME = 'indiceAtuMonetaria'
 class IndiceAtuMonetaria(BaseModel, Model):
     indiceId = AutoField(column_name='indiceId', null=True)
     dataReferente = DateField(column_name='dataReferente', formats=DATEFORMATS)
-    dib = BigIntegerField()
+    dib = DateField(column_name='dib', formats=DATEFORMATS)
     fator = FloatField()
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())

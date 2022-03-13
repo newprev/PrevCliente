@@ -575,7 +575,7 @@ class CNISModelo:
                     "seq": cabecalho.seq,
                     "tipo": TipoItemContribuicao.remuneracao.value,
                     "competencia": remuneracao['competencia'],
-                    "contribuicao": round(remuneracao['remuneracao'] * 0.2, ndigits=2) if not impedidoPorIndicadores else None,
+                    "contribuicao": round(remuneracao['remuneracao'] * 0.2, ndigits=2) if not impedidoPorIndicadores else 0.0,
                     "salContribuicao": remuneracao['remuneracao'],
                     "indicadores": remuneracao['indicadores'],
                     "validoTempoContrib": not impedidoPorIndicadores,

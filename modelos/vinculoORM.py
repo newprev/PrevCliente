@@ -4,6 +4,7 @@ from playhouse.signals import Model, post_save, pre_delete
 from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
+
 from peewee import AutoField, CharField, ForeignKeyField, BooleanField, BigIntegerField, DateField, IntegerField, DateTimeField
 from datetime import datetime
 
@@ -34,6 +35,13 @@ class CnisVinculos(BaseModel, Model):
 
     class Meta:
         table_name = 'cnisVinculos'
+
+    def atualizaDadoFaltante(self):
+        # Se nb não existe, é uma contribuição. Caso contrário, o vínculo é um benefício do INSS
+        if self.nb is None:
+            self.dadoFaltante = self.dataInicio is None or self.dataFim is None
+        else:
+            self.dadoFaltante = (self.dataInicio is None or self.dataFim is None) and self.situacao == 'CESSADO'
 
     def toDict(self):
         dictUsuario = {

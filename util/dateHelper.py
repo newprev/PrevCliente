@@ -97,6 +97,19 @@ def dataIdealReforma(dataReforma: datetime.date, dataInicio: datetime.date) -> d
     return dataAnteriorReforma
 
 
+def reformaNoPeriodo(dataInicio, dataFim, dataReforma) -> bool:
+    if not isinstance(dataInicio, datetime.date):
+        dataInicio = strToDate(dataInicio)
+
+    if not isinstance(dataFim, datetime.date):
+        dataFim = strToDate(dataFim)
+
+    if not isinstance(dataReforma, datetime.date):
+        dataReforma = strToDate(dataReforma)
+
+    return dataInicio <= dataReforma <= dataFim
+
+
 def mascaraDataPequena(data: datetime.date, onlyYear=False):
     if isinstance(data, str):
         if len(data) <= 16:
@@ -123,6 +136,45 @@ def mascaraData(data):
     return f'{data.day:02}/{data.month:02}/{data.year}'
 
 
+def normalizaData(dataANormalizar: relativedelta, diasEmUmMes: int = 30) -> relativedelta:
+    diasTotais: int = dataANormalizar.days
+    meses: int = diasTotais // diasEmUmMes
+    diasRestantes: int = diasTotais % diasEmUmMes
+
+    dataRetorno = dataANormalizar
+
+    dataRetorno.days = 0
+
+    return dataRetorno + relativedelta(months=meses, days=diasRestantes)
+
+
+def calculaTempoVinculosConcorrentes(dataIniAtivA: datetime.date, dataFimAtvA: datetime.date, dataIniAtivB: datetime.date, dataFimAtivB: datetime.date) -> relativedelta:
+    """
+        Abaixo um diagrama das linhas do tempo possíveis
+
+
+    1 -    |-------------------------------| A           Data início e data fim do vínculo A
+                            |-------------------| B      Data início e data fim do vínculo B
+
+
+    2 -    |------------------------------------| A     Data início e data fim do vínculo A
+                  |------------------| B                Data início e data fim do vínculo B
+    """
+
+    dataInicial = dataIniAtivB
+
+    if dataIniAtivB <= dataFimAtvA <= dataFimAtivB:
+        dataFinal = dataFimAtvA
+    elif dataIniAtivA <= dataFimAtivB <= dataFimAtvA:
+        dataFinal = dataFimAtivB
+    else:
+        dataFinal = relativedelta()
+        print("Deu problema: calculaTempoVinculosConcorrentes")
+
+    return relativedelta(dataFinal, dataInicial)
+
+
+
 def eliminaHoraDias(data: datetime.datetime):
     try:
         if isinstance(data, type(datetime.datetime)):
@@ -139,20 +191,23 @@ def comparaMesAno(dataInicio: datetime.datetime, dataFim: datetime.datetime, com
     if isinstance(dataInicio, str):
         dataInicio = strToDate(dataInicio)
 
-    inicio = eliminaHoraDias(dataInicio)
-    fim = eliminaHoraDias(dataFim)
+    if isinstance(dataFim, str):
+        dataFim = strToDate(dataFim)
 
-    if isinstance(inicio, datetime.datetime):
-        inicio = inicio.date()
-    if isinstance(fim, datetime.datetime):
-        fim = fim.date()
+    if isinstance(dataInicio, datetime.datetime):
+        inicio = dataInicio.date()
+    if isinstance(dataFim, datetime.datetime):
+        fim = dataFim.date()
+
+    # inicio = eliminaHoraDias(dataInicio)
+    # fim = eliminaHoraDias(dataFim)
 
     if comparacao == ComparaData.igual:
-        return inicio == fim
+        return dataInicio == dataFim
     elif comparacao == ComparaData.posterior:
-        return inicio > fim
+        return dataInicio > dataFim
     elif comparacao == ComparaData.anterior:
-        return inicio < fim
+        return dataInicio < dataFim
     else:
         raise Exception()
 

@@ -67,21 +67,18 @@ def buscaIndicesByClienteId(clienteId: int, indices: list = []) -> str:
 def remuEContrib(clienteId: int, seq: int) -> str:
     return f"""
     SELECT
-        --Contribuições
-        con.itemContribuicaoId, con.seq, con.competencia, 
-        IFNULL(con.salContribuicao, 0) AS salContribuicao, 'Contribuição' AS natureza, con.indicadores,
-        
-        --Conversão monetária
-        cm.sinal, cm.convMonId, cm.nomeMoeda,
-        
-        --Tetos previdenciários
-        tp.tetosPrevId, tp.valor
-    FROM itemContribuicao con
-        JOIN convMon cm 
-            ON con.competencia >= cm.dataInicial
-                AND con.competencia <= cm.dataFinal
-        LEFT JOIN tetosPrev tp
-            ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', con.competencia)
-    WHERE con.clienteId = {clienteId}
-        AND con.seq = {seq}
+    --Contribuições
+    con.itemContribuicaoId, con.seq, con.competencia, 
+    IFNULL(con.salContribuicao, 0) AS salContribuicao, con.indicadores,
+    
+    --Conversão monetária
+    cm.sinal, cm.convMonId, cm.nomeMoeda
+    
+    --Tetos previdenciários
+FROM itemContribuicao con
+    JOIN convMon cm 
+        ON con.competencia >= cm.dataInicial
+            AND con.competencia <= cm.dataFinal
+WHERE con.clienteId = {clienteId}
+    AND con.seq = {seq};
             """

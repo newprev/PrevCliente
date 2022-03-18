@@ -54,6 +54,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
         self.telaAtual = TelaResumo.resumos
         self.vinculoAtual = None
         self.toasty = None
+        self.efeitos = Efeitos()
 
         self.tblContribuicoes.horizontalHeader().show()
         self.tblContribuicoes.hideColumn(0)
@@ -64,8 +65,9 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
         self.tblCadBene.resizeColumnsToContents()
         self.tblCadContrib.resizeColumnsToContents()
 
-        Efeitos().shadowCards([self.pbAddContrib, self.pbAddBene], radius=10, offset=(1, 4), color=(63, 63, 63, 100))
-        
+        self.efeitos.shadowCards([self.pbAddContrib, self.pbAddBene], radius=10, offset=(1, 4), color=(63, 63, 63, 100))
+        self.efeitos.shadowCards([self.frTempoEspecial], radius=20, offset=(0, 0), color=(80, 80, 80, 100))
+
         self.iniciaCampos()
 
         self.pbEmpresas.clicked.connect(lambda: self.trocaTela(TelaResumo.resumos))
@@ -435,7 +437,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
 
         for linha in range(self.tblCadBene.rowCount()):
             salContribuicao = strToFloat(self.tblCadBene.cellWidget(linha, 2).text())
-            if salContribuicao is '':
+            if salContribuicao == '':
                 popUpOkAlerta("O valor do benefício precisa ser informado.", funcao=self.tblCadBene.cellWidget(linha, 2).setFocus)
                 return []
 
@@ -526,22 +528,22 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             self.tblContribuicoes.setItem(contLinha, 3, strItem)
 
             # Tetos previdenciários - Coluna 4 (ativa)
-            strItem = QTableWidgetItem(mascaraDinheiro(item.valor, simbolo=item.sinal))
-            strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-            self.tblContribuicoes.setItem(contLinha, 4, strItem)
+            # strItem = QTableWidgetItem(mascaraDinheiro(item.valor, simbolo=item.sinal))
+            # strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            # strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            # self.tblContribuicoes.setItem(contLinha, 4, strItem)
 
             # Natureza dos dados (Remuneração/Contribuição) - Coluna 5 (ativa)
-            strItem = QTableWidgetItem(item.natureza)
-            strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-            self.tblContribuicoes.setItem(contLinha, 5, strItem)
+            # strItem = QTableWidgetItem(item.natureza)
+            # strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            # strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            # self.tblContribuicoes.setItem(contLinha, 5, strItem)
 
             # Indicadores do CNIS - Coluna 6 (ativa)
             strItem = QTableWidgetItem(item.indicadores)
             strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-            self.tblContribuicoes.setItem(contLinha, 6, strItem)
+            self.tblContribuicoes.setItem(contLinha, 4, strItem)
 
             # Botões de edição (Ações) - Coluna 7 <Aparente>
             hlOpcoes = QHBoxLayout()

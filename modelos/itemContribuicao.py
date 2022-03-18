@@ -29,6 +29,8 @@ class ItemContribuicao(BaseModel, Model):
     indicadores = CharField(default=None, null=True)
     validoTempoContrib = BooleanField(default=True)
     validoSalContrib = BooleanField(default=True)
+    indiceInsalubridade = FloatField(null=True)
+    indiceDeficiencia = FloatField(null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
@@ -48,6 +50,8 @@ class ItemContribuicao(BaseModel, Model):
             'indicadores': self.indicadores,
             'validoTempoContrib': self.validoTempoContrib,
             'validoSalContrib': self.validoSalContrib,
+            'indiceInsalubridade': self.indiceInsalubridade,
+            'indiceDeficiencia': self.indiceDeficiencia,
             'dataCadastro': self.dataCadastro,
             'dataUltAlt': self.dataUltAlt
         }
@@ -65,6 +69,8 @@ class ItemContribuicao(BaseModel, Model):
         self.indicadores = dictContribuicoes['indicadores']
         self.validoTempoContrib = dictContribuicoes['validoTempoContrib']
         self.validoSalContrib = dictContribuicoes['validoSalContrib']
+        self.indiceInsalubridade = dictContribuicoes['indiceInsalubridade']
+        self.indiceDeficiencia = dictContribuicoes['indiceDeficiencia']
         self.dataCadastro = dictContribuicoes['dataCadastro']
         self.dataUltAlt = dictContribuicoes['dataUltAlt']
 
@@ -82,6 +88,8 @@ class ItemContribuicao(BaseModel, Model):
             indicadores: {self.indicadores},
             validoTempoContrib: {self.validoTempoContrib},
             validoSalContrib: {self.validoSalContrib},
+            indiceInsalubridade: {self.indiceInsalubridade},
+            indiceDeficiencia: {self.indiceDeficiencia},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}
         )""")

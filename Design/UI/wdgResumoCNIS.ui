@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1181</width>
-    <height>585</height>
+    <height>680</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -524,8 +524,8 @@ QScrollBar::sub-line:vertical {
 /*--------------------- Table Widget -----------------------*/
 #tblContribuicoes, #tblCadContrib,
 #tblCadBene {
-	selection-background-color: #F9F9F9;
-	selection-color: grey;
+	selection-background-color: grey;
+	selection-color: white;
 	gridline-color: white;
 
 	border: 0px solid transparent;
@@ -829,7 +829,7 @@ QComboBox::down-arrow:on {
                      <x>0</x>
                      <y>0</y>
                      <width>583</width>
-                     <height>374</height>
+                     <height>469</height>
                     </rect>
                    </property>
                    <property name="sizePolicy">
@@ -887,9 +887,10 @@ QComboBox::down-arrow:on {
             </property>
             <property name="styleSheet">
              <string notr="true">/*-------------------------------- Push Button -----------------------------------------*/
-#pbInserirContrib {
+#pbInserirContrib, #pbSalvarSelecionados {
 	font: 12pt &quot;Avenir LT Std&quot;;
 	color: #3F4E8C;
+	background-color: white;
 	
 	border: 2px solid #3F4E8C;
 	border-radius: 8px;
@@ -908,7 +909,8 @@ QComboBox::down-arrow:on {
 }
 
 #lbCNPJouNB, #lbDataInicio, 
-#lbDataFim {
+#lbDataFim, #lbInfoContribuicao,
+#lbInsalubridade, #lbDeficiencia {
 	font: 11pt &quot;Avenir LT Std&quot;;
 	color: #3F4E8C;
 	
@@ -916,6 +918,49 @@ QComboBox::down-arrow:on {
 	line-height: 24px;
 
 	margin: 2px 0px 0px 0px;
+}
+
+#lbInfoTempoEspecial {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: white;
+	
+	padding: 6px;
+}
+
+#lbInfoTpEspecial, #lbInfoTpDeficiencia,
+#lbInfoTpNormal {
+	font: 11pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	font-weight: 120;
+	line-height: 24px;
+
+	margin: 2px 0px 0px 0px;
+}
+
+#lbTpEspecial, #lbTpDeficiencia,
+#lbTpNormal {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	font-weight: 750;
+	line-height: 24px;
+
+	margin: 2px 0px 0px 0px;
+}
+/*-------------------------------- Frame -----------------------------------------*/
+#frInfoTempoEsp {
+	background-color: #3F4E8C;
+	
+	border: 0px solid none;
+	border-radius: 8px;
+}
+
+#frTempoEspecial {
+	background-color: white;
+	border-radius: 8px;
+
+	border: 0px solid none;
 }</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_6">
@@ -954,20 +999,314 @@ QComboBox::down-arrow:on {
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
                   </property>
-                  <layout class="QHBoxLayout" name="horizontalLayout_6">
-                   <property name="spacing">
-                    <number>0</number>
-                   </property>
+                  <layout class="QGridLayout" name="gridLayout_16">
                    <property name="topMargin">
-                    <number>24</number>
+                    <number>9</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>16</number>
                    </property>
                    <property name="bottomMargin">
                     <number>4</number>
                    </property>
-                   <item>
+                   <property name="horizontalSpacing">
+                    <number>24</number>
+                   </property>
+                   <item row="0" column="3" rowspan="3">
+                    <widget class="QFrame" name="frTempoEspecial">
+                     <property name="maximumSize">
+                      <size>
+                       <width>300</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="frameShape">
+                      <enum>QFrame::NoFrame</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_15">
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <item row="5" column="1">
+                       <widget class="QComboBox" name="cbxDeficiencia">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="5" column="0">
+                       <widget class="QLabel" name="lbDeficiencia">
+                        <property name="text">
+                         <string>Deficiência</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="0" colspan="2">
+                       <widget class="QFrame" name="frame_7">
+                        <property name="frameShape">
+                         <enum>QFrame::NoFrame</enum>
+                        </property>
+                        <property name="frameShadow">
+                         <enum>QFrame::Raised</enum>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_17">
+                         <property name="leftMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="topMargin">
+                          <number>8</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>0</number>
+                         </property>
+                         <item row="0" column="0">
+                          <widget class="QLabel" name="lbInfoTpEspecial">
+                           <property name="text">
+                            <string>Tempo especial:</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="0">
+                          <widget class="QLabel" name="lbInfoTpDeficiencia">
+                           <property name="text">
+                            <string>Tempo deficiência:</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="0">
+                          <widget class="QLabel" name="lbInfoTpNormal">
+                           <property name="text">
+                            <string>Tempo normal:</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="1">
+                          <widget class="QLabel" name="lbTpEspecial">
+                           <property name="text">
+                            <string>1 anos e 5 meses</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="1">
+                          <widget class="QLabel" name="lbTpDeficiencia">
+                           <property name="text">
+                            <string>-</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="1">
+                          <widget class="QLabel" name="lbTpNormal">
+                           <property name="text">
+                            <string>3 anos</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="2" column="0" colspan="2">
+                       <widget class="QFrame" name="frInfoTempoEsp">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>50</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>70</height>
+                         </size>
+                        </property>
+                        <property name="frameShape">
+                         <enum>QFrame::NoFrame</enum>
+                        </property>
+                        <property name="frameShadow">
+                         <enum>QFrame::Raised</enum>
+                        </property>
+                        <layout class="QHBoxLayout" name="horizontalLayout_15">
+                         <property name="spacing">
+                          <number>0</number>
+                         </property>
+                         <property name="leftMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="topMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="bottomMargin">
+                          <number>0</number>
+                         </property>
+                         <item>
+                          <widget class="QLabel" name="lbInfoTempoEspecial">
+                           <property name="text">
+                            <string>Alteração de tempo especial</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="4" column="1">
+                       <widget class="QComboBox" name="cbxInsalubridade">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="3" column="0" colspan="2">
+                       <spacer name="verticalSpacer_5">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                         <enum>QSizePolicy::Minimum</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>10</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                      <item row="4" column="0">
+                       <widget class="QLabel" name="lbInsalubridade">
+                        <property name="text">
+                         <string>Insalubridade</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="6" column="0" colspan="2">
+                       <spacer name="verticalSpacer_6">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                         <enum>QSizePolicy::Minimum</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>40</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                      <item row="7" column="0" colspan="2">
+                       <widget class="QPushButton" name="pbSalvarSelecionados">
+                        <property name="minimumSize">
+                         <size>
+                          <width>240</width>
+                          <height>40</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>13215465</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Salvar para selecionados</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="0" colspan="2">
+                       <spacer name="verticalSpacer_7">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                         <enum>QSizePolicy::Minimum</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>40</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item row="0" column="2" rowspan="2">
+                    <spacer name="horizontalSpacer_10">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeType">
+                      <enum>QSizePolicy::Preferred</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="QPushButton" name="pbInserirContrib">
+                     <property name="minimumSize">
+                      <size>
+                       <width>80</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>250</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Inserir contribuição</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="3">
+                    <spacer name="verticalSpacer">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item row="1" column="0" rowspan="3" colspan="2">
                     <widget class="QTableWidget" name="tblContribuicoes">
                      <property name="sizePolicy">
-                      <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                        <horstretch>0</horstretch>
                        <verstretch>0</verstretch>
                       </sizepolicy>
@@ -997,7 +1336,7 @@ QComboBox::down-arrow:on {
                       <bool>true</bool>
                      </property>
                      <property name="selectionMode">
-                      <enum>QAbstractItemView::NoSelection</enum>
+                      <enum>QAbstractItemView::MultiSelection</enum>
                      </property>
                      <property name="selectionBehavior">
                       <enum>QAbstractItemView::SelectRows</enum>
@@ -1021,7 +1360,7 @@ QComboBox::down-arrow:on {
                       <number>70</number>
                      </attribute>
                      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-                      <bool>false</bool>
+                      <bool>true</bool>
                      </attribute>
                      <attribute name="horizontalHeaderStretchLastSection">
                       <bool>false</bool>
@@ -1045,7 +1384,7 @@ QComboBox::down-arrow:on {
                       <bool>true</bool>
                      </attribute>
                      <attribute name="verticalHeaderStretchLastSection">
-                      <bool>false</bool>
+                      <bool>true</bool>
                      </attribute>
                      <row>
                       <property name="text">
@@ -1163,72 +1502,73 @@ contribuição</string>
                      </column>
                      <column>
                       <property name="text">
-                       <string>Tetos
-previdenciários</string>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>Avenir LT Std</family>
-                        <pointsize>12</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="textAlignment">
-                       <set>AlignCenter</set>
-                      </property>
-                      <property name="background">
-                       <color>
-                        <red>255</red>
-                        <green>255</green>
-                        <blue>255</blue>
-                       </color>
-                      </property>
-                      <property name="foreground">
-                       <brush brushstyle="SolidPattern">
-                        <color alpha="255">
-                         <red>63</red>
-                         <green>78</green>
-                         <blue>140</blue>
-                        </color>
-                       </brush>
-                      </property>
-                     </column>
-                     <column>
-                      <property name="text">
-                       <string>Natureza</string>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>Avenir LT Std</family>
-                        <pointsize>12</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="textAlignment">
-                       <set>AlignCenter</set>
-                      </property>
-                      <property name="background">
-                       <color>
-                        <red>255</red>
-                        <green>255</green>
-                        <blue>255</blue>
-                       </color>
-                      </property>
-                      <property name="foreground">
-                       <brush brushstyle="SolidPattern">
-                        <color alpha="255">
-                         <red>63</red>
-                         <green>78</green>
-                         <blue>140</blue>
-                        </color>
-                       </brush>
-                      </property>
-                     </column>
-                     <column>
-                      <property name="text">
                        <string>Indicadores</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Fator
+insalubridade</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Fator
+deficiencia</string>
                       </property>
                       <property name="font">
                        <font>
@@ -1305,12 +1645,7 @@ previdenciários</string>
                        <string>15230</string>
                       </property>
                      </item>
-                     <item row="0" column="5">
-                      <property name="text">
-                       <string>sdfsdf</string>
-                      </property>
-                     </item>
-                     <item row="0" column="6">
+                     <item row="0" column="4">
                       <property name="text">
                        <string>IUSDF</string>
                       </property>
@@ -1322,6 +1657,18 @@ previdenciários</string>
                 </item>
                 <item row="0" column="0">
                  <widget class="QFrame" name="frInfoResumo">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>75</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>90</height>
+                   </size>
+                  </property>
                   <property name="frameShape">
                    <enum>QFrame::NoFrame</enum>
                   </property>
@@ -1365,6 +1712,20 @@ previdenciários</string>
                       <property name="bottomMargin">
                        <number>0</number>
                       </property>
+                      <item row="2" column="1" alignment="Qt::AlignLeft|Qt::AlignBottom">
+                       <widget class="QLabel" name="lbDataFim">
+                        <property name="text">
+                         <string>Fim: 04/05/2010</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="0" alignment="Qt::AlignTop">
+                       <widget class="QLabel" name="lbCNPJouNB">
+                        <property name="text">
+                         <string>CNPJ: 45.658.000-1/34</string>
+                        </property>
+                       </widget>
+                      </item>
                       <item row="0" column="0" colspan="2">
                        <widget class="QLabel" name="lbNomeEmp">
                         <property name="minimumSize">
@@ -1381,57 +1742,21 @@ previdenciários</string>
                         </property>
                        </widget>
                       </item>
-                      <item row="3" column="0" alignment="Qt::AlignBottom">
+                      <item row="2" column="0" alignment="Qt::AlignBottom">
                        <widget class="QLabel" name="lbDataInicio">
                         <property name="text">
                          <string>Início: 01/02/2000</string>
                         </property>
                        </widget>
                       </item>
-                      <item row="1" column="0" alignment="Qt::AlignTop">
-                       <widget class="QLabel" name="lbCNPJouNB">
+                      <item row="1" column="1" alignment="Qt::AlignTop">
+                       <widget class="QLabel" name="lbInfoContribuicao">
                         <property name="text">
-                         <string>CNPJ: 45.658.000-1/34</string>
+                         <string>CONTRIBUIÇÃO</string>
                         </property>
                        </widget>
-                      </item>
-                      <item row="3" column="1" alignment="Qt::AlignLeft|Qt::AlignBottom">
-                       <widget class="QLabel" name="lbDataFim">
-                        <property name="text">
-                         <string>Fim: 04/05/2010</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="0">
-                       <spacer name="verticalSpacer">
-                        <property name="orientation">
-                         <enum>Qt::Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                         <enum>QSizePolicy::Fixed</enum>
-                        </property>
-                        <property name="sizeHint" stdset="0">
-                         <size>
-                          <width>20</width>
-                          <height>12</height>
-                         </size>
-                        </property>
-                       </spacer>
                       </item>
                      </layout>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="pbInserirContrib">
-                     <property name="minimumSize">
-                      <size>
-                       <width>80</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string>Inserir</string>
-                     </property>
                     </widget>
                    </item>
                    <item>
@@ -1486,7 +1811,7 @@ previdenciários</string>
 
 #lbCNPJouNBBene, 
 #lbDataInicioBene, #lbDataFimBene, 
-#lbSituacao {
+#lbSituacao, #lbInfoBeneficio {
 	font: 11pt &quot;Avenir LT Std&quot;;
 	color: #3F4E8C;
 	
@@ -1626,6 +1951,13 @@ previdenciários</string>
                         </property>
                         <property name="wordWrap">
                          <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="2">
+                       <widget class="QLabel" name="lbInfoBeneficio">
+                        <property name="text">
+                         <string>BENEFÍCIO</string>
                         </property>
                        </widget>
                       </item>

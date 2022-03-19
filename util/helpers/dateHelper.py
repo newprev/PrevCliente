@@ -174,7 +174,6 @@ def calculaTempoVinculosConcorrentes(dataIniAtivA: datetime.date, dataFimAtvA: d
     return relativedelta(dataFinal, dataInicial)
 
 
-
 def eliminaHoraDias(data: datetime.datetime):
     try:
         if isinstance(data, type(datetime.datetime)):

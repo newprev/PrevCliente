@@ -27,10 +27,10 @@ from modelos.advogadoORM import Advogados
 from modelos.clienteProfissao import ClienteProfissao
 
 from sinaisCustomizados import Sinais
-from util.dateHelper import strToDate, atividadesConcorrentes, atividadeSecundaria
+from util.helpers.dateHelper import strToDate, atividadesConcorrentes, atividadeSecundaria
 from util.enums.dashboardEnums import TelaAtual
 
-from util.helpers import mascaraTelCel, unmaskAll, calculaIdadeFromString
+from util.helpers.helpers import mascaraTelCel, unmaskAll, calculaIdadeFromString
 from util.popUps import popUpOkAlerta, popUpSimCancela
 from util.enums.cadastroEnums import Status
 

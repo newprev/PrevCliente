@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
 from Design.pyUi.tabTelAfins import Ui_wdgTelAfins
 
 from modelos.clienteORM import Cliente
-from util.helpers import getTipoTelefone, getPessoalRecado, mascaraTelCel, getTipoTelefoneBySigla, getPessoalRecadoBySigla
+from util.helpers.helpers import getTipoTelefone, getPessoalRecado, mascaraTelCel, getTipoTelefoneBySigla, getPessoalRecadoBySigla
 from heart.localStyleSheet.teleAfins import desabilita
 from modelos.telefonesORM import Telefones
 

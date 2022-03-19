@@ -8,7 +8,7 @@ from SQLs.itensContribuicao import selectItensDados
 from math import floor
 import numpy as np
 
-from util.dateHelper import calculaIdade, strToDate, dataConflitante, dataIdealReforma, calculaQtdContribuicoes, calculaQtdContrib, comparaMesAno, reformaNoPeriodo, normalizaData, \
+from util.helpers.dateHelper import calculaIdade, strToDate, dataIdealReforma, calculaQtdContribuicoes, calculaQtdContrib, reformaNoPeriodo, normalizaData, \
     atividadesConcorrentes, calculaTempoVinculosConcorrentes
 
 from modelos.vinculoORM import CnisVinculos
@@ -20,8 +20,6 @@ from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.aposentadoriaORM import Aposentadoria
 from modelos.tetosPrevORM import TetosPrev
 from modelos.ipcaMensalORM import IpcaMensal
-from modelos.baseModelORM import database
-from modelos.indiceAtuMonetariaORM import IndiceAtuMonetaria
 
 from util.enums.newPrevEnums import GeneroCliente, TipoItemContribuicao, ItemOrigem
 from util.enums.aposentadoriaEnums import ContribSimulacao, IndiceReajuste, RegraTransicao, RegraGeralAR, TipoAposentadoria

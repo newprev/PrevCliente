@@ -5,8 +5,8 @@ from typing import List
 
 from Design.pyUi.pgTetosPrevidenciarios import Ui_mwTetosPrev
 from modelos.tetosPrevORM import TetosPrev
-from util.dateHelper import mascaraDataPequena, strToDate
-from util.helpers import mascaraDinheiro, dinheiroToFloat
+from util.helpers.dateHelper import mascaraDataPequena, strToDate
+from util.helpers.helpers import mascaraDinheiro, dinheiroToFloat
 
 
 class TetosPrevidenciarios(QMainWindow, Ui_mwTetosPrev):

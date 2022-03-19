@@ -68,8 +68,8 @@ def remuEContrib(clienteId: int, seq: int) -> str:
     return f"""
     SELECT
     --Contribuições
-    con.itemContribuicaoId, con.seq, con.competencia, 
-    IFNULL(con.salContribuicao, 0) AS salContribuicao, con.indicadores,
+    con.itemContribuicaoId, con.competencia, con.fatorInsalubridade,
+    con.grauDeficiencia, IFNULL(con.salContribuicao, 0) AS salContribuicao, con.indicadores,
     
     --Conversão monetária
     cm.sinal, cm.convMonId, cm.nomeMoeda

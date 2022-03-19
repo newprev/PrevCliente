@@ -20,11 +20,11 @@ from geracaoDocumentos.geraDocAposentadoria import GeracaoDocumentos
 
 from cache.cacheEscritorio import CacheEscritorio
 from cache.cachingLogin import CacheLogin
-from util.dateHelper import strToDate
+from util.helpers.dateHelper import strToDate
 
 from util.enums.aposentadoriaEnums import TelaAtiva
 from util.enums.processoEnums import TipoBeneficioEnum, TipoProcesso, SituacaoProcesso, NaturezaProcesso
-from util.helpers import mascaraCPF
+from util.helpers.helpers import mascaraCPF
 from util.popUps import popUpOkAlerta
 
 

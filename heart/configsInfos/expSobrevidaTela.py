@@ -5,7 +5,7 @@ from typing import List
 
 from Design.pyUi.pgExpSobrevida import Ui_mwExpSobrevida
 from modelos.expSobrevidaORM import ExpSobrevida
-from util.dateHelper import mascaraDataPequena, strToDate
+from util.helpers.dateHelper import mascaraDataPequena, strToDate
 
 
 class ExpSobrevidaTela(QMainWindow, Ui_mwExpSobrevida):

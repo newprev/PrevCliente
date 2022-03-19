@@ -22,12 +22,12 @@ from modelos.itemContribuicao import ItemContribuicao
 
 from sinaisCustomizados import Sinais
 
-from util.dateHelper import mascaraData, calculaIdade, atividadesConcorrentes, strToDate, atividadeSecundaria
+from util.helpers.dateHelper import mascaraData, calculaIdade, atividadesConcorrentes, strToDate, atividadeSecundaria
 from util.enums.dashboardEnums import TelaAtual
 from util.enums.newPrevEnums import GeneroCliente
 from util.popUps import popUpSimCancela, popUpOkAlerta
 
-from util.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit
+from util.helpers.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit
 
 from modelos.clienteORM import Cliente
 

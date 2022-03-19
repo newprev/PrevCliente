@@ -1,4 +1,3 @@
-from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar, QHBoxLayout, QLineEdit
@@ -23,10 +22,9 @@ from modelos.escritoriosORM import Escritorios
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
 
-from util.dateHelper import atividadesConcorrentes, atividadeSecundaria
+from util.helpers.dateHelper import atividadesConcorrentes, atividadeSecundaria
 from Design.DesignSystem.designEnums import FontStyle
 from util.popUps import popUpOkAlerta
-from util.helpers import *
 
 from repositorios.integracaoRepositorio import IntegracaoRepository
 

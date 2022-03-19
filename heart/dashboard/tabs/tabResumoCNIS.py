@@ -19,12 +19,12 @@ from Design.DesignSystem.botoes import NewButton, NewButtonHover
 from Design.CustomWidgets.newDropMenu import NewSubMenu
 from Design.CustomWidgets.newTagFiltro import NewTagFiltro
 
-from util.dateHelper import strToDate
+from util.helpers.dateHelper import strToDate
 from util.enums.logEnums import StatusInfo
-from util.helpers import mascaraDinheiro, mascaraCPF, dataUSAtoBR, comparaFiltrosAny
+from util.helpers.helpers import mascaraDinheiro, mascaraCPF, dataUSAtoBR, comparaFiltrosAny
 from util.enums.newPrevEnums import TipoContribuicao, TipoFiltro
 from util.enums.tabsEnums import TabsResumo
-from util.layoutHelpers import limpaLayout
+from util.helpers.layoutHelpers import limpaLayout
 
 from modelos.clienteORM import Cliente
 from modelos.vinculoORM import cnisVinculos

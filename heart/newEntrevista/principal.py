@@ -1,7 +1,6 @@
 import datetime
 from typing import List
 
-from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QCheckBox, QGridLayout
 
 from Design.pyUi.newEntrevistaPrincipal import Ui_wdgEntrevistaPrincipal
@@ -31,11 +30,11 @@ from cache.cachingLogin import CacheLogin
 
 from sinaisCustomizados import Sinais
 
-from util.dateHelper import calculaIdade, mascaraData, strToDate
+from util.helpers.dateHelper import calculaIdade, mascaraData, strToDate
 from util.enums.dashboardEnums import TelaPosicao
 from util.enums.entrevistaEnums import EtapaEntrevista, CategoriaQuiz
 from util.enums.processoEnums import NaturezaProcesso, TipoBeneficioEnum, TipoProcesso
-from util.helpers import strTipoBeneFacilitado, strTipoProcesso, mascaraCPF
+from util.helpers.helpers import strTipoBeneFacilitado, strTipoProcesso, mascaraCPF
 from util.popUps import popUpSimCancela, popUpOkAlerta
 
 

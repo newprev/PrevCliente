@@ -6,7 +6,7 @@ from typing import List
 from Design.pyUi.buscaCliente import Ui_mwBuscaCliente
 from Design.efeitos import Efeitos
 
-from util.helpers import mascaraTelCel, mascaraNit
+from util.helpers.helpers import mascaraTelCel, mascaraNit
 from util.popUps import popUpOkAlerta
 
 from modelos.clienteORM import Cliente

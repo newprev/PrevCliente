@@ -7,7 +7,7 @@ from util.enums.newPrevEnums import TipoEdicao, Prioridade
 from peewee import AutoField, CharField, ForeignKeyField, FloatField, DateTimeField, DateField, IntegerField, BooleanField
 from datetime import datetime
 
-from util.helpers import getTipoItem, getItemOrigem
+from util.helpers.helpers import getTipoItem, getItemOrigem
 
 TABLENAME = 'itemContribuicao'
 
@@ -29,8 +29,8 @@ class ItemContribuicao(BaseModel, Model):
     indicadores = CharField(default=None, null=True)
     validoTempoContrib = BooleanField(default=True)
     validoSalContrib = BooleanField(default=True)
-    indiceInsalubridade = FloatField(null=True)
-    indiceDeficiencia = FloatField(null=True)
+    fatorInsalubridade = FloatField(null=True)
+    grauDeficiencia = IntegerField(null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 

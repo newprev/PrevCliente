@@ -7,7 +7,7 @@ from Design.CustomWidgets.styleSheets.newCardPadrao import firulaHover
 from Design.efeitos import Efeitos
 from Design.pyUi.newCardPadrao import Ui_frCardPadrao
 from util.enums.processoEnums import NaturezaProcesso, TipoBeneficioEnum, TipoProcesso
-from util.helpers import strTipoBeneFacilitado, strTipoProcesso
+from util.helpers.helpers import strTipoBeneFacilitado, strTipoProcesso
 
 
 class NewCardPadrao(Ui_frCardPadrao, QFrame):

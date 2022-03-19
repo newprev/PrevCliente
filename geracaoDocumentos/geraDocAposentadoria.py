@@ -13,11 +13,11 @@ from modelos.advogadoORM import Advogados
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.processosORM import Processos
 
-from util.dateHelper import strToDatetime
+from util.helpers.dateHelper import strToDatetime
 from util.enums.aposentadoriaEnums import SubTipoAposentadoria
 from util.enums.processoEnums import TipoBeneficioEnum
-from util.helpers import mascaraCep, mascaraTelCel, strTipoBeneficio, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG
-from util.dateHelper import mascaraDataPequena
+from util.helpers.helpers import mascaraCep, mascaraTelCel, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG
+from util.helpers.dateHelper import mascaraDataPequena
 
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio

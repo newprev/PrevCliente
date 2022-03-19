@@ -1,12 +1,11 @@
 import datetime
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui
 from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import QFrame, QCheckBox
 
-from Design.DesignSystem.designEnums import FontStyle
 from Design.pyUi.menuFiltroContrib_teste import Ui_wdgNewMenu
-from util.helpers import dictIndicadores
+from util.helpers.helpers import dictIndicadores
 
 from sinaisCustomizados import Sinais
 

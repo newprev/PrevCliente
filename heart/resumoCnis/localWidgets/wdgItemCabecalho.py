@@ -7,8 +7,8 @@ from modelos.itemContribuicao import ItemContribuicao
 from Design.CustomWidgets.newToast import QToaster
 
 from sinaisCustomizados import Sinais
-from util.dateHelper import mascaraData
-from util.helpers import mascaraCNPJ
+from util.helpers.dateHelper import mascaraData
+from util.helpers.helpers import mascaraCNPJ
 from util.popUps import popUpSimCancela
 
 

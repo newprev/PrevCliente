@@ -2,7 +2,7 @@ import datetime
 import pymysql
 import asyncio as aio
 from typing import List
-from peewee import fn, IntegrityError
+from peewee import IntegrityError
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QLineEdit
@@ -36,7 +36,7 @@ from Design.pyUi.loginPage import Ui_mwLogin
 from heart.newDashboard.newDashboard import NewDashboard
 from systemLog.logs import logPrioridade
 
-from util.dateHelper import strToDatetime
+from util.helpers.dateHelper import strToDatetime
 from util.enums.logEnums import TipoLog
 from util.enums.loginEnums import TelaLogin
 from util.enums.newPrevEnums import *
@@ -46,7 +46,7 @@ import os
 import json
 
 from util.ferramentas.tools import divideListaEmPartes
-from util.helpers import datetimeToSql
+from util.helpers.helpers import datetimeToSql
 from util.popUps import popUpOkAlerta
 
 from repositorios.informacoesRepositorio import ApiInformacoes

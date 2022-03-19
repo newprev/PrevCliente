@@ -10,9 +10,9 @@ from PyQt5.QtWidgets import QFileDialog
 from modelos.vinculoORM import CnisVinculos
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.clienteORM import Cliente
-from util.dateHelper import strToDate, comparaMesAno
+from util.helpers.dateHelper import strToDate, comparaMesAno
 from util.enums.newPrevEnums import TipoItemContribuicao, ComparaData
-from util.helpers import strToFloat, dictIndicadores, verificaIndicadorProibitivo, unmaskAll
+from util.helpers.helpers import strToFloat, dictIndicadores, verificaIndicadorProibitivo, unmaskAll
 
 
 class CNISModelo:

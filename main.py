@@ -219,7 +219,7 @@ class Main(Ui_MainWindow, QMainWindow):
 if __name__ == '__main__':
     import sys
     from os.path import join
-    from util.helpers import pathTo, buscaSql
+    from util.helpers.helpers import pathTo, buscaSql
     from util.enums.configEnums import ImportantPaths
 
     PATH_FONTS = pathTo(ImportantPaths.fonts)

@@ -524,8 +524,8 @@ QScrollBar::sub-line:vertical {
 /*--------------------- Table Widget -----------------------*/
 #tblContribuicoes, #tblCadContrib,
 #tblCadBene {
-	selection-background-color: grey;
-	selection-color: white;
+	selection-background-color: #DDDEDF;
+	selection-color: #292D40;
 	gridline-color: white;
 
 	border: 0px solid transparent;
@@ -541,6 +541,11 @@ QHeaderView::section {
     padding-left: 4px;
     border: 0px solid white;
 	min-height: 45px;
+}
+
+QHeaderView:QTableCornerButton::section {
+    background-color: white;
+	border: 1px solid white;
 }
 
 #tblContribuicoes::item:last,
@@ -583,7 +588,7 @@ QLineEdit {
 	image: url(:/opcoes/rbChecked.png);
 }
 
-/*------------------------------------------- Combo box -------------------------------------------*/
+/*---------------------- Combo box ---------------------*/
 QComboBox {
     border: 0px solid gray;
     border-radius: 8px;
@@ -1384,7 +1389,7 @@ QComboBox::down-arrow:on {
                       <bool>true</bool>
                      </attribute>
                      <attribute name="verticalHeaderStretchLastSection">
-                      <bool>true</bool>
+                      <bool>false</bool>
                      </attribute>
                      <row>
                       <property name="text">
@@ -1405,7 +1410,7 @@ QComboBox::down-arrow:on {
                      </column>
                      <column>
                       <property name="text">
-                       <string>Vínculo</string>
+                       <string>Nº</string>
                       </property>
                       <property name="font">
                        <font>
@@ -1630,11 +1635,6 @@ deficiencia</string>
                        </brush>
                       </property>
                      </column>
-                     <item row="0" column="1">
-                      <property name="text">
-                       <string>15</string>
-                      </property>
-                     </item>
                      <item row="0" column="2">
                       <property name="text">
                        <string>25/01/2020</string>
@@ -1712,13 +1712,9 @@ deficiencia</string>
                       <property name="bottomMargin">
                        <number>0</number>
                       </property>
-                      <item row="2" column="1" alignment="Qt::AlignLeft|Qt::AlignBottom">
-                       <widget class="QLabel" name="lbDataFim">
-                        <property name="text">
-                         <string>Fim: 04/05/2010</string>
-                        </property>
-                       </widget>
-                      </item>
+                      <property name="horizontalSpacing">
+                       <number>24</number>
+                      </property>
                       <item row="1" column="0" alignment="Qt::AlignTop">
                        <widget class="QLabel" name="lbCNPJouNB">
                         <property name="text">
@@ -1726,26 +1722,10 @@ deficiencia</string>
                         </property>
                        </widget>
                       </item>
-                      <item row="0" column="0" colspan="2">
-                       <widget class="QLabel" name="lbNomeEmp">
-                        <property name="minimumSize">
-                         <size>
-                          <width>400</width>
-                          <height>0</height>
-                         </size>
-                        </property>
+                      <item row="2" column="1" alignment="Qt::AlignLeft|Qt::AlignBottom">
+                       <widget class="QLabel" name="lbDataFim">
                         <property name="text">
-                         <string>DROGARIA COMERCIAL DE REMÉDIOS LTDA</string>
-                        </property>
-                        <property name="wordWrap">
-                         <bool>true</bool>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="0" alignment="Qt::AlignBottom">
-                       <widget class="QLabel" name="lbDataInicio">
-                        <property name="text">
-                         <string>Início: 01/02/2000</string>
+                         <string>Fim: 04/05/2010</string>
                         </property>
                        </widget>
                       </item>
@@ -1756,6 +1736,51 @@ deficiencia</string>
                         </property>
                        </widget>
                       </item>
+                      <item row="2" column="0" alignment="Qt::AlignBottom">
+                       <widget class="QLabel" name="lbDataInicio">
+                        <property name="text">
+                         <string>Início: 01/02/2000</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="0" colspan="3">
+                       <widget class="QLabel" name="lbNomeEmp">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>400</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>1 - DROGARIA COMERCIAL DE REMÉDIOS E COUTRAS COISAS PERIGOSAS LTDA</string>
+                        </property>
+                        <property name="scaledContents">
+                         <bool>true</bool>
+                        </property>
+                        <property name="wordWrap">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="2" rowspan="2">
+                       <spacer name="horizontalSpacer_11">
+                        <property name="orientation">
+                         <enum>Qt::Horizontal</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>40</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
                      </layout>
                     </widget>
                    </item>
@@ -1763,6 +1788,9 @@ deficiencia</string>
                     <spacer name="horizontalSpacer_4">
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeType">
+                      <enum>QSizePolicy::Preferred</enum>
                      </property>
                      <property name="sizeHint" stdset="0">
                       <size>

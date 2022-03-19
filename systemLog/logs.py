@@ -5,7 +5,7 @@ from datetime import datetime
 from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import *
 
-from util.helpers import datetimeToSql
+from util.helpers.helpers import datetimeToSql
 
 
 def logPrioridade(mensagem: str, tipoEdicao: TipoEdicao = TipoEdicao.select, tipoLog: TipoLog = TipoLog.DataBase, priodiade: Prioridade = Prioridade.saidaComum):

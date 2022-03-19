@@ -20,10 +20,10 @@ from modelos.clienteInfoBanco import ClienteInfoBanco
 
 from repositorios.integracaoRepositorio import IntegracaoRepository
 
-from util.dateHelper import strToDate, calculaIdade
+from util.helpers.dateHelper import strToDate, calculaIdade
 from util.enums.dashboardEnums import TelaAtual, Navegacao, EtapaCadastraCliente
 from util.enums.telefoneEnums import TipoTelefone, TelefonePesoal
-from util.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit, estCivil, getEscolaridade, getEstados, getEstadoBySigla, unmaskAll
+from util.helpers.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit, estCivil, getEscolaridade, getEstados, getEstadoBySigla, unmaskAll
 from util.popUps import popUpOkAlerta, popUpSimCancela
 
 

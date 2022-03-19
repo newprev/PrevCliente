@@ -9,7 +9,7 @@ from heart.processos.localWidgets.cardAposentadoria import CardAposentadoria
 
 from Design.efeitos import Efeitos
 
-from util.helpers import calculaCoordenadas
+from util.helpers.helpers import calculaCoordenadas
 
 
 class TabAposentariasController(QWidget, Ui_wdgTabAposentadorias):

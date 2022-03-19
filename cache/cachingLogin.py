@@ -4,7 +4,7 @@ import json
 from systemLog.logs import logPrioridade
 from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
-from util.helpers import pyToDefault
+from util.helpers.helpers import pyToDefault
 from modelos.advogadoORM import Advogados
 from playhouse.shortcuts import model_to_dict
 

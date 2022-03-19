@@ -298,8 +298,8 @@ class Ui_wdgResumoCnis(object):
 "/*--------------------- Table Widget -----------------------*/\n"
 "#tblContribuicoes, #tblCadContrib,\n"
 "#tblCadBene {\n"
-"    selection-background-color: #F9F9F9;\n"
-"    selection-color: black;\n"
+"    selection-background-color: #DDDEDF;\n"
+"    selection-color: #292D40;\n"
 "    gridline-color: white;\n"
 "\n"
 "    border: 0px solid transparent;\n"
@@ -315,6 +315,11 @@ class Ui_wdgResumoCnis(object):
 "    padding-left: 4px;\n"
 "    border: 0px solid white;\n"
 "    min-height: 45px;\n"
+"}\n"
+"\n"
+"QHeaderView:QTableCornerButton::section {\n"
+"    background-color: white;\n"
+"    border: 1px solid white;\n"
 "}\n"
 "\n"
 "#tblContribuicoes::item:last,\n"
@@ -357,7 +362,7 @@ class Ui_wdgResumoCnis(object):
 "    image: url(:/opcoes/rbChecked.png);\n"
 "}\n"
 "\n"
-"/*------------------------------------------- Combo box -------------------------------------------*/\n"
+"/*---------------------- Combo box ---------------------*/\n"
 "QComboBox {\n"
 "    border: 0px solid gray;\n"
 "    border-radius: 8px;\n"
@@ -839,8 +844,6 @@ class Ui_wdgResumoCnis(object):
         item.setForeground(brush)
         self.tblContribuicoes.setHorizontalHeaderItem(7, item)
         item = QtWidgets.QTableWidgetItem()
-        self.tblContribuicoes.setItem(0, 1, item)
-        item = QtWidgets.QTableWidgetItem()
         self.tblContribuicoes.setItem(0, 2, item)
         item = QtWidgets.QTableWidgetItem()
         self.tblContribuicoes.setItem(0, 3, item)
@@ -857,7 +860,7 @@ class Ui_wdgResumoCnis(object):
         self.tblContribuicoes.verticalHeader().setHighlightSections(False)
         self.tblContribuicoes.verticalHeader().setMinimumSectionSize(25)
         self.tblContribuicoes.verticalHeader().setSortIndicatorShown(True)
-        self.tblContribuicoes.verticalHeader().setStretchLastSection(True)
+        self.tblContribuicoes.verticalHeader().setStretchLastSection(False)
         self.gridLayout_16.addWidget(self.tblContribuicoes, 1, 0, 3, 2)
         self.gridLayout_5.addWidget(self.frTblContribuicoes, 1, 0, 1, 1)
         self.frInfoResumo = QtWidgets.QFrame(self.frInfoPrincipal)
@@ -877,27 +880,36 @@ class Ui_wdgResumoCnis(object):
         self.frInfoEmp.setObjectName("frInfoEmp")
         self.gridLayout_7 = QtWidgets.QGridLayout(self.frInfoEmp)
         self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_7.setHorizontalSpacing(24)
         self.gridLayout_7.setObjectName("gridLayout_7")
-        self.lbDataFim = QtWidgets.QLabel(self.frInfoEmp)
-        self.lbDataFim.setObjectName("lbDataFim")
-        self.gridLayout_7.addWidget(self.lbDataFim, 2, 1, 1, 1, QtCore.Qt.AlignLeft|QtCore.Qt.AlignBottom)
         self.lbCNPJouNB = QtWidgets.QLabel(self.frInfoEmp)
         self.lbCNPJouNB.setObjectName("lbCNPJouNB")
         self.gridLayout_7.addWidget(self.lbCNPJouNB, 1, 0, 1, 1, QtCore.Qt.AlignTop)
-        self.lbNomeEmp = QtWidgets.QLabel(self.frInfoEmp)
-        self.lbNomeEmp.setMinimumSize(QtCore.QSize(400, 0))
-        self.lbNomeEmp.setWordWrap(True)
-        self.lbNomeEmp.setObjectName("lbNomeEmp")
-        self.gridLayout_7.addWidget(self.lbNomeEmp, 0, 0, 1, 2)
-        self.lbDataInicio = QtWidgets.QLabel(self.frInfoEmp)
-        self.lbDataInicio.setObjectName("lbDataInicio")
-        self.gridLayout_7.addWidget(self.lbDataInicio, 2, 0, 1, 1, QtCore.Qt.AlignBottom)
+        self.lbDataFim = QtWidgets.QLabel(self.frInfoEmp)
+        self.lbDataFim.setObjectName("lbDataFim")
+        self.gridLayout_7.addWidget(self.lbDataFim, 2, 1, 1, 1, QtCore.Qt.AlignLeft|QtCore.Qt.AlignBottom)
         self.lbInfoContribuicao = QtWidgets.QLabel(self.frInfoEmp)
         self.lbInfoContribuicao.setObjectName("lbInfoContribuicao")
         self.gridLayout_7.addWidget(self.lbInfoContribuicao, 1, 1, 1, 1, QtCore.Qt.AlignTop)
-        self.horizontalLayout_4.addWidget(self.frInfoEmp)
+        self.lbDataInicio = QtWidgets.QLabel(self.frInfoEmp)
+        self.lbDataInicio.setObjectName("lbDataInicio")
+        self.gridLayout_7.addWidget(self.lbDataInicio, 2, 0, 1, 1, QtCore.Qt.AlignBottom)
+        self.lbNomeEmp = QtWidgets.QLabel(self.frInfoEmp)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbNomeEmp.sizePolicy().hasHeightForWidth())
+        self.lbNomeEmp.setSizePolicy(sizePolicy)
+        self.lbNomeEmp.setMinimumSize(QtCore.QSize(400, 0))
+        self.lbNomeEmp.setScaledContents(True)
+        self.lbNomeEmp.setWordWrap(True)
+        self.lbNomeEmp.setObjectName("lbNomeEmp")
+        self.gridLayout_7.addWidget(self.lbNomeEmp, 0, 0, 1, 3)
         spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem9)
+        self.gridLayout_7.addItem(spacerItem9, 1, 2, 2, 1)
+        self.horizontalLayout_4.addWidget(self.frInfoEmp)
+        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem10)
         self.gridLayout_5.addWidget(self.frInfoResumo, 0, 0, 1, 1)
         self.gridLayout_6.addWidget(self.frInfoPrincipal, 0, 0, 1, 1)
         self.stkCliente.addWidget(self.pgContribuicoes)
@@ -973,8 +985,8 @@ class Ui_wdgResumoCnis(object):
         self.lbCNPJouNBBene = QtWidgets.QLabel(self.frInfoEmpBene)
         self.lbCNPJouNBBene.setObjectName("lbCNPJouNBBene")
         self.gridLayout_9.addWidget(self.lbCNPJouNBBene, 1, 0, 1, 1)
-        spacerItem10 = QtWidgets.QSpacerItem(20, 12, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_9.addItem(spacerItem10, 2, 0, 1, 1)
+        spacerItem11 = QtWidgets.QSpacerItem(20, 12, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_9.addItem(spacerItem11, 2, 0, 1, 1)
         self.lbDataInicioBene = QtWidgets.QLabel(self.frInfoEmpBene)
         self.lbDataInicioBene.setObjectName("lbDataInicioBene")
         self.gridLayout_9.addWidget(self.lbDataInicioBene, 3, 0, 1, 1)
@@ -994,8 +1006,8 @@ class Ui_wdgResumoCnis(object):
         self.pbInserirBeneficios.setMinimumSize(QtCore.QSize(80, 0))
         self.pbInserirBeneficios.setObjectName("pbInserirBeneficios")
         self.horizontalLayout_8.addWidget(self.pbInserirBeneficios)
-        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_8.addItem(spacerItem11)
+        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_8.addItem(spacerItem12)
         self.gridLayout_10.addWidget(self.frInfoResumoBene, 0, 0, 1, 1)
         self.frTblBeneficios = QtWidgets.QFrame(self.frInfoPrincipalBene)
         self.frTblBeneficios.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -1169,8 +1181,8 @@ class Ui_wdgResumoCnis(object):
         self.gridLayout_12.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_12.setVerticalSpacing(24)
         self.gridLayout_12.setObjectName("gridLayout_12")
-        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_12.addItem(spacerItem12, 0, 0, 3, 1)
+        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_12.addItem(spacerItem13, 0, 0, 3, 1)
         self.frAcoes = QtWidgets.QFrame(self.frCadastroPrincipal)
         self.frAcoes.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frAcoes.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -1215,8 +1227,8 @@ class Ui_wdgResumoCnis(object):
         self.rbBeneficio.setObjectName("rbBeneficio")
         self.horizontalLayout_10.addWidget(self.rbBeneficio)
         self.gridLayout_12.addWidget(self.frTipoVinculo, 1, 1, 1, 1)
-        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_12.addItem(spacerItem13, 0, 3, 3, 1)
+        spacerItem14 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_12.addItem(spacerItem14, 0, 3, 3, 1)
         self.stkVinculo = QtWidgets.QStackedWidget(self.frCadastroPrincipal)
         self.stkVinculo.setObjectName("stkVinculo")
         self.pgContrib = QtWidgets.QWidget()
@@ -1330,8 +1342,8 @@ class Ui_wdgResumoCnis(object):
         self.verticalLayout_8.addWidget(self.cbxSituacao)
         self.stkVinculo.addWidget(self.pgBene)
         self.gridLayout_12.addWidget(self.stkVinculo, 2, 1, 1, 1)
-        spacerItem14 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout_12.addItem(spacerItem14, 4, 1, 1, 1)
+        spacerItem15 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_12.addItem(spacerItem15, 4, 1, 1, 1)
         self.gridLayout_11.addWidget(self.frCadastroPrincipal, 0, 0, 1, 1)
         self.stkCliente.addWidget(self.pgCadastroVinculo)
         self.pgCadContribBene = QtWidgets.QWidget()
@@ -1620,10 +1632,10 @@ class Ui_wdgResumoCnis(object):
         self.verticalLayout_10.addWidget(self.frBotaoAdd2)
         self.stkCadastro.addWidget(self.pgCadBene)
         self.gridLayout_14.addWidget(self.stkCadastro, 1, 0, 1, 3)
-        spacerItem15 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_14.addItem(spacerItem15, 2, 2, 1, 1)
         spacerItem16 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_14.addItem(spacerItem16, 2, 0, 1, 1)
+        self.gridLayout_14.addItem(spacerItem16, 2, 2, 1, 1)
+        spacerItem17 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_14.addItem(spacerItem17, 2, 0, 1, 1)
         self.lbInfoCadastrar = QtWidgets.QLabel(self.pgCadContribBene)
         self.lbInfoCadastrar.setObjectName("lbInfoCadastrar")
         self.gridLayout_14.addWidget(self.lbInfoCadastrar, 0, 0, 1, 3, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
@@ -1690,7 +1702,7 @@ class Ui_wdgResumoCnis(object):
         item = self.tblContribuicoes.horizontalHeaderItem(0)
         item.setText(_translate("wdgResumoCnis", "id"))
         item = self.tblContribuicoes.horizontalHeaderItem(1)
-        item.setText(_translate("wdgResumoCnis", "Vínculo"))
+        item.setText(_translate("wdgResumoCnis", "Nº"))
         item = self.tblContribuicoes.horizontalHeaderItem(2)
         item.setText(_translate("wdgResumoCnis", "Competência"))
         item = self.tblContribuicoes.horizontalHeaderItem(3)
@@ -1708,8 +1720,6 @@ class Ui_wdgResumoCnis(object):
         item.setText(_translate("wdgResumoCnis", "Ações"))
         __sortingEnabled = self.tblContribuicoes.isSortingEnabled()
         self.tblContribuicoes.setSortingEnabled(False)
-        item = self.tblContribuicoes.item(0, 1)
-        item.setText(_translate("wdgResumoCnis", "15"))
         item = self.tblContribuicoes.item(0, 2)
         item.setText(_translate("wdgResumoCnis", "25/01/2020"))
         item = self.tblContribuicoes.item(0, 3)
@@ -1717,11 +1727,11 @@ class Ui_wdgResumoCnis(object):
         item = self.tblContribuicoes.item(0, 4)
         item.setText(_translate("wdgResumoCnis", "IUSDF"))
         self.tblContribuicoes.setSortingEnabled(__sortingEnabled)
-        self.lbDataFim.setText(_translate("wdgResumoCnis", "Fim: 04/05/2010"))
         self.lbCNPJouNB.setText(_translate("wdgResumoCnis", "CNPJ: 45.658.000-1/34"))
-        self.lbNomeEmp.setText(_translate("wdgResumoCnis", "DROGARIA COMERCIAL DE REMÉDIOS LTDA"))
-        self.lbDataInicio.setText(_translate("wdgResumoCnis", "Início: 01/02/2000"))
+        self.lbDataFim.setText(_translate("wdgResumoCnis", "Fim: 04/05/2010"))
         self.lbInfoContribuicao.setText(_translate("wdgResumoCnis", "CONTRIBUIÇÃO"))
+        self.lbDataInicio.setText(_translate("wdgResumoCnis", "Início: 01/02/2000"))
+        self.lbNomeEmp.setText(_translate("wdgResumoCnis", "1 - DROGARIA COMERCIAL DE REMÉDIOS E COUTRAS COISAS PERIGOSAS LTDA"))
         self.lbDataFimBene.setText(_translate("wdgResumoCnis", "Fim: 04/05/2010"))
         self.lbCNPJouNBBene.setText(_translate("wdgResumoCnis", "CNPJ: 45.658.000-1/34"))
         self.lbDataInicioBene.setText(_translate("wdgResumoCnis", "Início: 01/02/2000"))

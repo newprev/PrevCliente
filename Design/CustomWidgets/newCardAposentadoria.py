@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget
 from Design.pyUi.wdgCardAposentadoria import Ui_wdgCardAposentadoria
 
 from modelos.aposentadoriaORM import Aposentadoria
-from util.helpers import dataUSAtoBR, strTipoAposentadoria, strTipoSimulacao, mascaraDinheiro
+from util.helpers.helpers import dataUSAtoBR, strTipoAposentadoria, mascaraDinheiro
 
 
 class NewCardAposentadoria(QWidget, Ui_wdgCardAposentadoria):

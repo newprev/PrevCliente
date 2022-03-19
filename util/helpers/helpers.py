@@ -4,10 +4,8 @@ from math import floor, ceil
 from peewee import ModelSelect
 from typing import Union, Tuple, List
 
-from util.dateHelper import strToDate
 from util.enums.aposentadoriaEnums import SubTipoAposentadoria, TipoAposentadoria, ContribSimulacao
 from util.enums.configEnums import ImportantPaths
-from util.enums.newPrevEnums import *
 from util.enums.processoEnums import TipoBeneficioEnum, TipoProcesso, NaturezaProcesso
 
 estCivil = ['Solteiro(a)', 'Casado(a)', 'Divorciado(a)', 'Viúvo(a)']

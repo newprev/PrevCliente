@@ -3,7 +3,7 @@ from peewee import SqliteDatabase, fn
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt, QSize, QModelIndex
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTableWidgetItem, QPushButton, QHBoxLayout, QLineEdit, QDateEdit
 
@@ -13,10 +13,12 @@ from Design.efeitos import Efeitos
 from SQLs.itensContribuicao import remuEContrib
 from modelos.especieBenefORM import EspecieBene
 
+from util.enums.aposentadoriaEnums import FatorTmpInsalubridade, GrauDeficiencia
 from util.enums.dashboardEnums import TelaAtual
 from util.enums.newPrevEnums import TipoContribuicao, TipoEdicao, Prioridade, ItemOrigem
 from util.enums.resumoCnisEnums import TelaResumo, TipoBotaoResumo, TipoContribuicao, TipoVinculo
 from util.enums.databaseEnums import DatabaseEnum
+from util.helpers.calculos import tempoContribPorVinculo, tempoContribPorCompetencias
 
 from .localStyleSheet.resumoCnis import selecionaBotao, botaoOpcoes, cadDataEdit
 from .localWidgets.duplicadorController import DuplicadorController
@@ -29,10 +31,10 @@ from modelos.Auxiliares.remuEContribs import RemuEContribs
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.clienteProfissao import ClienteProfissao
 
-from util.helpers import mascaraCPF, mascaraCNPJ, mascaraDinheiro, dataUSAtoBR, situacaoBeneficio, strToFloat
-from util.layoutHelpers import limpaLayout
+from util.helpers.helpers import mascaraCPF, mascaraCNPJ, mascaraDinheiro, dataUSAtoBR, situacaoBeneficio, strToFloat
+from util.helpers.layoutHelpers import limpaLayout
 from util.popUps import popUpSimCancela, popUpOkAlerta
-from util.dateHelper import mascaraData, strToDate, mascaraDataPequena
+from util.helpers.dateHelper import mascaraData, strToDate, mascaraDataPequena
 
 from systemLog.logs import logPrioridade
 from ..configsInfos.indicadoresTela import IndicadoresController
@@ -55,9 +57,10 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
         self.vinculoAtual = None
         self.toasty = None
         self.efeitos = Efeitos()
+        self.cliente = None
 
         self.tblContribuicoes.horizontalHeader().show()
-        self.tblContribuicoes.hideColumn(0)
+        # self.tblContribuicoes.hideColumn(0)
 
         self.tblBeneficios.horizontalHeader().show()
         self.tblBeneficios.hideColumn(0)
@@ -85,6 +88,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
         self.pbAddBene.clicked.connect(lambda: self.adicionaLinhaCadastro(TipoContribuicao.beneficio))
         self.pbBuscaIndicador.clicked.connect(lambda: IndicadoresController(retornaIndicadores=True, parent=self).show())
         self.pbFinalizar.clicked.connect(self.avaliaAddContrib)
+        self.pbSalvarSelecionados.clicked.connect(self.atualizaCompEspecial)
 
         self.trocaTela(self.telaAtual)
 
@@ -217,6 +221,34 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             self.tblCadBene.resizeColumnsToContents()
             self.tblCadBene.resizeRowsToContents()
 
+    def atualizaCompEspecial(self):
+        if self.vinculoAtual.nb is None:
+            fatorInsalubridade = self.getFatorInsalubridade()
+            grauDeficiencia = self.getGrauDeficiencia()
+            linhasSelecionadas: List[QModelIndex] = self.tblContribuicoes.selectionModel().selectedRows()
+            itemIds: List[int] = []
+
+            for linha in linhasSelecionadas:
+                itemIds.append(int(self.tblContribuicoes.item(linha.row(), 0).text()))
+
+            if fatorInsalubridade != -1:
+                ItemContribuicao.update(fatorInsalubridade=fatorInsalubridade).where(ItemContribuicao.itemContribuicaoId.in_(itemIds)).execute()
+            elif fatorInsalubridade is None:
+                pass
+            else:
+                ItemContribuicao.update(fatorInsalubridade=None).where(ItemContribuicao.itemContribuicaoId.in_(itemIds)).execute()
+
+            if grauDeficiencia != -1:
+                ItemContribuicao.update(grauDeficiencia=grauDeficiencia).where(ItemContribuicao.itemContribuicaoId.in_(itemIds)).execute()
+            elif grauDeficiencia is None:
+                pass
+            else:
+                ItemContribuicao.update(grauDeficiencia=None).where(ItemContribuicao.itemContribuicaoId.in_(itemIds)).execute()
+
+            self.carregaTblContribuicoes()
+        else:
+            pass
+
     def atualizaInfoBeneficios(self):
         # Nome da empresa ou do benefícios
         self.lbNomeEmpBene.setText(self.vinculoAtual.especie[5:])
@@ -239,7 +271,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
 
     def atualizaInfoContrib(self):
         # Nome da empresa ou do benefícios
-        self.lbNomeEmp.setText(self.vinculoAtual.nomeEmp)
+        self.lbNomeEmp.setText(f"{self.vinculoAtual.seq} - {self.vinculoAtual.nomeEmp}")
         self.lbCNPJouNB.setText("CNPJ: " + mascaraCNPJ(self.vinculoAtual.cdEmp))
 
         # Data de início
@@ -277,10 +309,21 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             if wdgCabecalho.selecionado and wdgCabecalho.vinculoAtual.vinculoId != cabecalho.vinculoId:
                 wdgCabecalho.desselecionaCabecalho()
 
+        self.atualizaTmpContrib()
+
         if self.vinculoAtual.nb is None:
             self.trocaTela(TelaResumo.contribuicoes)
         else:
             self.trocaTela(TelaResumo.beneficios)
+
+    def atualizaTmpContrib(self):
+        if self.vinculoAtual.nb is None:
+            listaCompetencias: List[ItemContribuicao] = ItemContribuicao.select().where(
+                ItemContribuicao.clienteId == self.cliente.clienteId,
+                ItemContribuicao.seq == self.vinculoAtual.seq
+            )
+            print(f"tempoContribPorVinculo: {tempoContribPorVinculo([self.vinculoAtual])}")
+            print(f"tempoContribPorCompetencias: {tempoContribPorCompetencias(listaCompetencias)=}")
 
     def avaliaAddContrib(self):
         # Se nb é None, então é uma contribuição. Caso contrário, é um benefício
@@ -509,8 +552,8 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblContribuicoes.setItem(contLinha, 0, strItem)
 
-            # Seq - Coluna 1 (ativa)
-            strItem = QTableWidgetItem(str(item.seq))
+            # Nº - Coluna 1 (ativa)
+            strItem = QTableWidgetItem(str(contLinha + 1))
             strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblContribuicoes.setItem(contLinha, 1, strItem)
@@ -527,23 +570,23 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblContribuicoes.setItem(contLinha, 3, strItem)
 
-            # Tetos previdenciários - Coluna 4 (ativa)
-            # strItem = QTableWidgetItem(mascaraDinheiro(item.valor, simbolo=item.sinal))
-            # strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            # strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-            # self.tblContribuicoes.setItem(contLinha, 4, strItem)
-
-            # Natureza dos dados (Remuneração/Contribuição) - Coluna 5 (ativa)
-            # strItem = QTableWidgetItem(item.natureza)
-            # strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            # strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
-            # self.tblContribuicoes.setItem(contLinha, 5, strItem)
-
-            # Indicadores do CNIS - Coluna 6 (ativa)
+            # Indicadores do CNIS - Coluna 4 (ativa)
             strItem = QTableWidgetItem(item.indicadores)
             strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblContribuicoes.setItem(contLinha, 4, strItem)
+
+            # Fator insalubridade - Coluna 5 (ativa)
+            strItem = QTableWidgetItem(str(item.fatorInsalubridade) if item.fatorInsalubridade is not None else "-")
+            strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            self.tblContribuicoes.setItem(contLinha, 5, strItem)
+
+            # Fator deficiência - Coluna 6 (ativa)
+            strItem = QTableWidgetItem(GrauDeficiencia(item.grauDeficiencia).name.title() if item.grauDeficiencia is not None else "-")
+            strItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            strItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
+            self.tblContribuicoes.setItem(contLinha, 6, strItem)
 
             # Botões de edição (Ações) - Coluna 7 <Aparente>
             hlOpcoes = QHBoxLayout()
@@ -742,16 +785,60 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             logPrioridade(f'DELETE<excluirItem>::erro ___________________{err=}', tipoEdicao=TipoEdicao.insert, priodiade=Prioridade.saidaComum)
         finally:
             return True
-        
+
+    def getFatorInsalubridade(self) -> float:
+        try:
+            if self.cbxInsalubridade.currentText() == 'Zerar':
+                return -1.0
+
+            index = self.cbxInsalubridade.currentText().find('|')
+            return float(self.cbxInsalubridade.currentText()[index + 1:])
+        except ValueError as err:
+            return None
+
+    def getGrauDeficiencia(self) -> int:
+        if self.cbxDeficiencia.currentText() == 'Zerar':
+            return -1
+
+        for grau in GrauDeficiencia:
+            if grau.name.title() == self.cbxDeficiencia.currentText():
+                return grau.value
+
+        return None
+
     def iniciaCampos(self):
         listaEspecies: List[EspecieBene] = EspecieBene.select()
+        self.cbxEspecie.clear()
         for especie in listaEspecies:
             self.cbxEspecie.addItem(f"{especie.especieId} - {especie.descricao}")
 
         self.cbxSituacao.addItems(sorted(situacaoBeneficio))
 
         listaTipoVinculos = (vinculo.value for vinculo in TipoVinculo)
+        self.cbxTipoVinculo.clear()
         self.cbxTipoVinculo.addItems(sorted(listaTipoVinculos))
+
+        if self.cliente is not None:
+
+            # ComboBox insalubridade
+            self.cbxInsalubridade.clear()
+            self.cbxInsalubridade.addItem('-')
+            if self.cliente.genero == 'M':
+                for fator in FatorTmpInsalubridade:
+                    if 'M' in fator.name:
+                        self.cbxInsalubridade.addItem(f"{fator.name[:len(fator.name) - 1].title()} | {fator.value}")
+            else:
+                for fator in FatorTmpInsalubridade:
+                    if 'F' in fator.name:
+                        self.cbxInsalubridade.addItem(f"{fator.name[:len(fator.name) - 1].title()} | {fator.value}")
+            self.cbxInsalubridade.addItem('Zerar')
+
+            # ComboBox deficiência
+            self.cbxDeficiencia.clear()
+            self.cbxDeficiencia.addItem('-')
+            for grau in GrauDeficiencia:
+                self.cbxDeficiencia.addItem(f'{grau.name.title()}')
+            self.cbxDeficiencia.addItem('Zerar')
 
     def insereContribuicoes(self, listaContribuicoes: List[ItemContribuicao]) -> bool:
         try:
@@ -827,6 +914,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             self.clienteInfoProf = ClienteProfissao.get_by_id(self.cliente.dadosProfissionais)
             self.carregaClienteNaTela()
             self.carregaResumos()
+            self.iniciaCampos()
 
     def recebeIndicadores(self, listaIndicadores: List[str]):
         if len(listaIndicadores) > 0:

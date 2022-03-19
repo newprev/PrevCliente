@@ -6,7 +6,7 @@ from modelos.clienteProfissao import ClienteProfissao
 from modelos.clienteInfoBanco import ClienteInfoBanco
 from systemLog.logs import logPrioridade
 from modelos.escritoriosORM import Escritorios
-from util.dateHelper import strToDate
+from util.helpers.dateHelper import strToDate
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import AutoField, CharField, ForeignKeyField, DateField, IntegerField, DateTimeField, BooleanField

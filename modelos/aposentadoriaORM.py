@@ -4,7 +4,7 @@ from modelos.processosORM import Processos
 from playhouse.signals import Model, post_save, pre_delete
 from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
-from util.helpers import getRegrasApos, getContribSimulacao
+from util.helpers.helpers import getRegrasApos, getContribSimulacao
 
 from peewee import AutoField, CharField, ForeignKeyField, DateField, IntegerField, DateTimeField, FloatField, BooleanField
 from datetime import datetime

@@ -4,11 +4,11 @@ from typing import List
 from Design.pyUi.wdgInfoGeralCliente import Ui_wdgInfoGeralCliente
 from modelos.clienteORM import Cliente
 from modelos.telefonesORM import Telefones
-from util.dateHelper import mascaraData, calculaIdadeAutomatica
+from util.helpers.dateHelper import mascaraData, calculaIdadeAutomatica
 from Design.CustomWidgets.newCheckBox import NewCheckBox
 from heart.dashboard.tabs.localWidgets.wdgTelefone import WdgTelefone
 
-from util.helpers import mascaraRG, mascaraCPF, mascaraCep
+from util.helpers.helpers import mascaraRG, mascaraCPF, mascaraCep
 from util.enums.newPrevEnums import GeneroCliente
 from util.ferramentas.layout import limpaLayout
 

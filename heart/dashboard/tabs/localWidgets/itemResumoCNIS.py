@@ -2,7 +2,7 @@ import datetime
 
 from PyQt5.QtWidgets import QWidget, QMessageBox
 from Design.pyUi.itemResumoCNIS import Ui_WdgItemRes
-from util.helpers import dataUSAtoBR, mascaraCNPJ, mascaraNB
+from util.helpers.helpers import dataUSAtoBR, mascaraCNPJ, mascaraNB
 
 from heart.dashboard.tabs.localWidgets.wdgCabecalhoBeneficio import WdgBeneficio
 from heart.dashboard.tabs.localWidgets.wdgCabecalhoContribuicao import WdgContribuicao

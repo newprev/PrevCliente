@@ -6,7 +6,7 @@ from typing import List
 from sinaisCustomizados import Sinais
 from Design.pyUi.buscaProcessos import Ui_mwBuscaProcessos
 from Design.efeitos import Efeitos
-from util.helpers import mascaraTelCel, strTipoProcesso, strTipoBeneficio, dataUSAtoBR
+from util.helpers.helpers import mascaraTelCel, strTipoProcesso, strTipoBeneficio, dataUSAtoBR
 from modelos.clienteORM import Cliente
 from modelos.telefonesORM import Telefones
 from modelos.processosORM import Processos

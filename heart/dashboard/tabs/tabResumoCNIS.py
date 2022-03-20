@@ -31,7 +31,7 @@ from modelos.vinculoORM import cnisVinculos
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.Auxiliares.remuEContribs import RemuEContribs
 
-from Daos.daoCalculos import DaoCalculos
+from Banco.daoCalculos import DaoCalculos
 
 
 class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):

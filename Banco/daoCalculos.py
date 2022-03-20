@@ -1,6 +1,6 @@
 import sqlite3
 
-from Daos.tabelas import TabelasConfig
+from Banco.tabelas import TabelasConfig
 from pymysql import connections
 import pandas as pd
 

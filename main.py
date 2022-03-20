@@ -16,6 +16,7 @@ from modelos.clienteInfoBanco import ClienteInfoBanco
 from modelos.clienteProfissao import ClienteProfissao
 
 from modelos.convMonORM import ConvMon
+from modelos.baseModelORM import database
 from modelos.especieBenefORM import EspecieBene
 from modelos.expSobrevidaORM import ExpSobrevida
 from modelos.indicadoresORM import Indicadores
@@ -36,6 +37,7 @@ from modelos.aposentadoriaORM import Aposentadoria
 from modelos.ipcaMensalORM import IpcaMensal
 from modelos.tipoBeneficioORM import TipoBeneficioModel
 from modelos.tiposESubtipos.tipoAposentadoriaORM import TipoAposentadoria
+
 from repositorios.informacoesRepositorio import ApiInformacoes
 from util.enums.databaseEnums import DatabaseEnum
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
@@ -65,6 +67,13 @@ class Main(Ui_MainWindow, QMainWindow):
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.progresso)
         self.timer.start(35)
+
+    def buscaPathTriggers(self) -> str:
+        pathTriggers = os.path.join("SQLs", "triggers")
+        if os.path.isdir(pathTriggers):
+            return pathTriggers
+        else:
+            return ""
 
     async def carregaTabelasIniciais(self):
         if TipoBeneficioModel.select().count() == 0:
@@ -109,7 +118,7 @@ class Main(Ui_MainWindow, QMainWindow):
         qtdTipos = TipoAposentadoria.select().count()
         database = SqliteDatabase(DatabaseEnum.producao.value)
         if qtdTipos == 0:
-            tipoAposPath = os.path.join(os.getcwd(), 'Daos', 'backup', 'cTipoAposentadoria.sql')
+            tipoAposPath = os.path.join(os.getcwd(), 'Banco', 'backup', 'cTipoAposentadoria.sql')
             sqlScript: str = buscaSql(tipoAposPath)
             database.execute_sql(sqlScript)
 
@@ -118,6 +127,8 @@ class Main(Ui_MainWindow, QMainWindow):
     def iniciaBancosETelas(self):
         try:
             loop = aio.get_event_loop()
+            pathTriggers = self.buscaPathTriggers()
+            fileDropTriggers = os.path.join(pathTriggers, "dropTriggers.sql")
 
             listaTabelas = {
                 Escritorios: 'CRIANDO TABELA DOS ESCRITORIOS...',
@@ -151,6 +162,20 @@ class Main(Ui_MainWindow, QMainWindow):
                 self.lbInfo.setText(label)
                 instancia.create_table()
                 self.progresso(add=percentLoading)
+
+            if not os.path.isfile(fileDropTriggers):
+                popUpOkAlerta("Não foi possível encontrar os scripts do banco de dados. Entre em contato com o suporte.", funcao=self.close)
+                return False
+            else:
+                with open(fileDropTriggers, encoding='utf-8', mode='r') as f:
+                    queries = f.readlines()
+                    for drop in queries:
+                        database.execute_sql(drop)
+
+                for trigger in os.listdir(pathTriggers):
+                    query = os.path.join(pathTriggers, trigger)
+                    with open(query, encoding='utf-8', mode='r') as trig:
+                        database.execute_sql(trig.read())
 
             self.lbInfo.setText('CRIANDO TELA DE LOGIN...')
             self.progresso(add=percentLoading)

@@ -47,6 +47,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.buscaEscritorio()
 
         self.iniciaCamposPessoais()
+        self.iniciaCamposBancarios()
         self.leIdade.setDisabled(True)
         self.leCdCliente.setDisabled(True)
 
@@ -88,6 +89,19 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.cbMostraMeuInss.stateChanged.connect(lambda: self.avaliaMostraSenhas('meuInss'))
 
         self.trocaEtapa(EtapaCadastraCliente.pessoal)
+
+    def avaliaCaracteres(self, info: str):
+        if info == 'leNumeroAgencia':
+            if not self.leNumeroAgencia.text().isnumeric():
+                self.leNumeroAgencia.setText(self.leNumeroAgencia.text()[:len(self.leNumeroAgencia.text()) - 1])
+
+        elif info == 'leConta':
+            if not self.leConta.text().isnumeric():
+                self.leConta.setText(self.leConta.text()[:len(self.leConta.text()) - 1])
+
+        elif info == 'leNomeBanco':
+            if self.leNomeBanco.text().isnumeric():
+                self.leNomeBanco.setText(self.leNomeBanco.text()[:len(self.leNomeBanco.text()) - 1])
 
     def atualizaIdadeTela(self):
         dataNascimento: datetime.date = self.dtNascimento.date().toPyDate()
@@ -379,6 +393,11 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         Cliente.delete_by_id(clienteId)
         ItemContribuicao.delete_by_id(clienteId)
         Telefones.delete_by_id(clienteId)
+
+    def iniciaCamposBancarios(self):
+        self.leNumeroAgencia.textChanged.connect(lambda: self.avaliaCaracteres('leNumeroAgencia'))
+        self.leConta.textChanged.connect(lambda: self.avaliaCaracteres('leConta'))
+        self.leNomeBanco.textChanged.connect(lambda: self.avaliaCaracteres('leNomeBanco'))
 
     def iniciaCamposPessoais(self):
         self.leRg.editingFinished.connect(lambda: self.leRg.setText(mascaraRG(self.leRg.text())))

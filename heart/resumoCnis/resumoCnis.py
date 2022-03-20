@@ -16,6 +16,7 @@ from modelos.especieBenefORM import EspecieBene
 from util.enums.aposentadoriaEnums import FatorTmpInsalubridade, GrauDeficiencia
 from util.enums.dashboardEnums import TelaAtual
 from util.enums.newPrevEnums import TipoContribuicao, TipoEdicao, Prioridade, ItemOrigem
+from util.enums.periodosImportantesEnum import Evento
 from util.enums.resumoCnisEnums import TelaResumo, TipoBotaoResumo, TipoContribuicao, TipoVinculo
 from util.enums.databaseEnums import DatabaseEnum
 from util.helpers.calculos import tempoContribPorVinculo, tempoContribPorCompetencias
@@ -69,7 +70,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
         self.tblCadContrib.resizeColumnsToContents()
 
         self.efeitos.shadowCards([self.pbAddContrib, self.pbAddBene], radius=10, offset=(1, 4), color=(63, 63, 63, 100))
-        self.efeitos.shadowCards([self.frTempoEspecial], radius=20, offset=(0, 0), color=(80, 80, 80, 100))
+        self.efeitos.shadowCards([self.frTempoEspecial, self.frRightInfo], radius=20, offset=(0, 0), color=(80, 80, 80, 100))
 
         self.iniciaCampos()
 
@@ -703,6 +704,54 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             self.vlResumos.addWidget(ItemVazioCnis(self))
 
         self.wdgScroll.setLayout(self.vlResumos)
+        self.carregaTempoVinculosNaTela()
+
+    def carregaTempoVinculosNaTela(self):
+        listaVinculos: List[CnisVinculos] = CnisVinculos.select().where(
+            CnisVinculos.clienteId == self.cliente.clienteId,
+            CnisVinculos.dataInicio is not None,
+            CnisVinculos.dataFim is not None,
+            CnisVinculos.dadoFaltante == False,
+        ).order_by(
+            CnisVinculos.dataInicio
+        )
+
+        tempoAte94 = tempoContribPorVinculo(listaVinculos, dataLimite=Evento.trocaMoedaRS.value)
+        tempoAte98 = tempoContribPorVinculo(listaVinculos, dataLimite=datetime(1998, 1, 1).date())
+        tempoAte2019 = tempoContribPorVinculo(listaVinculos, dataLimite=Evento.reforma2019.value)
+        tempoAteHoje = tempoContribPorVinculo(listaVinculos, dataLimite=datetime.today().date())
+
+        # Até a troca de moeda em 1994
+        if tempoAte94.years <= 0:
+            self.lbTpAte94.setText('-')
+        elif tempoAte94.days >= 0:
+            self.lbTpAte94.setText(f"{tempoAte94.years} anos, {tempoAte94.months} meses e {tempoAte94.days} dias")
+        else:
+            self.lbTpAte94.setText(f"{tempoAte94.years} anos e {tempoAte94.months} meses")
+
+        # Até a reforma em 1998
+        if tempoAte98.years <= 0:
+            self.lbTpAte98.setText('-')
+        elif tempoAte98.days >= 0:
+            self.lbTpAte98.setText(f"{tempoAte98.years} anos, {tempoAte98.months} meses e {tempoAte98.days} dias")
+        else:
+            self.lbTpAte98.setText(f"{tempoAte98.years} anos e {tempoAte98.months} meses")
+
+        # Até a reforma de 2019
+        if tempoAte2019.years <= 0:
+            self.lbTpAte2019.setText('-')
+        elif tempoAte2019.days >= 0:
+            self.lbTpAte2019.setText(f"{tempoAte2019.years} anos, {tempoAte2019.months} meses e {tempoAte2019.days} dias")
+        else:
+            self.lbTpAte2019.setText(f"{tempoAte2019.years} anos e {tempoAte2019.months} meses")
+
+        # Até hoje
+        if tempoAteHoje.years <= 0:
+            self.lbTpAteHoje.setText('-')
+        elif tempoAteHoje.days >= 0:
+            self.lbTpAteHoje.setText(f"{tempoAteHoje.years} anos, {tempoAteHoje.months} meses e {tempoAteHoje.days} dias")
+        else:
+            self.lbTpAteHoje.setText(f"{tempoAteHoje.years} anos e {tempoAteHoje.months} meses")
 
     def contribsParaCadastrar(self) -> List:
         listaContrib: List[ItemContribuicao] = []

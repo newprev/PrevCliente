@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1181</width>
-    <height>680</height>
+    <height>690</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -304,7 +304,7 @@
                   <item alignment="Qt::AlignBottom">
                    <widget class="QPushButton" name="pbEmpresas">
                     <property name="text">
-                     <string>Empresas</string>
+                     <string>Vínculos</string>
                     </property>
                     <property name="checkable">
                      <bool>true</bool>
@@ -718,30 +718,80 @@ QComboBox::down-arrow:on {
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">#pbInserirResumo {
+             <string notr="true">/*------------------ Push button ------------------*/
+#pbInserirResumo {
 	font: 12pt &quot;Avenir LT Std&quot;;
 	color: #3F4E8C;
 	
 	border: 2px solid #3F4E8C;
 	border-radius: 8px;
 	padding: 6px;
+}
+
+/*------------------ Labels ------------------*/
+QLabel {
+	font: 12pt &quot;Avenir LT Std&quot;;
+}
+
+#lbInfoTmpContribuicao {
+	font-weight: 750;
+	color: #3F4E8C;
+}
+
+#lbInfoTpAte94, #lbInfoTpAte98,
+#lbInfoTpAte2019, #lbInfoTpAteHoje {
+	font: 11pt &quot;Avenir LT Std&quot;;
+	color: black;
+	
+	font-weight: 120;
+	line-height: 24px;
+
+	margin: 2px 0px 0px 0px;
+}
+
+#lbTpAte94, #lbTpAte98,
+#lbTpAte2019, #lbTpAteHoje {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: black;
+	
+	font-weight: 750;
+	line-height: 24px;
+
+	margin: 2px 0px 0px 0px;
+}
+
+/*------------------ Frames ------------------*/
+#frTmpContrib {
+	background-color: #F9F9F9;
+	border: 0px solid none;
+	
+	border-radius: 8px;
+}
+
+#frRightInfo {
+	border-radius: 8px;
+
+	background-color: white;
 }</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_8">
              <property name="topMargin">
-              <number>0</number>
+              <number>8</number>
+             </property>
+             <property name="rightMargin">
+              <number>12</number>
              </property>
              <property name="bottomMargin">
               <number>0</number>
              </property>
              <property name="horizontalSpacing">
-              <number>32</number>
+              <number>0</number>
              </property>
              <property name="verticalSpacing">
               <number>16</number>
              </property>
              <item row="0" column="0">
-              <widget class="QFrame" name="frame">
+              <widget class="QFrame" name="frLeftVinculos">
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
                </property>
@@ -834,7 +884,7 @@ QComboBox::down-arrow:on {
                      <x>0</x>
                      <y>0</y>
                      <width>583</width>
-                     <height>469</height>
+                     <height>471</height>
                     </rect>
                    </property>
                    <property name="sizePolicy">
@@ -865,17 +915,168 @@ QComboBox::down-arrow:on {
                </layout>
               </widget>
              </item>
+             <item row="0" column="2" alignment="Qt::AlignTop">
+              <widget class="QFrame" name="frRightInfo">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_19">
+                <item row="0" column="0">
+                 <widget class="QFrame" name="frTmpContrib">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>270</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_7">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>8</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>8</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>8</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>8</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="lbInfoTmpContribuicao">
+                     <property name="text">
+                      <string>Tempo de contribuição</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QFrame" name="frame_8">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_18">
+                   <item row="0" column="0" colspan="2">
+                    <widget class="QLabel" name="lbInfoTpAte94">
+                     <property name="text">
+                      <string>Até 1994:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0" colspan="2">
+                    <widget class="QLabel" name="lbTpAte94">
+                     <property name="text">
+                      <string>1 anos e 5 meses</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="0" colspan="2">
+                    <widget class="QLabel" name="lbInfoTpAte98">
+                     <property name="text">
+                      <string>Até 1998:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="4" column="0" colspan="2">
+                    <widget class="QLabel" name="lbInfoTpAte2019">
+                     <property name="text">
+                      <string>Até 2019 - EC:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="5" column="0" colspan="2">
+                    <widget class="QLabel" name="lbTpAte2019">
+                     <property name="text">
+                      <string>3 anos</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="0" colspan="2">
+                    <widget class="QLabel" name="lbInfoTpAteHoje">
+                     <property name="text">
+                      <string>Até hoje:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="7" column="0" colspan="2">
+                    <widget class="QLabel" name="lbTpAteHoje">
+                     <property name="text">
+                      <string>10 anos e 7 meses</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="0" colspan="2">
+                    <widget class="QLabel" name="lbTpAte98">
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
              <item row="0" column="1">
               <spacer name="horizontalSpacer_2">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::MinimumExpanding</enum>
-               </property>
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="3">
+              <spacer name="horizontalSpacer_12">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>24</width>
                  <height>20</height>
                 </size>
                </property>

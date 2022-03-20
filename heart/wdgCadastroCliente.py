@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QLineEdit
 from PyQt5.QtCore import Qt
+import sqlite3
+import peewee
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -10,6 +12,7 @@ from Design.CustomWidgets.newToast import QToaster
 from heart.localStyleSheet.cadastroCliente import etapaCadatro
 
 from cache.cacheEscritorio import CacheEscritorio
+from systemLog.logs import logPrioridade
 
 from modelos.clienteORM import Cliente
 from modelos.escritoriosORM import Escritorios
@@ -19,6 +22,7 @@ from modelos.clienteProfissao import ClienteProfissao
 from modelos.clienteInfoBanco import ClienteInfoBanco
 
 from repositorios.integracaoRepositorio import IntegracaoRepository
+from util.enums.newPrevEnums import TipoEdicao
 
 from util.helpers.dateHelper import strToDate, calculaIdade
 from util.enums.dashboardEnums import TelaAtual, Navegacao, EtapaCadastraCliente
@@ -417,7 +421,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             self.clienteAtual.dataNascimento = self.dtNascimento.date().toPyDate().strftime('%Y-%m-%d')
 
         elif info == 'cpf':
-            self.clienteAtual.cpfCliente = self.leCpf.text()
+            self.clienteAtual.cpfCliente = unmaskAll(self.leCpf.text())
 
         elif info == 'nomeMae':
             self.clienteAtual.nomeMae = self.leNomeDaMae.text()
@@ -558,6 +562,15 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.cbxEstadoCivil.clear()
         self.cbxEscolaridade.clear()
 
+    def sairCadastro(self):
+        if self.clienteAtual.clienteId is not None:
+            self.deletaCliente(self.clienteAtual.clienteId)
+        else:
+            self.clienteAtual.delete().execute()
+
+        self.limpaTudo()
+        self.dashboard.trocaTela(TelaAtual.Cliente)
+
     def salvaEtapaBancaria(self):
         if self.dadosBancarios is None:
             self.dadosBancarios = ClienteInfoBanco()
@@ -596,7 +609,22 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         if self.clienteAtual.escritorioId is None:
             self.clienteAtual.escritorioId = self.escritorioAtual.escritorioId
 
-        self.clienteAtual.save()
+        try:
+            self.clienteAtual.save()
+        except sqlite3.IntegrityError as err:
+            logPrioridade("salvaEtapaPessoal<wdgCadastroCliente>", tipoEdicao=TipoEdicao.insert)
+            popUpOkAlerta(
+                "Caso queira fazer uma simulação, acesse o menu da calculadora rápida.",
+                titulo="Cliente já cadastrado.",
+                funcao=self.sairCadastro,
+            )
+        except peewee.IntegrityError as err:
+            logPrioridade("salvaEtapaPessoal<wdgCadastroCliente>", tipoEdicao=TipoEdicao.insert)
+            popUpOkAlerta(
+                "Caso queira fazer uma simulação, acesse o menu da calculadora rápida.",
+                titulo="Cliente já cadastrado.",
+                funcao=self.sairCadastro,
+            )
 
         self.avaliaInsereTelefone()
         self.avaliaInsereTelefoneSecundario()

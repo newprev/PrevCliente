@@ -60,7 +60,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
         self.cliente = None
 
         self.tblContribuicoes.horizontalHeader().show()
-        # self.tblContribuicoes.hideColumn(0)
+        self.tblContribuicoes.hideColumn(0)
 
         self.tblBeneficios.horizontalHeader().show()
         self.tblBeneficios.hideColumn(0)
@@ -231,21 +231,22 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
             for linha in linhasSelecionadas:
                 itemIds.append(int(self.tblContribuicoes.item(linha.row(), 0).text()))
 
-            if fatorInsalubridade != -1:
-                ItemContribuicao.update(fatorInsalubridade=fatorInsalubridade).where(ItemContribuicao.itemContribuicaoId.in_(itemIds)).execute()
-            elif fatorInsalubridade is None:
+            if fatorInsalubridade is None:
                 pass
+            elif fatorInsalubridade != -1:
+                ItemContribuicao.update(fatorInsalubridade=fatorInsalubridade).where(ItemContribuicao.itemContribuicaoId.in_(itemIds)).execute()
             else:
                 ItemContribuicao.update(fatorInsalubridade=None).where(ItemContribuicao.itemContribuicaoId.in_(itemIds)).execute()
 
-            if grauDeficiencia != -1:
-                ItemContribuicao.update(grauDeficiencia=grauDeficiencia).where(ItemContribuicao.itemContribuicaoId.in_(itemIds)).execute()
-            elif grauDeficiencia is None:
+            if grauDeficiencia is None:
                 pass
+            elif grauDeficiencia != -1:
+                ItemContribuicao.update(grauDeficiencia=grauDeficiencia).where(ItemContribuicao.itemContribuicaoId.in_(itemIds)).execute()
             else:
                 ItemContribuicao.update(grauDeficiencia=None).where(ItemContribuicao.itemContribuicaoId.in_(itemIds)).execute()
 
             self.carregaTblContribuicoes()
+            self.atualizaTmpContrib()
         else:
             pass
 
@@ -322,8 +323,18 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
                 ItemContribuicao.clienteId == self.cliente.clienteId,
                 ItemContribuicao.seq == self.vinculoAtual.seq
             )
-            print(f"tempoContribPorVinculo: {tempoContribPorVinculo([self.vinculoAtual])}")
-            print(f"tempoContribPorCompetencias: {tempoContribPorCompetencias(listaCompetencias)=}")
+            tempoNormal:relativedelta = tempoContribPorCompetencias(listaCompetencias)
+            tempoEspecial:relativedelta = tempoContribPorCompetencias(listaCompetencias, tempoEspecial=True)
+
+            if tempoNormal.days != 0:
+                self.lbTpNormal.setText(f"{tempoNormal.years} anos, {tempoNormal.months} meses e {tempoNormal.days} dias")
+            else:
+                self.lbTpNormal.setText(f"{tempoNormal.years} anos e {tempoNormal.months} meses")
+
+            if tempoEspecial.years == 0 and tempoEspecial.months == 0:
+                self.lbTpEspecial.setText("-")
+            else:
+                self.lbTpEspecial.setText(f"{tempoEspecial.months} meses")
 
     def avaliaAddContrib(self):
         # Se nb é None, então é uma contribuição. Caso contrário, é um benefício

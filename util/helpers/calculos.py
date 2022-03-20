@@ -40,20 +40,29 @@ def tempoContribPorVinculo(listaVinculos: List[CnisVinculos]) -> relativedelta:
     return tempoContribuicao
 
 
-def tempoContribPorCompetencias(listaContrib: List[ItemContribuicao], especial: bool = False) -> relativedelta:
+def tempoContribPorCompetencias(listaContrib: List[ItemContribuicao], tempoEspecial: bool = False) -> relativedelta:
     tempoContrib: relativedelta = relativedelta()
 
     for index in range(len(listaContrib)):
-        if index == len(listaContrib) - 1:
+        if index != 0 and listaContrib[index - 1].competencia == listaContrib[index].competencia:
+            continue
+                
+        competenciaAtual = listaContrib[index]
+
+        if not tempoEspecial and competenciaAtual.fatorInsalubridade is not None:
+            # Soma o tempo com acrescimo do fator de insalubridade
+            tempoContrib += relativedelta(days=30*competenciaAtual.fatorInsalubridade)
+
+        elif tempoEspecial and competenciaAtual.fatorInsalubridade is not None:
+            # Soma o tempo normalmente. Sem acréscimo do fator
+            tempoContrib += relativedelta(months=1)
+
+        elif tempoEspecial and competenciaAtual.fatorInsalubridade is None:
+            # Não soma o tempo proque não tem fator de insalubridade
             continue
 
-        competenciaAntes: datetime.date = strToDate(listaContrib[index].competencia)
-        competenciaDepois: datetime.date = strToDate(listaContrib[index + 1].competencia)
-        tempoAux = relativedelta(competenciaDepois, competenciaAntes)
+        else:
+            # Tempo normal sem fator de insalubridade
+            tempoContrib += relativedelta(months=1)
 
-        if not especial and listaContrib[index + 1].fatorInsalubridade is not None:
-            tempoAux = tempoAux * listaContrib[index + 1].fatorInsalubridade
-
-        tempoContrib += tempoAux
-
-    return tempoContrib
+    return normalizaData(tempoContrib)

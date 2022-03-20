@@ -29,7 +29,7 @@ class CNISModelo:
         self.expRegData = "[0-1]{1}[0-9]{1}/[0-9]{4}"
         self.expRegDataMenor = "^[0-9]{2}/[0-9]{4}$"
         self.expRegDataMaior = "^[0-9]{2}/[0-9]{2}/[0-9]{4}$"
-        self.expRegNomeEmp = "^[A-Z_ ]{2,20}"
+        self.expRegNomeEmp = "^[A-Z_. ]{2,30}"
         self.expRegNB = "[0-9]{10}"
         self.expRegEspecie = "[0-9]{0,3} - [A-Z]{2,40}"
         self.expRegCNPJ = "[0-9]{2}\.[0-9]{3}\.[0-9]{3}/[0-9]{4}-[0-9]{2}"

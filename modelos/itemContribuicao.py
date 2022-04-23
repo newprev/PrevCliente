@@ -1,7 +1,10 @@
+from logging import info
+
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
+
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import AutoField, CharField, ForeignKeyField, FloatField, DateTimeField, DateField, IntegerField, BooleanField
@@ -97,12 +100,9 @@ class ItemContribuicao(BaseModel, Model):
 
 @post_save(sender=ItemContribuicao)
 def inserindoItemContribuicao(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoItemContribuicao>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoCnisContribuicoes>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    info(f'{TipoLog.DataBase.value}::inserindoItemContribuicao___________________{TABLENAME}')
 
 
 @pre_delete(sender=ItemContribuicao)
 def deletandoItemContribuicao(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoItemContribuicao>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    info(f'{TipoLog.DataBase.value}::deletandoItemContribuicao___________________{TABLENAME}')

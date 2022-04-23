@@ -1,6 +1,9 @@
+from logging import info
+
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
+
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import AutoField, DateField, DateTimeField, FloatField
@@ -48,12 +51,9 @@ class IpcaMensal(BaseModel, Model):
 
 @post_save(sender=IpcaMensal)
 def inserindoIpcaMensal(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoIpcaMensal>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoIpcaMensal>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    info(f'{TipoLog.DataBase.value}::inserindoIpcaMensal___________________{TABLENAME}')
 
 
 @pre_delete(sender=IpcaMensal)
 def deletandoIpcaMensal(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoIpcaMensal>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    info(f'{TipoLog.DataBase.value}::deletandoIpcaMensal___________________{TABLENAME}')

@@ -1,8 +1,10 @@
+from logging import info
+
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
-from util.enums.newPrevEnums import TipoEdicao, Prioridade
+
+from util.enums.logEnums import TipoLog
 
 from peewee import DateField, DateTimeField, IntegerField, ForeignKeyField, CharField
 from datetime import datetime
@@ -129,13 +131,9 @@ class Ppp(BaseModel, Model):
     
 @post_save(sender=Ppp)
 def inserindoPpp(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoPpp>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoPpp>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    info(f'{TipoLog.DataBase.value}::inserindoPpp___________________{TABLENAME}')
 
 
 @pre_delete(sender=Ppp)
 def deletandoPpp(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoPpp>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
-    
+    info(f'{TipoLog.DataBase.value}::deletandoPpp___________________{TABLENAME}')

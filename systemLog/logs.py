@@ -1,50 +1,71 @@
-from colorama import Fore, init, Back, deinit
+import logging.config
+import sentry_sdk
+from sentry_sdk.integrations.logging import LoggingIntegration
 import os
+from logging import *
+
 from datetime import datetime
-
-from util.enums.logEnums import TipoLog
-from util.enums.newPrevEnums import *
-
-from util.helpers.helpers import datetimeToSql
+from typing import Set
 
 
-def logPrioridade(mensagem: str, tipoEdicao: TipoEdicao = TipoEdicao.select, tipoLog: TipoLog = TipoLog.DataBase, priodiade: Prioridade = Prioridade.saidaComum):
-    init(autoreset=True)
+class NewLogging:
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(NewLogging, cls).__new__(cls)
+        return cls.instance
 
-    if tipoLog == TipoLog.DataBase:
-        path = os.path.join(os.getcwd(), 'systemLog', 'historicoLogs', f'{datetime.now().date()}-DataBaseLog.txt')
-    elif tipoLog == TipoLog.Cache:
-        path = os.path.join(os.getcwd(), 'systemLog', 'historicoLogs', f'{datetime.now().date()}-CacheLog.txt')
-    else:
-        path = os.path.join(os.getcwd(), 'systemLog', 'historicoLogs', f'{datetime.now().date()}-RestLog.txt')
+    def __init__(self):
+        self.logApi: Logger = None
 
-    if tipoEdicao == tipoEdicao.insert or tipoEdicao == TipoEdicao.update:
-        corDaFonte = Fore.YELLOW
-    elif tipoEdicao == TipoEdicao.delete:
-        corDaFonte = Fore.MAGENTA
-    elif tipoEdicao == TipoEdicao.createTable or tipoEdicao == TipoEdicao.dropTable:
-        corDaFonte = Fore.LIGHTGREEN_EX
-    elif tipoEdicao == TipoEdicao.api:
-        corDaFonte = Fore.BLUE
-    elif tipoEdicao == TipoEdicao.cache:
-        corDaFonte = Fore.GREEN
-    elif tipoEdicao == TipoEdicao.erro:
-        corDaFonte = Fore.RED
-    else:
-        corDaFonte = Fore.CYAN
+        self.iniciaConfiguracao()
+        self.conectarComSentry()
 
-    if priodiade == Prioridade.saidaComum:
-        corDoFundo = Back.RESET
-    elif priodiade == Prioridade.saidaImportante:
-        corDoFundo = Back.YELLOW
-        corDaFonte = Fore.LIGHTWHITE_EX
-    elif priodiade == Prioridade.sync:
-        corDoFundo = Back.RESET
-        corDaFonte = Fore.LIGHTWHITE_EX
+    def iniciaConfiguracao(self):
+        # Handler Root
+        if logging.root.hasHandlers():
+            logging.root.handlers.clear()
+        stdoutFormatter: Formatter = Formatter("[%(asctime)s] %(levelname)s <%(module)s> --> %(message)s")
+        stdoutHandler = StreamHandler()
+        stdoutHandler.setFormatter(stdoutFormatter)
+        logging.root.setLevel(WARNING)
+        logging.root.addHandler(stdoutHandler)
 
-    with open(path, mode='a', encoding='utf-8') as log:
-        log.write(datetimeToSql(datetime.now()) + ' -> ' + mensagem + '\n')
-        log.flush()
+        # Handler API
+        apiFormatter: Formatter = Formatter("[%(asctime)s] %(levelname)s <%(module)s> --> %(message)s")
+        apiLogPath: str = os.path.join(os.curdir, 'systemLog', 'historicoLogs', f'{datetime.now().date()}_API.txt')
+        apiHandler = FileHandler(apiLogPath, 'a')
+        apiHandler.setFormatter(apiFormatter)
+        self.logApi = getLogger('logApi')
+        if self.logApi.hasHandlers():
+            self.logApi.handlers.clear()
+        self.logApi.setLevel(INFO)
+        self.logApi.addHandler(apiHandler)
 
-    print(corDaFonte + corDoFundo + mensagem)
-    deinit()
+    def buscaLogger(self) -> Logger:
+        return self.logApi
+
+    def conectarComSentry(self):
+        sentryIntegration = LoggingIntegration(
+            level=INFO,
+            event_level=INFO
+        )
+        sentry_sdk.init(
+            "https://0ff1b7f5532d427f9cd4b3bcac8f413c@o1205113.ingest.sentry.io/6345373",
+
+            # Set traces_sample_rate to 1.0 to capture 100%
+            # of transactions for performance monitoring.
+            # We recommend adjusting this value in production.
+            traces_sample_rate=1.0,
+            integrations=[sentryIntegration]
+        )
+
+
+class FiltroSistema(Filter):
+    def filter(self, record: LogRecord) -> bool:
+        arquivosSemInteresse: Set[str] = {
+            'selector_events.py',
+            'base.py',
+            'autoreload.py',
+            'log.py'
+        }
+        return record.filename not in arquivosSemInteresse

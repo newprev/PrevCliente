@@ -1,10 +1,12 @@
+from logging import info
+
 from modelos.baseModelORM import BaseModel
 from playhouse.signals import Model, post_save, pre_delete
 
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
-from systemLog.logs import logPrioridade
 
-from peewee import AutoField, CharField, ForeignKeyField, DateTimeField, IntegerField
+from peewee import AutoField, CharField, DateTimeField, IntegerField
 from datetime import datetime
 
 TABLENAME = 'clienteInfoBanco'
@@ -71,12 +73,9 @@ class ClienteInfoBanco(BaseModel, Model):
 
 @post_save(sender=ClienteInfoBanco)
 def inserindoCliente(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoVinculo>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoVinculo>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    info(f'{TipoLog.DataBase.value}::inserindoCliente___________________{TABLENAME}')
 
 
 @pre_delete(sender=ClienteInfoBanco)
 def deletandoCliente(*args, **kwargs):
-    logPrioridade(f'DELETE<inserindoVinculo>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    info(f'{TipoLog.DataBase.value}::deletandoCliente___________________{TABLENAME}')

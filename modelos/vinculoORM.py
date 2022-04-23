@@ -1,7 +1,9 @@
+from logging import info
+
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 
@@ -121,12 +123,9 @@ class CnisVinculos(BaseModel, Model):
 
 @post_save(sender=CnisVinculos)
 def inserindoVinculo(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoVinculo>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoVinculo>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    info(f'{TipoLog.DataBase.value}::inserindoVinculo___________________{TABLENAME}')
 
 
 @pre_delete(sender=CnisVinculos)
 def deletandoVinculo(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoVinculo>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    info(f'{TipoLog.DataBase.value}::deletandoVinculo___________________{TABLENAME}')

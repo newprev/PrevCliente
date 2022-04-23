@@ -1,15 +1,14 @@
-import datetime
-from dateutil.relativedelta import relativedelta
-from typing import List, Union
+from typing import Union
 from calendar import monthrange
 import pandas as pd
 from peewee import SqliteDatabase
 from SQLs.itensContribuicao import selectItensDados
 from math import floor
 import numpy as np
+from logging import error
 
-from util.helpers.dateHelper import calculaIdade, strToDate, dataIdealReforma, calculaQtdContribuicoes, calculaQtdContrib, reformaNoPeriodo, normalizaData, \
-    atividadesConcorrentes, calculaTempoVinculosConcorrentes
+from util.enums.logEnums import TipoLog
+from util.helpers.dateHelper import *
 
 from modelos.vinculoORM import CnisVinculos
 from modelos.itemContribuicao import ItemContribuicao
@@ -21,7 +20,7 @@ from modelos.aposentadoriaORM import Aposentadoria
 from modelos.tetosPrevORM import TetosPrev
 from modelos.ipcaMensalORM import IpcaMensal
 
-from util.enums.newPrevEnums import GeneroCliente, TipoItemContribuicao, ItemOrigem
+from util.enums.newPrevEnums import GeneroCliente, TipoItemContribuicao, ItemOrigem, TipoEdicao, Prioridade
 from util.enums.aposentadoriaEnums import ContribSimulacao, IndiceReajuste, RegraTransicao, RegraGeralAR, TipoAposentadoria
 
 
@@ -40,6 +39,7 @@ class CalculosAposentadoria:
     listaItensContrib: List[ItemContribuicao] = []
     listaRemuneracoes: List[ItemContribuicao] = []
     listaContribuicoes: List[ItemContribuicao] = []
+    listaSimulacoes: List[Aposentadoria] = []
     contribSimulacao: ContribSimulacao
     valorSimulacao: float
     dfTotalContribuicoes: pd.DataFrame
@@ -50,101 +50,101 @@ class CalculosAposentadoria:
     indiceReajuste: float
 
     def __init__(self, processo: Processos, cliente: Cliente, entrevistaParams: dict):
-        self.processo = processo
-        self.cliente = cliente
+        if processo is not None and cliente is not None:
+            self.processo = processo
+            self.cliente = cliente
 
-        # Datas importantes
-        self.dataReforma2019: datetime.date = datetime.date(2019, 11, 13)
-        self.dataTrocaMoeda: datetime.date = datetime.date(1994, 7, 1)
+            # Datas importantes
+            self.dataReforma2019: datetime.date = datetime.date(2019, 11, 13)
+            self.dataTrocaMoeda: datetime.date = datetime.date(1994, 7, 1)
 
-        self.fatorPrevidenciario: int = 1
+            self.fatorPrevidenciario: int = 1
 
-        if self.cliente.genero == 'M':
-            self.enumGeneroCliente = GeneroCliente.masculino
-        else:
-            self.enumGeneroCliente = GeneroCliente.feminino
+            if self.cliente.genero == 'M':
+                self.enumGeneroCliente = GeneroCliente.masculino
+            else:
+                self.enumGeneroCliente = GeneroCliente.feminino
 
-        self.contribSimulacao = entrevistaParams['contribSimulacao']
-        self.valorSimulacao = entrevistaParams['valorSimulacao']
-        self.indiceReajuste: IndiceReajuste = entrevistaParams['indiceReajuste']
-        self.regrasACalcular: List[Union[RegraTransicao, RegraGeralAR]] = [
-            RegraTransicao.pontos,
-            RegraTransicao.reducaoIdadeMinima,
-            RegraTransicao.pedagio50,
-            RegraTransicao.reducaoTempoContribuicao,
-            RegraTransicao.pedagio100,
-            RegraGeralAR.idade,
-            RegraGeralAR.tempoContribuicao,
-            RegraGeralAR.fator85_95
-        ]
+            self.contribSimulacao = entrevistaParams['contribSimulacao']
+            self.valorSimulacao = entrevistaParams['valorSimulacao']
+            self.indiceReajuste: IndiceReajuste = entrevistaParams['indiceReajuste']
+            self.regrasACalcular: List[Union[RegraTransicao, RegraGeralAR]] = [
+                RegraTransicao.pontos,
+                RegraTransicao.reducaoIdadeMinima,
+                RegraTransicao.pedagio50,
+                RegraTransicao.reducaoTempoContribuicao,
+                RegraTransicao.pedagio100,
+                RegraGeralAR.idade,
+                RegraGeralAR.tempoContribuicao,
+                RegraGeralAR.fator85_95
+            ]
 
-        self.regrasAposentadoria = {
-            RegraTransicao.pontos: False,
-            RegraTransicao.reducaoIdadeMinima: False,
-            RegraTransicao.pedagio50: False,
-            RegraTransicao.reducaoTempoContribuicao: False,
-            RegraTransicao.pedagio100: False,
-            RegraGeralAR.fator85_95: False,
-            RegraGeralAR.idade: False,
-            RegraGeralAR.tempoContribuicao: False
-        }
+            self.regrasAposentadoria = {
+                RegraTransicao.pontos: False,
+                RegraTransicao.reducaoIdadeMinima: False,
+                RegraTransicao.pedagio50: False,
+                RegraTransicao.reducaoTempoContribuicao: False,
+                RegraTransicao.pedagio100: False,
+                RegraGeralAR.fator85_95: False,
+                RegraGeralAR.idade: False,
+                RegraGeralAR.tempoContribuicao: False
+            }
 
-        self.valorBeneficios = {
-            RegraTransicao.pontos: 0.0,
-            RegraTransicao.reducaoIdadeMinima: 0.0,
-            RegraTransicao.pedagio50: 0.0,
-            RegraTransicao.pedagio100: 0.0,
-            RegraTransicao.reducaoTempoContribuicao: 0.0,
-            RegraGeralAR.fator85_95: 0.0,
-            RegraGeralAR.idade: 0.0,
-            RegraGeralAR.tempoContribuicao: 0.0
-        }
+            self.valorBeneficios = {
+                RegraTransicao.pontos: 0.0,
+                RegraTransicao.reducaoIdadeMinima: 0.0,
+                RegraTransicao.pedagio50: 0.0,
+                RegraTransicao.pedagio100: 0.0,
+                RegraTransicao.reducaoTempoContribuicao: 0.0,
+                RegraGeralAR.fator85_95: 0.0,
+                RegraGeralAR.idade: 0.0,
+                RegraGeralAR.tempoContribuicao: 0.0
+            }
 
-        self.dibs = {
-            RegraTransicao.pontos: None,
-            RegraTransicao.reducaoIdadeMinima: None,
-            RegraTransicao.pedagio50: None,
-            RegraTransicao.reducaoTempoContribuicao: None,
-            RegraTransicao.pedagio100: None,
-            RegraGeralAR.fator85_95: None,
-            RegraGeralAR.idade: None,
-            RegraGeralAR.tempoContribuicao: None
-        }
+            self.dibs = {
+                RegraTransicao.pontos: None,
+                RegraTransicao.reducaoIdadeMinima: None,
+                RegraTransicao.pedagio50: None,
+                RegraTransicao.reducaoTempoContribuicao: None,
+                RegraTransicao.pedagio100: None,
+                RegraGeralAR.fator85_95: None,
+                RegraGeralAR.idade: None,
+                RegraGeralAR.tempoContribuicao: None
+            }
 
-        self.qtdContrib = {
-            RegraTransicao.pontos: 0,
-            RegraTransicao.pedagio50: 0,
-            RegraTransicao.reducaoIdadeMinima: 0,
-            RegraTransicao.reducaoTempoContribuicao: 0,
-            RegraTransicao.pedagio100: 0,
-            RegraGeralAR.fator85_95: 0,
-            RegraGeralAR.idade: 0,
-            RegraGeralAR.tempoContribuicao: 0
-        }
+            self.qtdContrib = {
+                RegraTransicao.pontos: 0,
+                RegraTransicao.pedagio50: 0,
+                RegraTransicao.reducaoIdadeMinima: 0,
+                RegraTransicao.reducaoTempoContribuicao: 0,
+                RegraTransicao.pedagio100: 0,
+                RegraGeralAR.fator85_95: 0,
+                RegraGeralAR.idade: 0,
+                RegraGeralAR.tempoContribuicao: 0
+            }
 
-        self.tmpContribPorRegra = {
-            RegraTransicao.pontos: None,
-            RegraTransicao.pedagio50: None,
-            RegraTransicao.reducaoIdadeMinima: None,
-            RegraTransicao.reducaoTempoContribuicao: None,
-            RegraTransicao.pedagio100: None,
-            RegraGeralAR.fator85_95: None,
-            RegraGeralAR.idade: None,
-            RegraGeralAR.tempoContribuicao: None
-        }
+            self.tmpContribPorRegra = {
+                RegraTransicao.pontos: None,
+                RegraTransicao.pedagio50: None,
+                RegraTransicao.reducaoIdadeMinima: None,
+                RegraTransicao.reducaoTempoContribuicao: None,
+                RegraTransicao.pedagio100: None,
+                RegraGeralAR.fator85_95: None,
+                RegraGeralAR.idade: None,
+                RegraGeralAR.tempoContribuicao: None
+            }
 
-        self.indiceReajuste = self.buscaIndiceReajuste()
+            self.indiceReajuste = self.buscaIndiceReajuste()
 
-        self.calculaDibsAgoraVai()
-        # self.calculaDibsCorretamente()
-        # self.atualizaDataFrameContribuicoes()
-        # self.calculaValorBeneficios()
+            self.calculaDibsAgoraVai()
+            self.atualizaDataFrameContribuicoes()
+            self.calculaValorBeneficios()
 
-        print(f"{'Regra ':-<50}{'DIB':-^15}{'QtdContrib':-^10}{'Valor Beneficio':->18}{'tmpContribPorRegra':-^70}")
-        for chave, valor in self.dibs.items():
-            tamanhoStr: int = len(chave.name) + 14
-            tamanhoStr -= 2 if isinstance(chave, RegraGeralAR) else 0
-            print(f"{str(chave): <50}{str(valor): ^15}{self.qtdContrib[chave]: ^10} {'R$'+ str(self.valorBeneficios[chave]): ^15}{str(self.tmpContribPorRegra[chave]): ^70}")
+            print(f"{'Regra ':-<50}{'DIB':-^15}{'QtdContrib':-^10}{'Valor Beneficio':->18}{'tmpContribPorRegra':-^70}")
+            for chave, valor in self.dibs.items():
+                tamanhoStr: int = len(chave.name) + 14
+                tamanhoStr -= 2 if isinstance(chave, RegraGeralAR) else 0
+                print(f"{str(chave): <50}{str(valor): ^15}{self.qtdContrib[chave]: ^10} {'R$'+ str(self.valorBeneficios[chave]): ^15}{str(self.tmpContribPorRegra[chave]): ^70}")
 
     def atingiuIdadeAR(self, dib: datetime.date, qtdContribuicoes: int) -> bool:
         """
@@ -519,49 +519,49 @@ class CalculosAposentadoria:
     #
     #         return True
 
-    def calculaDibsCorretamente(self):
-        tempoContribuicao: relativedelta = relativedelta(days=0)
-        competenciaFinal: datetime.date = datetime.date.min
-        qtdContribuicoes: int = 0
-
-        listaDeVinculos: List[CnisVinculos] = CnisVinculos.select().where(
-            CnisVinculos.clienteId == self.cliente.clienteId,
-            CnisVinculos.dataInicio is not None,
-            CnisVinculos.dataFim is not None,
-            CnisVinculos.dadoFaltante == False,
-        ).order_by(
-            CnisVinculos.dataInicio
-        )
-        ItemContribuicao.delete().where(
-            ItemContribuicao.clienteId == self.cliente.clienteId,
-            ItemContribuicao.dadoOrigem == ItemOrigem.SIMULACAO.value
-        ).execute()
-
-        for vinculo in listaDeVinculos:
-            competenciaFinal = strToDate(vinculo.dataFim)
-            competenciaInicial = strToDate(vinculo.dataInicio)
-            tempoContribAux = relativedelta(strToDate(vinculo.dataFim), strToDate(vinculo.dataInicio))
-            qtdContribuicoes += calculaQtdContribuicoes(strToDate(vinculo.dataInicio), strToDate(vinculo.dataFim))
-
-            if competenciaFinal < self.dataReforma2019:
-                tempoContribuicao += tempoContribAux
-            else:
-                tempoContribAux.days = 0
-                tempoContribuicao += tempoContribAux
-
-            if competenciaFinal < datetime.date.today():
-                self.calculaDibsRegrasTransicao(competenciaInicial, competenciaFinal, qtdContribuicoes, tempoContribuicao)
-                self.calculaDibsDireitoAdquirido(competenciaInicial, competenciaFinal, qtdContribuicoes, tempoContribuicao)
-
-        if len(self.regrasACalcular) != 0:
-            contribARepetir: ItemContribuicao = ItemContribuicao.select().where(
-                ItemContribuicao.clienteId == self.cliente.clienteId,
-            ).order_by(
-                ItemContribuicao.itemContribuicaoId.desc()
-            ).get()
-            self.insereItensSimulacao(competenciaFinal, contribARepetir, qtdContribuicoes, tempoContribuicao)
-
-        return True
+    # def calculaDibsCorretamente(self):
+    #     tempoContribuicao: relativedelta = relativedelta(days=0)
+    #     competenciaFinal: datetime.date = datetime.date.min
+    #     qtdContribuicoes: int = 0
+    #
+    #     listaDeVinculos: List[CnisVinculos] = CnisVinculos.select().where(
+    #         CnisVinculos.clienteId == self.cliente.clienteId,
+    #         CnisVinculos.dataInicio is not None,
+    #         CnisVinculos.dataFim is not None,
+    #         CnisVinculos.dadoFaltante == False,
+    #     ).order_by(
+    #         CnisVinculos.dataInicio
+    #     )
+    #     ItemContribuicao.delete().where(
+    #         ItemContribuicao.clienteId == self.cliente.clienteId,
+    #         ItemContribuicao.dadoOrigem == ItemOrigem.SIMULACAO.value
+    #     ).execute()
+    #
+    #     for vinculo in listaDeVinculos:
+    #         competenciaFinal = strToDate(vinculo.dataFim)
+    #         competenciaInicial = strToDate(vinculo.dataInicio)
+    #         tempoContribAux = relativedelta(strToDate(vinculo.dataFim), strToDate(vinculo.dataInicio))
+    #         qtdContribuicoes += calculaQtdContribuicoes(strToDate(vinculo.dataInicio), strToDate(vinculo.dataFim))
+    #
+    #         if competenciaFinal < self.dataReforma2019:
+    #             tempoContribuicao += tempoContribAux
+    #         else:
+    #             tempoContribAux.days = 0
+    #             tempoContribuicao += tempoContribAux
+    #
+    #         if competenciaFinal < datetime.date.today():
+    #             self.calculaDibsRegrasTransicao(competenciaInicial, competenciaFinal, qtdContribuicoes, tempoContribuicao)
+    #             self.calculaDibsDireitoAdquirido(competenciaInicial, competenciaFinal, qtdContribuicoes, tempoContribuicao)
+    #
+    #     if len(self.regrasACalcular) != 0:
+    #         contribARepetir: ItemContribuicao = ItemContribuicao.select().where(
+    #             ItemContribuicao.clienteId == self.cliente.clienteId,
+    #         ).order_by(
+    #             ItemContribuicao.itemContribuicaoId.desc()
+    #         ).get()
+    #         self.insereItensSimulacao(competenciaFinal, contribARepetir, qtdContribuicoes, tempoContribuicao)
+    #
+    #     return True
 
     def calculaDibsAgoraVai(self):
         tempoContribuicao: relativedelta = relativedelta(years=0, months=0, days=0)
@@ -581,7 +581,11 @@ class CalculosAposentadoria:
             ItemContribuicao.dadoOrigem == ItemOrigem.SIMULACAO.value
         ).execute()
 
-        for vinculo in listaDeVinculos:
+        for index, vinculo in enumerate(listaDeVinculos):
+            competenciaFinal = strToDate(vinculo.dataFim)
+            competenciaInicial = strToDate(vinculo.dataInicio)
+            qtdContribuicoes += calculaQtdContribuicoes(strToDate(vinculo.dataInicio), strToDate(vinculo.dataFim))
+
             if reformaNoPeriodo(vinculo.dataInicio, vinculo.dataFim, self.dataReforma2019):
                 # Antes da reforma
                 tempoContribuicao += relativedelta(self.dataReforma2019, strToDate(vinculo.dataInicio))
@@ -603,11 +607,20 @@ class CalculosAposentadoria:
                 passouDataReforma = True
 
             tempoContribuicao = normalizaData(tempoContribuicao)
+            if index > 1:
+                tempoContribuicao -= self.tempoVinculosConcorrentes(listaDeVinculos[index-1:index+1])
 
+            if competenciaFinal < datetime.date.today():
+                self.calculaDibsRegrasTransicao(competenciaInicial, competenciaFinal, qtdContribuicoes, tempoContribuicao)
+                self.calculaDibsDireitoAdquirido(competenciaInicial, competenciaFinal, qtdContribuicoes, tempoContribuicao)
 
-        print(f"Antes: {tempoContribuicao}")
-        tempoContribuicao -= self.tempoVinculosConcorrentes(listaDeVinculos)
-        print(f"Depois: {tempoContribuicao}")
+        if len(self.regrasACalcular) != 0:
+            contribARepetir: ItemContribuicao = ItemContribuicao.select().where(
+                ItemContribuicao.clienteId == self.cliente.clienteId,
+            ).order_by(
+                ItemContribuicao.itemContribuicaoId.desc()
+            ).get()
+            self.insereItensSimulacao(competenciaFinal, contribARepetir, qtdContribuicoes, tempoContribuicao)
 
     def calculaFatorPrevidenciario(self, dibAtual: datetime.date, tempoContribCalculado: relativedelta):
         """
@@ -674,6 +687,49 @@ class CalculosAposentadoria:
         self.valorBeneficios[RegraGeralAR.idade] = self.rmiIdadeAR()
         self.valorBeneficios[RegraGeralAR.tempoContribuicao] = self.rmiTmpContribuicaoAR()
         self.valorBeneficios[RegraGeralAR.fator85_95] = self.rmiRegra85_95()
+
+    def geraSimulacoes(self) -> List[Aposentadoria]:
+        seq: int = 0
+
+        for chave, atingiu in self.regrasAposentadoria.items():
+            seq += 1
+
+            if chave == RegraTransicao.pontos:
+                tipo = TipoAposentadoria.pontos.value
+            elif chave == RegraTransicao.pedagio50:
+                tipo = TipoAposentadoria.pedagio50.value
+            elif chave == RegraGeralAR.tempoContribuicao:
+                tipo = TipoAposentadoria.tempoContribAR.value
+            elif chave == RegraGeralAR.idade:
+                tipo = TipoAposentadoria.idadeAR.value
+            elif chave == RegraTransicao.reducaoIdadeMinima:
+                tipo = TipoAposentadoria.redIdadeMinima.value
+            elif chave == RegraTransicao.reducaoTempoContribuicao:
+                tipo = TipoAposentadoria.redTempoContrib.value
+            elif chave == RegraTransicao.pedagio100:
+                tipo = TipoAposentadoria.pedagio100.value
+            else:
+                tipo = TipoAposentadoria.regra8595.value
+
+            self.listaSimulacoes.append(
+                Aposentadoria(
+                    clienteId=self.cliente.clienteId,
+                    # processoId=self.processo.processoId,
+                    seq=seq,
+                    tipo=tipo,
+                    contribSimulacao=self.contribSimulacao.name,
+                    valorSimulacao=self.valorSimulacao,
+                    idadeCliente=calculaIdade(strToDate(self.cliente.dataNascimento), self.dibs[chave]).years if self.dibs[chave] is not None else 0,
+                    qtdContribuicoes=self.qtdContrib[chave],
+                    contribMeses=self.tmpContribPorRegra[chave].months if self.tmpContribPorRegra[chave] is not None else 0,
+                    contribAnos=self.tmpContribPorRegra[chave].years if self.tmpContribPorRegra[chave] is not None else 0,
+                    valorBeneficio=self.valorBeneficios[chave],
+                    possuiDireito=atingiu,
+                    dib=self.dibs[chave] if self.dibs[chave] is not None else '2021-12-04',
+                    der=datetime.date.min,
+                )
+            )
+        return self.listaSimulacoes
 
     def insereItensSimulacao(self, competenciaAtual, itemRepetir, qtdContribuicoes, tempoContribuicao):
         mesesAMais = 0
@@ -1066,45 +1122,17 @@ class CalculosAposentadoria:
 
         return True
 
-    def salvaAposentadorias(self):
-        seq: int = 0
-        self.processo.dataUltAlt = datetime.datetime.now()
-        self.processo.save()
+    def salvaAposentadorias(self) -> bool:
+        try:
+            self.processo.dataUltAlt = datetime.datetime.now()
+            self.processo.save()
 
-        for chave, atingiu in self.regrasAposentadoria.items():
-            seq += 1
+            for simulacao in self.listaSimulacoes:
+                simulacao.processoId = self.processo.processoId
+                simulacao.save()
 
-            if chave == RegraTransicao.pontos:
-                tipo = TipoAposentadoria.pontos.value
-            elif chave == RegraTransicao.pedagio50:
-                tipo = TipoAposentadoria.pedagio50.value
-            elif chave == RegraGeralAR.tempoContribuicao:
-                tipo = TipoAposentadoria.tempoContribAR.value
-            elif chave == RegraGeralAR.idade:
-                tipo = TipoAposentadoria.idadeAR.value
-            elif chave == RegraTransicao.reducaoIdadeMinima:
-                tipo = TipoAposentadoria.redIdadeMinima.value
-            elif chave == RegraTransicao.reducaoTempoContribuicao:
-                tipo = TipoAposentadoria.redTempoContrib.value
-            elif chave == RegraTransicao.pedagio100:
-                tipo = TipoAposentadoria.pedagio100.value
-            else:
-                tipo = TipoAposentadoria.regra8595.value
+            return True
+        except Exception as err:
+            error(f'{TipoLog.Cache.value}::salvaAposentadorias', extra={"err": err})
+            return False
 
-            Aposentadoria(
-                clienteId=self.cliente.clienteId,
-                processoId=self.processo.processoId,
-                seq=seq,
-                tipo=tipo,
-                contribSimulacao=self.contribSimulacao.name,
-                valorSimulacao=self.valorSimulacao,
-                idadeCliente=calculaIdade(strToDate(self.cliente.dataNascimento), self.dibs[chave]).years if self.dibs[chave] is not None else 0,
-                qtdContribuicoes=self.qtdContrib[chave],
-                contribMeses=self.tmpContribPorRegra[chave].months if self.tmpContribPorRegra[chave] is not None else 0,
-                contribAnos=self.tmpContribPorRegra[chave].years if self.tmpContribPorRegra[chave] is not None else 0,
-                valorBeneficio=self.valorBeneficios[chave],
-                possuiDireito=atingiu,
-                dib=self.dibs[chave] if self.dibs[chave] is not None else '2021-12-04',
-                der=datetime.date.min,
-            ).save()
-        return True

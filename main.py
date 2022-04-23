@@ -39,6 +39,7 @@ from modelos.tipoBeneficioORM import TipoBeneficioModel
 from modelos.tiposESubtipos.tipoAposentadoriaORM import TipoAposentadoria
 
 from repositorios.informacoesRepositorio import ApiInformacoes
+from systemLog.logs import NewLogging
 from util.enums.databaseEnums import DatabaseEnum
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 from util.enums.newPrevEnums import TiposConexoes
@@ -57,6 +58,7 @@ class Main(Ui_MainWindow, QMainWindow):
         self.tipoConexao = TiposConexoes.sqlite
         self.dbConnection = ConfigConnection(instanciaBanco=self.tipoConexao)
         self.db = self.dbConnection.getDatabase()
+        self.newLogger = None
         self.loginPage = None
         self.center()
         self.show()
@@ -66,7 +68,7 @@ class Main(Ui_MainWindow, QMainWindow):
 
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.progresso)
-        self.timer.start(35)
+        self.timer.start(1)
 
     def buscaPathTriggers(self) -> str:
         pathTriggers = os.path.join("SQLs", "triggers")
@@ -74,6 +76,9 @@ class Main(Ui_MainWindow, QMainWindow):
             return pathTriggers
         else:
             return ""
+
+    def carregaLogsConfig(self):
+        self.newLogger = NewLogging()
 
     async def carregaTabelasIniciais(self):
         if TipoBeneficioModel.select().count() == 0:
@@ -94,7 +99,11 @@ class Main(Ui_MainWindow, QMainWindow):
 
         self.pbarSplash.setValue(self.contador)
 
-        if 10 <= self.contador < 70:
+        if 0 < self.contador < 2:
+            self.carregaLogsConfig()
+
+
+        elif 10 <= self.contador < 70:
             if self.contador == 10:
                 self.timer.stop()
                 self.iniciaBancosETelas()

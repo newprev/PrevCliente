@@ -1,8 +1,11 @@
+from logging import info
+
 from modelos.baseModelORM import BaseModel
 from modelos.clienteORM import Cliente
 from modelos.processosORM import Processos
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
+
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 from util.helpers.helpers import getRegrasApos, getContribSimulacao
 
@@ -89,12 +92,9 @@ class Aposentadoria(BaseModel, Model):
 
 @post_save(sender=Aposentadoria)
 def inserindoAposentadoria(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoAposentadoria>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoAposentadoria>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    info(f'{TipoLog.DataBase.value}::inserindoAposentadoria___________________{TABLENAME}')
 
 
 @pre_delete(sender=Aposentadoria)
 def deletandoAposentadoria(*args, **kwargs):
-    logPrioridade(f'DELETE<inserindoAposentadoria>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    info(f'{TipoLog.DataBase.value}::deletandoAposentadoria___________________{TABLENAME}')

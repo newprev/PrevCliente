@@ -7,6 +7,8 @@
     <file>down.png</file>
   </qresource>
   <qresource prefix="opcoes">
+    <file>blueInsalubridade.png</file>
+    <file>blueFaltaInfo.png</file>
     <file>duplicate.png</file>
     <file>busca.png</file>
     <file>addIcon.png</file>

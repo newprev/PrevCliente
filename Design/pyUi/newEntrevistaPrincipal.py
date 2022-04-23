@@ -882,6 +882,16 @@ class Ui_wdgEntrevistaPrincipal(object):
 "    background-color: #3F4E8C;\n"
 "}\n"
 "\n"
+"#pbCancelarSimulacao {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"\n"
+"    border-radius: 8px;\n"
+"    padding: 10px;\n"
+"    background-color: white;\n"
+"    border: 2px solid #3F4E8C;\n"
+"}\n"
+"\n"
 "")
         self.pgSimulacao.setObjectName("pgSimulacao")
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.pgSimulacao)
@@ -907,6 +917,31 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.frItensSimulacao.setObjectName("frItensSimulacao")
         self.gridLayout_6 = QtWidgets.QGridLayout(self.frItensSimulacao)
         self.gridLayout_6.setObjectName("gridLayout_6")
+        self.frBotoesBottom = QtWidgets.QFrame(self.frItensSimulacao)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frBotoesBottom.sizePolicy().hasHeightForWidth())
+        self.frBotoesBottom.setSizePolicy(sizePolicy)
+        self.frBotoesBottom.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frBotoesBottom.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frBotoesBottom.setObjectName("frBotoesBottom")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.frBotoesBottom)
+        self.horizontalLayout_8.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_8.setSpacing(0)
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.pbSalvarSimulacao = QtWidgets.QPushButton(self.frBotoesBottom)
+        self.pbSalvarSimulacao.setMinimumSize(QtCore.QSize(185, 45))
+        self.pbSalvarSimulacao.setMaximumSize(QtCore.QSize(185, 45))
+        self.pbSalvarSimulacao.setSizeIncrement(QtCore.QSize(0, 0))
+        self.pbSalvarSimulacao.setObjectName("pbSalvarSimulacao")
+        self.horizontalLayout_8.addWidget(self.pbSalvarSimulacao)
+        self.pbCancelarSimulacao = QtWidgets.QPushButton(self.frBotoesBottom)
+        self.pbCancelarSimulacao.setMinimumSize(QtCore.QSize(185, 45))
+        self.pbCancelarSimulacao.setMaximumSize(QtCore.QSize(185, 45))
+        self.pbCancelarSimulacao.setObjectName("pbCancelarSimulacao")
+        self.horizontalLayout_8.addWidget(self.pbCancelarSimulacao)
+        self.gridLayout_6.addWidget(self.frBotoesBottom, 1, 0, 1, 2)
         self.scrollAreaSimulacoes = QtWidgets.QScrollArea(self.frItensSimulacao)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -928,12 +963,6 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.scaSimulacoes.setObjectName("scaSimulacoes")
         self.scrollAreaSimulacoes.setWidget(self.scaSimulacoes)
         self.gridLayout_6.addWidget(self.scrollAreaSimulacoes, 0, 0, 1, 2)
-        self.pbSalvarSimulacao = QtWidgets.QPushButton(self.frItensSimulacao)
-        self.pbSalvarSimulacao.setMinimumSize(QtCore.QSize(185, 45))
-        self.pbSalvarSimulacao.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.pbSalvarSimulacao.setSizeIncrement(QtCore.QSize(0, 0))
-        self.pbSalvarSimulacao.setObjectName("pbSalvarSimulacao")
-        self.gridLayout_6.addWidget(self.pbSalvarSimulacao, 1, 0, 1, 2, QtCore.Qt.AlignHCenter)
         self.horizontalLayout_7.addWidget(self.frItensSimulacao)
         self.stkEntrevista.addWidget(self.pgSimulacao)
         self.horizontalLayout_4.addWidget(self.stkEntrevista)
@@ -976,6 +1005,7 @@ class Ui_wdgEntrevistaPrincipal(object):
         self.lbInfoQuestionario.setText(_translate("wdgEntrevistaPrincipal", "Questionário"))
         self.pbFinalizarEntrevista.setText(_translate("wdgEntrevistaPrincipal", "Finalizar entrevista"))
         self.pbSalvarSimulacao.setText(_translate("wdgEntrevistaPrincipal", "Salvar simulação"))
+        self.pbCancelarSimulacao.setText(_translate("wdgEntrevistaPrincipal", "Cancelar simulação"))
 import Resources.newEntrevistaPrincipal
 
 

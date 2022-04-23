@@ -1,8 +1,8 @@
 import requests as http
 from requests.exceptions import *
+from logging import debug, info, warning, error
 
 from Configs.systemConfig import buscaSystemConfigs
-from systemLog.logs import logPrioridade
 from util.enums.newPrevEnums import *
 from util.enums.logEnums import TipoLog
 from util.enums.configEnums import TipoConexao
@@ -25,6 +25,7 @@ class EscritorioRepositorio:
 
     def buscaEscritorio(self, escritorioId) -> Escritorios:
         url: str = self.baseUrl + f'escritorio/{escritorioId}/'
+        info(f"{TipoLog.Rest.value}::buscaEscritorio ____________________ GET<{url}>")
 
         try:
             response = http.get(url)
@@ -32,11 +33,11 @@ class EscritorioRepositorio:
             if 199 < response.status_code < 400:
 
                 escritorioModelo = Escritorios().fromDict(response.json())
-                logPrioridade(f"API____________________GET<escritorio/<int:id>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaComum)
+                debug(f"{TipoLog.Rest.value}[{response.status_code}]::buscaEscritorio ____________________ GET<{url}>")
                 return escritorioModelo
             else:
-                logPrioridade(f"API____________________GET<escritorio/<int:id>/Erro>:::{url}", tipoEdicao=TipoEdicao.api, tipoLog=TipoLog.Rest, priodiade=Prioridade.saidaImportante)
+                warning(f"{TipoLog.Rest.value}[{response.status_code}]::buscaEscritorio ____________________ GET<{url}>", extra={"json": response.json()})
                 return Escritorios()
         except ConnectionError as err:
-            print(f'buscaEscritorio ({type(err)}): {err}')
+            error(f'{TipoLog.Rest.value}::buscaEscritorio', extra={"err": err})
             return ErroConexao.ConnectionError

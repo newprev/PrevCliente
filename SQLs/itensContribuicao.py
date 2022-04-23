@@ -72,11 +72,11 @@ def remuEContrib(clienteId: int, seq: int) -> str:
     con.grauDeficiencia, IFNULL(con.salContribuicao, 0) AS salContribuicao, con.indicadores,
     
     --Conversão monetária
-    cm.sinal, cm.convMonId, cm.nomeMoeda
+    IFNULL(cm.sinal, 'R$'), cm.convMonId, cm.nomeMoeda
     
     --Tetos previdenciários
 FROM itemContribuicao con
-    JOIN convMon cm 
+    LEFT JOIN convMon cm 
         ON con.competencia >= cm.dataInicial
             AND con.competencia <= cm.dataFinal
 WHERE con.clienteId = {clienteId}

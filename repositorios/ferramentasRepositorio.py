@@ -1,11 +1,11 @@
 import requests
 import aiohttp
+from logging import info, debug, warning
 
 from Configs.systemConfig import buscaSystemConfigs
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 from util.enums.configEnums import TipoConexao
 from util.enums.logEnums import TipoLog
-from systemLog.logs import logPrioridade, TipoEdicao, Prioridade
 
 
 class ApiFerramentas:
@@ -32,14 +32,15 @@ class ApiFerramentas:
 
         async with aiohttp.ClientSession() as http:
             url = self.baseUrl + endpoint
+            info(f"{TipoLog.Rest.value}::getAllFerramentas ____________________ GET<{url}>")
 
             async with http.get(url) as response:
                 statusCode = response.status
                 if 199 < statusCode < 400:
-                    logPrioridade(f"API(Sync)<getAllFerramentas>____________________GET<{endpoint}>::::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.sync, tipoLog=TipoLog.Rest)
+                    debug(f"{TipoLog.Rest.value}[{statusCode}]::getAllFerramentas ____________________ GET<{url}>")
                     return await response.json()
                 else:
-                    logPrioridade(f"API(Sync)<getAllFerramentas>____________________GET<{endpoint}ERRO>::::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.saidaImportante, tipoLog=TipoLog.Rest)
+                    warning(f"{TipoLog.Rest.value}[{statusCode}]::buscaEscritorio ____________________ GET<{url}>", extra={"json": response.json()})
                     return []
 
     def conexaoOnline(self) -> bool:

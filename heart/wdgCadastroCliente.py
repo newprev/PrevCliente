@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QWidget, QLineEdit
 from PyQt5.QtCore import Qt
 import sqlite3
 import peewee
+from logging import error
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -12,7 +13,6 @@ from Design.CustomWidgets.newToast import QToaster
 from heart.localStyleSheet.cadastroCliente import etapaCadatro
 
 from cache.cacheEscritorio import CacheEscritorio
-from systemLog.logs import logPrioridade
 
 from modelos.clienteORM import Cliente
 from modelos.escritoriosORM import Escritorios
@@ -22,6 +22,7 @@ from modelos.clienteProfissao import ClienteProfissao
 from modelos.clienteInfoBanco import ClienteInfoBanco
 
 from repositorios.integracaoRepositorio import IntegracaoRepository
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao
 
 from util.helpers.dateHelper import strToDate, calculaIdade
@@ -631,14 +632,14 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         try:
             self.clienteAtual.save()
         except sqlite3.IntegrityError as err:
-            logPrioridade("salvaEtapaPessoal<wdgCadastroCliente>", tipoEdicao=TipoEdicao.insert)
+            error(f"{TipoLog.Cache.value}::salvaEtapaPessoal", extra={"err": err})
             popUpOkAlerta(
                 "Caso queira fazer uma simulação, acesse o menu da calculadora rápida.",
                 titulo="Cliente já cadastrado.",
                 funcao=self.sairCadastro,
             )
         except peewee.IntegrityError as err:
-            logPrioridade("salvaEtapaPessoal<wdgCadastroCliente>", tipoEdicao=TipoEdicao.insert)
+            error(f"{TipoLog.Cache.value}::salvaEtapaPessoal", extra={"err": err})
             popUpOkAlerta(
                 "Caso queira fazer uma simulação, acesse o menu da calculadora rápida.",
                 titulo="Cliente já cadastrado.",

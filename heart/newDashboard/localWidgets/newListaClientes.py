@@ -244,7 +244,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
         if len(strBusca) == 1:
             for linha in range(qtdLinhas):
-                primeiraLetra = self.tblClientes.item(linha, 1).text()[0]
+                primeiraLetra = self.tblClientes.item(linha, 2).text()[0]
                 if primeiraLetra.upper() == strBusca.upper():
                     qtdEncontrados += 1
                     self.tblClientes.showRow(linha)
@@ -253,13 +253,15 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
         else:
             for linha in range(qtdLinhas):
-                nomeCompleto: str = self.tblClientes.item(linha, 1).text().upper()
+                nomeCompleto: str = self.tblClientes.item(linha, 2).text().upper()
                 nomes: List[str] = nomeCompleto.split(' ')
-                if strBusca.upper() in nomes:
-                    qtdEncontrados += 1
-                    self.tblClientes.showRow(linha)
-                else:
-                    self.tblClientes.hideRow(linha)
+                for nome in nomes:
+                    if strBusca.upper() in nome[:len(strBusca)]:
+                        qtdEncontrados += 1
+                        self.tblClientes.showRow(linha)
+                        break
+                    else:
+                        self.tblClientes.hideRow(linha)
 
         self.lbInfoBusca.setText(f'{qtdEncontrados} clientes encontrados')
         self.frInfoCliEncontrados.show()

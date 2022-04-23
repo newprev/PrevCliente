@@ -26,7 +26,6 @@ def tempoContribPorVinculo(listaVinculos: List[CnisVinculos], dataLimite: dateti
             if dataLimite < dataInicio:
                 break
             elif dataInicio <= dataLimite <= dataFim:
-                print(f"\t {dataInicio=} {dataLimite=} {dataFim=}")
                 atingiuDataLimite = True
                 dataFim = dataLimite
 

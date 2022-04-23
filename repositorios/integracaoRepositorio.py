@@ -1,6 +1,7 @@
+from logging import info, debug, warning, error
+
 import requests as http
 
-from systemLog.logs import logPrioridade
 from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import *
 
@@ -14,17 +15,22 @@ class IntegracaoRepository:
 
     def getCep(self, numCep):
         url = self.urlBase + f'viacep.com.br/ws/{numCep}/json/'
+        info(f"{TipoLog.Rest.value}::getCep ____________________ GET<{url}>")
+
         try:
-            logPrioridade(f"API(CEP)<getCep>____________________GET<viacep.com.br/ws/<numCep>/json/>::::{url}", tipoEdicao=TipoEdicao.api, priodiade=Prioridade.sync, tipoLog=TipoLog.Rest)
             response: http.Response = http.get(url)
 
             if response.status_code == 200:
+                debug(f"{TipoLog.Rest.value}[{response.status_code}]::getCep ____________________ GET<{url}>")
                 if response.text != "" and 'erro' not in response.json().keys():
                     return response.json()
                 else:
+                    warning(f"{TipoLog.Rest.value}[{response.status_code}]::getCep ____________________ GET<{url}>", extra={'json': response.json()})
                     return dict()
             else:
+                warning(f"{TipoLog.Rest.value}[{response.status_code}]::getCep ____________________ GET<{url}>", extra={'json': response.json()})
                 return dict()
-        except http.exceptions.ConnectionError:
+        except http.exceptions.ConnectionError as err:
+            error(f'{TipoLog.Rest.value}::getCep', extra={"err": err})
             mensagem = {'erro': 'Falta de conexão com a internet.'}
             return mensagem

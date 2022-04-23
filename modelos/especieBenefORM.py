@@ -1,7 +1,10 @@
 from modelos.baseModelORM import BaseModel
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
+
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
+
+from logging import info, warning, error
 
 from peewee import AutoField, CharField, BooleanField
 
@@ -35,11 +38,11 @@ class EspecieBene(BaseModel, Model):
 @post_save(sender=EspecieBene)
 def inserindoEspecieBenef(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoEspecieBene>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
+        info(f'{TipoLog.DataBase.value}::inserindoEspecieBene___________________{TABLENAME}')
     else:
-        logPrioridade(f'UPDATE<inserindoEspecieBene>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+        info(f'{TipoLog.DataBase.value}::inserindoEspecieBene___________________ {TABLENAME}')
 
 
 @pre_delete(sender=EspecieBene)
 def deletandoEspecieBenef(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoEspecieBene>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    info(f'{TipoLog.DataBase.value}::deletandoEspecieBene___________________{TABLENAME}')

@@ -1,4 +1,5 @@
-from util.enums.resumoCnisEnums import TelaResumo, TipoBotaoResumo
+from Design.DesignSystem.colors import NewColorsPrimary, NewColorsSuccess
+from util.enums.resumoCnisEnums import TelaResumo, TipoBotaoResumo, TipoContribuicao
 
 
 def selecionaBotao(tela: TelaResumo, seleciona: bool) -> str:
@@ -64,6 +65,36 @@ def botaoOpcoes(botao: TipoBotaoResumo) -> str:
         border-radius: 0px;
     }}
     """
+
+
+def backgroundAlerta(dadoFaltante: bool = False) -> str:
+    # bgColor: str = "#F9F9F9"
+    bgColor: str = "#CFF2DC"
+
+    if dadoFaltante:
+        bgColor = "#F9F9F9"
+
+    return f"""
+    #gbMain {{
+        background-color: { bgColor };
+        border-radius: 8px;
+        border: 1px solid #3F4E8C;
+    }}
+    """
+
+
+def bgFirulaResumo(tipo: TipoContribuicao, nomeFrame: str):
+    if tipo == TipoContribuicao.contribuicao:
+         bgColor = NewColorsPrimary.p400.value
+    else:
+        bgColor = NewColorsSuccess.green100.value
+
+    return f"""
+    #{nomeFrame} {{
+        background-color: { bgColor };
+        border-radius: 8px;
+        border: 0px solid none;
+    }}"""
 
 
 def cadLineEdit() -> str:

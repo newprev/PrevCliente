@@ -215,7 +215,7 @@ def strAnoToDate(data: str) -> datetime.date:
     return datetime.date(year=int(data), month=1, day=1)
 
 
-def strToDate(dataAvaliar: str) -> datetime.date:
+def strToDate(dataAvaliar: str, dataSeErro: datetime.date = None) -> datetime.date:
     dateFormats: List[str] = ['%d/%m/%Y', '%m/%Y', '%Y-%m-%d', '%Y-%m-%d %H:%M:%S']
 
     # if isinstance(dataAvaliar, type(datetime.datetime)):
@@ -230,6 +230,8 @@ def strToDate(dataAvaliar: str) -> datetime.date:
                 dataRetorno = datetime.datetime.strptime(dataAvaliar, formato).date()
                 return dataRetorno
             except ValueError:
+                if dataSeErro is not None:
+                    return dataSeErro
                 pass
             except Exception as err:
                 print(f'strToDate: ({type(dataAvaliar)}) {dataAvaliar} - ({type(err)}) {err}')

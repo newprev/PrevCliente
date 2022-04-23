@@ -1,7 +1,9 @@
 from datetime import datetime
+from logging import info
+
 from peewee import AutoField, ForeignKeyField, CharField, DateField, IntegerField, FloatField, DateTimeField, BooleanField
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from modelos.baseModelORM import BaseModel, DATEFORMATS
@@ -122,12 +124,9 @@ class Processos(BaseModel, Model):
 
 @post_save(sender=Processos)
 def inserindoProcessos(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoProcessos>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoProcessos>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    info(f'{TipoLog.DataBase.value}::inserindoProcessos___________________{TABLENAME}')
 
 
 @pre_delete(sender=Processos)
 def deletandoProcessos(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoProcessos>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    info(f'{TipoLog.DataBase.value}::deletandoProcessos___________________{TABLENAME}')

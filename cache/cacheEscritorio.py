@@ -1,8 +1,8 @@
 import datetime
 import os
 import json
+from logging import info, warning, error
 
-from systemLog.logs import logPrioridade
 from playhouse.shortcuts import model_to_dict
 
 from util.enums.newPrevEnums import *
@@ -19,28 +19,31 @@ class CacheEscritorio:
 
     def salvarCache(self, escritorio: Escritorios) -> bool:
         jsonEscritorio = json.dumps(pyToDefault(model_to_dict(escritorio, recurse=False)))
+        info(f'{TipoLog.Cache.value}::salvarCache')
 
         try:
             with open(self.pathEscritorioTxt, encoding='utf-8', mode='w') as cacheLogin:
                 cacheLogin.write(jsonEscritorio)
-            logPrioridade(f'CacheEscritorio<salvarCache>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComum, tipoLog=TipoLog.Cache)
             return True
-        except Exception as erro:
-            print(f'salvarCache({type(erro)}) - {erro}')
-            logPrioridade(f'CacheEscritorio<salvarCache> ({type(erro)})___________________', tipoEdicao=TipoEdicao.erro, priodiade=Prioridade.saidaImportante)
+        except Exception as err:
+            print(f'salvarCache({type(err)}) - {err}')
+            error(f'{TipoLog.Cache.value}::salvarCache', extra={"err": err})
 
     def carregarCache(self) -> Escritorios:
+        info(f'{TipoLog.Cache.value}::carregarCache')
+
         if '.escritorio.json' in os.listdir(self.pathCache):
             with open(self.pathEscritorioTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
 
-            logPrioridade(f'CacheEscritorio<carregarCache> ___________________', tipoEdicao=TipoEdicao.cache, tipoLog=TipoLog.Cache)
             return Escritorios().fromDict(advJson)
 
         else:
             return Escritorios()
 
     def carregarCacheTemporario(self) -> Escritorios:
+        info(f'{TipoLog.Cache.value}::carregarCache')
+
         if '.escritorio.temp.json' in os.listdir(self.pathCache):
             with open(self.pathEscritorioTempTxt, encoding='utf-8', mode='r') as cacheLogin:
                 advJson = json.load(cacheLogin)
@@ -55,16 +58,15 @@ class CacheEscritorio:
                 os.remove(os.path.join(self.pathCache, temp))
 
     def salvarCacheTemporario(self, escritorio: Escritorios) -> bool:
+        info(f'{TipoLog.Cache.value}::salvarCacheTemporario')
         jsonAdv = json.dumps(escritorio.toDict())
 
         try:
             with open(self.pathEscritorioTempTxt, encoding='utf-8', mode='w') as cacheLogin:
-                logPrioridade(f'CacheEscritorio<salvarCacheTemporario> ___________________', tipoEdicao=TipoEdicao.cache, tipoLog=TipoLog.Cache)
                 cacheLogin.write(jsonAdv)
             return True
-        except Exception as erro:
-            logPrioridade(f'CacheEscritorio<salvarCacheTemporario> ___________________', tipoEdicao=TipoEdicao.erro, tipoLog=TipoLog.Cache)
-            print(f'salvarCacheTemporario({type(erro)} - {erro})')
+        except Exception as err:
+            error(f'{TipoLog.Cache.value}::salvarCacheTemporario', extra={"err": err})
 
     def limpaCache(self):
         self.limpaTemporarios()

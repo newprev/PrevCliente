@@ -1,11 +1,13 @@
+from logging import info
+
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
 
 from modelos.telefonesORM import Telefones
 from modelos.clienteProfissao import ClienteProfissao
 from modelos.clienteInfoBanco import ClienteInfoBanco
-from systemLog.logs import logPrioridade
 from modelos.escritoriosORM import Escritorios
+from util.enums.logEnums import TipoLog
 from util.helpers.dateHelper import strToDate
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
@@ -149,12 +151,9 @@ class Cliente(BaseModel, Model):
 
 @post_save(sender=Cliente)
 def inserindoCliente(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoVinculo>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoVinculo>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    info(f'{TipoLog.DataBase.value}::inserindoCliente___________________{TABLENAME}')
 
 
 @pre_delete(sender=Cliente)
 def deletandoCliente(*args, **kwargs):
-    logPrioridade(f'DELETE<inserindoVinculo>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    info(f'{TipoLog.DataBase.value}::deletandoCliente___________________{TABLENAME}')

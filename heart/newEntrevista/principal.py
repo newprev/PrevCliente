@@ -52,6 +52,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         'porcentagemCont': 11,
         'indiceReajuste': IndiceReajuste.Ipca
     }
+    aposentadoriaModel: CalculosAposentadoria
 
     def __init__(self, escritorioAtual: Escritorios = None, cliente: Cliente = None, parent=None):
         super(NewEntrevistaPrincipal, self).__init__(parent=parent)
@@ -65,6 +66,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.processoAtual = Processos()
         self.clienteAtual = cliente
         self.listaBeneficios = []
+        self.aposentadoriaModel = CalculosAposentadoria(None, None, None)
 
         self.iniciaQuiz()
         self.buscaAdvogadoAtual()
@@ -80,6 +82,8 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.pbFinalizarEntrevista.clicked.connect(self.avaliaFinalizaEntrevista)
         self.pbConfigSimulacao.clicked.connect(self.abreConfig)
         self.pbInfoCliente.clicked.connect(self.avaliaMostraInfoLateral)
+        self.pbSalvarSimulacao.clicked.connect(self.salvarSimulacao)
+        self.pbCancelarSimulacao.clicked.connect(self.avaliaCancelaSimulacao)
 
     def abreConfig(self):
         configPage = PgConfigSimulacao(parent=self, entrevistaParams=self.entrevistaParams)
@@ -157,14 +161,21 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.trocaEtapa(EtapaEntrevista.tipoBeneficio)
         self.clearFocus()
 
+    def avaliaCancelaSimulacao(self):
+        popUpSimCancela(
+            "Deseja cancelar essa simulação?\nVocê voltará para a tela anterior e poderá alterar as respostas e as configurações da entrevista.",
+            titulo="Cancelar simulação",
+            funcaoSim=self.cancelarSimulacao,
+        )
+
     def avaliaFinalizaEntrevista(self):
         tipoDoBeneficio = TipoBeneficioEnum(self.processoAtual.tipoBeneficio.tipoId)
 
         if self.processoAtual.natureza == NaturezaProcesso.administrativo.value:
             if tipoDoBeneficio == TipoBeneficioEnum.Aposentadoria:
-                calculaAposentadoria = CalculosAposentadoria(processo=self.processoAtual, cliente=self.clienteAtual, entrevistaParams=self.entrevistaParams)
-                calculaAposentadoria.salvaAposentadorias()
-                self.carregaTelaSimulacao()
+                self.aposentadoriaModel = CalculosAposentadoria(processo=self.processoAtual, cliente=self.clienteAtual, entrevistaParams=self.entrevistaParams)
+                listaSimulacao = self.aposentadoriaModel.geraSimulacoes()
+                self.carregaTelaSimulacao(listaSimulacoes=listaSimulacao)
                 self.frEsquerda.hide()
                 self.trocaEtapa(EtapaEntrevista.simulacoes)
 
@@ -226,15 +237,23 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
 
         return True
 
-    def carregaTelaSimulacao(self):
-        listaAposentadorias: List[Aposentadoria] = Aposentadoria.select().where(
-            Aposentadoria.clienteId == self.clienteAtual.clienteId,
-            Aposentadoria.processoId == self.processoAtual.processoId,
-        ).order_by(
-            Aposentadoria.valorSimulacao.desc(),
-            Aposentadoria.valorBeneficio.desc(),
-            Aposentadoria.idadeCliente,
-        )
+    def cancelarSimulacao(self):
+        #TODO: DELETAR AS SIMULAÇÕES SALVAS
+        self.avaliarVoltar()
+
+    def carregaTelaSimulacao(self, listaSimulacoes: List[Aposentadoria] = []):
+        if len(listaSimulacoes) > 0:
+            listaAposentadorias: List[Aposentadoria] = listaSimulacoes
+        else:
+            listaAposentadorias: List[Aposentadoria] = Aposentadoria.select().where(
+                Aposentadoria.clienteId == self.clienteAtual.clienteId,
+                Aposentadoria.processoId == self.processoAtual.processoId,
+            ).order_by(
+                Aposentadoria.valorSimulacao.desc(),
+                Aposentadoria.valorBeneficio.desc(),
+                Aposentadoria.idadeCliente,
+            )
+
         if len(listaAposentadorias) > 0:
             glSimulacoes = QGridLayout(self)
             glSimulacoes.setSpacing(36)
@@ -244,7 +263,6 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
                 glSimulacoes.addWidget(NewCardAposentadoria(aposentadoria, parent=self), index//4, index % 4)
 
             self.scaSimulacoes.setLayout(glSimulacoes)
-
 
     def carregaTiposBeneficio(self):
         self.listaBeneficios = TipoBeneficioModel.select()
@@ -441,6 +459,11 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         modalEntrevista = ModalEntrevistaController(info.tipoInfo, perguntas, parent=self, dashboard=self.dashboard)
         modalEntrevista.show()
         self.habilitaBlur(ativar=True)
+
+    def salvarSimulacao(self):
+        # TODO: LIMPAR TUDO
+        self.aposentadoriaModel.salvaAposentadorias()
+        self.voltarDashboard()
 
     def sairEntrevista(self):
         self.sinais.sTrocaWidgetCentral.emit(TelaPosicao.Cliente)

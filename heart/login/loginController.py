@@ -1,4 +1,8 @@
 import datetime
+import logging
+import os
+import json
+
 import pymysql
 import asyncio as aio
 from typing import List
@@ -31,19 +35,16 @@ from modelos.configGeraisORM import ConfigGerais
 from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.ipcaMensalORM import IpcaMensal
 
+from systemLog.logs import NewLogging
 from Design.pyUi.loginPage import Ui_mwLogin
 
 from heart.newDashboard.newDashboard import NewDashboard
-from systemLog.logs import logPrioridade
 
 from util.helpers.dateHelper import strToDatetime
 from util.enums.logEnums import TipoLog
 from util.enums.loginEnums import TelaLogin
 from util.enums.newPrevEnums import *
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
-
-import os
-import json
 
 from util.ferramentas.tools import divideListaEmPartes
 from util.helpers.helpers import datetimeToSql
@@ -58,6 +59,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
     somaTimer: int = 0
     esqueceuSenha: bool = False
     toasty: QToaster
+    apiLog: logging.Logger
 
     def __init__(self, db=None):
         super(LoginController, self).__init__()
@@ -71,6 +73,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.edittingFinished = True
         self.cacheLogin = CacheLogin()
         self.cacheEscritorio = CacheEscritorio()
+        self.newLog = NewLogging()
+        self.apiLog = self.newLog.buscaLogger()
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -205,6 +209,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
     def insereAdvEscPrimAcesso(self):
         try:
+            self.apiLog.info(f'{TipoLog.Cache.value}::insereAdvEscPrimAcesso')
             self.advogado.senha = self.lePASenha.text()
             self.advogado.dataUltAlt = datetime.datetime.now()
             self.escritorio = Escritorios.create(**self.escritorio.toDict())
@@ -212,11 +217,10 @@ class LoginController(QMainWindow, Ui_mwLogin):
             self.cacheLogin.salvarCache(self.advogado)
             self.cacheEscritorio.salvarCache(self.escritorio)
             self.toasty.showMessage(self, "Senha cadastrada com sucesso.")
-            logPrioridade(f'CREATE<insereAdvEscPrimAcesso> ___________________ ', TipoEdicao.insert, tipoLog=TipoLog.DataBase, priodiade=Prioridade.saidaComum)
             return True
 
         except IntegrityError as err:
-            logPrioridade(f'CREATE<insereAdvEscPrimAcesso> ___________________ {err=}', TipoEdicao.insert, tipoLog=TipoLog.DataBase, priodiade=Prioridade.saidaImportante)
+            self.apiLog.error(f"{TipoLog.Cache.value}::insereAdvEscPrimAcesso", extra={"err": err})
             self.escritorio = self.cacheEscritorio.carregarCache()
             self.advogado = self.cacheLogin.carregarCache()
 
@@ -373,7 +377,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
     def entrar(self):
         # TODO: Criar uma verificação se o usuário salvo em cache tem o mesmo login e senha digitado na tela de login
-
         self.loading(20)
         if self.infoNaoNulo():
             if ApiFerramentas().conexaoOnline():

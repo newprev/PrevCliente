@@ -1,7 +1,8 @@
+from logging import info
+
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
-from util.enums.newPrevEnums import TipoEdicao, Prioridade
+from util.enums.logEnums import TipoLog
 
 from peewee import CharField, DateField, DateTimeField, FloatField, AutoField
 from datetime import datetime
@@ -54,12 +55,9 @@ class SalarioMinimo(BaseModel, Model):
 
 @post_save(sender=SalarioMinimo)
 def inserindoSalarioMinimo(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoSalarioMinimo>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoSalarioMinimo>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    info(f'{TipoLog.DataBase.value}::inserindoSalarioMinimo___________________{TABLENAME}')
 
 
 @pre_delete(sender=SalarioMinimo)
 def deletandoSalarioMinimo(*args, **kwargs):
-    logPrioridade(f'DELETE<inserindoSalarioMinimo>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    info(f'{TipoLog.DataBase.value}::deletandoSalarioMinimo___________________{TABLENAME}')

@@ -118,6 +118,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         if self.advogado:
             self.iniciarAutomaticamente()
+        else:
+            self.cbSalvarSenha.setChecked(True)
 
         self.center()
         self.leLogin.setFocus()
@@ -408,6 +410,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     else:
                         self.cacheLogin.salvarCacheTemporario(self.advogado)
                         self.cacheEscritorio.salvarCacheTemporario(self.escritorio)
+
+                    self.newLog.setAdvLogado(self.advogado)
 
                     # Busca e define configurações
                     try:

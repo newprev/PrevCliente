@@ -1,4 +1,5 @@
 import datetime
+from logging import Logger
 from typing import List
 
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QCheckBox, QGridLayout
@@ -15,6 +16,7 @@ from beneficios.aposentadoria import CalculosAposentadoria
 from heart.dashboard.entrevista.localStyleSheet.lateral import iconeInfoCliente
 from heart.newEntrevista.localWidgets.pgConfigSimulacao import PgConfigSimulacao
 from modelos.Auxiliares.tipoInfo import InformacaoModel
+from systemLog.logs import NewLogging
 from util.enums.aposentadoriaEnums import ContribSimulacao, IndiceReajuste
 
 from .localStyleSheet.principal import styleEtapaEntrevista
@@ -53,6 +55,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         'indiceReajuste': IndiceReajuste.Ipca
     }
     aposentadoriaModel: CalculosAposentadoria
+    apiLog: Logger
 
     def __init__(self, escritorioAtual: Escritorios = None, cliente: Cliente = None, parent=None):
         super(NewEntrevistaPrincipal, self).__init__(parent=parent)
@@ -67,6 +70,9 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.clienteAtual = cliente
         self.listaBeneficios = []
         self.aposentadoriaModel = CalculosAposentadoria(None, None, None)
+
+        self.newLog = NewLogging()
+        self.apiLog = self.newLog.buscaLogger()
 
         self.iniciaQuiz()
         self.buscaAdvogadoAtual()
@@ -428,6 +434,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
 
     def defineCliente(self, cliente: Cliente):
         if cliente is not None and cliente.clienteId is not None:
+            self.apiLog.info("Iniciou entrevista")
             self.clienteAtual = cliente
             self.iniciaInfoPessoais()
             

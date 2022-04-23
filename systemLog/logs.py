@@ -1,14 +1,20 @@
+import json
 import logging.config
 import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk import set_user
 import os
 from logging import *
 
 from datetime import datetime
-from typing import Set
+
+from modelos.advogadoORM import Advogados
+from util.enums.logEnums import NomeLogger
 
 
 class NewLogging:
+    logConectado: bool = False
+
     def __new__(cls, *args, **kwargs):
         if not hasattr(cls, 'instance'):
             cls.instance = super(NewLogging, cls).__new__(cls)
@@ -17,8 +23,9 @@ class NewLogging:
     def __init__(self):
         self.logApi: Logger = None
 
-        self.iniciaConfiguracao()
-        self.conectarComSentry()
+        if not self.logConectado:
+            self.iniciaConfiguracao()
+            self.conectarComSentry()
 
     def iniciaConfiguracao(self):
         # Handler Root
@@ -35,7 +42,7 @@ class NewLogging:
         apiLogPath: str = os.path.join(os.curdir, 'systemLog', 'historicoLogs', f'{datetime.now().date()}_API.txt')
         apiHandler = FileHandler(apiLogPath, 'a')
         apiHandler.setFormatter(apiFormatter)
-        self.logApi = getLogger('logApi')
+        self.logApi = getLogger(NomeLogger.apiLogger.value)
         if self.logApi.hasHandlers():
             self.logApi.handlers.clear()
         self.logApi.setLevel(INFO)
@@ -49,8 +56,13 @@ class NewLogging:
             level=INFO,
             event_level=INFO
         )
+        pathConfig = os.path.join(os.getcwd(), 'systemLog', 'logConfig.json')
+
+        with open(pathConfig, encoding='utf-8', mode='r') as jsonConfig:
+            sentryDsn = json.load(jsonConfig)['sentry_dsn']
+
         sentry_sdk.init(
-            "https://0ff1b7f5532d427f9cd4b3bcac8f413c@o1205113.ingest.sentry.io/6345373",
+            sentryDsn,
 
             # Set traces_sample_rate to 1.0 to capture 100%
             # of transactions for performance monitoring.
@@ -58,14 +70,11 @@ class NewLogging:
             traces_sample_rate=1.0,
             integrations=[sentryIntegration]
         )
+        self.logConectado = True
 
-
-class FiltroSistema(Filter):
-    def filter(self, record: LogRecord) -> bool:
-        arquivosSemInteresse: Set[str] = {
-            'selector_events.py',
-            'base.py',
-            'autoreload.py',
-            'log.py'
+    def setAdvLogado(self, advogadoLogado: Advogados):
+        advDict: dict = {
+            "id": advogadoLogado.advogadoId,
+            "email": advogadoLogado.email
         }
-        return record.filename not in arquivosSemInteresse
+        set_user(advDict)

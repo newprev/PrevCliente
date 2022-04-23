@@ -32,3 +32,4 @@ prevCliEnv/
 crypt/.privateKey.txt
 
 crypt/publicKey.txt
+/systemLog/logConfig.json

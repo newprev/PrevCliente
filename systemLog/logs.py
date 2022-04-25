@@ -21,7 +21,7 @@ class NewLogging:
         return cls.instance
 
     def __init__(self):
-        self.logApi: Logger = None
+        self.logApi: Logger = getLogger(NomeLogger.apiLogger.value)
 
         if not self.logConectado:
             self.iniciaConfiguracao()
@@ -42,7 +42,6 @@ class NewLogging:
         apiLogPath: str = os.path.join(os.curdir, 'systemLog', 'historicoLogs', f'{datetime.now().date()}_API.txt')
         apiHandler = FileHandler(apiLogPath, 'a')
         apiHandler.setFormatter(apiFormatter)
-        self.logApi = getLogger(NomeLogger.apiLogger.value)
         if self.logApi.hasHandlers():
             self.logApi.handlers.clear()
         self.logApi.setLevel(INFO)

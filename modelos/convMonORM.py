@@ -1,4 +1,4 @@
-from logging import info
+from logging import info, debug
 
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
@@ -86,9 +86,9 @@ class ConvMon(BaseModel, Model):
 
 @post_save(sender=ConvMon)
 def inserindoConvMon(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoConvMon___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoConvMon___________________{TABLENAME}')
 
 
 @pre_delete(sender=ConvMon)
 def deletandoConvMon(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::deletandoConvMon___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::deletandoConvMon___________________{TABLENAME}')

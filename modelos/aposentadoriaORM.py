@@ -1,4 +1,4 @@
-from logging import info
+from logging import info, debug
 
 from modelos.baseModelORM import BaseModel
 from modelos.clienteORM import Cliente
@@ -92,9 +92,9 @@ class Aposentadoria(BaseModel, Model):
 
 @post_save(sender=Aposentadoria)
 def inserindoAposentadoria(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoAposentadoria___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoAposentadoria___________________{TABLENAME}')
 
 
 @pre_delete(sender=Aposentadoria)
 def deletandoAposentadoria(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::deletandoAposentadoria___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::deletandoAposentadoria___________________{TABLENAME}')

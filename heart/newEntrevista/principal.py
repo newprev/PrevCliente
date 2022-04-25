@@ -18,6 +18,7 @@ from heart.newEntrevista.localWidgets.pgConfigSimulacao import PgConfigSimulacao
 from modelos.Auxiliares.tipoInfo import InformacaoModel
 from systemLog.logs import NewLogging
 from util.enums.aposentadoriaEnums import ContribSimulacao, IndiceReajuste
+from util.helpers.layoutHelpers import limpaLayout
 
 from .localStyleSheet.principal import styleEtapaEntrevista
 
@@ -56,6 +57,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
     }
     aposentadoriaModel: CalculosAposentadoria
     apiLog: Logger
+    salvandoSimulacao: bool = False
 
     def __init__(self, escritorioAtual: Escritorios = None, cliente: Cliente = None, parent=None):
         super(NewEntrevistaPrincipal, self).__init__(parent=parent)
@@ -74,6 +76,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.newLog = NewLogging()
         self.apiLog = self.newLog.buscaLogger()
 
+        # self.defineCliente(cliente=cliente)
         self.iniciaQuiz()
         self.buscaAdvogadoAtual()
         self.carregaTiposBeneficio()
@@ -82,7 +85,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.iniciaBeneficio()
         self.iniciaTpProcesso()
         self.iniciaHistorico()
-        self.trocaEtapa(EtapaEntrevista.naturezaProcesso)
+        self.trocaEtapa(self.etapaAtual)
 
         self.pbVoltar.clicked.connect(self.avaliarVoltar)
         self.pbFinalizarEntrevista.clicked.connect(self.avaliaFinalizaEntrevista)
@@ -184,6 +187,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
                 self.carregaTelaSimulacao(listaSimulacoes=listaSimulacao)
                 self.frEsquerda.hide()
                 self.trocaEtapa(EtapaEntrevista.simulacoes)
+                self.apiLog.info('Finalizou questionário da entrevista')
 
             elif tipoDoBeneficio == TipoBeneficioEnum.AuxAcidente:
                 self.mensagemToast("Calculo de benefício ainda não implementado..")
@@ -244,7 +248,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         return True
 
     def cancelarSimulacao(self):
-        #TODO: DELETAR AS SIMULAÇÕES SALVAS
+        self.aposentadoriaModel.limpaTudo()
         self.avaliarVoltar()
 
     def carregaTelaSimulacao(self, listaSimulacoes: List[Aposentadoria] = []):
@@ -272,6 +276,12 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
 
     def carregaTiposBeneficio(self):
         self.listaBeneficios = TipoBeneficioModel.select()
+
+    def defineCliente(self, cliente: Cliente):
+        if cliente is not None and cliente.clienteId is not None:
+            self.apiLog.info("Iniciou entrevista")
+            self.clienteAtual = cliente
+            self.iniciaInfoPessoais()
 
     def iniciaBeneficio(self):
         pbAposentadoria = NewCardPadrao(
@@ -432,12 +442,6 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.vlNaturezas.addWidget(pbAdm)
         self.vlNaturezas.addWidget(pbJud)
 
-    def defineCliente(self, cliente: Cliente):
-        if cliente is not None and cliente.clienteId is not None:
-            self.apiLog.info("Iniciou entrevista")
-            self.clienteAtual = cliente
-            self.iniciaInfoPessoais()
-            
     def mensagemToast(self, mensagem: str):
         if self.toasty is None:
             self.toasty = QToaster(self)
@@ -469,7 +473,9 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
 
     def salvarSimulacao(self):
         # TODO: LIMPAR TUDO
+        self.salvandoSimulacao = True
         self.aposentadoriaModel.salvaAposentadorias()
+        self.aposentadoriaModel.limpaTudo()
         self.voltarDashboard()
 
     def sairEntrevista(self):
@@ -481,7 +487,9 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.frMigalhas.setStyleSheet(styleEtapaEntrevista(etapaDestino))
 
     def voltarDashboard(self):
-        self.processoAtual.delete().execute()
+        if not self.salvandoSimulacao:
+            self.processoAtual.delete().execute()
+
         self.dashboard.trocaTela(TelaPosicao.Cliente)
 
 

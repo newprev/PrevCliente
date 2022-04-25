@@ -1,4 +1,4 @@
-from logging import info
+from logging import info, debug
 
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
@@ -49,9 +49,9 @@ class TetosPrev(BaseModel, Model):
     
 @post_save(sender=TetosPrev)
 def inserindoTetosPrev(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoTetosPrev___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoTetosPrev___________________{TABLENAME}')
 
 
 @pre_delete(sender=TetosPrev)
 def deletandoTetosPrev(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::deletandoTetosPrev___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::deletandoTetosPrev___________________{TABLENAME}')

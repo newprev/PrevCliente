@@ -1,4 +1,4 @@
-from logging import info
+from logging import info, debug
 
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
@@ -100,9 +100,9 @@ class ItemContribuicao(BaseModel, Model):
 
 @post_save(sender=ItemContribuicao)
 def inserindoItemContribuicao(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoItemContribuicao___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoItemContribuicao___________________{TABLENAME}')
 
 
 @pre_delete(sender=ItemContribuicao)
 def deletandoItemContribuicao(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::deletandoItemContribuicao___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::deletandoItemContribuicao___________________{TABLENAME}')

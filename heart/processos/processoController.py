@@ -1,7 +1,7 @@
 import datetime
 
 from PyQt5.QtWidgets import QMainWindow
-from Design.pyUi.processoPg import Ui_mwProcessoPage
+from Design.pyUi.processoPage import Ui_wdgProcessoPage
 from typing import List
 
 from heart.buscaClientePage import BuscaClientePage
@@ -28,7 +28,7 @@ from util.helpers.helpers import mascaraCPF
 from util.popUps import popUpOkAlerta
 
 
-class ProcessosController(QMainWindow, Ui_mwProcessoPage):
+class ProcessosController(QMainWindow):
     clienteAtual: Cliente
     processoAtual: Processos
     advogadoAtual: Advogados

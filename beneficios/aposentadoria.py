@@ -60,81 +60,11 @@ class CalculosAposentadoria:
 
             self.fatorPrevidenciario: int = 1
 
-            if self.cliente.genero == 'M':
-                self.enumGeneroCliente = GeneroCliente.masculino
-            else:
-                self.enumGeneroCliente = GeneroCliente.feminino
-
             self.contribSimulacao = entrevistaParams['contribSimulacao']
             self.valorSimulacao = entrevistaParams['valorSimulacao']
             self.indiceReajuste: IndiceReajuste = entrevistaParams['indiceReajuste']
-            self.regrasACalcular: List[Union[RegraTransicao, RegraGeralAR]] = [
-                RegraTransicao.pontos,
-                RegraTransicao.reducaoIdadeMinima,
-                RegraTransicao.pedagio50,
-                RegraTransicao.reducaoTempoContribuicao,
-                RegraTransicao.pedagio100,
-                RegraGeralAR.idade,
-                RegraGeralAR.tempoContribuicao,
-                RegraGeralAR.fator85_95
-            ]
 
-            self.regrasAposentadoria = {
-                RegraTransicao.pontos: False,
-                RegraTransicao.reducaoIdadeMinima: False,
-                RegraTransicao.pedagio50: False,
-                RegraTransicao.reducaoTempoContribuicao: False,
-                RegraTransicao.pedagio100: False,
-                RegraGeralAR.fator85_95: False,
-                RegraGeralAR.idade: False,
-                RegraGeralAR.tempoContribuicao: False
-            }
-
-            self.valorBeneficios = {
-                RegraTransicao.pontos: 0.0,
-                RegraTransicao.reducaoIdadeMinima: 0.0,
-                RegraTransicao.pedagio50: 0.0,
-                RegraTransicao.pedagio100: 0.0,
-                RegraTransicao.reducaoTempoContribuicao: 0.0,
-                RegraGeralAR.fator85_95: 0.0,
-                RegraGeralAR.idade: 0.0,
-                RegraGeralAR.tempoContribuicao: 0.0
-            }
-
-            self.dibs = {
-                RegraTransicao.pontos: None,
-                RegraTransicao.reducaoIdadeMinima: None,
-                RegraTransicao.pedagio50: None,
-                RegraTransicao.reducaoTempoContribuicao: None,
-                RegraTransicao.pedagio100: None,
-                RegraGeralAR.fator85_95: None,
-                RegraGeralAR.idade: None,
-                RegraGeralAR.tempoContribuicao: None
-            }
-
-            self.qtdContrib = {
-                RegraTransicao.pontos: 0,
-                RegraTransicao.pedagio50: 0,
-                RegraTransicao.reducaoIdadeMinima: 0,
-                RegraTransicao.reducaoTempoContribuicao: 0,
-                RegraTransicao.pedagio100: 0,
-                RegraGeralAR.fator85_95: 0,
-                RegraGeralAR.idade: 0,
-                RegraGeralAR.tempoContribuicao: 0
-            }
-
-            self.tmpContribPorRegra = {
-                RegraTransicao.pontos: None,
-                RegraTransicao.pedagio50: None,
-                RegraTransicao.reducaoIdadeMinima: None,
-                RegraTransicao.reducaoTempoContribuicao: None,
-                RegraTransicao.pedagio100: None,
-                RegraGeralAR.fator85_95: None,
-                RegraGeralAR.idade: None,
-                RegraGeralAR.tempoContribuicao: None
-            }
-
-            self.indiceReajuste = self.buscaIndiceReajuste()
+            self.iniciaCampos()
 
             self.calculaDibsAgoraVai()
             self.atualizaDataFrameContribuicoes()
@@ -145,6 +75,79 @@ class CalculosAposentadoria:
                 tamanhoStr: int = len(chave.name) + 14
                 tamanhoStr -= 2 if isinstance(chave, RegraGeralAR) else 0
                 print(f"{str(chave): <50}{str(valor): ^15}{self.qtdContrib[chave]: ^10} {'R$'+ str(self.valorBeneficios[chave]): ^15}{str(self.tmpContribPorRegra[chave]): ^70}")
+
+    def iniciaCampos(self):
+        if self.cliente.genero == 'M':
+            self.enumGeneroCliente = GeneroCliente.masculino
+        else:
+            self.enumGeneroCliente = GeneroCliente.feminino
+
+        self.regrasACalcular: List[Union[RegraTransicao, RegraGeralAR]] = [
+            RegraTransicao.pontos,
+            RegraTransicao.reducaoIdadeMinima,
+            RegraTransicao.pedagio50,
+            RegraTransicao.reducaoTempoContribuicao,
+            RegraTransicao.pedagio100,
+            RegraGeralAR.idade,
+            RegraGeralAR.tempoContribuicao,
+            RegraGeralAR.fator85_95
+        ]
+
+        self.regrasAposentadoria = {
+            RegraTransicao.pontos: False,
+            RegraTransicao.reducaoIdadeMinima: False,
+            RegraTransicao.pedagio50: False,
+            RegraTransicao.reducaoTempoContribuicao: False,
+            RegraTransicao.pedagio100: False,
+            RegraGeralAR.fator85_95: False,
+            RegraGeralAR.idade: False,
+            RegraGeralAR.tempoContribuicao: False
+        }
+
+        self.valorBeneficios = {
+            RegraTransicao.pontos: 0.0,
+            RegraTransicao.reducaoIdadeMinima: 0.0,
+            RegraTransicao.pedagio50: 0.0,
+            RegraTransicao.pedagio100: 0.0,
+            RegraTransicao.reducaoTempoContribuicao: 0.0,
+            RegraGeralAR.fator85_95: 0.0,
+            RegraGeralAR.idade: 0.0,
+            RegraGeralAR.tempoContribuicao: 0.0
+        }
+
+        self.dibs = {
+            RegraTransicao.pontos: None,
+            RegraTransicao.reducaoIdadeMinima: None,
+            RegraTransicao.pedagio50: None,
+            RegraTransicao.reducaoTempoContribuicao: None,
+            RegraTransicao.pedagio100: None,
+            RegraGeralAR.fator85_95: None,
+            RegraGeralAR.idade: None,
+            RegraGeralAR.tempoContribuicao: None
+        }
+
+        self.qtdContrib = {
+            RegraTransicao.pontos: 0,
+            RegraTransicao.pedagio50: 0,
+            RegraTransicao.reducaoIdadeMinima: 0,
+            RegraTransicao.reducaoTempoContribuicao: 0,
+            RegraTransicao.pedagio100: 0,
+            RegraGeralAR.fator85_95: 0,
+            RegraGeralAR.idade: 0,
+            RegraGeralAR.tempoContribuicao: 0
+        }
+
+        self.tmpContribPorRegra = {
+            RegraTransicao.pontos: None,
+            RegraTransicao.pedagio50: None,
+            RegraTransicao.reducaoIdadeMinima: None,
+            RegraTransicao.reducaoTempoContribuicao: None,
+            RegraTransicao.pedagio100: None,
+            RegraGeralAR.fator85_95: None,
+            RegraGeralAR.idade: None,
+            RegraGeralAR.tempoContribuicao: None
+        }
+        self.indiceReajuste = self.buscaIndiceReajuste()
 
     def atingiuIdadeAR(self, dib: datetime.date, qtdContribuicoes: int) -> bool:
         """
@@ -730,6 +733,15 @@ class CalculosAposentadoria:
                 )
             )
         return self.listaSimulacoes
+
+    def limpaTudo(self):
+        self.listaCabecalhos.clear()
+        self.listaItensContrib.clear()
+        self.listaRemuneracoes.clear()
+        self.listaContribuicoes.clear()
+        self.listaSimulacoes.clear()
+
+        self.iniciaCampos()
 
     def insereItensSimulacao(self, competenciaAtual, itemRepetir, qtdContribuicoes, tempoContribuicao):
         mesesAMais = 0

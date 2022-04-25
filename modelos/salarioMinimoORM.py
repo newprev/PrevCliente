@@ -1,4 +1,4 @@
-from logging import info
+from logging import info, debug
 
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
@@ -55,9 +55,9 @@ class SalarioMinimo(BaseModel, Model):
 
 @post_save(sender=SalarioMinimo)
 def inserindoSalarioMinimo(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoSalarioMinimo___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoSalarioMinimo___________________{TABLENAME}')
 
 
 @pre_delete(sender=SalarioMinimo)
 def deletandoSalarioMinimo(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::deletandoSalarioMinimo___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::deletandoSalarioMinimo___________________{TABLENAME}')

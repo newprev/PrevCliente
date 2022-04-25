@@ -1,4 +1,4 @@
-from logging import info
+from logging import info, debug
 
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
@@ -131,9 +131,9 @@ class Ppp(BaseModel, Model):
     
 @post_save(sender=Ppp)
 def inserindoPpp(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoPpp___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoPpp___________________{TABLENAME}')
 
 
 @pre_delete(sender=Ppp)
 def deletandoPpp(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::deletandoPpp___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::deletandoPpp___________________{TABLENAME}')

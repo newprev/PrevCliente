@@ -10,6 +10,7 @@ class NewMenuOpcoes(QMenu):
             self,
             parent=None,
             funcArquivar: Callable = None,
+            funcDesarquivar: Callable = None,
             funcEditar: Callable = None,
             funcExcluir: Callable = None,
             funcAtualizar: Callable = None,
@@ -20,6 +21,7 @@ class NewMenuOpcoes(QMenu):
         self.carregaEstilo()
 
         self.funcArquivar = funcArquivar
+        self.funcDesarquivar = funcDesarquivar
         self.funcEditar = funcEditar
         self.funcExcluir = funcExcluir
         self.funcAtualizar = funcAtualizar
@@ -41,6 +43,11 @@ class NewMenuOpcoes(QMenu):
             acaoArquivar = QAction('Arquivar', self)
             acaoArquivar.triggered.connect(lambda: self.funcArquivar())
             self.addAction(acaoArquivar)
+
+        if self.funcDesarquivar is not None:
+            acaoDesarquivar = QAction('Desarquivar', self)
+            acaoDesarquivar.triggered.connect(lambda: self.funcDesarquivar())
+            self.addAction(acaoDesarquivar)
 
         if self.funcExcluir is not None:
             acaoExcluir = QAction('Excluir', self)

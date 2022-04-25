@@ -1,4 +1,4 @@
-from logging import info
+from logging import info, debug
 
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
@@ -52,8 +52,8 @@ class CarenciaLei91(BaseModel, Model):
 
 @post_save(sender=CarenciaLei91)
 def inserindoCarenciaLei91(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoCarenciaLei91___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoCarenciaLei91___________________{TABLENAME}')
 
 @pre_delete(sender=CarenciaLei91)
 def deletandoCarenciaLei91(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoCarenciaLei91___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoCarenciaLei91___________________{TABLENAME}')

@@ -1,4 +1,4 @@
-from logging import info
+from logging import info, debug
 
 from modelos.baseModelORM import BaseModel
 from playhouse.signals import Model, post_save, pre_delete
@@ -53,8 +53,8 @@ class Indicadores(BaseModel, Model):
 
 @post_save(sender=Indicadores)
 def inserindoIndicadores(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoIndicadores___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoIndicadores___________________{TABLENAME}')
 
 @pre_delete(sender=Indicadores)
 def deletandoIndicadores(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::deletandoIndicadores___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::deletandoIndicadores___________________{TABLENAME}')

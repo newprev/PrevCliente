@@ -1,4 +1,4 @@
-from logging import info
+from logging import info, debug
 
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
@@ -123,9 +123,9 @@ class CnisVinculos(BaseModel, Model):
 
 @post_save(sender=CnisVinculos)
 def inserindoVinculo(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoVinculo___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoVinculo___________________{TABLENAME}')
 
 
 @pre_delete(sender=CnisVinculos)
 def deletandoVinculo(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::deletandoVinculo___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::deletandoVinculo___________________{TABLENAME}')

@@ -1,7 +1,9 @@
+import logging
 import os
 import datetime
+from logging import Logger
 
-from typing import List
+from typing import List, Callable
 
 from PyQt5.QtCore import QObject, QEvent, Qt, QSize
 from PyQt5.QtGui import QFont, QKeyEvent, QCursor, QIcon
@@ -27,6 +29,7 @@ from modelos.advogadoORM import Advogados
 from modelos.clienteProfissao import ClienteProfissao
 
 from sinaisCustomizados import Sinais
+from systemLog.logs import NewLogging
 from util.helpers.dateHelper import strToDate, atividadesConcorrentes, atividadeSecundaria
 from util.enums.dashboardEnums import TelaAtual
 
@@ -40,6 +43,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
     toast: QToaster
     menuFiltro: NewFiltroClientes
     filtros: dict
+    apiLogger: Logger
 
     def __init__(self, escritorio: Escritorios, advogado: Advogados, parent=None):
         super(NewListaClientes, self).__init__(parent=parent)
@@ -50,6 +54,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.advogadoAtual = advogado
         self.filtros = None
         self.menuFiltro = None
+        self.apiLogger = NewLogging().buscaLogger()
 
         self.sinais = Sinais()
         self.sinais.sEnviaClienteParam.connect(self.enviaClienteDashboard)
@@ -83,13 +88,27 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             self.menuFiltro.show()
 
     def abreMenuOpcoes(self):
+        if self.apiLogger is None:
+            self.apiLogger = NewLogging().buscaLogger()
+
         linhaSelecionada: int = self.tblClientes.selectedItems()[0].row()
         clienteId: int = int(self.tblClientes.item(linhaSelecionada, 0).text())
+        arquivado: bool = self.tblClientes.item(linhaSelecionada, 8).checkState()
+
+        funcArquivar: Callable = lambda: self.avaliaArquivarCliente(clienteId, linhaSelecionada)
+        funcDesarquivar: Callable = lambda: self.avaliaDesarquivarCliente(clienteId, linhaSelecionada)
+
+        if arquivado:
+            funcArquivar = None
+        else:
+            funcDesarquivar = None
+
 
         menu = NewMenuOpcoes(
             parent=self,
             funcEditar=lambda: self.editarCliente(clienteId),
-            funcArquivar=lambda: self.avaliaArquivarCliente(clienteId, linhaSelecionada),
+            funcArquivar=funcArquivar,
+            funcDesarquivar=funcDesarquivar,
             funcEntrevista=lambda: self.confirmaInicioEntrevista(clienteId),
             funcResumoCnis=lambda: self.navegaResumoCnis(clienteId),
         )
@@ -193,14 +212,36 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
     def arquivarCliente(self, clienteId: int):
         try:
+            self.apiLogger.info("Arquivou cliente", extra={"clienteId": clienteId})
             clienteAArquivar: Cliente = Cliente.get_by_id(clienteId)
             clienteAArquivar.arquivado = True
             clienteAArquivar.dataUltAlt = datetime.datetime.now()
             clienteAArquivar.save()
+
+            if self.toast is None:
+                self.toast = QToaster(None)
+            self.toast.showMessage(self, f'Cliente {clienteAArquivar.nomeCliente} arquivado com sucesso!')
             return True
         except Cliente.DoesNotExist as err:
-            print(f"{err=}")
+            self.apiLogger.error("Não encontrou o cliente para arquivar", extra={"clienteId": clienteId})
             popUpOkAlerta("Não foi possível arquivar o cliente selecionado. Verifique se os dados estão corretos e tente novamente.", erro=err)
+            return False
+
+    def desarquivarCliente(self, clienteId: int):
+        try:
+            self.apiLogger.info("Desarquivou cliente", extra={"clienteId": clienteId})
+            clienteAArquivar: Cliente = Cliente.get_by_id(clienteId)
+            clienteAArquivar.arquivado = False
+            clienteAArquivar.dataUltAlt = datetime.datetime.now()
+            clienteAArquivar.save()
+
+            if self.toast is None:
+                self.toast = QToaster(None)
+            self.toast.showMessage(self, f'Cliente {clienteAArquivar.nomeCliente} desarquivado com sucesso!')
+            return True
+        except Cliente.DoesNotExist as err:
+            self.apiLogger.error("Não encontrou o cliente para desarquivar", extra={"clienteId": clienteId})
+            popUpOkAlerta("Não foi possível desarquivar o cliente selecionado. Verifique se os dados estão corretos e tente novamente.", erro=err)
             return False
 
     def avaliaArquivarCliente(self, clienteId: int, linhaSelecionada: int):
@@ -220,6 +261,12 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             listaReturn.append(cabecalho)
 
         return listaReturn
+
+    def avaliaDesarquivarCliente(self, clienteId: int, linhaSelecionada: int):
+        nomeCliente: str = self.tblClientes.item(linhaSelecionada, 1).text().upper()
+        popUpSimCancela(f"Tem certeza que deseja desarquivar o(a) cliente {nomeCliente} ?", funcaoSim=lambda: self.desarquivarCliente(clienteId))
+        self.atualizaTblClientes()
+        return True
 
     def avaliaFiltrosMenu(self, filtros: dict):
         self.menuFiltro = None
@@ -454,7 +501,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             return Status.jaCadastrado
 
         except Cliente.DoesNotExist as err:
-            # TODO: ADICIONAR LOG
+            self.apiLogger.info('Cliente não cadastrado.')
             print(f"verificaCadastradoCliente: {err=}")
             return Status.naoCadastrado
         except ItemContribuicao.DoesNotExist as err:

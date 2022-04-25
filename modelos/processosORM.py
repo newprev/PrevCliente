@@ -1,5 +1,5 @@
 from datetime import datetime
-from logging import info
+from logging import info, debug
 
 from peewee import AutoField, ForeignKeyField, CharField, DateField, IntegerField, FloatField, DateTimeField, BooleanField
 from playhouse.signals import Model, post_save, pre_delete
@@ -11,7 +11,7 @@ from modelos.advogadoORM import Advogados
 from modelos.clienteORM import Cliente
 from modelos.tipoBeneficioORM import TipoBeneficioModel
 
-TABLENAME = 'beneficios'
+TABLENAME = 'Processos'
 
 
 class Processos(BaseModel, Model):
@@ -39,7 +39,7 @@ class Processos(BaseModel, Model):
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
-        table_name = 'beneficios'
+        table_name = 'Processos'
 
     def toDict(self, recursive=False):
         dictUsuario = {
@@ -124,9 +124,9 @@ class Processos(BaseModel, Model):
 
 @post_save(sender=Processos)
 def inserindoProcessos(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoProcessos___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoProcessos___________________{TABLENAME}')
 
 
 @pre_delete(sender=Processos)
 def deletandoProcessos(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::deletandoProcessos___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::deletandoProcessos___________________{TABLENAME}')

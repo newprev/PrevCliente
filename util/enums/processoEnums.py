@@ -27,3 +27,8 @@ class SituacaoProcesso(Enum):
     arquivado = 2
     cancelado = 3
     finalizado = 4
+
+class SituacaoTela(Enum):
+    clienteFaltante = 0
+    processoFaltante = 1
+    ok = 3

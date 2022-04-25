@@ -1,8 +1,8 @@
 <RCC>
   <qresource prefix="arrowUp">
-    <file>arrowUp.png</file>
+    <file>upBlue.png</file>
   </qresource>
   <qresource prefix="arrowDown">
-    <file>arrowDown.png</file>
+    <file>down.png</file>
   </qresource>
 </RCC>

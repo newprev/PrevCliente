@@ -1,4 +1,4 @@
-from logging import info
+from logging import info, debug
 
 from modelos.baseModelORM import BaseModel
 from playhouse.signals import Model, post_save, pre_delete
@@ -55,9 +55,9 @@ class TipoBeneficioModel(BaseModel, Model):
 
 @post_save(sender=TipoBeneficioModel)
 def inserindoTipoBeneficio(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoTipoBeneficio___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoTipoBeneficio___________________{TABLENAME}')
 
 
 @pre_delete(sender=TipoBeneficioModel)
 def deletandoTipoBeneficio(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::deletandoTipoBeneficio___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::deletandoTipoBeneficio___________________{TABLENAME}')

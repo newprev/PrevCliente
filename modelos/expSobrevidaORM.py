@@ -1,4 +1,4 @@
-from logging import info
+from logging import info, debug
 
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
@@ -65,9 +65,9 @@ class ExpSobrevida(BaseModel, Model):
 
 @post_save(sender=ExpSobrevida)
 def inserindoExpSobrevida(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoExpSobrevida___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoExpSobrevida___________________{TABLENAME}')
 
 
 @pre_delete(sender=ExpSobrevida)
 def deletandoExpSobrevida(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::deletandoExpSobrevida___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::deletandoExpSobrevida___________________{TABLENAME}')

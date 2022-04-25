@@ -1,4 +1,4 @@
-from logging import info
+from logging import info, debug
 
 from modelos.baseModelORM import BaseModel
 from playhouse.signals import Model, post_save, pre_delete
@@ -68,9 +68,9 @@ class Telefones(BaseModel, Model):
     
 @post_save(sender=Telefones)
 def inserindoTelefones(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoTelefones___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoTelefones___________________{TABLENAME}')
 
 
 @pre_delete(sender=Telefones)
 def deletandoTelefones(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::deletandoTelefones___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::deletandoTelefones___________________{TABLENAME}')

@@ -70,10 +70,13 @@ class NewMenuPrincipal(QFrame, Ui_wdgMenuPrincipal):
         expSobrevidaPage.show()
 
     def openProcessos(self):
-        processosPage = ProcessosController(cliente=None, processo=None, parent=self)
-        processosPage.raise_()
-        processosPage.show()
+        self.dashboard.trocaTela(TelaAtual.Processos)
         self.close()
+
+        # processosPage = ProcessosController(cliente=None, processo=None, parent=self)
+        # processosPage.raise_()
+        # processosPage.show()
+        # self.close()
 
     def openEntrevista(self):
         self.dashboard.trocaTela(TelaAtual.Entrevista)

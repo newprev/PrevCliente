@@ -1,4 +1,4 @@
-from logging import info
+from logging import info, debug
 
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
@@ -51,9 +51,9 @@ class IpcaMensal(BaseModel, Model):
 
 @post_save(sender=IpcaMensal)
 def inserindoIpcaMensal(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::inserindoIpcaMensal___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::inserindoIpcaMensal___________________{TABLENAME}')
 
 
 @pre_delete(sender=IpcaMensal)
 def deletandoIpcaMensal(*args, **kwargs):
-    info(f'{TipoLog.DataBase.value}::deletandoIpcaMensal___________________{TABLENAME}')
+    debug(f'{TipoLog.DataBase.value}::deletandoIpcaMensal___________________{TABLENAME}')

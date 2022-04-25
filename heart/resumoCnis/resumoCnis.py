@@ -872,7 +872,7 @@ class ResumoCnisController(QWidget, Ui_wdgResumoCnis):
 
     def excluirItem(self, itemTabela: ItemContribuicao):
         try:
-            info(f'{TipoLog.DataBase.value}::excluirItem _________________ {itemTabela.itemContribuicaoId}')
+            debug(f'{TipoLog.DataBase.value}::excluirItem _________________ {itemTabela.itemContribuicaoId}')
             ItemContribuicao.delete_by_id(itemTabela.itemContribuicaoId)
             if self.toasty is None:
                 self.toasty = QToaster(self)

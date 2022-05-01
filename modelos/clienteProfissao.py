@@ -13,7 +13,7 @@ TABLENAME = 'clienteProfissao'
 
 
 class ClienteProfissao(BaseModel, Model):
-    infoId = AutoField(column_name='infoId')
+    infoId = AutoField(column_name='infoId', primary_key=True)
     clienteId = IntegerField(column_name='clienteId')
     nomeProfissao = CharField(column_name='nomeProfissao', null=True)
     numCaretiraTrabalho = CharField(column_name='numCaretiraTrabalho', null=True)

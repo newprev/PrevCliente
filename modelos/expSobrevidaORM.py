@@ -14,7 +14,7 @@ TABLENAME = 'expSobrevida'
 
 
 class ExpSobrevida(BaseModel, Model):
-    infoId = AutoField(column_name='infoId', null=True)
+    infoId = AutoField(column_name='infoId', null=True, primary_key=True)
     dataReferente = DateField(column_name='dataReferente', formats=DATEFORMATS)
     expectativaSobrevida = IntegerField(column_name='expectativaSobrevida')
     idade = IntegerField(null=False)

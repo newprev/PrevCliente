@@ -4,9 +4,11 @@ from math import floor, ceil
 from peewee import ModelSelect
 from typing import Union, Tuple, List
 
+from modelos.tipoBeneficioORM import TipoBeneficioModel
 from util.enums.aposentadoriaEnums import SubTipoAposentadoria, TipoAposentadoria, ContribSimulacao
 from util.enums.configEnums import ImportantPaths
 from util.enums.processoEnums import TipoBeneficioEnum, TipoProcesso, NaturezaProcesso
+from util.enums.processoEnums import SituacaoProcesso
 
 estCivil = ['Solteiro(a)', 'Casado(a)', 'Divorciado(a)', 'Viúvo(a)']
 
@@ -519,6 +521,9 @@ def strNatureza(natureza: int) -> str:
 
 
 def strTipoProcesso(tipoProcesso: TipoProcesso) -> str:
+    if not isinstance(tipoProcesso, TipoProcesso) and isinstance(tipoProcesso, int):
+        tipoProcesso = TipoProcesso(tipoProcesso)
+
     if tipoProcesso == TipoProcesso.Revisao:
         return 'Revisão'
     elif tipoProcesso == TipoProcesso.Concessao:
@@ -532,6 +537,8 @@ def strTipoProcesso(tipoProcesso: TipoProcesso) -> str:
 
 
 def strTipoBeneficio(tipoBeneficio: int, subTipoApos: int) -> str:
+    if not isinstance(tipoBeneficio, int) and isinstance(tipoBeneficio, TipoBeneficioModel):
+        tipoBeneficio = tipoBeneficio.tipoId
 
     if tipoBeneficio == TipoBeneficioEnum.Aposentadoria.value:
         if subTipoApos == SubTipoAposentadoria.Idade.value:
@@ -624,6 +631,24 @@ def strTipoSimulacao(tipoSimulacao: str) -> str:
         return "Repetição do teto previdenciário"
     elif tipoSimulacao == ContribSimulacao.MANU.name:
         return "Repetição do valor definido manualmente"
+
+
+def strSituacaoProcessual(situacao: SituacaoProcesso) -> str:
+    if isinstance(situacao, int):
+        situacao = SituacaoProcesso(situacao)
+
+    if situacao == SituacaoProcesso.aDarEntrada:
+        return "A dar entrada"
+    elif situacao == SituacaoProcesso.arquivado:
+        return "Arquivado"
+    elif situacao == SituacaoProcesso.cancelado:
+        return "Cancelado"
+    elif situacao == SituacaoProcesso.finalizado:
+        return "Finalizado"
+    elif situacao == SituacaoProcesso.emAndamento:
+        return "Andamento"
+    else:
+        return " - "
 
 
 def pyToDefault(dicionario: dict) -> dict:

@@ -18,6 +18,7 @@ class Sinais(QObject):
     sEditaVinculo = QtCore.pyqtSignal(name='editaVinculo')
     sAtualizaVinculo = QtCore.pyqtSignal(name='AtualizaCabecalho')
     sAbreResumoCnis = QtCore.pyqtSignal(name='resumoCnis')
+    sAbreProcesso = QtCore.pyqtSignal(name='abreProcesso')
     sTrocaPrimeiroAcesso = QtCore.pyqtSignal(Advogados, name='advogado')
     sTrocaTelaEntrevista = QtCore.pyqtSignal(list, name='tela')
     sTrocaInfoLateral = QtCore.pyqtSignal(dict, name='infoLateral')

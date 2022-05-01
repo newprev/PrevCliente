@@ -107,6 +107,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         menu = NewMenuOpcoes(
             parent=self,
             funcEditar=lambda: self.editarCliente(clienteId),
+            funcProcessos=lambda: self.navegaTelaProcesso(clienteId),
             funcArquivar=funcArquivar,
             funcDesarquivar=funcDesarquivar,
             funcEntrevista=lambda: self.confirmaInicioEntrevista(clienteId),
@@ -461,6 +462,10 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
     def navegaResumoCnis(self, clienteId: int):
         clienteEscolhido: Cliente = Cliente.get_by_id(clienteId)
         self.dashboard.trocaTela(TelaAtual.Resumo, clienteEscolhido)
+
+    def navegaTelaProcesso(self, clienteId: int):
+        clienteEscolhido: Cliente = Cliente.get_by_id(clienteId)
+        self.dashboard.trocaTela(TelaAtual.Processos, clienteEscolhido)
 
     def selecionaCliente(self, *args, **kwargs):
         linhaSelecionada = args[0].row()

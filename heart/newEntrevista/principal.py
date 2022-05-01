@@ -16,6 +16,7 @@ from beneficios.aposentadoria import CalculosAposentadoria
 from heart.dashboard.entrevista.localStyleSheet.lateral import iconeInfoCliente
 from heart.newEntrevista.localWidgets.pgConfigSimulacao import PgConfigSimulacao
 from modelos.Auxiliares.tipoInfo import InformacaoModel
+from modelos.incidenteProcessual import IncidenteProcessual
 from systemLog.logs import NewLogging
 from util.enums.aposentadoriaEnums import ContribSimulacao, IndiceReajuste
 from util.helpers.layoutHelpers import limpaLayout
@@ -36,7 +37,7 @@ from sinaisCustomizados import Sinais
 from util.helpers.dateHelper import calculaIdade, mascaraData, strToDate
 from util.enums.dashboardEnums import TelaPosicao
 from util.enums.entrevistaEnums import EtapaEntrevista, CategoriaQuiz
-from util.enums.processoEnums import NaturezaProcesso, TipoBeneficioEnum, TipoProcesso
+from util.enums.processoEnums import NaturezaProcesso, TipoBeneficioEnum, TipoProcesso, SituacaoProcesso
 from util.helpers.helpers import strTipoBeneFacilitado, strTipoProcesso, mascaraCPF
 from util.popUps import popUpSimCancela, popUpOkAlerta
 
@@ -76,7 +77,6 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.newLog = NewLogging()
         self.apiLog = self.newLog.buscaLogger()
 
-        # self.defineCliente(cliente=cliente)
         self.iniciaQuiz()
         self.buscaAdvogadoAtual()
         self.carregaTiposBeneficio()
@@ -473,6 +473,16 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
 
     def salvarSimulacao(self):
         # TODO: LIMPAR TUDO
+        IncidenteProcessual(
+            processoId=self.processoAtual.processoId,
+            andamento=SituacaoProcesso.aDarEntrada.value,
+            descricao='Processo a iniciar salvo no banco de dados.',
+            seq=1,
+            codAndamento=0,
+            dataCadastro=datetime.datetime.now(),
+            dataUltAlt=datetime.datetime.now()
+        ).save()
+
         self.salvandoSimulacao = True
         self.aposentadoriaModel.salvaAposentadorias()
         self.aposentadoriaModel.limpaTudo()

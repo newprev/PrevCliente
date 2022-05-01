@@ -44,7 +44,6 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
     def atualizaTabelaClientes(self, clientes: list = None):
 
         if clientes is None:
-            # clientes = [ClienteModelo().fromList(cliente, retornaInst=True) for cliente in self.daoCliente.buscaTodos()]
             listaClientes: List[Cliente] = Cliente.select().order_by(Cliente.nomeCliente)
 
             for cliente in listaClientes:

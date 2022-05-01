@@ -25,9 +25,10 @@ class BuscaProcessosPage(QMainWindow, Ui_mwBuscaProcessos):
         self.listaProcessos = []
         self.parent = parent
         self.efeitos = Efeitos()
-        self.efeitos.shadowCards([self.frInfoCliente],
-            radius=8,
-            offset=(0, 6),
+        self.efeitos.shadowCards(
+            [self.frInfoCliente],
+            radius=4,
+            offset=(0, 0),
             color=(63, 63, 63, 90),
         )
         self.sinais = Sinais()
@@ -37,6 +38,7 @@ class BuscaProcessosPage(QMainWindow, Ui_mwBuscaProcessos):
         self.pbSeleciona.clicked.connect(self.avaliaSelecao)
         self.sinais.sEnviaProcesso.connect(self.enviaProcesso)
         self.tblListaProcessos.doubleClicked.connect(self.processoSelecionado)
+        # self.pb
 
     def atualizaInfoTela(self):
         if self.clienteAtual is None:
@@ -56,9 +58,9 @@ class BuscaProcessosPage(QMainWindow, Ui_mwBuscaProcessos):
 
     def atualizaTabela(self, listaProcessos: List[Processos] = None):
         if listaProcessos is None:
-            listaAtual = self.listaProcessos
+            listaAtual: List[Processos] = self.listaProcessos
         else:
-            listaAtual = listaProcessos
+            listaAtual: List[Processos] = listaProcessos
 
         self.tblListaProcessos.setRowCount(0)
 

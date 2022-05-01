@@ -22,7 +22,7 @@ class Ui_wdgProcessoPage(object):
         wdgProcessoPage.setSizePolicy(sizePolicy)
         wdgProcessoPage.setMinimumSize(QtCore.QSize(0, 0))
         wdgProcessoPage.setMaximumSize(QtCore.QSize(16777215, 15498465))
-        wdgProcessoPage.setStyleSheet("#wdgCadastroCliente {\n"
+        wdgProcessoPage.setStyleSheet("#wdgProcessoPage {\n"
 "    background-color: white;\n"
 "}\n"
 "\n"
@@ -31,129 +31,9 @@ class Ui_wdgProcessoPage(object):
 "}")
         self.gridLayout = QtWidgets.QGridLayout(wdgProcessoPage)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout.setSpacing(0)
+        self.gridLayout.setHorizontalSpacing(12)
+        self.gridLayout.setVerticalSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
-        self.frPeticao = QtWidgets.QFrame(wdgProcessoPage)
-        self.frPeticao.setStyleSheet("/* ---------- Frame ---------- */\n"
-"#frDocView{\n"
-"    background-color: white;\n"
-"}\n"
-"\n"
-"#frOpcoesEdicao {\n"
-"    background-color: white;\n"
-"    border: 1px solid lightgrey;\n"
-"\n"
-"    border-radius: 20px;\n"
-"}\n"
-"\n"
-"#frPeticao {\n"
-"    background-color: white;\n"
-"}\n"
-"\n"
-"#frDocumento {\n"
-"    background-color: lightgrey;\n"
-"}\n"
-"\n"
-"/* ---------- Push button ---------- */\n"
-"#pbOpImprimir {\n"
-"    background-image: url(:/documentos/impressora_blue.png);\n"
-"    background-position: center;\n"
-"    background-repeat: no-repeat;\n"
-"\n"
-"    background-color: transparent;\n"
-"    border: 0px solid transparent;\n"
-"}\n"
-"\n"
-"#pbFull {\n"
-"    background-image: url(:/documentos/Maximize.png);\n"
-"    background-position: center;\n"
-"    background-repeat: no-repeat;\n"
-"\n"
-"    background-color: transparent;\n"
-"    border: 0px solid transparent;\n"
-"}\n"
-"\n"
-"#pbZoomIn {\n"
-"    background-image: url(:/documentos/zoomIn.png);\n"
-"    background-position: center;\n"
-"    background-repeat: no-repeat;\n"
-"\n"
-"    background-color: transparent;\n"
-"    border: 0px solid transparent;\n"
-"}\n"
-"\n"
-"#pbZoomOut {\n"
-"    background-image: url(:/documentos/zoomOut.png);\n"
-"    background-position: center;\n"
-"    background-repeat: no-repeat;\n"
-"\n"
-"    background-color: transparent;\n"
-"    border: 0px solid transparent;\n"
-"}")
-        self.frPeticao.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frPeticao.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frPeticao.setObjectName("frPeticao")
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frPeticao)
-        self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.frDocumento = QtWidgets.QFrame(self.frPeticao)
-        self.frDocumento.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frDocumento.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frDocumento.setObjectName("frDocumento")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frDocumento)
-        self.verticalLayout_2.setSpacing(24)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.frDocView = QtWidgets.QFrame(self.frDocumento)
-        self.frDocView.setMinimumSize(QtCore.QSize(380, 0))
-        self.frDocView.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frDocView.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frDocView.setObjectName("frDocView")
-        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.frDocView)
-        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_6.setSpacing(0)
-        self.verticalLayout_6.setObjectName("verticalLayout_6")
-        spacerItem = QtWidgets.QSpacerItem(20, 533, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_6.addItem(spacerItem)
-        self.verticalLayout_2.addWidget(self.frDocView)
-        self.frOpcoesEdicao = QtWidgets.QFrame(self.frDocumento)
-        self.frOpcoesEdicao.setMinimumSize(QtCore.QSize(180, 0))
-        self.frOpcoesEdicao.setMaximumSize(QtCore.QSize(180, 12321546))
-        self.frOpcoesEdicao.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frOpcoesEdicao.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frOpcoesEdicao.setObjectName("frOpcoesEdicao")
-        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.frOpcoesEdicao)
-        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
-        self.pbOpImprimir = QtWidgets.QPushButton(self.frOpcoesEdicao)
-        self.pbOpImprimir.setMinimumSize(QtCore.QSize(24, 24))
-        self.pbOpImprimir.setMaximumSize(QtCore.QSize(24, 24))
-        self.pbOpImprimir.setText("")
-        self.pbOpImprimir.setObjectName("pbOpImprimir")
-        self.horizontalLayout_9.addWidget(self.pbOpImprimir)
-        self.line = QtWidgets.QFrame(self.frOpcoesEdicao)
-        self.line.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.line.setFrameShape(QtWidgets.QFrame.VLine)
-        self.line.setObjectName("line")
-        self.horizontalLayout_9.addWidget(self.line)
-        self.pbZoomIn = QtWidgets.QPushButton(self.frOpcoesEdicao)
-        self.pbZoomIn.setMinimumSize(QtCore.QSize(24, 24))
-        self.pbZoomIn.setMaximumSize(QtCore.QSize(24, 24))
-        self.pbZoomIn.setText("")
-        self.pbZoomIn.setObjectName("pbZoomIn")
-        self.horizontalLayout_9.addWidget(self.pbZoomIn)
-        self.pbZoomOut = QtWidgets.QPushButton(self.frOpcoesEdicao)
-        self.pbZoomOut.setMinimumSize(QtCore.QSize(24, 24))
-        self.pbZoomOut.setMaximumSize(QtCore.QSize(24, 24))
-        self.pbZoomOut.setText("")
-        self.pbZoomOut.setObjectName("pbZoomOut")
-        self.horizontalLayout_9.addWidget(self.pbZoomOut)
-        self.pbFull = QtWidgets.QPushButton(self.frOpcoesEdicao)
-        self.pbFull.setMinimumSize(QtCore.QSize(24, 24))
-        self.pbFull.setMaximumSize(QtCore.QSize(24, 24))
-        self.pbFull.setText("")
-        self.pbFull.setObjectName("pbFull")
-        self.horizontalLayout_9.addWidget(self.pbFull)
-        self.verticalLayout_2.addWidget(self.frOpcoesEdicao, 0, QtCore.Qt.AlignHCenter)
-        self.verticalLayout_3.addWidget(self.frDocumento)
-        self.gridLayout.addWidget(self.frPeticao, 0, 1, 1, 1)
         self.frPrincipal = QtWidgets.QFrame(wdgProcessoPage)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -305,10 +185,21 @@ class Ui_wdgProcessoPage(object):
 "    font-weight: 750;\n"
 "}\n"
 "\n"
+"#pbAlterarProcesso {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    font-weight: 750;\n"
+"\n"
+"    border: 2px solid #3F4E8C;\n"
+"    border-radius: 8px;\n"
+"\n"
+"    padding: 10px;\n"
+"}\n"
+"\n"
 "/* ----------  Label -------- */\n"
 "#lbNomeCliente, #lbClienteEmail,\n"
 "#lbClienteTelefone {\n"
-"    font: 10pt \"Avenir LT Std\";\n"
+"    font: 11pt \"Avenir LT Std\";\n"
 "    color: #040D14;\n"
 "    font-weight: 200;\n"
 "}\n"
@@ -350,16 +241,16 @@ class Ui_wdgProcessoPage(object):
 "}\n"
 "\n"
 "/* ------------------------------------ Frames ------------------------------------*/\n"
-"#frInfoProcSelecionado {\n"
+"#frCardProcesso {\n"
 "    background-color: #F9F9F9;\n"
 "    border: 0px solid none;\n"
 "    border-radius: 8px;\n"
 "}\n"
 "\n"
 "#frBotoesDocs {\n"
-"    background-color: transparent;\n"
-"    border: 1px solid transparent;\n"
-"    border-radius: 16px;\n"
+"    background-color: white;\n"
+"    border: 0px solid black;\n"
+"    border-radius: 14px;\n"
 "}\n"
 "\n"
 "#frBuscaCliente {\n"
@@ -382,6 +273,11 @@ class Ui_wdgProcessoPage(object):
 "#frInfoGeralProcesso {\n"
 "    background-color: white;\n"
 "}\n"
+"\n"
+"/* --------------------------- Widgets --------------------------------- */\n"
+"#wdgListaProcessos {\n"
+"    background-color: white;\n"
+"}\n"
 "")
         self.frMiolo.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frMiolo.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -396,7 +292,7 @@ class Ui_wdgProcessoPage(object):
         sizePolicy.setHeightForWidth(self.frEsquerda.sizePolicy().hasHeightForWidth())
         self.frEsquerda.setSizePolicy(sizePolicy)
         self.frEsquerda.setMinimumSize(QtCore.QSize(350, 0))
-        self.frEsquerda.setMaximumSize(QtCore.QSize(450, 16777215))
+        self.frEsquerda.setMaximumSize(QtCore.QSize(550, 16777215))
         self.frEsquerda.setStyleSheet("")
         self.frEsquerda.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frEsquerda.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -432,7 +328,7 @@ class Ui_wdgProcessoPage(object):
         self.frClienteSelecionado.setObjectName("frClienteSelecionado")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.frClienteSelecionado)
         self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_5.setSpacing(0)
+        self.horizontalLayout_5.setSpacing(18)
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.frame_4 = QtWidgets.QFrame(self.frClienteSelecionado)
         self.frame_4.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -477,9 +373,21 @@ class Ui_wdgProcessoPage(object):
         self.lbClienteEmail.setObjectName("lbClienteEmail")
         self.verticalLayout_5.addWidget(self.lbClienteEmail)
         self.horizontalLayout_5.addWidget(self.frame_5)
+        self.frame = QtWidgets.QFrame(self.frClienteSelecionado)
+        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem)
+        self.pbAlterarProcesso = QtWidgets.QPushButton(self.frame)
+        self.pbAlterarProcesso.setObjectName("pbAlterarProcesso")
+        self.horizontalLayout_4.addWidget(self.pbAlterarProcesso)
+        self.horizontalLayout_5.addWidget(self.frame)
         self.stkInfoCliente.addWidget(self.frClienteSelecionado)
         self.gridLayout_3.addWidget(self.stkInfoCliente, 0, 0, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.MinimumExpanding)
         self.gridLayout_3.addItem(spacerItem1, 2, 0, 1, 1)
         self.frInfoGeralProcessos = QtWidgets.QFrame(self.frEsquerda)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
@@ -494,19 +402,41 @@ class Ui_wdgProcessoPage(object):
         self.verticalLayout_18.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_18.setSpacing(12)
         self.verticalLayout_18.setObjectName("verticalLayout_18")
-        self.frInfoProcSelecionado = QtWidgets.QFrame(self.frInfoGeralProcessos)
+        self.frCardProcesso = QtWidgets.QFrame(self.frInfoGeralProcessos)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.frInfoProcSelecionado.sizePolicy().hasHeightForWidth())
-        self.frInfoProcSelecionado.setSizePolicy(sizePolicy)
-        self.frInfoProcSelecionado.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frInfoProcSelecionado.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frInfoProcSelecionado.setObjectName("frInfoProcSelecionado")
-        self.gridLayout_2 = QtWidgets.QGridLayout(self.frInfoProcSelecionado)
+        sizePolicy.setHeightForWidth(self.frCardProcesso.sizePolicy().hasHeightForWidth())
+        self.frCardProcesso.setSizePolicy(sizePolicy)
+        self.frCardProcesso.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frCardProcesso.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frCardProcesso.setObjectName("frCardProcesso")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.frCardProcesso)
         self.gridLayout_2.setVerticalSpacing(12)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.frInfosProc = QtWidgets.QFrame(self.frInfoProcSelecionado)
+        self.frNumProcesso = QtWidgets.QFrame(self.frCardProcesso)
+        self.frNumProcesso.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frNumProcesso.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frNumProcesso.setObjectName("frNumProcesso")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frNumProcesso)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setSpacing(7)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.lbInfoNumProcesso = QtWidgets.QLabel(self.frNumProcesso)
+        self.lbInfoNumProcesso.setObjectName("lbInfoNumProcesso")
+        self.horizontalLayout_2.addWidget(self.lbInfoNumProcesso)
+        self.lbNumProcesso = QtWidgets.QLabel(self.frNumProcesso)
+        self.lbNumProcesso.setObjectName("lbNumProcesso")
+        self.horizontalLayout_2.addWidget(self.lbNumProcesso)
+        self.gridLayout_2.addWidget(self.frNumProcesso, 0, 1, 1, 1)
+        self.frFirulaProcesso = QtWidgets.QFrame(self.frCardProcesso)
+        self.frFirulaProcesso.setMinimumSize(QtCore.QSize(4, 0))
+        self.frFirulaProcesso.setMaximumSize(QtCore.QSize(4, 16777215))
+        self.frFirulaProcesso.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frFirulaProcesso.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frFirulaProcesso.setObjectName("frFirulaProcesso")
+        self.gridLayout_2.addWidget(self.frFirulaProcesso, 0, 0, 2, 1)
+        self.frInfosProc = QtWidgets.QFrame(self.frCardProcesso)
         self.frInfosProc.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frInfosProc.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frInfosProc.setObjectName("frInfosProc")
@@ -534,31 +464,9 @@ class Ui_wdgProcessoPage(object):
         self.lbTpProcesso.setObjectName("lbTpProcesso")
         self.gridLayout_4.addWidget(self.lbTpProcesso, 2, 1, 1, 1)
         self.gridLayout_2.addWidget(self.frInfosProc, 1, 1, 1, 1)
-        self.frNumProcesso = QtWidgets.QFrame(self.frInfoProcSelecionado)
-        self.frNumProcesso.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frNumProcesso.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frNumProcesso.setObjectName("frNumProcesso")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frNumProcesso)
-        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_2.setSpacing(7)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.lbInfoNumProcesso = QtWidgets.QLabel(self.frNumProcesso)
-        self.lbInfoNumProcesso.setObjectName("lbInfoNumProcesso")
-        self.horizontalLayout_2.addWidget(self.lbInfoNumProcesso)
-        self.lbNumProcesso = QtWidgets.QLabel(self.frNumProcesso)
-        self.lbNumProcesso.setObjectName("lbNumProcesso")
-        self.horizontalLayout_2.addWidget(self.lbNumProcesso)
-        self.gridLayout_2.addWidget(self.frNumProcesso, 0, 1, 1, 1)
-        self.frFirulaProcesso = QtWidgets.QFrame(self.frInfoProcSelecionado)
-        self.frFirulaProcesso.setMinimumSize(QtCore.QSize(4, 0))
-        self.frFirulaProcesso.setMaximumSize(QtCore.QSize(4, 16777215))
-        self.frFirulaProcesso.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frFirulaProcesso.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frFirulaProcesso.setObjectName("frFirulaProcesso")
-        self.gridLayout_2.addWidget(self.frFirulaProcesso, 0, 0, 2, 1)
-        self.verticalLayout_18.addWidget(self.frInfoProcSelecionado)
+        self.verticalLayout_18.addWidget(self.frCardProcesso)
         self.frInfoDocumentos = QtWidgets.QFrame(self.frInfoGeralProcessos)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frInfoDocumentos.sizePolicy().hasHeightForWidth())
@@ -569,10 +477,22 @@ class Ui_wdgProcessoPage(object):
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.frInfoDocumentos)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.lbInfoTituloDocs = QtWidgets.QLabel(self.frInfoDocumentos)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbInfoTituloDocs.sizePolicy().hasHeightForWidth())
+        self.lbInfoTituloDocs.setSizePolicy(sizePolicy)
         self.lbInfoTituloDocs.setObjectName("lbInfoTituloDocs")
         self.verticalLayout_4.addWidget(self.lbInfoTituloDocs)
         self.lbInfoDescricao = QtWidgets.QLabel(self.frInfoDocumentos)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbInfoDescricao.sizePolicy().hasHeightForWidth())
+        self.lbInfoDescricao.setSizePolicy(sizePolicy)
+        self.lbInfoDescricao.setMinimumSize(QtCore.QSize(0, 40))
         self.lbInfoDescricao.setScaledContents(True)
+        self.lbInfoDescricao.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.lbInfoDescricao.setWordWrap(True)
         self.lbInfoDescricao.setObjectName("lbInfoDescricao")
         self.verticalLayout_4.addWidget(self.lbInfoDescricao)
@@ -597,7 +517,7 @@ class Ui_wdgProcessoPage(object):
         self.checkBox_2.setObjectName("checkBox_2")
         self.gridLayout_5.addWidget(self.checkBox_2, 0, 2, 1, 1)
         self.verticalLayout_4.addWidget(self.frame_2)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout_4.addItem(spacerItem3)
         self.frBotoesDocs = QtWidgets.QFrame(self.frInfoDocumentos)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
@@ -665,50 +585,217 @@ class Ui_wdgProcessoPage(object):
         self.lbInfoGeraPdf.setObjectName("lbInfoGeraPdf")
         self.horizontalLayout_8.addWidget(self.lbInfoGeraPdf)
         self.horizontalLayout_3.addWidget(self.frame_7)
-        self.verticalLayout_4.addWidget(self.frBotoesDocs)
+        self.verticalLayout_4.addWidget(self.frBotoesDocs, 0, QtCore.Qt.AlignHCenter)
         self.lbInfoTituloDocs.raise_()
         self.lbInfoDescricao.raise_()
         self.frame_2.raise_()
         self.frBotoesDocs.raise_()
         self.verticalLayout_18.addWidget(self.frInfoDocumentos, 0, QtCore.Qt.AlignHCenter)
         self.gridLayout_3.addWidget(self.frInfoGeralProcessos, 1, 0, 1, 1)
-        self.gridLayout_6.addWidget(self.frEsquerda, 0, 0, 3, 1)
-        self.frDireita = QtWidgets.QFrame(self.frMiolo)
-        self.frDireita.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frDireita.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frDireita.setObjectName("frDireita")
-        self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.frDireita)
-        self.verticalLayout_8.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_8.setSpacing(8)
-        self.verticalLayout_8.setObjectName("verticalLayout_8")
-        self.frTituloListaProcessos = QtWidgets.QFrame(self.frDireita)
-        self.frTituloListaProcessos.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frTituloListaProcessos.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frTituloListaProcessos.setObjectName("frTituloListaProcessos")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frTituloListaProcessos)
-        self.horizontalLayout_4.setContentsMargins(16, 16, 16, 16)
-        self.horizontalLayout_4.setSpacing(0)
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.lbTituloListaProcessos = QtWidgets.QLabel(self.frTituloListaProcessos)
-        self.lbTituloListaProcessos.setAlignment(QtCore.Qt.AlignCenter)
-        self.lbTituloListaProcessos.setObjectName("lbTituloListaProcessos")
-        self.horizontalLayout_4.addWidget(self.lbTituloListaProcessos)
-        self.verticalLayout_8.addWidget(self.frTituloListaProcessos)
-        self.scaListaProcessos = QtWidgets.QScrollArea(self.frDireita)
-        self.scaListaProcessos.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.scaListaProcessos.setWidgetResizable(True)
-        self.scaListaProcessos.setObjectName("scaListaProcessos")
-        self.wdgListaProcessos = QtWidgets.QWidget()
-        self.wdgListaProcessos.setGeometry(QtCore.QRect(0, 0, 321, 491))
-        self.wdgListaProcessos.setObjectName("wdgListaProcessos")
-        self.scaListaProcessos.setWidget(self.wdgListaProcessos)
-        self.verticalLayout_8.addWidget(self.scaListaProcessos)
-        self.gridLayout_6.addWidget(self.frDireita, 1, 1, 1, 1)
+        self.gridLayout_6.addWidget(self.frEsquerda, 0, 0, 2, 1, QtCore.Qt.AlignLeft)
         self.verticalLayout.addWidget(self.frMiolo)
         self.gridLayout.addWidget(self.frPrincipal, 0, 0, 1, 1)
+        self.frAndamentos = QtWidgets.QFrame(wdgProcessoPage)
+        self.frAndamentos.setStyleSheet("/* ------------ Frames -------------- */\n"
+"#wdgListaAndamentos {\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"#frTituloAndamentos {\n"
+"    background-color: #3F4E8C;\n"
+"    border: 0px solid transparent;\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
+"/* ------------ Labels --------------- */\n"
+"#lbTituloAndamento {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"    font-weight: 750;\n"
+"\n"
+"    margin: 8px 18px;\n"
+"}")
+        self.frAndamentos.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frAndamentos.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frAndamentos.setObjectName("frAndamentos")
+        self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.frAndamentos)
+        self.verticalLayout_8.setContentsMargins(0, 40, 0, 0)
+        self.verticalLayout_8.setSpacing(18)
+        self.verticalLayout_8.setObjectName("verticalLayout_8")
+        self.frTituloAndamentos = QtWidgets.QFrame(self.frAndamentos)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frTituloAndamentos.sizePolicy().hasHeightForWidth())
+        self.frTituloAndamentos.setSizePolicy(sizePolicy)
+        self.frTituloAndamentos.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTituloAndamentos.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTituloAndamentos.setObjectName("frTituloAndamentos")
+        self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.frTituloAndamentos)
+        self.horizontalLayout_10.setContentsMargins(4, 4, 4, 4)
+        self.horizontalLayout_10.setSpacing(0)
+        self.horizontalLayout_10.setObjectName("horizontalLayout_10")
+        self.lbTituloAndamento = QtWidgets.QLabel(self.frTituloAndamentos)
+        self.lbTituloAndamento.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbTituloAndamento.setObjectName("lbTituloAndamento")
+        self.horizontalLayout_10.addWidget(self.lbTituloAndamento)
+        self.verticalLayout_8.addWidget(self.frTituloAndamentos)
+        self.scaAndamentos = QtWidgets.QScrollArea(self.frAndamentos)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scaAndamentos.sizePolicy().hasHeightForWidth())
+        self.scaAndamentos.setSizePolicy(sizePolicy)
+        self.scaAndamentos.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scaAndamentos.setWidgetResizable(True)
+        self.scaAndamentos.setObjectName("scaAndamentos")
+        self.wdgListaAndamentos = QtWidgets.QWidget()
+        self.wdgListaAndamentos.setGeometry(QtCore.QRect(0, 0, 233, 260))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.wdgListaAndamentos.sizePolicy().hasHeightForWidth())
+        self.wdgListaAndamentos.setSizePolicy(sizePolicy)
+        self.wdgListaAndamentos.setObjectName("wdgListaAndamentos")
+        self.scaAndamentos.setWidget(self.wdgListaAndamentos)
+        self.verticalLayout_8.addWidget(self.scaAndamentos)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.verticalLayout_8.addItem(spacerItem4)
+        self.gridLayout.addWidget(self.frAndamentos, 0, 2, 1, 1)
+        self.frPeticao = QtWidgets.QFrame(wdgProcessoPage)
+        self.frPeticao.setStyleSheet("/* ---------- Frame ---------- */\n"
+"#frDocView{\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"#frOpcoesEdicao {\n"
+"    background-color: white;\n"
+"    border: 1px solid lightgrey;\n"
+"\n"
+"    border-radius: 20px;\n"
+"}\n"
+"\n"
+"#frPeticao {\n"
+"    background-color: white;\n"
+"}\n"
+"\n"
+"#frDocumento {\n"
+"    background-color: lightgrey;\n"
+"}\n"
+"\n"
+"/* ---------- Push button ---------- */\n"
+"#pbOpImprimir {\n"
+"    background-image: url(:/documentos/impressora_blue.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"\n"
+"    background-color: transparent;\n"
+"    border: 0px solid transparent;\n"
+"}\n"
+"\n"
+"#pbFull {\n"
+"    background-image: url(:/documentos/Maximize.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"\n"
+"    background-color: transparent;\n"
+"    border: 0px solid transparent;\n"
+"}\n"
+"\n"
+"#pbZoomIn {\n"
+"    background-image: url(:/documentos/zoomIn.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"\n"
+"    background-color: transparent;\n"
+"    border: 0px solid transparent;\n"
+"}\n"
+"\n"
+"#pbZoomOut {\n"
+"    background-image: url(:/documentos/zoomOut.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"\n"
+"    background-color: transparent;\n"
+"    border: 0px solid transparent;\n"
+"}")
+        self.frPeticao.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frPeticao.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frPeticao.setObjectName("frPeticao")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frPeticao)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.frDocumento = QtWidgets.QFrame(self.frPeticao)
+        self.frDocumento.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frDocumento.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frDocumento.setObjectName("frDocumento")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frDocumento)
+        self.verticalLayout_2.setSpacing(24)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.frDocView = QtWidgets.QFrame(self.frDocumento)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frDocView.sizePolicy().hasHeightForWidth())
+        self.frDocView.setSizePolicy(sizePolicy)
+        self.frDocView.setMinimumSize(QtCore.QSize(380, 0))
+        self.frDocView.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frDocView.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frDocView.setObjectName("frDocView")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.frDocView)
+        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_6.setSpacing(0)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        spacerItem5 = QtWidgets.QSpacerItem(20, 533, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.MinimumExpanding)
+        self.verticalLayout_6.addItem(spacerItem5)
+        self.verticalLayout_2.addWidget(self.frDocView)
+        self.frOpcoesEdicao = QtWidgets.QFrame(self.frDocumento)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frOpcoesEdicao.sizePolicy().hasHeightForWidth())
+        self.frOpcoesEdicao.setSizePolicy(sizePolicy)
+        self.frOpcoesEdicao.setMinimumSize(QtCore.QSize(180, 0))
+        self.frOpcoesEdicao.setMaximumSize(QtCore.QSize(180, 44))
+        self.frOpcoesEdicao.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frOpcoesEdicao.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frOpcoesEdicao.setObjectName("frOpcoesEdicao")
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.frOpcoesEdicao)
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.pbOpImprimir = QtWidgets.QPushButton(self.frOpcoesEdicao)
+        self.pbOpImprimir.setMinimumSize(QtCore.QSize(24, 24))
+        self.pbOpImprimir.setMaximumSize(QtCore.QSize(24, 24))
+        self.pbOpImprimir.setText("")
+        self.pbOpImprimir.setObjectName("pbOpImprimir")
+        self.horizontalLayout_9.addWidget(self.pbOpImprimir)
+        self.line = QtWidgets.QFrame(self.frOpcoesEdicao)
+        self.line.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.line.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line.setObjectName("line")
+        self.horizontalLayout_9.addWidget(self.line)
+        self.pbZoomIn = QtWidgets.QPushButton(self.frOpcoesEdicao)
+        self.pbZoomIn.setMinimumSize(QtCore.QSize(24, 24))
+        self.pbZoomIn.setMaximumSize(QtCore.QSize(24, 24))
+        self.pbZoomIn.setText("")
+        self.pbZoomIn.setObjectName("pbZoomIn")
+        self.horizontalLayout_9.addWidget(self.pbZoomIn)
+        self.pbZoomOut = QtWidgets.QPushButton(self.frOpcoesEdicao)
+        self.pbZoomOut.setMinimumSize(QtCore.QSize(24, 24))
+        self.pbZoomOut.setMaximumSize(QtCore.QSize(24, 24))
+        self.pbZoomOut.setText("")
+        self.pbZoomOut.setObjectName("pbZoomOut")
+        self.horizontalLayout_9.addWidget(self.pbZoomOut)
+        self.pbFull = QtWidgets.QPushButton(self.frOpcoesEdicao)
+        self.pbFull.setMinimumSize(QtCore.QSize(24, 24))
+        self.pbFull.setMaximumSize(QtCore.QSize(24, 24))
+        self.pbFull.setText("")
+        self.pbFull.setObjectName("pbFull")
+        self.horizontalLayout_9.addWidget(self.pbFull)
+        self.verticalLayout_2.addWidget(self.frOpcoesEdicao, 0, QtCore.Qt.AlignHCenter)
+        self.verticalLayout_3.addWidget(self.frDocumento)
+        self.gridLayout.addWidget(self.frPeticao, 0, 3, 1, 1)
 
         self.retranslateUi(wdgProcessoPage)
-        self.stkInfoCliente.setCurrentIndex(0)
+        self.stkInfoCliente.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(wdgProcessoPage)
 
     def retranslateUi(self, wdgProcessoPage):
@@ -720,14 +807,15 @@ class Ui_wdgProcessoPage(object):
         self.lbNomeCliente.setText(_translate("wdgProcessoPage", "Nome do cliente"))
         self.lbClienteTelefone.setText(_translate("wdgProcessoPage", "(11) 9 1234 - 5678"))
         self.lbClienteEmail.setText(_translate("wdgProcessoPage", "fulano.deTal@gmail.com"))
+        self.pbAlterarProcesso.setText(_translate("wdgProcessoPage", "Selecionar processo"))
+        self.lbInfoNumProcesso.setText(_translate("wdgProcessoPage", "Processo: "))
+        self.lbNumProcesso.setText(_translate("wdgProcessoPage", "NumProcesso"))
         self.lbTpBeneficio.setText(_translate("wdgProcessoPage", "Aposentadoria"))
         self.lbInfoTpBeneficio.setText(_translate("wdgProcessoPage", "Tipo do benefício:"))
         self.lbNatureza.setText(_translate("wdgProcessoPage", "Administrativa"))
         self.lbInfoTpProcesso.setText(_translate("wdgProcessoPage", "Tipo do processo:"))
         self.lbInfoNatureza.setText(_translate("wdgProcessoPage", "Natureza:"))
         self.lbTpProcesso.setText(_translate("wdgProcessoPage", "Concessão"))
-        self.lbInfoNumProcesso.setText(_translate("wdgProcessoPage", "Processo: "))
-        self.lbNumProcesso.setText(_translate("wdgProcessoPage", "NumProcesso"))
         self.lbInfoTituloDocs.setText(_translate("wdgProcessoPage", "Documentos"))
         self.lbInfoDescricao.setText(_translate("wdgProcessoPage", "Selecione os documentos que deseja imprimir ou gerar PDF."))
         self.checkBox.setText(_translate("wdgProcessoPage", "CheckBox"))
@@ -735,7 +823,7 @@ class Ui_wdgProcessoPage(object):
         self.checkBox_2.setText(_translate("wdgProcessoPage", "CheckBox"))
         self.lbInfoImprimir.setText(_translate("wdgProcessoPage", "Imprimir tudo"))
         self.lbInfoGeraPdf.setText(_translate("wdgProcessoPage", "Gerar PDF\'s"))
-        self.lbTituloListaProcessos.setText(_translate("wdgProcessoPage", "Lista de processos"))
+        self.lbTituloAndamento.setText(_translate("wdgProcessoPage", "Andamentos processuais"))
 import Resources.processoPage
 
 

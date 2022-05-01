@@ -48,6 +48,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         self.sinais.sEnviaInfo.connect(self.editarInfoCliente)
         self.sinais.sIniciaEntrevista.connect(self.iniciarEntrevista)
         self.sinais.sAbreResumoCnis.connect(self.abreResumo)
+        self.sinais.sAbreProcesso.connect(self.navegaTelaProcesso)
         self.toasty = None
         self.popupCNIS = None
         self.limpaTudo()
@@ -59,6 +60,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         self.pbVoltar.clicked.connect(lambda: self.sinais.sVoltaTela.emit())
         self.pbEntrevista.clicked.connect(self.confirmaIniciaEntrevista)
         self.pbResumo.clicked.connect(self.enviaSinalResumoCnis)
+        self.pbProcessos.clicked.connect(self.enviaClienteProcesso)
         self.iniciarBotoesOpcoes()
 
     def abreResumo(self):
@@ -259,6 +261,9 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         self.dashboard.recebeCliente(self.clienteAtual, info=info)
         return True
 
+    def enviaClienteProcesso(self):
+        self.sinais.sAbreProcesso.emit()
+
     def enviaSinalResumoCnis(self):
         self.sinais.sAbreResumoCnis.emit()
 
@@ -320,6 +325,9 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         # Informações CNIS
         self.lbInfoNomeArquivo.setText('fulanoDeTal.pdf')
         self.lbInfoMetaArquivo.setText("10 dias atrás")
+
+    def navegaTelaProcesso(self):
+        self.dashboard.trocaTela(TelaAtual.Processos, self.clienteAtual)
 
     def recebePathCnis(self, pathCnis:str):
         if os.path.isfile(pathCnis):

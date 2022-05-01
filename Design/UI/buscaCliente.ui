@@ -967,7 +967,7 @@ QHeaderView::section {
           </property>
           <property name="font">
            <font>
-            <family>TeX Gyre Adventor</family>
+            <family>Avenir LT Std</family>
             <pointsize>12</pointsize>
             <weight>75</weight>
             <bold>true</bold>
@@ -984,7 +984,7 @@ QHeaderView::section {
            </color>
           </property>
           <property name="foreground">
-           <brush brushstyle="NoBrush">
+           <brush brushstyle="SolidPattern">
             <color alpha="255">
              <red>63</red>
              <green>78</green>

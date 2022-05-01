@@ -31,4 +31,4 @@ class SituacaoProcesso(Enum):
 class SituacaoTela(Enum):
     clienteFaltante = 0
     processoFaltante = 1
-    ok = 3
+    processoEncontrado = 2

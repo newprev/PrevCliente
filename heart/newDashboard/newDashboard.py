@@ -121,6 +121,12 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
                 self.stkPrincipal.removeWidget(self.wdgEntrevista)
                 self.wdgEntrevista = NewEntrevistaPrincipal(self.escritorioAtual, cliente=args[0], parent=self)
                 self.stkPrincipal.insertWidget(tela.value, self.wdgEntrevista)
+
+            elif tela == TelaAtual.Processos:
+                self.stkPrincipal.removeWidget(self.wdgProcesso)
+                self.wdgProcesso = ProcessoPage(cliente=args[0], parent=self)
+                self.stkPrincipal.insertWidget(tela.value, self.wdgProcesso)
+
             elif tela == TelaAtual.Resumo:
                 self.wdgResumoCnis.recebeCliente(args[0])
 

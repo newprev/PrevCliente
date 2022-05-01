@@ -13,7 +13,7 @@ TABLENAME = 'clienteInfoBanco'
 
 
 class ClienteInfoBanco(BaseModel, Model):
-    infoId = AutoField(column_name='infoId', null=True)
+    infoId = AutoField(column_name='infoId', null=True, primary_key=True)
     clienteId = IntegerField(column_name='clienteId')
     nomeBanco = CharField(column_name='nomeBanco', null=True)
     numeroAgencia = CharField(column_name='numeroAgencia', null=True)

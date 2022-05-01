@@ -19,6 +19,7 @@ from modelos.convMonORM import ConvMon
 from modelos.baseModelORM import database
 from modelos.especieBenefORM import EspecieBene
 from modelos.expSobrevidaORM import ExpSobrevida
+from modelos.incidenteProcessual import IncidenteProcessual
 from modelos.indicadoresORM import Indicadores
 from modelos.indiceAtuMonetariaORM import IndiceAtuMonetaria
 from modelos.pppORM import Ppp
@@ -149,6 +150,7 @@ class Main(Ui_MainWindow, QMainWindow):
                 ExpSobrevida: 'CRIANDO TABELA DAS EXPECTATIVAS DE SOBREVIDA...',
                 Indicadores: 'CRIANDO TABELA DE INDICADORES...',
                 IndiceAtuMonetaria: 'CRIANDO TABELA DOS ÍNDICES DE ATUALIZAÇÃO MONETARIA...',
+                IncidenteProcessual: 'CRIANDO TABELA DE INCIDENTES PROCESSUAIS...',
                 Ppp: 'CRIANDO TABELA DOS PPP...',
                 Processos: 'CRIANDO TABELA DOS PROCESSOS...',
                 Telefones: 'CRIANDO TABELA DE TELEFONES...',

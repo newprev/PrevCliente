@@ -38,7 +38,7 @@ class BuscaProcessosPage(QMainWindow, Ui_mwBuscaProcessos):
         self.pbSeleciona.clicked.connect(self.avaliaSelecao)
         self.sinais.sEnviaProcesso.connect(self.enviaProcesso)
         self.tblListaProcessos.doubleClicked.connect(self.processoSelecionado)
-        # self.pb
+        self.pbCancela.clicked.connect(self.fecharJanela)
 
     def atualizaInfoTela(self):
         if self.clienteAtual is None:
@@ -116,6 +116,9 @@ class BuscaProcessosPage(QMainWindow, Ui_mwBuscaProcessos):
 
     def enviaProcesso(self):
         self.parent.recebeProcesso(self.processoIdSelecionado)
+        self.close()
+
+    def fecharJanela(self):
         self.close()
 
 

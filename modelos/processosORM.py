@@ -30,7 +30,7 @@ class Processos(BaseModel, Model):
     numeroProcesso = CharField(column_name='numeroProcesso', null=True)
     pontuacao = IntegerField(null=True)
     situacaoId = IntegerField(column_name='situacaoId', default=0)
-    subTipoApos = IntegerField(column_name='subTipoApos', null=True)
+    subTipoApos = CharField(column_name='subTipoApos', max_length=10, null=True)
     tempoContribuicao = IntegerField(column_name='tempoContribuicao', null=True)
     tipoBeneficio = ForeignKeyField(column_name='tipoBeneficio', field='tipoId', model=TipoBeneficioModel, null=True, backref='TipoBeneficioModel')
     tipoProcesso = IntegerField(column_name='tipoProcesso', null=True)

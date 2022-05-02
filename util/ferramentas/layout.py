@@ -9,4 +9,5 @@ def limpaLayout(layout: Union[QHBoxLayout, QGridLayout, QVBoxLayout,QListWidget,
     """
 
     for i in reversed(range(layout.count())):
-        layout.itemAt(i).widget().setParent(None)
+        if layout.itemAt(i).widget() is not None:
+            layout.itemAt(i).widget().setParent(None)

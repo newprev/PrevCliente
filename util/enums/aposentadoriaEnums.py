@@ -79,6 +79,7 @@ class SubTipoAposentadoria(Enum):
     Especial = 3
     TempoContrib = 4
     Invalidez = 5
+    Pontos = 6
 
 
 class TelaAtiva(Enum):

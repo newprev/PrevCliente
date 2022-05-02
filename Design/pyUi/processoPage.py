@@ -157,22 +157,21 @@ class Ui_wdgProcessoPage(object):
 "}\n"
 "\n"
 "/* --------  Push Button -------- */\n"
-"#pbGeraPdf {\n"
-"    background-image: url(:/documentos/documento.png);\n"
-"    background-position: center;\n"
-"    background-repeat: no-repeat;\n"
+"#pbGeraPdf, #pbImprimir {\n"
+"    font: 10pt \"Avenir LT Std\";\n"
+"    color: #3A405A;\n"
 "\n"
 "    background-color: transparent;\n"
 "    border: 0px solid transparent;\n"
+"\n"
+"    margin: 3px;\n"
 "}\n"
 "\n"
-"#pbImprimir {\n"
-"    background-image: url(:/documentos/impressora_blue.png);\n"
-"    background-position: center;\n"
-"    background-repeat: no-repeat;\n"
+"#pbGeraPdf:hover, #pbImprimir:hover {\n"
+"    border-radius: 12px;\n"
+"    background-color: rgba(86, 107, 191, 60);\n"
 "\n"
-"    background-color: transparent;\n"
-"    border: 0px solid transparent;\n"
+"    margin: 3px;\n"
 "}\n"
 "\n"
 "#pbBuscarCliente {\n"
@@ -240,6 +239,11 @@ class Ui_wdgProcessoPage(object):
 "    font-weight: 750;\n"
 "}\n"
 "\n"
+"#lbClienteFoto {\n"
+"    border: 0px solid transparent;\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
 "/* ------------------------------------ Frames ------------------------------------*/\n"
 "#frCardProcesso {\n"
 "    background-color: #F9F9F9;\n"
@@ -265,6 +269,11 @@ class Ui_wdgProcessoPage(object):
 "\n"
 "#frTituloListaProcessos{\n"
 "    background-color: #3F4E8C;\n"
+"    border: 0px solid transparent;\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
+"#frClienteFoto {\n"
 "    border: 0px solid transparent;\n"
 "    border-radius: 8px;\n"
 "}\n"
@@ -328,26 +337,29 @@ class Ui_wdgProcessoPage(object):
         self.frClienteSelecionado.setObjectName("frClienteSelecionado")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.frClienteSelecionado)
         self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_5.setSpacing(18)
+        self.horizontalLayout_5.setSpacing(8)
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.frame_4 = QtWidgets.QFrame(self.frClienteSelecionado)
-        self.frame_4.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_4.setObjectName("frame_4")
-        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frame_4)
+        self.frClienteFoto = QtWidgets.QFrame(self.frClienteSelecionado)
+        self.frClienteFoto.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frClienteFoto.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frClienteFoto.setObjectName("frClienteFoto")
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frClienteFoto)
         self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_6.setSpacing(0)
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        self.lbClienteFoto = QtWidgets.QLabel(self.frame_4)
+        self.lbClienteFoto = QtWidgets.QLabel(self.frClienteFoto)
+        self.lbClienteFoto.setMaximumSize(QtCore.QSize(120, 120))
         self.lbClienteFoto.setObjectName("lbClienteFoto")
         self.horizontalLayout_6.addWidget(self.lbClienteFoto)
-        self.horizontalLayout_5.addWidget(self.frame_4)
+        self.horizontalLayout_5.addWidget(self.frClienteFoto)
         self.frame_5 = QtWidgets.QFrame(self.frClienteSelecionado)
         self.frame_5.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_5.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_5.setObjectName("frame_5")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.frame_5)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
+        self.verticalLayout_5.addItem(spacerItem)
         self.lbNomeCliente = QtWidgets.QLabel(self.frame_5)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
@@ -372,6 +384,8 @@ class Ui_wdgProcessoPage(object):
         self.lbClienteEmail.setSizePolicy(sizePolicy)
         self.lbClienteEmail.setObjectName("lbClienteEmail")
         self.verticalLayout_5.addWidget(self.lbClienteEmail)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
+        self.verticalLayout_5.addItem(spacerItem1)
         self.horizontalLayout_5.addWidget(self.frame_5)
         self.frame = QtWidgets.QFrame(self.frClienteSelecionado)
         self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -379,16 +393,14 @@ class Ui_wdgProcessoPage(object):
         self.frame.setObjectName("frame")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem)
         self.pbAlterarProcesso = QtWidgets.QPushButton(self.frame)
         self.pbAlterarProcesso.setObjectName("pbAlterarProcesso")
         self.horizontalLayout_4.addWidget(self.pbAlterarProcesso)
         self.horizontalLayout_5.addWidget(self.frame)
         self.stkInfoCliente.addWidget(self.frClienteSelecionado)
         self.gridLayout_3.addWidget(self.stkInfoCliente, 0, 0, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.MinimumExpanding)
-        self.gridLayout_3.addItem(spacerItem1, 2, 0, 1, 1)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.MinimumExpanding)
+        self.gridLayout_3.addItem(spacerItem2, 2, 0, 1, 1)
         self.frInfoGeralProcessos = QtWidgets.QFrame(self.frEsquerda)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
@@ -496,16 +508,15 @@ class Ui_wdgProcessoPage(object):
         self.lbInfoDescricao.setWordWrap(True)
         self.lbInfoDescricao.setObjectName("lbInfoDescricao")
         self.verticalLayout_4.addWidget(self.lbInfoDescricao)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 12, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.verticalLayout_4.addItem(spacerItem2)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 12, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.verticalLayout_4.addItem(spacerItem3)
         self.frame_2 = QtWidgets.QFrame(self.frInfoDocumentos)
         self.frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.frame_2)
         self.gridLayout_5.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_5.setHorizontalSpacing(8)
-        self.gridLayout_5.setVerticalSpacing(0)
+        self.gridLayout_5.setSpacing(0)
         self.gridLayout_5.setObjectName("gridLayout_5")
         self.checkBox = QtWidgets.QCheckBox(self.frame_2)
         self.checkBox.setObjectName("checkBox")
@@ -517,21 +528,39 @@ class Ui_wdgProcessoPage(object):
         self.checkBox_2.setObjectName("checkBox_2")
         self.gridLayout_5.addWidget(self.checkBox_2, 0, 2, 1, 1)
         self.verticalLayout_4.addWidget(self.frame_2)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.verticalLayout_4.addItem(spacerItem3)
+        self.frame_3 = QtWidgets.QFrame(self.frInfoDocumentos)
+        self.frame_3.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_3.setObjectName("frame_3")
+        self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.frame_3)
+        self.horizontalLayout_11.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_11.setSpacing(0)
+        self.horizontalLayout_11.setObjectName("horizontalLayout_11")
+        self.checkBox_4 = QtWidgets.QCheckBox(self.frame_3)
+        self.checkBox_4.setObjectName("checkBox_4")
+        self.horizontalLayout_11.addWidget(self.checkBox_4)
+        self.checkBox_5 = QtWidgets.QCheckBox(self.frame_3)
+        self.checkBox_5.setObjectName("checkBox_5")
+        self.horizontalLayout_11.addWidget(self.checkBox_5)
+        self.checkBox_6 = QtWidgets.QCheckBox(self.frame_3)
+        self.checkBox_6.setObjectName("checkBox_6")
+        self.horizontalLayout_11.addWidget(self.checkBox_6)
+        self.verticalLayout_4.addWidget(self.frame_3)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.verticalLayout_4.addItem(spacerItem4)
         self.frBotoesDocs = QtWidgets.QFrame(self.frInfoDocumentos)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frBotoesDocs.sizePolicy().hasHeightForWidth())
         self.frBotoesDocs.setSizePolicy(sizePolicy)
-        self.frBotoesDocs.setMaximumSize(QtCore.QSize(260, 50))
+        self.frBotoesDocs.setMaximumSize(QtCore.QSize(260, 60))
         self.frBotoesDocs.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frBotoesDocs.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frBotoesDocs.setObjectName("frBotoesDocs")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frBotoesDocs)
-        self.horizontalLayout_3.setContentsMargins(8, 0, 8, 0)
-        self.horizontalLayout_3.setSpacing(0)
+        self.horizontalLayout_3.setContentsMargins(4, 0, 4, 0)
+        self.horizontalLayout_3.setSpacing(6)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.frame_6 = QtWidgets.QFrame(self.frBotoesDocs)
         self.frame_6.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -541,9 +570,6 @@ class Ui_wdgProcessoPage(object):
         self.horizontalLayout_7.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_7.setSpacing(2)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        self.lbInfoImprimir = QtWidgets.QLabel(self.frame_6)
-        self.lbInfoImprimir.setObjectName("lbInfoImprimir")
-        self.horizontalLayout_7.addWidget(self.lbInfoImprimir)
         self.pbImprimir = QtWidgets.QPushButton(self.frame_6)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
@@ -551,8 +577,12 @@ class Ui_wdgProcessoPage(object):
         sizePolicy.setHeightForWidth(self.pbImprimir.sizePolicy().hasHeightForWidth())
         self.pbImprimir.setSizePolicy(sizePolicy)
         self.pbImprimir.setMinimumSize(QtCore.QSize(30, 30))
-        self.pbImprimir.setMaximumSize(QtCore.QSize(30, 30))
-        self.pbImprimir.setText("")
+        self.pbImprimir.setMaximumSize(QtCore.QSize(321546, 30))
+        self.pbImprimir.setLayoutDirection(QtCore.Qt.RightToLeft)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/documentos/impressora_blue.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbImprimir.setIcon(icon)
+        self.pbImprimir.setIconSize(QtCore.QSize(24, 24))
         self.pbImprimir.setObjectName("pbImprimir")
         self.horizontalLayout_7.addWidget(self.pbImprimir)
         self.horizontalLayout_3.addWidget(self.frame_6)
@@ -577,19 +607,22 @@ class Ui_wdgProcessoPage(object):
         sizePolicy.setHeightForWidth(self.pbGeraPdf.sizePolicy().hasHeightForWidth())
         self.pbGeraPdf.setSizePolicy(sizePolicy)
         self.pbGeraPdf.setMinimumSize(QtCore.QSize(30, 30))
-        self.pbGeraPdf.setMaximumSize(QtCore.QSize(30, 30))
-        self.pbGeraPdf.setText("")
+        self.pbGeraPdf.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.pbGeraPdf.setLayoutDirection(QtCore.Qt.LeftToRight)
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/documentos/documento.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbGeraPdf.setIcon(icon1)
+        self.pbGeraPdf.setIconSize(QtCore.QSize(16, 16))
+        self.pbGeraPdf.setAutoDefault(True)
         self.pbGeraPdf.setObjectName("pbGeraPdf")
         self.horizontalLayout_8.addWidget(self.pbGeraPdf)
-        self.lbInfoGeraPdf = QtWidgets.QLabel(self.frame_7)
-        self.lbInfoGeraPdf.setObjectName("lbInfoGeraPdf")
-        self.horizontalLayout_8.addWidget(self.lbInfoGeraPdf)
         self.horizontalLayout_3.addWidget(self.frame_7)
         self.verticalLayout_4.addWidget(self.frBotoesDocs, 0, QtCore.Qt.AlignHCenter)
         self.lbInfoTituloDocs.raise_()
         self.lbInfoDescricao.raise_()
         self.frame_2.raise_()
         self.frBotoesDocs.raise_()
+        self.frame_3.raise_()
         self.verticalLayout_18.addWidget(self.frInfoDocumentos, 0, QtCore.Qt.AlignHCenter)
         self.gridLayout_3.addWidget(self.frInfoGeralProcessos, 1, 0, 1, 1)
         self.gridLayout_6.addWidget(self.frEsquerda, 0, 0, 2, 1, QtCore.Qt.AlignLeft)
@@ -659,8 +692,8 @@ class Ui_wdgProcessoPage(object):
         self.wdgListaAndamentos.setObjectName("wdgListaAndamentos")
         self.scaAndamentos.setWidget(self.wdgListaAndamentos)
         self.verticalLayout_8.addWidget(self.scaAndamentos)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.verticalLayout_8.addItem(spacerItem4)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.verticalLayout_8.addItem(spacerItem5)
         self.gridLayout.addWidget(self.frAndamentos, 0, 2, 1, 1)
         self.frPeticao = QtWidgets.QFrame(wdgProcessoPage)
         self.frPeticao.setStyleSheet("/* ---------- Frame ---------- */\n"
@@ -745,8 +778,8 @@ class Ui_wdgProcessoPage(object):
         self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_6.setSpacing(0)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
-        spacerItem5 = QtWidgets.QSpacerItem(20, 533, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.MinimumExpanding)
-        self.verticalLayout_6.addItem(spacerItem5)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 533, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.MinimumExpanding)
+        self.verticalLayout_6.addItem(spacerItem6)
         self.verticalLayout_2.addWidget(self.frDocView)
         self.frOpcoesEdicao = QtWidgets.QFrame(self.frDocumento)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
@@ -819,10 +852,13 @@ class Ui_wdgProcessoPage(object):
         self.lbInfoTituloDocs.setText(_translate("wdgProcessoPage", "Documentos"))
         self.lbInfoDescricao.setText(_translate("wdgProcessoPage", "Selecione os documentos que deseja imprimir ou gerar PDF."))
         self.checkBox.setText(_translate("wdgProcessoPage", "CheckBox"))
-        self.checkBox_3.setText(_translate("wdgProcessoPage", "CheckBox"))
-        self.checkBox_2.setText(_translate("wdgProcessoPage", "CheckBox"))
-        self.lbInfoImprimir.setText(_translate("wdgProcessoPage", "Imprimir tudo"))
-        self.lbInfoGeraPdf.setText(_translate("wdgProcessoPage", "Gerar PDF\'s"))
+        self.checkBox_3.setText(_translate("wdgProcessoPage", "Procuração"))
+        self.checkBox_2.setText(_translate("wdgProcessoPage", "Dec. hipossuficiência"))
+        self.checkBox_4.setText(_translate("wdgProcessoPage", "CheckBox"))
+        self.checkBox_5.setText(_translate("wdgProcessoPage", "CheckBox"))
+        self.checkBox_6.setText(_translate("wdgProcessoPage", "CheckBox"))
+        self.pbImprimir.setText(_translate("wdgProcessoPage", "Imprimir tudo"))
+        self.pbGeraPdf.setText(_translate("wdgProcessoPage", "Gerar PDF\'S"))
         self.lbTituloAndamento.setText(_translate("wdgProcessoPage", "Andamentos processuais"))
 import Resources.processoPage
 

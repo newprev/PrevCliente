@@ -270,6 +270,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
             glSimulacoes.setContentsMargins(16, 16, 16, 16)
 
             for index, aposentadoria in enumerate(listaAposentadorias):
+                self.processoAtual.subTipoApos = aposentadoria.tipo
                 glSimulacoes.addWidget(NewCardAposentadoria(aposentadoria, parent=self), index//4, index % 4)
 
             self.scaSimulacoes.setLayout(glSimulacoes)
@@ -479,6 +480,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
             descricao='Processo a iniciar salvo no banco de dados.',
             seq=1,
             codAndamento=0,
+            dataIncidente=datetime.datetime.now(),
             dataCadastro=datetime.datetime.now(),
             dataUltAlt=datetime.datetime.now()
         ).save()

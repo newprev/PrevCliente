@@ -14,14 +14,17 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgIncidenteProcessual(object):
     def setupUi(self, wdgIncidenteProcessual):
         wdgIncidenteProcessual.setObjectName("wdgIncidenteProcessual")
-        wdgIncidenteProcessual.resize(400, 300)
+        wdgIncidenteProcessual.resize(400, 135)
         self.gridLayout = QtWidgets.QGridLayout(wdgIncidenteProcessual)
         self.gridLayout.setObjectName("gridLayout")
         self.frMain = QtWidgets.QFrame(wdgIncidenteProcessual)
-        self.frMain.setStyleSheet("/* ----------------- Widget ---------------- */\n"
-"Line{\n"
+        self.frMain.setStyleSheet("/* ----------------- Line ---------------- */\n"
+"#lnConexao{\n"
 "    color: #566BBF;\n"
-"    background-color: #566BBF;\n"
+"}\n"
+"\n"
+"#lnSeparador {\n"
+"    color: lightgrey;\n"
 "}\n"
 "\n"
 "/* ------------------ Frame ----------------- */\n"
@@ -47,20 +50,39 @@ class Ui_wdgIncidenteProcessual(object):
 "#lbAndamento {\n"
 "    font: 10pt \"Avenir LT Std\";\n"
 "    color: #566BBF;\n"
-"    font-weight: 200;\n"
 "}\n"
 "\n"
 "#lbDescricao {\n"
 "    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3D464D;\n"
+"}\n"
+"\n"
+"#lbDataIncidente {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
 "    color: #566BBF;\n"
+"    font-weight: 750;\n"
 "}")
         self.frMain.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frMain.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frMain.setObjectName("frMain")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.frMain)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout.setSpacing(0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.gridLayout_3 = QtWidgets.QGridLayout(self.frMain)
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_3.setHorizontalSpacing(0)
+        self.gridLayout_3.setVerticalSpacing(2)
+        self.gridLayout_3.setObjectName("gridLayout_3")
+        self.lnConexao = QtWidgets.QFrame(self.frMain)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lnConexao.sizePolicy().hasHeightForWidth())
+        self.lnConexao.setSizePolicy(sizePolicy)
+        self.lnConexao.setMinimumSize(QtCore.QSize(30, 0))
+        self.lnConexao.setMaximumSize(QtCore.QSize(15654887, 16777215))
+        self.lnConexao.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.lnConexao.setLineWidth(2)
+        self.lnConexao.setFrameShape(QtWidgets.QFrame.HLine)
+        self.lnConexao.setObjectName("lnConexao")
+        self.gridLayout_3.addWidget(self.lnConexao, 4, 1, 1, 1)
         self.frInfoEsquerda = QtWidgets.QFrame(self.frMain)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -99,26 +121,14 @@ class Ui_wdgIncidenteProcessual(object):
         self.lbAndamento.setAlignment(QtCore.Qt.AlignCenter)
         self.lbAndamento.setObjectName("lbAndamento")
         self.gridLayout_2.addWidget(self.lbAndamento, 1, 0, 1, 1)
-        self.horizontalLayout.addWidget(self.frInfoEsquerda)
-        self.lnConexao = QtWidgets.QFrame(self.frMain)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lnConexao.sizePolicy().hasHeightForWidth())
-        self.lnConexao.setSizePolicy(sizePolicy)
-        self.lnConexao.setMinimumSize(QtCore.QSize(30, 0))
-        self.lnConexao.setMaximumSize(QtCore.QSize(15654887, 16777215))
-        self.lnConexao.setFrameShadow(QtWidgets.QFrame.Plain)
-        self.lnConexao.setLineWidth(2)
-        self.lnConexao.setFrameShape(QtWidgets.QFrame.HLine)
-        self.lnConexao.setObjectName("lnConexao")
-        self.horizontalLayout.addWidget(self.lnConexao)
+        self.gridLayout_3.addWidget(self.frInfoEsquerda, 4, 0, 1, 1)
         self.frDescricao = QtWidgets.QFrame(self.frMain)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frDescricao.sizePolicy().hasHeightForWidth())
         self.frDescricao.setSizePolicy(sizePolicy)
+        self.frDescricao.setMinimumSize(QtCore.QSize(0, 80))
         self.frDescricao.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frDescricao.setFrameShadow(QtWidgets.QFrame.Plain)
         self.frDescricao.setObjectName("frDescricao")
@@ -128,11 +138,22 @@ class Ui_wdgIncidenteProcessual(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.lbDescricao = QtWidgets.QLabel(self.frDescricao)
         self.lbDescricao.setScaledContents(True)
-        self.lbDescricao.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.lbDescricao.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.lbDescricao.setWordWrap(True)
         self.lbDescricao.setObjectName("lbDescricao")
         self.verticalLayout.addWidget(self.lbDescricao)
-        self.horizontalLayout.addWidget(self.frDescricao)
+        self.gridLayout_3.addWidget(self.frDescricao, 4, 2, 1, 1)
+        self.lnSeparador = QtWidgets.QFrame(self.frMain)
+        self.lnSeparador.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.lnSeparador.setLineWidth(2)
+        self.lnSeparador.setFrameShape(QtWidgets.QFrame.HLine)
+        self.lnSeparador.setObjectName("lnSeparador")
+        self.gridLayout_3.addWidget(self.lnSeparador, 2, 0, 1, 3)
+        spacerItem = QtWidgets.QSpacerItem(20, 12, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
+        self.gridLayout_3.addItem(spacerItem, 3, 0, 1, 3)
+        self.lbDataIncidente = QtWidgets.QLabel(self.frMain)
+        self.lbDataIncidente.setObjectName("lbDataIncidente")
+        self.gridLayout_3.addWidget(self.lbDataIncidente, 1, 0, 1, 3)
         self.gridLayout.addWidget(self.frMain, 0, 0, 1, 1)
 
         self.retranslateUi(wdgIncidenteProcessual)
@@ -144,6 +165,7 @@ class Ui_wdgIncidenteProcessual(object):
         self.lbSeq.setText(_translate("wdgIncidenteProcessual", "1"))
         self.lbAndamento.setText(_translate("wdgIncidenteProcessual", "Andamento"))
         self.lbDescricao.setText(_translate("wdgIncidenteProcessual", "TextLabel"))
+        self.lbDataIncidente.setText(_translate("wdgIncidenteProcessual", "25 de Maio de 2021"))
 
 
 if __name__ == "__main__":

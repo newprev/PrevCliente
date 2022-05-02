@@ -1,7 +1,9 @@
+import os
 from logging import Logger
 from typing import List
 
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
+from PyQt5.QtGui import QPixmap
 
 from Design.efeitos import Efeitos
 from Design.pyUi.processoPage import Ui_wdgProcessoPage
@@ -92,6 +94,10 @@ class ProcessoPage(QWidget, Ui_wdgProcessoPage):
         self.lbClienteTelefone.setText(mascaraTelCel(self.telefoneAtual.numero))
         self.lbClienteEmail.setText(self.clienteAtual.email)
 
+        mapFoto = QPixmap('/home/israeldev/Imagens/photo_2022-03-25_21-28-00.jpg')
+        self.lbClienteFoto.setPixmap(mapFoto)
+        self.lbClienteFoto.setScaledContents(True)
+
     def carregarInfoCliente(self, clienteId: int = 0):
         try:
             self.clienteAtual = Cliente.get_by_id(clienteId)
@@ -104,7 +110,11 @@ class ProcessoPage(QWidget, Ui_wdgProcessoPage):
 
             if len(listaProcessos):
                 self.processoAtual = listaProcessos[0]
-                self.lbNumProcesso.setText(f"{self.processoAtual.numeroProcesso}")
+                if self.processoAtual.numeroProcesso is None:
+                    self.lbNumProcesso.setText(" - ")
+                else:
+                    self.lbNumProcesso.setText(f"{self.processoAtual.numeroProcesso}")
+
                 self.lbNatureza.setText(strNatureza(self.processoAtual.natureza))
                 self.lbTpBeneficio.setText(strTipoBeneficio(self.processoAtual.tipoBeneficio, self.processoAtual.subTipoApos))
                 self.lbTpProcesso.setText(strTipoProcesso(self.processoAtual.tipoProcesso))
@@ -135,14 +145,19 @@ class ProcessoPage(QWidget, Ui_wdgProcessoPage):
             vlIncidentes.addWidget(wdgIncidente)
 
         self.wdgListaAndamentos.setLayout(vlIncidentes)
+        vlIncidentes.addStretch()
 
     def recebeProcesso(self, processoId: int):
         try:
             self.processoAtual = Processos.get_by_id(processoId)
-            self.lbNumProcesso.setText(f"{self.processoAtual.numeroProcesso}")
+
             self.lbNatureza.setText(strNatureza(self.processoAtual.natureza))
             self.lbTpBeneficio.setText(strTipoBeneficio(self.processoAtual.tipoBeneficio, self.processoAtual.subTipoApos))
             self.lbTpProcesso.setText(strTipoProcesso(self.processoAtual.tipoProcesso))
+            if self.processoAtual.numeroProcesso is None:
+                self.lbNumProcesso.setText(" - ")
+            else:
+                self.lbNumProcesso.setText(f"{self.processoAtual.numeroProcesso}")
 
             self.frCardProcesso.show()
             self.carregaIncidentesNaTela()

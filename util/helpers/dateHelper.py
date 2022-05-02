@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from typing import List
 from dateutil.relativedelta import relativedelta
-from peewee import fn
+from util.helpers.helpers import meses
 
 import datetime
 
@@ -249,3 +249,10 @@ def strToDatetime(data: str) -> datetime.datetime:
             return dataRetorno
         except ValueError as err:
             pass
+
+
+def strDataPorExtenso(data: datetime.date):
+    if isinstance(data, str):
+        data = strToDate(data)
+
+    return f"{data.day} de {meses[data.month]} de {data.year}"

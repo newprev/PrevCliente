@@ -1,12 +1,12 @@
 from logging import debug
 
-from modelos.baseModelORM import BaseModel
+from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
 
 from modelos.processosORM import Processos
 from util.enums.logEnums import TipoLog
 
-from peewee import AutoField, CharField, DateTimeField, ForeignKeyField, IntegerField
+from peewee import AutoField, CharField, DateTimeField, ForeignKeyField, IntegerField, DateField
 from datetime import datetime
 
 TABLENAME = 'incidenteProcessual'
@@ -16,6 +16,7 @@ class IncidenteProcessual(BaseModel, Model):
     incidenteId = AutoField(column_name='incidenteId', null=True)
     processoId = ForeignKeyField(column_name='processoId', field='processoId', model=Processos, backref='Processos')
     seq = IntegerField(column_name='seq')
+    dataIncidente = DateField(column_name='dataIncidente', null=False, formats=DATEFORMATS)
     andamento = IntegerField(column_name='andamento', default=0)
     descricao = CharField(column_name='descricao', max_length=3000)
     codAndamento = IntegerField(column_name='codAndamento', default=None)    

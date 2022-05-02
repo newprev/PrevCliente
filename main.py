@@ -103,7 +103,6 @@ class Main(Ui_MainWindow, QMainWindow):
         if 0 < self.contador < 2:
             self.carregaLogsConfig()
 
-
         elif 10 <= self.contador < 70:
             if self.contador == 10:
                 self.timer.stop()
@@ -181,12 +180,15 @@ class Main(Ui_MainWindow, QMainWindow):
                 with open(fileDropTriggers, encoding='utf-8', mode='r') as f:
                     queries = f.readlines()
                     for drop in queries:
-                        database.execute_sql(drop)
+                        resultado = database.execute_sql(drop)
 
                 for trigger in os.listdir(pathTriggers):
                     query = os.path.join(pathTriggers, trigger)
+                    if fileDropTriggers == query:
+                        continue
+
                     with open(query, encoding='utf-8', mode='r') as trig:
-                        database.execute_sql(trig.read())
+                        resultado = database.execute_sql(trig.read())
 
             self.lbInfo.setText('CRIANDO TELA DE LOGIN...')
             self.progresso(add=percentLoading)

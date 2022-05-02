@@ -541,18 +541,19 @@ def strTipoBeneficio(tipoBeneficio: int, subTipoApos: int) -> str:
         tipoBeneficio = tipoBeneficio.tipoId
 
     if tipoBeneficio == TipoBeneficioEnum.Aposentadoria.value:
-        if subTipoApos == SubTipoAposentadoria.Idade.value:
-            return 'Aposentadoria por idade'
-        elif subTipoApos == SubTipoAposentadoria.Rural.value:
-            return 'Aposentadoria por idade - Rural'
-        elif subTipoApos == SubTipoAposentadoria.Especial.value:
-            return 'Aposentadoria Especial'
-        elif subTipoApos == SubTipoAposentadoria.Deficiencia.value:
-            return 'Aposentadoria da pessoa com deficiência'
-        elif subTipoApos == SubTipoAposentadoria.Invalidez.value:
-            return 'Aposentadoria por invalidez'
-        elif subTipoApos == SubTipoAposentadoria.TempoContrib.value:
-            return 'Aposentadoria por tempo de contribuição'
+        return strTipoAposentadoria(subTipoApos)
+        # if subTipoApos == SubTipoAposentadoria.Idade.value:
+        #     return 'Aposentadoria por idade'
+        # elif subTipoApos == SubTipoAposentadoria.Rural.value:
+        #     return 'Aposentadoria por idade - Rural'
+        # elif subTipoApos == SubTipoAposentadoria.Especial.value:
+        #     return 'Aposentadoria Especial'
+        # elif subTipoApos == SubTipoAposentadoria.Deficiencia.value:
+        #     return 'Aposentadoria da pessoa com deficiência'
+        # elif subTipoApos == SubTipoAposentadoria.Invalidez.value:
+        #     return 'Aposentadoria por invalidez'
+        # elif subTipoApos == SubTipoAposentadoria.TempoContrib.value:
+        #     return 'Aposentadoria por tempo de contribuição'
     elif tipoBeneficio == TipoBeneficioEnum.AuxDoenca.value:
         return 'Auxílio doença'
     elif tipoBeneficio == TipoBeneficioEnum.AuxReclusao.value:
@@ -591,24 +592,54 @@ def strTipoBeneFacilitado(tipoBeneficio: TipoBeneficioEnum) -> str:
         return ''
 
 
-def strTipoAposentadoria(tipoAposentadoria: str) -> str:
+def strTipoAposentadoria(tipoAposentadoria: str, verbose: bool = False) -> str:
     if tipoAposentadoria == TipoAposentadoria.tempoContribAR.value:
-        return "Aposentadoria por tempo de contribuição antes da reforma"
-    elif tipoAposentadoria == TipoAposentadoria.idadeAR.value:
-        return "Aposentadoria por idade antes da reforma"
-    elif tipoAposentadoria == TipoAposentadoria.redIdadeMinima.value:
-        return "Aposentadoria pela redução da idade mínima"
-    elif tipoAposentadoria == TipoAposentadoria.redTempoContrib.value:
-        return "Aposentadoria pela redução do tempo de contribuição"
-    elif tipoAposentadoria == TipoAposentadoria.pedagio50.value:
-        return "Aposentadoria pela regra de transição: Pedágio 50%"
-    elif tipoAposentadoria == TipoAposentadoria.pedagio100.value:
-        return "Aposentadoria pela regra de transição: Pedágio 100%"
-    elif tipoAposentadoria == TipoAposentadoria.pontos.value:
-        return "Aposentadoria por pontos pela regra de transição"
-    elif tipoAposentadoria == TipoAposentadoria.regra8595.value:
-        return "Aposentadoria por pontos pela regra 85/95"
+        if verbose:
+            return "Aposentadoria por tempo de contribuição antes da reforma"
+        else:
+            return "Aposentadoria por tempo de contribuição"
 
+    elif tipoAposentadoria == TipoAposentadoria.idadeAR.value:
+        if verbose:
+            return "Aposentadoria por idade antes da reforma"
+        else:
+            return "Aposentadoria por idade"
+
+    elif tipoAposentadoria == TipoAposentadoria.redIdadeMinima.value:
+        if verbose:
+            return "Aposentadoria pela redução da idade mínima"
+        else:
+            return "Aposentadoria por idade"
+
+    elif tipoAposentadoria == TipoAposentadoria.redTempoContrib.value:
+        if verbose:
+            return "Aposentadoria pela redução do tempo de contribuição"
+        else:
+            return "Aposentadoria por tempo de contribuição"
+
+    elif tipoAposentadoria == TipoAposentadoria.pedagio50.value:
+        if verbose:
+            return "Aposentadoria pela regra de transição: Pedágio 50%"
+        else:
+            return "Pedágio 50%"
+
+    elif tipoAposentadoria == TipoAposentadoria.pedagio100.value:
+        if verbose:
+            return "Aposentadoria pela regra de transição: Pedágio 100%"
+        else:
+            return "Pedágio 100%"
+
+    elif tipoAposentadoria == TipoAposentadoria.pontos.value:
+        if verbose:
+            return "Aposentadoria por pontos pela regra de transição"
+        else:
+            return "Aposentadoria por pontos"
+
+    elif tipoAposentadoria == TipoAposentadoria.regra8595.value:
+        if verbose:
+            return "Aposentadoria por pontos pela regra 85/95"
+        else:
+            return "Aposentadoria por pontos"
 
 def buscaSql(caminhoSql: str) -> str:
     if os.path.exists(caminhoSql) and os.path.isfile(caminhoSql):

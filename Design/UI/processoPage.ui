@@ -262,22 +262,21 @@ QCheckBox::indicator:checked {
 }
 
 /* --------  Push Button -------- */
-#pbGeraPdf {
-	background-image: url(:/documentos/documento.png);
-	background-position: center;
-	background-repeat: no-repeat;
+#pbGeraPdf, #pbImprimir {
+	font: 10pt &quot;Avenir LT Std&quot;;
+	color: #3A405A;
 
 	background-color: transparent;
 	border: 0px solid transparent;
+
+	margin: 3px;
 }
 
-#pbImprimir {
-	background-image: url(:/documentos/impressora_blue.png);
-	background-position: center;
-	background-repeat: no-repeat;
+#pbGeraPdf:hover, #pbImprimir:hover {
+	border-radius: 12px;
+	background-color: rgba(86, 107, 191, 60);
 
-	background-color: transparent;
-	border: 0px solid transparent;
+	margin: 3px;
 }
 
 #pbBuscarCliente {
@@ -345,6 +344,11 @@ QCheckBox::indicator:checked {
 	font-weight: 750;
 }
 
+#lbClienteFoto {
+	border: 0px solid transparent;
+	border-radius: 8px;
+}
+
 /* ------------------------------------ Frames ------------------------------------*/
 #frCardProcesso {
 	background-color: #F9F9F9;
@@ -370,6 +374,11 @@ QCheckBox::indicator:checked {
 
 #frTituloListaProcessos{
 	background-color: #3F4E8C;
+	border: 0px solid transparent;
+	border-radius: 8px;
+}
+
+#frClienteFoto {
 	border: 0px solid transparent;
 	border-radius: 8px;
 }
@@ -489,7 +498,7 @@ QCheckBox::indicator:checked {
               <widget class="QWidget" name="frClienteSelecionado">
                <layout class="QHBoxLayout" name="horizontalLayout_5">
                 <property name="spacing">
-                 <number>18</number>
+                 <number>8</number>
                 </property>
                 <property name="leftMargin">
                  <number>0</number>
@@ -504,7 +513,7 @@ QCheckBox::indicator:checked {
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="QFrame" name="frame_4">
+                 <widget class="QFrame" name="frClienteFoto">
                   <property name="frameShape">
                    <enum>QFrame::NoFrame</enum>
                   </property>
@@ -529,6 +538,12 @@ QCheckBox::indicator:checked {
                    </property>
                    <item>
                     <widget class="QLabel" name="lbClienteFoto">
+                     <property name="maximumSize">
+                      <size>
+                       <width>120</width>
+                       <height>120</height>
+                      </size>
+                     </property>
                      <property name="text">
                       <string>TextLabel</string>
                      </property>
@@ -546,6 +561,22 @@ QCheckBox::indicator:checked {
                    <enum>QFrame::Raised</enum>
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_5">
+                   <item>
+                    <spacer name="verticalSpacer_7">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeType">
+                      <enum>QSizePolicy::Maximum</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
                    <item>
                     <widget class="QLabel" name="lbNomeCliente">
                      <property name="sizePolicy">
@@ -585,6 +616,22 @@ QCheckBox::indicator:checked {
                      </property>
                     </widget>
                    </item>
+                   <item>
+                    <spacer name="verticalSpacer_6">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeType">
+                      <enum>QSizePolicy::Maximum</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
                   </layout>
                  </widget>
                 </item>
@@ -597,19 +644,6 @@ QCheckBox::indicator:checked {
                    <enum>QFrame::Raised</enum>
                   </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_4">
-                   <item>
-                    <spacer name="horizontalSpacer">
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>40</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
                    <item>
                     <widget class="QPushButton" name="pbAlterarProcesso">
                      <property name="text">
@@ -922,10 +956,7 @@ QCheckBox::indicator:checked {
                      <property name="bottomMargin">
                       <number>0</number>
                      </property>
-                     <property name="horizontalSpacing">
-                      <number>8</number>
-                     </property>
-                     <property name="verticalSpacing">
+                     <property name="spacing">
                       <number>0</number>
                      </property>
                      <item row="0" column="3">
@@ -938,12 +969,60 @@ QCheckBox::indicator:checked {
                      <item row="0" column="0" colspan="2">
                       <widget class="QCheckBox" name="checkBox_3">
                        <property name="text">
-                        <string>CheckBox</string>
+                        <string>Procuração</string>
                        </property>
                       </widget>
                      </item>
                      <item row="0" column="2">
                       <widget class="QCheckBox" name="checkBox_2">
+                       <property name="text">
+                        <string>Dec. hipossuficiência</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QFrame" name="frame_3">
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Raised</enum>
+                    </property>
+                    <layout class="QHBoxLayout" name="horizontalLayout_11">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QCheckBox" name="checkBox_4">
+                       <property name="text">
+                        <string>CheckBox</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QCheckBox" name="checkBox_5">
+                       <property name="text">
+                        <string>CheckBox</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QCheckBox" name="checkBox_6">
                        <property name="text">
                         <string>CheckBox</string>
                        </property>
@@ -979,7 +1058,7 @@ QCheckBox::indicator:checked {
                     <property name="maximumSize">
                      <size>
                       <width>260</width>
-                      <height>50</height>
+                      <height>60</height>
                      </size>
                     </property>
                     <property name="frameShape">
@@ -990,16 +1069,16 @@ QCheckBox::indicator:checked {
                     </property>
                     <layout class="QHBoxLayout" name="horizontalLayout_3">
                      <property name="spacing">
-                      <number>0</number>
+                      <number>6</number>
                      </property>
                      <property name="leftMargin">
-                      <number>8</number>
+                      <number>4</number>
                      </property>
                      <property name="topMargin">
                       <number>0</number>
                      </property>
                      <property name="rightMargin">
-                      <number>8</number>
+                      <number>4</number>
                      </property>
                      <property name="bottomMargin">
                       <number>0</number>
@@ -1029,13 +1108,6 @@ QCheckBox::indicator:checked {
                          <number>0</number>
                         </property>
                         <item>
-                         <widget class="QLabel" name="lbInfoImprimir">
-                          <property name="text">
-                           <string>Imprimir tudo</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
                          <widget class="QPushButton" name="pbImprimir">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
@@ -1051,12 +1123,25 @@ QCheckBox::indicator:checked {
                           </property>
                           <property name="maximumSize">
                            <size>
-                            <width>30</width>
+                            <width>321546</width>
                             <height>30</height>
                            </size>
                           </property>
+                          <property name="layoutDirection">
+                           <enum>Qt::RightToLeft</enum>
+                          </property>
                           <property name="text">
-                           <string/>
+                           <string>Imprimir tudo</string>
+                          </property>
+                          <property name="icon">
+                           <iconset resource="../../Resources/processoPage.qrc">
+                            <normaloff>:/documentos/impressora_blue.png</normaloff>:/documentos/impressora_blue.png</iconset>
+                          </property>
+                          <property name="iconSize">
+                           <size>
+                            <width>24</width>
+                            <height>24</height>
+                           </size>
                           </property>
                          </widget>
                         </item>
@@ -1119,19 +1204,28 @@ QCheckBox::indicator:checked {
                           </property>
                           <property name="maximumSize">
                            <size>
-                            <width>30</width>
+                            <width>16777215</width>
                             <height>30</height>
                            </size>
                           </property>
-                          <property name="text">
-                           <string/>
+                          <property name="layoutDirection">
+                           <enum>Qt::LeftToRight</enum>
                           </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QLabel" name="lbInfoGeraPdf">
                           <property name="text">
-                           <string>Gerar PDF's</string>
+                           <string>Gerar PDF'S</string>
+                          </property>
+                          <property name="icon">
+                           <iconset resource="../../Resources/processoPage.qrc">
+                            <normaloff>:/documentos/documento.png</normaloff>:/documentos/documento.png</iconset>
+                          </property>
+                          <property name="iconSize">
+                           <size>
+                            <width>16</width>
+                            <height>16</height>
+                           </size>
+                          </property>
+                          <property name="autoDefault">
+                           <bool>true</bool>
                           </property>
                          </widget>
                         </item>
@@ -1148,6 +1242,7 @@ QCheckBox::indicator:checked {
                  <zorder>verticalSpacer_2</zorder>
                  <zorder>verticalSpacer_4</zorder>
                  <zorder>frBotoesDocs</zorder>
+                 <zorder>frame_3</zorder>
                 </widget>
                </item>
               </layout>

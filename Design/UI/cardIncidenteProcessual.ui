@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>135</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,10 +17,13 @@
    <item row="0" column="0">
     <widget class="QFrame" name="frMain">
      <property name="styleSheet">
-      <string notr="true">/* ----------------- Widget ---------------- */
-Line{
+      <string notr="true">/* ----------------- Line ---------------- */
+#lnConexao{
 	color: #566BBF;
-	background-color: #566BBF;
+}
+
+#lnSeparador {
+	color: lightgrey;
 }
 
 /* ------------------ Frame ----------------- */
@@ -46,12 +49,17 @@ Line{
 #lbAndamento {
 	font: 10pt &quot;Avenir LT Std&quot;;
 	color: #566BBF;
-	font-weight: 200;
 }
 
 #lbDescricao {
 	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3D464D;
+}
+
+#lbDataIncidente {
+	font: 12pt &quot;Avenir LT Std&quot;;
 	color: #566BBF;
+	font-weight: 750;
 }</string>
      </property>
      <property name="frameShape">
@@ -60,10 +68,7 @@ Line{
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="spacing">
-       <number>0</number>
-      </property>
+     <layout class="QGridLayout" name="gridLayout_3">
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -76,7 +81,44 @@ Line{
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item>
+      <property name="horizontalSpacing">
+       <number>0</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>2</number>
+      </property>
+      <item row="4" column="1">
+       <widget class="Line" name="lnConexao">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>15654887</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="lineWidth">
+         <number>2</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
        <widget class="QFrame" name="frInfoEsquerda">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -183,44 +225,19 @@ Line{
         </layout>
        </widget>
       </item>
-      <item>
-       <widget class="Line" name="lnConexao">
+      <item row="4" column="2">
+       <widget class="QFrame" name="frDescricao">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="minimumSize">
          <size>
-          <width>30</width>
-          <height>0</height>
+          <width>0</width>
+          <height>80</height>
          </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>15654887</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="lineWidth">
-         <number>2</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QFrame" name="frDescricao">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
@@ -253,7 +270,7 @@ Line{
             <bool>true</bool>
            </property>
            <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -261,6 +278,42 @@ Line{
           </widget>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="3">
+       <widget class="Line" name="lnSeparador">
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="lineWidth">
+         <number>2</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="3">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Maximum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>12</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0" colspan="3">
+       <widget class="QLabel" name="lbDataIncidente">
+        <property name="text">
+         <string>25 de Maio de 2021</string>
+        </property>
        </widget>
       </item>
      </layout>

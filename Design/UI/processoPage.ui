@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1148</width>
-    <height>637</height>
+    <height>672</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,6 +38,52 @@
 
 #frCabecalho, #frMiolo, #frRodape {
 	background-color: white;
+}
+
+/*-------------------------------------------  Scroll Bar --------------------------------------------*/
+QScrollBar:vertical {
+        background-color: #DDDEDF;
+        width: 15px;
+        margin: 15px 3px 15px 3px;
+        border: 1px transparent #2A2929;
+        border-radius: 4px;
+    }
+
+QScrollBar:horizontal {
+        background-color: #DDDEDF;
+        height: 15px;
+        margin: 3px 15px 3px 15px;
+        border: 1px transparent #2A2929;
+        border-radius: 4px;
+    }
+
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background-color: #3F4E8C;
+    min-height: 5px;
+    width: 20px;
+	border-radius: 4px;
+}
+
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical{
+      border: none;
+      background: none;
+      color: none;
+}
+
+QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal {
+      border: none;
+      background: none;
+      color: none;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::add-line:horizontal {
+	border: none;
+    background: none;
+}
+
+QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal {
+	border: none;
+    background: none;
 }</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -253,12 +299,25 @@ QCheckBox {
 	margin: 0px 12px;
 }
 
+QCheckBox::indicator:disabled {
+	image: url(:/checkbox/checkBoxDisable.png);
+}
+
 QCheckBox::indicator:unchecked {
 	image: url(:/checkbox/CheckBoxFalse.png);
 }
 
 QCheckBox::indicator:checked {
 	image: url(:/checkbox/checkBoxTrue.png);
+}
+
+QCheckBox::indicator:checked {
+	image: url(:/checkbox/checkBoxTrue.png);
+}
+
+/* ---------- QScrollArea --------------- */
+#scaDocs, #wdgDocumentosCheckbox {
+	background-color: white;
 }
 
 /* --------  Push Button -------- */
@@ -875,6 +934,12 @@ QCheckBox::indicator:checked {
                   <enum>QFrame::Raised</enum>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_4">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
                   <item>
                    <widget class="QLabel" name="lbInfoTituloDocs">
                     <property name="sizePolicy">
@@ -936,7 +1001,113 @@ QCheckBox::indicator:checked {
                    </spacer>
                   </item>
                   <item>
+                   <widget class="QScrollArea" name="scaDocs">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="widgetResizable">
+                     <bool>true</bool>
+                    </property>
+                    <widget class="QWidget" name="wdgDocumentosCheckbox">
+                     <property name="geometry">
+                      <rect>
+                       <x>0</x>
+                       <y>0</y>
+                       <width>471</width>
+                       <height>86</height>
+                      </rect>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_7">
+                      <property name="leftMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="horizontalSpacing">
+                       <number>0</number>
+                      </property>
+                      <property name="verticalSpacing">
+                       <number>12</number>
+                      </property>
+                      <item row="0" column="0">
+                       <widget class="QCheckBox" name="cbProcuracao">
+                        <property name="text">
+                         <string>Procuração</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QCheckBox" name="cbRequerimento">
+                        <property name="text">
+                         <string>Requerimento</string>
+                        </property>
+                        <property name="checkable">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="2">
+                       <widget class="QCheckBox" name="cbDecPensionista">
+                        <property name="text">
+                         <string>Declaração de
+pensionista</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="0">
+                       <widget class="QCheckBox" name="cbDecHipossuficiencia">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="text">
+                         <string>Declaração de
+hipossuficiência</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1">
+                       <widget class="QCheckBox" name="cbDocsComprobatorios">
+                        <property name="text">
+                         <string>Documentos
+comprobatórios</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="2">
+                       <widget class="QCheckBox" name="cbHonorarios">
+                        <property name="text">
+                         <string>Honorários</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                  <item>
                    <widget class="QFrame" name="frame_2">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
                     </property>
@@ -956,78 +1127,12 @@ QCheckBox::indicator:checked {
                      <property name="bottomMargin">
                       <number>0</number>
                      </property>
-                     <property name="spacing">
+                     <property name="horizontalSpacing">
                       <number>0</number>
                      </property>
-                     <item row="0" column="3">
-                      <widget class="QCheckBox" name="checkBox">
-                       <property name="text">
-                        <string>CheckBox</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="0" colspan="2">
-                      <widget class="QCheckBox" name="checkBox_3">
-                       <property name="text">
-                        <string>Procuração</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="2">
-                      <widget class="QCheckBox" name="checkBox_2">
-                       <property name="text">
-                        <string>Dec. hipossuficiência</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QFrame" name="frame_3">
-                    <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                     <enum>QFrame::Raised</enum>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_11">
-                     <property name="spacing">
-                      <number>0</number>
+                     <property name="verticalSpacing">
+                      <number>12</number>
                      </property>
-                     <property name="leftMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="rightMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="bottomMargin">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <widget class="QCheckBox" name="checkBox_4">
-                       <property name="text">
-                        <string>CheckBox</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QCheckBox" name="checkBox_5">
-                       <property name="text">
-                        <string>CheckBox</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QCheckBox" name="checkBox_6">
-                       <property name="text">
-                        <string>CheckBox</string>
-                       </property>
-                      </widget>
-                     </item>
                     </layout>
                    </widget>
                   </item>
@@ -1042,7 +1147,7 @@ QCheckBox::indicator:checked {
                     <property name="sizeHint" stdset="0">
                      <size>
                       <width>20</width>
-                      <height>40</height>
+                      <height>18</height>
                      </size>
                     </property>
                    </spacer>
@@ -1240,9 +1345,9 @@ QCheckBox::indicator:checked {
                  <zorder>lbInfoDescricao</zorder>
                  <zorder>frame_2</zorder>
                  <zorder>verticalSpacer_2</zorder>
-                 <zorder>verticalSpacer_4</zorder>
                  <zorder>frBotoesDocs</zorder>
-                 <zorder>frame_3</zorder>
+                 <zorder>scaDocs</zorder>
+                 <zorder>verticalSpacer_4</zorder>
                 </widget>
                </item>
               </layout>
@@ -1365,7 +1470,7 @@ QCheckBox::indicator:checked {
            <x>0</x>
            <y>0</y>
            <width>233</width>
-           <height>260</height>
+           <height>278</height>
           </rect>
          </property>
          <property name="sizePolicy">

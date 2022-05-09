@@ -7,6 +7,7 @@
     <file>documento.png</file>
   </qresource>
   <qresource prefix="checkbox">
+    <file>checkBoxDisable.png</file>
     <file>checkBoxTrue.png</file>
     <file>CheckBoxFalse.png</file>
   </qresource>

@@ -6,8 +6,14 @@ from typing import List
 
 from docx.shared import Pt
 from docxtpl import DocxTemplate, InlineImage
+from jinja2 import Environment, FileSystemLoader, Template
+from weasyprint import HTML, CSS
+from weasyprint.text.fonts import FontConfiguration
+
+from systemLog.logs import NewLogging
 
 from modelos.clienteORM import Cliente
+from modelos.clienteProfissao import ClienteProfissao
 from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
 from modelos.itemContribuicao import ItemContribuicao
@@ -16,7 +22,8 @@ from modelos.processosORM import Processos
 from util.helpers.dateHelper import strToDatetime
 from util.enums.aposentadoriaEnums import SubTipoAposentadoria
 from util.enums.processoEnums import TipoBeneficioEnum
-from util.helpers.helpers import mascaraCep, mascaraTelCel, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG
+from util.enums.geracaoDocumentos import EnumDocumento
+from util.helpers.helpers import mascaraCep, mascaraTelCel, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG, strTipoBeneFacilitado
 from util.helpers.dateHelper import mascaraDataPequena
 
 from cache.cachingLogin import CacheLogin
@@ -30,11 +37,14 @@ class GeracaoDocumentos:
     def __init__(self, procModel: Processos, clientModel: Cliente):
         self.cacheLogin = CacheLogin()
         self.cacheEscritorio = CacheEscritorio()
+        self.apiLogger = NewLogging().buscaLogger()
 
         self.advogado = self.getAdvogado()
         self.escritorio = self.getEscritorio()
         self.processo = procModel
         self.cliente = clientModel
+
+        self.infoProfissional: ClienteProfissao = self.getinfoProfissional()
 
         self.pathDocumento = os.path.join(os.getcwd(), 'DocGerados')
         self.pathTemplate = os.path.join(os.getcwd(), '.templates')
@@ -64,6 +74,46 @@ class GeracaoDocumentos:
 
         for d in listaDiretorios:
             print(f"d -> {d}")
+
+    def buscaPathCss(self, tipoDocumento: EnumDocumento):
+        pathCss = ''
+
+        if tipoDocumento == EnumDocumento.procuracao:
+            pathCss = os.path.join(self.pathTemplate, 'css', 'procuracaoStyles.css')
+
+        elif tipoDocumento == EnumDocumento.decHipossuficiencia:
+            pathCss = os.path.join(self.pathTemplate, 'css', 'decHipossuficienciaStyles.css')
+
+        if os.path.isfile(pathCss):
+            return pathCss
+        else:
+            raise Exception()
+
+    def buscaPathResetCss(self):
+        pathCss = os.path.join(self.pathTemplate, 'css', 'reset.css')
+        return pathCss
+
+    def carregaTemplate(self, tipoDocumento: EnumDocumento):
+        if not os.path.isfile(self.pathTemplateAtual):
+            self.apiLogger.error("Não encontrou o template desejado", extra={"URI": self.pathTemplateAtual})
+            raise FileNotFoundError('Não encontrou o template desejado')
+
+        pathTemplateHtml: str = os.path.join(self.pathTemplate, 'html')
+        nomeTemplate: str = ''
+        if tipoDocumento == EnumDocumento.procuracao:
+            nomeTemplate = 'procuracao.html'
+        elif tipoDocumento == EnumDocumento.decHipossuficiencia:
+            nomeTemplate = 'decHipossuficiencia.html'
+
+        try:
+            temp = FileSystemLoader(searchpath=pathTemplateHtml)
+            environment = Environment(loader=temp)
+            jTemplate: Template = environment.get_template(nomeTemplate)
+            return jTemplate
+
+        except Exception as err:
+            self.apiLogger.error("Não foi possível gerar o template", extra={"err": err})
+            raise SyntaxError('Deu merda, maninho...')
             
     def criaContratoHonorarios(self):
         self.nomeArquivoSaida += f" - Contrato de honorários.docx"
@@ -73,7 +123,7 @@ class GeracaoDocumentos:
         self.geraCabecalho()
         self.geraCorpoContrato()
         self.geraRodape()
-        self.finalizaDocumento()
+        self.finalizaDocumento(EnumDocumento.honorarios)
         self.limparConfiguracoes()
 
     def criaConteudoEspecifico(self):
@@ -102,14 +152,14 @@ class GeracaoDocumentos:
             self.dictInfo['conteudoEspecifico'] = conteudoEspecifico
 
     def criaDeclaracaoHipo(self):
-        self.nomeArquivoSaida += f" - Declaração de hipossuficiência.docx"
-        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'decHipossuficiencia.docx')
-        self.documento = DocxTemplate(self.pathTemplateAtual)
+        # self.nomeArquivoSaida += f" - Declaração de hipossuficiência.docx"
+        self.nomeArquivoSaida += f" - Declaração de hipossuficiência.pdf"
+        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'html', 'decHipossuficiencia.html')
 
         self.geraCabecalho()
         self.geraCorpoDeclaracaoHipo()
         self.geraRodape()
-        self.finalizaDocumento()
+        self.finalizaDocumento(EnumDocumento.decHipossuficiencia)
         self.limparConfiguracoes()
 
     def criaDecPensao(self):
@@ -120,7 +170,7 @@ class GeracaoDocumentos:
         self.geraCabecalho()
         self.geraCorpoDeclaracaoPensao()
         self.geraRodape()
-        self.finalizaDocumento()
+        self.finalizaDocumento(EnumDocumento.decPensionista)
         self.limparConfiguracoes()
 
     def criaDocumentosComprobatorios(self):
@@ -134,7 +184,7 @@ class GeracaoDocumentos:
         self.geraConteudoGeral()
         self.criaConteudoEspecifico()
         self.geraRodape()
-        self.finalizaDocumento()
+        self.finalizaDocumento(EnumDocumento.docsComprobatorios)
         self.limparConfiguracoes()
 
     def criaRequerimentoAdm(self, itens: List[ItemContribuicao]):
@@ -149,23 +199,36 @@ class GeracaoDocumentos:
         self.geraDosFundJurid()
 
         self.geraRodape()
-        self.finalizaDocumento()
+        self.finalizaDocumento(EnumDocumento.requerimento)
         self.limparConfiguracoes()
 
     def criaProcuracao(self):
-        self.nomeArquivoSaida += f' - Procuração.docx'
-        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'procuracao.docx')
-        self.documento = DocxTemplate(self.pathTemplateAtual)
+        # self.nomeArquivoSaida += f' - Procuração.docx'
+        self.nomeArquivoSaida += f' - Procuração.pdf'
+        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'html', 'procuracao.html')
+        # self.documento = DocxTemplate(self.pathTemplateAtual)
 
         self.geraCabecalho()
         self.geraCorpoProcuracao()
         self.geraRodape()
-        self.finalizaDocumento()
+        self.finalizaDocumento(EnumDocumento.procuracao)
         self.limparConfiguracoes()
         
-    def finalizaDocumento(self):
-        self.documento.render(self.dictInfo)
-        self.documento.save(os.path.join(self.pathDocumento, self.nomeArquivoSaida))
+    def finalizaDocumento(self, tipoDocumento: EnumDocumento):
+        # self.documento.render(self.dictInfo)
+        # self.documento.save(os.path.join(self.pathDocumento, self.nomeArquivoSaida))
+        nomeArquivoSaida = os.path.join(self.pathDocumento, self.nomeArquivoSaida)
+        template = self.carregaTemplate(tipoDocumento)
+        pathStyles = self.buscaPathCss(tipoDocumento)
+        # pathReset = self.buscaPathResetCss()
+
+        build = template.render(self.dictInfo)
+
+        htmlNewPrev = HTML(string=build, base_url=self.pathTemplate)
+        cssStyles = CSS(filename=pathStyles)
+        # cssReset = CSS(filename=pathReset)
+        fontConfig = FontConfiguration()
+        htmlNewPrev.write_pdf(nomeArquivoSaida, stylesheets=[cssStyles], font_config=fontConfig)
 
     def geraConteudoGeral(self):
         self.dictInfo['conteudoGeral']: list = []
@@ -218,7 +281,7 @@ class GeracaoDocumentos:
         self.dictInfo['dataAtual'] = mascaraMeses(datetime.datetime.now())
             
     def geraCabecalho(self):
-        logo = InlineImage(self.documento, os.path.join(os.getcwd(), 'Resources', 'd3-grey.png'), Pt(24))
+        # logo = InlineImage(self.documento, os.path.join(os.getcwd(), 'Resources', 'd3-grey.png'), Pt(24))
 
         self.dictInfo['nomeFantasia'] = self.escritorio.nomeFantasia
         self.dictInfo['endereco'] = self.escritorio.endereco
@@ -226,14 +289,14 @@ class GeracaoDocumentos:
         self.dictInfo['cep'] = mascaraCep(self.escritorio.cep)
         self.dictInfo['telefone'] = mascaraTelCel(self.escritorio.telefone)
         self.dictInfo['emailEscritorio'] = self.escritorio.email
-        self.dictInfo['logo'] = logo
+        # self.dictInfo['logo'] = logo
 
     def geraSessaoInicialDocComp(self):
 
         self.dictInfo['nomeAdvogado'] = self.advogado.nomeAdvogado
         self.dictInfo['sobrenomeAdvogado'] = self.advogado.sobrenomeAdvogado
         self.dictInfo['tipoProcesso'] = strTipoProcesso(self.processo.tipoProcesso)
-        self.dictInfo['tipoBeneficio'] = strTipoBeneficioEnum(self.processo.tipoBeneficio, self.processo.subTipoApos)
+        self.dictInfo['tipoBeneficio'] = strTipoBeneFacilitado(self.processo.tipoBeneficio)
 
     def geraCorpoProcuracao(self):
         estadoSigla: str = getEstados()[self.cliente.estado]
@@ -244,7 +307,7 @@ class GeracaoDocumentos:
         self.dictInfo['sobrenomeCliente'] = self.cliente.sobrenomeCliente
         self.dictInfo['nacionalidade'] = 'brasileiro(a)'
         self.dictInfo['estadoCivil'] = self.cliente.estadoCivil
-        self.dictInfo['profissao'] = self.cliente.profissao
+        self.dictInfo['profissao'] = self.infoProfissional.nomeProfissao
         self.dictInfo['rg'] = mascaraRG(self.cliente.rgCliente)
         self.dictInfo['estadoSigla'] = estadoSigla
         self.dictInfo['email'] = self.cliente.email
@@ -257,7 +320,7 @@ class GeracaoDocumentos:
         # Informações do advogado
         self.dictInfo['nomeAdvogado'] = self.advogado.nomeAdvogado
         self.dictInfo['sobrenomeAdvogado'] = self.advogado.sobrenomeAdvogado
-        self.dictInfo['nacionalidade'] = self.advogado.nacionalidade
+        self.dictInfo['nacionalidadeAdvogado'] = self.advogado.nacionalidade
         self.dictInfo['estadoCivil'] = self.advogado.estadoCivil
         self.dictInfo['escritorioEstado'] = self.escritorio.estado
         self.dictInfo['numeroOAB'] = self.advogado.numeroOAB
@@ -271,7 +334,7 @@ class GeracaoDocumentos:
         self.dictInfo['estadoEscritorio'] = self.escritorio.estado
 
         # Informações do processo
-        self.dictInfo['tipoBeneficio'] = strTipoBeneficioEnum(self.processo.tipoBeneficio, self.processo.subTipoApos)
+        self.dictInfo['tipoBeneficio'] = strTipoBeneFacilitado(self.processo.tipoBeneficio)
 
         # Informações sobre a localidade atual
         self.dictInfo['cidadeAtual'] = self.strCidadeAtual
@@ -347,7 +410,7 @@ class GeracaoDocumentos:
         self.dictInfo['nomeCliente'] = self.cliente.nomeCliente
         self.dictInfo['sobrenomeCliente'] = self.cliente.sobrenomeCliente
         self.dictInfo['estadoCivilCliente'] = self.cliente.estadoCivil
-        self.dictInfo['profissaoCliente'] = self.cliente.profissao
+        self.dictInfo['profissaoCliente'] = self.infoProfissional.nomeProfissao
         self.dictInfo['rgCliente'] = mascaraRG(self.cliente.rgCliente)
         self.dictInfo['cpfCliente'] = mascaraCPF(self.cliente.cpfCliente)
         self.dictInfo['enderecoCliente'] = self.cliente.endereco
@@ -422,6 +485,14 @@ class GeracaoDocumentos:
         if not escritorio:
             return self.cacheEscritorio.carregarCacheTemporario()
         return escritorio
+
+    def getinfoProfissional(self) -> ClienteProfissao:
+        try:
+            self.apiLogger.debug("Buscando info profissional para gerar documentos")
+            return ClienteProfissao.get_by_id(self.cliente.clienteId)
+        except Exception as err:
+            print(f"getinfoProfissional: {err}")
+            self.apiLogger.error("Não conseguiu econtrar as informações profissionais", extra={"err": err})
     
     def limparConfiguracoes(self):
         self.dictInfo = {}

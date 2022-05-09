@@ -16,7 +16,7 @@ from modelos.escritoriosORM import Escritorios
 from modelos.aposentadoriaORM import Aposentadoria
 from modelos.itemContribuicao import ItemContribuicao
 
-from geracaoDocumentos.geraDocAposentadoria import GeracaoDocumentos
+from geracaoDocumentos.geraDocsGerais import GeracaoDocumentos
 
 from cache.cacheEscritorio import CacheEscritorio
 from cache.cachingLogin import CacheLogin

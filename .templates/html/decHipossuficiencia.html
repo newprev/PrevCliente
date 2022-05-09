@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/b0be8a5058.js" crossorigin="anonymous"></script>
+    <!--
+    <link rel="stylesheet" type="text/css" href="../css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../css/decHipossuficienciaStyles.css">
+    -->
+</head>
+<header>
+
+    <div class="leftInfo">
+        <h1 id="nomeEscritorio">{{ nomeFantasia }}</h1>
+    </div>
+
+    <div class="rightInfo">
+        <i class="fa-light fa-scale-balanced"></i>
+    </div>
+</header>
+
+<body>
+    <div class="conteudoPrincipal">
+        <div class="tituloDocumento">
+            <h2>Declaração de hipossuficiência</h2>
+        </div>
+        <p id="primeiroParagrafo">{{ nomeCliente }} {{ sobrenomeCliente }}, {{ estadoCivilCliente }}, {{ profissaoCliente }}, portador(a) da
+            identidade nº {{ rgCliente }}, CPF nº {{ cpfCliente }} residente e domiciliado(a) à {{ enderecoCliente }}, {{
+            numeroCliente }}, {{ bairroCliente }}, {{ cidadeCliente }} - {{ estadoCliente }}, CEP {{ cepCliente }}, {{
+            emailCliente }}, vem, na forma da Lei 7.115 de 29.08.83, declarar expressamente, sob as penas da lei, ser
+            pobre na acepção jurídica do termo e não estar em condições de pagar as custas do processo e os honorários
+            de advogado, sem prejuízo do sustento próprio e de sua família, para os fins da obtenção dos benefícios da
+            Assistência Jurídica Gratuita, nos termos do art. 2º e 4º da Lei 1060/50 e dos arts. 98 caput, 99, § 1º, §
+            3º e § 4º c/c art. 374, IV, todos do CPC.
+        </p>
+
+        <p>O declarante afirma, ainda, estar ciente de que em caso de falsidade de declaração, se sujeitará as sanções
+            civis, administrativas e criminais previstas na legislação.
+        </p>
+
+        <div class="dataAssinatura">
+            <ul id="listaDataAssinatura">
+                <li>{{ cidadeAtual }}, {{ dataAtual }} </li>
+                <li id="nomeAssinatura">{{ nomeCliente }} {{ sobrenomeCliente }} </li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+<footer>
+    <ul>
+        <li>Telefone: {{ telefoneEscritorio }}</li>
+        <li>E-mail: {{ emailEscritorio }}</li>
+        <li>{{ enderecoEscritorio }}, {{ numeroEscritorio }}</li>
+        <li>CEP: {{ cepEscritorio }}</li>
+    </ul>
+</footer>
+
+</html>

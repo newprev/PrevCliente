@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgProcessoPage(object):
     def setupUi(self, wdgProcessoPage):
         wdgProcessoPage.setObjectName("wdgProcessoPage")
-        wdgProcessoPage.resize(1148, 637)
+        wdgProcessoPage.resize(1148, 672)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -28,6 +28,52 @@ class Ui_wdgProcessoPage(object):
 "\n"
 "#frCabecalho, #frMiolo, #frRodape {\n"
 "    background-color: white;\n"
+"}\n"
+"\n"
+"/*-------------------------------------------  Scroll Bar --------------------------------------------*/\n"
+"QScrollBar:vertical {\n"
+"        background-color: #DDDEDF;\n"
+"        width: 15px;\n"
+"        margin: 15px 3px 15px 3px;\n"
+"        border: 1px transparent #2A2929;\n"
+"        border-radius: 4px;\n"
+"    }\n"
+"\n"
+"QScrollBar:horizontal {\n"
+"        background-color: #DDDEDF;\n"
+"        height: 15px;\n"
+"        margin: 3px 15px 3px 15px;\n"
+"        border: 1px transparent #2A2929;\n"
+"        border-radius: 4px;\n"
+"    }\n"
+"\n"
+"QScrollBar::handle:vertical, QScrollBar::handle:horizontal {\n"
+"    background-color: #3F4E8C;\n"
+"    min-height: 5px;\n"
+"    width: 20px;\n"
+"    border-radius: 4px;\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical{\n"
+"      border: none;\n"
+"      background: none;\n"
+"      color: none;\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal {\n"
+"      border: none;\n"
+"      background: none;\n"
+"      color: none;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical, QScrollBar::add-line:horizontal {\n"
+"    border: none;\n"
+"    background: none;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal {\n"
+"    border: none;\n"
+"    background: none;\n"
 "}")
         self.gridLayout = QtWidgets.QGridLayout(wdgProcessoPage)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -148,12 +194,25 @@ class Ui_wdgProcessoPage(object):
 "    margin: 0px 12px;\n"
 "}\n"
 "\n"
+"QCheckBox::indicator:disabled {\n"
+"    image: url(:/checkbox/checkBoxDisable.png);\n"
+"}\n"
+"\n"
 "QCheckBox::indicator:unchecked {\n"
 "    image: url(:/checkbox/CheckBoxFalse.png);\n"
 "}\n"
 "\n"
 "QCheckBox::indicator:checked {\n"
 "    image: url(:/checkbox/checkBoxTrue.png);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(:/checkbox/checkBoxTrue.png);\n"
+"}\n"
+"\n"
+"/* ---------- QScrollArea --------------- */\n"
+"#scaDocs, #wdgDocumentosCheckbox {\n"
+"    background-color: white;\n"
 "}\n"
 "\n"
 "/* --------  Push Button -------- */\n"
@@ -487,6 +546,7 @@ class Ui_wdgProcessoPage(object):
         self.frInfoDocumentos.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frInfoDocumentos.setObjectName("frInfoDocumentos")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.frInfoDocumentos)
+        self.verticalLayout_4.setContentsMargins(0, -1, 0, -1)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.lbInfoTituloDocs = QtWidgets.QLabel(self.frInfoDocumentos)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
@@ -510,43 +570,65 @@ class Ui_wdgProcessoPage(object):
         self.verticalLayout_4.addWidget(self.lbInfoDescricao)
         spacerItem3 = QtWidgets.QSpacerItem(20, 12, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout_4.addItem(spacerItem3)
+        self.scaDocs = QtWidgets.QScrollArea(self.frInfoDocumentos)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scaDocs.sizePolicy().hasHeightForWidth())
+        self.scaDocs.setSizePolicy(sizePolicy)
+        self.scaDocs.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scaDocs.setWidgetResizable(True)
+        self.scaDocs.setObjectName("scaDocs")
+        self.wdgDocumentosCheckbox = QtWidgets.QWidget()
+        self.wdgDocumentosCheckbox.setGeometry(QtCore.QRect(0, 0, 471, 86))
+        self.wdgDocumentosCheckbox.setObjectName("wdgDocumentosCheckbox")
+        self.gridLayout_7 = QtWidgets.QGridLayout(self.wdgDocumentosCheckbox)
+        self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_7.setHorizontalSpacing(0)
+        self.gridLayout_7.setVerticalSpacing(12)
+        self.gridLayout_7.setObjectName("gridLayout_7")
+        self.cbProcuracao = QtWidgets.QCheckBox(self.wdgDocumentosCheckbox)
+        self.cbProcuracao.setObjectName("cbProcuracao")
+        self.gridLayout_7.addWidget(self.cbProcuracao, 0, 0, 1, 1)
+        self.cbRequerimento = QtWidgets.QCheckBox(self.wdgDocumentosCheckbox)
+        self.cbRequerimento.setCheckable(True)
+        self.cbRequerimento.setObjectName("cbRequerimento")
+        self.gridLayout_7.addWidget(self.cbRequerimento, 0, 1, 1, 1)
+        self.cbDecPensionista = QtWidgets.QCheckBox(self.wdgDocumentosCheckbox)
+        self.cbDecPensionista.setObjectName("cbDecPensionista")
+        self.gridLayout_7.addWidget(self.cbDecPensionista, 0, 2, 1, 1)
+        self.cbDecHipossuficiencia = QtWidgets.QCheckBox(self.wdgDocumentosCheckbox)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.cbDecHipossuficiencia.sizePolicy().hasHeightForWidth())
+        self.cbDecHipossuficiencia.setSizePolicy(sizePolicy)
+        self.cbDecHipossuficiencia.setObjectName("cbDecHipossuficiencia")
+        self.gridLayout_7.addWidget(self.cbDecHipossuficiencia, 1, 0, 1, 1)
+        self.cbDocsComprobatorios = QtWidgets.QCheckBox(self.wdgDocumentosCheckbox)
+        self.cbDocsComprobatorios.setObjectName("cbDocsComprobatorios")
+        self.gridLayout_7.addWidget(self.cbDocsComprobatorios, 1, 1, 1, 1)
+        self.cbHonorarios = QtWidgets.QCheckBox(self.wdgDocumentosCheckbox)
+        self.cbHonorarios.setObjectName("cbHonorarios")
+        self.gridLayout_7.addWidget(self.cbHonorarios, 1, 2, 1, 1)
+        self.scaDocs.setWidget(self.wdgDocumentosCheckbox)
+        self.verticalLayout_4.addWidget(self.scaDocs)
         self.frame_2 = QtWidgets.QFrame(self.frInfoDocumentos)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
+        self.frame_2.setSizePolicy(sizePolicy)
         self.frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.frame_2)
         self.gridLayout_5.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_5.setSpacing(0)
+        self.gridLayout_5.setHorizontalSpacing(0)
+        self.gridLayout_5.setVerticalSpacing(12)
         self.gridLayout_5.setObjectName("gridLayout_5")
-        self.checkBox = QtWidgets.QCheckBox(self.frame_2)
-        self.checkBox.setObjectName("checkBox")
-        self.gridLayout_5.addWidget(self.checkBox, 0, 3, 1, 1)
-        self.checkBox_3 = QtWidgets.QCheckBox(self.frame_2)
-        self.checkBox_3.setObjectName("checkBox_3")
-        self.gridLayout_5.addWidget(self.checkBox_3, 0, 0, 1, 2)
-        self.checkBox_2 = QtWidgets.QCheckBox(self.frame_2)
-        self.checkBox_2.setObjectName("checkBox_2")
-        self.gridLayout_5.addWidget(self.checkBox_2, 0, 2, 1, 1)
         self.verticalLayout_4.addWidget(self.frame_2)
-        self.frame_3 = QtWidgets.QFrame(self.frInfoDocumentos)
-        self.frame_3.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_3.setObjectName("frame_3")
-        self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.frame_3)
-        self.horizontalLayout_11.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_11.setSpacing(0)
-        self.horizontalLayout_11.setObjectName("horizontalLayout_11")
-        self.checkBox_4 = QtWidgets.QCheckBox(self.frame_3)
-        self.checkBox_4.setObjectName("checkBox_4")
-        self.horizontalLayout_11.addWidget(self.checkBox_4)
-        self.checkBox_5 = QtWidgets.QCheckBox(self.frame_3)
-        self.checkBox_5.setObjectName("checkBox_5")
-        self.horizontalLayout_11.addWidget(self.checkBox_5)
-        self.checkBox_6 = QtWidgets.QCheckBox(self.frame_3)
-        self.checkBox_6.setObjectName("checkBox_6")
-        self.horizontalLayout_11.addWidget(self.checkBox_6)
-        self.verticalLayout_4.addWidget(self.frame_3)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 18, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout_4.addItem(spacerItem4)
         self.frBotoesDocs = QtWidgets.QFrame(self.frInfoDocumentos)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
@@ -622,7 +704,7 @@ class Ui_wdgProcessoPage(object):
         self.lbInfoDescricao.raise_()
         self.frame_2.raise_()
         self.frBotoesDocs.raise_()
-        self.frame_3.raise_()
+        self.scaDocs.raise_()
         self.verticalLayout_18.addWidget(self.frInfoDocumentos, 0, QtCore.Qt.AlignHCenter)
         self.gridLayout_3.addWidget(self.frInfoGeralProcessos, 1, 0, 1, 1)
         self.gridLayout_6.addWidget(self.frEsquerda, 0, 0, 2, 1, QtCore.Qt.AlignLeft)
@@ -683,7 +765,7 @@ class Ui_wdgProcessoPage(object):
         self.scaAndamentos.setWidgetResizable(True)
         self.scaAndamentos.setObjectName("scaAndamentos")
         self.wdgListaAndamentos = QtWidgets.QWidget()
-        self.wdgListaAndamentos.setGeometry(QtCore.QRect(0, 0, 233, 260))
+        self.wdgListaAndamentos.setGeometry(QtCore.QRect(0, 0, 233, 278))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -851,12 +933,15 @@ class Ui_wdgProcessoPage(object):
         self.lbTpProcesso.setText(_translate("wdgProcessoPage", "Concessão"))
         self.lbInfoTituloDocs.setText(_translate("wdgProcessoPage", "Documentos"))
         self.lbInfoDescricao.setText(_translate("wdgProcessoPage", "Selecione os documentos que deseja imprimir ou gerar PDF."))
-        self.checkBox.setText(_translate("wdgProcessoPage", "CheckBox"))
-        self.checkBox_3.setText(_translate("wdgProcessoPage", "Procuração"))
-        self.checkBox_2.setText(_translate("wdgProcessoPage", "Dec. hipossuficiência"))
-        self.checkBox_4.setText(_translate("wdgProcessoPage", "CheckBox"))
-        self.checkBox_5.setText(_translate("wdgProcessoPage", "CheckBox"))
-        self.checkBox_6.setText(_translate("wdgProcessoPage", "CheckBox"))
+        self.cbProcuracao.setText(_translate("wdgProcessoPage", "Procuração"))
+        self.cbRequerimento.setText(_translate("wdgProcessoPage", "Requerimento"))
+        self.cbDecPensionista.setText(_translate("wdgProcessoPage", "Declaração de\n"
+"pensionista"))
+        self.cbDecHipossuficiencia.setText(_translate("wdgProcessoPage", "Declaração de\n"
+"hipossuficiência"))
+        self.cbDocsComprobatorios.setText(_translate("wdgProcessoPage", "Documentos\n"
+"comprobatórios"))
+        self.cbHonorarios.setText(_translate("wdgProcessoPage", "Honorários"))
         self.pbImprimir.setText(_translate("wdgProcessoPage", "Imprimir tudo"))
         self.pbGeraPdf.setText(_translate("wdgProcessoPage", "Gerar PDF\'S"))
         self.lbTituloAndamento.setText(_translate("wdgProcessoPage", "Andamentos processuais"))

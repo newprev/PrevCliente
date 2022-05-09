@@ -1,0 +1,164 @@
+@font-face {
+    src: url(../../Design/Fonts/Avenir/AvenirLTStd-Roman.otf);
+    font-family: 'Avenir LT Std';
+    font-weight: normal;
+}
+
+@font-face {
+    src: url(../../Design/Fonts/Bebas/BebasNeue-Regular.ttf);
+    font-family: 'Bebas Neue';
+    font-weight: normal;
+}
+
+@page {
+    size: A4 portrait;
+    margin: 1cm;
+  }
+
+/*@page :right {
+    @top-right { content: element(footer) }
+    @bottom-right { content: counter(page) }
+}*/
+
+@page :left {
+    @bottom-left { content: counter(page) }
+}
+@page :blank {
+    @top-right { content: none }
+    @top-left { content: none }
+}
+@page clean {
+    @top-right { content: none }
+    @top-left { content: none }
+}
+
+/* --------- Geral ---------- */
+html {
+    font-family: 'Avenir LT Std', 'Bebas Neue';
+}
+
+
+/* --------- Cabeçalho ---------- */
+header {
+    display: block;
+    box-sizing: border-box;
+    top: 4px;
+    height: 7em;
+    width: 100%;
+    background-color: #FFF;
+    border-bottom: 4px solid #3F4E8C;
+}
+
+
+.leftInfo, .rightInfo{
+    display: inline-block;
+    margin: 1px;
+    box-sizing: border-box;
+}
+
+.leftInfo{
+    font-size: 24px;
+    font-weight: 700;
+    color: #3F4E8C;
+    position: relative;
+    max-width: 100px;
+}
+
+.rightInfo{
+    font-size: 42px;
+    color: #3F4E8C;
+    position: absolute;
+    right: 4px;
+}
+
+#nomeEscritorio {
+    font-family: 'Bebas Neue';
+    font-weight: bold;
+    font-size: larger;
+}
+
+/* ----------- Body -------------- */
+body {
+    text-align: justify;
+    background-color: #FFF;
+}
+
+.conteudoPrincipal{
+    margin: 12px 12px;
+}
+
+#primeiroParagrafo {
+    margin-top: 70px;
+}
+
+.conteudoPrincipal p {
+    text-indent: 30px;
+    margin: 24px;
+    line-height: 1.8em;
+}
+
+.tituloDocumento {
+    margin-top: 4em;
+    border-bottom: 2px solid #D4D4D4;
+}
+
+.tituloDocumento h2 {
+    color:#3F4E8C;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+
+    padding-bottom: 2px;
+
+    position: relative;
+    bottom: -14pt;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+
+    border-bottom: 2px solid #3F4E8C;
+    border-radius: 1px;
+}
+
+.dataAssinatura {
+    text-align: center;
+    margin-top: 3em;
+    font-weight: 700;
+    padding: 1em 0;
+}
+
+#listaDataAssinatura {
+    list-style: none;
+}
+
+#nomeAssinatura {
+    border-top: 2px solid #000;
+    padding: 12px;
+    max-width: 70%;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5em;
+}
+
+/* ---------- Rodapé ----------- */
+footer{
+    position: fixed;
+    display: block;
+    box-sizing: border-box;
+    bottom: 8px;
+    height: 42px;
+    width: 100%;
+    background-color: #FFF;
+    border-top: 1px solid #E4E4E4;
+}
+
+footer ul {
+    font-size: 10pt;
+    text-align: right;
+    right: 24px;
+    list-style: none;
+    padding-top: 8px;
+    margin: 8px 0;
+}

@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget, QFrame, QCheckBox
 
 from Design.efeitos import Efeitos
 from Design.pyUi.pgImpressaoDocs import Ui_wdgImpressaoDocs
-from geracaoDocumentos.geraDocAposentadoria import GeracaoDocumentos
+from geracaoDocumentos.geraDocsGerais import GeracaoDocumentos
 from sinaisCustomizados import Sinais
 
 from modelos.clienteORM import Cliente

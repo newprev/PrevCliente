@@ -50,7 +50,7 @@ header {
 }
 
 
-.leftInfo, .rightInfo{
+.leftInfo, .rightLogo{
     display: inline-block;
     margin: 1px;
     box-sizing: border-box;
@@ -64,11 +64,13 @@ header {
     max-width: 100px;
 }
 
-.rightInfo{
-    font-size: 42px;
-    color: #3F4E8C;
+.rightLogo img{
+    width: 7em;
+    height: 7em;
+
     position: absolute;
     right: 4px;
+    top: 4px;
 }
 
 #nomeEscritorio {

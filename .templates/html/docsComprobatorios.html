@@ -15,8 +15,10 @@
         <h1 id="nomeEscritorio">{{ nomeFantasia }}</h1>
     </div>
 
-    <div class="rightInfo">
-        <i class="fa-light fa-scale-balanced"></i>
+    <div class="rightLogo">
+        {% if logo != None %}
+            <img src="{{ logo }}", alt="Logo do escritório"/>            
+        {% endif %}
     </div>
 </header>
 

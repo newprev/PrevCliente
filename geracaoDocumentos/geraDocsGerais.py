@@ -313,6 +313,7 @@ class GeracaoDocumentos:
             
     def geraCabecalho(self):
         # logo = InlineImage(self.documento, os.path.join(os.getcwd(), 'Resources', 'd3-grey.png'), Pt(24))
+        logo = os.path.join(os.getcwd(), '.templates', 'img', 'Logo DJ.jpg')
 
         self.dictInfo['nomeFantasia'] = self.escritorio.nomeFantasia
         self.dictInfo['endereco'] = self.escritorio.endereco
@@ -320,7 +321,7 @@ class GeracaoDocumentos:
         self.dictInfo['cep'] = mascaraCep(self.escritorio.cep)
         self.dictInfo['telefone'] = mascaraTelCel(self.escritorio.telefone)
         self.dictInfo['emailEscritorio'] = self.escritorio.email
-        # self.dictInfo['logo'] = logo
+        self.dictInfo['logo'] = logo
 
     def geraSessaoInicialDocComp(self):
 

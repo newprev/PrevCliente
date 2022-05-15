@@ -61,7 +61,10 @@ QCheckBox::indicator:checked {
 #frCabecalho {
 	background-color: #3F4E8C;
 	
-	border-radius: 8px;	
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
 }
 
 #frFirulaGeral {
@@ -298,14 +301,47 @@ QCheckBox::indicator:checked {
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="pgBackup" native="true">
+      <widget class="QWidget" name="pgGeral">
        <property name="styleSheet">
         <string notr="true">/* ---------------- Label --------------- */
-#lbConfigSisTitulo {
+#lbConfigSisTitulo, #lbSubtituloDiretorios {
 	color: #3F4E8C;
 	font-size: 18px;
 
 	margin: 8px 0px;
+}
+
+#lbInfoDocsGerados, #lbInfoAutoLogin {
+	font-weight: 700;
+}
+
+#lbDirDocsGerados {
+	font-weight: 150;
+}
+
+/* ---------- Frames -------------- */
+#frFirulaDocsGerados, #frFirulaAutoLogin {
+	background-color: #566BBF;
+
+	border-radius: 2px;
+}
+
+#frDocsGerados, #frAutoLogin {
+	background-color: white;
+	border-radius: 4px;
+}
+
+/* ------------ Push Buttom --------------- */
+#pbAlteraDocsGerados {
+	background-color: #566BBF;
+
+	color: white;
+	font-weight: 400;
+	font-size: 17px;
+	padding: 4px 16px;
+
+	border-radius: 8px;
+	margin: 0px 0px 8px 0px;
 }</string>
        </property>
        <layout class="QGridLayout" name="gridLayout">
@@ -319,16 +355,16 @@ QCheckBox::indicator:checked {
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
            <property name="leftMargin">
-            <number>0</number>
+            <number>9</number>
            </property>
            <property name="topMargin">
             <number>0</number>
            </property>
            <property name="rightMargin">
-            <number>0</number>
+            <number>9</number>
            </property>
            <property name="bottomMargin">
-            <number>0</number>
+            <number>9</number>
            </property>
            <item>
             <widget class="QLabel" name="lbConfigSisTitulo">
@@ -337,11 +373,70 @@ QCheckBox::indicator:checked {
              </property>
             </widget>
            </item>
-           <item alignment="Qt::AlignLeft">
-            <widget class="QCheckBox" name="cbIniciaAutomatico">
-             <property name="text">
-              <string>Iniciar automaticamente, sem a necessidade do login.</string>
+           <item>
+            <widget class="QFrame" name="frAutoLogin">
+             <property name="frameShape">
+              <enum>QFrame::NoFrame</enum>
              </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <property name="leftMargin">
+               <number>4</number>
+              </property>
+              <property name="topMargin">
+               <number>4</number>
+              </property>
+              <property name="rightMargin">
+               <number>4</number>
+              </property>
+              <property name="bottomMargin">
+               <number>4</number>
+              </property>
+              <property name="horizontalSpacing">
+               <number>12</number>
+              </property>
+              <property name="verticalSpacing">
+               <number>8</number>
+              </property>
+              <item row="2" column="1">
+               <widget class="QCheckBox" name="cbIniciaAutomatico">
+                <property name="text">
+                 <string>Iniciar automaticamente, sem a necessidade do login.</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLabel" name="lbInfoAutoLogin">
+                <property name="text">
+                 <string>Login automático</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" rowspan="2">
+               <widget class="QFrame" name="frFirulaAutoLogin">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>4</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
            <item>
@@ -360,9 +455,135 @@ QCheckBox::indicator:checked {
           </layout>
          </widget>
         </item>
+        <item row="0" column="1">
+         <widget class="QFrame" name="frConfigDiretorios">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="lbSubtituloDiretorios">
+             <property name="text">
+              <string>Configurações dos diretórios</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="frDocsGerados">
+             <property name="frameShape">
+              <enum>QFrame::NoFrame</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_3">
+              <property name="leftMargin">
+               <number>4</number>
+              </property>
+              <property name="topMargin">
+               <number>4</number>
+              </property>
+              <property name="rightMargin">
+               <number>4</number>
+              </property>
+              <property name="bottomMargin">
+               <number>4</number>
+              </property>
+              <property name="horizontalSpacing">
+               <number>12</number>
+              </property>
+              <property name="verticalSpacing">
+               <number>8</number>
+              </property>
+              <item row="2" column="1">
+               <widget class="QPushButton" name="pbAlteraDocsGerados">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Alterar</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0" colspan="2">
+               <widget class="QLabel" name="lbInfoDocsGerados">
+                <property name="text">
+                 <string>Pasta dos documentos gerados</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="margin">
+                 <number>4</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="lbDirDocsGerados">
+                <property name="text">
+                 <string>~/DiretorioPadrao</string>
+                </property>
+                <property name="margin">
+                 <number>0</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2" rowspan="3">
+               <widget class="QFrame" name="frFirulaDocsGerados">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>4</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>279</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="pgGeral" native="true"/>
+      <widget class="QWidget" name="pgBackup"/>
      </widget>
     </item>
     <item row="3" column="0" alignment="Qt::AlignHCenter">

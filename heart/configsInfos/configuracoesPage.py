@@ -1,7 +1,9 @@
 import datetime
+from pathlib import Path
 
-from PyQt5.QtWidgets import QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QFileDialog
 
+from Design.efeitos import Efeitos
 from Design.pyUi.configuracoesPage import Ui_mwConfiguracoes
 
 from cache.cachingLogin import CacheLogin
@@ -25,11 +27,17 @@ class ConfiguracoesPage(QMainWindow, Ui_mwConfiguracoes):
         self.carregaConfiguracoes()
         self.atualizaTela()
         self.trocaCategConfig(CategoriaConfig.geral)
+        self.efeitos = Efeitos()
+        self.efeitos.shadowCards([self.frDocsGerados, self.frAutoLogin], color=(63, 63, 63, 60), offset=(0, 0))
+        self.efeitos.shadowCards([self.frCabecalho], color=(63, 63, 63, 60), offset=(0, 4))
+
+        self.carregaDirDocsGerados()
 
         self.cbIniciaAutomatico.stateChanged.connect(self.atualizaIniciaAuto)
-        self.pbSalvar.clicked.connect(self.close)
+        self.pbSalvar.clicked.connect(self.avaliaSalvar)
         self.pbGeral.clicked.connect(lambda: self.trocaCategConfig(CategoriaConfig.geral))
         self.pbBackup.clicked.connect(lambda: self.trocaCategConfig(CategoriaConfig.backup))
+        self.pbAlteraDocsGerados.clicked.connect(self.popUpAlteraDirDocsGerados)
 
     def atualizaIniciaAuto(self):
         if self.configGerais is not None:
@@ -42,6 +50,18 @@ class ConfiguracoesPage(QMainWindow, Ui_mwConfiguracoes):
             self.cbIniciaAutomatico.setChecked(self.configGerais.iniciaAuto)
         else:
             self.cbIniciaAutomatico.setChecked(False)
+
+    def avaliaSalvar(self):
+        self.configGerais.dataUltAlt = datetime.datetime.now()
+        self.configGerais.save()
+        self.close()
+
+    def carregaDirDocsGerados(self):
+        dirAtual: Path = Path(self.configGerais.pathDocGerados)
+        qtdParts = len(dirAtual.parts)
+        pathParcial = '/'.join(dirAtual.parts[qtdParts-3:])
+
+        self.lbDirDocsGerados.setText(pathParcial)
 
     def carregaConfiguracoes(self):
         cache = CacheLogin()
@@ -64,6 +84,17 @@ class ConfiguracoesPage(QMainWindow, Ui_mwConfiguracoes):
 
     def desabilitarTudo(self):
         self.cbIniciaAutomatico.setDisabled(True)
+
+    def popUpAlteraDirDocsGerados(self):
+        home = str(Path.home())
+
+        fileDialog: QFileDialog = QFileDialog(parent=self)
+        fileDialog.setDirectory(home)
+        novoDir = fileDialog.getExistingDirectory(parent=self, caption='Selecione uma pasta')
+
+        if novoDir != '':
+            self.configGerais.pathDocGerados = novoDir
+            self.carregaDirDocsGerados()
 
     def popUpSimCancela(self, mensagem, titulo: str = 'Atenção!', funcao=None):
         pop = QMessageBox()

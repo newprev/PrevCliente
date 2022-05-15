@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import List
+from typing import List, Tuple
 
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.QtGui import QPixmap
@@ -11,7 +11,9 @@ from geracaoDocumentos.geraDocsGerais import GeracaoDocumentos
 from heart.buscaClientePage import BuscaClientePage
 from heart.processos.localStyleSheet.processo import habDesCheckBox
 from heart.processos.localWidgets.cardIncidenteProcessual import CardIncidenteProcessual
+from modelos.advogadoORM import Advogados
 from modelos.clienteORM import Cliente
+from modelos.configGeraisORM import ConfigGerais
 from modelos.incidenteProcessual import IncidenteProcessual
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
@@ -21,7 +23,7 @@ from heart.buscaProcessoPage import BuscaProcessosPage
 
 from util.enums.dashboardEnums import TelaAtual
 from util.enums.geracaoDocumentos import EnumDocumento
-from util.enums.processoEnums import SituacaoTela
+from util.enums.processoEnums import SituacaoTela, SitProcessoTela
 from util.ferramentas.layout import limpaLayout
 from util.helpers.helpers import strNatureza, strTipoBeneficio, strTipoProcesso, mascaraTelCel
 from util.popUps import popUpSimCancela, popUpOkAlerta
@@ -30,10 +32,16 @@ from util.popUps import popUpSimCancela, popUpOkAlerta
 class ProcessoPage(QWidget, Ui_wdgProcessoPage):
     situacaoTela: SituacaoTela = SituacaoTela.clienteFaltante
     clienteAtual: Cliente
+    advogadoAtual: Advogados
     telefoneAtual: Telefones
     apiLogger: Logger
     processoAtual: Processos
     efeitos: Efeitos
+    configGerais: ConfigGerais = ConfigGerais()
+    textosProcTela: Tuple[str] = (
+        "Cliente não possui processo cadastrado.\n\n\nPara iniciar um processo com o seu cliente, basta finalizar uma entrevista.",
+        "Nenhum processo selecionado.\n\n\nPara gerar documentos e visualizar andamentos processuais, selecione um processo clicando no botão acima.",
+    )
     
     docsHabilitados: dict = {
         EnumDocumento.procuracao: True,
@@ -53,7 +61,7 @@ class ProcessoPage(QWidget, Ui_wdgProcessoPage):
         EnumDocumento.requerimento: False,        
     }
 
-    def __init__(self, cliente: Cliente = None, parent=None):
+    def __init__(self, advogado: Advogados, cliente: Cliente = None, parent=None):
         super(ProcessoPage, self).__init__(parent=parent)
         self.setupUi(self)
         self.apiLogger = NewLogging().buscaLogger()
@@ -62,6 +70,8 @@ class ProcessoPage(QWidget, Ui_wdgProcessoPage):
         self.sinais = Sinais()
         self.dashboard = parent
         self.toasty: QToaster = None
+        self.advogadoAtual = advogado
+        self.configGerais = ConfigGerais.select().where(ConfigGerais.advogadoId == self.advogadoAtual.advogadoId).get()
 
         self.efeitos.shadowCards([self.frBotoesDocs], color=(63, 63, 63, 80), radius=5, offset=(1, 1))
         self.atualizaCheckboxDocumentos()
@@ -111,6 +121,16 @@ class ProcessoPage(QWidget, Ui_wdgProcessoPage):
             self.carregaClienteNaTela()
             self.stkInfoCliente.setCurrentIndex(1)
             self.frCardProcesso.show()
+
+    def atualizaSituacaoProcesso(self, sitProcessoTela: SitProcessoTela):
+        if sitProcessoTela == SitProcessoTela.nenhumProcesso:
+            self.stkProcessoInfos.setCurrentIndex(0)
+            self.lbInfoProcNaoSelecionado.setText(self.textosProcTela[0])
+        elif sitProcessoTela == SitProcessoTela.soUmProcesso:
+            self.stkProcessoInfos.setCurrentIndex(1)
+        elif sitProcessoTela == SitProcessoTela.variosProcessos:
+            self.stkProcessoInfos.setCurrentIndex(0)
+            self.lbInfoProcNaoSelecionado.setText(self.textosProcTela[1])
             
     def avaliaGerarPdfs(self) -> bool:
         if not any(self.docsGerar.values()):
@@ -123,21 +143,21 @@ class ProcessoPage(QWidget, Ui_wdgProcessoPage):
                 mensagemPopup += '\n-Requerimento do processo'
 
             elif chave == EnumDocumento.procuracao and selecionado:
-                mensagemPopup += '\n  -Procuração'
+                mensagemPopup += '\n  - Procuração'
 
             elif chave == EnumDocumento.honorarios and selecionado:
-                mensagemPopup += '\n  -Declaração de honorários'
+                mensagemPopup += '\n  - Declaração de honorários'
 
             elif chave == EnumDocumento.decPensionista and selecionado:
-                mensagemPopup += '\n  -Declaração de pensionista'
+                mensagemPopup += '\n  - Declaração de pensionista'
 
             elif chave == EnumDocumento.docsComprobatorios and selecionado:
-                mensagemPopup += '\n  -Documentos coprobatórios'
+                mensagemPopup += '\n  - Documentos coprobatórios'
 
             elif chave == EnumDocumento.decHipossuficiencia and selecionado:
-                mensagemPopup += '\n  -Declaração de hipossuficiência'
+                mensagemPopup += '\n  - Declaração de hipossuficiência'
 
-        mensagemPopup += '\n\nDeseja continuar?'
+        mensagemPopup += f'\n\nDeseja continuar?\n\nPasta: {self.configGerais.pathDocGerados}'
         popUpSimCancela(mensagemPopup, funcaoSim=self.geraPdfs)
         return True
 
@@ -193,17 +213,14 @@ class ProcessoPage(QWidget, Ui_wdgProcessoPage):
                 Processos.processoId.desc()
             )
 
-            if len(listaProcessos):
-                self.processoAtual = listaProcessos[0]
-                if self.processoAtual.numeroProcesso is None:
-                    self.lbNumProcesso.setText(" - ")
-                else:
-                    self.lbNumProcesso.setText(f"{self.processoAtual.numeroProcesso}")
+            if len(listaProcessos) == 0:
+                self.atualizaSituacaoProcesso(SitProcessoTela.nenhumProcesso)
 
-                self.lbNatureza.setText(strNatureza(self.processoAtual.natureza))
-                self.lbTpBeneficio.setText(strTipoBeneficio(self.processoAtual.tipoBeneficio, self.processoAtual.regraAposentadoria))
-                self.lbTpProcesso.setText(strTipoProcesso(self.processoAtual.tipoProcesso))
-                self.atualizaSituacaoTela(SituacaoTela.processoEncontrado)
+            elif len(listaProcessos) == 1:
+                self.processoAtual = listaProcessos[0]
+                self.recebeProcesso(self.processoAtual.processoId)
+            else:
+                self.atualizaSituacaoProcesso(SitProcessoTela.variosProcessos)
 
         except Cliente.DoesNotExist as err:
             self.apiLogger.error("Não encontrou o cliente", extra={'err': err, 'clienteId': clienteId})
@@ -274,6 +291,8 @@ class ProcessoPage(QWidget, Ui_wdgProcessoPage):
 
             self.frCardProcesso.show()
             self.carregaIncidentesNaTela()
+            self.atualizaSituacaoProcesso(SitProcessoTela.soUmProcesso)
+
         except Exception as err:
             self.apiLogger.error("Tentou carregar o processo, mas não foi possível", extra={"err": err})
 

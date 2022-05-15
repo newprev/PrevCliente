@@ -597,6 +597,8 @@ def strTipoBeneficio(tipoBeneficio: int, subTipoApos: int) -> str:
 
 
 def strTipoBeneFacilitado(tipoBeneficio: TipoBeneficioEnum) -> str:
+    if isinstance(tipoBeneficio, int):
+        tipoBeneficio = TipoBeneficioEnum(tipoBeneficio)
 
     if tipoBeneficio == TipoBeneficioEnum.Aposentadoria:
         return 'Aposentadoria'

@@ -69,9 +69,9 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.setTabOrder(self.leCidade, self.cbxEstado)
         self.setTabOrder(self.cbxEstado, self.leEndereco)
         self.setTabOrder(self.leEndereco, self.leBairro)
-        self.setTabOrder(self.leBairro, self.leComplemento)
-        self.setTabOrder(self.leComplemento, self.leNumero)
-        self.setTabOrder(self.leNumero, self.pbSalvarDados)
+        self.setTabOrder(self.leBairro, self.leNumero)
+        self.setTabOrder(self.leNumero, self.leComplemento)
+        self.setTabOrder(self.leComplemento, self.pbSalvarDados)
 
         self.setTabOrder(self.leNit, self.leCarteiraProf)
         self.setTabOrder(self.leCarteiraProf, self.leProfissao)
@@ -237,6 +237,8 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
 
             self.cbxEstado.setCurrentText(getEstadoBySigla(dictCep['uf']))
             self.clienteAtual.estado = getEstadoBySigla(dictCep['uf'])
+
+            self.leNumero.setFocus()
         elif 'erro' in dictCep.keys():
             self.showPopupAlerta(dictCep['erro'])
 

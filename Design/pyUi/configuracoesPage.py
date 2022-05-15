@@ -62,7 +62,10 @@ class Ui_mwConfiguracoes(object):
 "#frCabecalho {\n"
 "    background-color: #3F4E8C;\n"
 "    \n"
-"    border-radius: 8px;    \n"
+"    border-top-left-radius: 0px;\n"
+"    border-top-right-radius: 0px;\n"
+"    border-bottom-left-radius: 8px;\n"
+"    border-bottom-right-radius: 8px;\n"
 "}\n"
 "\n"
 "#frFirulaGeral {\n"
@@ -155,37 +158,144 @@ class Ui_mwConfiguracoes(object):
         self.stkPrincipal = QtWidgets.QStackedWidget(self.wdgMain)
         self.stkPrincipal.setMinimumSize(QtCore.QSize(0, 0))
         self.stkPrincipal.setObjectName("stkPrincipal")
-        self.pgBackup = QtWidgets.QWidget()
-        self.pgBackup.setStyleSheet("/* ---------------- Label --------------- */\n"
-"#lbConfigSisTitulo {\n"
+        self.pgGeral = QtWidgets.QWidget()
+        self.pgGeral.setStyleSheet("/* ---------------- Label --------------- */\n"
+"#lbConfigSisTitulo, #lbSubtituloDiretorios {\n"
 "    color: #3F4E8C;\n"
 "    font-size: 18px;\n"
 "\n"
 "    margin: 8px 0px;\n"
+"}\n"
+"\n"
+"#lbInfoDocsGerados, #lbInfoAutoLogin {\n"
+"    font-weight: 700;\n"
+"}\n"
+"\n"
+"#lbDirDocsGerados {\n"
+"    font-weight: 150;\n"
+"}\n"
+"\n"
+"/* ---------- Frames -------------- */\n"
+"#frFirulaDocsGerados, #frFirulaAutoLogin {\n"
+"    background-color: #566BBF;\n"
+"\n"
+"    border-radius: 2px;\n"
+"}\n"
+"\n"
+"#frDocsGerados, #frAutoLogin {\n"
+"    background-color: white;\n"
+"    border-radius: 4px;\n"
+"}\n"
+"\n"
+"/* ------------ Push Buttom --------------- */\n"
+"#pbAlteraDocsGerados {\n"
+"    background-color: #566BBF;\n"
+"\n"
+"    color: white;\n"
+"    font-weight: 400;\n"
+"    font-size: 17px;\n"
+"    padding: 4px 16px;\n"
+"\n"
+"    border-radius: 8px;\n"
+"    margin: 0px 0px 8px 0px;\n"
 "}")
-        self.pgBackup.setObjectName("pgBackup")
-        self.gridLayout = QtWidgets.QGridLayout(self.pgBackup)
+        self.pgGeral.setObjectName("pgGeral")
+        self.gridLayout = QtWidgets.QGridLayout(self.pgGeral)
         self.gridLayout.setObjectName("gridLayout")
-        self.frConfigSistema = QtWidgets.QFrame(self.pgBackup)
+        self.frConfigSistema = QtWidgets.QFrame(self.pgGeral)
         self.frConfigSistema.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frConfigSistema.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frConfigSistema.setObjectName("frConfigSistema")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.frConfigSistema)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setContentsMargins(9, 0, 9, 9)
         self.verticalLayout.setObjectName("verticalLayout")
         self.lbConfigSisTitulo = QtWidgets.QLabel(self.frConfigSistema)
         self.lbConfigSisTitulo.setObjectName("lbConfigSisTitulo")
         self.verticalLayout.addWidget(self.lbConfigSisTitulo)
-        self.cbIniciaAutomatico = QtWidgets.QCheckBox(self.frConfigSistema)
+        self.frAutoLogin = QtWidgets.QFrame(self.frConfigSistema)
+        self.frAutoLogin.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frAutoLogin.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frAutoLogin.setObjectName("frAutoLogin")
+        self.gridLayout_4 = QtWidgets.QGridLayout(self.frAutoLogin)
+        self.gridLayout_4.setContentsMargins(4, 4, 4, 4)
+        self.gridLayout_4.setHorizontalSpacing(12)
+        self.gridLayout_4.setVerticalSpacing(8)
+        self.gridLayout_4.setObjectName("gridLayout_4")
+        self.cbIniciaAutomatico = QtWidgets.QCheckBox(self.frAutoLogin)
         self.cbIniciaAutomatico.setObjectName("cbIniciaAutomatico")
-        self.verticalLayout.addWidget(self.cbIniciaAutomatico, 0, QtCore.Qt.AlignLeft)
+        self.gridLayout_4.addWidget(self.cbIniciaAutomatico, 2, 1, 1, 1)
+        self.lbInfoAutoLogin = QtWidgets.QLabel(self.frAutoLogin)
+        self.lbInfoAutoLogin.setObjectName("lbInfoAutoLogin")
+        self.gridLayout_4.addWidget(self.lbInfoAutoLogin, 1, 1, 1, 1)
+        self.frFirulaAutoLogin = QtWidgets.QFrame(self.frAutoLogin)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frFirulaAutoLogin.sizePolicy().hasHeightForWidth())
+        self.frFirulaAutoLogin.setSizePolicy(sizePolicy)
+        self.frFirulaAutoLogin.setMinimumSize(QtCore.QSize(4, 0))
+        self.frFirulaAutoLogin.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frFirulaAutoLogin.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frFirulaAutoLogin.setObjectName("frFirulaAutoLogin")
+        self.gridLayout_4.addWidget(self.frFirulaAutoLogin, 1, 0, 2, 1)
+        self.verticalLayout.addWidget(self.frAutoLogin)
         spacerItem2 = QtWidgets.QSpacerItem(20, 345, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem2)
         self.gridLayout.addWidget(self.frConfigSistema, 0, 0, 1, 1, QtCore.Qt.AlignLeft)
-        self.stkPrincipal.addWidget(self.pgBackup)
-        self.pgGeral = QtWidgets.QWidget()
-        self.pgGeral.setObjectName("pgGeral")
+        self.frConfigDiretorios = QtWidgets.QFrame(self.pgGeral)
+        self.frConfigDiretorios.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frConfigDiretorios.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frConfigDiretorios.setObjectName("frConfigDiretorios")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.frConfigDiretorios)
+        self.verticalLayout_4.setContentsMargins(-1, 0, -1, -1)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.lbSubtituloDiretorios = QtWidgets.QLabel(self.frConfigDiretorios)
+        self.lbSubtituloDiretorios.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbSubtituloDiretorios.setObjectName("lbSubtituloDiretorios")
+        self.verticalLayout_4.addWidget(self.lbSubtituloDiretorios)
+        self.frDocsGerados = QtWidgets.QFrame(self.frConfigDiretorios)
+        self.frDocsGerados.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frDocsGerados.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frDocsGerados.setObjectName("frDocsGerados")
+        self.gridLayout_3 = QtWidgets.QGridLayout(self.frDocsGerados)
+        self.gridLayout_3.setContentsMargins(4, 4, 4, 4)
+        self.gridLayout_3.setHorizontalSpacing(12)
+        self.gridLayout_3.setVerticalSpacing(8)
+        self.gridLayout_3.setObjectName("gridLayout_3")
+        self.pbAlteraDocsGerados = QtWidgets.QPushButton(self.frDocsGerados)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pbAlteraDocsGerados.sizePolicy().hasHeightForWidth())
+        self.pbAlteraDocsGerados.setSizePolicy(sizePolicy)
+        self.pbAlteraDocsGerados.setObjectName("pbAlteraDocsGerados")
+        self.gridLayout_3.addWidget(self.pbAlteraDocsGerados, 2, 1, 1, 1)
+        self.lbInfoDocsGerados = QtWidgets.QLabel(self.frDocsGerados)
+        self.lbInfoDocsGerados.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbInfoDocsGerados.setObjectName("lbInfoDocsGerados")
+        self.gridLayout_3.addWidget(self.lbInfoDocsGerados, 0, 0, 1, 2)
+        self.lbDirDocsGerados = QtWidgets.QLabel(self.frDocsGerados)
+        self.lbDirDocsGerados.setObjectName("lbDirDocsGerados")
+        self.gridLayout_3.addWidget(self.lbDirDocsGerados, 2, 0, 1, 1)
+        self.frFirulaDocsGerados = QtWidgets.QFrame(self.frDocsGerados)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frFirulaDocsGerados.sizePolicy().hasHeightForWidth())
+        self.frFirulaDocsGerados.setSizePolicy(sizePolicy)
+        self.frFirulaDocsGerados.setMinimumSize(QtCore.QSize(4, 0))
+        self.frFirulaDocsGerados.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frFirulaDocsGerados.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frFirulaDocsGerados.setObjectName("frFirulaDocsGerados")
+        self.gridLayout_3.addWidget(self.frFirulaDocsGerados, 0, 2, 3, 1)
+        self.verticalLayout_4.addWidget(self.frDocsGerados)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 279, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_4.addItem(spacerItem3)
+        self.gridLayout.addWidget(self.frConfigDiretorios, 0, 1, 1, 1)
         self.stkPrincipal.addWidget(self.pgGeral)
+        self.pgBackup = QtWidgets.QWidget()
+        self.pgBackup.setObjectName("pgBackup")
+        self.stkPrincipal.addWidget(self.pgBackup)
         self.gridLayout_2.addWidget(self.stkPrincipal, 2, 0, 1, 1)
         self.pbSalvar = QtWidgets.QPushButton(self.wdgMain)
         self.pbSalvar.setMinimumSize(QtCore.QSize(160, 45))
@@ -205,6 +315,11 @@ class Ui_mwConfiguracoes(object):
         self.lbTitulo.setText(_translate("mwConfiguracoes", "Configurações gerais"))
         self.lbConfigSisTitulo.setText(_translate("mwConfiguracoes", "Configurações do sistema"))
         self.cbIniciaAutomatico.setText(_translate("mwConfiguracoes", "Iniciar automaticamente, sem a necessidade do login."))
+        self.lbInfoAutoLogin.setText(_translate("mwConfiguracoes", "Login automático"))
+        self.lbSubtituloDiretorios.setText(_translate("mwConfiguracoes", "Configurações dos diretórios"))
+        self.pbAlteraDocsGerados.setText(_translate("mwConfiguracoes", "Alterar"))
+        self.lbInfoDocsGerados.setText(_translate("mwConfiguracoes", "Pasta dos documentos gerados"))
+        self.lbDirDocsGerados.setText(_translate("mwConfiguracoes", "~/DiretorioPadrao"))
         self.pbSalvar.setText(_translate("mwConfiguracoes", "Salvar e fechar"))
 import Resources.configuracoesPage
 

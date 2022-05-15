@@ -28,6 +28,11 @@ class SituacaoProcesso(Enum):
     cancelado = 3
     finalizado = 4
 
+class SitProcessoTela(Enum):
+    nenhumProcesso = 0
+    soUmProcesso = 1
+    variosProcessos = 2
+
 class SituacaoTela(Enum):
     clienteFaltante = 0
     processoFaltante = 1

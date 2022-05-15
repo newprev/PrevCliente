@@ -1,6 +1,9 @@
 from typing import List
 import json
 import os
+from pathlib import Path
+
+from systemLog.logs import NewLogging
 
 
 def buscaSystemConfigs(configList: List = []) -> dict:
@@ -15,3 +18,15 @@ def buscaSystemConfigs(configList: List = []) -> dict:
                         del configsJson[chave]
 
             return configsJson
+
+
+def pathPadraoDocsGerados() -> str:
+    try:
+        pathPadrao: Path = Path() / 'DocGerados'
+        if pathPadrao.exists() and pathPadrao.is_dir():
+            return str(pathPadrao.absolute())
+    except Exception as err:
+        apiLogger = NewLogging().buscaLogger()
+        apiLogger.error('Não foi possível encontrar o diretório padrão DecsGerados', extra={'err': err})
+        print(f'Não foi possível encontrar o diretório padrão DecsGerados - {err=}')
+        return ''

@@ -3,6 +3,7 @@ import os
 import geocoder
 import datetime
 from typing import List
+from pathlib import Path
 
 from docx.shared import Pt
 from docxtpl import DocxTemplate, InlineImage
@@ -10,6 +11,7 @@ from jinja2 import Environment, FileSystemLoader, Template
 from weasyprint import HTML, CSS
 from weasyprint.text.fonts import FontConfiguration
 
+from modelos.configGeraisORM import ConfigGerais
 from systemLog.logs import NewLogging
 
 from modelos.clienteORM import Cliente
@@ -20,11 +22,11 @@ from modelos.itemContribuicao import ItemContribuicao
 from modelos.processosORM import Processos
 
 from util.helpers.dateHelper import strToDatetime
-from util.enums.aposentadoriaEnums import SubTipoAposentadoria
 from util.enums.processoEnums import TipoBeneficioEnum
 from util.enums.geracaoDocumentos import EnumDocumento
 from util.helpers.helpers import mascaraCep, mascaraTelCel, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG, strTipoBeneFacilitado, regraAposentadoria
 from util.helpers.dateHelper import mascaraDataPequena
+from util.popUps import popUpOkAlerta
 
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
@@ -33,6 +35,7 @@ from dateutil.relativedelta import relativedelta
 
 
 class GeracaoDocumentos:
+    dirCliente: str
 
     def __init__(self, procModel: Processos, clientModel: Cliente):
         self.cacheLogin = CacheLogin()
@@ -43,19 +46,23 @@ class GeracaoDocumentos:
         self.escritorio = self.getEscritorio()
         self.processo = procModel
         self.cliente = clientModel
+        self.configGerais: ConfigGerais = self.buscaConfigGerais()
 
         self.infoProfissional: ClienteProfissao = self.getinfoProfissional()
 
-        self.pathDocumento = os.path.join(os.getcwd(), 'DocGerados')
+        self.pathDocumento = self.configGerais.pathDocGerados
         self.pathTemplate = os.path.join(os.getcwd(), '.templates')
         self.pathTemplateAtual = ''
         self.pathConteudo = ''
-        self.nomeArquivoSaida = f'{self.cliente.clienteId}'
+        self.nomeArquivoSaida = ''
+        self.dirCliente = f'{self.cliente.clienteId}-{self.cliente.nomeCliente}'
         self.documento: DocxTemplate
 
         self.strCidadeAtual = self.getCidadeAtual()
 
         self.dictInfo: dict = {}
+        if not self.verificaPathOk():
+            self.criaDiretorioCliente()
 
         # self.buscaPastaUsuario()
 
@@ -68,6 +75,14 @@ class GeracaoDocumentos:
             ])
 
         return listaItensTbl
+
+    def buscaConfigGerais(self) -> ConfigGerais:
+        try:
+            return ConfigGerais.select().where(ConfigGerais.advogadoId == self.advogado.advogadoId).get()
+        except Exception as err:
+            self.apiLogger.error('Não foi possível encontrar as configurações do advogado.', extra={"err": err})
+            popUpOkAlerta("Não foi possível encontrar as configurações do sistema. Entre em contato com o suporte.")
+            return None
 
     def buscaPastaUsuario(self):
         listaDiretorios: list = os.listdir()
@@ -121,7 +136,7 @@ class GeracaoDocumentos:
             raise SyntaxError('Deu merda, maninho...')
             
     def criaContratoHonorarios(self):
-        self.nomeArquivoSaida += f" - Contrato de honorários.docx"
+        self.nomeArquivoSaida += f"Contrato de honorários.docx"
         self.pathTemplateAtual = os.path.join(self.pathTemplate, 'contratoHonorarios.docx')
         self.documento = DocxTemplate(self.pathTemplateAtual)
 
@@ -159,9 +174,14 @@ class GeracaoDocumentos:
             else:
                 self.dictInfo['conteudoEspecifico'] = conteudoEspecifico
 
+    def criaDiretorioCliente(self):
+        pathAtual: Path = Path(self.configGerais.pathDocGerados)
+        pathAtual = pathAtual / self.dirCliente
+        pathAtual.mkdir(parents=True, exist_ok=True)
+
     def criaDeclaracaoHipo(self):
-        # self.nomeArquivoSaida += f" - Declaração de hipossuficiência.docx"
-        self.nomeArquivoSaida += f" - Declaração de hipossuficiência.pdf"
+        # self.nomeArquivoSaida += f"Declaração de hipossuficiência.docx"
+        self.nomeArquivoSaida += f"Declaração de hipossuficiência.pdf"
         self.pathTemplateAtual = os.path.join(self.pathTemplate, 'html', 'decHipossuficiencia.html')
 
         self.geraCabecalho()
@@ -171,7 +191,7 @@ class GeracaoDocumentos:
         self.limparConfiguracoes()
 
     def criaDecPensao(self):
-        self.nomeArquivoSaida += f" - Declaração recebimento de pensão.docx"
+        self.nomeArquivoSaida += f"Declaração recebimento de pensão.docx"
         self.pathTemplateAtual = os.path.join(self.pathTemplate, 'decPensaoApos.docx')
         self.documento = DocxTemplate(self.pathTemplateAtual)
 
@@ -182,7 +202,7 @@ class GeracaoDocumentos:
         self.limparConfiguracoes()
 
     def criaDocumentosComprobatorios(self):
-        self.nomeArquivoSaida += f' - Doc comprobatorios.pdf'
+        self.nomeArquivoSaida += f'Doc comprobatorios.pdf'
         self.pathTemplateAtual = os.path.join(self.pathTemplate, 'html', 'docsComprobatorios.html')
         self.pathConteudo = self.getPathConteudo()
 
@@ -195,7 +215,7 @@ class GeracaoDocumentos:
         self.limparConfiguracoes()
 
     def criaRequerimentoAdm(self, itens: List[ItemContribuicao]):
-        self.nomeArquivoSaida += f" - Requerimento admnistrativo.docx"
+        self.nomeArquivoSaida += f"Requerimento admnistrativo.docx"
         self.pathTemplateAtual = os.path.join(self.pathTemplate, 'requerimentoAdm.docx')
         self.documento = DocxTemplate(self.pathTemplateAtual)
 
@@ -210,8 +230,8 @@ class GeracaoDocumentos:
         self.limparConfiguracoes()
 
     def criaProcuracao(self):
-        # self.nomeArquivoSaida += f' - Procuração.docx'
-        self.nomeArquivoSaida += f' - Procuração.pdf'
+        # self.nomeArquivoSaida += f'Procuração.docx'
+        self.nomeArquivoSaida += f'Procuração.pdf'
         self.pathTemplateAtual = os.path.join(self.pathTemplate, 'html', 'procuracao.html')
         # self.documento = DocxTemplate(self.pathTemplateAtual)
 
@@ -222,18 +242,17 @@ class GeracaoDocumentos:
         self.limparConfiguracoes()
         
     def finalizaDocumento(self, tipoDocumento: EnumDocumento):
-        # self.documento.render(self.dictInfo)
-        # self.documento.save(os.path.join(self.pathDocumento, self.nomeArquivoSaida))
-        nomeArquivoSaida = os.path.join(self.pathDocumento, self.nomeArquivoSaida)
+        if not self.verificaPathOk():
+            self.criaDiretorioCliente()
+
+        nomeArquivoSaida = str(Path(self.pathDocumento) / self.dirCliente / self.nomeArquivoSaida)
         template = self.carregaTemplate(tipoDocumento)
         pathStyles = self.buscaPathCss(tipoDocumento)
-        # pathReset = self.buscaPathResetCss()
 
         build = template.render(self.dictInfo)
 
         htmlNewPrev = HTML(string=build, base_url=self.pathTemplate)
         cssStyles = CSS(filename=pathStyles)
-        # cssReset = CSS(filename=pathReset)
         fontConfig = FontConfiguration()
         htmlNewPrev.write_pdf(nomeArquivoSaida, stylesheets=[cssStyles], font_config=fontConfig)
 
@@ -308,7 +327,7 @@ class GeracaoDocumentos:
         self.dictInfo['nomeAdvogado'] = self.advogado.nomeAdvogado
         self.dictInfo['sobrenomeAdvogado'] = self.advogado.sobrenomeAdvogado
         self.dictInfo['tipoProcesso'] = strTipoProcesso(self.processo.tipoProcesso)
-        self.dictInfo['tipoBeneficio'] = strTipoBeneFacilitado(self.processo.tipoBeneficio)
+        self.dictInfo['tipoBeneficio'] = strTipoBeneFacilitado(self.processo.tipoBeneficio.tipoId)
 
     def geraCorpoProcuracao(self):
         estadoSigla: str = getEstados()[self.cliente.estado]
@@ -510,7 +529,11 @@ class GeracaoDocumentos:
     
     def limparConfiguracoes(self):
         self.dictInfo = {}
-        self.nomeArquivoSaida = f'{self.cliente.clienteId}'
+        self.nomeArquivoSaida = ''
+
+    def verificaPathOk(self) -> bool:
+        pathAtual = Path(self.configGerais.pathDocGerados) / self.dirCliente
+        return pathAtual.exists() and pathAtual.is_dir()
 
 
 if __name__ == '__main__':

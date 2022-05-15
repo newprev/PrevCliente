@@ -88,7 +88,7 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
         self.wdgInfoCliente = NewInfoCliente(parent=self)
         self.wdgEntrevista = NewEntrevistaPrincipal(self.escritorioAtual, parent=self)
         self.wdgResumoCnis = ResumoCnisController(parent=self)
-        self.wdgProcesso = ProcessoPage(parent=self)
+        self.wdgProcesso = ProcessoPage(self.advogadoAtual, parent=self)
 
         self.stkPrincipal.addWidget(self.clienteController)
         self.stkPrincipal.addWidget(self.wdgCadastroCliente)
@@ -124,7 +124,7 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
 
             elif tela == TelaAtual.Processos:
                 self.stkPrincipal.removeWidget(self.wdgProcesso)
-                self.wdgProcesso = ProcessoPage(cliente=args[0], parent=self)
+                self.wdgProcesso = ProcessoPage(self.advogadoAtual, cliente=args[0], parent=self)
                 self.stkPrincipal.insertWidget(tela.value, self.wdgProcesso)
 
             elif tela == TelaAtual.Resumo:

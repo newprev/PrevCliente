@@ -39,7 +39,7 @@ class ProcessoPage(QWidget, Ui_wdgProcessoPage):
         EnumDocumento.procuracao: True,
         EnumDocumento.decHipossuficiencia: True,
         EnumDocumento.decPensionista: False,
-        EnumDocumento.docsComprobatorios: False,
+        EnumDocumento.docsComprobatorios: True,
         EnumDocumento.honorarios: False,
         EnumDocumento.requerimento: False,
     }
@@ -201,7 +201,7 @@ class ProcessoPage(QWidget, Ui_wdgProcessoPage):
                     self.lbNumProcesso.setText(f"{self.processoAtual.numeroProcesso}")
 
                 self.lbNatureza.setText(strNatureza(self.processoAtual.natureza))
-                self.lbTpBeneficio.setText(strTipoBeneficio(self.processoAtual.tipoBeneficio, self.processoAtual.subTipoApos))
+                self.lbTpBeneficio.setText(strTipoBeneficio(self.processoAtual.tipoBeneficio, self.processoAtual.regraAposentadoria))
                 self.lbTpProcesso.setText(strTipoProcesso(self.processoAtual.tipoProcesso))
                 self.atualizaSituacaoTela(SituacaoTela.processoEncontrado)
 
@@ -241,6 +241,8 @@ class ProcessoPage(QWidget, Ui_wdgProcessoPage):
                     geradorDocs.criaProcuracao()
                 elif tipoDoc == EnumDocumento.decHipossuficiencia and geraDoc:
                     geradorDocs.criaDeclaracaoHipo()
+                elif tipoDoc == EnumDocumento.docsComprobatorios and geraDoc:
+                    geradorDocs.criaDocumentosComprobatorios()
 
             if self.toasty is None:
                 self.toasty = QToaster(self)
@@ -263,7 +265,7 @@ class ProcessoPage(QWidget, Ui_wdgProcessoPage):
             self.processoAtual = Processos.get_by_id(processoId)
 
             self.lbNatureza.setText(strNatureza(self.processoAtual.natureza))
-            self.lbTpBeneficio.setText(strTipoBeneficio(self.processoAtual.tipoBeneficio, self.processoAtual.subTipoApos))
+            self.lbTpBeneficio.setText(strTipoBeneficio(self.processoAtual.tipoBeneficio, self.processoAtual.regraAposentadoria))
             self.lbTpProcesso.setText(strTipoProcesso(self.processoAtual.tipoProcesso))
             if self.processoAtual.numeroProcesso is None:
                 self.lbNumProcesso.setText(" - ")

@@ -226,7 +226,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             cidadeItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 4, cidadeItem)
 
-            tipoProcessoItem = QTableWidgetItem(strTipoBeneficio(processo.tipoBeneficio, processo.subTipoApos))
+            tipoProcessoItem = QTableWidgetItem(strTipoBeneficio(processo.tipoBeneficio, processo.regraAposentadoria))
             tipoProcessoItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 5, tipoProcessoItem)
 

@@ -182,7 +182,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
             elif self.telaAtual == MomentoEntrevista.tipoAtividade:
                 self.loading(20)
-                self.processoModelo.subTipoApos = 0
+                self.processoModelo.regraAposentadoria = 0
 
                 self.loading(20)
                 self.processoModelo.dib = self.calculaDib()

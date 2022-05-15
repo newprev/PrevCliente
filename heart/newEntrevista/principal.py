@@ -270,7 +270,7 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
             glSimulacoes.setContentsMargins(16, 16, 16, 16)
 
             for index, aposentadoria in enumerate(listaAposentadorias):
-                self.processoAtual.subTipoApos = aposentadoria.tipo
+                self.processoAtual.regraAposentadoria = aposentadoria.tipo
                 glSimulacoes.addWidget(NewCardAposentadoria(aposentadoria, parent=self), index//4, index % 4)
 
             self.scaSimulacoes.setLayout(glSimulacoes)

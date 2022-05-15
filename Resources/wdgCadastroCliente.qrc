@@ -2,6 +2,9 @@
   <qresource prefix="voltar">
     <file>back.png</file>
   </qresource>
+  <qresource prefix="usuario">
+    <file>fotoCliente.png</file>
+  </qresource>
   <qresource prefix="busca">
     <file>localizacao.png</file>
     <file>busca.png</file>

@@ -50,6 +50,7 @@ class GrauDeficiencia(Enum):
     medio = 1
     alto = 2
 
+
 class IndiceReajuste(Enum):
     Selic = 'Selic'
     Ipca = 'Ipca'
@@ -104,7 +105,7 @@ class TipoAposentadoria(Enum):
     redIdadeMinima = 'RIDM'   # Redução da idade mínima
     redTempoContrib = 'RETC'  # Redução do tempo de contribuição
     pedagio50 = 'PD50'        # Pedágio de 50%
-    pedagio100 = 'P100'       # Pedágio de 50%
+    pedagio100 = 'P100'       # Pedágio de 100%
     pontos = 'POTR'           # Pontos pela regra de transição
     regra8595 = '8595'        # Pontos pela regra 85/95
 

@@ -30,7 +30,7 @@ class Processos(BaseModel, Model):
     numeroProcesso = CharField(column_name='numeroProcesso', null=True)
     pontuacao = IntegerField(null=True)
     situacaoId = IntegerField(column_name='situacaoId', default=0)
-    subTipoApos = CharField(column_name='subTipoApos', max_length=10, null=True)
+    regraAposentadoria = CharField(column_name='regraAposentadoria', max_length=10, null=True)
     tempoContribuicao = IntegerField(column_name='tempoContribuicao', null=True)
     tipoBeneficio = ForeignKeyField(column_name='tipoBeneficio', field='tipoId', model=TipoBeneficioModel, null=True, backref='TipoBeneficioModel')
     tipoProcesso = IntegerField(column_name='tipoProcesso', null=True)
@@ -50,7 +50,7 @@ class Processos(BaseModel, Model):
             'natureza': self.natureza,
             'tipoProcesso': self.tipoProcesso,
             'tipoBeneficio': self.tipoBeneficio,
-            'subTipoApos': self.subTipoApos,
+            'regraAposentadoria': self.regraAposentadoria,
             'estado': self.estado,
             'cidade': self.cidade,
             'situacaoId': self.situacaoId,
@@ -78,7 +78,7 @@ class Processos(BaseModel, Model):
         self.natureza = dictProcessos['natureza']
         self.tipoProcesso = dictProcessos['tipoProcesso']
         self.tipoBeneficio = dictProcessos['tipoBeneficio']
-        self.subTipoApos = dictProcessos['subTipoApos']
+        self.regraAposentadoria = dictProcessos['regraAposentadoria']
         self.estado = dictProcessos['estado']
         self.cidade = dictProcessos['cidade']
         self.situacaoId = dictProcessos['situacaoId']
@@ -105,7 +105,7 @@ class Processos(BaseModel, Model):
             natureza: {self.natureza},
             tipoProcesso: {self.tipoProcesso},
             tipoBeneficio: {self.tipoBeneficio},
-            subTipoApos: {self.subTipoApos},
+            regraAposentadoria: {self.regraAposentadoria},
             estado: {self.estado},
             cidade: {self.cidade},
             situacaoId: {self.situacaoId},

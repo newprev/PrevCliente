@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1181</width>
-    <height>575</height>
+    <height>604</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -645,7 +645,8 @@
         </property>
         <property name="styleSheet">
          <string notr="true">/*-------------------------------------------  Stack --------------------------------------------*/
-#stkCliente {
+#stkCliente, #stkFotoUsuario, 
+#wdgSemFoto, #wdgFotoUsuario {
 	background-color: white;
 }
 
@@ -706,6 +707,32 @@
 
 	background-color: rgb(228, 233, 248);
 	border-radius: 8px;
+}
+
+#pbFotoUsuario {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: grey;
+	
+	background-color: #F9F9F9;
+	
+	border-radius: 8px;
+	border-top: 10px solid #F9F9F9;
+	border-left: 0px solid #F9F9F9;
+	border-bottom: 0px solid #F9F9F9;
+	border-right: 0px solid #F9F9F9;
+}
+
+#pbFotoUsuario:hover {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: grey;
+	
+	background-color: #F4F5F8;
+	
+	border-radius: 8px;
+	border-top: 10px solid #F4F5F8;
+	border-left: 0px solid #F9F9F9;
+	border-bottom: 0px solid #F9F9F9;
+	border-right: 0px solid #F9F9F9;
 }
 
 /*----------------------------  Line Edit ---------------------------------------*/
@@ -903,6 +930,16 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                 <property name="verticalSpacing">
                  <number>16</number>
                 </property>
+                <item row="2" column="1">
+                 <widget class="QComboBox" name="cbxEstado">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
                 <item row="0" column="0" colspan="2">
                  <widget class="QFrame" name="frInfoCamposEndereco">
                   <property name="minimumSize">
@@ -932,6 +969,19 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                     </widget>
                    </item>
                   </layout>
+                 </widget>
+                </item>
+                <item row="4" column="0" colspan="2">
+                 <widget class="QLineEdit" name="leEndereco">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Endereço</string>
+                  </property>
                  </widget>
                 </item>
                 <item row="1" column="0">
@@ -990,8 +1040,8 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                   </layout>
                  </widget>
                 </item>
-                <item row="4" column="0" colspan="2">
-                 <widget class="QLineEdit" name="leEndereco">
+                <item row="2" column="0">
+                 <widget class="QLineEdit" name="leCidade">
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -999,7 +1049,20 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                    </size>
                   </property>
                   <property name="placeholderText">
-                   <string>Endereço</string>
+                   <string>Cidade</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0" colspan="2">
+                 <widget class="QLineEdit" name="leBairro">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Bairro</string>
                   </property>
                  </widget>
                 </item>
@@ -1022,33 +1085,29 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="0">
-                 <widget class="QLineEdit" name="leCidade">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Cidade</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="7" column="1">
+                <item row="7" column="0">
                  <widget class="QLineEdit" name="leNumero">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
                     <height>40</height>
                    </size>
+                  </property>
+                  <property name="maxLength">
+                   <number>5</number>
                   </property>
                   <property name="placeholderText">
                    <string>Nº da residência</string>
                   </property>
                  </widget>
                 </item>
-                <item row="7" column="0">
+                <item row="7" column="1">
                  <widget class="QLineEdit" name="leComplemento">
                   <property name="minimumSize">
                    <size>
@@ -1058,29 +1117,6 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                   </property>
                   <property name="placeholderText">
                    <string>Complemento</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0" colspan="2">
-                 <widget class="QLineEdit" name="leBairro">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Bairro</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QComboBox" name="cbxEstado">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
                   </property>
                  </widget>
                 </item>
@@ -1114,57 +1150,27 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                 <property name="verticalSpacing">
                  <number>16</number>
                 </property>
-                <item row="4" column="1">
-                 <widget class="QComboBox" name="cbxEscolaridade">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QDateEdit" name="dtNascimento">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="calendarPopup">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="1">
-                 <widget class="QLineEdit" name="leCpf">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="placeholderText">
-                   <string>CPF</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="3" column="3">
-                 <widget class="QLineEdit" name="leTelefone2">
+                 <widget class="QLineEdit" name="leCdCliente">
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
                     <height>40</height>
                    </size>
                   </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
                   <property name="placeholderText">
-                   <string>Contato 2</string>
+                   <string>Código do cliente</string>
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="2" colspan="2">
-                 <widget class="QLineEdit" name="leNomeDaMae">
+                <item row="5" column="2">
+                 <widget class="QLineEdit" name="leTelefone1">
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -1172,7 +1178,23 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                    </size>
                   </property>
                   <property name="placeholderText">
-                   <string>Nome completo da mãe</string>
+                   <string>Contato 1</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLineEdit" name="leIdade">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Idade</string>
                   </property>
                  </widget>
                 </item>
@@ -1207,72 +1229,7 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                   </layout>
                  </widget>
                 </item>
-                <item row="4" column="0">
-                 <widget class="QComboBox" name="cbxEstadoCivil">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0" colspan="2">
-                 <widget class="QLineEdit" name="leNomeCliente">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Digite o nome completo</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="2" colspan="2">
-                 <widget class="QLineEdit" name="leEmail">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="placeholderText">
-                   <string>E-mail do cliente</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QLineEdit" name="leIdade">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Idade</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="2">
-                 <widget class="QLineEdit" name="leTelefone1">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Contato 1</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="0">
+                <item row="8" column="0">
                  <widget class="QLineEdit" name="leRg">
                   <property name="minimumSize">
                    <size>
@@ -1285,26 +1242,20 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="0">
-                 <widget class="QLineEdit" name="leCdCliente">
+                <item row="8" column="1">
+                 <widget class="QLineEdit" name="leCpf">
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
                     <height>40</height>
                    </size>
                   </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
                   <property name="placeholderText">
-                   <string>Código do cliente</string>
+                   <string>CPF</string>
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="2" colspan="2">
+                <item row="4" column="2" colspan="2">
                  <widget class="QFrame" name="frame_12">
                   <property name="frameShape">
                    <enum>QFrame::NoFrame</enum>
@@ -1356,6 +1307,179 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                     </spacer>
                    </item>
                   </layout>
+                 </widget>
+                </item>
+                <item row="1" column="0" rowspan="3">
+                 <widget class="QStackedWidget" name="stkFotoUsuario">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="currentIndex">
+                   <number>0</number>
+                  </property>
+                  <widget class="QWidget" name="wdgSemFoto">
+                   <layout class="QGridLayout" name="gridLayout_10">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="1" alignment="Qt::AlignLeft">
+                     <widget class="QToolButton" name="pbFotoUsuario">
+                      <property name="minimumSize">
+                       <size>
+                        <width>80</width>
+                        <height>70</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Adicionar
+foto</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../../Resources/wdgCadastroCliente.qrc">
+                        <normaloff>:/usuario/fotoCliente.png</normaloff>:/usuario/fotoCliente.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>40</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="toolButtonStyle">
+                       <enum>Qt::ToolButtonTextUnderIcon</enum>
+                      </property>
+                      <property name="autoRaise">
+                       <bool>false</bool>
+                      </property>
+                      <property name="arrowType">
+                       <enum>Qt::NoArrow</enum>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                  <widget class="QWidget" name="wdgFotoUsuario">
+                   <layout class="QGridLayout" name="gridLayout_11">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="lbFotoCliente">
+                      <property name="text">
+                       <string>FotoCliente</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+                <item row="4" column="0" colspan="2">
+                 <widget class="QLineEdit" name="leNomeCliente">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Digite o nome completo</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="2" colspan="2">
+                 <widget class="QLineEdit" name="leEmail">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="placeholderText">
+                   <string>E-mail do cliente</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QDateEdit" name="dtNascimento">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="calendarPopup">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="3">
+                 <widget class="QLineEdit" name="leTelefone2">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Contato 2</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="2" colspan="2">
+                 <widget class="QLineEdit" name="leNomeDaMae">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Nome completo da mãe</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QComboBox" name="cbxEscolaridade">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QComboBox" name="cbxEstadoCivil">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
                  </widget>
                 </item>
                </layout>

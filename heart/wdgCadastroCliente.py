@@ -23,7 +23,6 @@ from modelos.clienteInfoBanco import ClienteInfoBanco
 
 from repositorios.integracaoRepositorio import IntegracaoRepository
 from util.enums.logEnums import TipoLog
-from util.enums.newPrevEnums import TipoEdicao
 
 from util.helpers.dateHelper import strToDate, calculaIdade
 from util.enums.dashboardEnums import TelaAtual, Navegacao, EtapaCadastraCliente
@@ -51,6 +50,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.iniciaCamposBancarios()
         self.leIdade.setDisabled(True)
         self.leCdCliente.setDisabled(True)
+        self.stkFotoUsuario.setCurrentIndex(1)
 
         # Definindo ordem do focus
         self.setTabOrder(self.leNomeCliente, self.dtNascimento)
@@ -88,8 +88,12 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.pbSalvarDados.clicked.connect(self.avaliaSalvaDados)
         self.cbMostraPix.stateChanged.connect(lambda: self.avaliaMostraSenhas('pix'))
         self.cbMostraMeuInss.stateChanged.connect(lambda: self.avaliaMostraSenhas('meuInss'))
+        self.pbFotoUsuario.clicked.connect(lambda: self.abrirCamera)
 
         self.trocaEtapa(EtapaCadastraCliente.pessoal)
+
+    def abrirCamera(self):
+        pass
 
     def avaliaCaracteres(self, info: str):
         if info == 'leNumeroAgencia':

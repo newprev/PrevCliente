@@ -53,6 +53,7 @@ class Cliente(BaseModel, Model):
     rgCliente = CharField(column_name='rgCliente', null=True)
     senhaINSS = CharField(column_name='senhaINSS', null=True)
     pathCnis = CharField(column_name='pathCnis', null=True)
+    pathFoto = CharField(column_name='pathFoto', null=True)
     arquivado = BooleanField(column_name='arquivado', default=False)
     observacoes = CharField(column_name='observacoes', max_length=4000, null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())

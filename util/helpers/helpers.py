@@ -491,6 +491,32 @@ def dateToSql(data: datetime.date) -> str:
     return data.strftime('%Y-%m-%d')
 
 
+def regraAposentadoria(sigla: str) -> SubTipoAposentadoria:
+    tipo: TipoAposentadoria = TipoAposentadoria(sigla)
+    aposIdade: tuple = (
+        TipoAposentadoria.idadeAR,
+        TipoAposentadoria.redIdadeMinima
+    )
+    aposTempoContribuicao: tuple = (
+        TipoAposentadoria.tempoContribAR,
+        TipoAposentadoria.redTempoContrib,
+        TipoAposentadoria.pedagio50,
+        TipoAposentadoria.pedagio100
+    )
+    aposPontos: tuple = (
+        TipoAposentadoria.pontos,
+        TipoAposentadoria.regra8595
+    )
+    if tipo in aposIdade:
+        return SubTipoAposentadoria.Idade
+    elif tipo in aposPontos:
+        return SubTipoAposentadoria.Pontos
+    elif tipo in aposTempoContribuicao:
+        return SubTipoAposentadoria.TempoContrib
+    else:
+        raise TypeError('Tipo de aposentadoria não encontrado')
+
+
 def strToFloat(valor: str) -> float:
     try:
         return float(valor)
@@ -640,6 +666,7 @@ def strTipoAposentadoria(tipoAposentadoria: str, verbose: bool = False) -> str:
             return "Aposentadoria por pontos pela regra 85/95"
         else:
             return "Aposentadoria por pontos"
+
 
 def buscaSql(caminhoSql: str) -> str:
     if os.path.exists(caminhoSql) and os.path.isfile(caminhoSql):

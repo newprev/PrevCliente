@@ -23,7 +23,7 @@ from util.helpers.dateHelper import strToDatetime
 from util.enums.aposentadoriaEnums import SubTipoAposentadoria
 from util.enums.processoEnums import TipoBeneficioEnum
 from util.enums.geracaoDocumentos import EnumDocumento
-from util.helpers.helpers import mascaraCep, mascaraTelCel, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG, strTipoBeneFacilitado
+from util.helpers.helpers import mascaraCep, mascaraTelCel, strTipoProcesso, mascaraCPF, mascaraMeses, getEstados, mascaraRG, strTipoBeneFacilitado, regraAposentadoria
 from util.helpers.dateHelper import mascaraDataPequena
 
 from cache.cachingLogin import CacheLogin
@@ -84,6 +84,9 @@ class GeracaoDocumentos:
         elif tipoDocumento == EnumDocumento.decHipossuficiencia:
             pathCss = os.path.join(self.pathTemplate, 'css', 'decHipossuficienciaStyles.css')
 
+        elif tipoDocumento == EnumDocumento.docsComprobatorios:
+            pathCss = os.path.join(self.pathTemplate, 'css', 'docsComprobatorios.css')
+
         if os.path.isfile(pathCss):
             return pathCss
         else:
@@ -104,6 +107,8 @@ class GeracaoDocumentos:
             nomeTemplate = 'procuracao.html'
         elif tipoDocumento == EnumDocumento.decHipossuficiencia:
             nomeTemplate = 'decHipossuficiencia.html'
+        elif tipoDocumento == EnumDocumento.docsComprobatorios:
+            nomeTemplate = 'docsComprobatorios.html'
 
         try:
             temp = FileSystemLoader(searchpath=pathTemplateHtml)
@@ -134,7 +139,7 @@ class GeracaoDocumentos:
             TipoBeneficioEnum.BeneDeficiencia.value
         ]
 
-        if self.processo.tipoBeneficio in tipoBeneEspecifico:
+        if self.processo.tipoBeneficio.tipoId in tipoBeneEspecifico:
             self.dictInfo['conteudoEspecifico'] = []
         else:
             pathConteudoEspecifico = os.path.join(pathConteudoEspecifico, 'conteudoEspecifico.json')
@@ -142,14 +147,17 @@ class GeracaoDocumentos:
             with open(pathConteudoEspecifico, encoding='utf-8', mode='r') as f:
                 conteudoDict: dict = json.load(f)
 
-            if self.processo.tipoBeneficio == TipoBeneficioEnum.Aposentadoria.value:
-                conteudoEspecifico = conteudoDict['Aposentadoria'][SubTipoAposentadoria(self.processo.subTipoApos).name]
+            if self.processo.tipoBeneficio.tipoId == TipoBeneficioEnum.Aposentadoria.value:
+                conteudoEspecifico = conteudoDict['Aposentadoria'][regraAposentadoria(self.processo.regraAposentadoria).name]
                 if len(conteudoEspecifico.splitlines()) == 1:
                     conteudoEspecifico = [conteudoEspecifico]
             else:
-                conteudoEspecifico = conteudoDict[TipoBeneficioEnum(self.processo.tipoBeneficio).name].splitlines()
+                conteudoEspecifico = conteudoDict[TipoBeneficioEnum(self.processo.tipoBeneficio.tipoId).name].splitlines()
 
-            self.dictInfo['conteudoEspecifico'] = conteudoEspecifico
+            if isinstance(conteudoEspecifico, str):
+                self.dictInfo['conteudoEspecifico'] = [conteudoEspecifico]
+            else:
+                self.dictInfo['conteudoEspecifico'] = conteudoEspecifico
 
     def criaDeclaracaoHipo(self):
         # self.nomeArquivoSaida += f" - Declaração de hipossuficiência.docx"
@@ -174,10 +182,9 @@ class GeracaoDocumentos:
         self.limparConfiguracoes()
 
     def criaDocumentosComprobatorios(self):
-        self.nomeArquivoSaida += f' - Doc comprobatorios.docx'
-        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'documentosNecessarios.docx')
+        self.nomeArquivoSaida += f' - Doc comprobatorios.pdf'
+        self.pathTemplateAtual = os.path.join(self.pathTemplate, 'html', 'docsComprobatorios.html')
         self.pathConteudo = self.getPathConteudo()
-        self.documento = DocxTemplate(self.pathTemplateAtual)
 
         self.geraCabecalho()
         self.geraSessaoInicialDocComp()
@@ -233,11 +240,16 @@ class GeracaoDocumentos:
     def geraConteudoGeral(self):
         self.dictInfo['conteudoGeral']: list = []
 
-        with open(self.pathConteudo, 'r') as f:
-            listaConteudo: list = f.readlines()
+        try:
+            with open(self.pathConteudo, 'r') as f:
+                listaConteudo: list = f.readlines()
 
-        for linha in listaConteudo:
-            self.dictInfo['conteudoGeral'].append(linha.lstrip().replace('\n', ''))
+            for linha in listaConteudo:
+                self.dictInfo['conteudoGeral'].append(linha.lstrip().replace('\n', ''))
+
+        except IsADirectoryError as err:
+            print(f"geraConteudoGeral - {err=}")
+            self.apiLogger.error("Erro ao buscar o diretório de conteúdo geral.", extra={"err": err})
 
     def geraCorpoContrato(self):
 
@@ -457,11 +469,13 @@ class GeracaoDocumentos:
         ]
         if soConteudo:
             return strPathConteudo
-        elif self.processo.tipoBeneficio in beneMaisGenericos:
+        elif self.processo.tipoBeneficio.tipoId in beneMaisGenericos:
             strPathConteudo = os.path.join(strPathConteudo, 'docGerais.txt')
-        elif self.processo.tipoBeneficio == TipoBeneficioEnum.BeneIdoso.value:
+
+        elif self.processo.tipoBeneficio.tipoId == TipoBeneficioEnum.BeneIdoso.value:
             strPathConteudo = os.path.join(strPathConteudo, 'docIdoso.txt')
-        elif self.processo.tipoBeneficio == TipoBeneficioEnum.BeneDeficiencia.value:
+
+        elif self.processo.tipoBeneficio.tipoId == TipoBeneficioEnum.BeneDeficiencia.value:
             strPathConteudo = os.path.join(strPathConteudo, 'docDeficiencia.txt')
 
         return strPathConteudo

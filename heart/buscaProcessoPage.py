@@ -80,7 +80,7 @@ class BuscaProcessosPage(QMainWindow, Ui_mwBuscaProcessos):
             self.tblListaProcessos.setItem(linha, 1, tipoProcessoItem)
 
             # 2 - Tipo do processo - tipoBenefício<ativo>
-            tipoBeneficioItem = QTableWidgetItem(strTipoBeneficio(processo.tipoBeneficio, processo.subTipoApos))
+            tipoBeneficioItem = QTableWidgetItem(strTipoBeneficio(processo.tipoBeneficio, processo.regraAposentadoria))
             tipoBeneficioItem.setFont(QFont('Ubuntu', pointSize=12, italic=True, weight=25))
             tipoBeneficioItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.tblListaProcessos.setItem(linha, 2, tipoBeneficioItem)

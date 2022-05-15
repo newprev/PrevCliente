@@ -13,5 +13,5 @@ class CardProcesso(QWidget, Ui_wdgProcessoCard):
 
         self.lbNumProcesso.setText(f"{processo.numeroProcesso}")
         self.lbNatureza.setText(strNatureza(processo.natureza))
-        self.lbTpBeneficio.setText(strTipoBeneficio(processo.tipoBeneficio, processo.subTipoApos))
+        self.lbTpBeneficio.setText(strTipoBeneficio(processo.tipoBeneficio, processo.regraAposentadoria))
         self.lbTpProcesso.setText(strTipoProcesso(processo.tipoProcesso))

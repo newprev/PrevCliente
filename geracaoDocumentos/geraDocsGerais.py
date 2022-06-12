@@ -102,6 +102,9 @@ class GeracaoDocumentos:
         elif tipoDocumento == EnumDocumento.docsComprobatorios:
             pathCss = os.path.join(self.pathTemplate, 'css', 'docsComprobatorios.css')
 
+        elif tipoDocumento == EnumDocumento.baseCabecalho:
+            pathCss = os.path.join(self.pathTemplate, 'css', 'baseDocumento.css')
+
         if os.path.isfile(pathCss):
             return pathCss
         else:
@@ -248,13 +251,15 @@ class GeracaoDocumentos:
         nomeArquivoSaida = str(Path(self.pathDocumento) / self.dirCliente / self.nomeArquivoSaida)
         template = self.carregaTemplate(tipoDocumento)
         pathStyles = self.buscaPathCss(tipoDocumento)
+        pathCabecalhoStyle = self.buscaPathCss(EnumDocumento.baseCabecalho)
 
         build = template.render(self.dictInfo)
 
         htmlNewPrev = HTML(string=build, base_url=self.pathTemplate)
         cssStyles = CSS(filename=pathStyles)
+        baseCssStyles = CSS(filename=pathCabecalhoStyle)
         fontConfig = FontConfiguration()
-        htmlNewPrev.write_pdf(nomeArquivoSaida, stylesheets=[cssStyles], font_config=fontConfig)
+        htmlNewPrev.write_pdf(nomeArquivoSaida, stylesheets=[cssStyles, baseCssStyles], font_config=fontConfig)
 
     def geraConteudoGeral(self):
         self.dictInfo['conteudoGeral']: list = []

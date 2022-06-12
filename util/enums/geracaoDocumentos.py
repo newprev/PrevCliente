@@ -2,10 +2,11 @@ from enum import Enum
 
 
 class EnumDocumento(Enum):
-    procuracao = 0
-    decHipossuficiencia = 1
-    docsComprobatorios = 2
-    decPensionista = 3
-    requerimento = 4
-    honorarios = 5
+    baseCabecalho = 0
+    procuracao = 1
+    decHipossuficiencia = 2
+    docsComprobatorios = 3
+    decPensionista = 4
+    requerimento = 5
+    honorarios = 6
 

@@ -1,63 +1,29 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends 'layouts/baseDocumento.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-    <script src="https://kit.fontawesome.com/b0be8a5058.js" crossorigin="anonymous"></script>
-    <!--
-    <link rel="stylesheet" type="text/css" href="../css/docsComprobatorios.css">
-    -->
-</head>
-<header>
-
-    <div class="leftInfo">
-        <h1 id="nomeEscritorio">{{ nomeFantasia }}</h1>
+{% block corpo %}
+<div class="conteudoPrincipal">
+    <div class="tituloDocumento">
+        <h2>Documentos comprobatórios</h2>
     </div>
-
-    <div class="rightLogo">
-        {% if logo != None %}
-            <img src="{{ logo }}", alt="Logo do escritório"/>            
-        {% endif %}
-    </div>
-</header>
-
-<body>
-    <div class="conteudoPrincipal">
-        <div class="tituloDocumento">
-            <h2>Documentos comprobatórios</h2>
-        </div>
-        <p id="nomeAdvogado">Advogado(a): Dr(a) {{ nomeAdvogado }} {{ sobrenomeAdvogado }}
-        </p>
-        <ul class="infoProcesso">
-            <li id="tipoProcesso">Tipo de processo: {{ tipoProcesso }}</li>
-            <li id="beneficio">Benefício: {{ tipoBeneficio }}</li>
-        </ul>
-
-        <ul class="infoDocs">
-            {% for item in conteudoGeral %}
-                {% if item.lstrip()[0] == "-" %}
-                    <li>- {{ item[2:] }};</li>
-                {% else %}
-                    <li>- {{ item }};</li>
-                {% endif %}
-            {% endfor %}
-
-            {% for conteudo in conteudoEspecifico %}
-                <li>- {{ conteudo }}</li>
-            {% endfor %}
-        </ul>
-            
-    </div>
-</body>
-
-<footer>
-    <ul>
-        <li>Telefone: {{ telefoneEscritorio }}</li>
-        <li>E-mail: {{ emailEscritorio }}</li>
-        <li>{{ enderecoEscritorio }}, {{ numeroEscritorio }}</li>
-        <li>CEP: {{ cepEscritorio }}</li>
+    <p id="nomeAdvogado">Advogado(a): Dr(a) {{ nomeAdvogado }} {{ sobrenomeAdvogado }}
+    </p>
+    <ul class="infoProcesso">
+        <li id="tipoProcesso">Tipo de processo: {{ tipoProcesso }}</li>
+        <li id="beneficio">Benefício: {{ tipoBeneficio }}</li>
     </ul>
-</footer>
 
-</html>
+    <ul class="infoDocs">
+        {% for item in conteudoGeral %}
+            {% if item.lstrip()[0] == "-" %}
+                <li>- {{ item[2:] }};</li>
+            {% else %}
+                <li>- {{ item }};</li>
+            {% endif %}
+        {% endfor %}
+
+        {% for conteudo in conteudoEspecifico %}
+            <li>- {{ conteudo }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock corpo %}

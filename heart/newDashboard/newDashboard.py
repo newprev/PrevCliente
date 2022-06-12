@@ -130,6 +130,12 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
             elif tela == TelaAtual.Resumo:
                 self.wdgResumoCnis.recebeCliente(args[0])
 
+        else:
+            if tela == TelaAtual.Processos:
+                self.stkPrincipal.removeWidget(self.wdgProcesso)
+                self.wdgProcesso = ProcessoPage(self.advogadoAtual, parent=self)
+                self.stkPrincipal.insertWidget(tela.value, self.wdgProcesso)
+
         self.stkPrincipal.setCurrentIndex(tela.value)
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:

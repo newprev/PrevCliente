@@ -1,13 +1,11 @@
 import json
 import requests as http
+from os import getenv
+
 from typing import List, Tuple
 from playhouse.shortcuts import dict_to_model
 from logging import info, warning, error, debug
-
-from util.enums.newPrevEnums import *
 from util.enums.logEnums import TipoLog
-from util.enums.configEnums import TipoConexao
-from Configs.systemConfig import buscaSystemConfigs
 
 from modelos.advogadoORM import Advogados
 from modelos.escritoriosORM import Escritorios
@@ -18,15 +16,8 @@ class UsuarioRepository:
     header: dict
 
     def __init__(self):
-        configs: dict = buscaSystemConfigs()
         self.header = {"Content-Type": "application/json"}
-
-        if TipoConexao.desenvolvimento.name == configs['tipoConexao']:
-            # url para desenvolvimento
-            self.baseUrl = 'http://localhost:8000/api/'
-        else:
-            # url para produção
-            self.baseUrl = 'http://3.139.65.128:8080/api/'
+        self.baseUrl = getenv('BASE_URL', 'http://localhost:8000/api/')
 
     def confirmaAlteraSenha(self, senha: str, advogadoId: int) -> bool:
         url: str = self.baseUrl + 'advogados/'

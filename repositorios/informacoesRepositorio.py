@@ -2,11 +2,9 @@ from logging import info, debug, warning
 
 import requests
 import aiohttp
+from os import getenv
 
-
-from Configs.systemConfig import buscaSystemConfigs
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
-from util.enums.configEnums import TipoConexao
 from util.enums.logEnums import TipoLog
 
 
@@ -14,15 +12,8 @@ class ApiInformacoes:
     header: dict
 
     def __init__(self):
-        configs: dict = buscaSystemConfigs()
         self.header = {"Content-Type": "application/json"}
-
-        if TipoConexao.desenvolvimento.name == configs['tipoConexao']:
-            # url para desenvolvimento
-            self.baseUrl = 'http://localhost:8000/api/'
-        else:
-            # url para produção
-            self.baseUrl = 'http://3.139.65.128:8080/api/'
+        self.baseUrl = getenv('BASE_URL', 'http://localhost:8000/api/')
 
     async def getAllInformacoes(self, tipo: FerramentasEInfo):
 

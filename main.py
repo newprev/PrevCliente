@@ -1,6 +1,7 @@
 import os.path
 from math import ceil
 from typing import List
+from dotenv import load_dotenv
 
 from aiohttp import ClientConnectorError
 import asyncio as aio
@@ -54,6 +55,8 @@ class Main(Ui_MainWindow, QMainWindow):
 
     def __init__(self):
         super(Main, self).__init__()
+
+        load_dotenv()
         self.setupUi(self)
         self.contador = 0
         self.tipoConexao = TiposConexoes.sqlite

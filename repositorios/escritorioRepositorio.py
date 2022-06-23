@@ -1,11 +1,10 @@
 import requests as http
 from requests.exceptions import *
 from logging import debug, info, warning, error
+from os import getenv
 
-from Configs.systemConfig import buscaSystemConfigs
 from util.enums.newPrevEnums import *
 from util.enums.logEnums import TipoLog
-from util.enums.configEnums import TipoConexao
 from modelos.escritoriosORM import Escritorios
 
 
@@ -13,15 +12,8 @@ class EscritorioRepositorio:
     header: dict
 
     def __init__(self):
-        configs: dict = buscaSystemConfigs()
         self.header = {"Content-Type": "application/json"}
-
-        if TipoConexao.desenvolvimento.name == configs['tipoConexao']:
-            # url para desenvolvimento
-            self.baseUrl = 'http://localhost:8000/api/'
-        else:
-            # url para produção
-            self.baseUrl = 'http://3.139.65.128:8080/api/'
+        self.baseUrl = getenv('BASE_URL', 'http://localhost:8000/api/')
 
     def buscaEscritorio(self, escritorioId) -> Escritorios:
         url: str = self.baseUrl + f'escritorio/{escritorioId}/'

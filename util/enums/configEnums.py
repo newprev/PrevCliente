@@ -14,3 +14,8 @@ class ImportantPaths(Enum):
 class TipoConfiguracao(Enum):
     sistema = 0
 
+
+class CategoriaConfig(Enum):
+    geral = 0
+    backup = 1
+

@@ -1,0 +1,29 @@
+{% extends 'layouts/baseDocumento.html' %}
+
+{% block corpo %}
+<div class="conteudoPrincipal">
+    <div class="tituloDocumento">
+        <h2>Documentos comprobatórios</h2>
+    </div>
+    <p id="nomeAdvogado">Advogado(a): Dr(a) {{ nomeAdvogado }} {{ sobrenomeAdvogado }}
+    </p>
+    <ul class="infoProcesso">
+        <li id="tipoProcesso">Tipo de processo: {{ tipoProcesso }}</li>
+        <li id="beneficio">Benefício: {{ tipoBeneficio }}</li>
+    </ul>
+
+    <ul class="infoDocs">
+        {% for item in conteudoGeral %}
+            {% if item.lstrip()[0] == "-" %}
+                <li>- {{ item[2:] }};</li>
+            {% else %}
+                <li>- {{ item }};</li>
+            {% endif %}
+        {% endfor %}
+
+        {% for conteudo in conteudoEspecifico %}
+            <li>- {{ conteudo }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock corpo %}

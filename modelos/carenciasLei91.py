@@ -1,6 +1,9 @@
+from logging import info, debug
+
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
+
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import AutoField, DateField, DateTimeField, BigIntegerField
@@ -49,12 +52,8 @@ class CarenciaLei91(BaseModel, Model):
 
 @post_save(sender=CarenciaLei91)
 def inserindoCarenciaLei91(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoCarenciaLei91>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoCarenciaLei91>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
-
+    debug(f'{TipoLog.DataBase.value}::inserindoCarenciaLei91___________________{TABLENAME}')
 
 @pre_delete(sender=CarenciaLei91)
 def deletandoCarenciaLei91(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoCarenciaLei91>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    debug(f'{TipoLog.DataBase.value}::inserindoCarenciaLei91___________________{TABLENAME}')

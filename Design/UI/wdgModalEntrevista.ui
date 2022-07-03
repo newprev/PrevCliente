@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mwModalEntrevista</class>
+ <widget class="QMainWindow" name="mwModalEntrevista">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>589</width>
+    <height>684</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* ------------- Geral ------------------- */
+QScrollArea, #scaPerguntas {
+	background-color: white;
+}
+
+/* ------------- Frames ----------------- */
+#frInfoTitulo {
+	background-color: white;
+	border-radius: 5px;
+	
+	border: 2px solid #F4F5F8;
+}
+
+#frFirula {
+	background-color: #3F64FF;
+	
+	border-top-left-radius: 4px;
+	border-top-right-radius: 0px; 
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 4px;
+
+	border-top: 2px solid #3F64FF;
+	border-bottom: 2px solid #3F64FF;
+	border-left: 2px solid #3F64FF;
+	border-right: 0px solid none;
+}
+
+#frMain {
+	background-color: white;
+
+	border-top-left-radius: 0px;
+	border-top-right-radius: 8px; 
+	border-bottom-right-radius: 8px;
+	border-bottom-left-radius: 0px
+	
+}
+
+#frShadow {
+	background-color: transparent;
+}
+
+/* ------------ Label -------------*/
+
+#lbInfo {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #040D14;
+
+	font-weight: 150;
+}
+
+#lbInfoPerguntas {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+
+	font-weight: 750;
+}
+
+/*---------- Push Button -----------*/
+#pbSalvar {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: white;
+
+	border-radius: 8px;
+	background-color: #3F4E8C;
+}
+
+#pbSalvar:hover {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: white;
+
+	border-radius: 8px;
+	background-color: #566BBF;
+}
+
+#pbFechar {
+	background-image: url(:/botoes/closeLarge.png);
+	background-repeat: no-repeat;
+	background-position: center;
+
+	border: 0px solid none;
+	border-radius: 4px;
+
+	background-color: #F9F9F9;
+}</string>
+  </property>
+  <widget class="QWidget" name="wdgPrincipal">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QFrame" name="frShadow">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>20</number>
+       </property>
+       <property name="bottomMargin">
+        <number>2</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QFrame" name="frMain">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pbFechar">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>35</width>
+              <height>35</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>35</width>
+              <height>35</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QFrame" name="frPerguntas">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <property name="spacing">
+              <number>18</number>
+             </property>
+             <property name="topMargin">
+              <number>24</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="lbInfoPerguntas">
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QScrollArea" name="scrollArea">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="widgetResizable">
+                <bool>true</bool>
+               </property>
+               <widget class="QWidget" name="scaPerguntas">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>492</width>
+                  <height>427</height>
+                 </rect>
+                </property>
+               </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="3" column="0" alignment="Qt::AlignHCenter">
+           <widget class="QPushButton" name="pbSalvar">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>180</width>
+              <height>56</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>180</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Salvar</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QFrame" name="frInfoTitulo">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>42</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="sizeConstraint">
+              <enum>QLayout::SetMaximumSize</enum>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>4</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QFrame" name="frFirula">
+               <property name="maximumSize">
+                <size>
+                 <width>6</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lbInfo">
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../../Resources/wdgModalEntrevista.qrc"/>
+ </resources>
+ <connections/>
+</ui>

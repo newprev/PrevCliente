@@ -5,8 +5,8 @@ from typing import List
 
 from sinaisCustomizados import Sinais
 from Design.pyUi.buscaProcessos import Ui_mwBuscaProcessos
-from Design.pyUi.efeitos import Efeitos
-from util.helpers import mascaraTelCel, strTipoProcesso, strTipoBeneficio, dataUSAtoBR
+from Design.efeitos import Efeitos
+from util.helpers.helpers import mascaraTelCel, strTipoProcesso, strTipoBeneficio, dataUSAtoBR
 from modelos.clienteORM import Cliente
 from modelos.telefonesORM import Telefones
 from modelos.processosORM import Processos
@@ -25,9 +25,10 @@ class BuscaProcessosPage(QMainWindow, Ui_mwBuscaProcessos):
         self.listaProcessos = []
         self.parent = parent
         self.efeitos = Efeitos()
-        self.efeitos.shadowCards([self.frInfoCliente],
-            radius=8,
-            offset=(0, 6),
+        self.efeitos.shadowCards(
+            [self.frInfoCliente],
+            radius=4,
+            offset=(0, 0),
             color=(63, 63, 63, 90),
         )
         self.sinais = Sinais()
@@ -37,11 +38,12 @@ class BuscaProcessosPage(QMainWindow, Ui_mwBuscaProcessos):
         self.pbSeleciona.clicked.connect(self.avaliaSelecao)
         self.sinais.sEnviaProcesso.connect(self.enviaProcesso)
         self.tblListaProcessos.doubleClicked.connect(self.processoSelecionado)
+        self.pbCancela.clicked.connect(self.fecharJanela)
 
     def atualizaInfoTela(self):
         if self.clienteAtual is None:
             popUpOkAlerta(
-                'Algum erro aconteceu ao tentar abrir a tela de busca de processos. Entre em contato com o suporte.',
+                'Algum erro aconteceu ao tentar abrir a tela de busca de beneficios. Entre em contato com o suporte.',
                 erro='atualizaInfoTela <BuscaProcessosPage>',
                 funcao=self.close,
             )
@@ -56,9 +58,9 @@ class BuscaProcessosPage(QMainWindow, Ui_mwBuscaProcessos):
 
     def atualizaTabela(self, listaProcessos: List[Processos] = None):
         if listaProcessos is None:
-            listaAtual = self.listaProcessos
+            listaAtual: List[Processos] = self.listaProcessos
         else:
-            listaAtual = listaProcessos
+            listaAtual: List[Processos] = listaProcessos
 
         self.tblListaProcessos.setRowCount(0)
 
@@ -78,7 +80,7 @@ class BuscaProcessosPage(QMainWindow, Ui_mwBuscaProcessos):
             self.tblListaProcessos.setItem(linha, 1, tipoProcessoItem)
 
             # 2 - Tipo do processo - tipoBenefício<ativo>
-            tipoBeneficioItem = QTableWidgetItem(strTipoBeneficio(processo.tipoBeneficio, processo.subTipoApos))
+            tipoBeneficioItem = QTableWidgetItem(strTipoBeneficio(processo.tipoBeneficio, processo.regraAposentadoria))
             tipoBeneficioItem.setFont(QFont('Ubuntu', pointSize=12, italic=True, weight=25))
             tipoBeneficioItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.tblListaProcessos.setItem(linha, 2, tipoBeneficioItem)
@@ -114,6 +116,9 @@ class BuscaProcessosPage(QMainWindow, Ui_mwBuscaProcessos):
 
     def enviaProcesso(self):
         self.parent.recebeProcesso(self.processoIdSelecionado)
+        self.close()
+
+    def fecharJanela(self):
         self.close()
 
 

@@ -1,50 +1,79 @@
-from colorama import Fore, init, Back, deinit
+import json
+import logging.config
+import sentry_sdk
+from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk import set_user
 import os
+from logging import *
+
 from datetime import datetime
 
-from util.enums.logEnums import TipoLog
-from util.enums.newPrevEnums import *
-
-from util.helpers import datetimeToSql
+from modelos.advogadoORM import Advogados
+from util.enums.logEnums import NomeLogger
 
 
-def logPrioridade(mensagem: str, tipoEdicao: TipoEdicao = TipoEdicao.select, tipoLog: TipoLog = TipoLog.DataBase, priodiade: Prioridade = Prioridade.saidaComum):
-    init(autoreset=True)
+class NewLogging:
+    logConectado: bool = False
 
-    if tipoLog == TipoLog.DataBase:
-        path = os.path.join(os.getcwd(), 'systemLog', 'historicoLogs', f'{datetime.now().date()}-DataBaseLog.txt')
-    elif tipoLog == TipoLog.Cache:
-        path = os.path.join(os.getcwd(), 'systemLog', 'historicoLogs', f'{datetime.now().date()}-CacheLog.txt')
-    else:
-        path = os.path.join(os.getcwd(), 'systemLog', 'historicoLogs', f'{datetime.now().date()}-RestLog.txt')
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(NewLogging, cls).__new__(cls)
+        return cls.instance
 
-    if tipoEdicao == tipoEdicao.insert or tipoEdicao == TipoEdicao.update:
-        corDaFonte = Fore.YELLOW
-    elif tipoEdicao == TipoEdicao.delete:
-        corDaFonte = Fore.MAGENTA
-    elif tipoEdicao == TipoEdicao.createTable or tipoEdicao == TipoEdicao.dropTable:
-        corDaFonte = Fore.LIGHTGREEN_EX
-    elif tipoEdicao == TipoEdicao.api:
-        corDaFonte = Fore.BLUE
-    elif tipoEdicao == TipoEdicao.cache:
-        corDaFonte = Fore.GREEN
-    elif tipoEdicao == TipoEdicao.erro:
-        corDaFonte = Fore.RED
-    else:
-        corDaFonte = Fore.CYAN
+    def __init__(self):
+        self.logApi: Logger = getLogger(NomeLogger.apiLogger.value)
 
-    if priodiade == Prioridade.saidaComum:
-        corDoFundo = Back.RESET
-    elif priodiade == Prioridade.saidaImportante:
-        corDoFundo = Back.YELLOW
-        corDaFonte = Fore.LIGHTWHITE_EX
-    elif priodiade == Prioridade.sync:
-        corDoFundo = Back.RESET
-        corDaFonte = Fore.LIGHTWHITE_EX
+        if not self.logConectado:
+            self.iniciaConfiguracao()
+            self.conectarComSentry()
 
-    with open(path, mode='a', encoding='utf-8') as log:
-        log.write(datetimeToSql(datetime.now()) + ' -> ' + mensagem + '\n')
-        log.flush()
+    def iniciaConfiguracao(self):
+        # Handler Root
+        if logging.root.hasHandlers():
+            logging.root.handlers.clear()
+        stdoutFormatter: Formatter = Formatter("[%(asctime)s] %(levelname)s <%(module)s> --> %(message)s")
+        stdoutHandler = StreamHandler()
+        stdoutHandler.setFormatter(stdoutFormatter)
+        logging.root.setLevel(WARNING)
+        logging.root.addHandler(stdoutHandler)
 
-    print(corDaFonte + corDoFundo + mensagem)
-    deinit()
+        # Handler API
+        apiFormatter: Formatter = Formatter("[%(asctime)s] %(levelname)s <%(module)s> --> %(message)s")
+        apiLogPath: str = os.path.join(os.curdir, 'systemLog', 'historicoLogs', f'{datetime.now().date()}_API.txt')
+        apiHandler = FileHandler(apiLogPath, 'a')
+        apiHandler.setFormatter(apiFormatter)
+        if self.logApi.hasHandlers():
+            self.logApi.handlers.clear()
+        self.logApi.setLevel(INFO)
+        self.logApi.addHandler(apiHandler)
+
+    def buscaLogger(self) -> Logger:
+        return self.logApi
+
+    def conectarComSentry(self):
+        sentryIntegration = LoggingIntegration(
+            level=INFO,
+            event_level=INFO
+        )
+        pathConfig = os.path.join(os.getcwd(), 'systemLog', 'logConfig.json')
+
+        with open(pathConfig, encoding='utf-8', mode='r') as jsonConfig:
+            sentryDsn = json.load(jsonConfig)['sentry_dsn']
+
+        sentry_sdk.init(
+            sentryDsn,
+
+            # Set traces_sample_rate to 1.0 to capture 100%
+            # of transactions for performance monitoring.
+            # We recommend adjusting this value in production.
+            traces_sample_rate=1.0,
+            integrations=[sentryIntegration]
+        )
+        self.logConectado = True
+
+    def setAdvLogado(self, advogadoLogado: Advogados):
+        advDict: dict = {
+            "id": advogadoLogado.advogadoId,
+            "email": advogadoLogado.email
+        }
+        set_user(advDict)

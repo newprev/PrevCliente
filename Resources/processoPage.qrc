@@ -1,8 +1,17 @@
 <RCC>
-  <qresource prefix="menuIcone">
-    <file>processo.png</file>
+  <qresource prefix="documentos">
+    <file>zoomOut.png</file>
+    <file>zoomIn.png</file>
+    <file>Maximize.png</file>
+    <file>impressora_blue.png</file>
+    <file>documento.png</file>
   </qresource>
-  <qresource prefix="infoCards">
-    <file>entrevista-uncheck.png</file>
+  <qresource prefix="checkbox">
+    <file>checkBoxDisable.png</file>
+    <file>checkBoxTrue.png</file>
+    <file>CheckBoxFalse.png</file>
+  </qresource>
+  <qresource prefix="voltar">
+    <file>back.png</file>
   </qresource>
 </RCC>

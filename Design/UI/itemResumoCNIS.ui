@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>608</width>
+    <width>813</width>
     <height>144</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -69,6 +69,17 @@
 	color: #3F4E8C;
 }
 
+#lbInfoInfo,
+#lbInfoEdicao {
+	font: 11pt &quot;Avenir LT Std&quot;;
+	line-height: 16px;
+	color: white;
+	
+	background-color: #3F4E8C;
+	border-radius: 4px;
+	border: 2px solid #3F4E8C;
+}
+
 /* --------------------------------- Frames --------------------------------- */
 #frInfoTag {
 	background-image: url(:/opcoes/information-blue-16.png);
@@ -77,6 +88,30 @@
 
 	background-color: transparent;
 	border: 0px solid none;
+}
+
+#frFaltaData {
+	background-image: url(:/Info/blueFaltaInfo.png);
+	background-repeat: no-repeat;
+	background-position: center;
+
+	background-color: transparent;
+	border: 0px solid none;
+}
+
+#frInsalubridade {
+	background-image: url(:/Info/blueInsalubridade.png);
+	background-repeat: no-repeat;
+	background-position: center;
+
+	background-color: transparent;
+	border: 0px solid none;
+}
+
+#frDadoFaltante, #frEdicao {
+	background-color: white;
+	border: 0px solid none;
+	border-radius: 4px;
 }
 
 /* --------------------------------- Push Button --------------------------------- */
@@ -114,37 +149,46 @@
    <property name="bottomMargin">
     <number>2</number>
    </property>
-   <item>
-    <widget class="QGroupBox" name="gbMain">
+   <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+    <widget class="QWidget" name="gbMain" native="true">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
      <property name="minimumSize">
       <size>
-       <width>0</width>
+       <width>700</width>
        <height>140</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>16777215</width>
+       <width>820</width>
        <height>13215644</height>
       </size>
      </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>4</number>
+      </property>
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="rightMargin">
+       <number>4</number>
+      </property>
+      <property name="bottomMargin">
+       <number>4</number>
+      </property>
       <item>
        <widget class="QFrame" name="frame_2">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -174,7 +218,7 @@
          <item>
           <widget class="QFrame" name="frame_3">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -182,7 +226,7 @@
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>90</height>
+             <height>100</height>
             </size>
            </property>
            <property name="frameShape">
@@ -199,7 +243,7 @@
              <number>12</number>
             </property>
             <property name="topMargin">
-             <number>12</number>
+             <number>6</number>
             </property>
             <property name="rightMargin">
              <number>0</number>
@@ -209,6 +253,12 @@
             </property>
             <item>
              <widget class="QLabel" name="lbCdEmp">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -218,11 +268,14 @@
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>100</height>
+                <height>16548465</height>
                </size>
               </property>
               <property name="text">
                <string>DROGARIA COMERCIAL LTDA</string>
+              </property>
+              <property name="scaledContents">
+               <bool>true</bool>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
@@ -231,8 +284,17 @@
             </item>
             <item>
              <widget class="QLabel" name="lbCNPJouNB">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>CNPJ: 45.652.000-1/32</string>
+              </property>
+              <property name="scaledContents">
+               <bool>true</bool>
               </property>
               <property name="textInteractionFlags">
                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
@@ -244,10 +306,13 @@
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::MinimumExpanding</enum>
+              </property>
               <property name="sizeHint" stdset="0">
                <size>
                 <width>20</width>
-                <height>40</height>
+                <height>15</height>
                </size>
               </property>
              </spacer>
@@ -258,7 +323,7 @@
          <item>
           <widget class="QFrame" name="frame_4">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -377,7 +442,7 @@
                <item row="0" column="1" alignment="Qt::AlignLeft">
                 <widget class="QLabel" name="lbSituacao">
                  <property name="text">
-                  <string>Situação:</string>
+                  <string>Situação</string>
                  </property>
                 </widget>
                </item>
@@ -391,6 +456,22 @@
        </widget>
       </item>
       <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Preferred</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QFrame" name="frOpcoes">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -400,13 +481,13 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>120</width>
+          <width>80</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>120</width>
+          <width>80</width>
           <height>16777215</height>
          </size>
         </property>
@@ -418,91 +499,41 @@
         </property>
         <layout class="QGridLayout" name="gridLayout_4">
          <property name="leftMargin">
-          <number>0</number>
+          <number>4</number>
          </property>
          <property name="topMargin">
-          <number>0</number>
+          <number>4</number>
          </property>
          <property name="rightMargin">
-          <number>0</number>
+          <number>4</number>
          </property>
          <property name="bottomMargin">
-          <number>0</number>
+          <number>4</number>
          </property>
          <property name="horizontalSpacing">
           <number>4</number>
          </property>
-         <item row="1" column="0">
-          <widget class="QFrame" name="frame">
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <property name="bottomMargin">
-             <number>24</number>
-            </property>
-            <item>
-             <widget class="QPushButton" name="pbRemover">
-              <property name="minimumSize">
-               <size>
-                <width>40</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pbEditar">
-              <property name="minimumSize">
-               <size>
-                <width>40</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
+         <property name="verticalSpacing">
+          <number>0</number>
+         </property>
          <item row="0" column="0">
           <widget class="QFrame" name="frDadoFaltante">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <property name="minimumSize">
             <size>
-             <width>120</width>
+             <width>0</width>
              <height>24</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>24</height>
+             <height>50</height>
             </size>
            </property>
            <property name="frameShape">
@@ -511,10 +542,7 @@
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <property name="spacing">
-             <number>2</number>
-            </property>
+           <layout class="QGridLayout" name="gridLayout_6">
             <property name="leftMargin">
              <number>0</number>
             </property>
@@ -527,25 +555,21 @@
             <property name="bottomMargin">
              <number>0</number>
             </property>
-            <item alignment="Qt::AlignVCenter">
-             <widget class="QLabel" name="lbInfoFalta">
-              <property name="text">
-               <string>Dado faltante</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QFrame" name="frInfoTag">
+            <property name="spacing">
+             <number>8</number>
+            </property>
+            <item row="0" column="0" alignment="Qt::AlignHCenter">
+             <widget class="QFrame" name="frFaltaData">
               <property name="minimumSize">
                <size>
-                <width>24</width>
-                <height>24</height>
+                <width>18</width>
+                <height>18</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>24</width>
-                <height>24</height>
+                <width>18</width>
+                <height>18</height>
                </size>
               </property>
               <property name="frameShape">
@@ -556,8 +580,124 @@
               </property>
              </widget>
             </item>
+            <item row="0" column="2" alignment="Qt::AlignHCenter">
+             <widget class="QFrame" name="frInsalubridade">
+              <property name="minimumSize">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="Line" name="lineDadoFaltante">
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QFrame" name="frEdicao">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>4</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item row="1" column="1">
+             <widget class="QPushButton" name="pbEditar">
+              <property name="minimumSize">
+               <size>
+                <width>30</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="pbRemover">
+              <property name="minimumSize">
+               <size>
+                <width>30</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::MinimumExpanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>10</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </widget>

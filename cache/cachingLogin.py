@@ -1,10 +1,10 @@
 import os
 import json
+from logging import info, warning, error
 
-from systemLog.logs import logPrioridade
 from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
-from util.helpers import pyToDefault
+from util.helpers.helpers import pyToDefault
 from modelos.advogadoORM import Advogados
 from playhouse.shortcuts import model_to_dict
 
@@ -22,12 +22,11 @@ class CacheLogin:
 
         try:
             with open(self.pathLoginTxt, encoding='utf-8', mode='w') as cacheLogin:
-                logPrioridade(f'CacheLogin<salvarCache>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComum, tipoLog=TipoLog.Cache)
+                info(f'{TipoLog.Cache.value}::salvarCache')
                 cacheLogin.write(jsonAdv)
             return True
-        except Exception:
-            logPrioridade(f'CacheLogin<salvarCache> ___________________ Erro', tipoEdicao=TipoEdicao.erro, priodiade=Prioridade.saidaImportante, tipoLog=TipoLog.Cache)
-            print('Deu Bosta')
+        except Exception as err:
+            error(f'{TipoLog.Cache.value}::salvarCache', extra={"err": err})
 
     def carregarCache(self) -> Advogados:
         if '.login.json' in os.listdir(self.pathCache):
@@ -57,12 +56,11 @@ class CacheLogin:
 
         try:
             with open(self.pathLoginTempTxt, encoding='utf-8', mode='w') as cacheLogin:
-                logPrioridade(f'CacheLogin<salvarCacheTemporario>___________________', tipoEdicao=TipoEdicao.cache, priodiade=Prioridade.saidaComum, tipoLog=TipoLog.Cache)
+                info(f'{TipoLog.Cache.value}::salvarCacheTemporario')
                 cacheLogin.write(jsonAdv)
             return True
-        except Exception as erro:
-            logPrioridade(f'CacheLogin<salvarCacheTemporario>___________________ Erro', tipoEdicao=TipoEdicao.erro, priodiade=Prioridade.saidaImportante, tipoLog=TipoLog.Cache)
-            print(f'salvarCacheTemporario({type(erro)} - {erro})')
+        except Exception as err:
+            error(f'{TipoLog.Cache.value}salvarCacheTemporario', extra={"err": err})
 
     def limpaCache(self):
         self.limpaTemporarios()

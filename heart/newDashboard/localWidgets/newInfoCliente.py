@@ -11,10 +11,10 @@ from PyQt5.QtWidgets import QWidget
 
 from Design.CustomWidgets.newMenuOpcoes import NewMenuOpcoes
 from Design.CustomWidgets.newPopupCNIS import NewPopupCNIS
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 from Design.pyUi.wdgInfoCliente import Ui_wdgInfoCliente
 from Design.CustomWidgets.newToast import QToaster
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import CnisVinculos
 from modelos.clienteInfoBanco import ClienteInfoBanco
 from modelos.clienteProfissao import ClienteProfissao
 from modelos.cnisModelo import CNISModelo
@@ -22,11 +22,12 @@ from modelos.itemContribuicao import ItemContribuicao
 
 from sinaisCustomizados import Sinais
 
-from util.dateHelper import mascaraData, calculaIdade, atividadesConcorrentes, strToDate, atividadeSecundaria
+from util.helpers.dateHelper import mascaraData, calculaIdade, atividadesConcorrentes, strToDate, atividadeSecundaria
 from util.enums.dashboardEnums import TelaAtual
+from util.enums.newPrevEnums import GeneroCliente
 from util.popUps import popUpSimCancela, popUpOkAlerta
 
-from util.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit
+from util.helpers.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit
 
 from modelos.clienteORM import Cliente
 
@@ -47,6 +48,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         self.sinais.sEnviaInfo.connect(self.editarInfoCliente)
         self.sinais.sIniciaEntrevista.connect(self.iniciarEntrevista)
         self.sinais.sAbreResumoCnis.connect(self.abreResumo)
+        self.sinais.sAbreProcesso.connect(self.navegaTelaProcesso)
         self.toasty = None
         self.popupCNIS = None
         self.limpaTudo()
@@ -58,6 +60,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         self.pbVoltar.clicked.connect(lambda: self.sinais.sVoltaTela.emit())
         self.pbEntrevista.clicked.connect(self.confirmaIniciaEntrevista)
         self.pbResumo.clicked.connect(self.enviaSinalResumoCnis)
+        self.pbProcessos.clicked.connect(self.enviaClienteProcesso)
         self.iniciarBotoesOpcoes()
 
     def abreResumo(self):
@@ -107,11 +110,11 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
                 cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
                 cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
 
-                CnisCabecalhos.delete().where(CnisCabecalhos.clienteId==self.clienteAtual.clienteId).execute()
+                CnisVinculos.delete().where(CnisVinculos.clienteId==self.clienteAtual.clienteId).execute()
                 ItemContribuicao.delete().where(ItemContribuicao.clienteId==self.clienteAtual.clienteId).execute()
 
-                CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
-                CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
+                CnisVinculos.insert_many(cabecalho).on_conflict_replace().execute()
+                CnisVinculos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
 
                 cnisClienteAtual.insereItensContribuicao(self.clienteAtual)
                 self.avaliaAtividadesPrincipais(self.clienteAtual.clienteId)
@@ -124,7 +127,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
             print(f"atualizarCnis <NewInfoCliente>: {err=}")
 
     def avaliaAtividadesPrincipais(self, clienteId: int):
-        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == clienteId)
+        listaCabecalhos: List[CnisVinculos] = CnisVinculos.select().where(CnisVinculos.clienteId == clienteId)
 
         for index, cabecalho in enumerate(listaCabecalhos):
             if index == 0 or listaCabecalhos[index-1].dadoFaltante or listaCabecalhos[index].dadoFaltante:
@@ -177,7 +180,12 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
             self.lbEmailInferior.setText(cliente.email)
             self.lbEstadoCivil.setText(cliente.estadoCivil)
             self.lbNomeMae.setText(cliente.nomeMae)
-            self.rbMasculino.setChecked(True)
+            if cliente.genero == GeneroCliente.masculino.value:
+                self.rbMasculino.setChecked(True)
+                self.rbFeminino.setChecked(False)
+            else:
+                self.rbMasculino.setChecked(False)
+                self.rbFeminino.setChecked(True)
 
             # Informações residenciais
             self.lbCidade.setText(cliente.cidade)
@@ -231,7 +239,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         popUpSimCancela(
             f"Você deseja iniciar uma nova entrevista com o(a) cliente: \n\n{self.clienteAtual.nomeCliente} {self.clienteAtual.sobrenomeCliente}?",
             titulo="Iniciar entrevista",
-            funcao=self.sinais.sIniciaEntrevista.emit,
+            funcaoSim=self.sinais.sIniciaEntrevista.emit,
         )
         return True
 
@@ -252,6 +260,9 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
     def editarInfoCliente(self, info):
         self.dashboard.recebeCliente(self.clienteAtual, info=info)
         return True
+
+    def enviaClienteProcesso(self):
+        self.sinais.sAbreProcesso.emit()
 
     def enviaSinalResumoCnis(self):
         self.sinais.sAbreResumoCnis.emit()
@@ -315,6 +326,9 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         self.lbInfoNomeArquivo.setText('fulanoDeTal.pdf')
         self.lbInfoMetaArquivo.setText("10 dias atrás")
 
+    def navegaTelaProcesso(self):
+        self.dashboard.trocaTela(TelaAtual.Processos, self.clienteAtual)
+
     def recebePathCnis(self, pathCnis:str):
         if os.path.isfile(pathCnis):
             self.atualizarCnis(pathCnis)
@@ -332,7 +346,7 @@ class NewInfoCliente(QWidget, Ui_wdgInfoCliente):
         popUpSimCancela(
             "Atualizar o CNIS excluirá todos as contribuições e benefícios inseridos anteriormente, além das simulações geradas.\nDeseja continuar?",
             titulo="Atualizar arquivo do CNIS",
-            funcao=lambda: self.abrirPopupCNIS()
+            funcaoSim=lambda: self.abrirPopupCNIS()
         )
         return True
 

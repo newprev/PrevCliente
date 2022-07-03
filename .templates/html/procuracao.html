@@ -1,0 +1,18 @@
+{% extends 'layouts/baseDocumento.html' %}
+
+{% block corpo %}
+<div class="conteudoPrincipal">
+    <div class="tituloDocumento">
+        <h2>Procuração</h2>
+    </div>
+    <p id="primeiroParagrafo">Pelo presente instrumento particular de procuração, {{ nomeCliente }} {{ sobrenomeCliente }}, {{ nacionalidade }}, 
+        {{ estadoCivil }}, {{ profissao }}, portador da identidade {{ rg }} e CPF {{ cpf }}, residente e domiciliado na {{ endereco }}, {{ numero }}, {{ bairro }}, {{ cidade }} - {{ estadoSigla }}, {{ cep }}, {{ email }}, nomeia e constitui como seu bastante procurador o advogado, Dr. {{ nomeAdvogado }} {{ sobrenomeAdvogado }}, {{ nacionalidadeAdvogado }}, {{ estadoCivil }}, advogado, inscrito na OAB/{{ siglaEscritorioEstado }} sob o nº {{ numeroOAB }}, com escritório {{ enderecoEscritorio }}, nº {{ escritorioNum }}, {{ bairroEscritorio }}, {{ cidadeEscritorio }} - {{ estadoEscritorio }}, para o fim específico de tratar junto ao INSS, de {{ tipoBeneficio }} e outros, podendo para tanto, o referido procurador, assinar recibos, requerer senhas, receber mensalidades de benefícios, receber quantias atrasadas e firmar os respectivos recibos, requerer benefícios e documentos, requerer prontuários e exames médicos, requerer revisão e interpor recursos, requerer reajustes, acompanhar processos, concordar, transigir, enfim praticar todos os demais atos que forem necessários para o bom e fiel cumprimento da presente procuração, podendo inclusive substabelecer esta, com ou sem reserva de poderes, agindo em conjunto ou em separado.</p>
+
+    <div class="dataAssinatura">
+        <ul id="listaDataAssinatura">
+            <li>{{ cidadeAtual }}, {{ dataAtual }} </li>
+            <li id="nomeAssinatura">{{ nomeCliente }} {{ sobrenomeCliente }} </li>
+        </ul>
+    </div>
+</div>
+{% endblock corpo %}

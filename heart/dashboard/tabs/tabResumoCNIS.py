@@ -13,25 +13,25 @@ from heart.dashboard.tabs.localWidgets.itemResumoCNIS import ItemResumoCnis
 from heart.buscaClientePage import BuscaClientePage
 from heart.insereContribuicaoPage import InsereContribuicaoPage
 
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 from Design.DesignSystem.botoes import NewButton, NewButtonHover
 # from Design.CustomWidgets.newDropMenu import NewSubMenu
 from Design.CustomWidgets.newDropMenu import NewSubMenu
 from Design.CustomWidgets.newTagFiltro import NewTagFiltro
 
-from util.dateHelper import strToDate
+from util.helpers.dateHelper import strToDate
 from util.enums.logEnums import StatusInfo
-from util.helpers import mascaraDinheiro, mascaraCPF, dataUSAtoBR, comparaFiltrosAny
+from util.helpers.helpers import mascaraDinheiro, mascaraCPF, dataUSAtoBR, comparaFiltrosAny
 from util.enums.newPrevEnums import TipoContribuicao, TipoFiltro
 from util.enums.tabsEnums import TabsResumo
-from util.layoutHelpers import limpaLayout
+from util.helpers.layoutHelpers import limpaLayout
 
 from modelos.clienteORM import Cliente
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import cnisVinculos
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.Auxiliares.remuEContribs import RemuEContribs
 
-from Daos.daoCalculos import DaoCalculos
+from Banco.daoCalculos import DaoCalculos
 
 
 class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
@@ -188,7 +188,7 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
 
     def carregarTblContribuicoes(self, clienteId: int):
         # dados = self.daoCalculos.getRemECon(clienteId)
-        dbInst: SqliteDatabase = CnisCabecalhos._meta.database
+        dbInst: SqliteDatabase = cnisVinculos._meta.database
         dados = dbInst.execute_sql(remuEContrib(clienteId))
         listaItens: Generator[RemuEContribs] = (RemuEContribs(info) for info in dados)
 
@@ -277,7 +277,7 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
     def carregarTblBeneficios(self, clienteId: int):
 
         # TODO: ALTERAR FILTRO PARA SELECIONAR APENAS LINHAS QUE TENHAM NB
-        # dictCabecalhos: List[dict] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == clienteId & CnisCabecalhos.nb.is_null(False)).dicts()
+        # dictCabecalhos: List[dict] = cnisVinculos.select().where(cnisVinculos.clienteId == clienteId & cnisVinculos.nb.is_null(False)).dicts()
         dados: List[ItemContribuicao] = ItemContribuicao.select().where(
             ItemContribuicao.clienteId == clienteId,
             ItemContribuicao.tipo == TipoContribuicao.beneficio.value,
@@ -353,7 +353,7 @@ class TabResumoCNIS(QWidget, Ui_wdgTabResumoCNIS):
 
         self.limpaLayoutResumos()
 
-        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == clienteId)
+        listaCabecalhos: List[cnisVinculos] = cnisVinculos.select().where(cnisVinculos.clienteId == clienteId)
 
         if listaCabecalhos is not None:
             for cabecalho in listaCabecalhos:

@@ -1,23 +1,24 @@
+import logging
 import os
 import datetime
+from logging import Logger
 
-from typing import List
+from typing import List, Callable
 
 from PyQt5.QtCore import QObject, QEvent, Qt, QSize
 from PyQt5.QtGui import QFont, QKeyEvent, QCursor, QIcon
-from PyQt5.QtWidgets import QFrame, QTableWidgetItem, QPushButton, QHeaderView
+from PyQt5.QtWidgets import QFrame, QTableWidgetItem, QPushButton
 
 from Design.pyUi.newListaClientes import Ui_wdgListaClientes
 from Design.CustomWidgets.newPopupCNIS import NewPopupCNIS
 from Design.CustomWidgets.newFiltroClientes import NewFiltroClientes
 from Design.CustomWidgets.newToast import QToaster
 from Design.CustomWidgets.newMenuOpcoes import NewMenuOpcoes
-from Design.pyUi.efeitos import Efeitos
-from Design.DesignSystem.colors import NewColorsWhite
+from Design.efeitos import Efeitos
 
 from heart.newDashboard.localStyleSheet.localStyleSheet import btnOpcoesStyle, styleTooltip
 
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import CnisVinculos
 from modelos.clienteORM import Cliente
 from modelos.cnisModelo import CNISModelo
 from modelos.escritoriosORM import Escritorios
@@ -28,10 +29,11 @@ from modelos.advogadoORM import Advogados
 from modelos.clienteProfissao import ClienteProfissao
 
 from sinaisCustomizados import Sinais
-from util.dateHelper import strToDate, atividadesConcorrentes, atividadeSecundaria
+from systemLog.logs import NewLogging
+from util.helpers.dateHelper import strToDate, atividadesConcorrentes, atividadeSecundaria
 from util.enums.dashboardEnums import TelaAtual
 
-from util.helpers import mascaraTelCel, unmaskAll, calculaIdadeFromString
+from util.helpers.helpers import mascaraTelCel, unmaskAll, calculaIdadeFromString
 from util.popUps import popUpOkAlerta, popUpSimCancela
 from util.enums.cadastroEnums import Status
 
@@ -41,6 +43,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
     toast: QToaster
     menuFiltro: NewFiltroClientes
     filtros: dict
+    apiLogger: Logger
 
     def __init__(self, escritorio: Escritorios, advogado: Advogados, parent=None):
         super(NewListaClientes, self).__init__(parent=parent)
@@ -51,6 +54,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         self.advogadoAtual = advogado
         self.filtros = None
         self.menuFiltro = None
+        self.apiLogger = NewLogging().buscaLogger()
 
         self.sinais = Sinais()
         self.sinais.sEnviaClienteParam.connect(self.enviaClienteDashboard)
@@ -84,14 +88,30 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             self.menuFiltro.show()
 
     def abreMenuOpcoes(self):
+        if self.apiLogger is None:
+            self.apiLogger = NewLogging().buscaLogger()
+
         linhaSelecionada: int = self.tblClientes.selectedItems()[0].row()
         clienteId: int = int(self.tblClientes.item(linhaSelecionada, 0).text())
+        arquivado: bool = self.tblClientes.item(linhaSelecionada, 8).checkState()
+
+        funcArquivar: Callable = lambda: self.avaliaArquivarCliente(clienteId, linhaSelecionada)
+        funcDesarquivar: Callable = lambda: self.avaliaDesarquivarCliente(clienteId, linhaSelecionada)
+
+        if arquivado:
+            funcArquivar = None
+        else:
+            funcDesarquivar = None
+
 
         menu = NewMenuOpcoes(
             parent=self,
             funcEditar=lambda: self.editarCliente(clienteId),
-            funcArquivar=lambda: self.avaliaArquivarCliente(clienteId, linhaSelecionada),
+            funcProcessos=lambda: self.navegaTelaProcesso(clienteId),
+            funcArquivar=funcArquivar,
+            funcDesarquivar=funcDesarquivar,
             funcEntrevista=lambda: self.confirmaInicioEntrevista(clienteId),
+            funcResumoCnis=lambda: self.navegaResumoCnis(clienteId),
         )
         menu.exec_(QCursor.pos())
 
@@ -193,19 +213,41 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
     def arquivarCliente(self, clienteId: int):
         try:
+            self.apiLogger.info("Arquivou cliente", extra={"clienteId": clienteId})
             clienteAArquivar: Cliente = Cliente.get_by_id(clienteId)
             clienteAArquivar.arquivado = True
             clienteAArquivar.dataUltAlt = datetime.datetime.now()
             clienteAArquivar.save()
+
+            if self.toast is None:
+                self.toast = QToaster(None)
+            self.toast.showMessage(self, f'Cliente {clienteAArquivar.nomeCliente} arquivado com sucesso!')
             return True
         except Cliente.DoesNotExist as err:
-            print(f"{err=}")
+            self.apiLogger.error("Não encontrou o cliente para arquivar", extra={"clienteId": clienteId})
             popUpOkAlerta("Não foi possível arquivar o cliente selecionado. Verifique se os dados estão corretos e tente novamente.", erro=err)
+            return False
+
+    def desarquivarCliente(self, clienteId: int):
+        try:
+            self.apiLogger.info("Desarquivou cliente", extra={"clienteId": clienteId})
+            clienteAArquivar: Cliente = Cliente.get_by_id(clienteId)
+            clienteAArquivar.arquivado = False
+            clienteAArquivar.dataUltAlt = datetime.datetime.now()
+            clienteAArquivar.save()
+
+            if self.toast is None:
+                self.toast = QToaster(None)
+            self.toast.showMessage(self, f'Cliente {clienteAArquivar.nomeCliente} desarquivado com sucesso!')
+            return True
+        except Cliente.DoesNotExist as err:
+            self.apiLogger.error("Não encontrou o cliente para desarquivar", extra={"clienteId": clienteId})
+            popUpOkAlerta("Não foi possível desarquivar o cliente selecionado. Verifique se os dados estão corretos e tente novamente.", erro=err)
             return False
 
     def avaliaArquivarCliente(self, clienteId: int, linhaSelecionada: int):
         nomeCliente: str = self.tblClientes.item(linhaSelecionada, 1).text().upper()
-        popUpSimCancela(f"Tem certeza que deseja arquivar o(a) cliente {nomeCliente} ?", funcao=lambda: self.arquivarCliente(clienteId))
+        popUpSimCancela(f"Tem certeza que deseja arquivar o(a) cliente {nomeCliente} ?", funcaoSim=lambda: self.arquivarCliente(clienteId))
         self.atualizaTblClientes()
         return True
 
@@ -220,6 +262,12 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             listaReturn.append(cabecalho)
 
         return listaReturn
+
+    def avaliaDesarquivarCliente(self, clienteId: int, linhaSelecionada: int):
+        nomeCliente: str = self.tblClientes.item(linhaSelecionada, 1).text().upper()
+        popUpSimCancela(f"Tem certeza que deseja desarquivar o(a) cliente {nomeCliente} ?", funcaoSim=lambda: self.desarquivarCliente(clienteId))
+        self.atualizaTblClientes()
+        return True
 
     def avaliaFiltrosMenu(self, filtros: dict):
         self.menuFiltro = None
@@ -244,7 +292,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
         if len(strBusca) == 1:
             for linha in range(qtdLinhas):
-                primeiraLetra = self.tblClientes.item(linha, 1).text()[0]
+                primeiraLetra = self.tblClientes.item(linha, 2).text()[0]
                 if primeiraLetra.upper() == strBusca.upper():
                     qtdEncontrados += 1
                     self.tblClientes.showRow(linha)
@@ -253,19 +301,21 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
 
         else:
             for linha in range(qtdLinhas):
-                nomeCompleto: str = self.tblClientes.item(linha, 1).text().upper()
+                nomeCompleto: str = self.tblClientes.item(linha, 2).text().upper()
                 nomes: List[str] = nomeCompleto.split(' ')
-                if strBusca.upper() in nomes:
-                    qtdEncontrados += 1
-                    self.tblClientes.showRow(linha)
-                else:
-                    self.tblClientes.hideRow(linha)
+                for nome in nomes:
+                    if strBusca.upper() in nome[:len(strBusca)]:
+                        qtdEncontrados += 1
+                        self.tblClientes.showRow(linha)
+                        break
+                    else:
+                        self.tblClientes.hideRow(linha)
 
         self.lbInfoBusca.setText(f'{qtdEncontrados} clientes encontrados')
         self.frInfoCliEncontrados.show()
 
     def avaliaAtividadesPrincipais(self, clienteId: int):
-        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == clienteId)
+        listaCabecalhos: List[CnisVinculos] = CnisVinculos.select().where(CnisVinculos.clienteId == clienteId)
 
         for index, cabecalho in enumerate(listaCabecalhos):
             if index == 0 or listaCabecalhos[index-1].dadoFaltante or listaCabecalhos[index].dadoFaltante:
@@ -346,8 +396,8 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
                 cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
 
-                CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
-                CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
+                CnisVinculos.insert_many(cabecalho).on_conflict_replace().execute()
+                CnisVinculos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
 
                 self.cnisClienteAtual.insereItensContribuicao(clienteAtual)
                 cnisInseridoComSucesso = True
@@ -356,7 +406,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 popUpSimCancela(
                     f"O(a) cliente {infoPessoais['nomeCompleto'].upper()} já está cadastrado(a). Deseja atualizar suas informações?",
                     titulo="Cliente já cadastrado(a)",
-                    funcao=lambda: self.buscaClienteEdicao(unmaskAll(infoPessoais['cpf']))
+                    funcaoSim=lambda: self.buscaClienteEdicao(unmaskAll(infoPessoais['cpf']))
                 )
                 return False
 
@@ -381,7 +431,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         popUpSimCancela(
             f"Deseja iniciar uma entrevista com o(a) cliente:\n\n{clienteEscolhido.nomeCliente} {clienteEscolhido.sobrenomeCliente}?",
             titulo="Iniciar entrevista",
-            funcao=lambda: self.dashboard.trocaTela(TelaAtual.Entrevista, clienteEscolhido)
+            funcaoSim=lambda: self.dashboard.trocaTela(TelaAtual.Entrevista, clienteEscolhido)
         )
         return True
 
@@ -392,7 +442,7 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         except Cliente.DoesNotExist as err:
             popUpOkAlerta(
                 "Não foi possível carregar as informações do cliente selecionado. Tente novamente mais tarde.",
-                erro=err
+                erro=f"editarCliente: {err=}"
             )
             return False
 
@@ -408,6 +458,14 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
                 self.popupCNIS.close()
 
         return super(NewListaClientes, self).eventFilter(a0, tecla)
+
+    def navegaResumoCnis(self, clienteId: int):
+        clienteEscolhido: Cliente = Cliente.get_by_id(clienteId)
+        self.dashboard.trocaTela(TelaAtual.Resumo, clienteEscolhido)
+
+    def navegaTelaProcesso(self, clienteId: int):
+        clienteEscolhido: Cliente = Cliente.get_by_id(clienteId)
+        self.dashboard.trocaTela(TelaAtual.Processos, clienteEscolhido)
 
     def selecionaCliente(self, *args, **kwargs):
         linhaSelecionada = args[0].row()
@@ -437,10 +495,10 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
         try:
             cliente: Cliente = Cliente.select().where(Cliente.cpfCliente==cpf).get()
             qtdItens: int = ItemContribuicao.select().where(ItemContribuicao.clienteId==cliente.clienteId).count()
-            qtdCabecalhos: int = CnisCabecalhos.select().where(CnisCabecalhos.clienteId==cliente.clienteId).count()
+            qtdCabecalhos: int = CnisVinculos.select().where(CnisVinculos.clienteId==cliente.clienteId).count()
 
             if qtdItens == 0:
-                CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId).get()
+                CnisVinculos.select().where(CnisVinculos.clienteId == cliente.clienteId).get()
                 return Status.semContrib
             elif qtdCabecalhos == 0:
                 ItemContribuicao.delete().where(ItemContribuicao.clienteId == cliente.clienteId).execute()
@@ -448,15 +506,15 @@ class NewListaClientes(QFrame, Ui_wdgListaClientes):
             return Status.jaCadastrado
 
         except Cliente.DoesNotExist as err:
-            # TODO: ADICIONAR LOG
+            self.apiLogger.info('Cliente não cadastrado.')
             print(f"verificaCadastradoCliente: {err=}")
             return Status.naoCadastrado
         except ItemContribuicao.DoesNotExist as err:
             # TODO: ADICIONAR LOG
             print(f"verificaCadastradoCliente: {err=}")
-            CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId).get()
+            CnisVinculos.select().where(CnisVinculos.clienteId == cliente.clienteId).get()
             return Status.semContrib
-        except CnisCabecalhos.DoesNotExist as err:
+        except CnisVinculos.DoesNotExist as err:
             # TODO: ADICIONAR LOG
             print(f"verificaCadastradoCliente: {err=}")
             ItemContribuicao.delete().where(ItemContribuicao.clienteId==cliente.clienteId).execute()

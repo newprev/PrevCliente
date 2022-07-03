@@ -1,4 +1,3 @@
-from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox, QTableWidgetItem, QTabBar, QHBoxLayout, QLineEdit
@@ -17,16 +16,15 @@ from heart.telAfinsController import TelAfinsController
 
 from modelos.cnisModelo import CNISModelo
 from modelos.clienteORM import Cliente
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import cnisVinculos
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.escritoriosORM import Escritorios
 from modelos.processosORM import Processos
 from modelos.telefonesORM import Telefones
 
-from util.dateHelper import atividadesConcorrentes, atividadeSecundaria
+from util.helpers.dateHelper import atividadesConcorrentes, atividadeSecundaria
 from Design.DesignSystem.designEnums import FontStyle
 from util.popUps import popUpOkAlerta
-from util.helpers import *
 
 from repositorios.integracaoRepositorio import IntegracaoRepository
 
@@ -228,7 +226,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
             cidadeItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 4, cidadeItem)
 
-            tipoProcessoItem = QTableWidgetItem(strTipoBeneficio(processo.tipoBeneficio, processo.subTipoApos))
+            tipoProcessoItem = QTableWidgetItem(strTipoBeneficio(processo.tipoBeneficio, processo.regraAposentadoria))
             tipoProcessoItem.setFont(QFont('TeX Gyre Adventor', pointSize=12, italic=True, weight=25))
             self.tblClientes.setItem(numLinha, 5, tipoProcessoItem)
 
@@ -305,8 +303,8 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
                             cabecalho = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalho'])
                             cabecalhoBeneficio = self.avaliaDadosFaltantesNoCNIS(contribuicoes['cabecalhoBeneficio'])
 
-                            CnisCabecalhos.insert_many(cabecalho).on_conflict_replace().execute()
-                            CnisCabecalhos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
+                            cnisVinculos.insert_many(cabecalho).on_conflict_replace().execute()
+                            cnisVinculos.insert_many(cabecalhoBeneficio).on_conflict_replace().execute()
 
                             self.cliente.telefoneId = Telefones.get_by_id(self.cliente)
                             transaction.commit()
@@ -355,7 +353,7 @@ class TabCliente(Ui_wdgTabCliente, QWidget):
         return listaReturn
 
     def avaliaAtividadesPrincipais(self):
-        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == self.cliente.clienteId)
+        listaCabecalhos: List[cnisVinculos] = cnisVinculos.select().where(cnisVinculos.clienteId == self.cliente.clienteId)
 
         for index, cabecalho in enumerate(listaCabecalhos):
             if index == 0 or listaCabecalhos[index-1].dadoFaltante or listaCabecalhos[index].dadoFaltante:

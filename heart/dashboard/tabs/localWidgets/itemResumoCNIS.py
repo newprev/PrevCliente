@@ -2,18 +2,18 @@ import datetime
 
 from PyQt5.QtWidgets import QWidget, QMessageBox
 from Design.pyUi.itemResumoCNIS import Ui_WdgItemRes
-from util.helpers import dataUSAtoBR, mascaraCNPJ, mascaraNB
+from util.helpers.helpers import dataUSAtoBR, mascaraCNPJ, mascaraNB
 
 from heart.dashboard.tabs.localWidgets.wdgCabecalhoBeneficio import WdgBeneficio
 from heart.dashboard.tabs.localWidgets.wdgCabecalhoContribuicao import WdgContribuicao
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import CnisVinculos
 from heart.dashboard.tabs.localStyleSheet.styleResumo import iconeItem, frInfo
 from util.enums.newPrevEnums import TipoIcone
 
 
 class ItemResumoCnis(QWidget, Ui_WdgItemRes):
 
-    def __init__(self, cabecalho: CnisCabecalhos, parent=None):
+    def __init__(self, cabecalho: CnisVinculos, parent=None):
         super(ItemResumoCnis, self).__init__(parent=parent)
         self.setupUi(self)
         self.frDadoFaltante.hide()

@@ -45,7 +45,7 @@ class ConfigConnection:
             dataSourcesDir = os.path.join(os.path.dirname(__file__), 'datasource')
             dbPath = os.path.join(dataSourcesDir, 'databaseCloud.json')
         elif self.__instanciaBanco == TiposConexoes.sqlite:
-            return sqlite3.connect('Daos/producao.db')
+            return sqlite3.connect('Banco/producao.db')
 
         with open(dbPath) as arquivo:
             config = json.load(arquivo)

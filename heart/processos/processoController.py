@@ -1,7 +1,7 @@
 import datetime
 
 from PyQt5.QtWidgets import QMainWindow
-from Design.pyUi.processoPg import Ui_mwProcessoPage
+from Design.pyUi.processoPage import Ui_wdgProcessoPage
 from typing import List
 
 from heart.buscaClientePage import BuscaClientePage
@@ -16,19 +16,19 @@ from modelos.escritoriosORM import Escritorios
 from modelos.aposentadoriaORM import Aposentadoria
 from modelos.itemContribuicao import ItemContribuicao
 
-from geracaoDocumentos.geraDocAposentadoria import GeracaoDocumentos
+from geracaoDocumentos.geraDocsGerais import GeracaoDocumentos
 
 from cache.cacheEscritorio import CacheEscritorio
 from cache.cachingLogin import CacheLogin
-from util.dateHelper import strToDate
+from util.helpers.dateHelper import strToDate
 
 from util.enums.aposentadoriaEnums import TelaAtiva
 from util.enums.processoEnums import TipoBeneficioEnum, TipoProcesso, SituacaoProcesso, NaturezaProcesso
-from util.helpers import mascaraCPF
+from util.helpers.helpers import mascaraCPF
 from util.popUps import popUpOkAlerta
 
 
-class ProcessosController(QMainWindow, Ui_mwProcessoPage):
+class ProcessosController(QMainWindow):
     clienteAtual: Cliente
     processoAtual: Processos
     advogadoAtual: Advogados

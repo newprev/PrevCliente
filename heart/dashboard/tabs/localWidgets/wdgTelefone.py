@@ -7,7 +7,7 @@ from Design.CustomWidgets.newCheckBox import NewCheckBox
 from modelos.telefonesORM import Telefones
 from ..localStyleSheet.telefoneWdg import *
 
-from util.helpers import mascaraTelCel
+from util.helpers.helpers import mascaraTelCel
 from util.enums.telefoneEnums import *
 
 

@@ -2,19 +2,17 @@ import datetime
 import re
 import pandas as pd
 from pathlib import Path
-from typing import List, Union
-from math import floor
-from dateutil.relativedelta import relativedelta
+from typing import List
 
 from PyPDF3 import PdfFileReader
 from PyQt5.QtWidgets import QFileDialog
 
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import CnisVinculos
 from modelos.itemContribuicao import ItemContribuicao
 from modelos.clienteORM import Cliente
-from util.dateHelper import strToDate, comparaMesAno
+from util.helpers.dateHelper import strToDate, comparaMesAno
 from util.enums.newPrevEnums import TipoItemContribuicao, ComparaData
-from util.helpers import strToFloat, dictIndicadores, verificaIndicadorProibitivo
+from util.helpers.helpers import strToFloat, dictIndicadores, verificaIndicadorProibitivo, unmaskAll
 
 
 class CNISModelo:
@@ -31,7 +29,7 @@ class CNISModelo:
         self.expRegData = "[0-1]{1}[0-9]{1}/[0-9]{4}"
         self.expRegDataMenor = "^[0-9]{2}/[0-9]{4}$"
         self.expRegDataMaior = "^[0-9]{2}/[0-9]{2}/[0-9]{4}$"
-        self.expRegNomeEmp = "^[A-Z_ ]{2,20}"
+        self.expRegNomeEmp = "^[A-Z_. ]{2,30}"
         self.expRegNB = "[0-9]{10}"
         self.expRegEspecie = "[0-9]{0,3} - [A-Z]{2,40}"
         self.expRegCNPJ = "[0-9]{2}\.[0-9]{3}\.[0-9]{3}/[0-9]{4}-[0-9]{2}"
@@ -185,7 +183,7 @@ class CNISModelo:
                     self.dictCabecalho['nit'].append(documentoLinhas[j])
                     nit = True
                 elif re.fullmatch(self.expRegCNPJ, documentoLinhas[j]) is not None or re.fullmatch(self.expRegCNPJalter, documentoLinhas[j]):
-                    self.dictCabecalho['cdEmp'].append(documentoLinhas[j])
+                    self.dictCabecalho['cdEmp'].append(unmaskAll(documentoLinhas[j]))
                     cdEmp = True
                 elif self.isIndicador(documentoLinhas[j]):
                     self.dictCabecalho['indicadores'].append(documentoLinhas[j])
@@ -548,7 +546,7 @@ class CNISModelo:
     def insereItensContribuicao(self, cliente: Cliente):
         # TODO: Pensar em como identificar atividades primárias...
         listaItensContrib: List[dict] = []
-        listaCabecalhos: List[CnisCabecalhos] = CnisCabecalhos.select().where(CnisCabecalhos.clienteId == cliente.clienteId).order_by(CnisCabecalhos.dataInicio)
+        listaCabecalhos: List[CnisVinculos] = CnisVinculos.select().where(CnisVinculos.clienteId == cliente.clienteId).order_by(CnisVinculos.dataInicio)
         dataTrocaMoeda: datetime.date = datetime.date(1994, 7, 1)
 
         listaRemuneracoes = self.organizaParaInserir(self.dictRemuneracoes, cliente.clienteId)
@@ -577,7 +575,7 @@ class CNISModelo:
                     "seq": cabecalho.seq,
                     "tipo": TipoItemContribuicao.remuneracao.value,
                     "competencia": remuneracao['competencia'],
-                    "contribuicao": round(remuneracao['remuneracao'] * 0.2, ndigits=2) if not impedidoPorIndicadores else None,
+                    "contribuicao": round(remuneracao['remuneracao'] * 0.2, ndigits=2) if not impedidoPorIndicadores else 0.0,
                     "salContribuicao": remuneracao['remuneracao'],
                     "indicadores": remuneracao['indicadores'],
                     "validoTempoContrib": not impedidoPorIndicadores,

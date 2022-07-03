@@ -14,6 +14,8 @@ def styleEtapaEntrevista(etapa: EtapaEntrevista) -> str:
     elif etapa == EtapaEntrevista.quizEntrevista:
         framesOn = "#frPrimeiraEtapa, #frSegundaEtapa, #frTerceiraEtapa, #frQuartaEtapa"
         framesOff = "#frQuintaEtapa"
+    else:
+        return ""
 
     return f"""
     {framesOn} {{

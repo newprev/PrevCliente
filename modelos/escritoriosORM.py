@@ -1,7 +1,9 @@
 from modelos.baseModelORM import BaseModel
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
+
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
+from logging import info, warning, error, debug
 
 from datetime import datetime
 from peewee import AutoField, IntegerField, CharField, DateTimeField
@@ -116,11 +118,11 @@ class Escritorios(BaseModel, Model):
 @post_save(sender=Escritorios)
 def inserindoEscritorios(*args, **kwargs):
     if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoEscritorios>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
+        debug(f'{TipoLog.DataBase.value}::inserindoEscritorios___________________{TABLENAME}')
     else:
-        logPrioridade(f'UPDATE<inserindoEscritorios>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+        debug(f'{TipoLog.DataBase.value}::inserindoEscritorios___________________ {TABLENAME}')
 
 
 @pre_delete(sender=Escritorios)
 def deletandoEscritorios(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoEscritorios>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    debug(f'{TipoLog.DataBase.value}::deletandoEscritorios___________________{TABLENAME}')

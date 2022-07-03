@@ -1,7 +1,7 @@
 from os import path
 import os
 from datetime import datetime
-from Daos.daoInformacoes import DaoInformacoes
+from Banco.daoInformacoes import DaoInformacoes
 from connections import ConfigConnection
 from modelos.indicesAtuMonetarioModelo import IndiceAtuMonetarioModelo
 from util.enums.newPrevEnums import TiposConexoes

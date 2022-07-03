@@ -1,5 +1,8 @@
 from PyQt5.QtWidgets import QWidget, QLineEdit
 from PyQt5.QtCore import Qt
+import sqlite3
+import peewee
+from logging import error
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -19,12 +22,13 @@ from modelos.clienteProfissao import ClienteProfissao
 from modelos.clienteInfoBanco import ClienteInfoBanco
 
 from repositorios.integracaoRepositorio import IntegracaoRepository
+from util.enums.logEnums import TipoLog
 
-from util.dateHelper import strToDate, calculaIdade
+from util.helpers.dateHelper import strToDate, calculaIdade
 from util.enums.dashboardEnums import TelaAtual, Navegacao, EtapaCadastraCliente
 from util.enums.telefoneEnums import TipoTelefone, TelefonePesoal
-from util.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit, estCivil, getEscolaridade, getEstados, getEstadoBySigla, unmaskAll
-from util.popUps import popUpOkAlerta
+from util.helpers.helpers import mascaraCPF, mascaraRG, mascaraTelCel, mascaraCep, mascaraNit, estCivil, getEscolaridade, getEstados, getEstadoBySigla, unmaskAll
+from util.popUps import popUpOkAlerta, popUpSimCancela
 
 
 class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
@@ -43,8 +47,10 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.buscaEscritorio()
 
         self.iniciaCamposPessoais()
+        self.iniciaCamposBancarios()
         self.leIdade.setDisabled(True)
         self.leCdCliente.setDisabled(True)
+        self.stkFotoUsuario.setCurrentIndex(1)
 
         # Definindo ordem do focus
         self.setTabOrder(self.leNomeCliente, self.dtNascimento)
@@ -63,9 +69,9 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.setTabOrder(self.leCidade, self.cbxEstado)
         self.setTabOrder(self.cbxEstado, self.leEndereco)
         self.setTabOrder(self.leEndereco, self.leBairro)
-        self.setTabOrder(self.leBairro, self.leComplemento)
-        self.setTabOrder(self.leComplemento, self.leNumero)
-        self.setTabOrder(self.leNumero, self.pbSalvarDados)
+        self.setTabOrder(self.leBairro, self.leNumero)
+        self.setTabOrder(self.leNumero, self.leComplemento)
+        self.setTabOrder(self.leComplemento, self.pbSalvarDados)
 
         self.setTabOrder(self.leNit, self.leCarteiraProf)
         self.setTabOrder(self.leCarteiraProf, self.leProfissao)
@@ -82,8 +88,25 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         self.pbSalvarDados.clicked.connect(self.avaliaSalvaDados)
         self.cbMostraPix.stateChanged.connect(lambda: self.avaliaMostraSenhas('pix'))
         self.cbMostraMeuInss.stateChanged.connect(lambda: self.avaliaMostraSenhas('meuInss'))
+        self.pbFotoUsuario.clicked.connect(lambda: self.abrirCamera)
 
         self.trocaEtapa(EtapaCadastraCliente.pessoal)
+
+    def abrirCamera(self):
+        pass
+
+    def avaliaCaracteres(self, info: str):
+        if info == 'leNumeroAgencia':
+            if not self.leNumeroAgencia.text().isnumeric():
+                self.leNumeroAgencia.setText(self.leNumeroAgencia.text()[:len(self.leNumeroAgencia.text()) - 1])
+
+        elif info == 'leConta':
+            if not self.leConta.text().isnumeric():
+                self.leConta.setText(self.leConta.text()[:len(self.leConta.text()) - 1])
+
+        elif info == 'leNomeBanco':
+            if self.leNomeBanco.text().isnumeric():
+                self.leNomeBanco.setText(self.leNomeBanco.text()[:len(self.leNomeBanco.text()) - 1])
 
     def atualizaIdadeTela(self):
         dataNascimento: datetime.date = self.dtNascimento.date().toPyDate()
@@ -93,8 +116,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
     def avaliaNavegacao(self, tipo: Navegacao):
         if tipo == Navegacao.anterior:
             if self.etapaAtual == EtapaCadastraCliente.pessoal:
-                # TODO: PERGUNTAR PARA O ADVOGADO SE DESEJA SALVAR OU DESCARTAR ALTERAÇÕES
-                self.dashboard.trocaTela(TelaAtual.Cliente)
+                self.verificaPerderAlteracoes()
             elif self.etapaAtual == EtapaCadastraCliente.profissional:
                 self.trocaEtapa(EtapaCadastraCliente.pessoal, sucesso=False)
             elif self.etapaAtual == EtapaCadastraCliente.bancarias:
@@ -215,6 +237,8 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
 
             self.cbxEstado.setCurrentText(getEstadoBySigla(dictCep['uf']))
             self.clienteAtual.estado = getEstadoBySigla(dictCep['uf'])
+
+            self.leNumero.setFocus()
         elif 'erro' in dictCep.keys():
             self.showPopupAlerta(dictCep['erro'])
 
@@ -317,7 +341,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             self.dadosProfissionais = ClienteProfissao.get_by_id(cliente.dadosProfissionais)
 
             if self.dadosProfissionais.nit not in [None, 'None']:
-                self.leNit.setText(mascaraNit(int(self.dadosProfissionais.nit)))
+                self.leNit.setText(mascaraNit(unmaskAll(self.dadosProfissionais.nit)))
 
             if self.dadosProfissionais.numCaretiraTrabalho not in [None, 'None']:
                 self.leCarteiraProf.setText(str(self.dadosProfissionais.numCaretiraTrabalho))
@@ -377,6 +401,11 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         ItemContribuicao.delete_by_id(clienteId)
         Telefones.delete_by_id(clienteId)
 
+    def iniciaCamposBancarios(self):
+        self.leNumeroAgencia.textChanged.connect(lambda: self.avaliaCaracteres('leNumeroAgencia'))
+        self.leConta.textChanged.connect(lambda: self.avaliaCaracteres('leConta'))
+        self.leNomeBanco.textChanged.connect(lambda: self.avaliaCaracteres('leNomeBanco'))
+
     def iniciaCamposPessoais(self):
         self.leRg.editingFinished.connect(lambda: self.leRg.setText(mascaraRG(self.leRg.text())))
         self.leCpf.editingFinished.connect(lambda: self.leCpf.setText(mascaraCPF(self.leCpf.text())))
@@ -418,7 +447,7 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
             self.clienteAtual.dataNascimento = self.dtNascimento.date().toPyDate().strftime('%Y-%m-%d')
 
         elif info == 'cpf':
-            self.clienteAtual.cpfCliente = self.leCpf.text()
+            self.clienteAtual.cpfCliente = unmaskAll(self.leCpf.text())
 
         elif info == 'nomeMae':
             self.clienteAtual.nomeMae = self.leNomeDaMae.text()
@@ -557,6 +586,16 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
 
         self.cbxEstado.setCurrentIndex(24)
         self.cbxEstadoCivil.clear()
+        self.cbxEscolaridade.clear()
+
+    def sairCadastro(self):
+        if self.clienteAtual.clienteId is not None:
+            self.deletaCliente(self.clienteAtual.clienteId)
+        else:
+            self.clienteAtual.delete().execute()
+
+        self.limpaTudo()
+        self.dashboard.trocaTela(TelaAtual.Cliente)
 
     def salvaEtapaBancaria(self):
         if self.dadosBancarios is None:
@@ -596,7 +635,22 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
         if self.clienteAtual.escritorioId is None:
             self.clienteAtual.escritorioId = self.escritorioAtual.escritorioId
 
-        self.clienteAtual.save()
+        try:
+            self.clienteAtual.save()
+        except sqlite3.IntegrityError as err:
+            error(f"{TipoLog.Cache.value}::salvaEtapaPessoal", extra={"err": err})
+            popUpOkAlerta(
+                "Caso queira fazer uma simulação, acesse o menu da calculadora rápida.",
+                titulo="Cliente já cadastrado.",
+                funcao=self.sairCadastro,
+            )
+        except peewee.IntegrityError as err:
+            error(f"{TipoLog.Cache.value}::salvaEtapaPessoal", extra={"err": err})
+            popUpOkAlerta(
+                "Caso queira fazer uma simulação, acesse o menu da calculadora rápida.",
+                titulo="Cliente já cadastrado.",
+                funcao=self.sairCadastro,
+            )
 
         self.avaliaInsereTelefone()
         self.avaliaInsereTelefoneSecundario()
@@ -628,4 +682,8 @@ class NewCadastraCliente(QWidget, Ui_wdgCadastroCliente):
                 self.frSegundaEtapa.setStyleSheet(etapaCadatro(EtapaCadastraCliente.profissional, sucesso=False))
                 self.frTerceiraEtapa.setStyleSheet(etapaCadatro(EtapaCadastraCliente.bancarias, sucesso=False))
 
-
+    def verificaPerderAlteracoes(self):
+        popUpSimCancela(
+            "Deseja voltar para a tela anterior? Isso apagará suas alterações.",
+            funcaoSim=lambda: self.dashboard.trocaTela(TelaAtual.Cliente)
+        )

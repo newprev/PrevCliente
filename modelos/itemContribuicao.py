@@ -1,13 +1,16 @@
+from logging import info, debug
+
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from modelos.clienteORM import Cliente
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
+
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import AutoField, CharField, ForeignKeyField, FloatField, DateTimeField, DateField, IntegerField, BooleanField
 from datetime import datetime
 
-from util.helpers import getTipoItem, getItemOrigem
+from util.helpers.helpers import getTipoItem, getItemOrigem
 
 TABLENAME = 'itemContribuicao'
 
@@ -29,6 +32,8 @@ class ItemContribuicao(BaseModel, Model):
     indicadores = CharField(default=None, null=True)
     validoTempoContrib = BooleanField(default=True)
     validoSalContrib = BooleanField(default=True)
+    fatorInsalubridade = FloatField(null=True)
+    grauDeficiencia = IntegerField(null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
@@ -39,7 +44,6 @@ class ItemContribuicao(BaseModel, Model):
         dictUsuario = {
             'itemContribuicaoId': self.itemContribuicaoId,
             'clienteId': self.clienteId,
-            'itemId': self.itemId,
             'seq': self.seq,
             'tipo': self.tipo,
             'competencia': self.competencia,
@@ -49,6 +53,8 @@ class ItemContribuicao(BaseModel, Model):
             'indicadores': self.indicadores,
             'validoTempoContrib': self.validoTempoContrib,
             'validoSalContrib': self.validoSalContrib,
+            'indiceInsalubridade': self.indiceInsalubridade,
+            'indiceDeficiencia': self.indiceDeficiencia,
             'dataCadastro': self.dataCadastro,
             'dataUltAlt': self.dataUltAlt
         }
@@ -57,7 +63,6 @@ class ItemContribuicao(BaseModel, Model):
     def fromDict(self, dictContribuicoes):
         self.itemContribuicaoId = dictContribuicoes['itemContribuicaoId']
         self.clienteId = dictContribuicoes['clienteId']
-        self.itemId = dictContribuicoes['itemId']
         self.seq = dictContribuicoes['seq']
         self.tipo = dictContribuicoes['tipo']
         self.competencia = dictContribuicoes['competencia']
@@ -67,6 +72,8 @@ class ItemContribuicao(BaseModel, Model):
         self.indicadores = dictContribuicoes['indicadores']
         self.validoTempoContrib = dictContribuicoes['validoTempoContrib']
         self.validoSalContrib = dictContribuicoes['validoSalContrib']
+        self.indiceInsalubridade = dictContribuicoes['indiceInsalubridade']
+        self.indiceDeficiencia = dictContribuicoes['indiceDeficiencia']
         self.dataCadastro = dictContribuicoes['dataCadastro']
         self.dataUltAlt = dictContribuicoes['dataUltAlt']
 
@@ -75,7 +82,6 @@ class ItemContribuicao(BaseModel, Model):
         ItemContribuicao(
             itemContribuicaoId: {self.itemContribuicaoId},
             clienteId: {self.clienteId},
-            itemId: {self.itemId},
             seq: {self.seq},
             tipo: {self.tipo},
             competencia: {self.competencia},
@@ -85,6 +91,8 @@ class ItemContribuicao(BaseModel, Model):
             indicadores: {self.indicadores},
             validoTempoContrib: {self.validoTempoContrib},
             validoSalContrib: {self.validoSalContrib},
+            indiceInsalubridade: {self.indiceInsalubridade},
+            indiceDeficiencia: {self.indiceDeficiencia},
             dataCadastro: {self.dataCadastro},
             dataUltAlt: {self.dataUltAlt}
         )""")
@@ -92,12 +100,9 @@ class ItemContribuicao(BaseModel, Model):
 
 @post_save(sender=ItemContribuicao)
 def inserindoItemContribuicao(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoItemContribuicao>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoCnisContribuicoes>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    debug(f'{TipoLog.DataBase.value}::inserindoItemContribuicao___________________{TABLENAME}')
 
 
 @pre_delete(sender=ItemContribuicao)
 def deletandoItemContribuicao(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoItemContribuicao>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    debug(f'{TipoLog.DataBase.value}::deletandoItemContribuicao___________________{TABLENAME}')

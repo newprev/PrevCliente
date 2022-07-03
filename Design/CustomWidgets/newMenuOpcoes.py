@@ -10,19 +10,25 @@ class NewMenuOpcoes(QMenu):
             self,
             parent=None,
             funcArquivar: Callable = None,
+            funcProcessos: Callable = None,
+            funcDesarquivar: Callable = None,
             funcEditar: Callable = None,
             funcExcluir: Callable = None,
             funcAtualizar: Callable = None,
             funcEntrevista: Callable = None,
+            funcResumoCnis: Callable = None,
     ):
         super(NewMenuOpcoes, self).__init__(parent=parent)
         self.carregaEstilo()
 
         self.funcArquivar = funcArquivar
+        self.funcProcessos = funcProcessos
+        self.funcDesarquivar = funcDesarquivar
         self.funcEditar = funcEditar
         self.funcExcluir = funcExcluir
         self.funcAtualizar = funcAtualizar
         self.funcEntrevista = funcEntrevista
+        self.funcResumoCnis = funcResumoCnis
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -31,7 +37,6 @@ class NewMenuOpcoes(QMenu):
         self.iniciaLayout()
 
     def carregaEstilo(self):
-        # print(f"{self.dumpObjectTree()=}")
         self.setStyleSheet("#NewMenuOpcoes { background-color: transparent; }")
         self.setStyleSheet(estiloMenu())
 
@@ -40,6 +45,16 @@ class NewMenuOpcoes(QMenu):
             acaoArquivar = QAction('Arquivar', self)
             acaoArquivar.triggered.connect(lambda: self.funcArquivar())
             self.addAction(acaoArquivar)
+
+        if self.funcProcessos is not None:
+            acaoProcesso = QAction('Processos', self)
+            acaoProcesso.triggered.connect(lambda: self.funcProcessos())
+            self.addAction(acaoProcesso)
+
+        if self.funcDesarquivar is not None:
+            acaoDesarquivar = QAction('Desarquivar', self)
+            acaoDesarquivar.triggered.connect(lambda: self.funcDesarquivar())
+            self.addAction(acaoDesarquivar)
 
         if self.funcExcluir is not None:
             acaoExcluir = QAction('Excluir', self)
@@ -60,4 +75,9 @@ class NewMenuOpcoes(QMenu):
             acaoEntrevista = QAction('Entrevista', self)
             acaoEntrevista.triggered.connect(lambda: self.funcEntrevista())
             self.addAction(acaoEntrevista)
+
+        if self.funcResumoCnis is not None:
+            acaoResumoCnis = QAction('Resumo CNIS', self)
+            acaoResumoCnis.triggered.connect(lambda: self.funcResumoCnis())
+            self.addAction(acaoResumoCnis)
 

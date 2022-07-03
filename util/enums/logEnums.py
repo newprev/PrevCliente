@@ -11,3 +11,7 @@ class StatusInfo(Enum):
     warning = 0
     info = 1
 
+
+class NomeLogger(Enum):
+    apiLogger = 'logApi'
+

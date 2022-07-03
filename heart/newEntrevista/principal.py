@@ -1,8 +1,25 @@
 import datetime
+from logging import Logger
 from typing import List
 
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QCheckBox, QGridLayout
+
 from Design.pyUi.newEntrevistaPrincipal import Ui_wdgEntrevistaPrincipal
+from Design.CustomWidgets.newCardPadrao import NewCardPadrao
+from Design.CustomWidgets.newToast import QToaster
+from Design.CustomWidgets.wdgCheckInfoController import WdgCheckInfo
+from Design.CustomWidgets.newModalEntrevista import ModalEntrevistaController
+from Design.CustomWidgets.newCardAposentadoria import NewCardAposentadoria
+from Design.efeitos import Efeitos
+
+from beneficios.aposentadoria import CalculosAposentadoria
+from heart.dashboard.entrevista.localStyleSheet.lateral import iconeInfoCliente
+from heart.newEntrevista.localWidgets.pgConfigSimulacao import PgConfigSimulacao
+from modelos.Auxiliares.tipoInfo import InformacaoModel
+from modelos.incidenteProcessual import IncidenteProcessual
+from systemLog.logs import NewLogging
+from util.enums.aposentadoriaEnums import ContribSimulacao, IndiceReajuste
+from util.helpers.layoutHelpers import limpaLayout
 
 from .localStyleSheet.principal import styleEtapaEntrevista
 
@@ -11,17 +28,17 @@ from modelos.processosORM import Processos
 from modelos.tipoBeneficioORM import TipoBeneficioModel
 from modelos.clienteORM import Cliente
 from modelos.advogadoORM import Advogados
+from modelos.aposentadoriaORM import Aposentadoria
 
 from cache.cachingLogin import CacheLogin
 
-from Design.CustomWidgets.newCardPadrao import NewCardPadrao
 from sinaisCustomizados import Sinais
 
-from util.dateHelper import calculaIdade, mascaraData, strToDate
+from util.helpers.dateHelper import calculaIdade, mascaraData, strToDate
 from util.enums.dashboardEnums import TelaPosicao
-from util.enums.entrevistaEnums import EtapaEntrevista
-from util.enums.processoEnums import NaturezaProcesso, TipoBeneficioEnum, TipoProcesso
-from util.helpers import strTipoBeneFacilitado, strTipoProcesso, mascaraCPF
+from util.enums.entrevistaEnums import EtapaEntrevista, CategoriaQuiz
+from util.enums.processoEnums import NaturezaProcesso, TipoBeneficioEnum, TipoProcesso, SituacaoProcesso
+from util.helpers.helpers import strTipoBeneFacilitado, strTipoProcesso, mascaraCPF
 from util.popUps import popUpSimCancela, popUpOkAlerta
 
 
@@ -32,6 +49,16 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
     listaBeneficios: List[TipoBeneficioModel]
     clienteAtual: Cliente
     advogadoAtual: Advogados
+    toasty: QToaster
+    entrevistaParams: dict = {
+        'contribSimulacao': ContribSimulacao.ULTI,
+        'valorSimulacao': 0.0,
+        'porcentagemCont': 11,
+        'indiceReajuste': IndiceReajuste.Ipca
+    }
+    aposentadoriaModel: CalculosAposentadoria
+    apiLog: Logger
+    salvandoSimulacao: bool = False
 
     def __init__(self, escritorioAtual: Escritorios = None, cliente: Cliente = None, parent=None):
         super(NewEntrevistaPrincipal, self).__init__(parent=parent)
@@ -39,12 +66,18 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.dashboard = parent
         self.escritorio = escritorioAtual
         self.etapaAtual = EtapaEntrevista.naturezaProcesso
+        self.toasty = None
         self.sinais = Sinais()
         self.sinais.sTrocaWidgetCentral.connect(self.voltarDashboard)
         self.processoAtual = Processos()
         self.clienteAtual = cliente
         self.listaBeneficios = []
+        self.aposentadoriaModel = CalculosAposentadoria(None, None, None)
 
+        self.newLog = NewLogging()
+        self.apiLog = self.newLog.buscaLogger()
+
+        self.iniciaQuiz()
         self.buscaAdvogadoAtual()
         self.carregaTiposBeneficio()
         self.iniciaInfoPessoais()
@@ -52,22 +85,19 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.iniciaBeneficio()
         self.iniciaTpProcesso()
         self.iniciaHistorico()
+        self.trocaEtapa(self.etapaAtual)
 
         self.pbVoltar.clicked.connect(self.avaliarVoltar)
+        self.pbFinalizarEntrevista.clicked.connect(self.avaliaFinalizaEntrevista)
+        self.pbConfigSimulacao.clicked.connect(self.abreConfig)
+        self.pbInfoCliente.clicked.connect(self.avaliaMostraInfoLateral)
+        self.pbSalvarSimulacao.clicked.connect(self.salvarSimulacao)
+        self.pbCancelarSimulacao.clicked.connect(self.avaliaCancelaSimulacao)
 
-    def avaliarVoltar(self):
-        if self.etapaAtual == EtapaEntrevista.naturezaProcesso:
-            popUpSimCancela('Deseja deixar a entrevista?\nTodas as informações serão perdidas.', funcao=self.sairEntrevista)
-        elif self.etapaAtual == EtapaEntrevista.tipoBeneficio:
-            self.frTpBeneficioHist.hide()
-            self.lbTpBeneEscolhido.setText('')
-            self.trocaEtapa(EtapaEntrevista.naturezaProcesso)
-        elif self.etapaAtual == EtapaEntrevista.tipoProcesso:
-            self.frTpProcessoHist.hide()
-            self.lbTpProcEscolhido.setText('')
-            self.trocaEtapa(EtapaEntrevista.tipoBeneficio)
-        elif self.etapaAtual == EtapaEntrevista.quizEntrevista:
-            self.trocaEtapa(EtapaEntrevista.tipoProcesso)
+    def abreConfig(self):
+        configPage = PgConfigSimulacao(parent=self, entrevistaParams=self.entrevistaParams)
+        configPage.raise_()
+        configPage.show()
 
     def atualizaDescricaoBeneficio(self, tipo: TipoBeneficioEnum):
         beneficio: TipoBeneficioModel = self.listaBeneficios[tipo.value]
@@ -119,6 +149,8 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.processoAtual.dataUltAlt = datetime.datetime.now()
         self.processoAtual.save()
 
+        self.trocaEtapa(EtapaEntrevista.quizEntrevista)
+
     def atualizaNaturezaProcesso(self, natureza: NaturezaProcesso):
         if natureza == NaturezaProcesso.administrativo:
             self.lbNaturezaEscolhida.setText("Administrativo")
@@ -138,6 +170,69 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.trocaEtapa(EtapaEntrevista.tipoBeneficio)
         self.clearFocus()
 
+    def avaliaCancelaSimulacao(self):
+        popUpSimCancela(
+            "Deseja cancelar essa simulação?\nVocê voltará para a tela anterior e poderá alterar as respostas e as configurações da entrevista.",
+            titulo="Cancelar simulação",
+            funcaoSim=self.cancelarSimulacao,
+        )
+
+    def avaliaFinalizaEntrevista(self):
+        tipoDoBeneficio = TipoBeneficioEnum(self.processoAtual.tipoBeneficio.tipoId)
+
+        if self.processoAtual.natureza == NaturezaProcesso.administrativo.value:
+            if tipoDoBeneficio == TipoBeneficioEnum.Aposentadoria:
+                self.aposentadoriaModel = CalculosAposentadoria(processo=self.processoAtual, cliente=self.clienteAtual, entrevistaParams=self.entrevistaParams)
+                listaSimulacao = self.aposentadoriaModel.geraSimulacoes()
+                self.carregaTelaSimulacao(listaSimulacoes=listaSimulacao)
+                self.frEsquerda.hide()
+                self.trocaEtapa(EtapaEntrevista.simulacoes)
+                self.apiLog.info('Finalizou questionário da entrevista')
+
+            elif tipoDoBeneficio == TipoBeneficioEnum.AuxAcidente:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            elif tipoDoBeneficio == TipoBeneficioEnum.AuxDoenca:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            elif tipoDoBeneficio == TipoBeneficioEnum.AuxReclusao:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            elif tipoDoBeneficio == TipoBeneficioEnum.BeneDeficiencia:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            elif tipoDoBeneficio == TipoBeneficioEnum.BeneIdoso:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            elif tipoDoBeneficio == TipoBeneficioEnum.PensaoMorte:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            elif tipoDoBeneficio == TipoBeneficioEnum.SalMaternidade:
+                self.mensagemToast("Calculo de benefício ainda não implementado..")
+            else:
+                popUpOkAlerta("Tipo do benefício não encontrado. Entre em contato com o suporte.", erro=f"{self.processoAtual.tipoBeneficio=}\n{self.processoAtual.processoId=}")
+        else:
+            self.mensagemToast("Natureza do processo ainda não implementada...")
+
+    def avaliaMostraInfoLateral(self):
+        self.pbInfoCliente.setStyleSheet(iconeInfoCliente(self.frEsquerda.isHidden()))
+
+        if self.frEsquerda.isHidden():
+            self.frEsquerda.show()
+        else:
+            self.frEsquerda.hide()
+
+    def avaliarVoltar(self):
+        if self.etapaAtual == EtapaEntrevista.naturezaProcesso:
+            popUpSimCancela('Deseja deixar a entrevista?\nTodas as informações serão perdidas.', funcaoSim=self.sairEntrevista)
+        elif self.etapaAtual == EtapaEntrevista.tipoBeneficio:
+            self.frTpBeneficioHist.hide()
+            self.lbTpBeneEscolhido.setText('')
+            self.trocaEtapa(EtapaEntrevista.naturezaProcesso)
+        elif self.etapaAtual == EtapaEntrevista.tipoProcesso:
+            self.frTpProcessoHist.hide()
+            self.lbTpProcEscolhido.setText('')
+            self.trocaEtapa(EtapaEntrevista.tipoBeneficio)
+        elif self.etapaAtual == EtapaEntrevista.quizEntrevista:
+            self.trocaEtapa(EtapaEntrevista.tipoProcesso)
+        elif self.etapaAtual == EtapaEntrevista.simulacoes:
+            self.frEsquerda.show()
+            self.trocaEtapa(EtapaEntrevista.quizEntrevista)
+
     def buscaAdvogadoAtual(self):
         cacheAdvogado = CacheLogin()
         self.advogadoAtual = cacheAdvogado.carregarCache()
@@ -152,8 +247,42 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
 
         return True
 
+    def cancelarSimulacao(self):
+        self.aposentadoriaModel.limpaTudo()
+        self.avaliarVoltar()
+
+    def carregaTelaSimulacao(self, listaSimulacoes: List[Aposentadoria] = []):
+        if len(listaSimulacoes) > 0:
+            listaAposentadorias: List[Aposentadoria] = listaSimulacoes
+        else:
+            listaAposentadorias: List[Aposentadoria] = Aposentadoria.select().where(
+                Aposentadoria.clienteId == self.clienteAtual.clienteId,
+                Aposentadoria.processoId == self.processoAtual.processoId,
+            ).order_by(
+                Aposentadoria.valorSimulacao.desc(),
+                Aposentadoria.valorBeneficio.desc(),
+                Aposentadoria.idadeCliente,
+            )
+
+        if len(listaAposentadorias) > 0:
+            glSimulacoes = QGridLayout(self)
+            glSimulacoes.setSpacing(36)
+            glSimulacoes.setContentsMargins(16, 16, 16, 16)
+
+            for index, aposentadoria in enumerate(listaAposentadorias):
+                self.processoAtual.regraAposentadoria = aposentadoria.tipo
+                glSimulacoes.addWidget(NewCardAposentadoria(aposentadoria, parent=self), index//4, index % 4)
+
+            self.scaSimulacoes.setLayout(glSimulacoes)
+
     def carregaTiposBeneficio(self):
         self.listaBeneficios = TipoBeneficioModel.select()
+
+    def defineCliente(self, cliente: Cliente):
+        if cliente is not None and cliente.clienteId is not None:
+            self.apiLog.info("Iniciou entrevista")
+            self.clienteAtual = cliente
+            self.iniciaInfoPessoais()
 
     def iniciaBeneficio(self):
         pbAposentadoria = NewCardPadrao(
@@ -214,6 +343,10 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.vlTpBeneficio.addWidget(pbPensaoMorte)
         self.vlTpBeneficio.addWidget(pbSalMaternidade)
 
+    def habilitaBlur(self, ativar: bool = True):
+        efeito = Efeitos()
+        efeito.blurWidgets([self.frPrincipal], disable=not ativar)
+
     def iniciaInfoPessoais(self):
         if self.clienteAtual is not None and self.clienteAtual.clienteId is not None:
             idadeCliente = calculaIdade(self.clienteAtual.dataNascimento, datetime.datetime.today())
@@ -223,6 +356,35 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
             self.frInfoHistPessoais.show()
         else:
             self.frInfoHistPessoais.hide()
+
+    def iniciaQuiz(self):
+        vlQuiz = QVBoxLayout(self)
+
+        infoInsalubre = InformacaoModel('Insalubridade', CategoriaQuiz.insalubridade)
+        insalubridade = WdgCheckInfo(infoInsalubre, parent=self)
+        vlQuiz.addWidget(insalubridade)
+
+        infoDeficiente = InformacaoModel('Deficiência', CategoriaQuiz.deficiencia)
+        deficiencia = WdgCheckInfo(infoDeficiente, parent=self)
+        vlQuiz.addWidget(deficiencia)
+
+        infoMilitar = InformacaoModel('Serviço militar', CategoriaQuiz.servicoMilitar)
+        ServMilitar = WdgCheckInfo(infoMilitar, parent=self)
+        vlQuiz.addWidget(ServMilitar)
+
+        infoRural = InformacaoModel('Trabalho rural', CategoriaQuiz.trabalhoRural)
+        trabalhoRural = WdgCheckInfo(infoRural, parent=self)
+        vlQuiz.addWidget(trabalhoRural)
+
+        infoManual = InformacaoModel('Alteração manual', CategoriaQuiz.alteracaoManual)
+        altManual = WdgCheckInfo(infoManual, parent=self)
+        vlQuiz.addWidget(altManual)
+
+        infoOutros = InformacaoModel('Outros', CategoriaQuiz.outros)
+        outros = WdgCheckInfo(infoOutros, parent=self)
+        vlQuiz.addWidget(outros)
+
+        self.scaQuestionario.setLayout(vlQuiz)
 
     def iniciaTpProcesso(self):
         pbConcessao = NewCardPadrao(
@@ -281,10 +443,52 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.vlNaturezas.addWidget(pbAdm)
         self.vlNaturezas.addWidget(pbJud)
 
-    def defineCliente(self, cliente: Cliente):
-        if cliente is not None and cliente.clienteId is not None:
-            self.clienteAtual = cliente
-            self.iniciaInfoPessoais()
+    def mensagemToast(self, mensagem: str):
+        if self.toasty is None:
+            self.toasty = QToaster(self)
+        self.toasty.showMessage(self, mensagem)
+
+    def recebeInfo(self, info: InformacaoModel):
+        perguntas=[
+            InformacaoModel(
+                descricao="Testando questão 1",
+                tipoInfo=QCheckBox()
+            ),
+            InformacaoModel(
+                descricao="Testando questão 2",
+                tipoInfo=QCheckBox(),
+                nivel=1
+            ),
+            InformacaoModel(
+                descricao="Testando questão 3",
+                tipoInfo=QCheckBox()
+            ),
+            InformacaoModel(
+                descricao="Testando questão 4",
+                tipoInfo=QCheckBox()
+            ),
+        ]
+        modalEntrevista = ModalEntrevistaController(info.tipoInfo, perguntas, parent=self, dashboard=self.dashboard)
+        modalEntrevista.show()
+        self.habilitaBlur(ativar=True)
+
+    def salvarSimulacao(self):
+        # TODO: LIMPAR TUDO
+        IncidenteProcessual(
+            processoId=self.processoAtual.processoId,
+            andamento=SituacaoProcesso.aDarEntrada.value,
+            descricao='Processo a iniciar salvo no banco de dados.',
+            seq=1,
+            codAndamento=0,
+            dataIncidente=datetime.datetime.now(),
+            dataCadastro=datetime.datetime.now(),
+            dataUltAlt=datetime.datetime.now()
+        ).save()
+
+        self.salvandoSimulacao = True
+        self.aposentadoriaModel.salvaAposentadorias()
+        self.aposentadoriaModel.limpaTudo()
+        self.voltarDashboard()
 
     def sairEntrevista(self):
         self.sinais.sTrocaWidgetCentral.emit(TelaPosicao.Cliente)
@@ -295,7 +499,9 @@ class NewEntrevistaPrincipal(QWidget, Ui_wdgEntrevistaPrincipal):
         self.frMigalhas.setStyleSheet(styleEtapaEntrevista(etapaDestino))
 
     def voltarDashboard(self):
-        self.processoAtual.delete().execute()
+        if not self.salvandoSimulacao:
+            self.processoAtual.delete().execute()
+
         self.dashboard.trocaTela(TelaPosicao.Cliente)
 
 

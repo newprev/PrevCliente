@@ -1,12 +1,13 @@
 from Design.pyUi.newDashboard import Ui_newDashboard
-from PyQt5.QtWidgets import QMainWindow
-from PyQt5 import QtGui
+from PyQt5.QtWidgets import QMainWindow, QFrame, QWidget
+from PyQt5 import QtGui, QtCore
 
+from heart.processos.processoPage import ProcessoPage
 from heart.resumoCnis.resumoCnis import ResumoCnisController
 from modelos.clienteORM import Cliente
 from util.popUps import popUpOkAlerta
 
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 from sinaisCustomizados import Sinais
@@ -42,6 +43,7 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
         self.setWindowTitle('Dashboard - [dashboardController]')
 
         self.pbMenuPrincipal.clicked.connect(self.abreMenuPrincipal)
+        # self.pbAvisos.clicked.connect(pass)
 
     def abreMenuPrincipal(self):
         efeitos = Efeitos()
@@ -86,12 +88,14 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
         self.wdgInfoCliente = NewInfoCliente(parent=self)
         self.wdgEntrevista = NewEntrevistaPrincipal(self.escritorioAtual, parent=self)
         self.wdgResumoCnis = ResumoCnisController(parent=self)
+        self.wdgProcesso = ProcessoPage(self.advogadoAtual, parent=self)
 
         self.stkPrincipal.addWidget(self.clienteController)
         self.stkPrincipal.addWidget(self.wdgCadastroCliente)
         self.stkPrincipal.addWidget(self.wdgInfoCliente)
         self.stkPrincipal.addWidget(self.wdgEntrevista)
         self.stkPrincipal.addWidget(self.wdgResumoCnis)
+        self.stkPrincipal.addWidget(self.wdgProcesso)
 
         self.stkPrincipal.setCurrentIndex(TelaAtual.Cliente.value)
 
@@ -114,9 +118,23 @@ class NewDashboard(QMainWindow, Ui_newDashboard):
     def trocaTela(self, tela: TelaAtual, *args):
         if len(args) != 0 and isinstance(args[0], Cliente):
             if tela == TelaAtual.Entrevista:
-                self.wdgEntrevista.defineCliente(args[0])
+                self.stkPrincipal.removeWidget(self.wdgEntrevista)
+                self.wdgEntrevista = NewEntrevistaPrincipal(self.escritorioAtual, cliente=args[0], parent=self)
+                self.stkPrincipal.insertWidget(tela.value, self.wdgEntrevista)
+
+            elif tela == TelaAtual.Processos:
+                self.stkPrincipal.removeWidget(self.wdgProcesso)
+                self.wdgProcesso = ProcessoPage(self.advogadoAtual, cliente=args[0], parent=self)
+                self.stkPrincipal.insertWidget(tela.value, self.wdgProcesso)
+
             elif tela == TelaAtual.Resumo:
                 self.wdgResumoCnis.recebeCliente(args[0])
+
+        else:
+            if tela == TelaAtual.Processos:
+                self.stkPrincipal.removeWidget(self.wdgProcesso)
+                self.wdgProcesso = ProcessoPage(self.advogadoAtual, parent=self)
+                self.stkPrincipal.insertWidget(tela.value, self.wdgProcesso)
 
         self.stkPrincipal.setCurrentIndex(tela.value)
 

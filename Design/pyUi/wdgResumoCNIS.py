@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_wdgResumoCnis(object):
     def setupUi(self, wdgResumoCnis):
         wdgResumoCnis.setObjectName("wdgResumoCnis")
-        wdgResumoCnis.resize(1181, 515)
+        wdgResumoCnis.resize(1181, 793)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -250,33 +250,42 @@ class Ui_wdgResumoCnis(object):
 "\n"
 "/*-------------------------------------------  Widget --------------------------------------------*/\n"
 "#pgEmpresas, #pgContribuicoes, \n"
-"#pgBeneficios {\n"
+"#pgBeneficios, #pgCadastroVinculo, \n"
+"#pgContrib, #pgBene,\n"
+"#pgCadContribBene {\n"
 "    background-color: white;\n"
 "}\n"
 "\n"
 "/*-------------------------------------------  Scroll Bar --------------------------------------------*/\n"
 "QScrollBar:vertical {\n"
-"    border: 0px solid none;\n"
-"    background: #F2F2F2;\n"
-"}\n"
+"        background-color: #DDDEDF;\n"
+"        width: 15px;\n"
+"        margin: 15px 3px 15px 3px;\n"
+"        border: 1px transparent #2A2929;\n"
+"        border-radius: 4px;\n"
+"    }\n"
 "\n"
 "QScrollBar::handle:vertical {\n"
 "    background-color: #3F4E8C;\n"
-"    min-height: 10px;\n"
-"    max-height: 20px;\n"
-"\n"
-"    border-radius: 5px;\n"
+"    min-height: 5px;\n"
+"    width: 20px;\n"
+"    border-radius: 4px;\n"
 "}\n"
 "\n"
+"QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical{\n"
+"      border: none;\n"
+"      background: none;\n"
+"      color: none;\n"
+"}\n"
 "\n"
-"/*---------------------------- Push Button ----------------------------------*/\n"
-"#pbInserir, #pbInserirContrib {\n"
-"    font: 12pt \"Avenir LT Std\";\n"
-"    color: #3F4E8C;\n"
-"    \n"
-"    border: 2px solid #3F4E8C;\n"
-"    border-radius: 8px;\n"
-"    padding: 6px;\n"
+"QScrollBar::add-line:vertical {\n"
+"    border: none;\n"
+"    background: none;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical {\n"
+"    border: none;\n"
+"    background: none;\n"
 "}\n"
 "\n"
 "/*----------------------- Scroll Area  and  QWidget ------------------------*/\n"
@@ -284,35 +293,17 @@ class Ui_wdgResumoCnis(object):
 "    background-color: white;\n"
 "}\n"
 "\n"
-"/*-------------------------------- Labels -----------------------------------------*/\n"
-"#lbNomeEmp {\n"
-"    font: 15pt \"Avenir LT Std\";\n"
-"    color: #3F4E8C;\n"
-"    \n"
-"    font-weight: 750;\n"
-"    line-height: 24px;\n"
+"/*--------------------------- Labels ------------------------*/\n"
 "\n"
-"    margin: 8px 0px 0px 0px;\n"
-"}\n"
-"\n"
-"#lbCNPJouNB, #lbDataInicio, \n"
-"#lbDataFim {\n"
-"    font: 11pt \"Avenir LT Std\";\n"
-"    color: #3F4E8C;\n"
-"    \n"
-"    font-weight: 120;\n"
-"    line-height: 24px;\n"
-"\n"
-"    margin: 2px 0px 0px 0px;\n"
-"}\n"
-"\n"
-"/*------------------------------------------- Table Widget -------------------------------------------*/\n"
-"#tblContribuicoes {\n"
-"    selection-background-color: #F9F9F9;\n"
-"    selection-color: grey;\n"
+"/*--------------------- Table Widget -----------------------*/\n"
+"#tblContribuicoes, #tblCadContrib,\n"
+"#tblCadBene {\n"
+"    selection-background-color: #DDDEDF;\n"
+"    selection-color: #292D40;\n"
 "    gridline-color: white;\n"
 "\n"
 "    border: 0px solid transparent;\n"
+"    alternate-background-color: #F4F5F8;\n"
 "}\n"
 "\n"
 "QHeaderView {\n"
@@ -326,17 +317,139 @@ class Ui_wdgResumoCnis(object):
 "    min-height: 45px;\n"
 "}\n"
 "\n"
-"#tblContribuicoes::item:last {\n"
+"QHeaderView:QTableCornerButton::section {\n"
+"    background-color: white;\n"
+"    border: 1px solid white;\n"
+"}\n"
+"\n"
+"#tblContribuicoes::item:last,\n"
+"#tblCadContrib::item:last,\n"
+"#tblCadBene::item:last {\n"
 "    selection-background-color: black;\n"
 "    selection-color: grey;\n"
 "    gridline-color: black;\n"
 "    border: 0px solid transparent;\n"
 "}\n"
 "\n"
-"#tblContribuicoes::item {\n"
-"    padding: 2px 24px 2px 24px;\n"
+"#tblContribuicoes::item,\n"
+"#tblCadContrib::item,\n"
+"#tblCadBene::item {\n"
+"    padding: 2px 2px 2px 2px;\n"
 "}\n"
-"")
+"\n"
+"/*------------------------------------------- Line edit -------------------------------------------*/\n"
+"QLineEdit {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    border: 0px solid gray;\n"
+"    border-radius: 8px;\n"
+"       padding: 0 8px;\n"
+"    background: #F9F9F9;\n"
+"    selection-background-color: darkgray;\n"
+"}\n"
+"\n"
+"/*------------------------------ Radio Button -------------------------------------*/\n"
+"#rbContribuicao, #rbBeneficio {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"}\n"
+"\n"
+"#rbContribuicao::indicator::unchecked, \n"
+"#rbBeneficio::indicator::unchecked {\n"
+"    image: url(:/opcoes/rbUnchecked.png);\n"
+"}\n"
+"\n"
+"#rbContribuicao::indicator::checked, \n"
+"#rbBeneficio::indicator::checked {\n"
+"    image: url(:/opcoes/rbChecked.png);\n"
+"}\n"
+"\n"
+"/*---------------------- Combo box ---------------------*/\n"
+"QComboBox {\n"
+"    border: 0px solid gray;\n"
+"    border-radius: 8px;\n"
+"    padding: 1px 18px 1px 8px;\n"
+"    \n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #606970;    \n"
+"}\n"
+"\n"
+"QComboBox:editable {\n"
+"    background: white;\n"
+"}\n"
+"\n"
+"QComboBox:!editable, QComboBox::drop-down:editable {\n"
+"     background: #F9F9F9;\n"
+"}\n"
+"\n"
+"QComboBox:!editable:on, QComboBox::drop-down:editable:on {\n"
+"    background: #F9F9F9;\n"
+"}\n"
+"\n"
+"QComboBox:on {\n"
+"    padding-top: 3px;\n"
+"    padding-left: 4px;\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 15px;\n"
+"    padding: 0px 8px 0px 0px;\n"
+"\n"
+"    border-left-width: 0px;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    image: url(:/upDown/down.png);\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow:on {\n"
+"    top: 1px;\n"
+"    left: 1px;\n"
+"}\n"
+"\n"
+"/*------------------------------------------- Date edit -------------------------------------------*/\n"
+"#dtDataInicio, #dtDataFim,\n"
+"#dtDataInicioBene, #dtDataFimBene {\n"
+"    border: 0px solid gray;\n"
+"    border-radius: 8px;\n"
+"    padding: 1px 18px 1px 8px;\n"
+"    \n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #606970;\n"
+"\n"
+"    background-color: #F9F9F9;\n"
+"}\n"
+"\n"
+"#dtDataInicio::down-button,\n"
+"#dtDataFim::down-button,\n"
+"#dtDataInicioBene::down-button,\n"
+"#dtDataFimBene::down-button {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 15px;\n"
+"    padding: 0px 8px 0px 0px;\n"
+"\n"
+"    border-left-width: 0px;\n"
+"}\n"
+"\n"
+"#dtDataInicio::down-arrow,\n"
+"#dtDataFim::down-arrow,\n"
+"#dtDataInicioBene::down-arrow,\n"
+"#dtDataFimBene::down-arrow {\n"
+"    image: url(:/upDown/calendar.png);\n"
+"}\n"
+"\n"
+"#dtDataInicio::drop-down,\n"
+"#dtDataFim::drop-down,\n"
+"#dtDataInicioBene::drop-down,\n"
+"#dtDataFimBene::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 15px;\n"
+"    padding: 0px 8px 0px 0px;\n"
+"\n"
+"    border-left-width: 0px;\n"
+"}")
         self.frMiolo.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frMiolo.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frMiolo.setObjectName("frMiolo")
@@ -357,19 +470,74 @@ class Ui_wdgResumoCnis(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pgEmpresas.sizePolicy().hasHeightForWidth())
         self.pgEmpresas.setSizePolicy(sizePolicy)
+        self.pgEmpresas.setStyleSheet("/*------------------ Push button ------------------*/\n"
+"#pbInserirResumo {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    border: 2px solid #3F4E8C;\n"
+"    border-radius: 8px;\n"
+"    padding: 6px;\n"
+"}\n"
+"\n"
+"/*------------------ Labels ------------------*/\n"
+"QLabel {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"}\n"
+"\n"
+"#lbInfoTmpContribuicao {\n"
+"    font-weight: 750;\n"
+"    color: #3F4E8C;\n"
+"}\n"
+"\n"
+"#lbInfoTpAte94, #lbInfoTpAte98,\n"
+"#lbInfoTpAte2019, #lbInfoTpAteHoje {\n"
+"    font: 11pt \"Avenir LT Std\";\n"
+"    color: black;\n"
+"    \n"
+"    font-weight: 120;\n"
+"    line-height: 24px;\n"
+"\n"
+"    margin: 2px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"#lbTpAte94, #lbTpAte98,\n"
+"#lbTpAte2019, #lbTpAteHoje {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: black;\n"
+"    \n"
+"    font-weight: 750;\n"
+"    line-height: 24px;\n"
+"\n"
+"    margin: 2px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"/*------------------ Frames ------------------*/\n"
+"#frTmpContrib {\n"
+"    background-color: #F9F9F9;\n"
+"    border: 0px solid none;\n"
+"    \n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
+"#frRightInfo {\n"
+"    border-radius: 8px;\n"
+"\n"
+"    background-color: white;\n"
+"}")
         self.pgEmpresas.setObjectName("pgEmpresas")
         self.gridLayout_8 = QtWidgets.QGridLayout(self.pgEmpresas)
-        self.gridLayout_8.setContentsMargins(-1, 0, -1, 0)
-        self.gridLayout_8.setHorizontalSpacing(32)
+        self.gridLayout_8.setContentsMargins(-1, 8, 12, 0)
+        self.gridLayout_8.setHorizontalSpacing(0)
         self.gridLayout_8.setVerticalSpacing(16)
         self.gridLayout_8.setObjectName("gridLayout_8")
-        self.frame = QtWidgets.QFrame(self.pgEmpresas)
-        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.gridLayout_4 = QtWidgets.QGridLayout(self.frame)
+        self.frLeftVinculos = QtWidgets.QFrame(self.pgEmpresas)
+        self.frLeftVinculos.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frLeftVinculos.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frLeftVinculos.setObjectName("frLeftVinculos")
+        self.gridLayout_4 = QtWidgets.QGridLayout(self.frLeftVinculos)
         self.gridLayout_4.setObjectName("gridLayout_4")
-        self.frame_2 = QtWidgets.QFrame(self.frame)
+        self.frame_2 = QtWidgets.QFrame(self.frLeftVinculos)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -382,24 +550,27 @@ class Ui_wdgResumoCnis(object):
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         spacerItem1 = QtWidgets.QSpacerItem(479, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem1)
-        self.pbInserir = QtWidgets.QPushButton(self.frame_2)
-        self.pbInserir.setMinimumSize(QtCore.QSize(80, 0))
-        self.pbInserir.setObjectName("pbInserir")
-        self.horizontalLayout_3.addWidget(self.pbInserir)
-        self.gridLayout_4.addWidget(self.frame_2, 0, 0, 1, 1)
-        self.scaPrincipal = QtWidgets.QScrollArea(self.frame)
+        self.pbInserirResumo = QtWidgets.QPushButton(self.frame_2)
+        self.pbInserirResumo.setMinimumSize(QtCore.QSize(80, 0))
+        self.pbInserirResumo.setObjectName("pbInserirResumo")
+        self.horizontalLayout_3.addWidget(self.pbInserirResumo)
+        self.gridLayout_4.addWidget(self.frame_2, 0, 0, 1, 1, QtCore.Qt.AlignTop)
+        self.scaPrincipal = QtWidgets.QScrollArea(self.frLeftVinculos)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.scaPrincipal.sizePolicy().hasHeightForWidth())
         self.scaPrincipal.setSizePolicy(sizePolicy)
+        self.scaPrincipal.setMinimumSize(QtCore.QSize(0, 170))
+        self.scaPrincipal.setMaximumSize(QtCore.QSize(16777215, 700))
         self.scaPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.scaPrincipal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
-        self.scaPrincipal.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
+        self.scaPrincipal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.scaPrincipal.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.scaPrincipal.setWidgetResizable(True)
+        self.scaPrincipal.setAlignment(QtCore.Qt.AlignCenter)
         self.scaPrincipal.setObjectName("scaPrincipal")
         self.wdgScroll = QtWidgets.QWidget()
-        self.wdgScroll.setGeometry(QtCore.QRect(0, 0, 569, 350))
+        self.wdgScroll.setGeometry(QtCore.QRect(0, 0, 583, 574))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -408,9 +579,73 @@ class Ui_wdgResumoCnis(object):
         self.wdgScroll.setObjectName("wdgScroll")
         self.scaPrincipal.setWidget(self.wdgScroll)
         self.gridLayout_4.addWidget(self.scaPrincipal, 1, 0, 1, 1)
-        self.gridLayout_8.addWidget(self.frame, 0, 0, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_8.addItem(spacerItem2, 0, 1, 1, 1)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_4.addItem(spacerItem2, 2, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.frLeftVinculos, 0, 0, 1, 1)
+        self.frRightInfo = QtWidgets.QFrame(self.pgEmpresas)
+        self.frRightInfo.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frRightInfo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frRightInfo.setObjectName("frRightInfo")
+        self.gridLayout_19 = QtWidgets.QGridLayout(self.frRightInfo)
+        self.gridLayout_19.setObjectName("gridLayout_19")
+        self.frTmpContrib = QtWidgets.QFrame(self.frRightInfo)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frTmpContrib.sizePolicy().hasHeightForWidth())
+        self.frTmpContrib.setSizePolicy(sizePolicy)
+        self.frTmpContrib.setMinimumSize(QtCore.QSize(270, 0))
+        self.frTmpContrib.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTmpContrib.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTmpContrib.setObjectName("frTmpContrib")
+        self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.frTmpContrib)
+        self.verticalLayout_7.setContentsMargins(8, 8, 8, 8)
+        self.verticalLayout_7.setSpacing(0)
+        self.verticalLayout_7.setObjectName("verticalLayout_7")
+        self.lbInfoTmpContribuicao = QtWidgets.QLabel(self.frTmpContrib)
+        self.lbInfoTmpContribuicao.setObjectName("lbInfoTmpContribuicao")
+        self.verticalLayout_7.addWidget(self.lbInfoTmpContribuicao)
+        self.gridLayout_19.addWidget(self.frTmpContrib, 0, 0, 1, 1)
+        self.frame_8 = QtWidgets.QFrame(self.frRightInfo)
+        self.frame_8.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_8.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_8.setObjectName("frame_8")
+        self.gridLayout_18 = QtWidgets.QGridLayout(self.frame_8)
+        self.gridLayout_18.setObjectName("gridLayout_18")
+        self.lbInfoTpAte94 = QtWidgets.QLabel(self.frame_8)
+        self.lbInfoTpAte94.setObjectName("lbInfoTpAte94")
+        self.gridLayout_18.addWidget(self.lbInfoTpAte94, 0, 0, 1, 2)
+        self.lbTpAte94 = QtWidgets.QLabel(self.frame_8)
+        self.lbTpAte94.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbTpAte94.setObjectName("lbTpAte94")
+        self.gridLayout_18.addWidget(self.lbTpAte94, 1, 0, 1, 2)
+        self.lbInfoTpAte98 = QtWidgets.QLabel(self.frame_8)
+        self.lbInfoTpAte98.setObjectName("lbInfoTpAte98")
+        self.gridLayout_18.addWidget(self.lbInfoTpAte98, 2, 0, 1, 2)
+        self.lbInfoTpAte2019 = QtWidgets.QLabel(self.frame_8)
+        self.lbInfoTpAte2019.setObjectName("lbInfoTpAte2019")
+        self.gridLayout_18.addWidget(self.lbInfoTpAte2019, 4, 0, 1, 2)
+        self.lbTpAte2019 = QtWidgets.QLabel(self.frame_8)
+        self.lbTpAte2019.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbTpAte2019.setObjectName("lbTpAte2019")
+        self.gridLayout_18.addWidget(self.lbTpAte2019, 5, 0, 1, 2)
+        self.lbInfoTpAteHoje = QtWidgets.QLabel(self.frame_8)
+        self.lbInfoTpAteHoje.setObjectName("lbInfoTpAteHoje")
+        self.gridLayout_18.addWidget(self.lbInfoTpAteHoje, 6, 0, 1, 2)
+        self.lbTpAteHoje = QtWidgets.QLabel(self.frame_8)
+        self.lbTpAteHoje.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbTpAteHoje.setObjectName("lbTpAteHoje")
+        self.gridLayout_18.addWidget(self.lbTpAteHoje, 7, 0, 1, 2)
+        self.lbTpAte98 = QtWidgets.QLabel(self.frame_8)
+        self.lbTpAte98.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbTpAte98.setObjectName("lbTpAte98")
+        self.gridLayout_18.addWidget(self.lbTpAte98, 3, 0, 1, 2)
+        self.gridLayout_19.addWidget(self.frame_8, 1, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.frRightInfo, 0, 2, 1, 1, QtCore.Qt.AlignTop)
+        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_8.addItem(spacerItem3, 0, 1, 1, 1)
+        spacerItem4 = QtWidgets.QSpacerItem(24, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_8.addItem(spacerItem4, 0, 3, 1, 1)
         self.stkCliente.addWidget(self.pgEmpresas)
         self.pgContribuicoes = QtWidgets.QWidget()
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -418,6 +653,101 @@ class Ui_wdgResumoCnis(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pgContribuicoes.sizePolicy().hasHeightForWidth())
         self.pgContribuicoes.setSizePolicy(sizePolicy)
+        self.pgContribuicoes.setStyleSheet("/*-------------------------------- Push Button -----------------------------------------*/\n"
+"#pbInserirContrib, #pbSalvarSelecionados {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    background-color: white;\n"
+"    \n"
+"    border: 2px solid #3F4E8C;\n"
+"    border-radius: 8px;\n"
+"    padding: 6px;\n"
+"}\n"
+"\n"
+"/*-------------------------------- Labels -----------------------------------------*/\n"
+"#lbNomeEmp {\n"
+"    font: 15pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    font-weight: 750;\n"
+"    line-height: 24px;\n"
+"\n"
+"    margin: 8px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"#lbCNPJouNB, #lbDataInicio, \n"
+"#lbDataFim, #lbInfoContribuicao,\n"
+"#lbInsalubridade, #lbDeficiencia {\n"
+"    font: 11pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    font-weight: 120;\n"
+"    line-height: 24px;\n"
+"\n"
+"    margin: 2px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"#lbInfoTempoEspecial {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"    \n"
+"    padding: 6px;\n"
+"}\n"
+"\n"
+"#lbInfoTpEspecial, #lbInfoTpDeficiencia,\n"
+"#lbInfoTpNormal {\n"
+"    font: 11pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    font-weight: 120;\n"
+"    line-height: 24px;\n"
+"\n"
+"    margin: 2px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"#lbTpEspecial, #lbTpDeficiencia,\n"
+"#lbTpNormal {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    font-weight: 750;\n"
+"    line-height: 24px;\n"
+"\n"
+"    margin: 2px 0px 0px 0px;\n"
+"}\n"
+"/*-------------------------------- Frame -----------------------------------------*/\n"
+"#frInfoTempoEsp {\n"
+"    background-color: #3F4E8C;\n"
+"    \n"
+"    border: 0px solid none;\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
+"#frTempoEspecial, #frInfoEmp, #frImportante {\n"
+"    background-color: white;\n"
+"    border-radius: 8px;\n"
+"\n"
+"    border: 0px solid none;\n"
+"}\n"
+"\n"
+"#frBgFirula {\n"
+"    background-color: orange;\n"
+"    border-radius: 8px;\n"
+"\n"
+"    border: 0px solid none;\n"
+"}\n"
+"\n"
+"#frFaltaData {\n"
+"    background-image: url(:/opcoes/blueFaltaInfo.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"}\n"
+"\n"
+"#frInsalubridade {\n"
+"    background-image: url(:/opcoes/blueInsalubridade.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"}")
         self.pgContribuicoes.setObjectName("pgContribuicoes")
         self.gridLayout_6 = QtWidgets.QGridLayout(self.pgContribuicoes)
         self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
@@ -430,28 +760,125 @@ class Ui_wdgResumoCnis(object):
         self.gridLayout_5 = QtWidgets.QGridLayout(self.frInfoPrincipal)
         self.gridLayout_5.setContentsMargins(-1, 0, -1, -1)
         self.gridLayout_5.setObjectName("gridLayout_5")
-        self.tblContribuicoes = QtWidgets.QTableWidget(self.frInfoPrincipal)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
+        self.frTblContribuicoes = QtWidgets.QFrame(self.frInfoPrincipal)
+        self.frTblContribuicoes.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTblContribuicoes.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTblContribuicoes.setObjectName("frTblContribuicoes")
+        self.gridLayout_16 = QtWidgets.QGridLayout(self.frTblContribuicoes)
+        self.gridLayout_16.setContentsMargins(-1, 9, 16, 4)
+        self.gridLayout_16.setHorizontalSpacing(24)
+        self.gridLayout_16.setObjectName("gridLayout_16")
+        self.frTempoEspecial = QtWidgets.QFrame(self.frTblContribuicoes)
+        self.frTempoEspecial.setMaximumSize(QtCore.QSize(300, 16777215))
+        self.frTempoEspecial.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTempoEspecial.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTempoEspecial.setObjectName("frTempoEspecial")
+        self.gridLayout_15 = QtWidgets.QGridLayout(self.frTempoEspecial)
+        self.gridLayout_15.setContentsMargins(-1, 0, -1, -1)
+        self.gridLayout_15.setObjectName("gridLayout_15")
+        self.cbxDeficiencia = QtWidgets.QComboBox(self.frTempoEspecial)
+        self.cbxDeficiencia.setMinimumSize(QtCore.QSize(0, 30))
+        self.cbxDeficiencia.setObjectName("cbxDeficiencia")
+        self.gridLayout_15.addWidget(self.cbxDeficiencia, 5, 1, 1, 1)
+        self.lbDeficiencia = QtWidgets.QLabel(self.frTempoEspecial)
+        self.lbDeficiencia.setObjectName("lbDeficiencia")
+        self.gridLayout_15.addWidget(self.lbDeficiencia, 5, 0, 1, 1)
+        self.frame_7 = QtWidgets.QFrame(self.frTempoEspecial)
+        self.frame_7.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_7.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_7.setObjectName("frame_7")
+        self.gridLayout_17 = QtWidgets.QGridLayout(self.frame_7)
+        self.gridLayout_17.setContentsMargins(0, 8, 0, -1)
+        self.gridLayout_17.setObjectName("gridLayout_17")
+        self.lbInfoTpEspecial = QtWidgets.QLabel(self.frame_7)
+        self.lbInfoTpEspecial.setObjectName("lbInfoTpEspecial")
+        self.gridLayout_17.addWidget(self.lbInfoTpEspecial, 0, 0, 1, 2)
+        self.lbInfoTpDeficiencia = QtWidgets.QLabel(self.frame_7)
+        self.lbInfoTpDeficiencia.setObjectName("lbInfoTpDeficiencia")
+        self.gridLayout_17.addWidget(self.lbInfoTpDeficiencia, 2, 0, 1, 2)
+        self.lbTpDeficiencia = QtWidgets.QLabel(self.frame_7)
+        self.lbTpDeficiencia.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbTpDeficiencia.setObjectName("lbTpDeficiencia")
+        self.gridLayout_17.addWidget(self.lbTpDeficiencia, 3, 0, 1, 2)
+        self.lbTpEspecial = QtWidgets.QLabel(self.frame_7)
+        self.lbTpEspecial.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbTpEspecial.setObjectName("lbTpEspecial")
+        self.gridLayout_17.addWidget(self.lbTpEspecial, 1, 0, 1, 2)
+        self.lbTpNormal = QtWidgets.QLabel(self.frame_7)
+        self.lbTpNormal.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbTpNormal.setObjectName("lbTpNormal")
+        self.gridLayout_17.addWidget(self.lbTpNormal, 5, 0, 1, 2)
+        self.lbInfoTpNormal = QtWidgets.QLabel(self.frame_7)
+        self.lbInfoTpNormal.setObjectName("lbInfoTpNormal")
+        self.gridLayout_17.addWidget(self.lbInfoTpNormal, 4, 0, 1, 2)
+        self.gridLayout_15.addWidget(self.frame_7, 0, 0, 1, 2)
+        self.frInfoTempoEsp = QtWidgets.QFrame(self.frTempoEspecial)
+        self.frInfoTempoEsp.setMinimumSize(QtCore.QSize(0, 50))
+        self.frInfoTempoEsp.setMaximumSize(QtCore.QSize(16777215, 70))
+        self.frInfoTempoEsp.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfoTempoEsp.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoTempoEsp.setObjectName("frInfoTempoEsp")
+        self.horizontalLayout_15 = QtWidgets.QHBoxLayout(self.frInfoTempoEsp)
+        self.horizontalLayout_15.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_15.setSpacing(0)
+        self.horizontalLayout_15.setObjectName("horizontalLayout_15")
+        self.lbInfoTempoEspecial = QtWidgets.QLabel(self.frInfoTempoEsp)
+        self.lbInfoTempoEspecial.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbInfoTempoEspecial.setObjectName("lbInfoTempoEspecial")
+        self.horizontalLayout_15.addWidget(self.lbInfoTempoEspecial)
+        self.gridLayout_15.addWidget(self.frInfoTempoEsp, 2, 0, 1, 2)
+        self.cbxInsalubridade = QtWidgets.QComboBox(self.frTempoEspecial)
+        self.cbxInsalubridade.setMinimumSize(QtCore.QSize(0, 30))
+        self.cbxInsalubridade.setObjectName("cbxInsalubridade")
+        self.gridLayout_15.addWidget(self.cbxInsalubridade, 4, 1, 1, 1)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_15.addItem(spacerItem5, 3, 0, 1, 2)
+        self.lbInsalubridade = QtWidgets.QLabel(self.frTempoEspecial)
+        self.lbInsalubridade.setObjectName("lbInsalubridade")
+        self.gridLayout_15.addWidget(self.lbInsalubridade, 4, 0, 1, 1)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_15.addItem(spacerItem6, 6, 0, 1, 2)
+        self.pbSalvarSelecionados = QtWidgets.QPushButton(self.frTempoEspecial)
+        self.pbSalvarSelecionados.setMinimumSize(QtCore.QSize(240, 40))
+        self.pbSalvarSelecionados.setMaximumSize(QtCore.QSize(13215465, 16777215))
+        self.pbSalvarSelecionados.setObjectName("pbSalvarSelecionados")
+        self.gridLayout_15.addWidget(self.pbSalvarSelecionados, 7, 0, 1, 2)
+        spacerItem7 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_15.addItem(spacerItem7, 1, 0, 1, 2)
+        self.gridLayout_16.addWidget(self.frTempoEspecial, 0, 3, 3, 1)
+        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_16.addItem(spacerItem8, 0, 2, 2, 1)
+        self.pbInserirContrib = QtWidgets.QPushButton(self.frTblContribuicoes)
+        self.pbInserirContrib.setMinimumSize(QtCore.QSize(80, 0))
+        self.pbInserirContrib.setMaximumSize(QtCore.QSize(250, 16777215))
+        self.pbInserirContrib.setObjectName("pbInserirContrib")
+        self.gridLayout_16.addWidget(self.pbInserirContrib, 0, 1, 1, 1)
+        spacerItem9 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_16.addItem(spacerItem9, 3, 3, 1, 1)
+        self.tblContribuicoes = QtWidgets.QTableWidget(self.frTblContribuicoes)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.tblContribuicoes.sizePolicy().hasHeightForWidth())
         self.tblContribuicoes.setSizePolicy(sizePolicy)
+        self.tblContribuicoes.setMaximumSize(QtCore.QSize(16777215, 600))
         self.tblContribuicoes.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.tblContribuicoes.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
+        self.tblContribuicoes.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.tblContribuicoes.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tblContribuicoes.setProperty("showDropIndicator", False)
         self.tblContribuicoes.setDragDropOverwriteMode(False)
         self.tblContribuicoes.setAlternatingRowColors(True)
-        self.tblContribuicoes.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+        self.tblContribuicoes.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
         self.tblContribuicoes.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.tblContribuicoes.setShowGrid(False)
         self.tblContribuicoes.setGridStyle(QtCore.Qt.NoPen)
         self.tblContribuicoes.setObjectName("tblContribuicoes")
-        self.tblContribuicoes.setColumnCount(6)
+        self.tblContribuicoes.setColumnCount(8)
         self.tblContribuicoes.setRowCount(1)
         item = QtWidgets.QTableWidgetItem()
         self.tblContribuicoes.setVerticalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
+        item.setBackground(QtGui.QColor(255, 255, 255))
         self.tblContribuicoes.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
@@ -519,61 +946,140 @@ class Ui_wdgResumoCnis(object):
         item.setForeground(brush)
         self.tblContribuicoes.setHorizontalHeaderItem(5, item)
         item = QtWidgets.QTableWidgetItem()
-        self.tblContribuicoes.setItem(0, 0, item)
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblContribuicoes.setHorizontalHeaderItem(6, item)
         item = QtWidgets.QTableWidgetItem()
-        self.tblContribuicoes.setItem(0, 1, item)
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblContribuicoes.setHorizontalHeaderItem(7, item)
         item = QtWidgets.QTableWidgetItem()
         self.tblContribuicoes.setItem(0, 2, item)
         item = QtWidgets.QTableWidgetItem()
         self.tblContribuicoes.setItem(0, 3, item)
         item = QtWidgets.QTableWidgetItem()
         self.tblContribuicoes.setItem(0, 4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tblContribuicoes.setItem(0, 5, item)
         self.tblContribuicoes.horizontalHeader().setVisible(False)
         self.tblContribuicoes.horizontalHeader().setCascadingSectionResizes(True)
         self.tblContribuicoes.horizontalHeader().setMinimumSectionSize(70)
-        self.tblContribuicoes.horizontalHeader().setSortIndicatorShown(False)
+        self.tblContribuicoes.horizontalHeader().setSortIndicatorShown(True)
+        self.tblContribuicoes.horizontalHeader().setStretchLastSection(False)
         self.tblContribuicoes.verticalHeader().setVisible(False)
+        self.tblContribuicoes.verticalHeader().setCascadingSectionResizes(True)
+        self.tblContribuicoes.verticalHeader().setDefaultSectionSize(40)
         self.tblContribuicoes.verticalHeader().setHighlightSections(False)
-        self.gridLayout_5.addWidget(self.tblContribuicoes, 1, 0, 1, 1)
+        self.tblContribuicoes.verticalHeader().setMinimumSectionSize(25)
+        self.tblContribuicoes.verticalHeader().setSortIndicatorShown(True)
+        self.tblContribuicoes.verticalHeader().setStretchLastSection(False)
+        self.gridLayout_16.addWidget(self.tblContribuicoes, 1, 0, 3, 2)
+        self.gridLayout_5.addWidget(self.frTblContribuicoes, 1, 0, 1, 1)
         self.frInfoResumo = QtWidgets.QFrame(self.frInfoPrincipal)
+        self.frInfoResumo.setMinimumSize(QtCore.QSize(0, 75))
+        self.frInfoResumo.setMaximumSize(QtCore.QSize(16777215, 98))
         self.frInfoResumo.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frInfoResumo.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frInfoResumo.setObjectName("frInfoResumo")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frInfoResumo)
-        self.horizontalLayout_4.setContentsMargins(-1, 0, -1, 0)
+        self.horizontalLayout_4.setContentsMargins(-1, 9, -1, 9)
+        self.horizontalLayout_4.setSpacing(42)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.frInfoEmp = QtWidgets.QFrame(self.frInfoResumo)
-        self.frInfoEmp.setMinimumSize(QtCore.QSize(450, 0))
+        self.frBgFirula = QtWidgets.QFrame(self.frInfoResumo)
+        self.frBgFirula.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frBgFirula.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frBgFirula.setObjectName("frBgFirula")
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frBgFirula)
+        self.horizontalLayout_6.setContentsMargins(8, 0, 0, 0)
+        self.horizontalLayout_6.setSpacing(0)
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.frInfoEmp = QtWidgets.QFrame(self.frBgFirula)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frInfoEmp.sizePolicy().hasHeightForWidth())
+        self.frInfoEmp.setSizePolicy(sizePolicy)
+        self.frInfoEmp.setMinimumSize(QtCore.QSize(550, 0))
         self.frInfoEmp.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frInfoEmp.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frInfoEmp.setObjectName("frInfoEmp")
         self.gridLayout_7 = QtWidgets.QGridLayout(self.frInfoEmp)
-        self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_7.setContentsMargins(4, 4, 4, 4)
+        self.gridLayout_7.setHorizontalSpacing(8)
+        self.gridLayout_7.setVerticalSpacing(2)
         self.gridLayout_7.setObjectName("gridLayout_7")
-        self.lbNomeEmp = QtWidgets.QLabel(self.frInfoEmp)
-        self.lbNomeEmp.setWordWrap(True)
-        self.lbNomeEmp.setObjectName("lbNomeEmp")
-        self.gridLayout_7.addWidget(self.lbNomeEmp, 0, 0, 1, 2)
-        self.lbDataInicio = QtWidgets.QLabel(self.frInfoEmp)
-        self.lbDataInicio.setObjectName("lbDataInicio")
-        self.gridLayout_7.addWidget(self.lbDataInicio, 3, 0, 1, 1, QtCore.Qt.AlignBottom)
-        self.lbCNPJouNB = QtWidgets.QLabel(self.frInfoEmp)
-        self.lbCNPJouNB.setObjectName("lbCNPJouNB")
-        self.gridLayout_7.addWidget(self.lbCNPJouNB, 1, 0, 1, 1, QtCore.Qt.AlignTop)
         self.lbDataFim = QtWidgets.QLabel(self.frInfoEmp)
         self.lbDataFim.setObjectName("lbDataFim")
-        self.gridLayout_7.addWidget(self.lbDataFim, 3, 1, 1, 1, QtCore.Qt.AlignLeft|QtCore.Qt.AlignBottom)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 12, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_7.addItem(spacerItem3, 2, 0, 1, 1)
-        self.horizontalLayout_4.addWidget(self.frInfoEmp)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem4)
-        self.pbInserirContrib = QtWidgets.QPushButton(self.frInfoResumo)
-        self.pbInserirContrib.setMinimumSize(QtCore.QSize(80, 0))
-        self.pbInserirContrib.setObjectName("pbInserirContrib")
-        self.horizontalLayout_4.addWidget(self.pbInserirContrib)
+        self.gridLayout_7.addWidget(self.lbDataFim, 3, 1, 1, 1)
+        self.lbInfoContribuicao = QtWidgets.QLabel(self.frInfoEmp)
+        self.lbInfoContribuicao.setObjectName("lbInfoContribuicao")
+        self.gridLayout_7.addWidget(self.lbInfoContribuicao, 2, 1, 1, 1)
+        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_7.addItem(spacerItem10, 2, 2, 1, 1)
+        self.lbCNPJouNB = QtWidgets.QLabel(self.frInfoEmp)
+        self.lbCNPJouNB.setObjectName("lbCNPJouNB")
+        self.gridLayout_7.addWidget(self.lbCNPJouNB, 2, 0, 1, 1)
+        self.lbNomeEmp = QtWidgets.QLabel(self.frInfoEmp)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbNomeEmp.sizePolicy().hasHeightForWidth())
+        self.lbNomeEmp.setSizePolicy(sizePolicy)
+        self.lbNomeEmp.setMinimumSize(QtCore.QSize(400, 0))
+        self.lbNomeEmp.setScaledContents(True)
+        self.lbNomeEmp.setWordWrap(True)
+        self.lbNomeEmp.setObjectName("lbNomeEmp")
+        self.gridLayout_7.addWidget(self.lbNomeEmp, 0, 0, 1, 5)
+        self.lbDataInicio = QtWidgets.QLabel(self.frInfoEmp)
+        self.lbDataInicio.setObjectName("lbDataInicio")
+        self.gridLayout_7.addWidget(self.lbDataInicio, 3, 0, 1, 1)
+        self.frImportante = QtWidgets.QFrame(self.frInfoEmp)
+        self.frImportante.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frImportante.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frImportante.setObjectName("frImportante")
+        self.horizontalLayout_17 = QtWidgets.QHBoxLayout(self.frImportante)
+        self.horizontalLayout_17.setObjectName("horizontalLayout_17")
+        self.frFaltaData = QtWidgets.QFrame(self.frImportante)
+        self.frFaltaData.setMinimumSize(QtCore.QSize(24, 24))
+        self.frFaltaData.setMaximumSize(QtCore.QSize(24, 24))
+        self.frFaltaData.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frFaltaData.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frFaltaData.setObjectName("frFaltaData")
+        self.horizontalLayout_17.addWidget(self.frFaltaData)
+        self.lineImportante = QtWidgets.QFrame(self.frImportante)
+        self.lineImportante.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.lineImportante.setLineWidth(1)
+        self.lineImportante.setFrameShape(QtWidgets.QFrame.VLine)
+        self.lineImportante.setObjectName("lineImportante")
+        self.horizontalLayout_17.addWidget(self.lineImportante)
+        self.frInsalubridade = QtWidgets.QFrame(self.frImportante)
+        self.frInsalubridade.setMinimumSize(QtCore.QSize(24, 24))
+        self.frInsalubridade.setMaximumSize(QtCore.QSize(24, 24))
+        self.frInsalubridade.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInsalubridade.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInsalubridade.setObjectName("frInsalubridade")
+        self.horizontalLayout_17.addWidget(self.frInsalubridade)
+        self.gridLayout_7.addWidget(self.frImportante, 2, 4, 2, 1)
+        self.horizontalLayout_6.addWidget(self.frInfoEmp)
+        self.horizontalLayout_4.addWidget(self.frBgFirula)
+        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem11)
         self.gridLayout_5.addWidget(self.frInfoResumo, 0, 0, 1, 1)
         self.gridLayout_6.addWidget(self.frInfoPrincipal, 0, 0, 1, 1)
         self.stkCliente.addWidget(self.pgContribuicoes)
@@ -583,13 +1089,808 @@ class Ui_wdgResumoCnis(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pgBeneficios.sizePolicy().hasHeightForWidth())
         self.pgBeneficios.setSizePolicy(sizePolicy)
+        self.pgBeneficios.setStyleSheet("/*---------------------------- Push Button ----------------------------------*/\n"
+"#pbInserirBeneficios {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    border: 2px solid #3F4E8C;\n"
+"    border-radius: 8px;\n"
+"    padding: 6px;\n"
+"}\n"
+"\n"
+"/*-------------------------------- Labels -----------------------------------------*/\n"
+"#lbNomeEmpBene {\n"
+"    font: 15pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    font-weight: 750;\n"
+"    line-height: 24px;\n"
+"\n"
+"    margin: 8px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"#lbCNPJouNBBene, \n"
+"#lbDataInicioBene, #lbDataFimBene, \n"
+"#lbSituacao, #lbInfoBeneficio {\n"
+"    font: 11pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    font-weight: 120;\n"
+"    line-height: 24px;\n"
+"\n"
+"    margin: 2px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"/* ------------------------ Frame ------------------------ */\n"
+"#frBgFirulaBene {\n"
+"    background-color: orange;\n"
+"    border-radius: 8px;\n"
+"\n"
+"    border: 0px solid none;\n"
+"}\n"
+"\n"
+"#frInfoCabecalhoBene {\n"
+"    background-color: white;\n"
+"    border-radius: 8px;\n"
+"\n"
+"    border: 0px solid none;\n"
+"}")
         self.pgBeneficios.setObjectName("pgBeneficios")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.pgBeneficios)
-        self.gridLayout_3.setContentsMargins(-1, 0, -1, 0)
-        self.gridLayout_3.setHorizontalSpacing(32)
-        self.gridLayout_3.setVerticalSpacing(16)
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_3.setHorizontalSpacing(0)
         self.gridLayout_3.setObjectName("gridLayout_3")
+        self.frInfoPrincipalBene = QtWidgets.QFrame(self.pgBeneficios)
+        self.frInfoPrincipalBene.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfoPrincipalBene.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoPrincipalBene.setObjectName("frInfoPrincipalBene")
+        self.gridLayout_10 = QtWidgets.QGridLayout(self.frInfoPrincipalBene)
+        self.gridLayout_10.setContentsMargins(-1, 0, -1, -1)
+        self.gridLayout_10.setObjectName("gridLayout_10")
+        self.frInfoResumoBene = QtWidgets.QFrame(self.frInfoPrincipalBene)
+        self.frInfoResumoBene.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfoResumoBene.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoResumoBene.setObjectName("frInfoResumoBene")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.frInfoResumoBene)
+        self.horizontalLayout_8.setContentsMargins(-1, 8, -1, 8)
+        self.horizontalLayout_8.setSpacing(42)
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.frBgFirulaBene = QtWidgets.QFrame(self.frInfoResumoBene)
+        self.frBgFirulaBene.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frBgFirulaBene.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frBgFirulaBene.setObjectName("frBgFirulaBene")
+        self.horizontalLayout_16 = QtWidgets.QHBoxLayout(self.frBgFirulaBene)
+        self.horizontalLayout_16.setContentsMargins(8, 0, 0, 0)
+        self.horizontalLayout_16.setSpacing(0)
+        self.horizontalLayout_16.setObjectName("horizontalLayout_16")
+        self.frInfoCabecalhoBene = QtWidgets.QFrame(self.frBgFirulaBene)
+        self.frInfoCabecalhoBene.setMinimumSize(QtCore.QSize(550, 0))
+        self.frInfoCabecalhoBene.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frInfoCabecalhoBene.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoCabecalhoBene.setObjectName("frInfoCabecalhoBene")
+        self.gridLayout_9 = QtWidgets.QGridLayout(self.frInfoCabecalhoBene)
+        self.gridLayout_9.setContentsMargins(4, 4, 0, 4)
+        self.gridLayout_9.setVerticalSpacing(3)
+        self.gridLayout_9.setObjectName("gridLayout_9")
+        self.lbCNPJouNBBene = QtWidgets.QLabel(self.frInfoCabecalhoBene)
+        self.lbCNPJouNBBene.setObjectName("lbCNPJouNBBene")
+        self.gridLayout_9.addWidget(self.lbCNPJouNBBene, 1, 0, 1, 1)
+        self.lbSituacao = QtWidgets.QLabel(self.frInfoCabecalhoBene)
+        self.lbSituacao.setObjectName("lbSituacao")
+        self.gridLayout_9.addWidget(self.lbSituacao, 2, 2, 1, 1)
+        self.lbNomeEmpBene = QtWidgets.QLabel(self.frInfoCabecalhoBene)
+        self.lbNomeEmpBene.setMinimumSize(QtCore.QSize(400, 0))
+        self.lbNomeEmpBene.setWordWrap(True)
+        self.lbNomeEmpBene.setObjectName("lbNomeEmpBene")
+        self.gridLayout_9.addWidget(self.lbNomeEmpBene, 0, 0, 1, 3)
+        self.lbDataFimBene = QtWidgets.QLabel(self.frInfoCabecalhoBene)
+        self.lbDataFimBene.setObjectName("lbDataFimBene")
+        self.gridLayout_9.addWidget(self.lbDataFimBene, 2, 1, 1, 1)
+        self.lbInfoBeneficio = QtWidgets.QLabel(self.frInfoCabecalhoBene)
+        self.lbInfoBeneficio.setObjectName("lbInfoBeneficio")
+        self.gridLayout_9.addWidget(self.lbInfoBeneficio, 1, 2, 1, 1)
+        self.lbDataInicioBene = QtWidgets.QLabel(self.frInfoCabecalhoBene)
+        self.lbDataInicioBene.setObjectName("lbDataInicioBene")
+        self.gridLayout_9.addWidget(self.lbDataInicioBene, 2, 0, 1, 1)
+        self.horizontalLayout_16.addWidget(self.frInfoCabecalhoBene)
+        self.horizontalLayout_8.addWidget(self.frBgFirulaBene)
+        self.pbInserirBeneficios = QtWidgets.QPushButton(self.frInfoResumoBene)
+        self.pbInserirBeneficios.setMinimumSize(QtCore.QSize(80, 0))
+        self.pbInserirBeneficios.setObjectName("pbInserirBeneficios")
+        self.horizontalLayout_8.addWidget(self.pbInserirBeneficios)
+        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_8.addItem(spacerItem12)
+        self.gridLayout_10.addWidget(self.frInfoResumoBene, 0, 0, 1, 1)
+        self.frTblBeneficios = QtWidgets.QFrame(self.frInfoPrincipalBene)
+        self.frTblBeneficios.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTblBeneficios.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTblBeneficios.setObjectName("frTblBeneficios")
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.frTblBeneficios)
+        self.horizontalLayout_7.setContentsMargins(-1, 24, -1, 4)
+        self.horizontalLayout_7.setSpacing(0)
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.tblBeneficios = QtWidgets.QTableWidget(self.frTblBeneficios)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.tblBeneficios.sizePolicy().hasHeightForWidth())
+        self.tblBeneficios.setSizePolicy(sizePolicy)
+        self.tblBeneficios.setMaximumSize(QtCore.QSize(16777215, 600))
+        self.tblBeneficios.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.tblBeneficios.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
+        self.tblBeneficios.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tblBeneficios.setProperty("showDropIndicator", False)
+        self.tblBeneficios.setDragDropOverwriteMode(False)
+        self.tblBeneficios.setAlternatingRowColors(True)
+        self.tblBeneficios.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+        self.tblBeneficios.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.tblBeneficios.setShowGrid(False)
+        self.tblBeneficios.setGridStyle(QtCore.Qt.NoPen)
+        self.tblBeneficios.setObjectName("tblBeneficios")
+        self.tblBeneficios.setColumnCount(6)
+        self.tblBeneficios.setRowCount(1)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblBeneficios.setVerticalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        self.tblBeneficios.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblBeneficios.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblBeneficios.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblBeneficios.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblBeneficios.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblBeneficios.setHorizontalHeaderItem(5, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblBeneficios.setItem(0, 1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblBeneficios.setItem(0, 2, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tblBeneficios.setItem(0, 3, item)
+        self.tblBeneficios.horizontalHeader().setVisible(False)
+        self.tblBeneficios.horizontalHeader().setCascadingSectionResizes(True)
+        self.tblBeneficios.horizontalHeader().setMinimumSectionSize(70)
+        self.tblBeneficios.horizontalHeader().setSortIndicatorShown(False)
+        self.tblBeneficios.horizontalHeader().setStretchLastSection(False)
+        self.tblBeneficios.verticalHeader().setVisible(False)
+        self.tblBeneficios.verticalHeader().setHighlightSections(False)
+        self.tblBeneficios.verticalHeader().setSortIndicatorShown(True)
+        self.tblBeneficios.verticalHeader().setStretchLastSection(False)
+        self.horizontalLayout_7.addWidget(self.tblBeneficios)
+        self.gridLayout_10.addWidget(self.frTblBeneficios, 1, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.frInfoPrincipalBene, 0, 0, 1, 1)
         self.stkCliente.addWidget(self.pgBeneficios)
+        self.pgCadastroVinculo = QtWidgets.QWidget()
+        self.pgCadastroVinculo.setStyleSheet("/*-------------------------------- Labels -----------------------------------------*/\n"
+"QLabel {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"#lbInfoCadastro {\n"
+"    font: 18pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    font-weight: 750;\n"
+"    line-height: 24px;\n"
+"\n"
+"    margin: 8px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"/*---------------------------- Push Button ----------------------------------*/\n"
+"#pbCancelar {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    border: 2px solid #3F4E8C;\n"
+"    border-radius: 8px;\n"
+"    padding: 6px;\n"
+"}\n"
+"\n"
+"\n"
+"#pbSeguir {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"\n"
+"    background-color: #3F4E8C; \n"
+"    \n"
+"    border-radius: 8px;\n"
+"    padding: 6px;\n"
+"}\n"
+"\n"
+"#pbBuscaIndicador{\n"
+"    background-color: transparent;\n"
+"\n"
+"    border: 0px solid none;\n"
+"    \n"
+"    background-image: url(:/opcoes/busca.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"}")
+        self.pgCadastroVinculo.setObjectName("pgCadastroVinculo")
+        self.gridLayout_11 = QtWidgets.QGridLayout(self.pgCadastroVinculo)
+        self.gridLayout_11.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_11.setHorizontalSpacing(0)
+        self.gridLayout_11.setObjectName("gridLayout_11")
+        self.frCadastroPrincipal = QtWidgets.QFrame(self.pgCadastroVinculo)
+        self.frCadastroPrincipal.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frCadastroPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frCadastroPrincipal.setObjectName("frCadastroPrincipal")
+        self.gridLayout_12 = QtWidgets.QGridLayout(self.frCadastroPrincipal)
+        self.gridLayout_12.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_12.setVerticalSpacing(24)
+        self.gridLayout_12.setObjectName("gridLayout_12")
+        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_12.addItem(spacerItem13, 0, 0, 3, 1)
+        self.frAcoes = QtWidgets.QFrame(self.frCadastroPrincipal)
+        self.frAcoes.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frAcoes.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frAcoes.setObjectName("frAcoes")
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.frAcoes)
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.pbSeguir = QtWidgets.QPushButton(self.frAcoes)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pbSeguir.sizePolicy().hasHeightForWidth())
+        self.pbSeguir.setSizePolicy(sizePolicy)
+        self.pbSeguir.setMinimumSize(QtCore.QSize(160, 45))
+        self.pbSeguir.setMaximumSize(QtCore.QSize(160, 45))
+        self.pbSeguir.setObjectName("pbSeguir")
+        self.horizontalLayout_9.addWidget(self.pbSeguir)
+        self.pbCancelar = QtWidgets.QPushButton(self.frAcoes)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pbCancelar.sizePolicy().hasHeightForWidth())
+        self.pbCancelar.setSizePolicy(sizePolicy)
+        self.pbCancelar.setMinimumSize(QtCore.QSize(160, 45))
+        self.pbCancelar.setMaximumSize(QtCore.QSize(160, 45))
+        self.pbCancelar.setObjectName("pbCancelar")
+        self.horizontalLayout_9.addWidget(self.pbCancelar)
+        self.gridLayout_12.addWidget(self.frAcoes, 3, 1, 1, 1)
+        spacerItem14 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_12.addItem(spacerItem14, 0, 3, 3, 1)
+        self.frTipoVinculo = QtWidgets.QFrame(self.frCadastroPrincipal)
+        self.frTipoVinculo.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frTipoVinculo.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frTipoVinculo.setObjectName("frTipoVinculo")
+        self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.frTipoVinculo)
+        self.horizontalLayout_10.setContentsMargins(36, 0, 0, 0)
+        self.horizontalLayout_10.setObjectName("horizontalLayout_10")
+        self.rbContribuicao = QtWidgets.QRadioButton(self.frTipoVinculo)
+        self.rbContribuicao.setObjectName("rbContribuicao")
+        self.horizontalLayout_10.addWidget(self.rbContribuicao)
+        self.rbBeneficio = QtWidgets.QRadioButton(self.frTipoVinculo)
+        self.rbBeneficio.setObjectName("rbBeneficio")
+        self.horizontalLayout_10.addWidget(self.rbBeneficio)
+        self.gridLayout_12.addWidget(self.frTipoVinculo, 1, 1, 1, 1)
+        self.stkVinculo = QtWidgets.QStackedWidget(self.frCadastroPrincipal)
+        self.stkVinculo.setObjectName("stkVinculo")
+        self.pgContrib = QtWidgets.QWidget()
+        self.pgContrib.setObjectName("pgContrib")
+        self.gridLayout_13 = QtWidgets.QGridLayout(self.pgContrib)
+        self.gridLayout_13.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_13.setObjectName("gridLayout_13")
+        self.lbInfoCnpj = QtWidgets.QLabel(self.pgContrib)
+        self.lbInfoCnpj.setObjectName("lbInfoCnpj")
+        self.gridLayout_13.addWidget(self.lbInfoCnpj, 3, 0, 1, 1)
+        self.dtDataInicio = QtWidgets.QDateEdit(self.pgContrib)
+        self.dtDataInicio.setMinimumSize(QtCore.QSize(0, 35))
+        self.dtDataInicio.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.dtDataInicio.setCalendarPopup(True)
+        self.dtDataInicio.setObjectName("dtDataInicio")
+        self.gridLayout_13.addWidget(self.dtDataInicio, 10, 0, 1, 1)
+        self.lbInfoDataInicio = QtWidgets.QLabel(self.pgContrib)
+        self.lbInfoDataInicio.setObjectName("lbInfoDataInicio")
+        self.gridLayout_13.addWidget(self.lbInfoDataInicio, 9, 0, 1, 1)
+        self.leNomeEmp = QtWidgets.QLineEdit(self.pgContrib)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.leNomeEmp.sizePolicy().hasHeightForWidth())
+        self.leNomeEmp.setSizePolicy(sizePolicy)
+        self.leNomeEmp.setMinimumSize(QtCore.QSize(0, 35))
+        self.leNomeEmp.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.leNomeEmp.setObjectName("leNomeEmp")
+        self.gridLayout_13.addWidget(self.leNomeEmp, 1, 0, 1, 1)
+        spacerItem15 = QtWidgets.QSpacerItem(8, 8, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_13.addItem(spacerItem15, 2, 0, 1, 1)
+        self.dtDataFim = QtWidgets.QDateEdit(self.pgContrib)
+        self.dtDataFim.setMinimumSize(QtCore.QSize(0, 35))
+        self.dtDataFim.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.dtDataFim.setCalendarPopup(True)
+        self.dtDataFim.setObjectName("dtDataFim")
+        self.gridLayout_13.addWidget(self.dtDataFim, 13, 0, 1, 1)
+        self.lbInfoIndicadores = QtWidgets.QLabel(self.pgContrib)
+        self.lbInfoIndicadores.setObjectName("lbInfoIndicadores")
+        self.gridLayout_13.addWidget(self.lbInfoIndicadores, 15, 0, 1, 1)
+        spacerItem16 = QtWidgets.QSpacerItem(20, 8, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_13.addItem(spacerItem16, 5, 0, 1, 1)
+        self.lbInfoTpVinculo = QtWidgets.QLabel(self.pgContrib)
+        self.lbInfoTpVinculo.setObjectName("lbInfoTpVinculo")
+        self.gridLayout_13.addWidget(self.lbInfoTpVinculo, 6, 0, 1, 1)
+        self.frame_4 = QtWidgets.QFrame(self.pgContrib)
+        self.frame_4.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_4.setObjectName("frame_4")
+        self.horizontalLayout_14 = QtWidgets.QHBoxLayout(self.frame_4)
+        self.horizontalLayout_14.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_14.setSpacing(8)
+        self.horizontalLayout_14.setObjectName("horizontalLayout_14")
+        self.cbxIndicadores = QtWidgets.QComboBox(self.frame_4)
+        self.cbxIndicadores.setMinimumSize(QtCore.QSize(0, 40))
+        self.cbxIndicadores.setObjectName("cbxIndicadores")
+        self.horizontalLayout_14.addWidget(self.cbxIndicadores)
+        self.pbBuscaIndicador = QtWidgets.QPushButton(self.frame_4)
+        self.pbBuscaIndicador.setMinimumSize(QtCore.QSize(30, 30))
+        self.pbBuscaIndicador.setMaximumSize(QtCore.QSize(30, 30))
+        self.pbBuscaIndicador.setText("")
+        self.pbBuscaIndicador.setObjectName("pbBuscaIndicador")
+        self.horizontalLayout_14.addWidget(self.pbBuscaIndicador)
+        self.gridLayout_13.addWidget(self.frame_4, 16, 0, 1, 1, QtCore.Qt.AlignTop)
+        self.lbInfoNomeEmp = QtWidgets.QLabel(self.pgContrib)
+        self.lbInfoNomeEmp.setObjectName("lbInfoNomeEmp")
+        self.gridLayout_13.addWidget(self.lbInfoNomeEmp, 0, 0, 1, 1)
+        self.lbInfoDataFim = QtWidgets.QLabel(self.pgContrib)
+        self.lbInfoDataFim.setObjectName("lbInfoDataFim")
+        self.gridLayout_13.addWidget(self.lbInfoDataFim, 12, 0, 1, 1)
+        spacerItem17 = QtWidgets.QSpacerItem(20, 8, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_13.addItem(spacerItem17, 8, 0, 1, 1)
+        spacerItem18 = QtWidgets.QSpacerItem(20, 8, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_13.addItem(spacerItem18, 11, 0, 1, 1)
+        self.leCnpj = QtWidgets.QLineEdit(self.pgContrib)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.leCnpj.sizePolicy().hasHeightForWidth())
+        self.leCnpj.setSizePolicy(sizePolicy)
+        self.leCnpj.setMinimumSize(QtCore.QSize(0, 35))
+        self.leCnpj.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.leCnpj.setSizeIncrement(QtCore.QSize(0, 0))
+        self.leCnpj.setObjectName("leCnpj")
+        self.gridLayout_13.addWidget(self.leCnpj, 4, 0, 1, 1)
+        self.cbxTipoVinculo = QtWidgets.QComboBox(self.pgContrib)
+        self.cbxTipoVinculo.setMinimumSize(QtCore.QSize(0, 35))
+        self.cbxTipoVinculo.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.cbxTipoVinculo.setObjectName("cbxTipoVinculo")
+        self.gridLayout_13.addWidget(self.cbxTipoVinculo, 7, 0, 1, 1)
+        spacerItem19 = QtWidgets.QSpacerItem(20, 8, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_13.addItem(spacerItem19, 14, 0, 1, 1)
+        self.stkVinculo.addWidget(self.pgContrib)
+        self.pgBene = QtWidgets.QWidget()
+        self.pgBene.setObjectName("pgBene")
+        self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.pgBene)
+        self.verticalLayout_8.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_8.setSpacing(4)
+        self.verticalLayout_8.setObjectName("verticalLayout_8")
+        self.lbInfoEspecie = QtWidgets.QLabel(self.pgBene)
+        self.lbInfoEspecie.setObjectName("lbInfoEspecie")
+        self.verticalLayout_8.addWidget(self.lbInfoEspecie)
+        self.cbxEspecie = QtWidgets.QComboBox(self.pgBene)
+        self.cbxEspecie.setMinimumSize(QtCore.QSize(0, 35))
+        self.cbxEspecie.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.cbxEspecie.setObjectName("cbxEspecie")
+        self.verticalLayout_8.addWidget(self.cbxEspecie)
+        spacerItem20 = QtWidgets.QSpacerItem(20, 12, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.verticalLayout_8.addItem(spacerItem20)
+        self.lbInfoNb = QtWidgets.QLabel(self.pgBene)
+        self.lbInfoNb.setObjectName("lbInfoNb")
+        self.verticalLayout_8.addWidget(self.lbInfoNb)
+        self.leNb = QtWidgets.QLineEdit(self.pgBene)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.leNb.sizePolicy().hasHeightForWidth())
+        self.leNb.setSizePolicy(sizePolicy)
+        self.leNb.setMinimumSize(QtCore.QSize(0, 35))
+        self.leNb.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.leNb.setSizeIncrement(QtCore.QSize(0, 0))
+        self.leNb.setMaxLength(15)
+        self.leNb.setClearButtonEnabled(False)
+        self.leNb.setObjectName("leNb")
+        self.verticalLayout_8.addWidget(self.leNb)
+        spacerItem21 = QtWidgets.QSpacerItem(12, 12, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.verticalLayout_8.addItem(spacerItem21)
+        self.lbInfoDataInicioBene = QtWidgets.QLabel(self.pgBene)
+        self.lbInfoDataInicioBene.setObjectName("lbInfoDataInicioBene")
+        self.verticalLayout_8.addWidget(self.lbInfoDataInicioBene)
+        self.dtDataInicioBene = QtWidgets.QDateEdit(self.pgBene)
+        self.dtDataInicioBene.setMinimumSize(QtCore.QSize(0, 35))
+        self.dtDataInicioBene.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.dtDataInicioBene.setCalendarPopup(True)
+        self.dtDataInicioBene.setObjectName("dtDataInicioBene")
+        self.verticalLayout_8.addWidget(self.dtDataInicioBene)
+        spacerItem22 = QtWidgets.QSpacerItem(20, 12, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.verticalLayout_8.addItem(spacerItem22)
+        self.lbInfoDataFimBene = QtWidgets.QLabel(self.pgBene)
+        self.lbInfoDataFimBene.setObjectName("lbInfoDataFimBene")
+        self.verticalLayout_8.addWidget(self.lbInfoDataFimBene)
+        self.dtDataFimBene = QtWidgets.QDateEdit(self.pgBene)
+        self.dtDataFimBene.setMinimumSize(QtCore.QSize(0, 35))
+        self.dtDataFimBene.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.dtDataFimBene.setCalendarPopup(True)
+        self.dtDataFimBene.setObjectName("dtDataFimBene")
+        self.verticalLayout_8.addWidget(self.dtDataFimBene)
+        spacerItem23 = QtWidgets.QSpacerItem(20, 12, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_8.addItem(spacerItem23)
+        self.lbInfoSituacao = QtWidgets.QLabel(self.pgBene)
+        self.lbInfoSituacao.setObjectName("lbInfoSituacao")
+        self.verticalLayout_8.addWidget(self.lbInfoSituacao)
+        self.cbxSituacao = QtWidgets.QComboBox(self.pgBene)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.cbxSituacao.sizePolicy().hasHeightForWidth())
+        self.cbxSituacao.setSizePolicy(sizePolicy)
+        self.cbxSituacao.setMinimumSize(QtCore.QSize(0, 35))
+        self.cbxSituacao.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.cbxSituacao.setObjectName("cbxSituacao")
+        self.verticalLayout_8.addWidget(self.cbxSituacao)
+        spacerItem24 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        self.verticalLayout_8.addItem(spacerItem24)
+        self.stkVinculo.addWidget(self.pgBene)
+        self.gridLayout_12.addWidget(self.stkVinculo, 2, 1, 1, 1)
+        self.lbInfoCadastro = QtWidgets.QLabel(self.frCadastroPrincipal)
+        self.lbInfoCadastro.setObjectName("lbInfoCadastro")
+        self.gridLayout_12.addWidget(self.lbInfoCadastro, 0, 1, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
+        spacerItem25 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_12.addItem(spacerItem25, 4, 1, 1, 1)
+        self.gridLayout_11.addWidget(self.frCadastroPrincipal, 0, 0, 1, 1)
+        self.stkCliente.addWidget(self.pgCadastroVinculo)
+        self.pgCadContribBene = QtWidgets.QWidget()
+        self.pgCadContribBene.setStyleSheet("/*---------------------------- Push Button ----------------------------------*/\n"
+"#pbCancelaInsercao {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    border: 2px solid #3F4E8C;\n"
+"    border-radius: 8px;\n"
+"    padding: 6px;\n"
+"}\n"
+"\n"
+"\n"
+"#pbFinalizar {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"\n"
+"    background-color: #3F4E8C; \n"
+"    \n"
+"    border-radius: 8px;\n"
+"    padding: 6px;\n"
+"}\n"
+"\n"
+"#pbAddContrib, #pbAddBene {\n"
+"    background-image: url(:/opcoes/addIcon.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"\n"
+"    border-radius: 18px;\n"
+"    background-color: #F9F9F9;\n"
+"}\n"
+"\n"
+"/*-------------------------------- Labels -----------------------------------------*/\n"
+"#lbInfoCadastrar {\n"
+"    font: 18pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    \n"
+"    font-weight: 750;\n"
+"    line-height: 24px;\n"
+"\n"
+"    margin: 8px 0px 0px 0px;\n"
+"}")
+        self.pgCadContribBene.setObjectName("pgCadContribBene")
+        self.gridLayout_14 = QtWidgets.QGridLayout(self.pgCadContribBene)
+        self.gridLayout_14.setContentsMargins(48, -1, 48, -1)
+        self.gridLayout_14.setVerticalSpacing(18)
+        self.gridLayout_14.setObjectName("gridLayout_14")
+        self.frame_3 = QtWidgets.QFrame(self.pgCadContribBene)
+        self.frame_3.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_3.setObjectName("frame_3")
+        self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.frame_3)
+        self.horizontalLayout_11.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_11.setSpacing(24)
+        self.horizontalLayout_11.setObjectName("horizontalLayout_11")
+        self.pbFinalizar = QtWidgets.QPushButton(self.frame_3)
+        self.pbFinalizar.setMinimumSize(QtCore.QSize(160, 40))
+        self.pbFinalizar.setObjectName("pbFinalizar")
+        self.horizontalLayout_11.addWidget(self.pbFinalizar)
+        self.pbCancelaInsercao = QtWidgets.QPushButton(self.frame_3)
+        self.pbCancelaInsercao.setMinimumSize(QtCore.QSize(140, 40))
+        self.pbCancelaInsercao.setObjectName("pbCancelaInsercao")
+        self.horizontalLayout_11.addWidget(self.pbCancelaInsercao)
+        self.gridLayout_14.addWidget(self.frame_3, 2, 1, 1, 1)
+        self.stkCadastro = QtWidgets.QStackedWidget(self.pgCadContribBene)
+        self.stkCadastro.setObjectName("stkCadastro")
+        self.pgCadContrib = QtWidgets.QWidget()
+        self.pgCadContrib.setObjectName("pgCadContrib")
+        self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.pgCadContrib)
+        self.verticalLayout_9.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_9.setSpacing(0)
+        self.verticalLayout_9.setObjectName("verticalLayout_9")
+        self.tblCadContrib = QtWidgets.QTableWidget(self.pgCadContrib)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.tblCadContrib.sizePolicy().hasHeightForWidth())
+        self.tblCadContrib.setSizePolicy(sizePolicy)
+        self.tblCadContrib.setMaximumSize(QtCore.QSize(16777215, 600))
+        self.tblCadContrib.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.tblCadContrib.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.tblCadContrib.setObjectName("tblCadContrib")
+        self.tblCadContrib.setColumnCount(5)
+        self.tblCadContrib.setRowCount(0)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblCadContrib.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblCadContrib.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblCadContrib.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblCadContrib.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblCadContrib.setHorizontalHeaderItem(4, item)
+        self.tblCadContrib.horizontalHeader().setCascadingSectionResizes(True)
+        self.tblCadContrib.horizontalHeader().setDefaultSectionSize(160)
+        self.tblCadContrib.horizontalHeader().setMinimumSectionSize(160)
+        self.tblCadContrib.verticalHeader().setVisible(False)
+        self.tblCadContrib.verticalHeader().setDefaultSectionSize(40)
+        self.verticalLayout_9.addWidget(self.tblCadContrib)
+        self.frBotaoAdd = QtWidgets.QFrame(self.pgCadContrib)
+        self.frBotaoAdd.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frBotaoAdd.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frBotaoAdd.setObjectName("frBotaoAdd")
+        self.horizontalLayout_12 = QtWidgets.QHBoxLayout(self.frBotaoAdd)
+        self.horizontalLayout_12.setContentsMargins(0, 0, 0, 8)
+        self.horizontalLayout_12.setSpacing(0)
+        self.horizontalLayout_12.setObjectName("horizontalLayout_12")
+        self.frFirulaLeft = QtWidgets.QFrame(self.frBotaoAdd)
+        self.frFirulaLeft.setMaximumSize(QtCore.QSize(16777215, 2))
+        self.frFirulaLeft.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frFirulaLeft.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frFirulaLeft.setObjectName("frFirulaLeft")
+        self.horizontalLayout_12.addWidget(self.frFirulaLeft)
+        self.pbAddContrib = QtWidgets.QPushButton(self.frBotaoAdd)
+        self.pbAddContrib.setMinimumSize(QtCore.QSize(36, 36))
+        self.pbAddContrib.setMaximumSize(QtCore.QSize(36, 36))
+        self.pbAddContrib.setText("")
+        self.pbAddContrib.setObjectName("pbAddContrib")
+        self.horizontalLayout_12.addWidget(self.pbAddContrib)
+        self.frFirulaRight = QtWidgets.QFrame(self.frBotaoAdd)
+        self.frFirulaRight.setMinimumSize(QtCore.QSize(0, 0))
+        self.frFirulaRight.setMaximumSize(QtCore.QSize(16777215, 2))
+        self.frFirulaRight.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frFirulaRight.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frFirulaRight.setObjectName("frFirulaRight")
+        self.horizontalLayout_12.addWidget(self.frFirulaRight)
+        self.verticalLayout_9.addWidget(self.frBotaoAdd)
+        self.stkCadastro.addWidget(self.pgCadContrib)
+        self.pgCadBene = QtWidgets.QWidget()
+        self.pgCadBene.setObjectName("pgCadBene")
+        self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.pgCadBene)
+        self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_10.setSpacing(0)
+        self.verticalLayout_10.setObjectName("verticalLayout_10")
+        self.tblCadBene = QtWidgets.QTableWidget(self.pgCadBene)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.tblCadBene.sizePolicy().hasHeightForWidth())
+        self.tblCadBene.setSizePolicy(sizePolicy)
+        self.tblCadBene.setMaximumSize(QtCore.QSize(16777215, 600))
+        self.tblCadBene.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.tblCadBene.setObjectName("tblCadBene")
+        self.tblCadBene.setColumnCount(4)
+        self.tblCadBene.setRowCount(0)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblCadBene.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblCadBene.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblCadBene.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("Avenir LT Std")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
+        self.tblCadBene.setHorizontalHeaderItem(3, item)
+        self.tblCadBene.horizontalHeader().setCascadingSectionResizes(True)
+        self.tblCadBene.horizontalHeader().setDefaultSectionSize(160)
+        self.tblCadBene.horizontalHeader().setMinimumSectionSize(160)
+        self.tblCadBene.verticalHeader().setVisible(False)
+        self.verticalLayout_10.addWidget(self.tblCadBene)
+        self.frBotaoAdd2 = QtWidgets.QFrame(self.pgCadBene)
+        self.frBotaoAdd2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frBotaoAdd2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frBotaoAdd2.setObjectName("frBotaoAdd2")
+        self.horizontalLayout_13 = QtWidgets.QHBoxLayout(self.frBotaoAdd2)
+        self.horizontalLayout_13.setContentsMargins(0, 0, 0, 8)
+        self.horizontalLayout_13.setSpacing(0)
+        self.horizontalLayout_13.setObjectName("horizontalLayout_13")
+        self.frame_5 = QtWidgets.QFrame(self.frBotaoAdd2)
+        self.frame_5.setMaximumSize(QtCore.QSize(16777215, 2))
+        self.frame_5.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_5.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_5.setObjectName("frame_5")
+        self.horizontalLayout_13.addWidget(self.frame_5)
+        self.pbAddBene = QtWidgets.QPushButton(self.frBotaoAdd2)
+        self.pbAddBene.setMinimumSize(QtCore.QSize(36, 36))
+        self.pbAddBene.setMaximumSize(QtCore.QSize(36, 36))
+        self.pbAddBene.setText("")
+        self.pbAddBene.setObjectName("pbAddBene")
+        self.horizontalLayout_13.addWidget(self.pbAddBene)
+        self.frame_6 = QtWidgets.QFrame(self.frBotaoAdd2)
+        self.frame_6.setMaximumSize(QtCore.QSize(16777215, 2))
+        self.frame_6.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_6.setObjectName("frame_6")
+        self.horizontalLayout_13.addWidget(self.frame_6)
+        self.verticalLayout_10.addWidget(self.frBotaoAdd2)
+        self.stkCadastro.addWidget(self.pgCadBene)
+        self.gridLayout_14.addWidget(self.stkCadastro, 1, 0, 1, 3)
+        spacerItem26 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_14.addItem(spacerItem26, 2, 2, 1, 1)
+        spacerItem27 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_14.addItem(spacerItem27, 2, 0, 1, 1)
+        self.lbInfoCadastrar = QtWidgets.QLabel(self.pgCadContribBene)
+        self.lbInfoCadastrar.setObjectName("lbInfoCadastrar")
+        self.gridLayout_14.addWidget(self.lbInfoCadastrar, 0, 0, 1, 3, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
+        self.stkCliente.addWidget(self.pgCadContribBene)
         self.gridLayout_2.addWidget(self.stkCliente, 0, 0, 1, 1)
         self.verticalLayout.addWidget(self.frMiolo)
         self.frRodape = QtWidgets.QFrame(self.frPrincipal)
@@ -621,6 +1922,8 @@ class Ui_wdgResumoCnis(object):
 
         self.retranslateUi(wdgResumoCnis)
         self.stkCliente.setCurrentIndex(0)
+        self.stkVinculo.setCurrentIndex(0)
+        self.stkCadastro.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(wdgResumoCnis)
 
     def retranslateUi(self, wdgResumoCnis):
@@ -629,46 +1932,137 @@ class Ui_wdgResumoCnis(object):
         self.lbInfoTitulo.setText(_translate("wdgResumoCnis", "Resumo do CNIS"))
         self.lbNomeCliente.setText(_translate("wdgResumoCnis", "Maria de Lourdes da Silva Prado"))
         self.lbCpfCliente.setText(_translate("wdgResumoCnis", "CPF: 632.154.874-56"))
-        self.pbEmpresas.setText(_translate("wdgResumoCnis", "Empresas"))
+        self.pbEmpresas.setText(_translate("wdgResumoCnis", "Vínculos"))
         self.pbContrib.setText(_translate("wdgResumoCnis", "Contribuições"))
         self.pbBeneficios.setText(_translate("wdgResumoCnis", "Benefícios"))
-        self.pbInserir.setText(_translate("wdgResumoCnis", "Inserir"))
+        self.pbInserirResumo.setText(_translate("wdgResumoCnis", "Inserir"))
+        self.lbInfoTmpContribuicao.setText(_translate("wdgResumoCnis", "Tempo de contribuição"))
+        self.lbInfoTpAte94.setText(_translate("wdgResumoCnis", "Até 1994:"))
+        self.lbTpAte94.setText(_translate("wdgResumoCnis", "1 anos e 5 meses"))
+        self.lbInfoTpAte98.setText(_translate("wdgResumoCnis", "Até 1998:"))
+        self.lbInfoTpAte2019.setText(_translate("wdgResumoCnis", "Até 2019 - EC:"))
+        self.lbTpAte2019.setText(_translate("wdgResumoCnis", "3 anos"))
+        self.lbInfoTpAteHoje.setText(_translate("wdgResumoCnis", "Até hoje:"))
+        self.lbTpAteHoje.setText(_translate("wdgResumoCnis", "10 anos e 7 meses"))
+        self.lbTpAte98.setText(_translate("wdgResumoCnis", "-"))
+        self.lbDeficiencia.setText(_translate("wdgResumoCnis", "Deficiência"))
+        self.lbInfoTpEspecial.setText(_translate("wdgResumoCnis", "Tempo especial:"))
+        self.lbInfoTpDeficiencia.setText(_translate("wdgResumoCnis", "Tempo deficiência:"))
+        self.lbTpDeficiencia.setText(_translate("wdgResumoCnis", "-"))
+        self.lbTpEspecial.setText(_translate("wdgResumoCnis", "1 anos e 5 meses"))
+        self.lbTpNormal.setText(_translate("wdgResumoCnis", "3 anos"))
+        self.lbInfoTpNormal.setText(_translate("wdgResumoCnis", "Tempo normal:"))
+        self.lbInfoTempoEspecial.setText(_translate("wdgResumoCnis", "Alteração de tempo especial"))
+        self.lbInsalubridade.setText(_translate("wdgResumoCnis", "Insalubridade"))
+        self.pbSalvarSelecionados.setText(_translate("wdgResumoCnis", "Salvar para selecionados"))
+        self.pbInserirContrib.setText(_translate("wdgResumoCnis", "Inserir contribuição"))
         self.tblContribuicoes.setSortingEnabled(True)
         item = self.tblContribuicoes.verticalHeaderItem(0)
         item.setText(_translate("wdgResumoCnis", "Teste"))
         item = self.tblContribuicoes.horizontalHeaderItem(0)
         item.setText(_translate("wdgResumoCnis", "id"))
         item = self.tblContribuicoes.horizontalHeaderItem(1)
-        item.setText(_translate("wdgResumoCnis", "Entrada"))
+        item.setText(_translate("wdgResumoCnis", "Nº"))
         item = self.tblContribuicoes.horizontalHeaderItem(2)
         item.setText(_translate("wdgResumoCnis", "Competência"))
         item = self.tblContribuicoes.horizontalHeaderItem(3)
         item.setText(_translate("wdgResumoCnis", "Salário de\n"
 "contribuição"))
         item = self.tblContribuicoes.horizontalHeaderItem(4)
-        item.setText(_translate("wdgResumoCnis", "Natureza"))
-        item = self.tblContribuicoes.horizontalHeaderItem(5)
         item.setText(_translate("wdgResumoCnis", "Indicadores"))
+        item = self.tblContribuicoes.horizontalHeaderItem(5)
+        item.setText(_translate("wdgResumoCnis", "Fator\n"
+"insalubridade"))
+        item = self.tblContribuicoes.horizontalHeaderItem(6)
+        item.setText(_translate("wdgResumoCnis", "Fator\n"
+"deficiencia"))
+        item = self.tblContribuicoes.horizontalHeaderItem(7)
+        item.setText(_translate("wdgResumoCnis", "Ações"))
         __sortingEnabled = self.tblContribuicoes.isSortingEnabled()
         self.tblContribuicoes.setSortingEnabled(False)
-        item = self.tblContribuicoes.item(0, 0)
-        item.setText(_translate("wdgResumoCnis", "5"))
-        item = self.tblContribuicoes.item(0, 1)
-        item.setText(_translate("wdgResumoCnis", "10"))
         item = self.tblContribuicoes.item(0, 2)
-        item.setText(_translate("wdgResumoCnis", "10/02/2020"))
+        item.setText(_translate("wdgResumoCnis", "25/01/2020"))
         item = self.tblContribuicoes.item(0, 3)
-        item.setText(_translate("wdgResumoCnis", "R$ 1200,00"))
+        item.setText(_translate("wdgResumoCnis", "15230"))
         item = self.tblContribuicoes.item(0, 4)
-        item.setText(_translate("wdgResumoCnis", "Recolhimento"))
-        item = self.tblContribuicoes.item(0, 5)
-        item.setText(_translate("wdgResumoCnis", "sdfasdfasdfasdfsd"))
+        item.setText(_translate("wdgResumoCnis", "IUSDF"))
         self.tblContribuicoes.setSortingEnabled(__sortingEnabled)
-        self.lbNomeEmp.setText(_translate("wdgResumoCnis", "DROGARIA COMERCIAL DE REMÉDIOS LTDA"))
-        self.lbDataInicio.setText(_translate("wdgResumoCnis", "Início: 01/02/2000"))
-        self.lbCNPJouNB.setText(_translate("wdgResumoCnis", "CNPJ: 45.658.000-1/34"))
         self.lbDataFim.setText(_translate("wdgResumoCnis", "Fim: 04/05/2010"))
-        self.pbInserirContrib.setText(_translate("wdgResumoCnis", "Inserir"))
+        self.lbInfoContribuicao.setText(_translate("wdgResumoCnis", "CONTRIBUIÇÃO"))
+        self.lbCNPJouNB.setText(_translate("wdgResumoCnis", "CNPJ: 45.658.000-1/34"))
+        self.lbNomeEmp.setText(_translate("wdgResumoCnis", "1 - DROGARIA COMERCIAL DE REMÉDIOS E COUTRAS COISAS PERIGOSAS LTDA"))
+        self.lbDataInicio.setText(_translate("wdgResumoCnis", "Início: 01/02/2000"))
+        self.lbCNPJouNBBene.setText(_translate("wdgResumoCnis", "CNPJ: 45.658.000-1/34"))
+        self.lbSituacao.setText(_translate("wdgResumoCnis", "Situação: Indeferido"))
+        self.lbNomeEmpBene.setText(_translate("wdgResumoCnis", "DROGARIA COMERCIAL DE REMÉDIOS LTDA"))
+        self.lbDataFimBene.setText(_translate("wdgResumoCnis", "Fim: 04/05/2010"))
+        self.lbInfoBeneficio.setText(_translate("wdgResumoCnis", "BENEFÍCIO"))
+        self.lbDataInicioBene.setText(_translate("wdgResumoCnis", "Início: 01/02/2000"))
+        self.pbInserirBeneficios.setText(_translate("wdgResumoCnis", "Inserir"))
+        self.tblBeneficios.setSortingEnabled(True)
+        item = self.tblBeneficios.verticalHeaderItem(0)
+        item.setText(_translate("wdgResumoCnis", "Teste"))
+        item = self.tblBeneficios.horizontalHeaderItem(0)
+        item.setText(_translate("wdgResumoCnis", "id"))
+        item = self.tblBeneficios.horizontalHeaderItem(1)
+        item.setText(_translate("wdgResumoCnis", "Vínculo"))
+        item = self.tblBeneficios.horizontalHeaderItem(2)
+        item.setText(_translate("wdgResumoCnis", "N° do benefício"))
+        item = self.tblBeneficios.horizontalHeaderItem(3)
+        item.setText(_translate("wdgResumoCnis", "Competência"))
+        item = self.tblBeneficios.horizontalHeaderItem(4)
+        item.setText(_translate("wdgResumoCnis", "Valor do benefício"))
+        item = self.tblBeneficios.horizontalHeaderItem(5)
+        item.setText(_translate("wdgResumoCnis", "Ações"))
+        __sortingEnabled = self.tblBeneficios.isSortingEnabled()
+        self.tblBeneficios.setSortingEnabled(False)
+        item = self.tblBeneficios.item(0, 1)
+        item.setText(_translate("wdgResumoCnis", "15"))
+        item = self.tblBeneficios.item(0, 2)
+        item.setText(_translate("wdgResumoCnis", "15230"))
+        item = self.tblBeneficios.item(0, 3)
+        item.setText(_translate("wdgResumoCnis", "25/01/2020"))
+        self.tblBeneficios.setSortingEnabled(__sortingEnabled)
+        self.pbSeguir.setText(_translate("wdgResumoCnis", "Seguir cadastro"))
+        self.pbCancelar.setText(_translate("wdgResumoCnis", "Cancelar"))
+        self.rbContribuicao.setText(_translate("wdgResumoCnis", "Contribuição"))
+        self.rbBeneficio.setText(_translate("wdgResumoCnis", "Benefício"))
+        self.lbInfoCnpj.setText(_translate("wdgResumoCnis", "CNPJ"))
+        self.lbInfoDataInicio.setText(_translate("wdgResumoCnis", "Data início"))
+        self.leNomeEmp.setPlaceholderText(_translate("wdgResumoCnis", "Nome da empresa"))
+        self.lbInfoIndicadores.setText(_translate("wdgResumoCnis", "Indicadores"))
+        self.lbInfoTpVinculo.setText(_translate("wdgResumoCnis", "Tipo de vínculo"))
+        self.lbInfoNomeEmp.setText(_translate("wdgResumoCnis", "Nome da empresa"))
+        self.lbInfoDataFim.setText(_translate("wdgResumoCnis", "Data fim"))
+        self.leCnpj.setPlaceholderText(_translate("wdgResumoCnis", "CNPJ"))
+        self.lbInfoEspecie.setText(_translate("wdgResumoCnis", "Espécie do benefício"))
+        self.lbInfoNb.setText(_translate("wdgResumoCnis", "Número do benefício"))
+        self.leNb.setPlaceholderText(_translate("wdgResumoCnis", "Número do benefício"))
+        self.lbInfoDataInicioBene.setText(_translate("wdgResumoCnis", "Data início"))
+        self.lbInfoDataFimBene.setText(_translate("wdgResumoCnis", "Data fim"))
+        self.lbInfoSituacao.setText(_translate("wdgResumoCnis", "Situação"))
+        self.lbInfoCadastro.setText(_translate("wdgResumoCnis", "Cadastro de vínculo"))
+        self.pbFinalizar.setText(_translate("wdgResumoCnis", "Finalizar cadastro"))
+        self.pbCancelaInsercao.setText(_translate("wdgResumoCnis", "Cancelar"))
+        item = self.tblCadContrib.horizontalHeaderItem(0)
+        item.setText(_translate("wdgResumoCnis", "N° vínculo"))
+        item = self.tblCadContrib.horizontalHeaderItem(1)
+        item.setText(_translate("wdgResumoCnis", "Competência"))
+        item = self.tblCadContrib.horizontalHeaderItem(2)
+        item.setText(_translate("wdgResumoCnis", "Salário de contribuição"))
+        item = self.tblCadContrib.horizontalHeaderItem(3)
+        item.setText(_translate("wdgResumoCnis", "Indicadores"))
+        item = self.tblCadContrib.horizontalHeaderItem(4)
+        item.setText(_translate("wdgResumoCnis", "Ações"))
+        item = self.tblCadBene.horizontalHeaderItem(0)
+        item.setText(_translate("wdgResumoCnis", "N° do benefício"))
+        item = self.tblCadBene.horizontalHeaderItem(1)
+        item.setText(_translate("wdgResumoCnis", "Competência"))
+        item = self.tblCadBene.horizontalHeaderItem(2)
+        item.setText(_translate("wdgResumoCnis", "Valor do benefício"))
+        item = self.tblCadBene.horizontalHeaderItem(3)
+        item.setText(_translate("wdgResumoCnis", "Ações"))
+        self.lbInfoCadastrar.setText(_translate("wdgResumoCnis", "Cadastrar contribuições"))
 import Resources.wdgResumoCNIS
 
 

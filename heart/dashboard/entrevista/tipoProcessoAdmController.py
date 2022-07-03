@@ -5,7 +5,7 @@ from Design.pyUi.pgTipoProcessoAdm import Ui_wdgTipoProcessoAdm
 from sinaisCustomizados import Sinais
 from modelos.processosORM import Processos
 from util.enums.newPrevEnums import MomentoEntrevista
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 from util.enums.processoEnums import TipoProcesso
 
 

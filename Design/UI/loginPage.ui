@@ -26,18 +26,17 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#mwLogin, #centralwidget, 
-#stkPrimeiroAcesso, #frMain {
+   <string notr="true">#stkPrimeiroAcesso, #frMain {
 	border-radius: 8px;
 }
 
-#frLogin, #frPrimAcesso,
-#frPrimAcessoKey, #frPrimAcessoSenha {
-	border-top-left-radius: 8px;
-	border-top-right-radius: 0px;
-	border-bottom-right-radius: 0px;
-	border-bottom-left-radius: 8px;
-}</string>
+#mwLogin, #centralwidget {
+	border-radius: 8px;
+
+	background-color: red;
+}
+
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -73,6 +72,16 @@
 
 #frLogo{
 	border-image: url(:/Logo/LogoLogin.png);
+}
+
+#frLogin, #frPrimAcesso,
+#frPrimAcessoKey, #frPrimAcessoSenha {	
+	border-top-left-radius: 8px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 8px;
+
+	background-color: white;
 }
 
 /*---------------------------------- Label --------------------------------------*/
@@ -225,10 +234,7 @@
          </property>
          <widget class="QWidget" name="frLogin">
           <property name="styleSheet">
-           <string notr="true">/*----------------------------------- Frame -----------------------------------*/
-#frLogin {
-	background-color: white;
-}</string>
+           <string notr="true"/>
           </property>
           <layout class="QGridLayout" name="gridLayout">
            <item row="0" column="1" colspan="3">
@@ -474,12 +480,7 @@ programa</string>
          </widget>
          <widget class="QWidget" name="frPrimAcesso">
           <property name="styleSheet">
-           <string notr="true">/*----------------------------------------- Frame ------------------------------------------*/
-#frPrimAcesso {
-	background-color: white;
-}
-
-/*----------------------------------------- Line Edit ------------------------------------------*/
+           <string notr="true">/*----------------------------------------- Line Edit ------------------------------------------*/
 #lePACpfEmail {
 	font: 10pt &quot;Avenir LT Std&quot;;
     border: 0px solid gray;
@@ -772,12 +773,7 @@ programa</string>
          </widget>
          <widget class="QWidget" name="frPrimAcessoKey">
           <property name="styleSheet">
-           <string notr="true">/*------------------------------------------ Frame ---------------------------------------*/
-#frPrimAcessoKey {
-	background-color: white;
-}
-
-/*----------------------------------------- Line Edit ------------------------------------------*/
+           <string notr="true">/*----------------------------------------- Line Edit ------------------------------------------*/
 #lePrimeiro, #leSegundo, #leTerceiro, 
 #leQuarto, #leQuinto {
 	font: 10pt &quot;Avenir LT Std&quot;;
@@ -1252,17 +1248,7 @@ programa</string>
          </widget>
          <widget class="QWidget" name="frPrimAcessoSenha">
           <property name="styleSheet">
-           <string notr="true">/*------------------------------------------ Frame ---------------------------------------*/
-#frPASenha {
-	background-color: white;
-}
-
-#frPASenhaPrincipal, #frPAConfirmaSenha {
-	border-radius: 8px;
-	background-color: #F9F9F9;
-}
-
-/*----------------------------------------- Line Edit ------------------------------------------*/
+           <string notr="true">/*----------------------------------------- Line Edit ------------------------------------------*/
 #lePASenha, #lePAConfirmaSenha {
 	font: 10pt &quot;Avenir LT Std&quot;;
     border: 0px solid gray;
@@ -1376,17 +1362,139 @@ programa</string>
               <property name="verticalSpacing">
                <number>20</number>
               </property>
-              <item row="0" column="1" colspan="2">
-               <spacer name="verticalSpacer_11">
+              <item row="5" column="2" rowspan="2">
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="14" column="0" colspan="3">
+               <spacer name="verticalSpacer_8">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
-                </property>
-                <property name="sizeType">
-                 <enum>QSizePolicy::Minimum</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>20</width>
+                  <height>152</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="1" column="0" colspan="3">
+               <widget class="QFrame" name="frCab_3">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <property name="spacing">
+                  <number>12</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>64</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QPushButton" name="pbVoltar3">
+                   <property name="minimumSize">
+                    <size>
+                     <width>40</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>40</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item alignment="Qt::AlignRight">
+                  <widget class="QLabel" name="lbNew_3">
+                   <property name="text">
+                    <string>NEW</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item alignment="Qt::AlignLeft">
+                  <widget class="QLabel" name="lbPrev_3">
+                   <property name="text">
+                    <string>PREV</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_13">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="2" column="0" colspan="3" alignment="Qt::AlignHCenter">
+               <widget class="QLabel" name="lbPALogin_3">
+                <property name="text">
+                 <string>Primeiro Acesso</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0" colspan="3">
+               <widget class="QLabel" name="lbInfoPrimeiroAcesso_3">
+                <property name="text">
+                 <string>Crie sua senha de acesso</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0" rowspan="2">
+               <spacer name="horizontalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
                   <height>20</height>
                  </size>
                 </property>
@@ -1492,131 +1600,6 @@ programa</string>
                 </layout>
                </widget>
               </item>
-              <item row="5" column="0" rowspan="2">
-               <spacer name="horizontalSpacer_5">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="5" column="2" rowspan="2">
-               <spacer name="horizontalSpacer_6">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="1" column="0" colspan="3">
-               <widget class="QFrame" name="frCab_3">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>50</height>
-                 </size>
-                </property>
-                <property name="frameShape">
-                 <enum>QFrame::NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QHBoxLayout" name="horizontalLayout_7">
-                 <property name="spacing">
-                  <number>12</number>
-                 </property>
-                 <property name="leftMargin">
-                  <number>64</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="rightMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="bottomMargin">
-                  <number>0</number>
-                 </property>
-                 <item>
-                  <widget class="QPushButton" name="pbVoltar3">
-                   <property name="minimumSize">
-                    <size>
-                     <width>40</width>
-                     <height>40</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>40</width>
-                     <height>40</height>
-                    </size>
-                   </property>
-                   <property name="text">
-                    <string/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item alignment="Qt::AlignRight">
-                  <widget class="QLabel" name="lbNew_3">
-                   <property name="text">
-                    <string>NEW</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item alignment="Qt::AlignLeft">
-                  <widget class="QLabel" name="lbPrev_3">
-                   <property name="text">
-                    <string>PREV</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer_13">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item row="2" column="0" colspan="3" alignment="Qt::AlignHCenter">
-               <widget class="QLabel" name="lbPALogin_3">
-                <property name="text">
-                 <string>Primeiro Acesso</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="0" colspan="3">
-               <widget class="QLabel" name="lbInfoPrimeiroAcesso_3">
-                <property name="text">
-                 <string>Crie sua senha de acesso</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-                <property name="wordWrap">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
               <item row="13" column="1">
                <widget class="QPushButton" name="pbCriaSenha">
                 <property name="minimumSize">
@@ -1630,15 +1613,18 @@ programa</string>
                 </property>
                </widget>
               </item>
-              <item row="14" column="0" colspan="3">
-               <spacer name="verticalSpacer_8">
+              <item row="0" column="1" colspan="2">
+               <spacer name="verticalSpacer_11">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Minimum</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>20</width>
-                  <height>40</height>
+                  <height>20</height>
                  </size>
                 </property>
                </spacer>

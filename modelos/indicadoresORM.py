@@ -1,6 +1,9 @@
+from logging import info, debug
+
 from modelos.baseModelORM import BaseModel
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
+
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import CharField, DateTimeField
@@ -50,12 +53,8 @@ class Indicadores(BaseModel, Model):
 
 @post_save(sender=Indicadores)
 def inserindoIndicadores(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoIndicadores>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoIndicadores>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
-
+    debug(f'{TipoLog.DataBase.value}::inserindoIndicadores___________________{TABLENAME}')
 
 @pre_delete(sender=Indicadores)
 def deletandoIndicadores(*args, **kwargs):
-    logPrioridade(f'DELETE<inserindoIndicadores>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    debug(f'{TipoLog.DataBase.value}::deletandoIndicadores___________________{TABLENAME}')

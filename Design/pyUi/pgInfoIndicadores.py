@@ -76,6 +76,38 @@ class Ui_mwInfoIndicadores(object):
 "    background-color: white;\n"
 "}\n"
 "\n"
+"/*-------------------------------------------  Scroll Bar --------------------------------------------*/\n"
+"QScrollBar:vertical {\n"
+"        background-color: #DDDEDF;\n"
+"        width: 15px;\n"
+"        margin: 15px 3px 15px 3px;\n"
+"        border: 1px transparent #2A2929;\n"
+"        border-radius: 4px;\n"
+"    }\n"
+"\n"
+"QScrollBar::handle:vertical {\n"
+"    background-color: #3F4E8C;\n"
+"    min-height: 5px;\n"
+"    width: 20px;\n"
+"    border-radius: 4px;\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical{\n"
+"      border: none;\n"
+"      background: none;\n"
+"      color: none;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical {\n"
+"    border: none;\n"
+"    background: none;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical {\n"
+"    border: none;\n"
+"    background: none;\n"
+"}\n"
+"\n"
 "/* ----------------------------------------------- Line Edit ----------------------------------------------- */\n"
 "#leBusca {\n"
 "    border: 0px solid gray;\n"
@@ -185,12 +217,19 @@ class Ui_mwInfoIndicadores(object):
         self.verticalLayout_5.setSpacing(4)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.scrollArea = QtWidgets.QScrollArea(self.frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
+        self.scrollArea.setSizePolicy(sizePolicy)
         self.scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.scrollArea.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setAlignment(QtCore.Qt.AlignCenter)
         self.scrollArea.setObjectName("scrollArea")
         self.scaIndicadores = QtWidgets.QWidget()
-        self.scaIndicadores.setGeometry(QtCore.QRect(0, 0, 215, 438))
+        self.scaIndicadores.setGeometry(QtCore.QRect(0, 0, 218, 438))
         self.scaIndicadores.setObjectName("scaIndicadores")
         self.scrollArea.setWidget(self.scaIndicadores)
         self.verticalLayout_5.addWidget(self.scrollArea)

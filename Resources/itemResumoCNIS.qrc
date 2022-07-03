@@ -4,6 +4,11 @@
     <file>redDeletar.png</file>
     <file>blueEditar.png</file>
   </qresource>
+  <qresource prefix="Info">
+    <file>blueInsalubridade.png</file>
+    <file>blueFaltaInfo.png</file>
+    <file>redFaltaInfo.png</file>
+  </qresource>
   <qresource prefix="selecionado">
     <file>CheckBoxFalse.png</file>
     <file>checkBoxTrue.png</file>

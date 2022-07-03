@@ -16,105 +16,184 @@ class Ui_mwBuscaProcessos(object):
         mwBuscaProcessos.setObjectName("mwBuscaProcessos")
         mwBuscaProcessos.resize(1039, 608)
         mwBuscaProcessos.setMinimumSize(QtCore.QSize(1039, 608))
-        mwBuscaProcessos.setStyleSheet("/*-------------------------------- Labels -----------------------------------------*/\n"
-"#lbTitulo {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 24px;\n"
-"\n"
-"    color: white;\n"
+        mwBuscaProcessos.setStyleSheet("#centralwidget {\n"
+"    background-color: lightgrey;\n"
+"}")
+        self.centralwidget = QtWidgets.QWidget(mwBuscaProcessos)
+        self.centralwidget.setStyleSheet("/* ------------ Geral --------------- */\n"
+"QLabel {\n"
+"    font: 11pt \"Avenir LT Std\";\n"
+"    color: #1F1E29;\n"
+"    font-weight: 200;\n"
 "}\n"
 "\n"
-"#lbSubtitulo {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;    \n"
-"\n"
-"    color: white;\n"
+"QLineEdit {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    border: 0px solid gray;\n"
+"    border-radius: 8px;\n"
+"       padding: 0 8px;\n"
+"    background: #F9F9F9;\n"
+"    selection-background-color: darkgray;\n"
 "}\n"
 "\n"
-"#lbTituloFrame {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;\n"
+"QComboBox {\n"
+"    border: 0px solid gray;\n"
+"    border-radius: 8px;\n"
+"    padding: 1px 18px 1px 8px;\n"
+"    \n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #606970;    \n"
+"}\n"
 "\n"
+"QComboBox:editable {\n"
+"    background: white;\n"
+"}\n"
+"\n"
+"QComboBox:!editable, QComboBox::drop-down:editable {\n"
+"     background: #F9F9F9;\n"
+"}\n"
+"\n"
+"QComboBox:!editable:on, QComboBox::drop-down:editable:on {\n"
+"    background: #F9F9F9;\n"
+"}\n"
+"\n"
+"QComboBox:on { /* shift the text when the popup opens */\n"
+"    padding-top: 3px;\n"
+"    padding-left: 4px;\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 15px;\n"
+"    padding: 0px 8px 0px 0px;\n"
+"\n"
+"    border-left-width: 0px;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    image: url(:/arrowDown/down.png);\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow:on { /* shift the arrow when popup is open */\n"
+"    top: 1px;\n"
+"    left: 1px;\n"
+"}\n"
+"\n"
+"/*-------------------------------------------  Scroll Bar --------------------------------------------*/\n"
+"QScrollBar:vertical {\n"
+"        background-color: #DDDEDF;\n"
+"        width: 15px;\n"
+"        margin: 15px 3px 15px 3px;\n"
+"        border: 1px transparent #2A2929;\n"
+"        border-radius: 4px;\n"
+"    }\n"
+"\n"
+"QScrollBar::handle:vertical {\n"
+"    background-color: #3F4E8C;\n"
+"    min-height: 5px;\n"
+"    width: 20px;\n"
+"    border-radius: 4px;\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical{\n"
+"      border: none;\n"
+"      background: none;\n"
+"      color: none;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical {\n"
+"    border: none;\n"
+"    background: none;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical {\n"
+"    border: none;\n"
+"    background: none;\n"
+"}\n"
+"\n"
+"/*------------------------------------------- Table Widget -------------------------------------------*/\n"
+"#tblListaProcessos {\n"
+"    selection-background-color: #F9F9F9;\n"
+"    selection-color: grey;\n"
+"    gridline-color: white;\n"
+"\n"
+"    border: 0px solid transparent;\n"
+"}\n"
+"\n"
+"QHeaderView {\n"
 "    background-color: white;\n"
 "}\n"
 "\n"
-"/*-------------------------------- Frames -----------------------------------------*/\n"
-"#frCabecalho {\n"
-"    border: 0px;\n"
-"    border-radius: 8px;\n"
-"    background-color: rgb(52, 73, 94);\n"
+"QHeaderView::section {\n"
+"    background-color: white;\n"
+"    padding-left: 4px;\n"
+"    border: 0px solid white;\n"
+"    min-height: 45px;\n"
 "}\n"
 "\n"
-"#frFiltrosBusca {\n"
-"    background-color: rgb(82, 111, 139);\n"
-"\n"
-"    border: 0px solid;\n"
-"    border-radius: 8px;\n"
+"#tblListaProcessos::item:last {\n"
+"    selection-background-color: black;\n"
+"    selection-color: grey;\n"
+"    gridline-color: black;\n"
+"    border: 0px solid transparent;\n"
 "}\n"
 "\n"
+"#tblListaProcessos::item {\n"
+"    padding: 2px 24px 2px 24px;\n"
+"}\n"
+"\n"
+"/* ------------------  Frames --------------------- */\n"
 "#frMain {\n"
+"    background-color: white;\n"
+"    border: 0px solid transparent;\n"
 "    border-radius: 8px;\n"
-"    border: 0px solid;\n"
-"\n"
-"    background-color: lightgrey;\n"
 "}\n"
 "\n"
-"#centralwidget {\n"
+"#frFirulaCliente {\n"
+"    background-color: #009E38;\n"
+"    border: 0px solid transparent;\n"
+"    border-radius: 2px;\n"
+"}\n"
+"\n"
+"#frInfoCliente {\n"
+"    background-color: white;\n"
+"    border: 0px solid transparent;\n"
 "    border-radius: 8px;\n"
-"    border: 0px solid;    \n"
 "}\n"
 "\n"
-"/*-------------------------------- Push Buttons --------------------------------*/\n"
-"#pbSeleciona, #pbLimpa, \n"
-"#pbCancela, #pbEditar {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;\n"
-"    color: white;\n"
-"\n"
-"    border-radius: 4px;\n"
-"    background-color: rgb(52, 73, 94);\n"
+"/* ------------------- Label ------------------- */\n"
+"#lbTitulo {\n"
+"    font: 16pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    font-weight: 750;\n"
 "}\n"
 "\n"
-"#pbSeleciona:hover, #pbLimpa:hover, \n"
-"#pbCancela:hover, #pbEditar:hover {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 12px;\n"
-"    color: white;\n"
+"#pbSeleciona, #pbCancela {\n"
+"    background-color: white;\n"
+"    border: 2px solid #3F4E8C;\n"
+"    border-radius: 8px;\n"
 "\n"
-"    border-radius: 4px;\n"
-"    background-color: rgb(72, 93, 114);\n"
-"}\n"
+"    \n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    font-weight: 750;\n"
 "\n"
-"/*-------------------------------- Main Window -------------------------------*/\n"
-"#mwBuscaCliente{\n"
-"    background-color: rgb(52, 73, 94);\n"
-"}\n"
-"")
-        self.centralwidget = QtWidgets.QWidget(mwBuscaProcessos)
+"    padding: 8px;\n"
+"}")
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setContentsMargins(8, 8, 8, 8)
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.frMain = QtWidgets.QFrame(self.centralwidget)
-        self.frMain.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frMain.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frMain.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frMain.setObjectName("frMain")
         self.gridLayout = QtWidgets.QGridLayout(self.frMain)
         self.gridLayout.setObjectName("gridLayout")
         self.frTabela = QtWidgets.QFrame(self.frMain)
-        self.frTabela.setStyleSheet("/*-------------------------------- Tables -----------------------------------------*/\n"
-"#tblListaProcessos{\n"
-"    background-color: white;\n"
-"}\n"
-"\n"
-"QHeaderView::section {\n"
-"    background-color: rgb(52, 73, 94);\n"
-"    color: white;\n"
-"    padding-left: 4px;\n"
-"    border: 1px solid #6c6c6c;\n"
-"    min-height: 45px;\n"
-"}")
+        self.frTabela.setStyleSheet("")
         self.frTabela.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frTabela.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frTabela.setObjectName("frTabela")
@@ -131,38 +210,68 @@ class Ui_mwBuscaProcessos(object):
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
-        font.setFamily("Ubuntu")
+        font.setFamily("Avenir LT Std")
         font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
         item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
         self.tblListaProcessos.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
-        font.setFamily("Ubuntu")
+        font.setFamily("Avenir LT Std")
         font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
         item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
         self.tblListaProcessos.setHorizontalHeaderItem(1, item)
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
-        font.setFamily("Ubuntu")
+        font.setFamily("Avenir LT Std")
         font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
         item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
         self.tblListaProcessos.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
-        font.setFamily("Ubuntu")
+        font.setFamily("Avenir LT Std")
         font.setPointSize(12)
+        font.setBold(True)
         font.setItalic(False)
+        font.setWeight(75)
         item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
         self.tblListaProcessos.setHorizontalHeaderItem(3, item)
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
         font.setFamily("Ubuntu")
         font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
         item.setFont(font)
+        item.setBackground(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(63, 78, 140))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setForeground(brush)
         self.tblListaProcessos.setHorizontalHeaderItem(4, item)
         self.tblListaProcessos.horizontalHeader().setCascadingSectionResizes(True)
         self.tblListaProcessos.horizontalHeader().setStretchLastSection(True)
@@ -170,35 +279,7 @@ class Ui_mwBuscaProcessos(object):
         self.horizontalLayout_2.addWidget(self.tblListaProcessos)
         self.gridLayout.addWidget(self.frTabela, 1, 0, 1, 1)
         self.frCabecalho = QtWidgets.QFrame(self.frMain)
-        self.frCabecalho.setStyleSheet("/*--------------------------------------- Frames ---------------------------------------*/\n"
-"#frFirulaCliente {\n"
-"    background-color: #048ba8;\n"
-"    border-radius: 5px;\n"
-"}\n"
-"\n"
-"#frFirulaProcesso {\n"
-"    background-color: rgb(220, 147, 0);\n"
-"    border-radius: 5px;\n"
-"}\n"
-"\n"
-"#frInfoCliente, #frInfoProcesso {\n"
-"    background-color: rgb(255, 255, 255);\n"
-"\n"
-"    border-top-left-radius: 5px;\n"
-"    border-top-right-radius: 5px;\n"
-"    border-bottom-left-radius: 5px;\n"
-"    border-bottom-right-radius: 5px;\n"
-"}\n"
-"\n"
-"/*--------------------------------------- Labels ---------------------------------------*/\n"
-"#lbNomeCompleto, \n"
-"#lbInfoTelefone, #lbTelefone,\n"
-"#lbEmail, #lbInfoEmail {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
-"\n"
-"    color: rgb(52, 52, 52);\n"
-"}")
+        self.frCabecalho.setStyleSheet("")
         self.frCabecalho.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frCabecalho.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frCabecalho.setObjectName("frCabecalho")
@@ -208,6 +289,7 @@ class Ui_mwBuscaProcessos(object):
         self.lbTitulo.setObjectName("lbTitulo")
         self.verticalLayout_2.addWidget(self.lbTitulo)
         self.lbSubtitulo = QtWidgets.QLabel(self.frCabecalho)
+        self.lbSubtitulo.setIndent(8)
         self.lbSubtitulo.setObjectName("lbSubtitulo")
         self.verticalLayout_2.addWidget(self.lbSubtitulo)
         self.frOrganizadorCards = QtWidgets.QFrame(self.frCabecalho)
@@ -215,8 +297,8 @@ class Ui_mwBuscaProcessos(object):
         self.frOrganizadorCards.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frOrganizadorCards.setObjectName("frOrganizadorCards")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frOrganizadorCards)
-        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_3.setSpacing(0)
+        self.horizontalLayout_3.setContentsMargins(9, 9, 9, 9)
+        self.horizontalLayout_3.setSpacing(9)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.frInfoCliente = QtWidgets.QFrame(self.frOrganizadorCards)
         self.frInfoCliente.setMinimumSize(QtCore.QSize(0, 50))
@@ -232,9 +314,9 @@ class Ui_mwBuscaProcessos(object):
         self.lbInfoEmail.setObjectName("lbInfoEmail")
         self.gridLayout_7.addWidget(self.lbInfoEmail, 2, 1, 1, 1)
         self.frFirulaCliente = QtWidgets.QFrame(self.frInfoCliente)
-        self.frFirulaCliente.setMinimumSize(QtCore.QSize(10, 0))
-        self.frFirulaCliente.setMaximumSize(QtCore.QSize(10, 16777215))
-        self.frFirulaCliente.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frFirulaCliente.setMinimumSize(QtCore.QSize(4, 0))
+        self.frFirulaCliente.setMaximumSize(QtCore.QSize(4, 16777215))
+        self.frFirulaCliente.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frFirulaCliente.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frFirulaCliente.setObjectName("frFirulaCliente")
         self.gridLayout_7.addWidget(self.frFirulaCliente, 0, 0, 3, 1)
@@ -259,13 +341,23 @@ class Ui_mwBuscaProcessos(object):
         self.verticalLayout_3.setSpacing(8)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.pbSeleciona = QtWidgets.QPushButton(self.frSideButtons)
-        self.pbSeleciona.setMinimumSize(QtCore.QSize(80, 20))
-        self.pbSeleciona.setMaximumSize(QtCore.QSize(100, 30))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pbSeleciona.sizePolicy().hasHeightForWidth())
+        self.pbSeleciona.setSizePolicy(sizePolicy)
+        self.pbSeleciona.setMinimumSize(QtCore.QSize(0, 0))
+        self.pbSeleciona.setMaximumSize(QtCore.QSize(654654, 1984654))
         self.pbSeleciona.setObjectName("pbSeleciona")
         self.verticalLayout_3.addWidget(self.pbSeleciona)
         self.pbCancela = QtWidgets.QPushButton(self.frSideButtons)
-        self.pbCancela.setMinimumSize(QtCore.QSize(80, 20))
-        self.pbCancela.setMaximumSize(QtCore.QSize(100, 30))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pbCancela.sizePolicy().hasHeightForWidth())
+        self.pbCancela.setSizePolicy(sizePolicy)
+        self.pbCancela.setMinimumSize(QtCore.QSize(0, 0))
+        self.pbCancela.setMaximumSize(QtCore.QSize(987987, 989849))
         self.pbCancela.setObjectName("pbCancela")
         self.verticalLayout_3.addWidget(self.pbCancela)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
@@ -291,7 +383,7 @@ class Ui_mwBuscaProcessos(object):
         item = self.tblListaProcessos.horizontalHeaderItem(4)
         item.setText(_translate("mwBuscaProcessos", "Última atualização"))
         self.lbTitulo.setText(_translate("mwBuscaProcessos", "Buscar Processos"))
-        self.lbSubtitulo.setText(_translate("mwBuscaProcessos", "Buscar processos de um cliente pré-selecionado."))
+        self.lbSubtitulo.setText(_translate("mwBuscaProcessos", "Buscar processos do cliente selecionado."))
         self.lbInfoTelefone.setText(_translate("mwBuscaProcessos", "Tel/Cel:"))
         self.lbInfoEmail.setText(_translate("mwBuscaProcessos", "E-mail:"))
         self.lbEmail.setText(_translate("mwBuscaProcessos", "-"))

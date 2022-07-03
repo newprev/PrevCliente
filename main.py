@@ -1,6 +1,7 @@
 import os.path
 from math import ceil
 from typing import List
+from dotenv import load_dotenv
 
 from aiohttp import ClientConnectorError
 import asyncio as aio
@@ -16,8 +17,10 @@ from modelos.clienteInfoBanco import ClienteInfoBanco
 from modelos.clienteProfissao import ClienteProfissao
 
 from modelos.convMonORM import ConvMon
-from modelos.especieBenefORM import EspecieBenef
+from modelos.baseModelORM import database
+from modelos.especieBenefORM import EspecieBene
 from modelos.expSobrevidaORM import ExpSobrevida
+from modelos.incidenteProcessual import IncidenteProcessual
 from modelos.indicadoresORM import Indicadores
 from modelos.indiceAtuMonetariaORM import IndiceAtuMonetaria
 from modelos.pppORM import Ppp
@@ -27,7 +30,7 @@ from modelos.tetosPrevORM import TetosPrev
 from modelos.escritoriosORM import Escritorios
 from modelos.advogadoORM import Advogados
 from modelos.clienteORM import Cliente
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import CnisVinculos
 from modelos.carenciasLei91 import CarenciaLei91
 from modelos.configGeraisORM import ConfigGerais
 from modelos.itemContribuicao import ItemContribuicao
@@ -36,7 +39,9 @@ from modelos.aposentadoriaORM import Aposentadoria
 from modelos.ipcaMensalORM import IpcaMensal
 from modelos.tipoBeneficioORM import TipoBeneficioModel
 from modelos.tiposESubtipos.tipoAposentadoriaORM import TipoAposentadoria
+
 from repositorios.informacoesRepositorio import ApiInformacoes
+from systemLog.logs import NewLogging
 from util.enums.databaseEnums import DatabaseEnum
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 from util.enums.newPrevEnums import TiposConexoes
@@ -50,11 +55,14 @@ class Main(Ui_MainWindow, QMainWindow):
 
     def __init__(self):
         super(Main, self).__init__()
+
+        load_dotenv()
         self.setupUi(self)
         self.contador = 0
         self.tipoConexao = TiposConexoes.sqlite
         self.dbConnection = ConfigConnection(instanciaBanco=self.tipoConexao)
         self.db = self.dbConnection.getDatabase()
+        self.newLogger = None
         self.loginPage = None
         self.center()
         self.show()
@@ -64,7 +72,17 @@ class Main(Ui_MainWindow, QMainWindow):
 
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.progresso)
-        self.timer.start(35)
+        self.timer.start(1)
+
+    def buscaPathTriggers(self) -> str:
+        pathTriggers = os.path.join("SQLs", "triggers")
+        if os.path.isdir(pathTriggers):
+            return pathTriggers
+        else:
+            return ""
+
+    def carregaLogsConfig(self):
+        self.newLogger = NewLogging()
 
     async def carregaTabelasIniciais(self):
         if TipoBeneficioModel.select().count() == 0:
@@ -85,7 +103,10 @@ class Main(Ui_MainWindow, QMainWindow):
 
         self.pbarSplash.setValue(self.contador)
 
-        if 10 <= self.contador < 70:
+        if 0 < self.contador < 2:
+            self.carregaLogsConfig()
+
+        elif 10 <= self.contador < 70:
             if self.contador == 10:
                 self.timer.stop()
                 self.iniciaBancosETelas()
@@ -109,7 +130,7 @@ class Main(Ui_MainWindow, QMainWindow):
         qtdTipos = TipoAposentadoria.select().count()
         database = SqliteDatabase(DatabaseEnum.producao.value)
         if qtdTipos == 0:
-            tipoAposPath = os.path.join(os.getcwd(), 'Daos', 'backup', 'cTipoAposentadoria.sql')
+            tipoAposPath = os.path.join(os.getcwd(), 'Banco', 'backup', 'cTipoAposentadoria.sql')
             sqlScript: str = buscaSql(tipoAposPath)
             database.execute_sql(sqlScript)
 
@@ -118,17 +139,20 @@ class Main(Ui_MainWindow, QMainWindow):
     def iniciaBancosETelas(self):
         try:
             loop = aio.get_event_loop()
+            pathTriggers = self.buscaPathTriggers()
+            fileDropTriggers = os.path.join(pathTriggers, "dropTriggers.sql")
 
             listaTabelas = {
                 Escritorios: 'CRIANDO TABELA DOS ESCRITORIOS...',
                 Advogados: 'CRIANDO TABELA DOS ADVOGADOS...',
                 Cliente: 'CRIANDO TABELA DO CLIENTE...',
-                CnisCabecalhos: 'CRIANDO TABELA DE CABEÇALHOS...',
+                CnisVinculos: 'CRIANDO TABELA DE VÍNCULOS...',
                 ConvMon: 'CRIANDO TABELA DE CONVERSÕES MONETÁRIAS...',
-                EspecieBenef: 'CRIANDO TABELA DE ESPÉCIES DE BENEFÍCIOS...',
+                EspecieBene: 'CRIANDO TABELA DE ESPÉCIES DE BENEFÍCIOS...',
                 ExpSobrevida: 'CRIANDO TABELA DAS EXPECTATIVAS DE SOBREVIDA...',
                 Indicadores: 'CRIANDO TABELA DE INDICADORES...',
                 IndiceAtuMonetaria: 'CRIANDO TABELA DOS ÍNDICES DE ATUALIZAÇÃO MONETARIA...',
+                IncidenteProcessual: 'CRIANDO TABELA DE INCIDENTES PROCESSUAIS...',
                 Ppp: 'CRIANDO TABELA DOS PPP...',
                 Processos: 'CRIANDO TABELA DOS PROCESSOS...',
                 Telefones: 'CRIANDO TABELA DE TELEFONES...',
@@ -151,6 +175,23 @@ class Main(Ui_MainWindow, QMainWindow):
                 self.lbInfo.setText(label)
                 instancia.create_table()
                 self.progresso(add=percentLoading)
+
+            if not os.path.isfile(fileDropTriggers):
+                popUpOkAlerta("Não foi possível encontrar os scripts do banco de dados. Entre em contato com o suporte.", funcao=self.close)
+                return False
+            else:
+                with open(fileDropTriggers, encoding='utf-8', mode='r') as f:
+                    queries = f.readlines()
+                    for drop in queries:
+                        resultado = database.execute_sql(drop)
+
+                for trigger in os.listdir(pathTriggers):
+                    query = os.path.join(pathTriggers, trigger)
+                    if fileDropTriggers == query:
+                        continue
+
+                    with open(query, encoding='utf-8', mode='r') as trig:
+                        resultado = database.execute_sql(trig.read())
 
             self.lbInfo.setText('CRIANDO TELA DE LOGIN...')
             self.progresso(add=percentLoading)
@@ -219,7 +260,7 @@ class Main(Ui_MainWindow, QMainWindow):
 if __name__ == '__main__':
     import sys
     from os.path import join
-    from util.helpers import pathTo, buscaSql
+    from util.helpers.helpers import pathTo, buscaSql
     from util.enums.configEnums import ImportantPaths
 
     PATH_FONTS = pathTo(ImportantPaths.fonts)

@@ -8,7 +8,7 @@ from SQLs.itensContribuicao import buscaIndicesByClienteId
 from heart.dashboard.tabs.tabResumoCNIS import TabResumoCNIS
 from sinaisCustomizados import Sinais
 from modelos.clienteORM import Cliente
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 from util.enums.aposentadoriaEnums import AtivApos
 
 

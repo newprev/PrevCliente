@@ -1,10 +1,11 @@
 from modelos.baseModelORM import BaseModel
 from modelos.escritoriosORM import Escritorios
-from systemLog.logs import *
 
 from peewee import AutoField, ForeignKeyField, BooleanField, CharField, DateTimeField
 from playhouse.signals import Model, post_save, pre_delete
 from datetime import datetime
+
+from util.helpers.helpers import datetimeToSql
 
 TABLENAME = 'advogados'
 
@@ -129,15 +130,15 @@ class Advogados(BaseModel, Model):
         )""")
 
 
-@post_save(sender=Advogados)
-def inserindoAdvogados(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoAdvogados>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoAdvogados>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
-
-
-@pre_delete(sender=Advogados)
-def deletandoAdvogados(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoAdvogados>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+# @post_save(sender=Advogados)
+# def inserindoAdvogados(*args, **kwargs):
+#     if kwargs['created']:
+#         logPrioridade(f'INSERT<inserindoAdvogados>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
+#     else:
+#         logPrioridade(f'UPDATE<inserindoAdvogados>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+#
+#
+# @pre_delete(sender=Advogados)
+# def deletandoAdvogados(*args, **kwargs):
+#     logPrioridade(f'DELETE<deletandoAdvogados>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
 

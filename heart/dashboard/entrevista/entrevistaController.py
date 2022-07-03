@@ -15,7 +15,7 @@ from heart.dashboard.entrevista.tipoProcessoAdmController import TipoProcessoAdm
 from heart.dashboard.entrevista.tipoBeneficioController import TipoBeneficioConcController
 from heart.dashboard.entrevista.tipoAtividadeController import TipoAtividadeController
 from heart.dashboard.tabs.clienteController import TabCliente
-from heart.dashboard.entrevista.localWidgets.pgConfigSimulacao import PgConfigSimulacao
+from heart.newEntrevista.localWidgets.pgConfigSimulacao import PgConfigSimulacao
 from heart.processos.processoController import ProcessosController
 from heart.dashboard.gerarDocsPage import GerarDocsPage
 from heart.dashboard.entrevista.localStyleSheet.cabecalho import *
@@ -28,7 +28,7 @@ from modelos.escritoriosORM import Escritorios
 
 from Design.CustomWidgets.infoGuiaEntrevista import InfoGuia
 
-from processos.aposentadoria import CalculosAposentadoria
+from beneficios.aposentadoria import CalculosAposentadoria
 # from compilado.aposentadoria import CalculosAposentadoria
 
 from util.enums.newPrevEnums import *
@@ -81,7 +81,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
         self.stackedWidget.addWidget(self.clienteController)  # tela: cadastro - 0
         self.stackedWidget.addWidget(self.naturezaPg)  # tela: naturezaProcesso - 1
-        self.stackedWidget.addWidget(self.tipoProcessoAdmPg)  # tela: tiposESubtipos de processos admnistrativos - 2
+        self.stackedWidget.addWidget(self.tipoProcessoAdmPg)  # tela: tiposESubtipos de beneficios admnistrativos - 2
         self.stackedWidget.addWidget(self.tipoBeneficioConcPg)  # tela: tiposESubtipos de benefícios Concessão -  3
         self.stackedWidget.addWidget(self.tipoAtividadePg)  # tela: tiposESubtipos de atividade Aposentadoria - 4
         self.stackedWidget.addWidget(self.impressaoDocsPg)  # tela: tiposESubtipos de geração de documentos - 5
@@ -182,7 +182,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
 
             elif self.telaAtual == MomentoEntrevista.tipoAtividade:
                 self.loading(20)
-                self.processoModelo.subTipoApos = 0
+                self.processoModelo.regraAposentadoria = 0
 
                 self.loading(20)
                 self.processoModelo.dib = self.calculaDib()
@@ -287,7 +287,7 @@ class EntrevistaController(QMainWindow, Ui_mwEntrevistaPage):
                 self.stackedWidget.setCurrentIndex(2)
             elif wdgFuturo == NaturezaProcesso.judicial:
                 self.processoModelo.natureza = NaturezaProcesso.judicial.value
-                # TODO: wdgAtual dos tiposESubtipos de processos judiciais
+                # TODO: wdgAtual dos tiposESubtipos de beneficios judiciais
                 pass
             else:
                 self.stackedWidget.setCurrentIndex(0)

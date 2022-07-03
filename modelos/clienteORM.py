@@ -1,12 +1,14 @@
+from logging import info, debug
+
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
 
 from modelos.telefonesORM import Telefones
 from modelos.clienteProfissao import ClienteProfissao
 from modelos.clienteInfoBanco import ClienteInfoBanco
-from systemLog.logs import logPrioridade
 from modelos.escritoriosORM import Escritorios
-from util.dateHelper import strToDate
+from util.enums.logEnums import TipoLog
+from util.helpers.dateHelper import strToDate
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from peewee import AutoField, CharField, ForeignKeyField, DateField, IntegerField, DateTimeField, BooleanField
@@ -51,6 +53,7 @@ class Cliente(BaseModel, Model):
     rgCliente = CharField(column_name='rgCliente', null=True)
     senhaINSS = CharField(column_name='senhaINSS', null=True)
     pathCnis = CharField(column_name='pathCnis', null=True)
+    pathFoto = CharField(column_name='pathFoto', null=True)
     arquivado = BooleanField(column_name='arquivado', default=False)
     observacoes = CharField(column_name='observacoes', max_length=4000, null=True)
     dataCadastro = DateTimeField(column_name='dataCadastro', default=datetime.now())
@@ -149,12 +152,9 @@ class Cliente(BaseModel, Model):
 
 @post_save(sender=Cliente)
 def inserindoCliente(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoCabecalho>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    debug(f'{TipoLog.DataBase.value}::inserindoCliente___________________{TABLENAME}')
 
 
 @pre_delete(sender=Cliente)
 def deletandoCliente(*args, **kwargs):
-    logPrioridade(f'DELETE<inserindoCabecalho>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    debug(f'{TipoLog.DataBase.value}::deletandoCliente___________________{TABLENAME}')

@@ -3,7 +3,7 @@ import datetime
 from PyQt5.QtWidgets import QWidget
 
 from typing import Union
-from util.dateHelper import mascaraData
+from util.helpers.dateHelper import mascaraData
 
 from Design.CustomWidgets.styleSheets.tagStyles import tipoTagFiltro, textTagFiltro
 from Design.pyUi.wdgTagFiltro import Ui_wdgTagFiltro

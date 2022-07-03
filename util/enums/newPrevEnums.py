@@ -73,9 +73,9 @@ class TipoItemContribuicao(Enum):
     remuneracao = 'R'
 
 class ItemOrigem(Enum):
-    CNIS = 'C'
-    NEWPREV = 'N'
-    SIMULACAO = 'S'
+    CNIS = 'CNIS'
+    NEWPREV = 'NEWPREV'
+    SIMULACAO = 'SIMULACAO'
 
 class TipoFiltro(Enum):
     indicador = 0

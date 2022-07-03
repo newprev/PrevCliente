@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="botoes">
+    <file>closeLarge.png</file>
+  </qresource>
+  <qresource prefix="indicador">
+    <file>CheckBoxFalse.png</file>
+    <file>checkBoxTrue.png</file>
+  </qresource>
+</RCC>

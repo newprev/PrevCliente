@@ -26,3 +26,15 @@ class NewButtonHover(Enum):
             {BorderRadius.r4.value}
             background-color: {NewColorsPrimary.p200.value};         
         }}"""
+
+
+class NewCheckBox(Enum):
+    padrao = f"""
+        QCheckBox{{
+            {Fonts.bebasStd.value}
+            {FontSize.H2.value}
+            color: {NewColorsWhite.white400.value};
+
+            {BorderRadius.r4.value}
+            background-color: {NewColorsPrimary.p100.value};         
+        }}"""

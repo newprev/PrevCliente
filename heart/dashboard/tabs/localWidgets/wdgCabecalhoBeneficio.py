@@ -2,15 +2,15 @@ import datetime
 
 from PyQt5.QtWidgets import QWidget, QMessageBox
 from Design.pyUi.wdgCabecalhoBeneficio import Ui_wdgCabecalhoBeneficio
-from util.dateHelper import strToDate
-from util.helpers import situacaoBeneficio, dictEspecies
+from util.helpers.dateHelper import strToDate
+from util.helpers.helpers import situacaoBeneficio, dictEspecies
 
-from modelos.cabecalhoORM import CnisCabecalhos
+from modelos.vinculoORM import cnisVinculos
 
 
 class WdgBeneficio(QWidget, Ui_wdgCabecalhoBeneficio):
 
-    def __init__(self, cabecalho: CnisCabecalhos, parent=None):
+    def __init__(self, cabecalho: cnisVinculos, parent=None):
         super(WdgBeneficio, self).__init__(parent=parent)
         self.setupUi(self)
         self.cabecalho = cabecalho

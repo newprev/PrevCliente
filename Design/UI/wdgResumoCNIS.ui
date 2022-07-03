@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1181</width>
-    <height>515</height>
+    <height>793</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -304,7 +304,7 @@
                   <item alignment="Qt::AlignBottom">
                    <widget class="QPushButton" name="pbEmpresas">
                     <property name="text">
-                     <string>Empresas</string>
+                     <string>Vínculos</string>
                     </property>
                     <property name="checkable">
                      <bool>true</bool>
@@ -476,33 +476,42 @@
 
 /*-------------------------------------------  Widget --------------------------------------------*/
 #pgEmpresas, #pgContribuicoes, 
-#pgBeneficios {
+#pgBeneficios, #pgCadastroVinculo, 
+#pgContrib, #pgBene,
+#pgCadContribBene {
 	background-color: white;
 }
 
 /*-------------------------------------------  Scroll Bar --------------------------------------------*/
 QScrollBar:vertical {
-	border: 0px solid none;
-	background: #F2F2F2;
-}
+        background-color: #DDDEDF;
+        width: 15px;
+        margin: 15px 3px 15px 3px;
+        border: 1px transparent #2A2929;
+        border-radius: 4px;
+    }
 
 QScrollBar::handle:vertical {
-	background-color: #3F4E8C;
-	min-height: 10px;
-	max-height: 20px;
-
-	border-radius: 5px;
+    background-color: #3F4E8C;
+    min-height: 5px;
+    width: 20px;
+	border-radius: 4px;
 }
 
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical{
+      border: none;
+      background: none;
+      color: none;
+}
 
-/*---------------------------- Push Button ----------------------------------*/
-#pbInserir, #pbInserirContrib {
-	font: 12pt &quot;Avenir LT Std&quot;;
-	color: #3F4E8C;
-	
-	border: 2px solid #3F4E8C;
-	border-radius: 8px;
-	padding: 6px;
+QScrollBar::add-line:vertical {
+	border: none;
+    background: none;
+}
+
+QScrollBar::sub-line:vertical {
+	border: none;
+    background: none;
 }
 
 /*----------------------- Scroll Area  and  QWidget ------------------------*/
@@ -510,35 +519,17 @@ QScrollBar::handle:vertical {
 	background-color: white;
 }
 
-/*-------------------------------- Labels -----------------------------------------*/
-#lbNomeEmp {
-	font: 15pt &quot;Avenir LT Std&quot;;
-	color: #3F4E8C;
-	
-	font-weight: 750;
-	line-height: 24px;
+/*--------------------------- Labels ------------------------*/
 
-	margin: 8px 0px 0px 0px;
-}
-
-#lbCNPJouNB, #lbDataInicio, 
-#lbDataFim {
-	font: 11pt &quot;Avenir LT Std&quot;;
-	color: #3F4E8C;
-	
-	font-weight: 120;
-	line-height: 24px;
-
-	margin: 2px 0px 0px 0px;
-}
-
-/*------------------------------------------- Table Widget -------------------------------------------*/
-#tblContribuicoes {
-	selection-background-color: #F9F9F9;
-	selection-color: grey;
+/*--------------------- Table Widget -----------------------*/
+#tblContribuicoes, #tblCadContrib,
+#tblCadBene {
+	selection-background-color: #DDDEDF;
+	selection-color: #292D40;
 	gridline-color: white;
 
 	border: 0px solid transparent;
+	alternate-background-color: #F4F5F8;
 }
 
 QHeaderView {
@@ -552,17 +543,139 @@ QHeaderView::section {
 	min-height: 45px;
 }
 
-#tblContribuicoes::item:last {
+QHeaderView:QTableCornerButton::section {
+    background-color: white;
+	border: 1px solid white;
+}
+
+#tblContribuicoes::item:last,
+#tblCadContrib::item:last,
+#tblCadBene::item:last {
 	selection-background-color: black;
 	selection-color: grey;
 	gridline-color: black;
 	border: 0px solid transparent;
 }
 
-#tblContribuicoes::item {
-	padding: 2px 24px 2px 24px;
+#tblContribuicoes::item,
+#tblCadContrib::item,
+#tblCadBene::item {
+	padding: 2px 2px 2px 2px;
 }
-</string>
+
+/*------------------------------------------- Line edit -------------------------------------------*/
+QLineEdit {
+	font: 12pt &quot;Avenir LT Std&quot;;
+    border: 0px solid gray;
+    border-radius: 8px;
+   	padding: 0 8px;
+    background: #F9F9F9;
+    selection-background-color: darkgray;
+}
+
+/*------------------------------ Radio Button -------------------------------------*/
+#rbContribuicao, #rbBeneficio {
+	font: 12pt &quot;Avenir LT Std&quot;;
+}
+
+#rbContribuicao::indicator::unchecked, 
+#rbBeneficio::indicator::unchecked {
+	image: url(:/opcoes/rbUnchecked.png);
+}
+
+#rbContribuicao::indicator::checked, 
+#rbBeneficio::indicator::checked {
+	image: url(:/opcoes/rbChecked.png);
+}
+
+/*---------------------- Combo box ---------------------*/
+QComboBox {
+    border: 0px solid gray;
+    border-radius: 8px;
+    padding: 1px 18px 1px 8px;
+	
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #606970;	
+}
+
+QComboBox:editable {
+    background: white;
+}
+
+QComboBox:!editable, QComboBox::drop-down:editable {
+     background: #F9F9F9;
+}
+
+QComboBox:!editable:on, QComboBox::drop-down:editable:on {
+    background: #F9F9F9;
+}
+
+QComboBox:on {
+    padding-top: 3px;
+    padding-left: 4px;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+	padding: 0px 8px 0px 0px;
+
+    border-left-width: 0px;
+}
+
+QComboBox::down-arrow {
+    image: url(:/upDown/down.png);
+}
+
+QComboBox::down-arrow:on {
+    top: 1px;
+    left: 1px;
+}
+
+/*------------------------------------------- Date edit -------------------------------------------*/
+#dtDataInicio, #dtDataFim,
+#dtDataInicioBene, #dtDataFimBene {
+	border: 0px solid gray;
+    border-radius: 8px;
+    padding: 1px 18px 1px 8px;
+	
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #606970;
+
+	background-color: #F9F9F9;
+}
+
+#dtDataInicio::down-button,
+#dtDataFim::down-button,
+#dtDataInicioBene::down-button,
+#dtDataFimBene::down-button {
+	subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+	padding: 0px 8px 0px 0px;
+
+    border-left-width: 0px;
+}
+
+#dtDataInicio::down-arrow,
+#dtDataFim::down-arrow,
+#dtDataInicioBene::down-arrow,
+#dtDataFimBene::down-arrow {
+    image: url(:/upDown/calendar.png);
+}
+
+#dtDataInicio::drop-down,
+#dtDataFim::drop-down,
+#dtDataInicioBene::drop-down,
+#dtDataFimBene::drop-down {
+	subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+	padding: 0px 8px 0px 0px;
+
+    border-left-width: 0px;
+}</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
@@ -604,21 +717,81 @@ QHeaderView::section {
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="styleSheet">
+             <string notr="true">/*------------------ Push button ------------------*/
+#pbInserirResumo {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	border: 2px solid #3F4E8C;
+	border-radius: 8px;
+	padding: 6px;
+}
+
+/*------------------ Labels ------------------*/
+QLabel {
+	font: 12pt &quot;Avenir LT Std&quot;;
+}
+
+#lbInfoTmpContribuicao {
+	font-weight: 750;
+	color: #3F4E8C;
+}
+
+#lbInfoTpAte94, #lbInfoTpAte98,
+#lbInfoTpAte2019, #lbInfoTpAteHoje {
+	font: 11pt &quot;Avenir LT Std&quot;;
+	color: black;
+	
+	font-weight: 120;
+	line-height: 24px;
+
+	margin: 2px 0px 0px 0px;
+}
+
+#lbTpAte94, #lbTpAte98,
+#lbTpAte2019, #lbTpAteHoje {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: black;
+	
+	font-weight: 750;
+	line-height: 24px;
+
+	margin: 2px 0px 0px 0px;
+}
+
+/*------------------ Frames ------------------*/
+#frTmpContrib {
+	background-color: #F9F9F9;
+	border: 0px solid none;
+	
+	border-radius: 8px;
+}
+
+#frRightInfo {
+	border-radius: 8px;
+
+	background-color: white;
+}</string>
+            </property>
             <layout class="QGridLayout" name="gridLayout_8">
              <property name="topMargin">
-              <number>0</number>
+              <number>8</number>
+             </property>
+             <property name="rightMargin">
+              <number>12</number>
              </property>
              <property name="bottomMargin">
               <number>0</number>
              </property>
              <property name="horizontalSpacing">
-              <number>32</number>
+              <number>0</number>
              </property>
              <property name="verticalSpacing">
               <number>16</number>
              </property>
              <item row="0" column="0">
-              <widget class="QFrame" name="frame">
+              <widget class="QFrame" name="frLeftVinculos">
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
                </property>
@@ -626,7 +799,7 @@ QHeaderView::section {
                 <enum>QFrame::Raised</enum>
                </property>
                <layout class="QGridLayout" name="gridLayout_4">
-                <item row="0" column="0">
+                <item row="0" column="0" alignment="Qt::AlignTop">
                  <widget class="QFrame" name="frame_2">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -655,7 +828,7 @@ QHeaderView::section {
                     </spacer>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pbInserir">
+                    <widget class="QPushButton" name="pbInserirResumo">
                      <property name="minimumSize">
                       <size>
                        <width>80</width>
@@ -678,25 +851,40 @@ QHeaderView::section {
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>700</height>
+                   </size>
+                  </property>
                   <property name="frameShape">
                    <enum>QFrame::NoFrame</enum>
                   </property>
                   <property name="verticalScrollBarPolicy">
-                   <enum>Qt::ScrollBarAlwaysOn</enum>
+                   <enum>Qt::ScrollBarAsNeeded</enum>
                   </property>
                   <property name="sizeAdjustPolicy">
-                   <enum>QAbstractScrollArea::AdjustIgnored</enum>
+                   <enum>QAbstractScrollArea::AdjustToContents</enum>
                   </property>
                   <property name="widgetResizable">
                    <bool>true</bool>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
                   </property>
                   <widget class="QWidget" name="wdgScroll">
                    <property name="geometry">
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>569</width>
-                     <height>350</height>
+                     <width>583</width>
+                     <height>574</height>
                     </rect>
                    </property>
                    <property name="sizePolicy">
@@ -708,6 +896,160 @@ QHeaderView::section {
                   </widget>
                  </widget>
                 </item>
+                <item row="2" column="0">
+                 <spacer name="verticalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Minimum</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="0" column="2" alignment="Qt::AlignTop">
+              <widget class="QFrame" name="frRightInfo">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_19">
+                <item row="0" column="0">
+                 <widget class="QFrame" name="frTmpContrib">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>270</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_7">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>8</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>8</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>8</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>8</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="lbInfoTmpContribuicao">
+                     <property name="text">
+                      <string>Tempo de contribuição</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QFrame" name="frame_8">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_18">
+                   <item row="0" column="0" colspan="2">
+                    <widget class="QLabel" name="lbInfoTpAte94">
+                     <property name="text">
+                      <string>Até 1994:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0" colspan="2">
+                    <widget class="QLabel" name="lbTpAte94">
+                     <property name="text">
+                      <string>1 anos e 5 meses</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="0" colspan="2">
+                    <widget class="QLabel" name="lbInfoTpAte98">
+                     <property name="text">
+                      <string>Até 1998:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="4" column="0" colspan="2">
+                    <widget class="QLabel" name="lbInfoTpAte2019">
+                     <property name="text">
+                      <string>Até 2019 - EC:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="5" column="0" colspan="2">
+                    <widget class="QLabel" name="lbTpAte2019">
+                     <property name="text">
+                      <string>3 anos</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="0" colspan="2">
+                    <widget class="QLabel" name="lbInfoTpAteHoje">
+                     <property name="text">
+                      <string>Até hoje:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="7" column="0" colspan="2">
+                    <widget class="QLabel" name="lbTpAteHoje">
+                     <property name="text">
+                      <string>10 anos e 7 meses</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="0" colspan="2">
+                    <widget class="QLabel" name="lbTpAte98">
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
                </layout>
               </widget>
              </item>
@@ -716,12 +1058,25 @@ QHeaderView::section {
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::MinimumExpanding</enum>
-               </property>
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="3">
+              <spacer name="horizontalSpacer_12">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>24</width>
                  <height>20</height>
                 </size>
                </property>
@@ -735,6 +1090,103 @@ QHeaderView::section {
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/*-------------------------------- Push Button -----------------------------------------*/
+#pbInserirContrib, #pbSalvarSelecionados {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	background-color: white;
+	
+	border: 2px solid #3F4E8C;
+	border-radius: 8px;
+	padding: 6px;
+}
+
+/*-------------------------------- Labels -----------------------------------------*/
+#lbNomeEmp {
+	font: 15pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	font-weight: 750;
+	line-height: 24px;
+
+	margin: 8px 0px 0px 0px;
+}
+
+#lbCNPJouNB, #lbDataInicio, 
+#lbDataFim, #lbInfoContribuicao,
+#lbInsalubridade, #lbDeficiencia {
+	font: 11pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	font-weight: 120;
+	line-height: 24px;
+
+	margin: 2px 0px 0px 0px;
+}
+
+#lbInfoTempoEspecial {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: white;
+	
+	padding: 6px;
+}
+
+#lbInfoTpEspecial, #lbInfoTpDeficiencia,
+#lbInfoTpNormal {
+	font: 11pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	font-weight: 120;
+	line-height: 24px;
+
+	margin: 2px 0px 0px 0px;
+}
+
+#lbTpEspecial, #lbTpDeficiencia,
+#lbTpNormal {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	font-weight: 750;
+	line-height: 24px;
+
+	margin: 2px 0px 0px 0px;
+}
+/*-------------------------------- Frame -----------------------------------------*/
+#frInfoTempoEsp {
+	background-color: #3F4E8C;
+	
+	border: 0px solid none;
+	border-radius: 8px;
+}
+
+#frTempoEspecial, #frInfoEmp, #frImportante {
+	background-color: white;
+	border-radius: 8px;
+
+	border: 0px solid none;
+}
+
+#frBgFirula {
+	background-color: orange;
+	border-radius: 8px;
+
+	border: 0px solid none;
+}
+
+#frFaltaData {
+	background-image: url(:/opcoes/blueFaltaInfo.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+#frInsalubridade {
+	background-image: url(:/opcoes/blueInsalubridade.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_6">
              <property name="leftMargin">
@@ -765,288 +1217,32 @@ QHeaderView::section {
                  <number>0</number>
                 </property>
                 <item row="1" column="0">
-                 <widget class="QTableWidget" name="tblContribuicoes">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
-                  </property>
-                  <property name="sizeAdjustPolicy">
-                   <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
-                  </property>
-                  <property name="editTriggers">
-                   <set>QAbstractItemView::NoEditTriggers</set>
-                  </property>
-                  <property name="showDropIndicator" stdset="0">
-                   <bool>false</bool>
-                  </property>
-                  <property name="dragDropOverwriteMode">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alternatingRowColors">
-                   <bool>true</bool>
-                  </property>
-                  <property name="selectionMode">
-                   <enum>QAbstractItemView::NoSelection</enum>
-                  </property>
-                  <property name="selectionBehavior">
-                   <enum>QAbstractItemView::SelectRows</enum>
-                  </property>
-                  <property name="showGrid">
-                   <bool>false</bool>
-                  </property>
-                  <property name="gridStyle">
-                   <enum>Qt::NoPen</enum>
-                  </property>
-                  <property name="sortingEnabled">
-                   <bool>true</bool>
-                  </property>
-                  <attribute name="horizontalHeaderVisible">
-                   <bool>false</bool>
-                  </attribute>
-                  <attribute name="horizontalHeaderCascadingSectionResizes">
-                   <bool>true</bool>
-                  </attribute>
-                  <attribute name="horizontalHeaderMinimumSectionSize">
-                   <number>70</number>
-                  </attribute>
-                  <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-                   <bool>false</bool>
-                  </attribute>
-                  <attribute name="verticalHeaderVisible">
-                   <bool>false</bool>
-                  </attribute>
-                  <attribute name="verticalHeaderHighlightSections">
-                   <bool>false</bool>
-                  </attribute>
-                  <row>
-                   <property name="text">
-                    <string>Teste</string>
-                   </property>
-                  </row>
-                  <column>
-                   <property name="text">
-                    <string>id</string>
-                   </property>
-                  </column>
-                  <column>
-                   <property name="text">
-                    <string>Entrada</string>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <family>Avenir LT Std</family>
-                     <pointsize>12</pointsize>
-                     <weight>75</weight>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="textAlignment">
-                    <set>AlignCenter</set>
-                   </property>
-                   <property name="background">
-                    <color>
-                     <red>255</red>
-                     <green>255</green>
-                     <blue>255</blue>
-                    </color>
-                   </property>
-                   <property name="foreground">
-                    <brush brushstyle="SolidPattern">
-                     <color alpha="255">
-                      <red>63</red>
-                      <green>78</green>
-                      <blue>140</blue>
-                     </color>
-                    </brush>
-                   </property>
-                  </column>
-                  <column>
-                   <property name="text">
-                    <string>Competência</string>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <family>Avenir LT Std</family>
-                     <pointsize>12</pointsize>
-                     <weight>75</weight>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="textAlignment">
-                    <set>AlignCenter</set>
-                   </property>
-                   <property name="background">
-                    <color>
-                     <red>255</red>
-                     <green>255</green>
-                     <blue>255</blue>
-                    </color>
-                   </property>
-                   <property name="foreground">
-                    <brush brushstyle="SolidPattern">
-                     <color alpha="255">
-                      <red>63</red>
-                      <green>78</green>
-                      <blue>140</blue>
-                     </color>
-                    </brush>
-                   </property>
-                  </column>
-                  <column>
-                   <property name="text">
-                    <string>Salário de
-contribuição</string>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <family>Avenir LT Std</family>
-                     <pointsize>12</pointsize>
-                     <weight>75</weight>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="textAlignment">
-                    <set>AlignCenter</set>
-                   </property>
-                   <property name="background">
-                    <color>
-                     <red>255</red>
-                     <green>255</green>
-                     <blue>255</blue>
-                    </color>
-                   </property>
-                   <property name="foreground">
-                    <brush brushstyle="SolidPattern">
-                     <color alpha="255">
-                      <red>63</red>
-                      <green>78</green>
-                      <blue>140</blue>
-                     </color>
-                    </brush>
-                   </property>
-                  </column>
-                  <column>
-                   <property name="text">
-                    <string>Natureza</string>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <family>Avenir LT Std</family>
-                     <pointsize>12</pointsize>
-                     <weight>75</weight>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="textAlignment">
-                    <set>AlignCenter</set>
-                   </property>
-                   <property name="background">
-                    <color>
-                     <red>255</red>
-                     <green>255</green>
-                     <blue>255</blue>
-                    </color>
-                   </property>
-                   <property name="foreground">
-                    <brush brushstyle="SolidPattern">
-                     <color alpha="255">
-                      <red>63</red>
-                      <green>78</green>
-                      <blue>140</blue>
-                     </color>
-                    </brush>
-                   </property>
-                  </column>
-                  <column>
-                   <property name="text">
-                    <string>Indicadores</string>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <family>Avenir LT Std</family>
-                     <pointsize>12</pointsize>
-                     <weight>75</weight>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="textAlignment">
-                    <set>AlignCenter</set>
-                   </property>
-                   <property name="background">
-                    <color>
-                     <red>255</red>
-                     <green>255</green>
-                     <blue>255</blue>
-                    </color>
-                   </property>
-                   <property name="foreground">
-                    <brush brushstyle="SolidPattern">
-                     <color alpha="255">
-                      <red>63</red>
-                      <green>78</green>
-                      <blue>140</blue>
-                     </color>
-                    </brush>
-                   </property>
-                  </column>
-                  <item row="0" column="0">
-                   <property name="text">
-                    <string>5</string>
-                   </property>
-                  </item>
-                  <item row="0" column="1">
-                   <property name="text">
-                    <string>10</string>
-                   </property>
-                  </item>
-                  <item row="0" column="2">
-                   <property name="text">
-                    <string>10/02/2020</string>
-                   </property>
-                  </item>
-                  <item row="0" column="3">
-                   <property name="text">
-                    <string>R$ 1200,00</string>
-                   </property>
-                  </item>
-                  <item row="0" column="4">
-                   <property name="text">
-                    <string>Recolhimento</string>
-                   </property>
-                  </item>
-                  <item row="0" column="5">
-                   <property name="text">
-                    <string>sdfasdfasdfasdfsd</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QFrame" name="frInfoResumo">
+                 <widget class="QFrame" name="frTblContribuicoes">
                   <property name="frameShape">
                    <enum>QFrame::NoFrame</enum>
                   </property>
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
                   </property>
-                  <layout class="QHBoxLayout" name="horizontalLayout_4">
+                  <layout class="QGridLayout" name="gridLayout_16">
                    <property name="topMargin">
-                    <number>0</number>
+                    <number>9</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>16</number>
                    </property>
                    <property name="bottomMargin">
-                    <number>0</number>
+                    <number>4</number>
                    </property>
-                   <item>
-                    <widget class="QFrame" name="frInfoEmp">
-                     <property name="minimumSize">
+                   <property name="horizontalSpacing">
+                    <number>24</number>
+                   </property>
+                   <item row="0" column="3" rowspan="3">
+                    <widget class="QFrame" name="frTempoEspecial">
+                     <property name="maximumSize">
                       <size>
-                       <width>450</width>
-                       <height>0</height>
+                       <width>300</width>
+                       <height>16777215</height>
                       </size>
                      </property>
                      <property name="frameShape">
@@ -1055,9 +1251,674 @@ contribuição</string>
                      <property name="frameShadow">
                       <enum>QFrame::Raised</enum>
                      </property>
-                     <layout class="QGridLayout" name="gridLayout_7">
-                      <property name="leftMargin">
+                     <layout class="QGridLayout" name="gridLayout_15">
+                      <property name="topMargin">
                        <number>0</number>
+                      </property>
+                      <item row="5" column="1">
+                       <widget class="QComboBox" name="cbxDeficiencia">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="5" column="0">
+                       <widget class="QLabel" name="lbDeficiencia">
+                        <property name="text">
+                         <string>Deficiência</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="0" colspan="2">
+                       <widget class="QFrame" name="frame_7">
+                        <property name="frameShape">
+                         <enum>QFrame::NoFrame</enum>
+                        </property>
+                        <property name="frameShadow">
+                         <enum>QFrame::Raised</enum>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_17">
+                         <property name="leftMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="topMargin">
+                          <number>8</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>0</number>
+                         </property>
+                         <item row="0" column="0" colspan="2">
+                          <widget class="QLabel" name="lbInfoTpEspecial">
+                           <property name="text">
+                            <string>Tempo especial:</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="0" colspan="2">
+                          <widget class="QLabel" name="lbInfoTpDeficiencia">
+                           <property name="text">
+                            <string>Tempo deficiência:</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="3" column="0" colspan="2">
+                          <widget class="QLabel" name="lbTpDeficiencia">
+                           <property name="text">
+                            <string>-</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="0" colspan="2">
+                          <widget class="QLabel" name="lbTpEspecial">
+                           <property name="text">
+                            <string>1 anos e 5 meses</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="5" column="0" colspan="2">
+                          <widget class="QLabel" name="lbTpNormal">
+                           <property name="text">
+                            <string>3 anos</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="4" column="0" colspan="2">
+                          <widget class="QLabel" name="lbInfoTpNormal">
+                           <property name="text">
+                            <string>Tempo normal:</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="2" column="0" colspan="2">
+                       <widget class="QFrame" name="frInfoTempoEsp">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>50</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>70</height>
+                         </size>
+                        </property>
+                        <property name="frameShape">
+                         <enum>QFrame::NoFrame</enum>
+                        </property>
+                        <property name="frameShadow">
+                         <enum>QFrame::Raised</enum>
+                        </property>
+                        <layout class="QHBoxLayout" name="horizontalLayout_15">
+                         <property name="spacing">
+                          <number>0</number>
+                         </property>
+                         <property name="leftMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="topMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="bottomMargin">
+                          <number>0</number>
+                         </property>
+                         <item>
+                          <widget class="QLabel" name="lbInfoTempoEspecial">
+                           <property name="text">
+                            <string>Alteração de tempo especial</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="4" column="1">
+                       <widget class="QComboBox" name="cbxInsalubridade">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="3" column="0" colspan="2">
+                       <spacer name="verticalSpacer_5">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                         <enum>QSizePolicy::Minimum</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>10</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                      <item row="4" column="0">
+                       <widget class="QLabel" name="lbInsalubridade">
+                        <property name="text">
+                         <string>Insalubridade</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="6" column="0" colspan="2">
+                       <spacer name="verticalSpacer_6">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                         <enum>QSizePolicy::Minimum</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>40</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                      <item row="7" column="0" colspan="2">
+                       <widget class="QPushButton" name="pbSalvarSelecionados">
+                        <property name="minimumSize">
+                         <size>
+                          <width>240</width>
+                          <height>40</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>13215465</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Salvar para selecionados</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="0" colspan="2">
+                       <spacer name="verticalSpacer_7">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                         <enum>QSizePolicy::Minimum</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>40</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item row="0" column="2" rowspan="2">
+                    <spacer name="horizontalSpacer_10">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeType">
+                      <enum>QSizePolicy::Preferred</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="QPushButton" name="pbInserirContrib">
+                     <property name="minimumSize">
+                      <size>
+                       <width>80</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>250</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Inserir contribuição</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="3">
+                    <spacer name="verticalSpacer">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item row="1" column="0" rowspan="3" colspan="2">
+                    <widget class="QTableWidget" name="tblContribuicoes">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>600</height>
+                      </size>
+                     </property>
+                     <property name="frameShape">
+                      <enum>QFrame::NoFrame</enum>
+                     </property>
+                     <property name="sizeAdjustPolicy">
+                      <enum>QAbstractScrollArea::AdjustToContents</enum>
+                     </property>
+                     <property name="editTriggers">
+                      <set>QAbstractItemView::NoEditTriggers</set>
+                     </property>
+                     <property name="showDropIndicator" stdset="0">
+                      <bool>false</bool>
+                     </property>
+                     <property name="dragDropOverwriteMode">
+                      <bool>false</bool>
+                     </property>
+                     <property name="alternatingRowColors">
+                      <bool>true</bool>
+                     </property>
+                     <property name="selectionMode">
+                      <enum>QAbstractItemView::MultiSelection</enum>
+                     </property>
+                     <property name="selectionBehavior">
+                      <enum>QAbstractItemView::SelectRows</enum>
+                     </property>
+                     <property name="showGrid">
+                      <bool>false</bool>
+                     </property>
+                     <property name="gridStyle">
+                      <enum>Qt::NoPen</enum>
+                     </property>
+                     <property name="sortingEnabled">
+                      <bool>true</bool>
+                     </property>
+                     <attribute name="horizontalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderCascadingSectionResizes">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderMinimumSectionSize">
+                      <number>70</number>
+                     </attribute>
+                     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderStretchLastSection">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderCascadingSectionResizes">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderMinimumSectionSize">
+                      <number>25</number>
+                     </attribute>
+                     <attribute name="verticalHeaderDefaultSectionSize">
+                      <number>40</number>
+                     </attribute>
+                     <attribute name="verticalHeaderHighlightSections">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderStretchLastSection">
+                      <bool>false</bool>
+                     </attribute>
+                     <row>
+                      <property name="text">
+                       <string>Teste</string>
+                      </property>
+                     </row>
+                     <column>
+                      <property name="text">
+                       <string>id</string>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Nº</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Competência</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Salário de
+contribuição</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Indicadores</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Fator
+insalubridade</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Fator
+deficiencia</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Ações</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <item row="0" column="2">
+                      <property name="text">
+                       <string>25/01/2020</string>
+                      </property>
+                     </item>
+                     <item row="0" column="3">
+                      <property name="text">
+                       <string>15230</string>
+                      </property>
+                     </item>
+                     <item row="0" column="4">
+                      <property name="text">
+                       <string>IUSDF</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QFrame" name="frInfoResumo">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>75</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>98</height>
+                   </size>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_4">
+                   <property name="spacing">
+                    <number>42</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>9</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>9</number>
+                   </property>
+                   <item>
+                    <widget class="QFrame" name="frBgFirula">
+                     <property name="frameShape">
+                      <enum>QFrame::NoFrame</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_6">
+                      <property name="spacing">
+                       <number>0</number>
+                      </property>
+                      <property name="leftMargin">
+                       <number>8</number>
                       </property>
                       <property name="topMargin">
                        <number>0</number>
@@ -1068,52 +1929,182 @@ contribuição</string>
                       <property name="bottomMargin">
                        <number>0</number>
                       </property>
-                      <item row="0" column="0" colspan="2">
-                       <widget class="QLabel" name="lbNomeEmp">
-                        <property name="text">
-                         <string>DROGARIA COMERCIAL DE REMÉDIOS LTDA</string>
+                      <item>
+                       <widget class="QFrame" name="frInfoEmp">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
                         </property>
-                        <property name="wordWrap">
-                         <bool>true</bool>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="3" column="0" alignment="Qt::AlignBottom">
-                       <widget class="QLabel" name="lbDataInicio">
-                        <property name="text">
-                         <string>Início: 01/02/2000</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="0" alignment="Qt::AlignTop">
-                       <widget class="QLabel" name="lbCNPJouNB">
-                        <property name="text">
-                         <string>CNPJ: 45.658.000-1/34</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="3" column="1" alignment="Qt::AlignLeft|Qt::AlignBottom">
-                       <widget class="QLabel" name="lbDataFim">
-                        <property name="text">
-                         <string>Fim: 04/05/2010</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="0">
-                       <spacer name="verticalSpacer">
-                        <property name="orientation">
-                         <enum>Qt::Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                         <enum>QSizePolicy::Fixed</enum>
-                        </property>
-                        <property name="sizeHint" stdset="0">
+                        <property name="minimumSize">
                          <size>
-                          <width>20</width>
-                          <height>12</height>
+                          <width>550</width>
+                          <height>0</height>
                          </size>
                         </property>
-                       </spacer>
+                        <property name="frameShape">
+                         <enum>QFrame::NoFrame</enum>
+                        </property>
+                        <property name="frameShadow">
+                         <enum>QFrame::Raised</enum>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_7">
+                         <property name="leftMargin">
+                          <number>4</number>
+                         </property>
+                         <property name="topMargin">
+                          <number>4</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>4</number>
+                         </property>
+                         <property name="bottomMargin">
+                          <number>4</number>
+                         </property>
+                         <property name="horizontalSpacing">
+                          <number>8</number>
+                         </property>
+                         <property name="verticalSpacing">
+                          <number>2</number>
+                         </property>
+                         <item row="3" column="1">
+                          <widget class="QLabel" name="lbDataFim">
+                           <property name="text">
+                            <string>Fim: 04/05/2010</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="1">
+                          <widget class="QLabel" name="lbInfoContribuicao">
+                           <property name="text">
+                            <string>CONTRIBUIÇÃO</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="2">
+                          <spacer name="horizontalSpacer_11">
+                           <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                           </property>
+                           <property name="sizeHint" stdset="0">
+                            <size>
+                             <width>40</width>
+                             <height>20</height>
+                            </size>
+                           </property>
+                          </spacer>
+                         </item>
+                         <item row="2" column="0">
+                          <widget class="QLabel" name="lbCNPJouNB">
+                           <property name="text">
+                            <string>CNPJ: 45.658.000-1/34</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="0" colspan="5">
+                          <widget class="QLabel" name="lbNomeEmp">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="minimumSize">
+                            <size>
+                             <width>400</width>
+                             <height>0</height>
+                            </size>
+                           </property>
+                           <property name="text">
+                            <string>1 - DROGARIA COMERCIAL DE REMÉDIOS E COUTRAS COISAS PERIGOSAS LTDA</string>
+                           </property>
+                           <property name="scaledContents">
+                            <bool>true</bool>
+                           </property>
+                           <property name="wordWrap">
+                            <bool>true</bool>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="3" column="0">
+                          <widget class="QLabel" name="lbDataInicio">
+                           <property name="text">
+                            <string>Início: 01/02/2000</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="4" rowspan="2">
+                          <widget class="QFrame" name="frImportante">
+                           <property name="frameShape">
+                            <enum>QFrame::NoFrame</enum>
+                           </property>
+                           <property name="frameShadow">
+                            <enum>QFrame::Raised</enum>
+                           </property>
+                           <layout class="QHBoxLayout" name="horizontalLayout_17">
+                            <item>
+                             <widget class="QFrame" name="frFaltaData">
+                              <property name="minimumSize">
+                               <size>
+                                <width>24</width>
+                                <height>24</height>
+                               </size>
+                              </property>
+                              <property name="maximumSize">
+                               <size>
+                                <width>24</width>
+                                <height>24</height>
+                               </size>
+                              </property>
+                              <property name="frameShape">
+                               <enum>QFrame::NoFrame</enum>
+                              </property>
+                              <property name="frameShadow">
+                               <enum>QFrame::Raised</enum>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="Line" name="lineImportante">
+                              <property name="frameShadow">
+                               <enum>QFrame::Raised</enum>
+                              </property>
+                              <property name="lineWidth">
+                               <number>1</number>
+                              </property>
+                              <property name="orientation">
+                               <enum>Qt::Vertical</enum>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QFrame" name="frInsalubridade">
+                              <property name="minimumSize">
+                               <size>
+                                <width>24</width>
+                                <height>24</height>
+                               </size>
+                              </property>
+                              <property name="maximumSize">
+                               <size>
+                                <width>24</width>
+                                <height>24</height>
+                               </size>
+                              </property>
+                              <property name="frameShape">
+                               <enum>QFrame::NoFrame</enum>
+                              </property>
+                              <property name="frameShadow">
+                               <enum>QFrame::Raised</enum>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
                       </item>
                      </layout>
                     </widget>
@@ -1123,6 +2114,9 @@ contribuição</string>
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
                      </property>
+                     <property name="sizeType">
+                      <enum>QSizePolicy::MinimumExpanding</enum>
+                     </property>
                      <property name="sizeHint" stdset="0">
                       <size>
                        <width>40</width>
@@ -1130,19 +2124,6 @@ contribuição</string>
                       </size>
                      </property>
                     </spacer>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="pbInserirContrib">
-                     <property name="minimumSize">
-                      <size>
-                       <width>80</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string>Inserir</string>
-                     </property>
-                    </widget>
                    </item>
                   </layout>
                  </widget>
@@ -1159,19 +2140,2032 @@ contribuição</string>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="styleSheet">
+             <string notr="true">/*---------------------------- Push Button ----------------------------------*/
+#pbInserirBeneficios {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	border: 2px solid #3F4E8C;
+	border-radius: 8px;
+	padding: 6px;
+}
+
+/*-------------------------------- Labels -----------------------------------------*/
+#lbNomeEmpBene {
+	font: 15pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	font-weight: 750;
+	line-height: 24px;
+
+	margin: 8px 0px 0px 0px;
+}
+
+#lbCNPJouNBBene, 
+#lbDataInicioBene, #lbDataFimBene, 
+#lbSituacao, #lbInfoBeneficio {
+	font: 11pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	font-weight: 120;
+	line-height: 24px;
+
+	margin: 2px 0px 0px 0px;
+}
+
+/* ------------------------ Frame ------------------------ */
+#frBgFirulaBene {
+	background-color: orange;
+	border-radius: 8px;
+
+	border: 0px solid none;
+}
+
+#frInfoCabecalhoBene {
+	background-color: white;
+	border-radius: 8px;
+
+	border: 0px solid none;
+}</string>
+            </property>
             <layout class="QGridLayout" name="gridLayout_3">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
              <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
               <number>0</number>
              </property>
              <property name="bottomMargin">
               <number>0</number>
              </property>
              <property name="horizontalSpacing">
-              <number>32</number>
+              <number>0</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="QFrame" name="frInfoPrincipalBene">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_10">
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QFrame" name="frInfoResumoBene">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_8">
+                   <property name="spacing">
+                    <number>42</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>8</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>8</number>
+                   </property>
+                   <item>
+                    <widget class="QFrame" name="frBgFirulaBene">
+                     <property name="frameShape">
+                      <enum>QFrame::NoFrame</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_16">
+                      <property name="spacing">
+                       <number>0</number>
+                      </property>
+                      <property name="leftMargin">
+                       <number>8</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QFrame" name="frInfoCabecalhoBene">
+                        <property name="minimumSize">
+                         <size>
+                          <width>550</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="frameShape">
+                         <enum>QFrame::NoFrame</enum>
+                        </property>
+                        <property name="frameShadow">
+                         <enum>QFrame::Raised</enum>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_9">
+                         <property name="leftMargin">
+                          <number>4</number>
+                         </property>
+                         <property name="topMargin">
+                          <number>4</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="bottomMargin">
+                          <number>4</number>
+                         </property>
+                         <property name="verticalSpacing">
+                          <number>3</number>
+                         </property>
+                         <item row="1" column="0">
+                          <widget class="QLabel" name="lbCNPJouNBBene">
+                           <property name="text">
+                            <string>CNPJ: 45.658.000-1/34</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="2">
+                          <widget class="QLabel" name="lbSituacao">
+                           <property name="text">
+                            <string>Situação: Indeferido</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="0" colspan="3">
+                          <widget class="QLabel" name="lbNomeEmpBene">
+                           <property name="minimumSize">
+                            <size>
+                             <width>400</width>
+                             <height>0</height>
+                            </size>
+                           </property>
+                           <property name="text">
+                            <string>DROGARIA COMERCIAL DE REMÉDIOS LTDA</string>
+                           </property>
+                           <property name="wordWrap">
+                            <bool>true</bool>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="1">
+                          <widget class="QLabel" name="lbDataFimBene">
+                           <property name="text">
+                            <string>Fim: 04/05/2010</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="2">
+                          <widget class="QLabel" name="lbInfoBeneficio">
+                           <property name="text">
+                            <string>BENEFÍCIO</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="0">
+                          <widget class="QLabel" name="lbDataInicioBene">
+                           <property name="text">
+                            <string>Início: 01/02/2000</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="pbInserirBeneficios">
+                     <property name="minimumSize">
+                      <size>
+                       <width>80</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Inserir</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_5">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QFrame" name="frTblBeneficios">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_7">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>24</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>4</number>
+                   </property>
+                   <item>
+                    <widget class="QTableWidget" name="tblBeneficios">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>600</height>
+                      </size>
+                     </property>
+                     <property name="frameShape">
+                      <enum>QFrame::NoFrame</enum>
+                     </property>
+                     <property name="sizeAdjustPolicy">
+                      <enum>QAbstractScrollArea::AdjustIgnored</enum>
+                     </property>
+                     <property name="editTriggers">
+                      <set>QAbstractItemView::NoEditTriggers</set>
+                     </property>
+                     <property name="showDropIndicator" stdset="0">
+                      <bool>false</bool>
+                     </property>
+                     <property name="dragDropOverwriteMode">
+                      <bool>false</bool>
+                     </property>
+                     <property name="alternatingRowColors">
+                      <bool>true</bool>
+                     </property>
+                     <property name="selectionMode">
+                      <enum>QAbstractItemView::NoSelection</enum>
+                     </property>
+                     <property name="selectionBehavior">
+                      <enum>QAbstractItemView::SelectRows</enum>
+                     </property>
+                     <property name="showGrid">
+                      <bool>false</bool>
+                     </property>
+                     <property name="gridStyle">
+                      <enum>Qt::NoPen</enum>
+                     </property>
+                     <property name="sortingEnabled">
+                      <bool>true</bool>
+                     </property>
+                     <attribute name="horizontalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderCascadingSectionResizes">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderMinimumSectionSize">
+                      <number>70</number>
+                     </attribute>
+                     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderStretchLastSection">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderHighlightSections">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderStretchLastSection">
+                      <bool>false</bool>
+                     </attribute>
+                     <row>
+                      <property name="text">
+                       <string>Teste</string>
+                      </property>
+                     </row>
+                     <column>
+                      <property name="text">
+                       <string>id</string>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Vínculo</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>N° do benefício</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Competência</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Valor do benefício</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Ações</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Avenir LT Std</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                      <property name="background">
+                       <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>63</red>
+                         <green>78</green>
+                         <blue>140</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <item row="0" column="1">
+                      <property name="text">
+                       <string>15</string>
+                      </property>
+                     </item>
+                     <item row="0" column="2">
+                      <property name="text">
+                       <string>15230</string>
+                      </property>
+                     </item>
+                     <item row="0" column="3">
+                      <property name="text">
+                       <string>25/01/2020</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="pgCadastroVinculo">
+            <property name="styleSheet">
+             <string notr="true">/*-------------------------------- Labels -----------------------------------------*/
+QLabel {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: black;
+}
+
+#lbInfoCadastro {
+	font: 18pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	font-weight: 750;
+	line-height: 24px;
+
+	margin: 8px 0px 0px 0px;
+}
+
+/*---------------------------- Push Button ----------------------------------*/
+#pbCancelar {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	border: 2px solid #3F4E8C;
+	border-radius: 8px;
+	padding: 6px;
+}
+
+
+#pbSeguir {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: white;
+
+	background-color: #3F4E8C; 
+	
+	border-radius: 8px;
+	padding: 6px;
+}
+
+#pbBuscaIndicador{
+	background-color: transparent;
+
+	border: 0px solid none;
+	
+	background-image: url(:/opcoes/busca.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_11">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <property name="horizontalSpacing">
+              <number>0</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="QFrame" name="frCadastroPrincipal">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_12">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>24</number>
+                </property>
+                <item row="0" column="0" rowspan="3">
+                 <spacer name="horizontalSpacer_6">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QFrame" name="frAcoes">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_9">
+                   <item>
+                    <widget class="QPushButton" name="pbSeguir">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>160</width>
+                       <height>45</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>160</width>
+                       <height>45</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Seguir cadastro</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="pbCancelar">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>160</width>
+                       <height>45</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>160</width>
+                       <height>45</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Cancelar</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="0" column="3" rowspan="3">
+                 <spacer name="horizontalSpacer_7">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QFrame" name="frTipoVinculo">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_10">
+                   <property name="leftMargin">
+                    <number>36</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QRadioButton" name="rbContribuicao">
+                     <property name="text">
+                      <string>Contribuição</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="rbBeneficio">
+                     <property name="text">
+                      <string>Benefício</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QStackedWidget" name="stkVinculo">
+                  <property name="currentIndex">
+                   <number>0</number>
+                  </property>
+                  <widget class="QWidget" name="pgContrib">
+                   <layout class="QGridLayout" name="gridLayout_13">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="lbInfoCnpj">
+                      <property name="text">
+                       <string>CNPJ</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="10" column="0">
+                     <widget class="QDateEdit" name="dtDataInicio">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>35</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="calendarPopup">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="9" column="0">
+                     <widget class="QLabel" name="lbInfoDataInicio">
+                      <property name="text">
+                       <string>Data início</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLineEdit" name="leNomeEmp">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>35</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="placeholderText">
+                       <string>Nome da empresa</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <spacer name="verticalSpacer_13">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Fixed</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>8</width>
+                        <height>8</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="13" column="0">
+                     <widget class="QDateEdit" name="dtDataFim">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>35</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="calendarPopup">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="15" column="0">
+                     <widget class="QLabel" name="lbInfoIndicadores">
+                      <property name="text">
+                       <string>Indicadores</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="0">
+                     <spacer name="verticalSpacer_14">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Fixed</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>8</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="6" column="0">
+                     <widget class="QLabel" name="lbInfoTpVinculo">
+                      <property name="text">
+                       <string>Tipo de vínculo</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="16" column="0" alignment="Qt::AlignTop">
+                     <widget class="QFrame" name="frame_4">
+                      <property name="frameShape">
+                       <enum>QFrame::NoFrame</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_14">
+                       <property name="spacing">
+                        <number>8</number>
+                       </property>
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QComboBox" name="cbxIndicadores">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>40</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="pbBuscaIndicador">
+                         <property name="minimumSize">
+                          <size>
+                           <width>30</width>
+                           <height>30</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>30</width>
+                           <height>30</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="lbInfoNomeEmp">
+                      <property name="text">
+                       <string>Nome da empresa</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="12" column="0">
+                     <widget class="QLabel" name="lbInfoDataFim">
+                      <property name="text">
+                       <string>Data fim</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="8" column="0">
+                     <spacer name="verticalSpacer_15">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Fixed</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>8</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="11" column="0">
+                     <spacer name="verticalSpacer_16">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Fixed</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>8</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLineEdit" name="leCnpj">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>35</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="sizeIncrement">
+                       <size>
+                        <width>0</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="placeholderText">
+                       <string>CNPJ</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="7" column="0">
+                     <widget class="QComboBox" name="cbxTipoVinculo">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>35</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="14" column="0">
+                     <spacer name="verticalSpacer_17">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Fixed</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>8</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                  <widget class="QWidget" name="pgBene">
+                   <layout class="QVBoxLayout" name="verticalLayout_8">
+                    <property name="spacing">
+                     <number>4</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lbInfoEspecie">
+                      <property name="text">
+                       <string>Espécie do benefício</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="cbxEspecie">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>35</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="verticalSpacer_8">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Fixed</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>12</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbInfoNb">
+                      <property name="text">
+                       <string>Número do benefício</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="leNb">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>35</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="sizeIncrement">
+                       <size>
+                        <width>0</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maxLength">
+                       <number>15</number>
+                      </property>
+                      <property name="placeholderText">
+                       <string>Número do benefício</string>
+                      </property>
+                      <property name="clearButtonEnabled">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="verticalSpacer_9">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Fixed</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>12</width>
+                        <height>12</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbInfoDataInicioBene">
+                      <property name="text">
+                       <string>Data início</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QDateEdit" name="dtDataInicioBene">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>35</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="calendarPopup">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="verticalSpacer_10">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Fixed</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>12</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbInfoDataFimBene">
+                      <property name="text">
+                       <string>Data fim</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QDateEdit" name="dtDataFimBene">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>35</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="calendarPopup">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="verticalSpacer_11">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>12</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbInfoSituacao">
+                      <property name="text">
+                       <string>Situação</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="cbxSituacao">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>35</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="verticalSpacer_12">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Preferred</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+                <item row="0" column="1" alignment="Qt::AlignHCenter|Qt::AlignTop">
+                 <widget class="QLabel" name="lbInfoCadastro">
+                  <property name="text">
+                   <string>Cadastro de vínculo</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <spacer name="verticalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="pgCadContribBene">
+            <property name="styleSheet">
+             <string notr="true">/*---------------------------- Push Button ----------------------------------*/
+#pbCancelaInsercao {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	border: 2px solid #3F4E8C;
+	border-radius: 8px;
+	padding: 6px;
+}
+
+
+#pbFinalizar {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: white;
+
+	background-color: #3F4E8C; 
+	
+	border-radius: 8px;
+	padding: 6px;
+}
+
+#pbAddContrib, #pbAddBene {
+	background-image: url(:/opcoes/addIcon.png);
+	background-position: center;
+	background-repeat: no-repeat;
+
+	border-radius: 18px;
+	background-color: #F9F9F9;
+}
+
+/*-------------------------------- Labels -----------------------------------------*/
+#lbInfoCadastrar {
+	font: 18pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	
+	font-weight: 750;
+	line-height: 24px;
+
+	margin: 8px 0px 0px 0px;
+}</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_14">
+             <property name="leftMargin">
+              <number>48</number>
+             </property>
+             <property name="rightMargin">
+              <number>48</number>
              </property>
              <property name="verticalSpacing">
-              <number>16</number>
+              <number>18</number>
              </property>
+             <item row="2" column="1">
+              <widget class="QFrame" name="frame_3">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_11">
+                <property name="spacing">
+                 <number>24</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="pbFinalizar">
+                  <property name="minimumSize">
+                   <size>
+                    <width>160</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Finalizar cadastro</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pbCancelaInsercao">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Cancelar</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="3">
+              <widget class="QStackedWidget" name="stkCadastro">
+               <property name="currentIndex">
+                <number>0</number>
+               </property>
+               <widget class="QWidget" name="pgCadContrib">
+                <layout class="QVBoxLayout" name="verticalLayout_9">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QTableWidget" name="tblCadContrib">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>600</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="sizeAdjustPolicy">
+                    <enum>QAbstractScrollArea::AdjustToContents</enum>
+                   </property>
+                   <attribute name="horizontalHeaderCascadingSectionResizes">
+                    <bool>true</bool>
+                   </attribute>
+                   <attribute name="horizontalHeaderMinimumSectionSize">
+                    <number>160</number>
+                   </attribute>
+                   <attribute name="horizontalHeaderDefaultSectionSize">
+                    <number>160</number>
+                   </attribute>
+                   <attribute name="verticalHeaderVisible">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="verticalHeaderDefaultSectionSize">
+                    <number>40</number>
+                   </attribute>
+                   <column>
+                    <property name="text">
+                     <string>N° vínculo</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Avenir LT Std</family>
+                      <pointsize>12</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="textAlignment">
+                     <set>AlignCenter</set>
+                    </property>
+                    <property name="background">
+                     <color>
+                      <red>255</red>
+                      <green>255</green>
+                      <blue>255</blue>
+                     </color>
+                    </property>
+                    <property name="foreground">
+                     <brush brushstyle="SolidPattern">
+                      <color alpha="255">
+                       <red>63</red>
+                       <green>78</green>
+                       <blue>140</blue>
+                      </color>
+                     </brush>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Competência</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Avenir LT Std</family>
+                      <pointsize>12</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="textAlignment">
+                     <set>AlignCenter</set>
+                    </property>
+                    <property name="background">
+                     <color>
+                      <red>255</red>
+                      <green>255</green>
+                      <blue>255</blue>
+                     </color>
+                    </property>
+                    <property name="foreground">
+                     <brush brushstyle="SolidPattern">
+                      <color alpha="255">
+                       <red>63</red>
+                       <green>78</green>
+                       <blue>140</blue>
+                      </color>
+                     </brush>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Salário de contribuição</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Avenir LT Std</family>
+                      <pointsize>12</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="textAlignment">
+                     <set>AlignCenter</set>
+                    </property>
+                    <property name="background">
+                     <color>
+                      <red>255</red>
+                      <green>255</green>
+                      <blue>255</blue>
+                     </color>
+                    </property>
+                    <property name="foreground">
+                     <brush brushstyle="SolidPattern">
+                      <color alpha="255">
+                       <red>63</red>
+                       <green>78</green>
+                       <blue>140</blue>
+                      </color>
+                     </brush>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Indicadores</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Avenir LT Std</family>
+                      <pointsize>12</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="textAlignment">
+                     <set>AlignCenter</set>
+                    </property>
+                    <property name="background">
+                     <color>
+                      <red>255</red>
+                      <green>255</green>
+                      <blue>255</blue>
+                     </color>
+                    </property>
+                    <property name="foreground">
+                     <brush brushstyle="SolidPattern">
+                      <color alpha="255">
+                       <red>63</red>
+                       <green>78</green>
+                       <blue>140</blue>
+                      </color>
+                     </brush>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Ações</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Avenir LT Std</family>
+                      <pointsize>12</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="textAlignment">
+                     <set>AlignCenter</set>
+                    </property>
+                    <property name="background">
+                     <color>
+                      <red>255</red>
+                      <green>255</green>
+                      <blue>255</blue>
+                     </color>
+                    </property>
+                    <property name="foreground">
+                     <brush brushstyle="SolidPattern">
+                      <color alpha="255">
+                       <red>63</red>
+                       <green>78</green>
+                       <blue>140</blue>
+                      </color>
+                     </brush>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frBotaoAdd">
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_12">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>8</number>
+                    </property>
+                    <item>
+                     <widget class="QFrame" name="frFirulaLeft">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>2</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pbAddContrib">
+                      <property name="minimumSize">
+                       <size>
+                        <width>36</width>
+                        <height>36</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>36</width>
+                        <height>36</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QFrame" name="frFirulaRight">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>2</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+               <widget class="QWidget" name="pgCadBene">
+                <layout class="QVBoxLayout" name="verticalLayout_10">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QTableWidget" name="tblCadBene">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>600</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <attribute name="horizontalHeaderCascadingSectionResizes">
+                    <bool>true</bool>
+                   </attribute>
+                   <attribute name="horizontalHeaderMinimumSectionSize">
+                    <number>160</number>
+                   </attribute>
+                   <attribute name="horizontalHeaderDefaultSectionSize">
+                    <number>160</number>
+                   </attribute>
+                   <attribute name="verticalHeaderVisible">
+                    <bool>false</bool>
+                   </attribute>
+                   <column>
+                    <property name="text">
+                     <string>N° do benefício</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Avenir LT Std</family>
+                      <pointsize>12</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="textAlignment">
+                     <set>AlignCenter</set>
+                    </property>
+                    <property name="background">
+                     <color>
+                      <red>255</red>
+                      <green>255</green>
+                      <blue>255</blue>
+                     </color>
+                    </property>
+                    <property name="foreground">
+                     <brush brushstyle="SolidPattern">
+                      <color alpha="255">
+                       <red>63</red>
+                       <green>78</green>
+                       <blue>140</blue>
+                      </color>
+                     </brush>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Competência</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Avenir LT Std</family>
+                      <pointsize>12</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="textAlignment">
+                     <set>AlignCenter</set>
+                    </property>
+                    <property name="background">
+                     <color>
+                      <red>255</red>
+                      <green>255</green>
+                      <blue>255</blue>
+                     </color>
+                    </property>
+                    <property name="foreground">
+                     <brush brushstyle="SolidPattern">
+                      <color alpha="255">
+                       <red>63</red>
+                       <green>78</green>
+                       <blue>140</blue>
+                      </color>
+                     </brush>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Valor do benefício</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Avenir LT Std</family>
+                      <pointsize>12</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="textAlignment">
+                     <set>AlignCenter</set>
+                    </property>
+                    <property name="background">
+                     <color>
+                      <red>255</red>
+                      <green>255</green>
+                      <blue>255</blue>
+                     </color>
+                    </property>
+                    <property name="foreground">
+                     <brush brushstyle="SolidPattern">
+                      <color alpha="255">
+                       <red>63</red>
+                       <green>78</green>
+                       <blue>140</blue>
+                      </color>
+                     </brush>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Ações</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Avenir LT Std</family>
+                      <pointsize>14</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="textAlignment">
+                     <set>AlignCenter</set>
+                    </property>
+                    <property name="background">
+                     <color>
+                      <red>255</red>
+                      <green>255</green>
+                      <blue>255</blue>
+                     </color>
+                    </property>
+                    <property name="foreground">
+                     <brush brushstyle="SolidPattern">
+                      <color alpha="255">
+                       <red>63</red>
+                       <green>78</green>
+                       <blue>140</blue>
+                      </color>
+                     </brush>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frBotaoAdd2">
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_13">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>8</number>
+                    </property>
+                    <item>
+                     <widget class="QFrame" name="frame_5">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>2</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pbAddBene">
+                      <property name="minimumSize">
+                       <size>
+                        <width>36</width>
+                        <height>36</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>36</width>
+                        <height>36</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QFrame" name="frame_6">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>2</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <spacer name="horizontalSpacer_9">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="2" column="0">
+              <spacer name="horizontalSpacer_8">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="0" colspan="3" alignment="Qt::AlignHCenter|Qt::AlignTop">
+              <widget class="QLabel" name="lbInfoCadastrar">
+               <property name="text">
+                <string>Cadastrar contribuições</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
           </widget>

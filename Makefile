@@ -14,10 +14,10 @@ SQL_FILE = arquivo.sql
 ## @ Limpeza
 cleanAll: ## Limpa todo o cache e exclui o banco de dados
 	@echo 'Limpando o cache'
-	@rm -f .sync/.syncFile && echo "---> .sync/.syncFile"
+	@rm -f .sync/.syncFile.json && echo "---> .sync/.syncFile.json"
 	@rm -f cache/.escritorio.json && echo "---> cache/.escritorio.json"
 	@rm -f cache/.login.json && echo "---> cache/.login.json"
-	@rm -f Daos/producao.db	&& echo "---> Daos/producao.db"
+	@rm -f Banco/producao.db	&& echo "---> Banco/producao.db"
 	@rm -f crypt/.privateKey.txt && echo "---> crypt/.privateKey.txt"
 	@rm -f crypt/publicKey.txt && echo "---> crypt/publicKey.txt"
 
@@ -39,4 +39,4 @@ resources: ## Cria o arquivo de recurso do python my_resource.py a partir de um 
 
 ## @ Backup
 backupAll: ## Roda todos os scripts de backup dentro da pasta de backup
-	sudo sqlite3 Daos/producao.db < ../backup/cTipoAposentadoria.sql
+	sudo sqlite3 Banco/producao.db < ../backup/cTipoAposentadoria.sql

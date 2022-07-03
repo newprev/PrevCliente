@@ -6,3 +6,13 @@ class EtapaEntrevista(Enum):
     tipoBeneficio = 1
     tipoProcesso = 2
     quizEntrevista = 3
+    simulacoes = 4
+
+
+class CategoriaQuiz(Enum):
+    insalubridade = 0
+    deficiencia = 1
+    servicoMilitar = 2
+    trabalhoRural = 3
+    alteracaoManual = 4
+    outros = 5

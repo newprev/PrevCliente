@@ -40,3 +40,22 @@ def layoutBotaoGuia(siglaBotao:str, selecionado: bool = False) -> str:
         return style
     else:
         return style + hover
+
+
+def habDesCheckBox(cbNome: str, desabilita: bool) -> str:
+    if desabilita:
+        return f"""
+            #{cbNome}::indicator:disabled {{
+	            image: url(:/checkbox/checkBoxDisable.png);
+            }}
+        """
+    else:
+        return f"""
+            #{cbNome}::indicator:unchecked {{
+	            image: url(:/checkbox/CheckBoxFalse.png);
+            }}
+
+            #{cbNome}::indicator:checked {{
+                image: url(:/checkbox/checkBoxTrue.png);
+            }}
+        """

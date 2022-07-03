@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="indicador">
+    <file>checkBoxTrue.png</file>
+    <file>CheckBoxFalse.png</file>
+  </qresource>
+</RCC>

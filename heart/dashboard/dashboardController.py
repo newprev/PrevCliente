@@ -1,9 +1,8 @@
-from PyQt5 import QtGui, QtCore
+from PyQt5 import QtGui
 from PyQt5.QtWidgets import QMainWindow, QHBoxLayout
 
-from Design.CustomWidgets.newToast import QToaster
 from Design.pyUi.dashboard import Ui_mwDashBoard
-from heart.menuLateral.configuracoesPage import ConfiguracoesPage
+from heart.informacoesTelas.configuracoesPage import ConfiguracoesPage
 from heart.dashboard.localWidgets.cardFuncionalidade import CardFuncionalidade
 from heart.dashboard.tabs.clienteController import TabCliente
 from heart.dashboard.tabs.tabResumoCNIS import TabResumoCNIS

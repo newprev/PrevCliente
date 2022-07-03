@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="fechar">
+    <file>closeLarge.png</file>
+  </qresource>
+  <qresource prefix="upDown">
+    <file>up.png</file>
+    <file>down.png</file>
+  </qresource>
+</RCC>

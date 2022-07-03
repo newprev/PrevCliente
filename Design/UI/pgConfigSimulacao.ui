@@ -6,118 +6,157 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>453</height>
+    <width>817</width>
+    <height>354</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">/*-------------------------------- Labels -----------------------------------------*/
+   <string notr="true">/*-------------------------------- Widgets --------------------------------*/
+#mwConfigSimulacao, #wdgCentral {
+	background-color: transparent;
+}
+
+/*-------------------------------- Labels -----------------------------------------*/
 #lbTitulo {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 24px;
+	font: 18pt &quot;Avenir LT Std&quot;;
+	color: white;
+	
+	font-weight: 750;
 }
 
 #lbSubtitulo {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 14px;	
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: white;
 }
 
+#lbInfoContribFuturas, #lbInfoIndices,
+#lbInfoPorcentagem {
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #3F4E8C;
+	font-weight: 750;
+}
+
+/*----------------------------  Line Edit ---------------------------------------*/
+QLineEdit {
+	font: 12pt &quot;Avenir LT Std&quot;;
+    border: 0px solid gray;
+    border-radius: 8px;
+   	padding: 0 8px;
+    background: #F9F9F9;
+    selection-background-color: darkgray;
+}
+
+
 /*-------------------------------- Frames -----------------------------------------*/
+#frPrincipal {
+	background-color: white;
+	border-radius: 8px;
+	border: 2px solid lightgrey;
+}
 
 #frTop {
-	background-color: white;
+	background-color: #3F4E8C;
 	border-radius: 8px;
 	border-width: 0px 0px 2px 0px;
 	border-color: transparent transparent rgba(58, 64, 90, 90) transparent;
 	border-style: groove;
 }
 
-#frBottom {
-	background-color: transparent;
+#frInfoContribFuturas, #frInfoIndices,
+#frInfoPorcentagem {
+	border: 2px solid #3F4E8C;
 	border-radius: 8px;
-}
-
-/*-------------------------------- Group Box -----------------------------------------*/
-QGroupBox {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 14px;
-	border: 1px solid transparent;
-
-	background-color: lightgrey;
-	border-radius: 4px;
-}
-
-#gbContFuturas::title, #gbIndicesReajuste::title, #gbPorcentagem::title {
-	subcontrol-position: top left;
-	background-color: #3A405A;
-	border-top-left-radius: 8px;
-	border-top-right-radius: 8px;
-	color: white;
-	padding: 4px;
+	background-color: white;
 }
 
 /*-------------------------------- Push Buttons --------------------------------*/
 
-#pbSalvar {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 14px;
+#pbSalvarFechar {
+	font: 12pt &quot;Avenir LT Std&quot;;
 	color: white;
+	font-weight: 750;
 
 	border-radius: 4px;
-	background-color: rgb(52, 73, 94);
+	background-color: #3F4E8C;
 }
 
-#pbSalvar:hover {
-	font-family: &quot;TeX Gyre Adventor&quot;;
-	font-size: 14px;
-	color: white;
+/*----------------------------- Combo box --------------------------------------*/
+QComboBox {
+    border: 0px solid gray;
+    border-radius: 8px;
+    padding: 1px 18px 1px 8px;
+	
+	font: 12pt &quot;Avenir LT Std&quot;;
+	color: #606970;	
+}
 
-	border-radius: 4px;
-	border: 1px solid transparent;
-	background-color: rgb(72, 93, 114);
+QComboBox:editable {
+    background: white;
+}
+
+QComboBox:!editable, QComboBox::drop-down:editable {
+     background: #F9F9F9;
+}
+
+QComboBox:!editable:on, QComboBox::drop-down:editable:on {
+    background: #F9F9F9;
+}
+
+QComboBox:on { /* shift the text when the popup opens */
+    padding-top: 3px;
+    padding-left: 4px;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+	padding: 0px 8px 0px 0px;
+
+    border-left-width: 0px;
+}
+
+QComboBox::down-arrow {
+    image: url(:/comboBox/down.png);
+}
+
+QComboBox::down-arrow:on { /* shift the arrow when popup is open */
+    top: 1px;
+    left: 1px;
 }
 </string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <property name="spacing">
-     <number>16</number>
-    </property>
+  <widget class="QWidget" name="wdgCentral">
+   <layout class="QGridLayout" name="gridLayout_4">
     <property name="leftMargin">
-     <number>8</number>
+     <number>0</number>
     </property>
     <property name="topMargin">
-     <number>16</number>
+     <number>0</number>
     </property>
     <property name="rightMargin">
-     <number>8</number>
+     <number>0</number>
     </property>
     <property name="bottomMargin">
-     <number>8</number>
+     <number>0</number>
     </property>
-    <item>
-     <widget class="QFrame" name="frTop">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>100</height>
-       </size>
-      </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QFrame" name="frPrincipal">
       <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="spacing">
-        <number>0</number>
-       </property>
+      <layout class="QGridLayout" name="gridLayout_5">
        <property name="leftMargin">
-        <number>16</number>
+        <number>0</number>
        </property>
        <property name="topMargin">
         <number>0</number>
@@ -126,173 +165,17 @@ QGroupBox {
         <number>0</number>
        </property>
        <property name="bottomMargin">
-        <number>8</number>
+        <number>0</number>
        </property>
-       <item>
-        <widget class="QLabel" name="lbTitulo">
+       <property name="spacing">
+        <number>12</number>
+       </property>
+       <item row="0" column="0" colspan="2">
+        <widget class="QFrame" name="frTop">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Configurações da simulação</string>
-         </property>
-        </widget>
-       </item>
-       <item alignment="Qt::AlignTop">
-        <widget class="QLabel" name="lbSubtitulo">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Defina os parâmetros da simulação para se ajustar melhor à situação do seu cliente.</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QFrame" name="frBottom">
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="gbContFuturas">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
            <height>80</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>300</width>
-           <height>110</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Padrão de contribuições futuras</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <property name="spacing">
-           <number>12</number>
-          </property>
-          <property name="leftMargin">
-           <number>8</number>
-          </property>
-          <property name="topMargin">
-           <number>8</number>
-          </property>
-          <property name="rightMargin">
-           <number>8</number>
-          </property>
-          <property name="bottomMargin">
-           <number>8</number>
-          </property>
-          <item>
-           <widget class="QComboBox" name="cbContribFuturas"/>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="leValorCustomizado">
-            <property name="maximumSize">
-             <size>
-              <width>60</width>
-              <height>16777215</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QGroupBox" name="gbIndicesReajuste">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>80</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>110</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Índice de reajuste anual</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="leftMargin">
-           <number>8</number>
-          </property>
-          <property name="topMargin">
-           <number>8</number>
-          </property>
-          <property name="rightMargin">
-           <number>8</number>
-          </property>
-          <item>
-           <widget class="QComboBox" name="cbIndiceReajuste"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QGroupBox" name="gbPorcentagem">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>80</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>300</width>
-           <height>110</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Porcentagem de contribuição</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="leftMargin">
-           <number>8</number>
-          </property>
-          <property name="topMargin">
-           <number>8</number>
-          </property>
-          <property name="rightMargin">
-           <number>8</number>
-          </property>
-          <item>
-           <widget class="QComboBox" name="cbPorcentagem"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QFrame" name="frame">
-         <property name="maximumSize">
-          <size>
-           <width>300</width>
-           <height>16777215</height>
           </size>
          </property>
          <property name="frameShape">
@@ -301,23 +184,210 @@ QGroupBox {
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0" alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="lbTitulo">
+            <property name="text">
+             <string>Configurações da simulação</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="lbSubtitulo">
+            <property name="text">
+             <string>Defina os parâmetros da simulação para se ajustar melhor à situação do seu cliente.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QFrame" name="frContribFuturas">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="leValorCustomizado">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>35</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QComboBox" name="cbContribFuturas">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>35</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QFrame" name="frInfoContribFuturas">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>65</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item alignment="Qt::AlignHCenter">
+              <widget class="QLabel" name="lbInfoContribFuturas">
+               <property name="text">
+                <string>Padrão de contribuições futuras</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QFrame" name="frPorcentagem">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="2" column="0">
+           <widget class="QFrame" name="frInfoPorcentagem">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>65</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item alignment="Qt::AlignHCenter">
+              <widget class="QLabel" name="lbInfoPorcentagem">
+               <property name="text">
+                <string>Porcentagem de contribuição</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QComboBox" name="cbPorcentagem">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>35</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QFrame" name="frIndice">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="1" column="0" rowspan="2" colspan="2">
+           <widget class="QComboBox" name="cbIndiceReajuste">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>35</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QFrame" name="frInfoIndices">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>65</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item alignment="Qt::AlignHCenter">
+              <widget class="QLabel" name="lbInfoIndices">
+               <property name="text">
+                <string>Índice de reajuste anual</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QFrame" name="frame_6">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pbSalvarFechar">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>45</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>160</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Salvar e fechar</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -330,25 +400,6 @@ QGroupBox {
             </property>
            </spacer>
           </item>
-          <item alignment="Qt::AlignRight|Qt::AlignBottom">
-           <widget class="QPushButton" name="pbSalvar">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>36</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>150</width>
-              <height>60</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Salvar e fechar</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
@@ -358,6 +409,8 @@ QGroupBox {
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../Resources/pgConfigSimulacao.qrc"/>
+ </resources>
  <connections/>
 </ui>

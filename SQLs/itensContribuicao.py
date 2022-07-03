@@ -23,7 +23,7 @@ def buscaIndicesByClienteId(clienteId: int, indices: list = []) -> str:
     if 0 <= len(indices) <= 1:
 
         strComando = f"""
-        SELECT indicadores FROM cnisCabecalhos
+        SELECT indicadores FROM cnisVinculos
             WHERE clienteId = {clienteId}
                 AND indicadores LIKE '%{indices[0]}%'
 
@@ -46,7 +46,7 @@ def buscaIndicesByClienteId(clienteId: int, indices: list = []) -> str:
         strOr = strOr.removesuffix(' OR')
 
         strComando = f"""
-        SELECT indicadores FROM cnisCabecalhos
+        SELECT indicadores FROM cnisVinculos
             WHERE clienteId = {clienteId}
                 AND ({strOr})
 
@@ -64,23 +64,21 @@ def buscaIndicesByClienteId(clienteId: int, indices: list = []) -> str:
 
     return strComando
 
-def remuEContrib(clienteId: int) -> str:
+def remuEContrib(clienteId: int, seq: int) -> str:
     return f"""
     SELECT
-        --Contribuições
-        con.itemContribuicaoId, con.seq, con.competencia, 
-        IFNULL(con.salContribuicao, 0) AS salContribuicao, 'Contribuição' AS natureza, con.indicadores,
-        
-        --Conversão monetária
-        cm.sinal, cm.convMonId, cm.nomeMoeda,
-        
-        --Tetos previdenciários
-        tp.tetosPrevId, tp.valor
-    FROM itemContribuicao con
-        JOIN convMon cm 
-            ON con.competencia >= cm.dataInicial
-                AND con.competencia <= cm.dataFinal
-        LEFT JOIN tetosPrev tp
-            ON STRFTIME('%Y-%m', tp.dataValidade) = STRFTIME('%Y-%m', con.competencia)
-    WHERE clienteId = {clienteId}
+    --Contribuições
+    con.itemContribuicaoId, con.competencia, con.fatorInsalubridade,
+    con.grauDeficiencia, IFNULL(con.salContribuicao, 0) AS salContribuicao, con.indicadores,
+    
+    --Conversão monetária
+    IFNULL(cm.sinal, 'R$'), cm.convMonId, cm.nomeMoeda
+    
+    --Tetos previdenciários
+FROM itemContribuicao con
+    LEFT JOIN convMon cm 
+        ON con.competencia >= cm.dataInicial
+            AND con.competencia <= cm.dataFinal
+WHERE con.clienteId = {clienteId}
+    AND con.seq = {seq};
             """

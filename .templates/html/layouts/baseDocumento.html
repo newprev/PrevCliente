@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!--
+    <link rel="stylesheet" href="../css/cabecalhoDocs.css">
+    <link rel="stylesheet" type="text/css" href="../css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../css/decHipossuficienciaStyles.css">
+    -->
+</head>
+<header>
+    <!-- Cabeçalho -->
+    <div class="leftInfo">
+        <h1 id="nomeEscritorio">{{ nomeFantasia }}</h1>
+    </div>
+
+    <div class="rightLogo">
+        {% if logo != None %}
+            <img src="{{ logo }}", alt="Logo do escritório"/>            
+        {% endif %}
+    </div>
+</header>
+
+  <body>
+    {% block corpo %}
+    {% endblock %}
+  </body>
+
+  <!-- Rodapé -->
+  <footer>
+        <ul>
+            <li>Telefone: {{ telefoneEscritorio }}</li>
+            <li>E-mail: {{ emailEscritorio }}</li>
+            <li>{{ enderecoEscritorio }}, {{ numeroEscritorio }}</li>
+            <li>CEP: {{ cepEscritorio }}</li>
+        </ul>
+    </footer>
+</html>

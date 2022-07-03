@@ -2,9 +2,11 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QFrame
 
 from Design.pyUi.wdgMenuPrincipal import Ui_wdgMenuPrincipal
-from heart.informacoesTelas.indicadoresTela import IndicadoresController
-from heart.informacoesTelas.tetosPrevidenciariosTela import TetosPrevidenciarios
-from heart.informacoesTelas.expSobrevidaTela import ExpSobrevidaTela
+
+from heart.configsInfos.indicadoresTela import IndicadoresController
+from heart.configsInfos.tetosPrevidenciariosTela import TetosPrevidenciarios
+from heart.configsInfos.expSobrevidaTela import ExpSobrevidaTela
+from heart.configsInfos.configuracoesPage import ConfiguracoesPage
 from heart.processos.processoController import ProcessosController
 
 from Design.CustomWidgets.newToast import QToaster
@@ -39,10 +41,18 @@ class NewMenuPrincipal(QFrame, Ui_wdgMenuPrincipal):
         self.pbResumoCnis.clicked.connect(self.openFaltaImplementacao)
 
         # Escritorio
-        # Clientes, entrevista, processos
+        # Clientes, entrevista, beneficios
         self.pbProcessos.clicked.connect(self.openProcessos)
         self.pbCliente.clicked.connect(self.openCliente)
         self.pbEntrevista.clicked.connect(self.openEntrevista)
+
+        # Configurações
+        self.pbConfiguracoes.clicked.connect(self.openConfiguracoes)
+
+    def openConfiguracoes(self):
+        configuracoesPage = ConfiguracoesPage(parent=self)
+        configuracoesPage.raise_()
+        configuracoesPage.show()
 
     def openIndicadores(self):
         indicadoresPage = IndicadoresController(parent=self)
@@ -60,10 +70,13 @@ class NewMenuPrincipal(QFrame, Ui_wdgMenuPrincipal):
         expSobrevidaPage.show()
 
     def openProcessos(self):
-        processosPage = ProcessosController(cliente=None, processo=None, parent=self)
-        processosPage.raise_()
-        processosPage.show()
+        self.dashboard.trocaTela(TelaAtual.Processos)
         self.close()
+
+        # processosPage = ProcessosController(cliente=None, processo=None, parent=self)
+        # processosPage.raise_()
+        # processosPage.show()
+        # self.close()
 
     def openEntrevista(self):
         self.dashboard.trocaTela(TelaAtual.Entrevista)

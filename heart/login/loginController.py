@@ -1,8 +1,12 @@
 import datetime
+import logging
+import os
+import json
+
 import pymysql
 import asyncio as aio
 from typing import List
-from peewee import fn
+from peewee import IntegrityError
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QLineEdit
@@ -13,6 +17,7 @@ from Design.DesignSystem.fonts import FontSize
 from cache.cachingLogin import CacheLogin
 from cache.cacheEscritorio import CacheEscritorio
 from modelos.Auth import AdvAuthModelo
+from modelos.especieBenefORM import EspecieBene
 
 from repositorios.clienteRepositorio import UsuarioRepository
 from repositorios.escritorioRepositorio import EscritorioRepositorio
@@ -30,20 +35,19 @@ from modelos.configGeraisORM import ConfigGerais
 from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.ipcaMensalORM import IpcaMensal
 
+from systemLog.logs import NewLogging
 from Design.pyUi.loginPage import Ui_mwLogin
 
 from heart.newDashboard.newDashboard import NewDashboard
 
-from util.dateHelper import strToDatetime
+from util.helpers.dateHelper import strToDatetime
+from util.enums.logEnums import TipoLog
 from util.enums.loginEnums import TelaLogin
 from util.enums.newPrevEnums import *
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 
-import os
-import json
-
 from util.ferramentas.tools import divideListaEmPartes
-from util.helpers import datetimeToSql
+from util.helpers.helpers import datetimeToSql
 from util.popUps import popUpOkAlerta
 
 from repositorios.informacoesRepositorio import ApiInformacoes
@@ -55,6 +59,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
     somaTimer: int = 0
     esqueceuSenha: bool = False
     toasty: QToaster
+    apiLog: logging.Logger
 
     def __init__(self, db=None):
         super(LoginController, self).__init__()
@@ -68,6 +73,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.edittingFinished = True
         self.cacheLogin = CacheLogin()
         self.cacheEscritorio = CacheEscritorio()
+        self.newLog = NewLogging()
+        self.apiLog = self.newLog.buscaLogger()
 
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -105,12 +112,14 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.leSegundo.textChanged.connect(self.avaliaFocus)
         self.leTerceiro.textChanged.connect(self.avaliaFocus)
         self.leQuarto.textChanged.connect(self.avaliaFocus)
-        self.leQuinto.textChanged.connect(self.avaliaFocus)
+        self.leQuinto.textEdited.connect(self.avaliaFocus)
 
         self.carregaCacheLogin()
 
         if self.advogado:
             self.iniciarAutomaticamente()
+        else:
+            self.cbSalvarSenha.setChecked(True)
 
         self.center()
         self.leLogin.setFocus()
@@ -158,7 +167,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.leLogin.setText(self.advogado.numeroOAB)
                 self.loading(10)
                 self.leSenha.setText(self.advogado.senha)
-                self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.inicio.value)
+                self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.principal.value)
                 self.loading(10)
                 self.cacheLogin.salvarCache(self.advogado)
 
@@ -185,38 +194,56 @@ class LoginController(QMainWindow, Ui_mwLogin):
     def avaliaCriaSenha(self):
         if self.lePASenha.text() == '' or self.lePAConfirmaSenha.text() == '':
             self.toasty.showMessage(self, "É preciso informar uma senha no primeiro campo e confirmá-la no campo abaixo.")
-            # popUpOkAlerta("É preciso informar uma senha no primeiro campo e confirmá-la no campo abaixo.")
             self.lePASenha.setFocus()
             return False
         elif self.lePASenha.text() != self.lePAConfirmaSenha.text():
             self.toasty.showMessage(self, "As senhas não coincidem. Tente digitá-las novamente.")
-            # popUpOkAlerta("As senhas não coincidem. Tente digitá-las novamente.")
             return False
         else:
             senhaConfirmada: bool = self.usuarioRepositorio.confirmaAlteraSenha(self.lePASenha.text(), self.advogado.advogadoId)
             if senhaConfirmada:
-                self.advogado.senha = self.lePASenha.text()
-                self.advogado.dataUltAlt = datetime.datetime.now()
-                self.advogado.save()
-                self.cacheLogin.salvarCache(self.advogado)
+                self.insereAdvEscPrimAcesso()
                 self.carregaCacheLogin()
-                self.toasty.showMessage(self, "Senha cadastrada com sucesso.")
             else:
                 popUpOkAlerta("Não foi possível atualizar sua senha. Tente novamente mais tarde.")
 
             self.trocaTelaAtual(TelaLogin.principal)
+
+    def insereAdvEscPrimAcesso(self):
+        try:
+            self.apiLog.info(f'{TipoLog.Cache.value}::insereAdvEscPrimAcesso')
+            self.advogado.senha = self.lePASenha.text()
+            self.advogado.dataUltAlt = datetime.datetime.now()
+            self.escritorio = Escritorios.create(**self.escritorio.toDict())
+            self.advogado = Advogados.create(**self.advogado.toDict())
+            self.cacheLogin.salvarCache(self.advogado)
+            self.cacheEscritorio.salvarCache(self.escritorio)
+            self.toasty.showMessage(self, "Senha cadastrada com sucesso.")
+            return True
+
+        except IntegrityError as err:
+            self.apiLog.error(f"{TipoLog.Cache.value}::insereAdvEscPrimAcesso", extra={"err": err})
+            self.escritorio = self.cacheEscritorio.carregarCache()
+            self.advogado = self.cacheLogin.carregarCache()
 
     def avaliaEnviarCodigo(self):
         if self.lePACpfEmail.text() == '':
             popUpOkAlerta('Digite seu e-mail cadastrado ou o número do CPF para receber o código de acesso.')
             return False
         else:
-            advogadoId: int = self.usuarioRepositorio.buscaCpfEmailPrimeiroAcesso(self.lePACpfEmail.text(), esqueceuSenha=self.esqueceuSenha)
-            self.advogado = self.usuarioRepositorio.buscaAdvPor(advogadoId=advogadoId)
-            self.iniciaTimerPrimeiroAcesso()
-            self.trocaTelaAtual(TelaLogin.primAcessoKey)
-            self.toasty.showMessage(self, "Você receberá o código de acesso dentro de alguns instantes", fontSize=FontSize.H3)
+            try:
+                advogadoId: int = self.usuarioRepositorio.buscaCpfEmailPrimeiroAcesso(self.lePACpfEmail.text(), esqueceuSenha=self.esqueceuSenha)
+                self.advogado, escritorioId = self.usuarioRepositorio.buscaAdvPor(advogadoId=advogadoId)
+                self.escritorio = self.escritorioRepositorio.buscaEscritorio(escritorioId)
+                self.advogado.escritorioId = self.escritorio
+                self.iniciaTimerPrimeiroAcesso()
+                self.trocaTelaAtual(TelaLogin.primAcessoKey)
+                self.toasty.showMessage(self, "Você receberá o código de acesso dentro de alguns instantes", fontSize=FontSize.H3)
+            except Exception as err:
+                print(f"avaliaEnviarCodigo: {err=}")
+                return False
 
+            self.lePrimeiro.setFocus()
             return True
 
     def avaliaFocus(self):
@@ -253,6 +280,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 self.leQuinto.clear()
                 return False
             self.avaliaCodAcessoEnviado()
+            self.lePASenha.setFocus()
 
         return True
 
@@ -351,7 +379,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
     def entrar(self):
         # TODO: Criar uma verificação se o usuário salvo em cache tem o mesmo login e senha digitado na tela de login
-
         self.loading(20)
         if self.infoNaoNulo():
             if ApiFerramentas().conexaoOnline():
@@ -370,7 +397,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 if self.escritorio:
                     self.escritorio = self.buscaInsereEscritorio(self.escritorio)
 
-                self.advogado = self.usuarioRepositorio.buscaAdvPor(advogadoAutenticado.advogadoId, senhaInserida=self.leSenha.text())
+                self.advogado, _ = self.usuarioRepositorio.buscaAdvPor(advogadoAutenticado.advogadoId, senhaInserida=self.leSenha.text())
                 if self.advogado:
                     self.advogado = self.buscaInsereAdvogado(self.advogado)
 
@@ -383,6 +410,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     else:
                         self.cacheLogin.salvarCacheTemporario(self.advogado)
                         self.cacheEscritorio.salvarCacheTemporario(self.escritorio)
+
+                    self.newLog.setAdvLogado(self.advogado)
 
                     # Busca e define configurações
                     try:
@@ -424,6 +453,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.esqueceuSenha = False
         self.alteraLabelEsqueceuSenha()
         self.trocaTelaAtual(TelaLogin.primAcessoEmail)
+        self.lePACpfEmail.setFocus()
 
     def fecharPrograma(self):
         self.close()
@@ -491,19 +521,19 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
     def buscaInsereAdvogado(self, advogado: Advogados, advInserido: bool = False) -> Advogados:
         try:
-            # advogado: Advogados = Advogados.get_by_id(advogado.advogadoId)
-            advogado = Advogados.select(
-                Advogados.advogadoId,
-                Advogados.escritorioId,
-                Advogados.nomeAdvogado,
-                Advogados.sobrenomeAdvogado,
-                Advogados.numeroOAB,
-                Advogados.email,
-                Advogados.login,
-                Advogados.estadoCivil,
-                fn.decifrar(Advogados.senha),
-            ).where(
-                Advogados.advogadoId == advogado.advogadoId).get()
+            advogado: Advogados = Advogados.get_by_id(advogado.advogadoId)
+            # advogado = Advogados.select(
+            #     Advogados.advogadoId,
+            #     Advogados.escritorioId,
+            #     Advogados.nomeAdvogado,
+            #     Advogados.sobrenomeAdvogado,
+            #     Advogados.numeroOAB,
+            #     Advogados.email,
+            #     Advogados.login,
+            #     Advogados.estadoCivil,
+            #     Advogados.senha,
+            # ).where(
+            #     Advogados.advogadoId == advogado.advogadoId).get()
             return advogado
         except Advogados.DoesNotExist as err:
             if not advInserido:
@@ -519,7 +549,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     nacionalidade=advogado.nacionalidade,
                     nomeAdvogado=advogado.nomeAdvogado,
                     numeroOAB=advogado.numeroOAB,
-                    senha=fn.cifrar(advogado.senha),
+                    senha=advogado.senha,
                     sobrenomeAdvogado=advogado.sobrenomeAdvogado
                 ).save()
                 return self.buscaInsereAdvogado(advogado, advInserido=True)
@@ -538,6 +568,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
             'syncCarenciasLei91': datetimeToSql(datetime.datetime.now()),
             'syncAtuMonetaria': datetimeToSql(datetime.datetime.now()),
             'syncSalarioMinimo': datetimeToSql(datetime.datetime.now()),
+            'syncEspecieBeneficio': datetimeToSql(datetime.datetime.now()),
             'syncIpca': datetimeToSql(datetime.datetime.now()),
         }
         loop = aio.get_event_loop()
@@ -560,6 +591,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     dateSyncCarenciasLei91 = strToDatetime(syncDict['syncCarenciasLei91'])
                     dateSyncAtuMonetaria = strToDatetime(syncDict['syncAtuMonetaria'])
                     dateSyncSalarioMinimo = strToDatetime(syncDict['syncSalarioMinimo'])
+                    dateSyncEspecieBeneficio = strToDatetime(syncDict['syncEspecieBeneficio'])
                     dateSyncIpca = strToDatetime(syncDict['syncIpca'])
 
                     if (datetime.datetime.now() - dateSyncConvMon).days != 0:
@@ -597,6 +629,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     else:
                         syncJson['syncSalarioMinimo'] = syncDict['syncSalarioMinimo']
 
+                    if (datetime.datetime.now() - dateSyncEspecieBeneficio).days != 0:
+                        infoToUpdate[FerramentasEInfo.especieBeneficio] = True
+                    else:
+                        syncJson['syncEspecieBeneficio'] = syncDict['syncEspecieBeneficio']
+
                     if (datetime.datetime.now() - dateSyncIpca).days != 0:
                         infoToUpdate[FerramentasEInfo.ipca] = True
                     else:
@@ -615,6 +652,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 FerramentasEInfo.carenciasLei91: True,
                 FerramentasEInfo.atuMonetaria: True,
                 FerramentasEInfo.salarioMinimo: True,
+                FerramentasEInfo.especieBeneficio: True,
                 FerramentasEInfo.ipca: True,
             }
             loop.run_until_complete(self.atualizaInformacoes(infoToUpdate))
@@ -630,6 +668,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         qtdCarenciasLei91 = CarenciaLei91.select().count()
         qtdAtuMonetarias = IndiceAtuMonetaria.select().count()
         qtdSalariosMinimos = SalarioMinimo.select().count()
+        qtdEspecieBeneficios = EspecieBene.select().count()
         qtdIpca = IpcaMensal().select().count()
 
         asyncTasks = []
@@ -649,6 +688,8 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.atuMonetaria)))
                 elif tipoInfo == FerramentasEInfo.salarioMinimo:
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.salarioMinimo)))
+                elif tipoInfo == FerramentasEInfo.especieBeneficio:
+                    asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.especieBeneficio)))
                 elif tipoInfo == FerramentasEInfo.ipca:
                     asyncTasks.append(aio.ensure_future(ApiInformacoes().getAllInformacoes(FerramentasEInfo.ipca)))
 
@@ -696,6 +737,11 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 listaSalarios: List[dict] = infoApi
                 if qtdSalariosMinimos < len(listaSalarios):
                     SalarioMinimo.insert_many(listaSalarios).on_conflict('replace').execute()
+
+            elif aioTask == FerramentasEInfo.especieBeneficio:
+                listaEspecieBene: List[dict] = infoApi
+                if qtdEspecieBeneficios < len(listaEspecieBene):
+                    EspecieBene.insert_many(listaEspecieBene).on_conflict('replace').execute()
 
             elif aioTask == FerramentasEInfo.ipca:
                 listaIpca: List[dict] = infoApi

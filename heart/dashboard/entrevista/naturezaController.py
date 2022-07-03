@@ -11,7 +11,7 @@ from modelos.advogadoORM import Advogados
 from util.enums.newPrevEnums import MomentoEntrevista
 from util.enums.processoEnums import NaturezaProcesso
 from .localStyleSheet.central import checkNatureza
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
 
 
 class NaturezaController(QWidget, Ui_wdgNatureza):

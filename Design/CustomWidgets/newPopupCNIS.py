@@ -45,7 +45,7 @@ class NewPopupCNIS(QWidget, Ui_wdgEnviaCNIS):
         home = str(Path.home())
 
         # Ambiente de produção
-        pathAux = QFileDialog.getOpenFileName(directory=home)
+        pathAux = QFileDialog.getOpenFileName(parent=self, directory=home)
 
         if pathAux[0] is not None and pathAux[0] != '':
             if not pathAux[0].endswith('.pdf'):

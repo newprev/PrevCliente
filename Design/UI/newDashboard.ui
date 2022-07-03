@@ -30,7 +30,7 @@
     </sizepolicy>
    </property>
    <property name="styleSheet">
-    <string notr="true">/*-------------------------------------------------- Frames --------------------------------------------------*/
+    <string notr="true">/* -------------- Frames -------------- */
 #frCabecalho {
 	background-color: #3F4E8C;
 }
@@ -44,7 +44,7 @@
 	border-radius: 20px;
 }
 
-/*-------------------------------------------------- Labels --------------------------------------------------*/
+/* -------------- Labels ---------------- */
 QLabel {
 	color: white;
 }
@@ -54,15 +54,15 @@ QLabel {
 }
 
 #lbNomeAdvogado {
-	font: 10pt &quot;Avenir LT Std&quot;;
+	font: 14pt &quot;Avenir LT Std&quot;;
 }
 
 #lbOAB {
-	font: 8pt &quot;Avenir LT Std&quot;;
+	font: 12pt &quot;Avenir LT Std&quot;;
 	font-weight: 750;
 }
 
-/*-------------------------------------------------- Push Buttom --------------------------------------------------*/
+/* ------------- Push Buttom ------------------- */
 #pbMenuPrincipal {
 	background-color: #292D40;
 	border: 0px solid transparent;
@@ -81,7 +81,7 @@ QLabel {
 	background-position: center;
 }
 
-/*-------------------------------------------------- Stacked Eidget --------------------------------------------------*/
+/* --------------- Stacked Eidget --------------------- */
 #stkPrincipal {
 	background-color: white;
 }</string>

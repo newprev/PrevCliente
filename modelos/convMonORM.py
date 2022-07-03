@@ -1,6 +1,9 @@
+from logging import info, debug
+
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
+
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from datetime import datetime
@@ -83,12 +86,9 @@ class ConvMon(BaseModel, Model):
 
 @post_save(sender=ConvMon)
 def inserindoConvMon(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoConvMon>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoConvMon>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    debug(f'{TipoLog.DataBase.value}::inserindoConvMon___________________{TABLENAME}')
 
 
 @pre_delete(sender=ConvMon)
 def deletandoConvMon(*args, **kwargs):
-    logPrioridade(f'DELETE<inserindoConvMon>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    debug(f'{TipoLog.DataBase.value}::deletandoConvMon___________________{TABLENAME}')

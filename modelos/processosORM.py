@@ -1,7 +1,9 @@
 from datetime import datetime
+from logging import info, debug
+
 from peewee import AutoField, ForeignKeyField, CharField, DateField, IntegerField, FloatField, DateTimeField, BooleanField
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
+from util.enums.logEnums import TipoLog
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from modelos.baseModelORM import BaseModel, DATEFORMATS
@@ -9,7 +11,7 @@ from modelos.advogadoORM import Advogados
 from modelos.clienteORM import Cliente
 from modelos.tipoBeneficioORM import TipoBeneficioModel
 
-TABLENAME = 'processos'
+TABLENAME = 'Processos'
 
 
 class Processos(BaseModel, Model):
@@ -28,7 +30,7 @@ class Processos(BaseModel, Model):
     numeroProcesso = CharField(column_name='numeroProcesso', null=True)
     pontuacao = IntegerField(null=True)
     situacaoId = IntegerField(column_name='situacaoId', default=0)
-    subTipoApos = IntegerField(column_name='subTipoApos', null=True)
+    regraAposentadoria = CharField(column_name='regraAposentadoria', max_length=10, null=True)
     tempoContribuicao = IntegerField(column_name='tempoContribuicao', null=True)
     tipoBeneficio = ForeignKeyField(column_name='tipoBeneficio', field='tipoId', model=TipoBeneficioModel, null=True, backref='TipoBeneficioModel')
     tipoProcesso = IntegerField(column_name='tipoProcesso', null=True)
@@ -37,7 +39,7 @@ class Processos(BaseModel, Model):
     dataUltAlt = DateTimeField(column_name='dataUltAlt', default=datetime.now())
 
     class Meta:
-        table_name = 'processos'
+        table_name = 'Processos'
 
     def toDict(self, recursive=False):
         dictUsuario = {
@@ -48,7 +50,7 @@ class Processos(BaseModel, Model):
             'natureza': self.natureza,
             'tipoProcesso': self.tipoProcesso,
             'tipoBeneficio': self.tipoBeneficio,
-            'subTipoApos': self.subTipoApos,
+            'regraAposentadoria': self.regraAposentadoria,
             'estado': self.estado,
             'cidade': self.cidade,
             'situacaoId': self.situacaoId,
@@ -76,7 +78,7 @@ class Processos(BaseModel, Model):
         self.natureza = dictProcessos['natureza']
         self.tipoProcesso = dictProcessos['tipoProcesso']
         self.tipoBeneficio = dictProcessos['tipoBeneficio']
-        self.subTipoApos = dictProcessos['subTipoApos']
+        self.regraAposentadoria = dictProcessos['regraAposentadoria']
         self.estado = dictProcessos['estado']
         self.cidade = dictProcessos['cidade']
         self.situacaoId = dictProcessos['situacaoId']
@@ -103,7 +105,7 @@ class Processos(BaseModel, Model):
             natureza: {self.natureza},
             tipoProcesso: {self.tipoProcesso},
             tipoBeneficio: {self.tipoBeneficio},
-            subTipoApos: {self.subTipoApos},
+            regraAposentadoria: {self.regraAposentadoria},
             estado: {self.estado},
             cidade: {self.cidade},
             situacaoId: {self.situacaoId},
@@ -122,12 +124,9 @@ class Processos(BaseModel, Model):
 
 @post_save(sender=Processos)
 def inserindoProcessos(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoProcessos>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoProcessos>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    debug(f'{TipoLog.DataBase.value}::inserindoProcessos___________________{TABLENAME}')
 
 
 @pre_delete(sender=Processos)
 def deletandoProcessos(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoProcessos>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    debug(f'{TipoLog.DataBase.value}::deletandoProcessos___________________{TABLENAME}')

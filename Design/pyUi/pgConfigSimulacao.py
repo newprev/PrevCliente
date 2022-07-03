@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'pgConfigSimulacao.ui'
+# Form implementation generated from reading ui file 'Design/UI/pgConfigSimulacao.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -14,162 +14,236 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_mwConfigSimulacao(object):
     def setupUi(self, mwConfigSimulacao):
         mwConfigSimulacao.setObjectName("mwConfigSimulacao")
-        mwConfigSimulacao.resize(800, 453)
-        mwConfigSimulacao.setStyleSheet("/*-------------------------------- Labels -----------------------------------------*/\n"
+        mwConfigSimulacao.resize(817, 354)
+        mwConfigSimulacao.setStyleSheet("/*-------------------------------- Widgets --------------------------------*/\n"
+"#mwConfigSimulacao, #wdgCentral {\n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"/*-------------------------------- Labels -----------------------------------------*/\n"
 "#lbTitulo {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 24px;\n"
+"    font: 18pt \"Avenir LT Std\";\n"
+"    color: white;\n"
+"    \n"
+"    font-weight: 750;\n"
 "}\n"
 "\n"
 "#lbSubtitulo {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;    \n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: white;\n"
 "}\n"
 "\n"
+"#lbInfoContribFuturas, #lbInfoIndices,\n"
+"#lbInfoPorcentagem {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #3F4E8C;\n"
+"    font-weight: 750;\n"
+"}\n"
+"\n"
+"/*----------------------------  Line Edit ---------------------------------------*/\n"
+"QLineEdit {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    border: 0px solid gray;\n"
+"    border-radius: 8px;\n"
+"       padding: 0 8px;\n"
+"    background: #F9F9F9;\n"
+"    selection-background-color: darkgray;\n"
+"}\n"
+"\n"
+"\n"
 "/*-------------------------------- Frames -----------------------------------------*/\n"
+"#frPrincipal {\n"
+"    background-color: white;\n"
+"    border-radius: 8px;\n"
+"    border: 2px solid lightgrey;\n"
+"}\n"
 "\n"
 "#frTop {\n"
-"    background-color: white;\n"
+"    background-color: #3F4E8C;\n"
 "    border-radius: 8px;\n"
 "    border-width: 0px 0px 2px 0px;\n"
 "    border-color: transparent transparent rgba(58, 64, 90, 90) transparent;\n"
 "    border-style: groove;\n"
 "}\n"
 "\n"
-"#frBottom {\n"
-"    background-color: transparent;\n"
+"#frInfoContribFuturas, #frInfoIndices,\n"
+"#frInfoPorcentagem {\n"
+"    border: 2px solid #3F4E8C;\n"
 "    border-radius: 8px;\n"
-"}\n"
-"\n"
-"/*-------------------------------- Group Box -----------------------------------------*/\n"
-"QGroupBox {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
-"    border: 1px solid transparent;\n"
-"\n"
-"    background-color: lightgrey;\n"
-"    border-radius: 4px;\n"
-"}\n"
-"\n"
-"#gbContFuturas::title, #gbIndicesReajuste::title, #gbPorcentagem::title {\n"
-"    subcontrol-position: top left;\n"
-"    background-color: #3A405A;\n"
-"    border-top-left-radius: 8px;\n"
-"    border-top-right-radius: 8px;\n"
-"    color: white;\n"
-"    padding: 4px;\n"
+"    background-color: white;\n"
 "}\n"
 "\n"
 "/*-------------------------------- Push Buttons --------------------------------*/\n"
 "\n"
-"#pbSalvar {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
+"#pbSalvarFechar {\n"
+"    font: 12pt \"Avenir LT Std\";\n"
 "    color: white;\n"
+"    font-weight: 750;\n"
 "\n"
 "    border-radius: 4px;\n"
-"    background-color: rgb(52, 73, 94);\n"
+"    background-color: #3F4E8C;\n"
 "}\n"
 "\n"
-"#pbSalvar:hover {\n"
-"    font-family: \"TeX Gyre Adventor\";\n"
-"    font-size: 14px;\n"
-"    color: white;\n"
+"/*----------------------------- Combo box --------------------------------------*/\n"
+"QComboBox {\n"
+"    border: 0px solid gray;\n"
+"    border-radius: 8px;\n"
+"    padding: 1px 18px 1px 8px;\n"
+"    \n"
+"    font: 12pt \"Avenir LT Std\";\n"
+"    color: #606970;    \n"
+"}\n"
 "\n"
-"    border-radius: 4px;\n"
-"    border: 1px solid transparent;\n"
-"    background-color: rgb(72, 93, 114);\n"
+"QComboBox:editable {\n"
+"    background: white;\n"
+"}\n"
+"\n"
+"QComboBox:!editable, QComboBox::drop-down:editable {\n"
+"     background: #F9F9F9;\n"
+"}\n"
+"\n"
+"QComboBox:!editable:on, QComboBox::drop-down:editable:on {\n"
+"    background: #F9F9F9;\n"
+"}\n"
+"\n"
+"QComboBox:on { /* shift the text when the popup opens */\n"
+"    padding-top: 3px;\n"
+"    padding-left: 4px;\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 15px;\n"
+"    padding: 0px 8px 0px 0px;\n"
+"\n"
+"    border-left-width: 0px;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    image: url(:/comboBox/down.png);\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow:on { /* shift the arrow when popup is open */\n"
+"    top: 1px;\n"
+"    left: 1px;\n"
 "}\n"
 "")
-        self.centralwidget = QtWidgets.QWidget(mwConfigSimulacao)
-        self.centralwidget.setObjectName("centralwidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setContentsMargins(8, 16, 8, 8)
-        self.verticalLayout.setSpacing(16)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.frTop = QtWidgets.QFrame(self.centralwidget)
-        self.frTop.setMaximumSize(QtCore.QSize(16777215, 100))
+        self.wdgCentral = QtWidgets.QWidget(mwConfigSimulacao)
+        self.wdgCentral.setObjectName("wdgCentral")
+        self.gridLayout_4 = QtWidgets.QGridLayout(self.wdgCentral)
+        self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_4.setSpacing(0)
+        self.gridLayout_4.setObjectName("gridLayout_4")
+        self.frPrincipal = QtWidgets.QFrame(self.wdgCentral)
+        self.frPrincipal.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frPrincipal.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frPrincipal.setObjectName("frPrincipal")
+        self.gridLayout_5 = QtWidgets.QGridLayout(self.frPrincipal)
+        self.gridLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_5.setSpacing(12)
+        self.gridLayout_5.setObjectName("gridLayout_5")
+        self.frTop = QtWidgets.QFrame(self.frPrincipal)
+        self.frTop.setMaximumSize(QtCore.QSize(16777215, 80))
         self.frTop.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frTop.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frTop.setObjectName("frTop")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frTop)
-        self.verticalLayout_2.setContentsMargins(16, 0, 0, 8)
-        self.verticalLayout_2.setSpacing(0)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.gridLayout_6 = QtWidgets.QGridLayout(self.frTop)
+        self.gridLayout_6.setObjectName("gridLayout_6")
         self.lbTitulo = QtWidgets.QLabel(self.frTop)
-        self.lbTitulo.setMaximumSize(QtCore.QSize(16777215, 40))
         self.lbTitulo.setObjectName("lbTitulo")
-        self.verticalLayout_2.addWidget(self.lbTitulo)
+        self.gridLayout_6.addWidget(self.lbTitulo, 0, 0, 1, 1, QtCore.Qt.AlignHCenter)
         self.lbSubtitulo = QtWidgets.QLabel(self.frTop)
-        self.lbSubtitulo.setMaximumSize(QtCore.QSize(16777215, 32))
         self.lbSubtitulo.setObjectName("lbSubtitulo")
-        self.verticalLayout_2.addWidget(self.lbSubtitulo, 0, QtCore.Qt.AlignTop)
-        self.verticalLayout.addWidget(self.frTop)
-        self.frBottom = QtWidgets.QFrame(self.centralwidget)
-        self.frBottom.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frBottom.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frBottom.setObjectName("frBottom")
-        self.gridLayout = QtWidgets.QGridLayout(self.frBottom)
+        self.gridLayout_6.addWidget(self.lbSubtitulo, 1, 0, 1, 1, QtCore.Qt.AlignHCenter)
+        self.gridLayout_5.addWidget(self.frTop, 0, 0, 1, 2)
+        self.frContribFuturas = QtWidgets.QFrame(self.frPrincipal)
+        self.frContribFuturas.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frContribFuturas.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frContribFuturas.setObjectName("frContribFuturas")
+        self.gridLayout = QtWidgets.QGridLayout(self.frContribFuturas)
         self.gridLayout.setObjectName("gridLayout")
-        self.gbContFuturas = QtWidgets.QGroupBox(self.frBottom)
-        self.gbContFuturas.setMinimumSize(QtCore.QSize(0, 80))
-        self.gbContFuturas.setMaximumSize(QtCore.QSize(300, 110))
-        self.gbContFuturas.setObjectName("gbContFuturas")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.gbContFuturas)
-        self.horizontalLayout.setContentsMargins(8, 8, 8, 8)
-        self.horizontalLayout.setSpacing(12)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.cbContribFuturas = QtWidgets.QComboBox(self.gbContFuturas)
-        self.cbContribFuturas.setObjectName("cbContribFuturas")
-        self.horizontalLayout.addWidget(self.cbContribFuturas)
-        self.leValorCustomizado = QtWidgets.QLineEdit(self.gbContFuturas)
-        self.leValorCustomizado.setMaximumSize(QtCore.QSize(60, 16777215))
+        self.leValorCustomizado = QtWidgets.QLineEdit(self.frContribFuturas)
+        self.leValorCustomizado.setMinimumSize(QtCore.QSize(0, 35))
+        self.leValorCustomizado.setMaximumSize(QtCore.QSize(100, 16777215))
         self.leValorCustomizado.setObjectName("leValorCustomizado")
-        self.horizontalLayout.addWidget(self.leValorCustomizado)
-        self.gridLayout.addWidget(self.gbContFuturas, 0, 0, 1, 1)
-        self.gbIndicesReajuste = QtWidgets.QGroupBox(self.frBottom)
-        self.gbIndicesReajuste.setMinimumSize(QtCore.QSize(0, 80))
-        self.gbIndicesReajuste.setMaximumSize(QtCore.QSize(16777215, 110))
-        self.gbIndicesReajuste.setObjectName("gbIndicesReajuste")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.gbIndicesReajuste)
-        self.horizontalLayout_3.setContentsMargins(8, 8, 8, -1)
-        self.horizontalLayout_3.setSpacing(0)
+        self.gridLayout.addWidget(self.leValorCustomizado, 4, 1, 1, 1)
+        self.cbContribFuturas = QtWidgets.QComboBox(self.frContribFuturas)
+        self.cbContribFuturas.setMinimumSize(QtCore.QSize(0, 35))
+        self.cbContribFuturas.setObjectName("cbContribFuturas")
+        self.gridLayout.addWidget(self.cbContribFuturas, 4, 0, 1, 1)
+        self.frInfoContribFuturas = QtWidgets.QFrame(self.frContribFuturas)
+        self.frInfoContribFuturas.setMinimumSize(QtCore.QSize(0, 65))
+        self.frInfoContribFuturas.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frInfoContribFuturas.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoContribFuturas.setObjectName("frInfoContribFuturas")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.frInfoContribFuturas)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.lbInfoContribFuturas = QtWidgets.QLabel(self.frInfoContribFuturas)
+        self.lbInfoContribFuturas.setObjectName("lbInfoContribFuturas")
+        self.horizontalLayout.addWidget(self.lbInfoContribFuturas, 0, QtCore.Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.frInfoContribFuturas, 0, 0, 1, 2)
+        self.gridLayout_5.addWidget(self.frContribFuturas, 1, 0, 1, 1)
+        self.frPorcentagem = QtWidgets.QFrame(self.frPrincipal)
+        self.frPorcentagem.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frPorcentagem.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frPorcentagem.setObjectName("frPorcentagem")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.frPorcentagem)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.frInfoPorcentagem = QtWidgets.QFrame(self.frPorcentagem)
+        self.frInfoPorcentagem.setMinimumSize(QtCore.QSize(0, 65))
+        self.frInfoPorcentagem.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frInfoPorcentagem.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoPorcentagem.setObjectName("frInfoPorcentagem")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frInfoPorcentagem)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.cbIndiceReajuste = QtWidgets.QComboBox(self.gbIndicesReajuste)
-        self.cbIndiceReajuste.setObjectName("cbIndiceReajuste")
-        self.horizontalLayout_3.addWidget(self.cbIndiceReajuste)
-        self.gridLayout.addWidget(self.gbIndicesReajuste, 3, 0, 1, 1)
-        self.gbPorcentagem = QtWidgets.QGroupBox(self.frBottom)
-        self.gbPorcentagem.setMinimumSize(QtCore.QSize(0, 80))
-        self.gbPorcentagem.setMaximumSize(QtCore.QSize(300, 110))
-        self.gbPorcentagem.setObjectName("gbPorcentagem")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.gbPorcentagem)
-        self.horizontalLayout_2.setContentsMargins(8, 8, 8, -1)
-        self.horizontalLayout_2.setSpacing(0)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.cbPorcentagem = QtWidgets.QComboBox(self.gbPorcentagem)
+        self.lbInfoPorcentagem = QtWidgets.QLabel(self.frInfoPorcentagem)
+        self.lbInfoPorcentagem.setObjectName("lbInfoPorcentagem")
+        self.horizontalLayout_3.addWidget(self.lbInfoPorcentagem, 0, QtCore.Qt.AlignHCenter)
+        self.gridLayout_2.addWidget(self.frInfoPorcentagem, 2, 0, 1, 1)
+        self.cbPorcentagem = QtWidgets.QComboBox(self.frPorcentagem)
+        self.cbPorcentagem.setMinimumSize(QtCore.QSize(0, 35))
         self.cbPorcentagem.setObjectName("cbPorcentagem")
-        self.horizontalLayout_2.addWidget(self.cbPorcentagem)
-        self.gridLayout.addWidget(self.gbPorcentagem, 0, 1, 1, 1)
-        self.frame = QtWidgets.QFrame(self.frBottom)
-        self.frame.setMaximumSize(QtCore.QSize(300, 16777215))
-        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame)
-        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_4.setSpacing(0)
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.gridLayout_2.addWidget(self.cbPorcentagem, 3, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.frPorcentagem, 1, 1, 1, 1)
+        self.frIndice = QtWidgets.QFrame(self.frPrincipal)
+        self.frIndice.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frIndice.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frIndice.setObjectName("frIndice")
+        self.gridLayout_3 = QtWidgets.QGridLayout(self.frIndice)
+        self.gridLayout_3.setObjectName("gridLayout_3")
+        self.cbIndiceReajuste = QtWidgets.QComboBox(self.frIndice)
+        self.cbIndiceReajuste.setMinimumSize(QtCore.QSize(0, 35))
+        self.cbIndiceReajuste.setObjectName("cbIndiceReajuste")
+        self.gridLayout_3.addWidget(self.cbIndiceReajuste, 1, 0, 2, 2)
+        self.frInfoIndices = QtWidgets.QFrame(self.frIndice)
+        self.frInfoIndices.setMinimumSize(QtCore.QSize(0, 65))
+        self.frInfoIndices.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frInfoIndices.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frInfoIndices.setObjectName("frInfoIndices")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frInfoIndices)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.lbInfoIndices = QtWidgets.QLabel(self.frInfoIndices)
+        self.lbInfoIndices.setObjectName("lbInfoIndices")
+        self.horizontalLayout_2.addWidget(self.lbInfoIndices, 0, QtCore.Qt.AlignHCenter)
+        self.gridLayout_3.addWidget(self.frInfoIndices, 0, 0, 1, 2)
+        self.gridLayout_5.addWidget(self.frIndice, 2, 0, 1, 1)
+        self.frame_6 = QtWidgets.QFrame(self.frPrincipal)
+        self.frame_6.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_6.setObjectName("frame_6")
+        self.gridLayout_7 = QtWidgets.QGridLayout(self.frame_6)
+        self.gridLayout_7.setObjectName("gridLayout_7")
+        self.pbSalvarFechar = QtWidgets.QPushButton(self.frame_6)
+        self.pbSalvarFechar.setMinimumSize(QtCore.QSize(150, 45))
+        self.pbSalvarFechar.setMaximumSize(QtCore.QSize(160, 16777215))
+        self.pbSalvarFechar.setObjectName("pbSalvarFechar")
+        self.gridLayout_7.addWidget(self.pbSalvarFechar, 0, 1, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem)
-        self.pbSalvar = QtWidgets.QPushButton(self.frame)
-        self.pbSalvar.setMinimumSize(QtCore.QSize(150, 36))
-        self.pbSalvar.setMaximumSize(QtCore.QSize(150, 60))
-        self.pbSalvar.setObjectName("pbSalvar")
-        self.horizontalLayout_4.addWidget(self.pbSalvar, 0, QtCore.Qt.AlignRight|QtCore.Qt.AlignBottom)
-        self.gridLayout.addWidget(self.frame, 3, 1, 1, 1)
-        self.verticalLayout.addWidget(self.frBottom)
-        mwConfigSimulacao.setCentralWidget(self.centralwidget)
+        self.gridLayout_7.addItem(spacerItem, 0, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.frame_6, 2, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.frPrincipal, 0, 0, 1, 1)
+        mwConfigSimulacao.setCentralWidget(self.wdgCentral)
 
         self.retranslateUi(mwConfigSimulacao)
         QtCore.QMetaObject.connectSlotsByName(mwConfigSimulacao)
@@ -179,10 +253,11 @@ class Ui_mwConfigSimulacao(object):
         mwConfigSimulacao.setWindowTitle(_translate("mwConfigSimulacao", "MainWindow"))
         self.lbTitulo.setText(_translate("mwConfigSimulacao", "Configurações da simulação"))
         self.lbSubtitulo.setText(_translate("mwConfigSimulacao", "Defina os parâmetros da simulação para se ajustar melhor à situação do seu cliente."))
-        self.gbContFuturas.setTitle(_translate("mwConfigSimulacao", "Padrão de contribuições futuras"))
-        self.gbIndicesReajuste.setTitle(_translate("mwConfigSimulacao", "Índice de reajuste anual"))
-        self.gbPorcentagem.setTitle(_translate("mwConfigSimulacao", "Porcentagem de contribuição"))
-        self.pbSalvar.setText(_translate("mwConfigSimulacao", "Salvar e fechar"))
+        self.lbInfoContribFuturas.setText(_translate("mwConfigSimulacao", "Padrão de contribuições futuras"))
+        self.lbInfoPorcentagem.setText(_translate("mwConfigSimulacao", "Porcentagem de contribuição"))
+        self.lbInfoIndices.setText(_translate("mwConfigSimulacao", "Índice de reajuste anual"))
+        self.pbSalvarFechar.setText(_translate("mwConfigSimulacao", "Salvar e fechar"))
+import Resources.pgConfigSimulacao
 
 
 if __name__ == "__main__":

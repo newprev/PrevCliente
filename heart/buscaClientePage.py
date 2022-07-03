@@ -1,12 +1,18 @@
+import datetime
+
+from dateutil.relativedelta import relativedelta
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from typing import List
 
 from Design.pyUi.buscaCliente import Ui_mwBuscaCliente
-from Design.pyUi.efeitos import Efeitos
+from Design.efeitos import Efeitos
+from modelos.clienteProfissao import ClienteProfissao
+from util.helpers.dateHelper import calculaIdade
 
-from util.helpers import mascaraTelCel, mascaraNit
+from util.helpers.helpers import mascaraTelCel
 from util.popUps import popUpOkAlerta
 
 from modelos.clienteORM import Cliente
@@ -19,13 +25,13 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
         super(BuscaClientePage, self).__init__(parent=parent)
         self.setupUi(self)
 
-        # self.db = db
         self.parent = parent
 
-        # self.daoCliente = DaoCliente(db=db)
-        self.clientes: list = None
+        self.listaClientes: list = None
         self.clienteSelecionadoId = 0
         self.efeito = Efeitos()
+
+        self.efeito.shadowCards([self.frFiltrosBusca, self.frInfo], radius=20, color=(63, 63, 63, 80))
 
         self.tblListaClientes.clicked.connect(self.carregaInfoClienteNaTela)
         self.tblListaClientes.doubleClicked.connect(self.enviaCliente)
@@ -38,7 +44,6 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
     def atualizaTabelaClientes(self, clientes: list = None):
 
         if clientes is None:
-            # clientes = [ClienteModelo().fromList(cliente, retornaInst=True) for cliente in self.daoCliente.buscaTodos()]
             listaClientes: List[Cliente] = Cliente.select().order_by(Cliente.nomeCliente)
 
             for cliente in listaClientes:
@@ -48,7 +53,7 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
                 except Telefones.DoesNotExist:
                     cliente.telefoneId = Telefones()
 
-            self.clientes = listaClientes
+            self.listaClientes = listaClientes
         else:
             return False
 
@@ -96,29 +101,33 @@ class BuscaClientePage(QMainWindow, Ui_mwBuscaCliente):
             if self.lbCdCliente.text() == '':
                 self.parent.cliente = None
             else:
-                for cliente in self.clientes:
+                for cliente in self.listaClientes:
                     if cliente.clienteId == int(self.lbCdCliente.text()):
                         clienteSelecionado = cliente
                         break
                 self.parent.cliente = clienteSelecionado
 
-            self.parent.carregarInfoCliente(clientId=clienteSelecionado.clienteId)
+            self.parent.carregarInfoCliente(clienteId=clienteSelecionado.clienteId)
             self.close()
 
     def carregaInfoClienteNaTela(self, *args):
         clienteId = int(self.tblListaClientes.item(args[0].row(), 0).text())
         clienteSelecionado = Cliente()
 
-        for cliente in self.clientes:
+        for cliente in self.listaClientes:
             if cliente.clienteId == clienteId:
                 clienteSelecionado = cliente
                 self.clienteSelecionadoId = clienteSelecionado.clienteId
+                infoProfissional: ClienteProfissao = ClienteProfissao.select().where(
+                    ClienteProfissao.clienteId == cliente.clienteId
+                ).get()
+                idadeCliente: relativedelta = calculaIdade(clienteSelecionado.dataNascimento, datetime.datetime.today())
                 break
 
         self.lbTel.setText(mascaraTelCel(clienteSelecionado.telefoneId.numero))
         self.lbCdCliente.setText(str(clienteSelecionado.clienteId))
-        self.lbNit.setText(mascaraNit(int(clienteSelecionado.nit)))
-        self.lbIdade.setText(str(clienteSelecionado.idade))
+        self.lbNit.setText(infoProfissional.nit)
+        self.lbIdade.setText(f"{idadeCliente.years} anos")
         self.lbEmail.setText(clienteSelecionado.email)
         self.lbNomeCompleto.setText(f"{clienteSelecionado.nomeCliente} {clienteSelecionado.sobrenomeCliente}")
 

@@ -1,7 +1,10 @@
+from logging import info, debug
+
 from modelos.baseModelORM import BaseModel, DATEFORMATS
 from playhouse.signals import Model, post_save, pre_delete
-from systemLog.logs import logPrioridade
-from util.dateHelper import strToDate
+
+from util.enums.logEnums import TipoLog
+from util.helpers.dateHelper import strToDate
 from util.enums.newPrevEnums import TipoEdicao, Prioridade
 
 from datetime import datetime
@@ -11,7 +14,7 @@ TABLENAME = 'expSobrevida'
 
 
 class ExpSobrevida(BaseModel, Model):
-    infoId = AutoField(column_name='infoId', null=True)
+    infoId = AutoField(column_name='infoId', null=True, primary_key=True)
     dataReferente = DateField(column_name='dataReferente', formats=DATEFORMATS)
     expectativaSobrevida = IntegerField(column_name='expectativaSobrevida')
     idade = IntegerField(null=False)
@@ -62,12 +65,9 @@ class ExpSobrevida(BaseModel, Model):
 
 @post_save(sender=ExpSobrevida)
 def inserindoExpSobrevida(*args, **kwargs):
-    if kwargs['created']:
-        logPrioridade(f'INSERT<inserindoExpSobrevida>___________________{TABLENAME}', TipoEdicao.insert, Prioridade.saidaComum)
-    else:
-        logPrioridade(f'UPDATE<inserindoExpSobrevida>___________________ {TABLENAME}', TipoEdicao.update, Prioridade.saidaComum)
+    debug(f'{TipoLog.DataBase.value}::inserindoExpSobrevida___________________{TABLENAME}')
 
 
 @pre_delete(sender=ExpSobrevida)
 def deletandoExpSobrevida(*args, **kwargs):
-    logPrioridade(f'DELETE<deletandoExpSobrevida>___________________{TABLENAME}', TipoEdicao.delete, Prioridade.saidaImportante)
+    debug(f'{TipoLog.DataBase.value}::deletandoExpSobrevida___________________{TABLENAME}')

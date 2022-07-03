@@ -97,7 +97,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.cbPAConfirmaSenha.setChecked(True)
 
         self.pbFechar.clicked.connect(self.close)
-        self.pbEntrar.clicked.connect(self.entrar)
+        self.pbEntrar.clicked.connect(self.avaliaEntrar)
         self.pbPrimeiroAcesso.clicked.connect(self.fluxoPrimeiroAcesso)
         self.pbVoltar.clicked.connect(self.avaliaVoltar)
         self.pbVoltar2.clicked.connect(self.avaliaVoltar)
@@ -208,6 +208,12 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 popUpOkAlerta("Não foi possível atualizar sua senha. Tente novamente mais tarde.")
 
             self.trocaTelaAtual(TelaLogin.principal)
+
+    def avaliaEntrar(self):
+        try:
+            self.entrar()
+        except Exception as err:
+            popUpOkAlerta("Não foi possível fazer o login. Entre em contato com o suporte", erro=str(err))
 
     def insereAdvEscPrimAcesso(self):
         try:

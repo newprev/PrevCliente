@@ -12,6 +12,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QMainWindow
 
+from Configs.systemConfig import pathPadraoDocsGerados
 from Design.CustomWidgets.newToast import QToaster
 from Design.DesignSystem.fonts import FontSize
 from cache.cachingLogin import CacheLogin
@@ -423,7 +424,10 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     try:
                         ConfigGerais.get(ConfigGerais.advogadoId == self.advogado.advogadoId)
                     except ConfigGerais.DoesNotExist:
-                        ConfigGerais(advogadoId=self.advogado).save()
+                        ConfigGerais(
+                            advogadoId=self.advogado,
+                            pathDocGerados=pathPadraoDocsGerados()
+                        ).save()
 
                     # Inicia programa
                     self.iniciaDashboard()

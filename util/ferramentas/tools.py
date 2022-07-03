@@ -53,3 +53,13 @@ def divideListaEmPartes(lista: List, qtdElemNaLista: int) -> List:
             continueAdicionando = False
 
     return listaFinal
+
+
+def loading(ligado: bool):
+    from PyQt5.QtWidgets import QApplication
+    from PyQt5.QtCore import Qt
+
+    if ligado:
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+    else:
+        QApplication.restoreOverrideCursor()

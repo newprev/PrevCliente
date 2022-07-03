@@ -12,7 +12,6 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QMainWindow
 
-from Configs.systemConfig import pathPadraoDocsGerados
 from Design.CustomWidgets.newToast import QToaster
 from Design.DesignSystem.fonts import FontSize
 from cache.cachingLogin import CacheLogin
@@ -35,6 +34,7 @@ from modelos.indiceAtuMonetariaORM import IndiceAtuMonetaria
 from modelos.configGeraisORM import ConfigGerais
 from modelos.salarioMinimoORM import SalarioMinimo
 from modelos.ipcaMensalORM import IpcaMensal
+from sinaisCustomizados import Sinais
 
 from systemLog.logs import NewLogging
 from Design.pyUi.loginPage import Ui_mwLogin
@@ -47,7 +47,7 @@ from util.enums.loginEnums import TelaLogin
 from util.enums.newPrevEnums import *
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 
-from util.ferramentas.tools import divideListaEmPartes
+from util.ferramentas.tools import divideListaEmPartes, loading
 from util.helpers.helpers import datetimeToSql
 from util.popUps import popUpOkAlerta
 
@@ -93,6 +93,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
         self.trocaTelaAtual(TelaLogin.principal)
         self.pbEnviarCodigo_2.hide()
+        self.mensagemRodape("")
 
         self.cbPASenha.setChecked(True)
         self.cbPAConfirmaSenha.setChecked(True)
@@ -160,16 +161,16 @@ class LoginController(QMainWindow, Ui_mwLogin):
             popUpOkAlerta(f"Senhas não coincidem. Tente novamente.")
         else:
             senhaConfirmada = self.usuarioRepositorio.atualizaSenha(self.advogado.advogadoId, self.leConfirmarSenha.text())
-            self.loading(10)
+            
             if 'statusCode' not in senhaConfirmada.keys():
-                self.loading(10)
+                
                 self.advogado.senha = senhaConfirmada['senha']
-                self.loading(20)
+                
                 self.leLogin.setText(self.advogado.numeroOAB)
-                self.loading(10)
+                
                 self.leSenha.setText(self.advogado.senha)
                 self.stkPrimeiroAcesso.setCurrentIndex(TelaLogin.principal.value)
-                self.loading(10)
+                
                 self.cacheLogin.salvarCache(self.advogado)
 
                 try:
@@ -181,15 +182,14 @@ class LoginController(QMainWindow, Ui_mwLogin):
                 except Advogados.DoesNotExist:
                     Advogados.create(**self.advogado.toDict())
 
-                self.loading(20)
+                
                 self.cacheEscritorio.salvarCache(self.escritorio)
-                self.loading(10)
+                
                 # self.daoEscritorio.insereEscritorio(self.escritorio)
                 self.escritorio.dataUltAlt = datetime.datetime.now()
                 self.escritorio.save()
-                self.loading(10)
+                
             else:
-                self.loading(100)
                 popUpOkAlerta(f"Não foi possível confirmar o cadastro. Tente novamente.")
 
     def avaliaCriaSenha(self):
@@ -212,9 +212,14 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
     def avaliaEntrar(self):
         try:
+            loading(True)
             self.entrar()
         except Exception as err:
+            self.apiLog.error(f"{TipoLog.Cache.value}::avaliaEntrar", extra={"err": err})
             popUpOkAlerta("Não foi possível fazer o login. Entre em contato com o suporte", erro=str(err))
+        finally:
+            loading(False)
+            QtCore.QCoreApplication.processEvents()
 
     def insereAdvEscPrimAcesso(self):
         try:
@@ -386,17 +391,18 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
     def entrar(self):
         # TODO: Criar uma verificação se o usuário salvo em cache tem o mesmo login e senha digitado na tela de login
-        self.loading(20)
+        self.mensagemRodape("Verificando conexão com o servidor...")
         if self.infoNaoNulo():
             if ApiFerramentas().conexaoOnline():
-                self.loading(10)
+                self.mensagemRodape("Rodando rotina de atualização...")
                 self.verificaRotinaAtualizacao()
-                self.loading(20)
+                
             else:
                 popUpOkAlerta('Sem conexão com o servidor.')
                 return False
 
             # Autentica advogado
+            self.mensagemRodape("Autenticando advogado...")
             advogadoAutenticado: AdvAuthModelo = self.authAdvogado()
 
             if advogadoAutenticado:
@@ -427,6 +433,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                         ConfigGerais(advogadoId=self.advogado).save()
 
                     # Inicia programa
+                    self.mensagemRodape("Iniciando NewPrev...")
                     self.iniciaDashboard()
                 else:
                     self.cacheLogin.limpaCache()
@@ -481,6 +488,14 @@ class LoginController(QMainWindow, Ui_mwLogin):
 
     def iniciarAutomaticamente(self):
         pass
+
+    def mensagemRodape(self, mensagem: str):
+        if mensagem is not None:
+            self.lbInfoLogin.setText(mensagem)
+        else:
+            self.lbInfoLogin.setText("")
+
+        QtCore.QCoreApplication.processEvents()
 
     def infoNaoNulo(self):
         login: bool = self.leLogin.text() != ''
@@ -761,9 +776,6 @@ class LoginController(QMainWindow, Ui_mwLogin):
         self.leTerceiro.clear()
         self.leQuarto.clear()
         self.leQuinto.clear()
-
-    def loading(self, value: int):
-        pass
 
     def trocaTelaAtual(self, tela: TelaLogin):
         self.telaAtual = tela

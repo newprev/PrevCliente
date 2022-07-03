@@ -1,6 +1,7 @@
 import os.path
 from math import ceil
 from typing import List
+
 from dotenv import load_dotenv
 
 from aiohttp import ClientConnectorError
@@ -46,6 +47,7 @@ from util.enums.databaseEnums import DatabaseEnum
 from util.enums.ferramentasEInfoEnums import FerramentasEInfo
 from util.enums.newPrevEnums import TiposConexoes
 from util.popUps import popUpOkAlerta
+from util.ferramentas.tools import loading
 
 from cache.cachingLogin import CacheLogin
 from crypt.newRsa import Crypt
@@ -104,6 +106,7 @@ class Main(Ui_MainWindow, QMainWindow):
         self.pbarSplash.setValue(self.contador)
 
         if 0 < self.contador < 2:
+            loading(True)
             self.carregaLogsConfig()
 
         elif 10 <= self.contador < 70:
@@ -124,6 +127,7 @@ class Main(Ui_MainWindow, QMainWindow):
         elif self.contador == 90:
             self.lbInfo.setText('INICIANDO SUBMERSAO...')
             self.avaliaAbrirTelaLogin()
+            loading(False)
             return True
 
     def verificaBackups(self):

@@ -746,8 +746,8 @@ class Ui_mwLogin(object):
         self.gridLayout_8.addWidget(self.frPASenha, 0, 0, 1, 1)
         self.stkPrincipal.addWidget(self.frPrimAcessoSenha)
         self.horizontalLayout.addWidget(self.stkPrincipal)
-        self.widgetStack = QtWidgets.QStackedWidget(self.frMain)
-        self.widgetStack.setStyleSheet("/*---------------------------------- Widgets ----------------------------------*/\n"
+        self.frDesvinculado = QtWidgets.QFrame(self.frMain)
+        self.frDesvinculado.setStyleSheet("/*---------------------------------- Widgets ----------------------------------*/\n"
 "\n"
 "#wdgVinculado, #wdgCadastrar{\n"
 "    border-top.left-radius: 0px;\n"
@@ -757,7 +757,7 @@ class Ui_mwLogin(object):
 "    background-color: rgb(33, 76, 121);\n"
 "}\n"
 "\n"
-"#wdgDesvinculado {\n"
+"#frDesvinculado {\n"
 "    border-top.left-radius: 0px;\n"
 "    border-top-right-radius: 8px;\n"
 "    border-bottom-left-radius: 0px;\n"
@@ -779,6 +779,13 @@ class Ui_mwLogin(object):
 "    font-size: 14px;\n"
 "\n"
 "    color: black;\n"
+"}\n"
+"\n"
+"#lbInfoLogin {\n"
+"    font-family: \"TeX Gyre Adventor\";\n"
+"    font-size: 14px;\n"
+"\n"
+"    color: white;\n"
 "}\n"
 "\n"
 "#lbTitulo, #lbNumeroDaOAB {\n"
@@ -848,17 +855,21 @@ class Ui_mwLogin(object):
 "    border-radius: 4px;\n"
 "    background-color: rgba(255, 255, 255, 245);\n"
 "}")
-        self.widgetStack.setObjectName("widgetStack")
-        self.wdgDesvinculado = QtWidgets.QWidget()
-        self.wdgDesvinculado.setObjectName("wdgDesvinculado")
-        self.widgetStack.addWidget(self.wdgDesvinculado)
-        self.horizontalLayout.addWidget(self.widgetStack)
+        self.frDesvinculado.setObjectName("frDesvinculado")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frDesvinculado)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        spacerItem21 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.MinimumExpanding)
+        self.verticalLayout_2.addItem(spacerItem21)
+        self.lbInfoLogin = QtWidgets.QLabel(self.frDesvinculado)
+        self.lbInfoLogin.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbInfoLogin.setObjectName("lbInfoLogin")
+        self.verticalLayout_2.addWidget(self.lbInfoLogin)
+        self.horizontalLayout.addWidget(self.frDesvinculado)
         self.horizontalLayout_2.addWidget(self.frMain)
         mwLogin.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(mwLogin)
         self.stkPrincipal.setCurrentIndex(0)
-        self.widgetStack.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(mwLogin)
 
     def retranslateUi(self, mwLogin):
@@ -897,6 +908,7 @@ class Ui_mwLogin(object):
         self.lePASenha.setPlaceholderText(_translate("mwLogin", "Digite sua senha"))
         self.lePAConfirmaSenha.setPlaceholderText(_translate("mwLogin", "Confirme a senha"))
         self.pbCriaSenha.setText(_translate("mwLogin", "Criar senha"))
+        self.lbInfoLogin.setText(_translate("mwLogin", "TextLabel"))
 import Resources.login
 
 

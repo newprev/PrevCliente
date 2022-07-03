@@ -1637,7 +1637,7 @@ programa</string>
         </widget>
        </item>
        <item>
-        <widget class="QStackedWidget" name="widgetStack">
+        <widget class="QFrame" name="frDesvinculado">
          <property name="styleSheet">
           <string notr="true">/*---------------------------------- Widgets ----------------------------------*/
 
@@ -1649,7 +1649,7 @@ programa</string>
 	background-color: rgb(33, 76, 121);
 }
 
-#wdgDesvinculado {
+#frDesvinculado {
 	border-top.left-radius: 0px;
 	border-top-right-radius: 8px;
 	border-bottom-left-radius: 0px;
@@ -1671,6 +1671,13 @@ programa</string>
 	font-size: 14px;
 
 	color: black;
+}
+
+#lbInfoLogin {
+	font-family: &quot;TeX Gyre Adventor&quot;;
+	font-size: 14px;
+
+	color: white;
 }
 
 #lbTitulo, #lbNumeroDaOAB {
@@ -1741,10 +1748,34 @@ programa</string>
 	background-color: rgba(255, 255, 255, 245);
 }</string>
          </property>
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <widget class="QWidget" name="wdgDesvinculado"/>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::MinimumExpanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="lbInfoLogin">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>

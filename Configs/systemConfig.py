@@ -23,7 +23,11 @@ from systemLog.logs import NewLogging
 def pathPadraoDocsGerados() -> str:
     try:
         pathPadrao: Path = Path() / 'DocGerados'
-        if pathPadrao.exists() and pathPadrao.is_dir():
+        if not pathPadrao.exists():
+            pathPadrao.mkdir()
+            return str(pathPadrao.absolute())
+
+        elif pathPadrao.exists() and pathPadrao.is_dir():
             return str(pathPadrao.absolute())
     except Exception as err:
         apiLogger = NewLogging().buscaLogger()

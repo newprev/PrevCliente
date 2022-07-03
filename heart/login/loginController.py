@@ -424,10 +424,7 @@ class LoginController(QMainWindow, Ui_mwLogin):
                     try:
                         ConfigGerais.get(ConfigGerais.advogadoId == self.advogado.advogadoId)
                     except ConfigGerais.DoesNotExist:
-                        ConfigGerais(
-                            advogadoId=self.advogado,
-                            pathDocGerados=pathPadraoDocsGerados()
-                        ).save()
+                        ConfigGerais(advogadoId=self.advogado).save()
 
                     # Inicia programa
                     self.iniciaDashboard()
